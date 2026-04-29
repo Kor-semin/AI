@@ -1,0 +1,85 @@
+@import "tailwindcss";
+
+:root {
+  /* Moleskine-ish palette */
+  --background: #f6f1e7; /* warm paper */
+  --foreground: #141414; /* ink */
+  --paper: #fbf7ef;
+  --paper-2: #f1eadc;
+  --ink-2: #2a2a2a;
+  --edge: rgba(20, 20, 20, 0.12);
+  --edge-strong: rgba(20, 20, 20, 0.18);
+  --accent: #1a1a1a; /* cover black */
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0b0b0b;
+    --foreground: #f2f2f2;
+    --paper: #101010;
+    --paper-2: #0c0c0c;
+    --ink-2: #eaeaea;
+    --edge: rgba(242, 242, 242, 0.14);
+    --edge-strong: rgba(242, 242, 242, 0.22);
+    --accent: #f2f2f2;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", Arial, sans-serif;
+}
+
+/* App frame */
+.moleskine-bg {
+  background:
+    radial-gradient(1200px 600px at 20% -10%, rgba(0, 0, 0, 0.06), transparent 60%),
+    radial-gradient(900px 500px at 110% 10%, rgba(0, 0, 0, 0.04), transparent 55%),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0)),
+    repeating-linear-gradient(
+      to bottom,
+      rgba(20, 20, 20, 0.055) 0px,
+      rgba(20, 20, 20, 0.055) 1px,
+      transparent 1px,
+      transparent 26px
+    ),
+    linear-gradient(to bottom, var(--background), var(--paper-2));
+}
+
+.moleskine-card {
+  background: var(--paper);
+  border: 1px solid var(--edge);
+  box-shadow:
+    0 1px 0 rgba(0, 0, 0, 0.06),
+    0 12px 30px rgba(0, 0, 0, 0.06);
+}
+
+.moleskine-ink-btn {
+  background: var(--accent);
+  color: var(--paper);
+  border: 1px solid rgba(0, 0, 0, 0.35);
+}
+
+.moleskine-ink-btn:hover {
+  filter: brightness(0.95);
+}
+
+.moleskine-ghost-btn {
+  background: transparent;
+  border: 1px solid var(--edge-strong);
+  color: var(--foreground);
+}
+
+.moleskine-ghost-btn:hover {
+  background: rgba(20, 20, 20, 0.04);
+}
+
