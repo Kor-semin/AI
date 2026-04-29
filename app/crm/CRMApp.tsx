@@ -603,12 +603,6 @@ export function CRMApp({ uid }: { uid?: string | null }) {
                         upsertCustomer({ id: selectedCustomer.id, stage: v as PipelineStage })
                       }
                     />
-                  </div>
-                </div>
-
-                <div className="rounded-2xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-950">
-                  <div className="text-sm font-semibold">관심/메모</div>
-                  <div className="mt-4 grid grid-cols-1 gap-3">
                     <SelectField
                       label="브랜드"
                       placeholderOption="먼저 브랜드를 선택해 주세요"
@@ -655,9 +649,15 @@ export function CRMApp({ uid }: { uid?: string | null }) {
                       )
                     ) : (
                       <div className="rounded-xl border border-dashed border-zinc-200 px-3 py-2 text-xs text-zinc-500 dark:border-zinc-700 dark:text-zinc-400">
-                        브랜드를 고르면 대표 차종 목록이 나옵니다. (카탈로그에는 없는 줄도 차종 선택 후 트림/색은 메모에 적어 주세요.)
+                        위에서 브랜드를 고르면 대표 차종 목록이 나옵니다.
                       </div>
                     )}
+                  </div>
+                </div>
+
+                <div className="rounded-2xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-950">
+                  <div className="text-sm font-semibold">예산·메모</div>
+                  <div className="mt-4 grid grid-cols-1 gap-3">
                     <Field
                       label="예산"
                       value={selectedCustomer.budget ?? ""}
@@ -921,7 +921,9 @@ export function CRMApp({ uid }: { uid?: string | null }) {
             </>
           ) : (
             <div className="rounded-2xl border border-dashed border-zinc-300 bg-white p-8 text-sm text-zinc-600 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-300">
-              왼쪽에서 고객을 선택하거나 “+ 고객”을 눌러 추가하세요.
+              왼쪽에서 고객을 선택하거나 “+ 고객”을 눌러 추가하세요. 선택하면{" "}
+              <span className="font-semibold text-zinc-900 dark:text-zinc-100">브랜드·차종</span>을 고를 수
+              있습니다.
             </div>
           )}
 
