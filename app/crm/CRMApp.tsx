@@ -33,6 +33,8 @@ import {
 import { DEALER_LEAD_SOURCES, DEALER_PIPELINE_STAGES } from "./constants";
 import type { VehicleBrandId } from "./vehicleCatalog";
 import { vehicleModelsFor, VEHICLE_BRANDS } from "./vehicleCatalog";
+import { parseContactPaste, type ParsedRow } from "./importContacts";
+import { scorePurchaseIntent } from "./leadScore";
 import { makeId, seedState } from "./seed";
 
 const LEAD_SOURCES = [...DEALER_LEAD_SOURCES] satisfies LeadSource[];
@@ -129,6 +131,56 @@ export function CRMApp({
   const didHydrateRef = useRef(false);
   const [sync, setSync] = useState<SyncStatus>({ mode: uid ? "cloud" : "local", status: "idle" });
   const cloudPartsRef = useRef<Partial<CRMState>>({});
+
+  const SEARCH_SHORTCUT_HINT = "(Ctrl+K)";
+  const SELLER_NICK_KEY = "crm.sellerNickname";
+  const searchInputRef = useRef<HTMLInputElement | null>(null);
+  /** 문자 템플릿 `{내이름}` : 로컬 입력이 있으면 우선 */
+  const [sellerNickname, setSellerNickname] = useState("");
+  const [pasteOpen, setPasteOpen] = useState(false);
+  const [pasteText, setPasteText] = useState("");
+
+  useEffect(() => {
+    try {
+      const v = window.localStorage.getItem(SELLER_NICK_KEY);
+      if (v) setSellerNickname(v);
+    } catch {
+      /* ignore */
+    }
+  }, []);
+
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if ((e.ctrlKey || e.metaKey) && (e.key === "k" || e.key === "K")) {
+        const t = e.target as HTMLElement | null;
+        const tag = t?.tagName;
+        if (
+          tag &&
+          (tag === "INPUT" ||
+            tag === "TEXTAREA" ||
+            tag === "SELECT" ||
+            (t?.isContentEditable ?? false))
+        ) {
+          return;
+        }
+        e.preventDefault();
+        searchInputRef.current?.focus();
+        searchInputRef.current?.select();
+      }
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  function persistSellerNickname(next: string) {
+    setSellerNickname(next);
+    try {
+      if (next.trim()) window.localStorage.setItem(SELLER_NICK_KEY, next.trim());
+      else window.localStorage.removeItem(SELLER_NICK_KEY);
+    } catch {
+      /* ignore */
+    }
+  }
 
   useEffect(() => {
     (async () => {
@@ -286,6 +338,38 @@ export function CRMApp({
         .then(() => setSync({ mode: "cloud", status: "idle" }))
         .catch((e) => setSync({ mode: "cloud", status: "error", message: String(e) }));
     }
+  }
+
+  function ingestPastedContacts(rows: ParsedRow[]) {
+    if (rows.length === 0) {
+      alert("인식된 연락처가 없습니다. 전화번호·이름 형식으로 붙여넣어 보세요.");
+      return;
+    }
+    const t = nowIso();
+    const batch: Customer[] = rows.map((row) => ({
+      id: makeId("cus"),
+      createdAt: t,
+      updatedAt: t,
+      name: row.name || "신규",
+      phone: row.phone,
+      memo: row.memo,
+      leadSource: "전화·매장방문",
+      stage: "문의·리드",
+    }));
+    setState((prev) => ({ ...prev, customers: [...batch, ...prev.customers] }));
+    setSelectedCustomerId(batch[0]!.id);
+    setTab("고객");
+    setPasteOpen(false);
+    setPasteText("");
+
+    if (uid) {
+      setSync({ mode: "cloud", status: "syncing" });
+      void Promise.all(batch.map((c) => createCustomerCloud(uid!, c)))
+        .then(() => setSync({ mode: "cloud", status: "idle" }))
+        .catch((e) => setSync({ mode: "cloud", status: "error", message: String(e) }));
+    }
+
+    alert(`연락처 ${batch.length}명을 불러왔습니다. 정보를 확인·수정해 주세요.\n구글·삼성·애플은 「주소록 → 내보내기/복사」한 뒤 여기 붙여넣기 하면 됩니다.`);
   }
 
   function deleteCustomer(id: string) {
@@ -451,7 +535,7 @@ export function CRMApp({
     downloadText(`customer_${customer.name}_${customer.id}.txt`, text);
   }
 
-  const myName = sellerDisplayName?.trim() || "영업 담당";
+  const myName = sellerNickname.trim() || sellerDisplayName?.trim() || "영업 담당";
 
   function renderTemplate(tpl: MessageTemplate, customer?: Customer | null) {
     const cName = customer?.name ?? "고객";
@@ -475,30 +559,53 @@ export function CRMApp({
       <aside className="w-[360px] shrink-0 border-r border-[color:var(--edge)] bg-[color:var(--paper)] p-4">
         <div className="flex items-center justify-between gap-3">
           <div className="flex flex-col">
-            <div className="text-sm font-semibold tracking-tight">고객관리</div>
+            <div className="text-sm font-semibold tracking-tight">자동차딜러의 수첩</div>
             <div className="text-xs text-zinc-500 dark:text-zinc-400">
               {sync.mode === "cloud" ? "클라우드 동기화" : "로컬 저장(MVP)"} ·{" "}
               {sync.status === "syncing"
                 ? "동기화 중…"
-                : sync.status === "error"
+                  : sync.status === "error"
                   ? "동기화 오류"
-                  : "정상"}
+                  : "정상"}{" "}
+              · v0.3
             </div>
           </div>
-          <button
-            className="moleskine-ink-btn rounded-lg px-3 py-2 text-xs font-semibold"
-            onClick={addCustomer}
-          >
-            + 고객
-          </button>
+          <div className="flex flex-col items-end gap-1.5">
+            <button
+              className="moleskine-ink-btn rounded-lg px-3 py-2 text-xs font-semibold"
+              onClick={addCustomer}
+            >
+              + 고객
+            </button>
+            <button
+              type="button"
+              className="rounded-lg border border-[color:var(--edge-strong)] bg-[color:var(--paper)] px-3 py-1.5 text-[11px] font-semibold hover:bg-[color:var(--paper-2)]"
+              onClick={() => setPasteOpen(true)}
+              title="다른 앱에서 복사한 목록 붙여넣기"
+            >
+              연락처 붙여넣기
+            </button>
+          </div>
         </div>
+
+        <label className="mt-4 grid gap-1">
+          <div className="text-[11px] font-semibold text-zinc-600 dark:text-zinc-400">내 이름 (문자·템플릿)</div>
+          <input
+            value={sellerNickname}
+            onChange={(e) => persistSellerNickname(e.target.value)}
+            placeholder="예: 김실장 로그인 전에도 이름 고정 가능"
+            className="w-full rounded-lg border border-[color:var(--edge)] bg-[color:var(--paper)] px-3 py-1.5 text-xs outline-none focus:border-[color:var(--edge-strong)]"
+          />
+        </label>
 
         <div className="mt-4">
           <input
+            ref={searchInputRef}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="이름/연락처/메모 검색"
+            placeholder={`이름/연락처 검색 · ${SEARCH_SHORTCUT_HINT}`}
             className="w-full rounded-lg border border-[color:var(--edge)] bg-[color:var(--paper)] px-3 py-2 text-sm outline-none focus:border-[color:var(--edge-strong)]"
+            title="어디서나 Ctrl+K (Mac: ⌘K) 로 포커스"
           />
         </div>
 
@@ -521,38 +628,65 @@ export function CRMApp({
 
         <div className="mt-4 space-y-2">
           {customersFiltered.map((c) => (
-            <button
+            <div
               key={c.id}
               className={[
-                "w-full rounded-xl border p-3 text-left transition-colors",
+                "flex w-full items-stretch gap-0 overflow-hidden rounded-xl border transition-colors",
                 selectedCustomerId === c.id
                   ? "border-[color:var(--edge-strong)] bg-[color:var(--paper-2)]"
-                  : "border-[color:var(--edge)] bg-[color:var(--paper)] hover:bg-[color:var(--paper-2)]/70",
+                  : "border-[color:var(--edge)] bg-[color:var(--paper)]",
               ].join(" ")}
-              onClick={() => setSelectedCustomerId(c.id)}
             >
-              <div className="flex items-center justify-between gap-3">
-                <div className="min-w-0">
-                  <div className="truncate text-sm font-semibold">{c.name}</div>
-                  <div className="truncate text-xs text-zinc-500 dark:text-zinc-400">
-                    {c.phone ?? "연락처 없음"} ·{" "}
-                    {[c.vehicleBrand, c.interestedModel].filter(Boolean).join(" ") ||
-                      "브랜드·차종 없음"}
+              <button
+                type="button"
+                className="min-w-0 flex-1 p-3 text-left hover:bg-[color:var(--paper-2)]/70"
+                onClick={() => setSelectedCustomerId(c.id)}
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <div className="min-w-0">
+                    <div className="truncate text-sm font-semibold">{c.name}</div>
+                    <div className="truncate text-xs text-zinc-500 dark:text-zinc-400">
+                      {c.phone ?? "연락처 없음"} ·{" "}
+                      {[c.vehicleBrand, c.interestedModel].filter(Boolean).join(" ") ||
+                        "브랜드·차종 없음"}
+                    </div>
+                  </div>
+                    <div className="shrink-0 text-right">
+                    <div className="text-[11px] font-semibold text-zinc-700 dark:text-zinc-200">
+                      {c.stage}
+                    </div>
+                    <div className="text-[11px] text-zinc-500 dark:text-zinc-400">{c.leadSource}</div>
+                    <div className="mt-0.5 text-[10px] font-semibold text-emerald-800 dark:text-emerald-400">
+                      {(() => {
+                        const sx = scorePurchaseIntent(c);
+                        return `가망 ${sx.percent}% · ${sx.grade}`;
+                      })()}
+                    </div>
                   </div>
                 </div>
-                <div className="shrink-0 text-right">
-                  <div className="text-[11px] font-semibold text-zinc-700 dark:text-zinc-200">
-                    {c.stage}
+                {c.memo ? (
+                  <div className="mt-2 text-xs text-zinc-600 dark:text-zinc-400">
+                    {clampText(c.memo, 60)}
                   </div>
-                  <div className="text-[11px] text-zinc-500 dark:text-zinc-400">{c.leadSource}</div>
-                </div>
-              </div>
-              {c.memo ? (
-                <div className="mt-2 text-xs text-zinc-600 dark:text-zinc-400">
-                  {clampText(c.memo, 60)}
-                </div>
+                ) : null}
+              </button>
+              {c.phone?.trim() ? (
+                <button
+                  type="button"
+                  title="전화번호 복사"
+                  className="shrink-0 self-stretch border-l border-[color:var(--edge)] px-2 text-[11px] font-semibold text-zinc-600 hover:bg-zinc-200/40 dark:hover:bg-zinc-800/50"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    void copyToClipboard(c.phone!.trim()).then((ok) => {
+                      if (ok && typeof navigator !== "undefined" && "vibrate" in navigator)
+                        navigator.vibrate(15);
+                    });
+                  }}
+                >
+                  복사
+                </button>
               ) : null}
-            </button>
+            </div>
           ))}
           {customersFiltered.length === 0 ? (
             <div className="rounded-xl border border-dashed border-zinc-300 p-4 text-xs text-zinc-500 dark:border-zinc-800 dark:text-zinc-400">
@@ -1025,6 +1159,55 @@ export function CRMApp({
           ) : null}
         </div>
       </section>
+
+      {pasteOpen ? (
+        <div
+          className="fixed inset-0 z-[300] flex items-start justify-center bg-black/50 p-4 pt-14"
+          onClick={() => setPasteOpen(false)}
+          onKeyDown={(e) => e.key === "Escape" && setPasteOpen(false)}
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="paste-import-title"
+            className="w-full max-w-lg rounded-2xl border border-zinc-200 bg-white p-5 shadow-xl dark:border-zinc-700 dark:bg-zinc-950"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div id="paste-import-title" className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+              연락처 붙여넣기
+            </div>
+            <p className="mt-2 text-xs text-zinc-600 dark:text-zinc-400">
+              구글 · 삼성 · 애플 등에서 이름·번호가 보이도록 복사한 뒤 아래에 붙여 넣으세요.
+              줄마다 이름과 전화를 넣거나, 공유 받은 카카오 문자를 통째로 붙여넣어도 시도합니다.
+            </p>
+            <textarea
+              value={pasteText}
+              onChange={(e) => setPasteText(e.target.value)}
+              rows={11}
+              className="mt-3 w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-900 outline-none focus:border-emerald-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50"
+              placeholder={`예시\n홍길동\t010-1234-5678\t시승 희망\n`}
+            />
+            <div className="mt-4 flex flex-wrap gap-2">
+              <button
+                type="button"
+                className="rounded-lg border border-zinc-200 px-4 py-2 text-xs font-semibold hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-900"
+                onClick={() => {
+                  setPasteOpen(false);
+                }}
+              >
+                닫기
+              </button>
+              <button
+                type="button"
+                className="rounded-lg bg-zinc-900 px-4 py-2 text-xs font-semibold text-white hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-950"
+                onClick={() => ingestPastedContacts(parseContactPaste(pasteText))}
+              >
+                정리해서 고객으로 넣기
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

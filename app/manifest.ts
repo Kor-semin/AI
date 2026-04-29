@@ -2,9 +2,9 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "고객관리",
-    short_name: "고객관리",
-    description: "Moleskine 스타일 고객·일정 간단 관리(Firestore 선택)",
+    name: "자동차딜러의 수첩",
+    short_name: "딜러의 수첩",
+    description: "자동차 딜러를 위한 수첩 앱 · 고객·일정·가망(참고) · 클라우드 선택 가입",
     start_url: "/",
     scope: "/",
     display: "standalone",

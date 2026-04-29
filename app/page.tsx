@@ -1,5 +1,6 @@
 "use client";
 
+import { InspirationalBackdrop } from "@/app/components/InspirationalBackdrop";
 import { CRMApp } from "@/app/crm/CRMApp";
 import { useAuth } from "@/app/crm/useAuth";
 import { isFirebaseConfigured } from "@/app/firebase/client";
@@ -9,14 +10,15 @@ export default function Home() {
   const firebaseReady = isFirebaseConfigured();
 
   return (
-    <div className="moleskine-bg flex min-h-screen flex-col text-zinc-950 dark:text-zinc-50">
-      <header className="sticky top-0 z-10 border-b border-[color:var(--edge)] bg-[color:var(--paper)]/80 px-4 py-3 backdrop-blur">
+    <div className="relative flex min-h-screen flex-col overflow-x-hidden text-zinc-950 dark:text-zinc-50">
+      <InspirationalBackdrop />
+      <header className="sticky top-0 z-20 border-b border-[color:var(--edge)] bg-[color:var(--paper)]/82 px-4 py-3 backdrop-blur-md">
         <div className="mx-auto flex max-w-[1280px] items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="h-2 w-2 rounded-full bg-[color:var(--accent)]" />
-            <div className="text-sm font-semibold tracking-tight">고객관리</div>
+            <div className="text-sm font-semibold tracking-tight">자동차딜러의 수첩</div>
             <div className="hidden text-xs text-zinc-600 dark:text-zinc-300 sm:block">
-              Moleskine style · paper + ink
+              매장 상담에 맞춘 디자인 · 손글씨 감각
             </div>
           </div>
         <div className="flex items-center gap-2">
@@ -66,7 +68,7 @@ export default function Home() {
         </div>
       </header>
 
-      <main className="mx-auto flex w-full max-w-[1280px] flex-1 px-4 py-5">
+      <main className="relative z-10 mx-auto flex w-full max-w-[1280px] flex-1 px-4 py-5">
         <div className="moleskine-card w-full overflow-hidden rounded-2xl">
           <CRMApp
             uid={auth.status === "signed-in" ? auth.uid : null}
