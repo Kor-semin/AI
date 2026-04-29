@@ -559,7 +559,7 @@ export function CRMApp({
       <aside className="w-[360px] shrink-0 border-r border-[color:var(--edge)] bg-[color:var(--paper)] p-4">
         <div className="flex items-center justify-between gap-3">
           <div className="flex flex-col">
-            <div className="text-sm font-semibold tracking-tight">자동차딜러의 수첩</div>
+            <div className="text-sm font-semibold tracking-tight">자동차 컨설턴트 전용 수첩</div>
             <div className="text-xs text-zinc-500 dark:text-zinc-400">
               {sync.mode === "cloud" ? "클라우드 동기화" : "로컬 저장(MVP)"} ·{" "}
               {sync.status === "syncing"

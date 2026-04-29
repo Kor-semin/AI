@@ -14,13 +14,14 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "자동차딜러의 수첩",
-    template: "%s · 자동차딜러의 수첩",
+    default: "자동차 컨설턴트 전용 수첩",
+    template: "%s · 자동차 컨설턴트 전용 수첩",
   },
-  description: "매장 현장에서 쓰는 자동차 딜러용 수첩 — 고객·일정·문자까지 한 번에.",
+  description:
+    "매장 현장에서 쓰는 자동차 컨설턴트 전용 수첩 — 고객·일정·문자까지 한 번에.",
   appleWebApp: {
     capable: true,
-    title: "자동차딜러의 수첩",
+    title: "자동차 컨설턴트 전용 수첩",
     statusBarStyle: "default",
   },
   icons: {
