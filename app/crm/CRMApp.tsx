@@ -78,15 +78,49 @@ function downloadText(filename: string, text: string) {
   URL.revokeObjectURL(url);
 }
 
-function copyToClipboard(text: string) {
-  return navigator.clipboard.writeText(text);
+/** 클립보드 API가 막힌 브라우저/WebView에서는 textarea 폴백 사용 */
+async function copyToClipboard(text: string): Promise<boolean> {
+  if (typeof window === "undefined") return false;
+  try {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+  } catch {
+    /* 폴백 */
+  }
+  try {
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.readOnly = true;
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    ta.style.left = "0";
+    ta.style.top = "0";
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    ta.setSelectionRange(0, text.length);
+    const ok = document.execCommand("copy");
+    ta.remove();
+    return ok;
+  } catch {
+    return false;
+  }
 }
 
 function emptyState(): CRMState {
   return { version: 1, customers: [], nextActions: [], events: [], templates: [] };
 }
 
-export function CRMApp({ uid }: { uid?: string | null }) {
+export function CRMApp({
+  uid,
+  sellerDisplayName,
+}: {
+  uid?: string | null;
+  /** `{내이름}` 치환: 로그인 시 구글 이름·이메일 등 */
+  sellerDisplayName?: string | null;
+}) {
   // uid=null means local-only mode.
   const [state, setState] = useState<CRMState>(() => emptyState());
   const [selectedCustomerId, setSelectedCustomerId] = useState<string | null>(null);
@@ -417,9 +451,11 @@ export function CRMApp({ uid }: { uid?: string | null }) {
     downloadText(`customer_${customer.name}_${customer.id}.txt`, text);
   }
 
+  const myName = sellerDisplayName?.trim() || "영업 담당";
+
   function renderTemplate(tpl: MessageTemplate, customer?: Customer | null) {
     const cName = customer?.name ?? "고객";
-    return tpl.body.replaceAll("{고객명}", cName).replaceAll("{내이름}", "나");
+    return tpl.body.replaceAll("{고객명}", cName).replaceAll("{내이름}", myName);
   }
 
   const allNextActions = useMemo(() => {
@@ -696,8 +732,12 @@ export function CRMApp({ uid }: { uid?: string | null }) {
                         className="w-full rounded-xl border border-zinc-200 bg-white p-3 text-left hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950 dark:hover:bg-zinc-900/30"
                         onClick={async () => {
                           const text = renderTemplate(tpl, selectedCustomer);
-                          await copyToClipboard(text);
-                          alert("클립보드에 복사했습니다.");
+                          const ok = await copyToClipboard(text);
+                          alert(
+                            ok
+                              ? "클립보드에 복사했습니다."
+                              : "자동 복사가 불가했습니다. ‘템플릿’ 탭에서 본문을 길게 눌러 복사해 주세요.",
+                          );
                         }}
                       >
                         <div className="text-xs font-semibold">{tpl.title}</div>
@@ -958,8 +998,12 @@ export function CRMApp({ uid }: { uid?: string | null }) {
                       <button
                         onClick={async () => {
                           const text = renderTemplate(tpl, selectedCustomer);
-                          await copyToClipboard(text);
-                          alert("클립보드에 복사했습니다.");
+                          const ok = await copyToClipboard(text);
+                          alert(
+                            ok
+                              ? "클립보드에 복사했습니다."
+                              : "자동 복사가 불가했습니다. 위 상자 안의 글자를 길게 눌러 복사하거나 전체 선택(Ctrl+A) 후 복사해 주세요.",
+                          );
                         }}
                         className="rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs font-semibold hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950 dark:hover:bg-zinc-900/30"
                       >

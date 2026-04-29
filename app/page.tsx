@@ -68,7 +68,14 @@ export default function Home() {
 
       <main className="mx-auto flex w-full max-w-[1280px] flex-1 px-4 py-5">
         <div className="moleskine-card w-full overflow-hidden rounded-2xl">
-          <CRMApp uid={auth.status === "signed-in" ? auth.uid : null} />
+          <CRMApp
+            uid={auth.status === "signed-in" ? auth.uid : null}
+            sellerDisplayName={
+              auth.status === "signed-in"
+                ? auth.name?.trim() || auth.email?.split("@")[0] || ""
+                : ""
+            }
+          />
         </div>
       </main>
     </div>
