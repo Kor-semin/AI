@@ -171,9 +171,9 @@ export function HeroSection() {
               <Link href="/join" className="crm-ink-btn rounded-xl px-5 py-3 text-xs font-semibold">
                 {t("cta.joinBeta")}
               </Link>
-              <a href="#dashboard-preview" className="crm-outline-light-btn rounded-xl px-5 py-3 text-xs font-semibold">
+              <Link href="/?view=app" className="crm-outline-light-btn rounded-xl px-5 py-3 text-xs font-semibold">
                 {t("cta.viewDemo")}
-              </a>
+              </Link>
             </div>
 
             <ul className="mt-8 space-y-2 text-[12px] leading-relaxed text-[#8b94a1] sm:text-[13px]">
@@ -490,15 +490,12 @@ export function FinalBrandingSection() {
           경험을 담았습니다.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
-          <Link href="/?view=app#app" className="crm-ink-btn rounded-xl px-5 py-3 text-xs font-semibold">
+          <Link href="/?view=app" className="crm-ink-btn rounded-xl px-5 py-3 text-xs font-semibold">
             고객관리 시작하기
           </Link>
-          <a
-            href="#ai-secretary"
-            className="crm-outline-light-btn rounded-xl px-5 py-3 text-xs font-semibold"
-          >
+          <Link href="/?view=app" className="crm-outline-light-btn rounded-xl px-5 py-3 text-xs font-semibold">
             AI 비서 체험하기
-          </a>
+          </Link>
         </div>
       </div>
     </section>
