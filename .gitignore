@@ -33,6 +33,7 @@ yarn-error.log*
 # env files (실제 비밀키는 커밋하지 않음)
 .env*
 !.env.example
+!.env.local.example
 
 # vercel
 .vercel
