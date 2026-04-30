@@ -42,8 +42,7 @@ export default function BetaJoinPage() {
     setPending(true);
     try {
       const res = await submitBetaSignup(payload);
-      if (!res.ok) window.alert(`제출에 실패했습니다: ${res.error}`);
-      else e.currentTarget.reset();
+      if (res.ok) e.currentTarget.reset();
     } finally {
       setPending(false);
     }
