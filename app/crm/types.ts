@@ -22,7 +22,7 @@ export type UsedCarInfo = {
   notes?: string;
 };
 
-/** 엔카·보배 등에서 본인이 적어 둔 시세 범위(원 단위 문자열 허용) */
+/** 직접 확인한 시세 범위(원 단위 문자열 허용) */
 export type MarketPriceSnapshot = {
   encarMin?: string;
   encarMax?: string;
@@ -108,7 +108,7 @@ export type Customer = {
   paymentType?: PaymentType;
   /** 중고차 매입·비교용 정리 */
   usedCar?: UsedCarInfo;
-  /** 시세 메모(엔카·보배 등) */
+  /** 시세 메모(직접 확인 값) */
   marketPrice?: MarketPriceSnapshot;
   /** 예산·비교차종·시세 정리 메모 */
   comparisonNotes?: string;

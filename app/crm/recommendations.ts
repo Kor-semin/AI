@@ -98,7 +98,7 @@ function normalizeUsedCarModel(raw: string): string {
   if (!t) return "";
   // "A · B" 또는 "A / B" 같은 후보 묶음이면 첫 후보만 사용
   const first = t.split(/[·/|,]/)[0]?.trim() ?? t;
-  // 괄호 정보는 남겨도 되지만 엔카 검색에서 노이즈가 되기 쉬워 제거
+  // 괄호 정보는 검색에서 노이즈가 되기 쉬워 제거
   const cleaned = first.replace(/\([^)]*\)/g, "").replace(/\s+/g, " ").trim();
   // 흔한 표기 보정(검색 정확도용)
   const s = cleaned
@@ -152,18 +152,6 @@ export function buildUsedCarSearchQuery(
   return q || model || brand || "중고차";
 }
 
-/** SK엔카(모바일) 검색 — 키워드 기반(시세 자동 수집 아님) */
-export function encarSearchUrl(query: string): string {
-  const q = query.trim() || "중고차";
-  return `https://m.encar.com/dc/dc_carsearchlist.do?carType=kor&keyword=${encodeURIComponent(q)}`;
-}
-
-/** 보배드림 중고차 목록 검색(키워드 기반) */
-export function bobaeSearchUrl(query: string): string {
-  const q = query.trim() || "중고차";
-  return `https://www.bobaedream.co.kr/mycar/mycar_list.php?gubun=K&order=11&search_kwd=${encodeURIComponent(q)}`;
-}
-
 export function summarizeMarketVsBudget(opts: {
   budgetWon: number | null;
   encarMin?: string;
@@ -185,19 +173,19 @@ export function summarizeMarketVsBudget(opts: {
   const encMid = mid(e1, e2);
 
   if (encMid != null) {
-    lines.push(`엔카 기준 대략 ${formatKrwShort(encMid)} 전후로 보시면 됩니다(직접 확인 값).`);
+    lines.push(`직접 확인한 시세 기준 대략 ${formatKrwShort(encMid)} 전후로 보시면 됩니다.`);
   }
 
   if (b != null && b > 0) {
     if (encMid != null) {
-      if (encMid <= b * 1.05) lines.push("엔카 시세는 예산 안에 들어오는 편으로 보입니다.");
-      else if (encMid <= b * 1.15) lines.push("엔카 시세는 예산 대비 약간 높을 수 있어요. 옵션·연식·사고로 협상 여지를 보세요.");
-      else lines.push("엔카 시세가 예산보다 높게 잡혀 있습니다. 차종 변경 또는 예산 재확인이 필요할 수 있어요.");
+      if (encMid <= b * 1.05) lines.push("시세가 예산 안에 들어오는 편으로 보입니다.");
+      else if (encMid <= b * 1.15) lines.push("시세가 예산 대비 약간 높을 수 있어요. 옵션·연식·사고로 협상 여지를 보세요.");
+      else lines.push("시세가 예산보다 높게 잡혀 있습니다. 차종 변경 또는 예산 재확인이 필요할 수 있어요.");
     }
   }
 
   if (lines.length === 0) {
-    lines.push("엔카 시세(최소~최대)를 입력하면 예산 대비 한 줄 요약을 만들어 드립니다.");
+    lines.push("시세(최소~최대)를 입력하면 예산 대비 한 줄 요약을 만들어 드립니다.");
   }
 
   return lines;

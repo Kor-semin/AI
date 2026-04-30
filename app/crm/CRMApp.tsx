@@ -44,7 +44,6 @@ import {
 } from "./leadScore";
 import {
   buildUsedCarSearchQuery,
-  encarSearchUrl,
   formatKrwShort,
   parseMoneyToKrw,
   recommendModelsByBudget,
@@ -1110,7 +1109,7 @@ export function CRMApp({
                 >
                   <div className="text-sm font-semibold">금융·예산·시세 정리</div>
                   <p className="mt-1 text-[11px] text-zinc-500 dark:text-zinc-400">
-                    시세는 엔카·보배에서 직접 확인한 값을 적어 두면, 예산과 비교해 한 줄로 정리합니다(자동 수집 아님).
+                    시세는 직접 확인한 값을 적어 두면, 예산과 비교해 한 줄로 정리합니다(자동 수집 아님).
                   </p>
                   <div className="mt-4 grid grid-cols-1 gap-4">
                     <div className="grid gap-2">
@@ -1227,7 +1226,7 @@ export function CRMApp({
                       className="scroll-mt-24 rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-950"
                     >
                       <div className="text-xs font-semibold text-zinc-800 dark:text-zinc-100">
-                        중고차 정리(엔카 바로 조회)
+                        중고차 정리(검색어 생성)
                       </div>
                       <datalist id="usedcar-brand-options">
                         {[
@@ -1476,24 +1475,27 @@ export function CRMApp({
                           className="rounded-lg bg-zinc-900 px-3 py-2 text-xs font-semibold text-white hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-950 dark:hover:bg-white"
                           onClick={() => {
                             const q = buildUsedCarSearchQuery(selectedCustomer);
-                            window.open(encarSearchUrl(q), "_blank", "noopener,noreferrer");
+                            void copyToClipboard(q).then((ok) => {
+                              if (ok) showToast("검색어 복사 완료");
+                              else alert(q);
+                            });
                           }}
                         >
-                          엔카 열기
+                          검색어 복사
                         </button>
                         <button
                           type="button"
                           className="rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs font-semibold hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950 dark:hover:bg-zinc-900/30"
                           onClick={() => {
                             const q = buildUsedCarSearchQuery(selectedCustomer);
-                            const url = encarSearchUrl(q);
-                            void copyToClipboard(url).then((ok) => {
-                              if (ok) showToast("엔카 링크 복사 완료");
-                              else alert(url);
+                            const line = `${q}\n- 연식/주행거리/사고/등급을 추가로 입력하면 더 정확합니다.`;
+                            void copyToClipboard(line).then((ok) => {
+                              if (ok) showToast("메모 복사 완료");
+                              else alert(line);
                             });
                           }}
                         >
-                          링크 복사
+                          메모 복사
                         </button>
                       </div>
                       <p className="mt-2 text-[11px] text-zinc-500 dark:text-zinc-400">
@@ -1502,25 +1504,15 @@ export function CRMApp({
                           {buildUsedCarSearchQuery(selectedCustomer)}
                         </span>
                       </p>
-                      <div className="mt-2 grid gap-2">
-                        <div className="text-[11px] font-semibold text-zinc-600 dark:text-zinc-300">
-                          엔카 링크(자동 생성)
-                        </div>
-                        <input
-                          readOnly
-                          value={encarSearchUrl(buildUsedCarSearchQuery(selectedCustomer))}
-                          className="w-full rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-[11px] text-zinc-700 outline-none dark:border-zinc-800 dark:bg-zinc-900/30 dark:text-zinc-200"
-                        />
-                      </div>
                     </div>
 
                     <div className="rounded-xl border border-zinc-200 bg-zinc-50/60 p-4 dark:border-zinc-800 dark:bg-zinc-900/25">
                       <div className="text-xs font-semibold text-zinc-800 dark:text-zinc-100">
-                        엔카 시세 메모(직접 확인 값)
+                        시세 메모(직접 확인 값)
                       </div>
                       <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
                         <Field
-                          label="엔카 최저(만원/원)"
+                          label="시세 최저(만원/원)"
                           value={selectedCustomer.marketPrice?.encarMin ?? ""}
                           placeholder="예: 2100만"
                           onChange={(v) =>
@@ -1534,7 +1526,7 @@ export function CRMApp({
                           }
                         />
                         <Field
-                          label="엔카 최고(만원/원)"
+                          label="시세 최고(만원/원)"
                           value={selectedCustomer.marketPrice?.encarMax ?? ""}
                           placeholder="예: 2350만"
                           onChange={(v) =>
@@ -1595,7 +1587,6 @@ export function CRMApp({
                       </p>
                       {(() => {
                         const q = buildUsedCarSearchQuery(selectedCustomer);
-                        const url = encarSearchUrl(q);
                         const lines: string[] = [];
                         lines.push(`안녕하세요 ${selectedCustomer.name}님. ${myName}입니다.`);
                         if (selectedCustomer.usedCar?.brand || selectedCustomer.usedCar?.model || selectedCustomer.interestedModel) {
@@ -1604,14 +1595,13 @@ export function CRMApp({
                         if (selectedCustomer.marketPrice?.encarMin || selectedCustomer.marketPrice?.encarMax) {
                           const mn = selectedCustomer.marketPrice?.encarMin?.trim();
                           const mx = selectedCustomer.marketPrice?.encarMax?.trim();
-                          if (mn && mx) lines.push(`엔카 시세는 대략 ${mn} ~ ${mx} 범위로 확인됩니다(기준: ${selectedCustomer.marketPrice?.asOf ?? "최근"}).`);
-                          else if (mn) lines.push(`엔카 최저가는 대략 ${mn}로 확인됩니다(기준: ${selectedCustomer.marketPrice?.asOf ?? "최근"}).`);
-                          else if (mx) lines.push(`엔카 최고가는 대략 ${mx}로 확인됩니다(기준: ${selectedCustomer.marketPrice?.asOf ?? "최근"}).`);
+                          if (mn && mx) lines.push(`시세는 대략 ${mn} ~ ${mx} 범위로 확인됩니다(기준: ${selectedCustomer.marketPrice?.asOf ?? "최근"}).`);
+                          else if (mn) lines.push(`최저 시세는 대략 ${mn}로 확인됩니다(기준: ${selectedCustomer.marketPrice?.asOf ?? "최근"}).`);
+                          else if (mx) lines.push(`최고 시세는 대략 ${mx}로 확인됩니다(기준: ${selectedCustomer.marketPrice?.asOf ?? "최근"}).`);
                         }
                         if (selectedCustomer.budget?.trim()) {
                           lines.push(`예산: ${selectedCustomer.budget.trim()}`);
                         }
-                        lines.push(`엔카 링크: ${url}`);
                         lines.push(`추가로 사고/보험이력(성능점검)까지 확인해서 안내드릴게요. 편하실 때 통화 가능 시간 부탁드립니다.`);
                         const text = lines.filter(Boolean).join("\n");
                         return (
@@ -1638,18 +1628,6 @@ export function CRMApp({
                                 }}
                               >
                                 메시지 복사
-                              </button>
-                              <button
-                                type="button"
-                                className="rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs font-semibold hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950 dark:hover:bg-zinc-900/30"
-                                onClick={() => {
-                                  void copyToClipboard(url).then((ok) => {
-                                    if (ok) showToast("엔카 링크 복사 완료");
-                                    else alert(url);
-                                  });
-                                }}
-                              >
-                                링크만 복사
                               </button>
                             </div>
                           </>
