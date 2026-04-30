@@ -41,94 +41,127 @@ function SectionShell({
 }
 
 export function HeroSection({ onEnter }: { onEnter: () => void }) {
+  const filmstrip = [
+    {
+      src: "/images/interior.png",
+      label: "Vintage cabin",
+      href: "#dashboard-preview",
+    },
+    {
+      src: "/images/desk.png",
+      label: "Secretary desk",
+      href: "#ai-secretary",
+    },
+    {
+      src: "/images/profile-workspace.png",
+      label: "Workspace",
+      href: "#dashboard-preview",
+    },
+  ] as const;
+
   return (
     <section className="mx-auto w-full max-w-[1280px] px-4 pb-14 pt-12 sm:pb-20 sm:pt-16">
-      <div className="grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr]">
-        <div>
-          <div className="inline-flex items-center gap-2 rounded-full border border-[color:var(--edge)] bg-[color:var(--paper)]/40 px-3 py-1 text-[11px] font-semibold tracking-[0.12em] text-[color:var(--gold)] backdrop-blur">
-            SALES CONCIERGE AI · 오토 세일즈 AI 비서
-          </div>
-          <h1 className="mt-5 text-3xl font-semibold tracking-tight text-[color:var(--foreground)] sm:text-5xl">
-            고객을 기억하는 자동차 영업 AI 비서
-          </h1>
-          <p className="mt-5 max-w-[62ch] text-sm leading-relaxed text-[color:var(--ink-2)] sm:text-[15px]">
-            고급 자동차 영업사원을 위한 프리미엄 고객관리 시스템. 상담 이력, 관심 차량, 구매 가능성,
-            후속 연락까지 AI가 정리하고 제안합니다.
-          </p>
-
-          <div
-            aria-hidden
-            className="mt-6 h-px w-full max-w-sm bg-gradient-to-r from-transparent via-[color:var(--gold)]/55 to-transparent"
+      <div className="relative min-h-[min(88vh,720px)] overflow-hidden rounded-[2rem] border border-[color:var(--edge)] shadow-[0_34px_90px_rgba(0,0,0,0.68)]">
+        <div className="pointer-events-none absolute inset-0">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/images/hero-classic-car.png"
+            alt=""
+            className="h-full w-full object-cover object-[58%_44%] sm:object-[64%_40%]"
           />
+        </div>
+        {/* 읽기 쉬운 왼쪽·하단 어둠 + 가벼운 골드 광택 */}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[#0b0b0a]/97 via-[#0b0b0a]/78 to-[#0b0b0a]/12 sm:via-[#0b0b0a]/55 sm:to-transparent" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0b0b0a]/92 via-transparent to-[#0b0b0a]/45" />
+        <div className="pointer-events-none absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-[color:var(--gold)]/55 to-transparent sm:inset-x-14" />
 
-          <div className="mt-8 flex flex-wrap items-center gap-3">
-            <button
-              type="button"
-              className="crm-ink-btn rounded-xl px-5 py-3 text-xs font-semibold"
-              onClick={onEnter}
-            >
-              고객관리 시작하기
-            </button>
-            <a
-              href="#ai-secretary"
-              className="crm-ghost-btn rounded-xl px-5 py-3 text-xs font-semibold"
-            >
-              AI 비서 체험하기
-            </a>
+        <div className="relative z-10 flex min-h-[min(88vh,720px)] flex-col justify-between gap-12 px-6 py-10 sm:px-11 sm:py-14 lg:flex-row lg:items-end">
+          <div className="flex max-w-xl flex-col justify-center lg:justify-center lg:self-center lg:pb-0">
+            <div className="inline-flex items-center gap-2 rounded-full border border-[color:var(--edge)] bg-black/38 px-3 py-1 text-[11px] font-semibold tracking-[0.12em] text-[color:var(--gold)] backdrop-blur-md">
+              SALES CONCIERGE AI · 오토 세일즈 AI 비서
+            </div>
+            <h1 className="mt-5 max-w-[16ch] text-3xl font-semibold tracking-tight text-[color:var(--foreground)] sm:text-5xl lg:max-w-none">
+              고객을 기억하는 자동차 영업 AI 비서
+            </h1>
+            <p className="mt-5 max-w-[62ch] text-sm leading-relaxed text-[color:var(--foreground)]/82 sm:text-[15px]">
+              고급 자동차 영업사원을 위한 프리미엄 고객관리 시스템. 상담 이력, 관심 차량, 구매 가능성,
+              후속 연락까지 AI가 정리하고 제안합니다.
+            </p>
+
+            <div
+              aria-hidden
+              className="mt-7 h-px w-full max-w-sm bg-gradient-to-r from-transparent via-[color:var(--gold)]/55 to-transparent"
+            />
+
+            <div className="mt-9 flex flex-wrap items-center gap-3">
+              <button
+                type="button"
+                className="crm-ink-btn rounded-xl px-5 py-3 text-xs font-semibold"
+                onClick={onEnter}
+              >
+                고객관리 시작하기
+              </button>
+              <a href="#ai-secretary" className="crm-ghost-btn rounded-xl px-5 py-3 text-xs font-semibold">
+                AI 비서 체험하기
+              </a>
+            </div>
+
+            <div className="mt-10 rounded-2xl border border-[color:var(--edge)] bg-black/42 p-5 backdrop-blur-md">
+              <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[color:var(--gold-2)]">
+                Concierge note
+              </div>
+              <div className="mt-3 text-sm font-semibold text-[color:var(--foreground)]">
+                고객을 기억하고, 다음 행동을 제안하고, 영업의 흐름을 관리합니다.
+              </div>
+              <div className="mt-2 text-[12px] leading-relaxed text-[color:var(--foreground)]/70">
+                클래식카·프라이빗 라운지 톤. 과한 연출 없이 깊은 기록과 타이밍을 우선합니다.
+              </div>
+            </div>
           </div>
 
-          <div className="mt-8 rounded-2xl border border-[color:var(--edge)] bg-[color:var(--paper)]/55 p-5 backdrop-blur">
-            <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[color:var(--gold-2)]">
-              Concierge note
-            </div>
-            <div className="mt-3 text-sm font-semibold text-[color:var(--foreground)]">
-              고객을 기억하고, 다음 행동을 제안하고, 영업의 흐름을 관리합니다.
-            </div>
-            <div className="mt-2 text-[12px] leading-relaxed text-[color:var(--ink-2)]">
-              과한 자동화보다, 실제 영업 루틴에 맞춘 정리와 타이밍을 우선합니다.
-            </div>
+          <div className="grid w-full max-w-xl shrink-0 grid-cols-3 gap-3 self-end sm:gap-4 lg:max-w-md">
+            {[
+              { k: "오늘 상담", v: "3" },
+              { k: "후속 연락", v: "5" },
+              { k: "우선순위", v: "High" },
+            ].map((m) => (
+              <div
+                key={m.k}
+                className="rounded-2xl border border-[color:var(--edge)] bg-black/52 px-4 py-3 shadow-[inset_0_0_0_1px_rgba(199,164,106,0.08)] backdrop-blur-md"
+              >
+                <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[color:var(--gold-2)] sm:text-[11px]">
+                  {m.k}
+                </div>
+                <div className="mt-2 text-lg font-semibold tabular-nums text-[color:var(--foreground)]">{m.v}</div>
+              </div>
+            ))}
           </div>
         </div>
+      </div>
 
-        <div className="relative">
-          <div className="absolute -inset-8 -z-10 rounded-[2.25rem] bg-[radial-gradient(780px_520px_at_22%_0%,rgba(199,164,106,0.20),transparent_62%),radial-gradient(700px_520px_at_100%_16%,rgba(232,220,200,0.07),transparent_58%)] blur-2xl" />
-          <div className="rounded-2xl border border-[color:var(--edge)] bg-[color:var(--paper)] p-4 shadow-[0_28px_70px_rgba(0,0,0,0.6)]">
-            <div className="flex items-center justify-between gap-3">
-              <div>
-                <div className="text-xs font-semibold text-[color:var(--foreground)]">Private lounge brief</div>
-                <div className="mt-1 text-[11px] text-[color:var(--ink-2)]">
-                  브랜드/로고 노출 없는 제너릭 이미지 슬롯
+      {/* 나머지 씬(인테리어·데스크·워크스페이스) 프리뷰 필름스트립 */}
+      <div className="mt-8 grid gap-4 sm:grid-cols-3">
+        {filmstrip.map((f) => (
+          <a
+            key={f.src}
+            href={f.href}
+            className="group overflow-hidden rounded-2xl border border-[color:var(--edge)] bg-[color:var(--paper)]/40 shadow-[0_18px_46px_rgba(0,0,0,0.45)] transition-transform duration-200 hover:border-[color:var(--gold)]/55 hover:[transform:translateY(-3px)]"
+          >
+            <div className="relative aspect-[16/10] overflow-hidden">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={f.src}
+                alt=""
+                className="h-full w-full object-cover transition duration-[220ms] group-hover:scale-[1.03]"
+              />
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#0b0b0a]/88 to-transparent p-4 pt-14">
+                <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[color:var(--gold)]">
+                  {f.label}
                 </div>
               </div>
-              <span className="crm-free-badge">Premium</span>
             </div>
-            <div className="mt-4 overflow-hidden rounded-2xl">
-              <ImageSlot
-                src="/images/hero-classic-car.jpg"
-                alt="Classic luxury car scene"
-                tone="hero"
-                className="h-[240px] sm:h-[320px]"
-              />
-            </div>
-            <div className="mt-4 grid grid-cols-3 gap-3">
-              {[
-                { k: "오늘 상담", v: "3" },
-                { k: "후속 연락", v: "5" },
-                { k: "우선순위", v: "High" },
-              ].map((m) => (
-                <div
-                  key={m.k}
-                  className="rounded-2xl border border-[color:var(--edge)] bg-[color:var(--paper-2)]/70 px-4 py-3"
-                >
-                  <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[color:var(--gold-2)]">
-                    {m.k}
-                  </div>
-                  <div className="mt-2 text-lg font-semibold text-[color:var(--foreground)]">{m.v}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+          </a>
+        ))}
       </div>
     </section>
   );
@@ -183,6 +216,7 @@ export function FeatureSection() {
 export function DashboardPreview() {
   return (
     <SectionShell
+      id="dashboard-preview"
       kicker="Dashboard"
       title="오늘의 흐름을 한 화면에"
       subtitle="상담 예정, 후속 연락, 계약 가능성, 출고 준비. ‘지금 해야 할 일’을 우선순위로 정리합니다."
@@ -213,7 +247,7 @@ export function DashboardPreview() {
           </div>
 
           <div className="mt-5 overflow-hidden rounded-2xl">
-            <ImageSlot src="/images/interior.jpg" alt="Luxury interior" tone="interior" className="h-[220px]" />
+            <ImageSlot src="/images/interior.png" alt="" tone="interior" className="h-[220px]" />
           </div>
         </div>
 
@@ -271,14 +305,14 @@ export function DashboardPreview() {
             </div>
             <div className="mt-3 overflow-hidden rounded-2xl">
               <ImageSlot
-                src="/images/profile.jpg"
-                alt="Premium consultant workspace preview"
+                src="/images/profile-workspace.png"
+                alt=""
                 tone="profile"
                 className="h-[180px] sm:h-[220px]"
               />
             </div>
             <div className="mt-3 text-[12px] text-[color:var(--ink-2)]">
-              `/public/images/profile.jpg`로 교체할 수 있습니다. 로고가 보이는 사진은 사용하지 마세요.
+              `/public/images/profile-workspace.png`로 교체할 수 있습니다. 로고가 보이는 사진은 사용하지 마세요.
             </div>
           </div>
         </div>
@@ -348,7 +382,7 @@ export function AISecretaryPreview() {
             <span className="crm-free-badge">Desk</span>
           </div>
           <div className="mt-4 overflow-hidden rounded-2xl">
-            <ImageSlot src="/images/desk.jpg" alt="Premium desk" tone="desk" className="h-[320px]" />
+            <ImageSlot src="/images/desk.png" alt="" tone="desk" className="h-[320px]" />
           </div>
         </div>
       </div>
