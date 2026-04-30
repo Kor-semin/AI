@@ -3,9 +3,7 @@ Luxury concierge 이미지 (PNG)
 브랜드 로고가 보이는 사진은 사용하지 마세요.
 
 현재 포함된 에셋(동일 디렉터리):
-- hero-classic-car.png … 히어로 풀블리드 (클래식 장면)
-- interior.png … 빈티지 캐빈 인테리어 프리뷰
-- desk.png … AI Secretary 영역 (데스크·램프 무드)
-- profile-workspace.png … 대시보드·워크스페이스 (태블릿 UI 무드)
+- interior.png … 빈티지 캐빈(히어로 배경 및 프리뷰)
+- profile-workspace.png … 워크스페이스·AI Secretary 영역 및 대시보드 프리뷰
 
-교체 방법: 같은 파일명으로 덮어쓰기하면 됩니다. JPG를 쓰는 경우 각 컴포넌트의 src 경로를 함께 수정하세요.
+프리미엄 업무실 썸네일은 고정 사진 대신 CSS 무드 카드로 표시합니다. 실제 책상 사진을 넣으려면 `LandingSections.tsx`의 filmstrip `studyPlaceholder` 항목을 이미지로 교체하면 됩니다.

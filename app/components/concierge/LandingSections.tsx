@@ -40,24 +40,33 @@ function SectionShell({
   );
 }
 
+type FilmStripItem =
+  | { key: string; kind: "img"; src: string; label: string; href: string }
+  | { key: string; kind: "studyPlaceholder"; label: string; href: string };
+
 export function HeroSection({ onEnter }: { onEnter: () => void }) {
-  const filmstrip = [
+  const filmstrip: FilmStripItem[] = [
     {
+      key: "cabin",
+      kind: "img",
       src: "/images/interior.png",
       label: "Vintage cabin",
       href: "#dashboard-preview",
     },
     {
-      src: "/images/desk.png",
-      label: "Secretary desk",
+      key: "study",
+      kind: "studyPlaceholder",
+      label: "프리미엄 업무실",
       href: "#ai-secretary",
     },
     {
+      key: "workspace",
+      kind: "img",
       src: "/images/profile-workspace.png",
       label: "Workspace",
       href: "#dashboard-preview",
     },
-  ] as const;
+  ];
 
   return (
     <section className="mx-auto w-full max-w-[1280px] px-4 pb-14 pt-12 sm:pb-20 sm:pt-16">
@@ -65,9 +74,9 @@ export function HeroSection({ onEnter }: { onEnter: () => void }) {
         <div className="pointer-events-none absolute inset-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/images/hero-classic-car.png"
+            src="/images/interior.png"
             alt=""
-            className="h-full w-full object-cover object-[58%_44%] sm:object-[64%_40%]"
+            className="h-full w-full object-cover object-[52%_50%]"
           />
         </div>
         {/* 읽기 쉬운 왼쪽·하단 어둠 + 가벼운 골드 광택 */}
@@ -141,27 +150,55 @@ export function HeroSection({ onEnter }: { onEnter: () => void }) {
 
       {/* 나머지 씬(인테리어·데스크·워크스페이스) 프리뷰 필름스트립 */}
       <div className="mt-8 grid gap-4 sm:grid-cols-3">
-        {filmstrip.map((f) => (
-          <a
-            key={f.src}
-            href={f.href}
-            className="group overflow-hidden rounded-2xl border border-[color:var(--edge)] bg-[color:var(--paper)]/40 shadow-[0_18px_46px_rgba(0,0,0,0.45)] transition-transform duration-200 hover:border-[color:var(--gold)]/55 hover:[transform:translateY(-3px)]"
-          >
-            <div className="relative aspect-[16/10] overflow-hidden">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={f.src}
-                alt=""
-                className="h-full w-full object-cover transition duration-[220ms] group-hover:scale-[1.03]"
-              />
-              <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#0b0b0a]/88 to-transparent p-4 pt-14">
-                <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[color:var(--gold)]">
-                  {f.label}
+        {filmstrip.map((f) =>
+          f.kind === "studyPlaceholder" ? (
+            <a
+              key={f.key}
+              href={f.href}
+              className="group overflow-hidden rounded-2xl border border-[color:var(--edge)] bg-[color:var(--paper)]/40 shadow-[0_18px_46px_rgba(0,0,0,0.45)] transition-transform duration-200 hover:border-[color:var(--gold)]/55 hover:[transform:translateY(-3px)]"
+            >
+              <div className="relative aspect-[16/10] overflow-hidden">
+                <div
+                  aria-hidden
+                  className="absolute inset-0 bg-[linear-gradient(135deg,#15120f_0%,#0b0b0a_42%,#1a1612_88%)]"
+                />
+                <div
+                  aria-hidden
+                  className="absolute -left-[18%] top-[8%] h-[58%] w-[72%] rounded-full bg-[radial-gradient(circle,rgba(199,164,106,0.28),transparent_68%)] opacity-95 blur-xl transition duration-[220ms] group-hover:opacity-100"
+                />
+                <div
+                  aria-hidden
+                  className="absolute inset-x-[12%] top-[52%] h-px bg-gradient-to-r from-transparent via-[color:var(--gold)]/40 to-transparent"
+                />
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#0b0b0a]/92 to-transparent p-4 pt-14">
+                  <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[color:var(--gold)]">
+                    {f.label}
+                  </div>
                 </div>
               </div>
-            </div>
-          </a>
-        ))}
+            </a>
+          ) : (
+            <a
+              key={f.key}
+              href={f.href}
+              className="group overflow-hidden rounded-2xl border border-[color:var(--edge)] bg-[color:var(--paper)]/40 shadow-[0_18px_46px_rgba(0,0,0,0.45)] transition-transform duration-200 hover:border-[color:var(--gold)]/55 hover:[transform:translateY(-3px)]"
+            >
+              <div className="relative aspect-[16/10] overflow-hidden">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={f.src}
+                  alt=""
+                  className="h-full w-full object-cover transition duration-[220ms] group-hover:scale-[1.03]"
+                />
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#0b0b0a]/88 to-transparent p-4 pt-14">
+                  <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[color:var(--gold)]">
+                    {f.label}
+                  </div>
+                </div>
+              </div>
+            </a>
+          ),
+        )}
       </div>
     </section>
   );
@@ -382,7 +419,12 @@ export function AISecretaryPreview() {
             <span className="crm-free-badge">Desk</span>
           </div>
           <div className="mt-4 overflow-hidden rounded-2xl">
-            <ImageSlot src="/images/desk.png" alt="" tone="desk" className="h-[320px]" />
+            <ImageSlot
+              src="/images/profile-workspace.png"
+              alt=""
+              tone="desk"
+              className="h-[320px]"
+            />
           </div>
         </div>
       </div>
