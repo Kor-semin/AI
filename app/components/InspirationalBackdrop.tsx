@@ -32,22 +32,22 @@ export function InspirationalBackdrop() {
         <div className="absolute inset-0">
           <div
             aria-hidden
-            className="absolute inset-0 bg-gradient-to-br from-[#0b0b0a]/98 via-[#15120f]/88 to-transparent"
+            className="absolute inset-0 bg-gradient-to-br from-[#eef1f4] via-[#e8ecf2] to-[#f8fafc]"
           />
           <div
             aria-hidden
-            className="absolute inset-0 bg-[radial-gradient(ellipse_at_30%_0%,rgba(199,164,106,0.16),transparent_55%)]"
+            className="absolute inset-0 bg-[radial-gradient(ellipse_120%_70%_at_20%_-12%,rgba(148,163,184,0.2),transparent_55%)]"
           />
           <div
             aria-hidden
-            className="absolute inset-0 bg-[radial-gradient(1200px_760px_at_18%_-10%,rgba(199,164,106,0.12),transparent_62%),radial-gradient(980px_620px_at_112%_16%,rgba(232,220,200,0.08),transparent_58%),linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0))]"
+            className="absolute inset-0 bg-[radial-gradient(900px_560px_at_100%_18%,rgba(255,255,255,0.75),transparent_58%),linear-gradient(180deg,rgba(241,245,249,0.5),transparent)]"
           />
         </div>
       </div>
       <div
         role="status"
         aria-live="polite"
-        className="pointer-events-none fixed bottom-14 left-4 z-[5] max-w-[min(92vw,22rem)] text-left text-[11px] font-medium tracking-tight text-[#e8dcc8]/90 drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]"
+        className="pointer-events-none fixed bottom-14 left-4 z-[5] max-w-[min(92vw,22rem)] text-left text-[11px] font-medium tracking-tight text-[#64748b]"
       >
         「{QUOTES[quoteIdx]}」
       </div>

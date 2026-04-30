@@ -49,24 +49,24 @@ export default function BetaJoinPage() {
   }
 
   const fieldClass =
-    "mt-2 w-full rounded-xl border border-[color:var(--edge)] bg-[color:var(--paper-2)] px-4 py-3 text-sm text-[color:var(--foreground)] shadow-[inset_0_1px_0_rgba(255,255,255,0.03)] placeholder:text-[color:var(--ink-2)] focus:border-[color:var(--gold)]/45 focus:outline-none focus:ring-[3px] focus:ring-[color:var(--gold)]/12";
+    "mt-2 w-full rounded-xl border border-[#d7dce2] bg-[#fafbfc] px-4 py-3 text-sm text-[#1e2329] shadow-[inset_0_1px_2px_rgba(17,19,24,0.03)] placeholder:text-[#8a929e] focus:border-[#a8b0ba] focus:outline-none focus:ring-[3px] focus:ring-[rgba(168,176,186,0.22)]";
 
   return (
     <main className="crm-bg relative min-h-[100dvh] min-h-[100svh] overflow-x-hidden px-[max(1rem,env(safe-area-inset-left))] pb-[max(2rem,env(safe-area-inset-bottom))] pr-[max(1rem,env(safe-area-inset-right))] pt-[max(1.25rem,env(safe-area-inset-top))]">
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(900px_560px_at_14%_-8%,rgba(199,164,106,0.10),transparent_58%),radial-gradient(760px_520px_at_104%_100%,rgba(232,220,200,0.05),transparent_58%)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(760px_480px_at_10%_-4%,rgba(148,163,184,0.18),transparent_58%),radial-gradient(640px_400px_at_100%_0%,rgba(255,255,255,0.9),transparent_55%)]"
       />
 
       <div className="relative z-[1] mx-auto w-full max-w-xl">
         <div className="mb-8">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-[12px] font-semibold text-[color:var(--gold-2)] transition hover:text-[color:var(--gold)]"
+            className="inline-flex items-center gap-2 text-[12px] font-semibold text-[#64748b] transition hover:text-[#1e2329]"
           >
             <span aria-hidden>←</span> 홈으로 돌아가기
           </Link>
-          <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-[color:var(--edge)] bg-[color:var(--paper)]/72 px-3 py-1 text-[11px] font-semibold tracking-[0.12em] text-[color:var(--gold)] backdrop-blur">
+          <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-[#d7dce2] bg-white/85 px-3 py-1 text-[11px] font-semibold tracking-[0.12em] text-[#5f6675] backdrop-blur-sm">
             SALES CONCIERGE AI
           </div>
           <h1 className="mt-4 text-2xl font-semibold tracking-tight text-[color:var(--foreground)] sm:text-3xl">
@@ -161,7 +161,7 @@ export default function BetaJoinPage() {
             </div>
           </fieldset>
 
-          <div className="mt-8 flex flex-col gap-3 border-t border-[color:var(--edge)] pt-8">
+          <div className="mt-8 flex flex-col gap-3 border-t border-[#d7dce2] pt-8">
             <button
               type="submit"
               disabled={pending}
@@ -171,7 +171,7 @@ export default function BetaJoinPage() {
             </button>
             <p className="text-center text-[11px] leading-relaxed text-[color:var(--ink-2)]">
               이미 명함 접수 후 승인을 기다리는 경우{" "}
-              <Link href="/register" className="font-semibold text-[color:var(--gold-2)] underline-offset-4 hover:text-[color:var(--gold)] hover:underline">
+              <Link href="/register" className="font-semibold text-[#5c6370] underline-offset-4 hover:text-[#1e2329] hover:underline">
                 영업 계정 등록
               </Link>
               에서 상태를 확인하세요.
