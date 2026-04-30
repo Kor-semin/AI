@@ -20,7 +20,7 @@ import { sellerCanUseApp, useSellerProfile } from "@/app/crm/useSellerProfile";
 import { isFirebaseConfigured, isGoogleAuthEnabled } from "@/app/firebase/client";
 
 export default function Home() {
-  const { auth, authError, signIn, signOut } = useAuth();
+  const { auth, authError, signOut } = useAuth();
   const firebaseReady = isFirebaseConfigured();
   const googleAuthEnabled = isGoogleAuthEnabled();
   const seller = useSellerProfile(auth.status === "signed-in" ? auth.uid : null);
@@ -47,10 +47,12 @@ export default function Home() {
     }
   }, []);
 
+  const showNotebookCover = view === "app";
+
   return (
     <div className="relative flex min-h-screen flex-col overflow-x-hidden text-[color:var(--foreground)]">
       <InspirationalBackdrop />
-      <NotebookCover />
+      {showNotebookCover ? <NotebookCover /> : null}
 
       <header className="sticky top-0 z-20 border-b border-[color:var(--edge)] bg-[color:var(--background)]/72 px-4 py-3 backdrop-blur-md">
         <div className="mx-auto flex max-w-[1280px] items-center justify-between">
@@ -79,12 +81,6 @@ export default function Home() {
           >
             {view === "app" ? "랜딩" : "Workspace"}
           </button>
-          <Link
-            href="/register"
-            className="crm-ghost-btn hidden rounded-lg px-2.5 py-1.5 text-[11px] font-medium sm:inline-flex"
-          >
-            영업 계정 등록
-          </Link>
           {auth.status === "loading" ? (
             <div className="text-xs text-[color:var(--ink-2)]">로그인 확인 중…</div>
           ) : auth.status === "signed-in" ? (
@@ -106,22 +102,15 @@ export default function Home() {
                   로그인 오류: {authError}
                 </div>
               ) : null}
-              <button
+              <Link
+                href="/register"
                 className={[
                   "crm-ink-btn rounded-lg px-3 py-2 text-xs font-semibold",
-                  firebaseReady && googleAuthEnabled ? "" : "opacity-50",
+                  firebaseReady ? "" : "opacity-55",
                 ].join(" ")}
-                onClick={async () => {
-                  try {
-                    await signIn();
-                  } catch (e) {
-                    alert(e instanceof Error ? e.message : String(e));
-                  }
-                }}
-                disabled={!firebaseReady || !googleAuthEnabled}
               >
-                {googleAuthEnabled ? "Google로 시작하기" : "고객관리 시작하기"}
-              </button>
+                영업 계정 등록
+              </Link>
             </>
           )}
         </div>
@@ -140,6 +129,7 @@ export default function Home() {
           </>
         ) : null}
 
+        {view === "app" ? (
         <div id="app" className="mx-auto w-full max-w-[1280px] scroll-mt-24 px-4 pb-16 pt-6">
           <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
             <ConciergeSidebar />
@@ -223,6 +213,7 @@ export default function Home() {
             </div>
           </div>
         </div>
+        ) : null}
       </main>
     </div>
   );
