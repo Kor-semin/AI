@@ -106,7 +106,21 @@ export type TranslationKey =
   | "landing.feature.memory.title"
   | "landing.feature.memory.desc"
   | "landing.feature.delivery.title"
-  | "landing.feature.delivery.desc";
+  | "landing.feature.delivery.desc"
+  | "cta.tryAIDemo"
+  | "landing.aiDemo.sectionTitle"
+  | "landing.aiDemo.sectionDesc"
+  | "landing.aiDemo.inputLabel"
+  | "landing.aiDemo.inputExample"
+  | "landing.aiDemo.status"
+  | "landing.aiDemo.aiResponseLabel"
+  | "landing.aiDemo.aiResponseExample"
+  | "landing.aiDemo.messageLabel"
+  | "landing.aiDemo.messageExample"
+  | "landing.aiDemo.applyCta"
+  | "landing.crmDemo.sectionTitle"
+  | "landing.crmDemo.sectionDesc"
+  | "landing.crmDemo.startCta";
 
 type TranslationDict = Partial<Record<TranslationKey, string>>;
 
@@ -121,6 +135,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
       "고객 상담, 관심 차량, 후속 연락, 메시지 작성, 영업 파이프라인을 AI가 정리하고 제안합니다.",
     "cta.joinBeta": "베타 신청하기",
     "cta.viewDemo": "데모 보기",
+    "cta.tryAIDemo": "AI 비서 체험하기",
     "header.cover": "표지",
     "header.landing": "랜딩",
     "header.workspace": "Workspace",
@@ -184,6 +199,24 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.feature.memory.desc": "고객이 중요하게 보는 기준을 기억해, 비교 포인트를 상담 기록에 남깁니다.",
     "landing.feature.delivery.title": "출고 후 관리",
     "landing.feature.delivery.desc": "인도/등록/사후관리까지 체크리스트로 정리해 ‘다음 행동’을 놓치지 않습니다.",
+    "landing.aiDemo.sectionTitle": "AI 비서 체험하기",
+    "landing.aiDemo.sectionDesc":
+      "상담 메모를 입력하면 AI가 고객 요약, 다음 액션, 연락 문구를 즉시 제안합니다.",
+    "landing.aiDemo.inputLabel": "상담 메모 (예시)",
+    "landing.aiDemo.inputExample":
+      "고객은 조용한 승차감과 가족 이동을 중요하게 생각했고, 금융 조건을 궁금해했습니다.",
+    "landing.aiDemo.status": "AI가 상담 내용을 정리하고 있습니다…",
+    "landing.aiDemo.aiResponseLabel": "AI 요약",
+    "landing.aiDemo.aiResponseExample":
+      "이 고객은 실용성과 고급감을 함께 고려하는 고객입니다. 오늘은 월 납입금, 장기 보유 가치, 가족 이동 편의성을 중심으로 연락하는 것이 좋습니다.",
+    "landing.aiDemo.messageLabel": "추천 메시지",
+    "landing.aiDemo.messageExample":
+      "안녕하세요. 지난 상담에서 말씀하신 승차감과 가족 이동 편의성을 기준으로 정리해봤습니다. 오늘 편하실 때 금융 조건까지 함께 안내드리겠습니다.",
+    "landing.aiDemo.applyCta": "CRM에 적용하기",
+    "landing.crmDemo.sectionTitle": "고객관리 흐름을 한 화면에",
+    "landing.crmDemo.sectionDesc":
+      "오늘 연락할 고객, 계약 가능성, 상담 요약, 출고 안내서를 한 번에 확인합니다.",
+    "landing.crmDemo.startCta": "고객관리 시작하기",
   },
   en: {
     "brand.name": "Sensora",
@@ -195,6 +228,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
       "Sensora organizes customer conversations, vehicle interests, follow-ups, message drafts, and sales pipelines with AI.",
     "cta.joinBeta": "Join the Beta",
     "cta.viewDemo": "View Demo",
+    "cta.tryAIDemo": "Try the AI Assistant",
     "header.cover": "Cover",
     "header.landing": "Landing",
     "header.workspace": "Workspace",
@@ -258,6 +292,24 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.feature.memory.desc": "Remember what matters to each customer and keep comparison points captured in context.",
     "landing.feature.delivery.title": "Post-delivery Care",
     "landing.feature.delivery.desc": "Track delivery, registration, and aftercare with checklists so the next action never slips.",
+    "landing.aiDemo.sectionTitle": "Try the AI Assistant",
+    "landing.aiDemo.sectionDesc":
+      "Paste a consultation memo and Sensora will instantly suggest a customer summary, next actions, and a follow-up message.",
+    "landing.aiDemo.inputLabel": "Consultation memo (example)",
+    "landing.aiDemo.inputExample":
+      "The customer values a quiet ride and family comfort, and asked about financing options.",
+    "landing.aiDemo.status": "Sensora is organizing your consultation notes…",
+    "landing.aiDemo.aiResponseLabel": "AI Summary",
+    "landing.aiDemo.aiResponseExample":
+      "This customer is balancing practicality with premium comfort. Today, focus your outreach on monthly payments, long-term value, and family-friendly convenience.",
+    "landing.aiDemo.messageLabel": "Suggested message",
+    "landing.aiDemo.messageExample":
+      "Hello—based on what you shared about ride comfort and family convenience, I summarized the key points. When you’re free today, I can also walk you through financing options.",
+    "landing.aiDemo.applyCta": "Apply in CRM",
+    "landing.crmDemo.sectionTitle": "The CRM flow—at a glance",
+    "landing.crmDemo.sectionDesc":
+      "See today’s follow-ups, deal probability, consultation summaries, and delivery guides in one place.",
+    "landing.crmDemo.startCta": "Start in CRM",
   },
   ja: {},
   "zh-CN": {},

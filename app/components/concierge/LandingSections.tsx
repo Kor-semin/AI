@@ -171,9 +171,9 @@ export function HeroSection() {
               <Link href="/join" className="crm-ink-btn rounded-xl px-5 py-3 text-xs font-semibold">
                 {t("cta.joinBeta")}
               </Link>
-              <Link href="/?view=app" className="crm-outline-light-btn rounded-xl px-5 py-3 text-xs font-semibold">
-                {t("cta.viewDemo")}
-              </Link>
+              <a href="#ai-demo" className="crm-outline-light-btn rounded-xl px-5 py-3 text-xs font-semibold">
+                {t("cta.tryAIDemo")}
+              </a>
             </div>
 
             <ul className="mt-8 space-y-2 text-[12px] leading-relaxed text-[#8b94a1] sm:text-[13px]">
@@ -189,6 +189,154 @@ export function HeroSection() {
         </div>
       </div>
     </section>
+  );
+}
+
+export function AIDemoSection() {
+  const { t } = useLanguage();
+  return (
+    <section id="ai-demo" className="mx-auto w-full max-w-[1280px] px-4 py-14 sm:py-18">
+      <div className="grid gap-6 lg:grid-cols-[0.98fr_1.02fr] lg:items-start">
+        <div className="rounded-2xl border border-[color:var(--edge)] bg-[color:var(--paper)] p-7 shadow-[0_12px_36px_rgba(17,19,24,0.08)]">
+          <div className="text-[12px] font-semibold tracking-[-0.01em] text-[#475569]">{t("landing.aiDemo.sectionTitle")}</div>
+          <h2 className="mt-3 text-2xl font-semibold tracking-tight text-[#111827] sm:text-3xl">
+            {t("landing.aiDemo.sectionTitle")}
+          </h2>
+          <p className="mt-3 max-w-[62ch] text-[15px] leading-relaxed text-[color:var(--ink-2)]">
+            {t("landing.aiDemo.sectionDesc")}
+          </p>
+
+          <div className="mt-6 rounded-2xl border border-[#E5E7EB] bg-[#F9FAFB] p-5">
+            <div className="text-[12px] font-semibold text-[#374151]">{t("landing.aiDemo.inputLabel")}</div>
+            <div className="mt-3 rounded-xl border border-[#E5E7EB] bg-white px-4 py-3 text-[14px] leading-relaxed text-[#111827]">
+              {t("landing.aiDemo.inputExample")}
+            </div>
+          </div>
+
+          <div className="mt-7 flex flex-wrap gap-3">
+            <Link href="/?view=app" className="crm-ink-btn rounded-xl px-5 py-3 text-xs font-semibold">
+              {t("landing.aiDemo.applyCta")}
+            </Link>
+            <Link href="/join" className="crm-ghost-btn rounded-xl px-5 py-3 text-xs font-semibold">
+              {t("cta.joinBeta")}
+            </Link>
+          </div>
+        </div>
+
+        <div className="relative overflow-hidden rounded-[1.75rem] border border-[#CBD5E1]/70 bg-[radial-gradient(900px_560px_at_30%_0%,rgba(148,163,184,0.22),transparent_58%),radial-gradient(820px_520px_at_100%_30%,rgba(59,130,246,0.18),transparent_60%),linear-gradient(180deg,rgba(255,255,255,0.85),rgba(248,250,252,0.75))] p-6 shadow-[0_26px_70px_-34px_rgba(15,23,42,0.35)] backdrop-blur-sm">
+          <div className="pointer-events-none absolute inset-0 opacity-[0.85] [mask-image:radial-gradient(ellipse_80%_70%_at_50%_35%,black_55%,transparent_100%)]">
+            <div className="absolute inset-0 bg-[linear-gradient(115deg,rgba(148,163,184,0.18),transparent_45%,rgba(59,130,246,0.14))]" />
+            <div className="absolute inset-0 bg-[radial-gradient(700px_420px_at_32%_22%,rgba(226,232,240,0.8),transparent_55%)]" />
+          </div>
+
+          <div className="relative">
+            <div className="inline-flex items-center gap-2 rounded-full border border-[#CBD5E1]/70 bg-white/70 px-3 py-1 text-[12px] font-semibold text-[#334155] shadow-[0_1px_10px_rgba(15,23,42,0.06)]">
+              <span className="relative inline-flex size-2">
+                <span className="absolute inset-0 rounded-full bg-[#60A5FA] opacity-40 motion-reduce:animate-none [animation:sensora-pulse-ring_1.9s_ease-out_infinite]" />
+                <span className="relative inline-block size-2 rounded-full bg-[#2563EB]" />
+              </span>
+              {t("landing.aiDemo.status")}
+            </div>
+
+            <div className="mt-6 grid gap-4">
+              <div className="relative overflow-hidden rounded-2xl border border-white/70 bg-white/55 p-5 shadow-[0_18px_50px_-28px_rgba(15,23,42,0.35)] backdrop-blur-lg motion-reduce:transform-none motion-reduce:animate-none [animation:sensora-float_5.5s_ease-in-out_infinite]">
+                <div className="text-[12px] font-semibold text-[#334155]">{t("landing.aiDemo.aiResponseLabel")}</div>
+                <div className="mt-3 text-[15px] leading-relaxed text-[#111827]">
+                  <span className="block overflow-hidden whitespace-nowrap motion-reduce:whitespace-normal motion-reduce:w-auto [width:0%] motion-reduce:[animation:none] [animation:sensora-type_1.8s_steps(44,end)_0.15s_forwards]">
+                    {t("landing.aiDemo.aiResponseExample")}
+                  </span>
+                </div>
+              </div>
+
+              <div className="relative overflow-hidden rounded-2xl border border-white/70 bg-white/55 p-5 shadow-[0_18px_50px_-28px_rgba(15,23,42,0.35)] backdrop-blur-lg motion-reduce:transform-none motion-reduce:animate-none [animation:sensora-float_5.5s_ease-in-out_infinite] [animation-delay:-1.8s]">
+                <div className="text-[12px] font-semibold text-[#334155]">{t("landing.aiDemo.messageLabel")}</div>
+                <div className="mt-3 text-[15px] leading-relaxed text-[#111827]">
+                  <span className="block overflow-hidden whitespace-nowrap motion-reduce:whitespace-normal motion-reduce:w-auto [width:0%] motion-reduce:[animation:none] [animation:sensora-type_1.9s_steps(52,end)_0.25s_forwards]">
+                    {t("landing.aiDemo.messageExample")}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div aria-hidden className="pointer-events-none absolute -bottom-16 -right-24 size-[360px] rounded-full bg-[radial-gradient(circle,rgba(59,130,246,0.18),transparent_60%)] blur-2xl" />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export function CRMDemoSection() {
+  const { t } = useLanguage();
+  return (
+    <SectionShell
+      id="crm-demo"
+      kicker="CRM Demo"
+      title={t("landing.crmDemo.sectionTitle")}
+      subtitle={t("landing.crmDemo.sectionDesc")}
+    >
+      <div className="grid gap-6 lg:grid-cols-[0.96fr_1.04fr]">
+        <div className="space-y-6">
+          <HeroDashboardPreviewCard />
+          <div className="rounded-2xl border border-[color:var(--edge)] bg-[color:var(--paper)] p-5 shadow-[0_12px_36px_rgba(17,19,24,0.06)]">
+            <div className="text-sm font-semibold text-[color:var(--foreground)]">Customers (Sample)</div>
+            <div className="mt-1 text-[12px] text-[color:var(--ink-2)]">
+              고객명 / {t("common.interestedVehicle")} / {t("common.status")} / {t("crm.section.nextAction")}
+            </div>
+            <div className="mt-4 overflow-hidden rounded-2xl border border-[color:var(--edge)]">
+              <table className="w-full text-left text-[12px]">
+                <thead className="bg-[color:var(--paper-2)]/75 text-[12px] font-semibold text-[color:var(--gold-ink)]">
+                  <tr>
+                    <th className="px-4 py-3">고객</th>
+                    <th className="px-4 py-3">{t("common.interestedVehicle")}</th>
+                    <th className="px-4 py-3">{t("common.status")}</th>
+                    <th className="px-4 py-3">{t("crm.section.nextAction")}</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[color:var(--edge)] bg-[color:var(--paper)]/30">
+                  {SAMPLE_CUSTOMERS.slice(0, 4).map((c) => (
+                    <tr key={c.name}>
+                      <td className="px-4 py-3 font-semibold text-[color:var(--foreground)]">{c.name}</td>
+                      <td className="px-4 py-3 text-[color:var(--ink-2)]">{c.vehicle}</td>
+                      <td className="px-4 py-3 text-[color:var(--ink-2)]">{c.status}</td>
+                      <td className="px-4 py-3 text-[color:var(--ink-2)]">{c.nextAction}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div className="rounded-[2rem] border border-[color:var(--edge)] bg-[color:var(--paper)] p-6 shadow-[0_16px_44px_rgba(17,19,24,0.08)]">
+          <div className="flex items-center justify-between">
+            <div className="text-sm font-semibold text-[color:var(--foreground)]">Pipeline (Sample)</div>
+            <span className="crm-free-badge">Preview</span>
+          </div>
+          <p className="mt-2 text-[15px] leading-relaxed text-[color:var(--ink-2)]">
+            신규 리드부터 출고까지 단계별 흐름을 한 화면에서 정리합니다.
+          </p>
+          <div className="mt-5 overflow-x-auto">
+            <div className="grid min-w-[820px] grid-cols-6 gap-3">
+              {["신규", "상담", "견적", "검토", "출고", "재구매"].map((s) => (
+                <div key={s} className="rounded-2xl border border-[color:var(--edge)] bg-[color:var(--paper-2)]/55 p-3">
+                  <div className="text-[12px] font-semibold text-[color:var(--gold-ink)]">{s}</div>
+                  <div className="mt-2 rounded-xl border border-[color:var(--edge)] bg-white px-3 py-2 text-[12px] font-semibold text-[color:var(--foreground)]">
+                    샘플 카드
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-7 flex flex-wrap gap-3">
+            <Link href="/?view=app" className="crm-ink-btn rounded-xl px-5 py-3 text-xs font-semibold">
+              {t("landing.crmDemo.startCta")}
+            </Link>
+          </div>
+        </div>
+      </div>
+    </SectionShell>
   );
 }
 

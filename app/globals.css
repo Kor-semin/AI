@@ -74,6 +74,40 @@ html[lang="ko"] body {
   line-height: 1.55;
 }
 
+@keyframes sensora-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -8px, 0);
+  }
+}
+
+@keyframes sensora-pulse-ring {
+  0% {
+    transform: scale(0.86);
+    opacity: 0.15;
+  }
+  65% {
+    transform: scale(1.08);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.08);
+    opacity: 0;
+  }
+}
+
+@keyframes sensora-type {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
 /* App frame / join — 밝은 그레이 베이스 */
 .crm-bg {
   background-color: var(--background);

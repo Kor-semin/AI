@@ -12,6 +12,7 @@ type Props = {
 
 export function ImageSlot({ src, alt, className, tone = "hero" }: Props) {
   const [failed, setFailed] = useState(false);
+  const [loaded, setLoaded] = useState(false);
 
   const placeholder = useMemo(() => {
     const base =
@@ -32,23 +33,22 @@ export function ImageSlot({ src, alt, className, tone = "hero" }: Props) {
     return [base, glow, tones[tone], sheen].join(" ");
   }, [tone]);
 
-  if (failed) {
-    return <div aria-hidden className={[placeholder, className].filter(Boolean).join(" ")} />;
-  }
-
-  // eslint-disable-next-line @next/next/no-img-element -- public/images 교체용 슬롯
   return (
-    <img
-      src={src}
-      alt={alt}
-      className={[
-        "block h-full w-full rounded-2xl border border-[color:var(--edge)] object-cover shadow-[0_14px_40px_rgba(17,19,24,0.1)]",
-        className,
-      ]
-        .filter(Boolean)
-        .join(" ")}
-      onError={() => setFailed(true)}
-    />
+    <div aria-hidden={alt ? undefined : true} className={[placeholder, className].filter(Boolean).join(" ")}>
+      {!failed ? (
+        // eslint-disable-next-line @next/next/no-img-element -- public/images 교체용 슬롯
+        <img
+          src={src}
+          alt={alt}
+          className={[
+            "absolute inset-0 h-full w-full rounded-2xl border border-[color:var(--edge)] object-cover shadow-[0_14px_40px_rgba(17,19,24,0.1)] transition-opacity duration-300",
+            loaded ? "opacity-100" : "opacity-0",
+          ].join(" ")}
+          onLoad={() => setLoaded(true)}
+          onError={() => setFailed(true)}
+        />
+      ) : null}
+    </div>
   );
 }
 
