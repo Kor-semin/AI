@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { InspirationalBackdrop } from "@/app/components/InspirationalBackdrop";
 import { NotebookCover } from "@/app/components/NotebookCover";
@@ -36,11 +36,6 @@ export default function Home() {
 
   const crmUid =
     auth.status === "signed-in" && !(sellerLoading || sellerGateBlock) ? auth.uid : null;
-
-  const query = useMemo(() => {
-    if (typeof window === "undefined") return new URLSearchParams();
-    return new URLSearchParams(window.location.search);
-  }, []);
 
   useEffect(() => {
     try {
@@ -106,10 +101,10 @@ export default function Home() {
             영업 계정 등록
           </Link>
           {auth.status === "loading" ? (
-            <div className="text-xs text-zinc-500 dark:text-zinc-400">로그인 확인 중…</div>
+            <div className="text-xs text-[color:var(--ink-2)]">로그인 확인 중…</div>
           ) : auth.status === "signed-in" ? (
             <>
-              <div className="hidden text-xs text-zinc-600 dark:text-zinc-300 sm:block">
+              <div className="hidden text-xs text-[color:var(--ink-2)] sm:block">
                 {auth.name ?? auth.email ?? auth.uid}
               </div>
               <button
@@ -122,7 +117,7 @@ export default function Home() {
           ) : (
             <>
               {authError ? (
-                <div className="max-w-[520px] text-xs text-red-700 dark:text-red-300">
+                <div className="max-w-[520px] text-xs text-red-300">
                   로그인 오류: {authError}
                 </div>
               ) : null}

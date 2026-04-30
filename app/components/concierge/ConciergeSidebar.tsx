@@ -22,7 +22,7 @@ export function ConciergeSidebar() {
           <div className="mt-2 text-sm font-semibold tracking-tight text-[color:var(--foreground)]">
             오토 세일즈 AI 비서
           </div>
-          <div className="mt-1 text-[12px] text-[color:var(--ink-2)]">Premium sales workspace</div>
+          <div className="mt-1 text-[12px] text-[color:var(--ink-2)]">프리미엄 영업 업무실</div>
         </div>
 
         <nav className="mt-3 grid gap-1">

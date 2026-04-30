@@ -22,7 +22,7 @@ function readDismissed(): boolean {
   }
 }
 
-/** 전체 화면 컨설턴트 표지 — 히어로 사진 + 실버 무드 오버레이 */
+/** 전체 화면 표지 — Sales Concierge AI (다크 프리미엄, 인물 미사용) */
 export function NotebookCover() {
   const router = useRouter();
   const [dismissed, setDismissed] = useState(false);
@@ -123,14 +123,15 @@ export function NotebookCover() {
       <div className="notebook-cover-cover-layer notebook-cover-biz-micro notebook-cover-reveal notebook-cover-editorial-shell flex min-h-[100dvh] min-h-[100svh] w-full cursor-pointer flex-col pl-[max(22px,calc(env(safe-area-inset-left,0px)+1.25rem))] pr-[max(22px,calc(env(safe-area-inset-right,0px)+1.25rem))] pb-[calc(1.35rem+env(safe-area-inset-bottom,0px))] pt-[max(28px,calc(env(safe-area-inset-top,0px)+1.85rem))] text-center md:mx-auto md:max-w-[min(760px,calc(100vw-48px))] md:pb-[calc(2rem+env(safe-area-inset-bottom,0px))]">
         <header className="notebook-cover-cover-header shrink-0 px-3 pb-[1.1rem]">
           <p className="notebook-cover-cover-kicker-upper font-[family-name:var(--font-cover-serif)] text-[clamp(10px,2.55vw,12px)] font-semibold tracking-[0.2em]">
-            FIELD OPS
+            SALES CONCIERGE
           </p>
           <p className="notebook-cover-cover-kicker-sub mt-3.5 text-[clamp(12px,2.85vw,14px)] font-semibold leading-[1.45] tracking-[-0.018em]">
-            고객을 기억하고, 흐름을 관리하는 프리미엄 업무 파트너
+            오토 세일즈 AI 비서 · 클래식 카 · 라운지
           </p>
           <p className="notebook-cover-tagline mt-3 text-[clamp(11px,2.5vw,13px)] font-medium leading-[1.6] tracking-[-0.012em]">
-            고객 상담, 시승 일정, 출고 준비, 재구매 타이밍까지<br className="hidden sm:block" />
-            놓치지 않도록 정리해주는 자동차 영업 AI 비서입니다.
+            고급 자동차 영업사원을 위한 프리미엄 고객관리 시스템입니다.
+            <br />
+            상담 이력, 관심 차량, 구매 가능성, 후속 연락까지 AI가 정리하고 제안합니다.
           </p>
           <div className="mt-4 flex justify-center">
             <span className="crm-free-badge">무료 사용</span>
@@ -145,8 +146,8 @@ export function NotebookCover() {
                 id="notebook-cover-title"
                 className="notebook-cover-biz-heading notebook-cover-heading-block mx-auto max-w-[min(22ch,calc(100vw-2rem))] text-center sm:max-w-[min(520px,94vw)]"
               >
-                <span className="notebook-cover-title-primary">자동차 영업</span>
-                <span className="notebook-cover-title-sub">AI 영업 비서</span>
+                <span className="notebook-cover-title-primary">고객을 기억하는</span>
+                <span className="notebook-cover-title-sub">자동차 영업 AI 비서</span>
                 <span aria-hidden className="notebook-cover-title-shine" />
               </h1>
             </div>
@@ -216,7 +217,7 @@ export function NotebookCover() {
 
             <div className="notebook-cover-biz-micro notebook-cover-cta-wrap mt-[2.65rem] flex flex-col items-center gap-[0.72rem] text-center md:mt-12 md:gap-3">
               <span className="notebook-cover-cta-chip notebook-cover-cta-main inline-flex min-h-[2.75rem] min-w-[12.25rem] max-w-[min(90vw,20rem)] items-center justify-center rounded-full px-[1.4rem] py-2.5 text-center font-[family-name:var(--font-cover-sans)] text-[clamp(11.25px,2.65vw,12.5px)] font-bold leading-snug tracking-[-0.01em]">
-                {googleAuthEnabled ? "Google로 시작하기" : "영업 시작하기"}
+                {googleAuthEnabled ? "Google로 시작하기" : "고객관리 시작하기"}
               </span>
               <span className="notebook-cover-cta-sub text-[clamp(11px,2.55vw,12px)] font-semibold leading-snug tracking-[-0.012em]">
                 {googleAuthEnabled

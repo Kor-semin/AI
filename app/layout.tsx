@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     template: "%s · Sales Concierge AI",
   },
   description:
-    "고객 상담, 시승 일정, 출고 준비, 재구매 타이밍까지. 고급 자동차 영업사원의 하루를 놓치지 않도록 정리해주는 프리미엄 영업 컨시어지.",
+    "고급 자동차 영업사원을 위한 프리미엄 고객관리 시스템. 상담 이력, 관심 차량, 구매 가능성, 후속 연락까지 AI가 정리하고 제안합니다.",
   appleWebApp: {
     capable: true,
     title: "Sales Concierge AI",

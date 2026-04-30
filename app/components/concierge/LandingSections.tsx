@@ -56,6 +56,11 @@ export function HeroSection({ onEnter }: { onEnter: () => void }) {
             후속 연락까지 AI가 정리하고 제안합니다.
           </p>
 
+          <div
+            aria-hidden
+            className="mt-6 h-px w-full max-w-sm bg-gradient-to-r from-transparent via-[color:var(--gold)]/55 to-transparent"
+          />
+
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <button
               type="button"
@@ -152,8 +157,8 @@ export function FeatureSection() {
   return (
     <SectionShell
       kicker="Features"
-      title="고급 영업 루틴에 맞춘, 조용한 생산성"
-      subtitle="테크 서비스처럼 보이기보다, 실제 영업사원이 매일 쓰는 개인 비서처럼. 필요한 것만 정확히, 보기 좋게."
+      title="고급 영업 루틴을 위한, 조용한 생산성"
+      subtitle="클래식카·프라이빗 라운지 톤의 프리미엄 세일즈 컨시어지. 과시보다 깊은 기록과 타이밍을 우선합니다."
     >
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {items.map((it) => (
@@ -259,6 +264,23 @@ export function DashboardPreview() {
             <span className="opacity-65">·</span>
             <span>샘플 데이터는 랜딩 프리뷰용입니다.</span>
           </div>
+
+          <div className="mt-6 rounded-2xl border border-[color:var(--edge)] bg-[color:var(--paper-2)]/40 p-4">
+            <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[color:var(--gold-2)]">
+              Customer workspace
+            </div>
+            <div className="mt-3 overflow-hidden rounded-2xl">
+              <ImageSlot
+                src="/images/profile.jpg"
+                alt="Premium consultant workspace preview"
+                tone="profile"
+                className="h-[180px] sm:h-[220px]"
+              />
+            </div>
+            <div className="mt-3 text-[12px] text-[color:var(--ink-2)]">
+              `/public/images/profile.jpg`로 교체할 수 있습니다. 로고가 보이는 사진은 사용하지 마세요.
+            </div>
+          </div>
         </div>
       </div>
     </SectionShell>
@@ -308,7 +330,7 @@ export function AISecretaryPreview() {
           </div>
 
           <div className="mt-6 flex flex-wrap gap-2">
-            <Link href="#app" className="crm-ghost-btn rounded-xl px-4 py-2.5 text-xs font-semibold">
+            <Link href="/?view=app#app" className="crm-ghost-btn rounded-xl px-4 py-2.5 text-xs font-semibold">
               CRM에서 바로 적용
             </Link>
             <a href="#pipeline" className="crm-ghost-btn rounded-xl px-4 py-2.5 text-xs font-semibold">
@@ -398,9 +420,9 @@ export function FinalBrandingSection() {
           응대할 수 있도록 설계된 고객관리 앱입니다.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
-          <a href="#app" className="crm-ink-btn rounded-xl px-5 py-3 text-xs font-semibold">
+          <Link href="/?view=app#app" className="crm-ink-btn rounded-xl px-5 py-3 text-xs font-semibold">
             고객관리 시작하기
-          </a>
+          </Link>
           <a href="#ai-secretary" className="crm-ghost-btn rounded-xl px-5 py-3 text-xs font-semibold">
             AI 비서 체험하기
           </a>
