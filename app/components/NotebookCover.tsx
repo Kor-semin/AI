@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -12,9 +11,6 @@ import {
   parseNotebookCoverTheme,
 } from "@/app/components/notebookCoverTheme";
 import { isGoogleAuthEnabled } from "@/app/firebase/client";
-
-/** `public/cover-consultant-hero.png` 표지 전면 배경만 사용 */
-const COVER_HERO_IMG = "/cover-consultant-hero.png";
 
 const STORAGE_KEY = "crm.notebookCoverDismissed";
 
@@ -119,15 +115,7 @@ export function NotebookCover() {
       }}
     >
       <div className="notebook-cover-consultant-hero" aria-hidden>
-        <Image
-          src={COVER_HERO_IMG}
-          alt=""
-          fill
-          priority
-          unoptimized
-          sizes="100vw"
-          className="notebook-cover-hero-photo object-cover object-[center_42%]"
-        />
+        <div className="notebook-cover-hero-abstract" aria-hidden />
         <div className="notebook-cover-hero-dim" aria-hidden />
         <div className="notebook-cover-tone-scrim" aria-hidden />
       </div>

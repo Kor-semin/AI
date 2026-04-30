@@ -147,16 +147,24 @@ body {
   overflow: hidden;
 }
 
-/* PNG 원본에 가까운 디스플레이(언옵티마이즈 호환) 스케일 안정화 */
-.notebook-cover-hero-photo {
+/* 인물/사진 없이도 프리미엄 무드 — 추상 그라데이션 + 미세 하이라이트 */
+.notebook-cover-hero-abstract {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(1200px 760px at 18% 8%, rgba(255, 255, 255, 0.92), rgba(226, 232, 240, 0.18) 45%, transparent 70%),
+    radial-gradient(980px 680px at 92% 24%, rgba(186, 230, 253, 0.26), transparent 62%),
+    radial-gradient(900px 700px at 64% 84%, rgba(226, 232, 240, 0.55), transparent 62%),
+    linear-gradient(160deg, #eef2f6 0%, #cfd7e2 40%, #95a3b6 100%);
   transform: translateZ(0);
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
 }
 
-/* 흑백 모드: 채도 완전 제거 + 명암 강조(실제 흑백 필름 느낌) */
-.notebook-cover-sheet--tone-mono .notebook-cover-hero-photo {
-  filter: grayscale(1) saturate(0) contrast(1.22) brightness(0.93);
+.notebook-cover-sheet--tone-mono .notebook-cover-hero-abstract {
+  background:
+    radial-gradient(980px 680px at 22% 14%, rgba(255, 255, 255, 0.08), transparent 60%),
+    radial-gradient(920px 660px at 92% 26%, rgba(255, 255, 255, 0.06), transparent 62%),
+    linear-gradient(160deg, #0d0d10 0%, #1a1a20 44%, #050507 100%);
 }
 
 /* 배경만 살짝 어둡게 — 눈 피로 완화(텍스트 레이어는 그대로) */
