@@ -87,7 +87,7 @@ export function NotebookCover() {
     }
     setDismissed(true);
     setForceShow(false);
-    if (googleAuthEnabled) router.push("/join");
+    if (googleAuthEnabled) router.push("/register");
   }, [router]);
 
   useEffect(() => {

@@ -8,7 +8,7 @@ const MENU = [
   { label: "Pipeline", href: "#pipeline", hint: "단계 흐름" },
   { label: "Vehicle Match", tab: "customers" as const, hint: "추천 메모" },
   { label: "Follow-up", tab: "next" as const, hint: "다음 할 일" },
-  { label: "Settings", href: "/join", hint: "계정/승인" },
+  { label: "Settings", href: "/register", hint: "계정/승인" },
 ];
 
 export function ConciergeSidebar() {

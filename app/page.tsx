@@ -80,7 +80,7 @@ export default function Home() {
             {view === "app" ? "랜딩" : "Workspace"}
           </button>
           <Link
-            href="/join"
+            href="/register"
             className="crm-ghost-btn hidden rounded-lg px-2.5 py-1.5 text-[11px] font-medium sm:inline-flex"
           >
             영업 계정 등록
@@ -182,7 +182,7 @@ export default function Home() {
                   </div>
                   <div className="flex flex-wrap items-center justify-center gap-2">
                     <Link
-                      href="/join"
+                      href="/register"
                       className="crm-ink-btn rounded-xl px-5 py-3 text-xs font-semibold"
                     >
                       등록 계속하기
