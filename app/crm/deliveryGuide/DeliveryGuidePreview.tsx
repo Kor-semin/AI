@@ -23,20 +23,20 @@ export function DeliveryGuidePreview({ customer, guide }: { customer: Customer; 
   const images = guide.images ?? [];
 
   const pageShell =
-    "rounded-2xl border border-[color:var(--edge)] bg-[color:var(--paper)] p-5 shadow-[0_18px_42px_-26px_rgba(15,23,42,0.25)] print:shadow-none";
+    "rounded-2xl border border-[#E5E7EB] bg-[#FFFFFF] p-5 shadow-[0_18px_42px_-26px_rgba(15,23,42,0.25)] print:shadow-none";
 
-  const pageTitle = "text-sm font-extrabold tracking-[-0.02em] text-[color:var(--foreground)]";
-  const pageMeta = "mt-1 text-[11px] font-semibold text-zinc-600 dark:text-zinc-300";
-  const h2 = "text-xs font-extrabold uppercase tracking-[0.16em] text-[color:var(--gold-ink)]";
+  const pageTitle = "text-sm font-extrabold tracking-[-0.02em] text-[#111827]";
+  const pageMeta = "mt-1 text-[11px] font-semibold text-[#6B7280]";
+  const h2 = "text-xs font-extrabold uppercase tracking-[0.16em] text-[#64748B]";
   const grid = "mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2";
 
   return (
     <div className="grid gap-6">
-      <div className="rounded-2xl border border-[color:var(--edge)] bg-[color:var(--paper-2)] p-4">
+      <div className="rounded-2xl border border-[#E5E7EB] bg-[#F9FAFB] p-4">
         <div className="flex flex-wrap items-start justify-between gap-2">
           <div>
-            <div className="text-sm font-extrabold text-[color:var(--foreground)]">안내서 미리보기</div>
-            <div className="mt-1 text-xs text-zinc-600 dark:text-zinc-300">
+            <div className="text-sm font-extrabold text-[#111827]">안내서 미리보기</div>
+            <div className="mt-1 text-xs text-[#6B7280]">
               고객에게 공유하기 전, 문서 형태로 어떻게 보이는지 확인합니다. (PDF/공유는 다음 단계)
             </div>
           </div>
@@ -98,12 +98,12 @@ export function DeliveryGuidePreview({ customer, guide }: { customer: Customer; 
               {images.map((img) => (
                 <figure
                   key={img.id}
-                  className="overflow-hidden rounded-2xl border border-[color:var(--edge)] bg-[color:var(--paper)]"
+                  className="overflow-hidden rounded-2xl border border-[#E5E7EB] bg-[#FFFFFF]"
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element -- dataUrl 미리보기 */}
                   <img src={img.dataUrl} alt="" className="h-44 w-full object-cover" />
-                  <figcaption className="p-3 text-xs text-zinc-700 dark:text-zinc-200">
-                    <div className="font-semibold text-[color:var(--foreground)]">
+                  <figcaption className="p-3 text-xs text-[#374151]">
+                    <div className="font-semibold text-[#111827]">
                       {pick(img.caption)}
                     </div>
                   </figcaption>
@@ -111,7 +111,7 @@ export function DeliveryGuidePreview({ customer, guide }: { customer: Customer; 
               ))}
             </div>
           ) : (
-            <div className="mt-4 rounded-2xl border border-dashed border-[color:var(--edge)] bg-[color:var(--paper)] p-4 text-xs text-zinc-600 dark:text-zinc-300">
+            <div className="mt-4 rounded-2xl border border-dashed border-[#E5E7EB] bg-[#FFFFFF] p-4 text-xs text-[#6B7280]">
               아직 업로드된 이미지가 없습니다.
             </div>
           )}
@@ -153,10 +153,10 @@ function serviceSummary(s: Record<string, string | undefined>): string {
 function KV({ label, value, wide }: { label: string; value: string; wide?: boolean }) {
   return (
     <div className={wide ? "sm:col-span-2" : undefined}>
-      <div className="text-[11px] font-extrabold uppercase tracking-[0.14em] text-zinc-500 dark:text-zinc-400">
+      <div className="text-[11px] font-extrabold uppercase tracking-[0.14em] text-[#6B7280]">
         {label}
       </div>
-      <div className="mt-1 rounded-xl border border-[color:var(--edge)] bg-[color:var(--paper-2)] px-3 py-2 text-sm font-semibold text-[color:var(--foreground)]">
+      <div className="mt-1 rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] px-3 py-2 text-sm font-semibold text-[#111827]">
         {value}
       </div>
     </div>

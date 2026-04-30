@@ -1,29 +1,29 @@
 @import "tailwindcss";
 
 :root {
-  /* Premium charcoal + light-gray SaaS (B2B) */
-  --background: #eef1f4;
-  --foreground: #1e2329;
+  /* Light SaaS shell — 실버 · 그레이 · 블랙 */
+  --background: #f4f6f8;
+  --foreground: #111827;
   --paper: #ffffff;
-  --paper-2: #f8fafc;
+  --paper-2: #f9fafb;
   --ink-2: #6b7280;
-  --edge: #d7dce2;
-  --edge-strong: rgba(42, 47, 54, 0.38);
+  --edge: #e5e7eb;
+  --edge-strong: rgba(148, 163, 184, 0.55);
 
   /* Dark hero / marketing strip */
   --landing-hero-bg: #111318;
   --landing-hero-text: #f4f6f8;
   --landing-hero-muted: #9ca3af;
 
-  --accent: #8a929e;
-  /* Legacy names — 채워진 값은 차쿨 슬레이트(포인트는 아주 약하게만) */
-  --gold: #7d8694;
-  --gold-2: rgba(125, 134, 148, 0.88);
-  --gold-ink: #5f6670;
+  --accent: #94a3b8;
+  /* Legacy aliases — 브라운·골드 제거 후 슬레이트 계열 유지용 */
+  --gold: #cbd5e1;
+  --gold-2: rgba(203, 213, 225, 0.9);
+  --gold-ink: #475569;
 
-  --btn-primary-bg: #1d2128;
-  --btn-primary-hover: #2b3038;
-  --btn-primary-text: #f4f6f8;
+  --btn-primary-bg: #111827;
+  --btn-primary-hover: #1f2937;
+  --btn-primary-text: #f9fafb;
 
   --card-shadow: 0 12px 40px rgba(17, 19, 24, 0.07), 0 2px 8px rgba(17, 19, 24, 0.04);
 }
@@ -38,23 +38,23 @@
 @media (prefers-color-scheme: dark) {
   :root {
     /* 앱 단일 라이트 테마와 동일(랜딩·워크스페이스 일관성) */
-    --background: #eef1f4;
-    --foreground: #1e2329;
+    --background: #f4f6f8;
+    --foreground: #111827;
     --paper: #ffffff;
-    --paper-2: #f8fafc;
+    --paper-2: #f9fafb;
     --ink-2: #6b7280;
-    --edge: #d7dce2;
-    --edge-strong: rgba(42, 47, 54, 0.38);
+    --edge: #e5e7eb;
+    --edge-strong: rgba(148, 163, 184, 0.55);
     --landing-hero-bg: #111318;
     --landing-hero-text: #f4f6f8;
     --landing-hero-muted: #9ca3af;
-    --accent: #8a929e;
-    --gold: #7d8694;
-    --gold-2: rgba(125, 134, 148, 0.88);
-    --gold-ink: #5f6670;
-    --btn-primary-bg: #1d2128;
-    --btn-primary-hover: #2b3038;
-    --btn-primary-text: #f4f6f8;
+    --accent: #94a3b8;
+    --gold: #cbd5e1;
+    --gold-2: rgba(203, 213, 225, 0.9);
+    --gold-ink: #475569;
+    --btn-primary-bg: #111827;
+    --btn-primary-hover: #1f2937;
+    --btn-primary-text: #f9fafb;
     --card-shadow: 0 12px 40px rgba(17, 19, 24, 0.07), 0 2px 8px rgba(17, 19, 24, 0.04);
   }
 }

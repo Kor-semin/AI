@@ -1,53 +1,52 @@
 "use client";
 
 const MENU = [
-  { label: "Dashboard", tab: "customers" as const, hint: "오늘의 흐름" },
-  { label: "Customers", tab: "customers" as const, hint: "고객 카드" },
-  { label: "Consulting Notes", tab: "customers" as const, hint: "상담 기록" },
-  { label: "AI Secretary", href: "#ai-secretary", hint: "요약/문구" },
-  { label: "Pipeline", href: "#pipeline", hint: "단계 흐름" },
-  { label: "Vehicle Match", tab: "customers" as const, hint: "추천 메모" },
-  { label: "Follow-up", tab: "next" as const, hint: "다음 할 일" },
-  { label: "Settings", href: "/register", hint: "계정/승인" },
+  { label: "Dashboard", tab: "customers" as const, hint: "요약" },
+  { label: "Customers", tab: "customers" as const, hint: "고객 목록" },
+  { label: "Consulting Notes", tab: "customers" as const, hint: "상담" },
+  { label: "AI Secretary", tab: "customers" as const, hint: "제안" },
+  { label: "Pipeline", tab: "customers" as const, hint: "단계" },
+  { label: "Vehicle Match", tab: "customers" as const, hint: "차량" },
+  { label: "Follow-up", tab: "next" as const, hint: "후속" },
+  { label: "Settings", href: "/register", hint: "설정" },
 ];
 
 export function ConciergeSidebar() {
   return (
-    <aside className="hidden w-[280px] shrink-0 lg:block">
-      <div className="sticky top-[76px] rounded-2xl border border-[color:var(--edge)] bg-[color:var(--paper)] p-4 shadow-[0_12px_36px_rgba(17,19,24,0.07)] backdrop-blur-sm">
-        <div className="px-2 pb-3">
-          <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[color:var(--gold-2)]">
+    <aside className="hidden w-[260px] shrink-0 lg:block">
+      <div className="sticky top-24 flex min-h-[calc(100vh-8rem)] flex-col rounded-2xl border border-[#1F2937] bg-[#111827] pb-6 pt-5 shadow-[0_12px_40px_rgba(0,0,0,0.12)]">
+        <div className="border-b border-[#1F2937] px-5 pb-5">
+          <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#94A3B8]">
+            Workspace
+          </div>
+          <div className="mt-3 text-[15px] font-semibold leading-snug tracking-tight text-[#F9FAFB]">
             Sales Concierge AI
           </div>
-          <div className="mt-2 text-sm font-semibold tracking-tight text-[color:var(--foreground)]">
-            오토 세일즈 AI 비서
+          <div className="mt-1.5 text-[13px] leading-snug text-[#9CA3AF]">
+            영업 현장 고객관리
           </div>
-          <div className="mt-1 text-[12px] text-[color:var(--ink-2)]">프리미엄 영업 업무실</div>
         </div>
 
-        <nav className="mt-3 grid gap-1">
+        <nav className="mt-4 flex flex-1 flex-col gap-0.5 px-3" aria-label="CRM 주 메뉴">
           {MENU.map((m) => {
-            const href = m.href ?? `/?view=app&tab=${m.tab}#app`;
+            const tabParam = m.tab === "next" ? "next" : "customers";
+            const hash = m.tab === "next" ? "crm-workspace-next" : "crm-main";
+            const href = m.href ?? `/?view=app&tab=${tabParam}#${hash}`;
             return (
               <a
                 key={m.label}
                 href={href}
-                className="group flex items-center justify-between rounded-xl border border-transparent px-3 py-2 text-[12px] font-semibold text-[color:var(--foreground)]/92 hover:border-[color:var(--edge)] hover:bg-[color:var(--paper-2)]/55"
+                className="group flex items-center justify-between rounded-xl px-3 py-2.5 text-[13px] font-medium text-[#E5E7EB] hover:bg-[#1F2937] hover:text-white"
               >
                 <span>{m.label}</span>
-                <span className="text-[10px] font-semibold tracking-[0.14em] text-[color:var(--ink-2)] group-hover:text-[color:var(--accent)]">
+                <span className="text-[11px] font-medium tracking-wide text-[#64748B] group-hover:text-[#CBD5E1]">
                   {m.hint}
                 </span>
               </a>
             );
           })}
         </nav>
-
-        <div className="mt-4 rounded-2xl border border-[color:var(--edge)] bg-[color:var(--paper-2)] px-4 py-3 text-[11px] text-[color:var(--ink-2)]">
-          실제 CRM 기능은 오른쪽에서 실행됩니다. 이 메뉴는 콘셉트 프레임 + 빠른 진입 링크를 제공합니다.
-        </div>
       </div>
     </aside>
   );
 }
-

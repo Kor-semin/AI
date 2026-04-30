@@ -73,13 +73,13 @@ export function ContactSyncDialog({
         role="dialog"
         aria-modal="true"
         aria-labelledby="contact-sync-title"
-        className="my-auto w-full max-w-lg rounded-2xl border border-zinc-200 bg-white p-5 shadow-xl dark:border-zinc-700 dark:bg-zinc-950"
+        className="my-auto w-full max-w-lg rounded-2xl border border-[#E5E7EB] bg-[#FFFFFF] p-5 shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <h2 id="contact-sync-title" className="text-base font-semibold text-zinc-900 dark:text-zinc-50">
+        <h2 id="contact-sync-title" className="text-base font-semibold text-[#111827]">
           연락처 연동
         </h2>
-        <p className="mt-2 text-xs leading-relaxed text-zinc-600 dark:text-zinc-400">
+        <p className="mt-2 text-xs leading-relaxed text-[#6B7280]">
           외부 주소록은 새 탭에서 여신 뒤, 이름·전화번호를 골라 복사해 아래 영역에 붙여 넣거나, 받은 내보내기(.vcf) 파일을
           불러오세요. 앱 제작자에게 자동 업로드되지 않으며, 기존 수첩 저장·동기화 방식과 같습니다.
         </p>
@@ -91,13 +91,13 @@ export function ContactSyncDialog({
               href={s.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex flex-col gap-1 rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2.5 text-center transition hover:border-emerald-500/50 hover:bg-white dark:border-zinc-700 dark:bg-zinc-900/70 dark:hover:border-emerald-500/35 dark:hover:bg-zinc-900"
+              className="flex flex-col gap-1 rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] px-3 py-2.5 text-center transition hover:border-[#CBD5E1] hover:bg-[#FFFFFF]"
             >
-              <span className="text-xs font-semibold text-zinc-900 dark:text-zinc-50">{s.label}</span>
-              <span className="text-[10px] font-medium leading-tight text-zinc-500 dark:text-zinc-400">
+              <span className="text-xs font-semibold text-[#111827]">{s.label}</span>
+              <span className="text-[10px] font-medium leading-tight text-[#6B7280]">
                 {s.description}
               </span>
-              <span className="text-[10px] font-semibold text-emerald-700 dark:text-emerald-400">열기 →</span>
+              <span className="text-[10px] font-semibold text-[#475569]">열기 →</span>
             </a>
           ))}
         </div>
@@ -105,7 +105,7 @@ export function ContactSyncDialog({
         <div className="mt-4 flex flex-wrap gap-2">
           <button
             type="button"
-            className="rounded-lg border border-emerald-600/50 bg-emerald-50 px-4 py-2 text-xs font-semibold text-emerald-900 hover:bg-emerald-100 dark:border-emerald-500/40 dark:bg-emerald-950/50 dark:text-emerald-100 dark:hover:bg-emerald-900/50"
+            className="rounded-lg border border-[#E5E7EB] bg-[#F3F4F6] px-4 py-2 text-xs font-semibold text-[#111827] hover:bg-[#E5E7EB]"
             onClick={() => {
               void (async () => {
                 const lines = await pickDeviceContacts(showToast);
@@ -119,7 +119,7 @@ export function ContactSyncDialog({
           </button>
           <button
             type="button"
-            className="rounded-lg border border-zinc-200 px-4 py-2 text-xs font-semibold hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-900"
+            className="rounded-lg border border-[#E5E7EB] px-4 py-2 text-xs font-semibold text-[#374151] hover:bg-[#F3F4F6]"
             onClick={() => vcfInputRef.current?.click()}
           >
             .vcf / 내보내기 파일 불러오기
@@ -159,7 +159,7 @@ export function ContactSyncDialog({
             autoCorrect="off"
             autoCapitalize="off"
             spellCheck={false}
-            className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-900 outline-none focus:border-emerald-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50"
+            className="w-full rounded-xl border border-[#E5E7EB] bg-[#FFFFFF] px-3 py-2 text-xs text-[#111827] outline-none focus:border-[#94A3B8] focus:ring-2 focus:ring-[#CBD5E1]/60"
             placeholder={`예) 한 줄당 이름과 전화, 또는 VCARD 블록\n홍길동\t010-1234-5678`}
           />
         </label>
@@ -167,14 +167,14 @@ export function ContactSyncDialog({
         <div className="mt-4 flex flex-wrap justify-end gap-2">
           <button
             type="button"
-            className="rounded-lg border border-zinc-200 px-4 py-2 text-xs font-semibold hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-900"
+            className="rounded-lg border border-[#E5E7EB] px-4 py-2 text-xs font-semibold text-[#374151] hover:bg-[#F3F4F6]"
             onClick={() => onClose()}
           >
             닫기
           </button>
           <button
             type="button"
-            className="rounded-lg bg-zinc-900 px-4 py-2 text-xs font-semibold text-white hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-950 dark:hover:bg-white"
+            className="rounded-lg bg-[#111827] px-4 py-2 text-xs font-semibold text-white hover:bg-[#1F2937] focus:outline-none focus:ring-2 focus:ring-[#94A3B8]"
             onClick={() => onIngestFromParsed(parseContactPaste(pasteText))}
           >
             정리해서 고객으로 넣기

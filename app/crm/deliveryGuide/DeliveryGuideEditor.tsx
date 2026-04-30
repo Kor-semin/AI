@@ -94,17 +94,17 @@ export function DeliveryGuideEditor({ customer, guide, onChange, showHeader = tr
   return (
     <div className="grid gap-5">
       {showHeader ? (
-        <div className="rounded-2xl border border-[color:var(--edge)] bg-[color:var(--paper)] p-5">
+        <div className="rounded-2xl border border-[#E5E7EB] bg-[#FFFFFF] p-5">
           <div className="flex flex-wrap items-start justify-between gap-2">
             <div>
-              <div className="text-sm font-semibold text-[color:var(--foreground)]">
+              <div className="text-sm font-semibold text-[#111827]">
                 안내서 입력
               </div>
-              <div className="mt-1 text-xs text-zinc-600 dark:text-zinc-300">
+              <div className="mt-1 text-xs text-[#6B7280]">
                 입력한 내용을 바탕으로 안내서 미리보기를 생성합니다.
               </div>
             </div>
-            <div className="text-[11px] font-semibold text-zinc-600 dark:text-zinc-300">
+            <div className="text-[11px] font-semibold text-[#6B7280]">
               마지막 수정: {new Date(current.updatedAt || nowIso()).toLocaleString("ko-KR")}
             </div>
           </div>
@@ -217,7 +217,7 @@ export function DeliveryGuideEditor({ customer, guide, onChange, showHeader = tr
           >
             {busy ? "업로드 중…" : "이미지 추가"}
           </button>
-          <div className="text-[11px] text-zinc-600 dark:text-zinc-300">
+          <div className="text-[11px] text-[#6B7280]">
             차량/선팅/견적/서비스 품목 사진 등을 여러 장 넣을 수 있어요. (최대 24장)
           </div>
           <input
@@ -234,7 +234,7 @@ export function DeliveryGuideEditor({ customer, guide, onChange, showHeader = tr
           {(current.images ?? []).map((img) => (
             <div
               key={img.id}
-              className="overflow-hidden rounded-2xl border border-[color:var(--edge)] bg-[color:var(--paper)]"
+              className="overflow-hidden rounded-2xl border border-[#E5E7EB] bg-[#FFFFFF]"
             >
               {/* eslint-disable-next-line @next/next/no-img-element -- dataUrl 미리보기 */}
               <img src={img.dataUrl} alt="" className="h-44 w-full object-cover" />
@@ -261,7 +261,7 @@ export function DeliveryGuideEditor({ customer, guide, onChange, showHeader = tr
             </div>
           ))}
           {(current.images ?? []).length === 0 ? (
-            <div className="rounded-2xl border border-dashed border-[color:var(--edge)] bg-[color:var(--paper)] p-4 text-xs text-zinc-600 dark:text-zinc-300">
+            <div className="rounded-2xl border border-dashed border-[#E5E7EB] bg-[#FFFFFF] p-4 text-xs text-[#6B7280]">
               아직 이미지가 없습니다. 위의 “이미지 추가”로 여러 장 업로드해 주세요.
             </div>
           ) : null}
@@ -320,8 +320,8 @@ export function DeliveryGuideEditor({ customer, guide, onChange, showHeader = tr
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section className="rounded-2xl border border-[color:var(--edge)] bg-[color:var(--paper)] p-5">
-      <div className="text-sm font-semibold text-[color:var(--foreground)]">{title}</div>
+    <section className="rounded-2xl border border-[#E5E7EB] bg-[#FFFFFF] p-5">
+      <div className="text-sm font-semibold text-[#111827]">{title}</div>
       <div className="mt-4">{children}</div>
     </section>
   );
@@ -340,12 +340,12 @@ function TextField({
 }) {
   return (
     <label className="grid gap-1">
-      <div className="text-xs font-semibold text-zinc-700 dark:text-zinc-200">{label}</div>
+      <div className="text-xs font-semibold text-[#374151]">{label}</div>
       <input
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full rounded-xl border border-[color:var(--edge)] bg-[color:var(--paper)] px-3 py-2 text-sm outline-none focus:border-[color:var(--edge-strong)]"
+        className="w-full rounded-xl border border-[#E5E7EB] bg-[#FFFFFF] px-3 py-2 text-sm outline-none focus:border-[#94A3B8]"
       />
     </label>
   );
@@ -362,12 +362,12 @@ function DateField({
 }) {
   return (
     <label className="grid gap-1">
-      <div className="text-xs font-semibold text-zinc-700 dark:text-zinc-200">{label}</div>
+      <div className="text-xs font-semibold text-[#374151]">{label}</div>
       <input
         type="date"
         value={isoToDateOnlyInput(valueIso)}
         onChange={(e) => onChangeIso(parseDateOnlyToIso(e.target.value))}
-        className="w-full rounded-xl border border-[color:var(--edge)] bg-[color:var(--paper)] px-3 py-2 text-sm outline-none focus:border-[color:var(--edge-strong)]"
+        className="w-full rounded-xl border border-[#E5E7EB] bg-[#FFFFFF] px-3 py-2 text-sm outline-none focus:border-[#94A3B8]"
       />
     </label>
   );
@@ -386,12 +386,12 @@ function TextArea({
 }) {
   return (
     <label className="grid gap-1">
-      <div className="text-xs font-semibold text-zinc-700 dark:text-zinc-200">{label}</div>
+      <div className="text-xs font-semibold text-[#374151]">{label}</div>
       <textarea
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="min-h-[92px] w-full resize-y rounded-xl border border-[color:var(--edge)] bg-[color:var(--paper)] px-3 py-2 text-sm outline-none focus:border-[color:var(--edge-strong)]"
+        className="min-h-[92px] w-full resize-y rounded-xl border border-[#E5E7EB] bg-[#FFFFFF] px-3 py-2 text-sm outline-none focus:border-[#94A3B8]"
       />
     </label>
   );
@@ -400,8 +400,8 @@ function TextArea({
 function ReadOnlyField({ label, value }: { label: string; value: string }) {
   return (
     <div className="grid gap-1">
-      <div className="text-xs font-semibold text-zinc-700 dark:text-zinc-200">{label}</div>
-      <div className="rounded-xl border border-[color:var(--edge)] bg-[color:var(--paper-2)] px-3 py-2 text-sm text-[color:var(--foreground)]">
+      <div className="text-xs font-semibold text-[#374151]">{label}</div>
+      <div className="rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] px-3 py-2 text-sm text-[#111827]">
         {value}
       </div>
     </div>
