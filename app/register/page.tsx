@@ -18,6 +18,7 @@ import {
 } from "@/app/crm/sellerProfile";
 import { sellerCanUseApp, useSellerProfile } from "@/app/crm/useSellerProfile";
 import { getFirebaseAuth, getFirebaseStorageBucket, isFirebaseConfigured, isGoogleAuthEnabled } from "@/app/firebase/client";
+import { useLanguage } from "@/app/components/i18n/LanguageProvider";
 
 const JOIN_REDIRECT_PENDING = "customer-manager.join.redirectPending";
 
@@ -31,6 +32,7 @@ export default function JoinPage() {
   const [error, setError] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const googleAuthEnabled = isGoogleAuthEnabled();
+  const { t } = useLanguage();
 
   const seller = useSellerProfile(uid);
 
@@ -188,7 +190,7 @@ export default function JoinPage() {
             SENSORA AUTO CRM · SELLER ONBOARDING
           </p>
           <h1 className="mt-2 font-semibold tracking-tight text-xl text-[#231d18] sm:text-[1.35rem]">
-            영업 계정 등록(명함 접수)
+            {t("register.title")}(명함 접수)
           </h1>
           <p className="mt-2 text-sm leading-relaxed text-[#4c433a]">
             {googleAuthEnabled ? (
@@ -266,7 +268,7 @@ export default function JoinPage() {
                 className="w-full rounded-xl bg-[#2f2720] px-4 py-3 text-sm font-semibold text-[#fcf9f3] hover:opacity-95 disabled:opacity-55"
                 onClick={() => void signInWithGoogle()}
               >
-                {busy ? "이동 중…" : "Google로 계속하기"}
+                {busy ? "이동 중…" : t("register.continueWithGoogle")}
               </button>
             </div>
           ) : null}

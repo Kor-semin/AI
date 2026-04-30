@@ -1,5 +1,7 @@
 "use client";
 
+import { useLanguage } from "@/app/components/i18n/LanguageProvider";
+
 const MENU = [
   { label: "Dashboard", tab: "customers" as const, hint: "요약" },
   { label: "Customers", tab: "customers" as const, hint: "고객 목록" },
@@ -12,15 +14,16 @@ const MENU = [
 ];
 
 export function ConciergeSidebar() {
+  const { t } = useLanguage();
   return (
     <aside className="hidden w-[260px] shrink-0 lg:block">
       <div className="sticky top-24 flex min-h-[calc(100vh-8rem)] flex-col rounded-2xl border border-[#1F2937] bg-[#111827] pb-6 pt-5 shadow-[0_12px_40px_rgba(0,0,0,0.12)]">
         <div className="border-b border-[#1F2937] px-5 pb-5">
           <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#94A3B8]">
-            Workspace
+            {t("header.workspace")}
           </div>
           <div className="mt-3 text-[15px] font-semibold leading-snug tracking-tight text-[#F9FAFB]">
-            Sensora Auto CRM
+            {t("product.name")}
           </div>
           <div className="mt-1.5 text-[13px] leading-snug text-[#9CA3AF]">
             Sales Concierge AI 스타일 영업 보조 · B2B AI SaaS

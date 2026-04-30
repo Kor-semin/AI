@@ -5,9 +5,11 @@ import { useState } from "react";
 
 import type { BetaSignupPayload } from "@/lib/betaSignupSubmit";
 import { submitBetaSignup } from "@/lib/betaSignupSubmit";
+import { useLanguage } from "@/app/components/i18n/LanguageProvider";
 
 export default function BetaJoinPage() {
   const [pending, setPending] = useState(false);
+  const { t } = useLanguage();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -30,12 +32,12 @@ export default function BetaJoinPage() {
       !payload.currentCrmApproach ||
       !payload.motivation
     ) {
-      window.alert("모든 항목을 입력해 주세요.");
+      window.alert(t("join.fillAllFields"));
       return;
     }
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)) {
-      window.alert("이메일 형식을 확인해 주세요.");
+      window.alert(t("join.invalidEmail"));
       return;
     }
 
@@ -64,33 +66,33 @@ export default function BetaJoinPage() {
             href="/"
             className="inline-flex items-center gap-2 text-[12px] font-semibold text-[#64748b] transition hover:text-[#1e2329]"
           >
-            <span aria-hidden>←</span> 홈으로 돌아가기
+            <span aria-hidden>←</span> {t("join.backHome")}
           </Link>
           <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-[#d7dce2] bg-white/85 px-3 py-1 text-[11px] font-semibold tracking-[0.12em] text-[#5f6675] backdrop-blur-sm">
             SENSORA · AUTO CRM
           </div>
           <h1 className="mt-4 text-2xl font-semibold tracking-tight text-[color:var(--foreground)] sm:text-3xl">
-            베타 신청
+            {t("join.title")}
           </h1>
           <p className="mt-3 max-w-[42ch] text-sm leading-relaxed text-[color:var(--ink-2)]">
-            Sensora Auto CRM 초기 접수입니다. 정보는 검토 후 연락드립니다. (제품 경험 레이어: Sales Concierge AI)
+            {t("join.intro")} (Sales Concierge AI)
           </p>
         </div>
 
         <form className="crm-card rounded-[1.35rem] p-6 sm:p-9" onSubmit={(ev) => void handleSubmit(ev)} noValidate>
           <fieldset className="space-y-5 border-0 p-0 [&_legend]:sr-only">
-            <legend>Sensora Auto CRM 베타 신청 폼</legend>
+            <legend>{t("join.formLegend")}</legend>
 
             <div>
               <label htmlFor="fullName" className="text-[12px] font-semibold text-[color:var(--foreground)]">
-                이름
+                {t("form.name")}
               </label>
               <input id="fullName" name="fullName" type="text" autoComplete="name" required className={fieldClass} placeholder="홍길동" />
             </div>
 
             <div>
               <label htmlFor="contact" className="text-[12px] font-semibold text-[color:var(--foreground)]">
-                연락처
+                {t("form.contact")}
               </label>
               <input
                 id="contact"
@@ -105,7 +107,7 @@ export default function BetaJoinPage() {
 
             <div>
               <label htmlFor="email" className="text-[12px] font-semibold text-[color:var(--foreground)]">
-                이메일
+                {t("form.email")}
               </label>
               <input
                 id="email"
@@ -120,7 +122,7 @@ export default function BetaJoinPage() {
 
             <div>
               <label htmlFor="dealership" className="text-[12px] font-semibold text-[color:var(--foreground)]">
-                소속 브랜드 / 전시장
+                {t("form.dealership")}
               </label>
               <input
                 id="dealership"
@@ -134,7 +136,7 @@ export default function BetaJoinPage() {
 
             <div>
               <label htmlFor="currentCrmApproach" className="text-[12px] font-semibold text-[color:var(--foreground)]">
-                현재 고객관리 방식
+                {t("form.currentCrm")}
               </label>
               <textarea
                 id="currentCrmApproach"
@@ -148,7 +150,7 @@ export default function BetaJoinPage() {
 
             <div>
               <label htmlFor="motivation" className="text-[12px] font-semibold text-[color:var(--foreground)]">
-                사용해 보고 싶은 이유
+                {t("form.motivation")}
               </label>
               <textarea
                 id="motivation"
@@ -167,7 +169,7 @@ export default function BetaJoinPage() {
               disabled={pending}
               className="crm-ink-btn w-full rounded-xl py-3.5 text-[13px] font-semibold disabled:cursor-not-allowed disabled:opacity-55"
             >
-              {pending ? "제출 중…" : "베타 신청 제출"}
+              {pending ? t("join.submitting") : t("join.submit")}
             </button>
             <p className="text-center text-[11px] leading-relaxed text-[color:var(--ink-2)]">
               이미 명함 접수 후 승인을 기다리는 경우{" "}

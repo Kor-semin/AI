@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import { ImageSlot } from "./ImageSlot";
 import { SAMPLE_CUSTOMERS } from "./sampleCustomers";
+import { useLanguage } from "@/app/components/i18n/LanguageProvider";
 
 /** 랜딩 교체용 이미지 경로 (`public/images`에 동일 파일명으로 두면 적용됩니다). */
 export const LANDING_IMAGES = {
@@ -49,6 +50,7 @@ function SectionShell({
 }
 
 function HeroDashboardPreviewCard() {
+  const { t } = useLanguage();
   return (
     <div className="relative overflow-hidden rounded-2xl border border-[color:var(--edge)] bg-[color:var(--paper)] shadow-[0_20px_52px_rgba(17,19,24,0.12),0_2px_12px_rgba(17,19,24,0.05)]">
       <div className="relative border-b border-[color:var(--edge)] bg-[color:var(--paper-2)] px-5 py-4">
@@ -87,7 +89,7 @@ function HeroDashboardPreviewCard() {
 
         <div className="rounded-xl border border-[color:var(--edge)] bg-[color:var(--paper-2)]/40 p-4">
           <div className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[color:var(--gold-2)]">
-            AI 추천 메시지
+            {t("crm.aiRecommendation")}
           </div>
           <p className="mt-2 text-[13px] font-medium leading-relaxed text-[color:var(--foreground)]">
             「지난 상담에서 승차감과 가족 이동이 핵심이었습니다. 오늘은 프리미엄 세단의 유지·보증을 짧게
@@ -113,6 +115,7 @@ function HeroDashboardPreviewCard() {
 }
 
 export function HeroSection() {
+  const { t } = useLanguage();
   return (
     <section className="relative mx-auto w-full max-w-[1280px] px-4 pb-16 pt-12 sm:pb-20 sm:pt-16">
       <div className="relative overflow-hidden rounded-[1.75rem] border border-[color:rgba(244,246,248,0.08)] bg-[color:var(--landing-hero-bg)] px-5 py-11 sm:rounded-[2rem] sm:px-8 sm:py-14 lg:px-10">
@@ -144,20 +147,19 @@ export function HeroSection() {
         <div className="relative z-[1] grid gap-12 lg:grid-cols-[minmax(0,1.06fr)_minmax(340px,420px)] lg:items-start xl:gap-14">
           <div className="max-w-xl">
             <div className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.06] px-3 py-1 text-[11px] font-semibold tracking-[0.12em] text-[color:var(--landing-hero-muted)] backdrop-blur-sm">
-              Sensora · Sense + Aura
+              {t("brand.name")} · Sense + Aura
             </div>
 
             <h1 className="mt-6 text-[1.65rem] font-semibold tracking-tight text-[color:var(--landing-hero-text)] sm:text-[2.6rem] sm:leading-[1.12] lg:text-[2.75rem]">
-              Sensora Auto CRM
+              {t("product.name")}
             </h1>
 
             <p className="mt-3 max-w-[40rem] text-sm font-medium leading-relaxed text-[#c5cad2] sm:text-[15px]">
-              작은 시작에서부터 시작된다
+              {t("brand.slogan")}
             </p>
 
             <p className="mt-5 max-w-[40rem] text-sm leading-relaxed text-[color:var(--landing-hero-muted)] sm:text-[15px]">
-              Sensora Auto CRM은 자동차 영업사원을 위한 AI 고객관리 SaaS입니다. 고객 상담, 관심 차량, 후속 연락,
-              메시지 작성, 영업 파이프라인을 AI가 정리하고 제안합니다. (영업 지원 패러다임: Sales Concierge AI)
+              {t("hero.description")} (Sales Concierge AI)
             </p>
 
             <div
@@ -167,10 +169,10 @@ export function HeroSection() {
 
             <div className="mt-10 flex flex-wrap items-center gap-3">
               <Link href="/join" className="crm-ink-btn rounded-xl px-5 py-3 text-xs font-semibold">
-                베타 신청하기
+                {t("cta.joinBeta")}
               </Link>
               <a href="#dashboard-preview" className="crm-outline-light-btn rounded-xl px-5 py-3 text-xs font-semibold">
-                데모 보기
+                {t("cta.viewDemo")}
               </a>
             </div>
 
@@ -191,22 +193,23 @@ export function HeroSection() {
 }
 
 export function FeatureSection() {
+  const { t } = useLanguage();
   const items = [
     {
-      title: "고객 프로필 자동 정리",
-      desc: "상담 메모·관심 포인트·예산·성향을 카드로 정리해 다음 대화를 빠르게 이어갑니다.",
+      title: t("landing.feature.profile.title"),
+      desc: t("landing.feature.profile.desc"),
     },
     {
-      title: "후속 연락 제안",
-      desc: "상담 흐름과 단계에 맞춰, 오늘 해야 할 연락과 톤을 제안합니다.",
+      title: t("landing.feature.followup.title"),
+      desc: t("landing.feature.followup.desc"),
     },
     {
-      title: "차량 추천 메모리",
-      desc: "고객이 중요하게 보는 기준을 기억해, 비교 포인트를 상담 기록에 남깁니다.",
+      title: t("landing.feature.memory.title"),
+      desc: t("landing.feature.memory.desc"),
     },
     {
-      title: "출고 후 관리",
-      desc: "인도/등록/사후관리까지 체크리스트로 정리해 ‘다음 행동’을 놓치지 않습니다.",
+      title: t("landing.feature.delivery.title"),
+      desc: t("landing.feature.delivery.desc"),
     },
   ];
 

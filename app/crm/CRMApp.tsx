@@ -53,6 +53,7 @@ import { getMemoFeedback } from "./memoFeedback";
 import { makeId, seedState } from "./seed";
 import { ContactSyncDialog } from "./ContactSyncDialog";
 import { DeliveryGuideScreen } from "@/app/crm/deliveryGuide/DeliveryGuideScreen";
+import { useLanguage } from "@/app/components/i18n/LanguageProvider";
 
 const LEAD_SOURCES = [...DEALER_LEAD_SOURCES] satisfies LeadSource[];
 const STAGES = [...DEALER_PIPELINE_STAGES] satisfies PipelineStage[];
@@ -153,6 +154,7 @@ export function CRMApp({
   /** `{내이름}` 치환: 로그인 시 구글 이름·이메일 등 */
   sellerDisplayName?: string | null;
 }) {
+  const { t } = useLanguage();
   // uid=null means local-only mode.
   const [state, setState] = useState<CRMState>(() => emptyState());
   const [selectedCustomerId, setSelectedCustomerId] = useState<string | null>(null);
@@ -174,10 +176,10 @@ export function CRMApp({
   const [deliveryGuideOpen, setDeliveryGuideOpen] = useState(false);
 
   const TAB_LABELS: Record<typeof tab, string> = {
-    고객: "고객",
-    다음할일: "다음 연락",
-    일정: "일정",
-    템플릿: "문자 템플릿",
+    고객: t("crm.tab.customers"),
+    다음할일: t("crm.tab.next"),
+    일정: t("crm.tab.events"),
+    템플릿: t("crm.tab.templates"),
   };
 
   useEffect(() => {
@@ -721,7 +723,7 @@ export function CRMApp({
           <header className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between lg:gap-8">
             <div className="min-w-0">
               <h1 className="text-[clamp(22px,2.8vw,30px)] font-semibold leading-tight tracking-tight text-[#111827]">
-                Sensora Auto CRM
+                {t("product.name")}
               </h1>
               <p className="mt-2 max-w-xl text-[15px] leading-relaxed text-[#6B7280]">
                 {sync.mode === "cloud" ? "클라우드 동기화" : "로컬 저장"} ·{" "}
@@ -735,7 +737,7 @@ export function CRMApp({
             </div>
             <div className="flex w-full min-w-0 flex-col gap-3 sm:flex-row sm:items-stretch lg:max-w-[540px]">
               <label className="min-w-0 flex-1">
-                <span className="sr-only">고객 검색</span>
+                <span className="sr-only">{t("common.search")}</span>
                 <input
                   ref={searchInputRef}
                   value={query}
@@ -750,7 +752,7 @@ export function CRMApp({
                 className="shrink-0 rounded-xl bg-[#111827] px-6 py-3.5 text-[15px] font-semibold text-white shadow-sm transition hover:bg-[#1F2937] focus:outline-none focus:ring-2 focus:ring-[#94A3B8] sm:w-auto sm:whitespace-nowrap"
                 onClick={addCustomer}
               >
-                + 고객 추가
+                + {t("crm.addCustomer")}
               </button>
             </div>
           </header>
@@ -812,14 +814,14 @@ export function CRMApp({
             id="crm-overview-stats"
             className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4"
           >
-            <StatCard label="오늘 연락" value={overviewStats.dueToday} hint="오늘 기한 후속" />
+            <StatCard label={t("crm.stat.todayFollowups")} value={overviewStats.dueToday} hint="오늘 기한 후속" />
             <StatCard
-              label="계약 가능성 높음"
+              label={t("crm.stat.dealProbability")}
               value={overviewStats.highPotential}
               hint="가망등급 A·S 및 66%+"
             />
-            <StatCard label="후속 연락 필요" value={overviewStats.followUp} hint="미완료 업무 수" />
-            <StatCard label="최근 상담" value={overviewStats.recentConsult} hint="7일 내 기록 수정" />
+            <StatCard label={t("crm.stat.followupNeeded")} value={overviewStats.followUp} hint="미완료 업무 수" />
+            <StatCard label={t("crm.stat.recentConsultations")} value={overviewStats.recentConsult} hint="7일 내 기록 수정" />
           </div>
 
           {tab === "고객" ? (
@@ -829,7 +831,7 @@ export function CRMApp({
                 className="min-w-0 overflow-hidden rounded-2xl border border-[#E5E7EB] bg-[#FFFFFF] shadow-[0_1px_4px_rgba(15,23,42,0.04)] xl:sticky xl:top-4 xl:self-start xl:max-h-[calc(100vh-13rem)] xl:overflow-auto"
               >
                 <div className="border-b border-[#E5E7EB] px-5 py-5 sm:px-6">
-                  <h2 className="text-[18px] font-semibold text-[#111827]">상담 고객</h2>
+                  <h2 className="text-[18px] font-semibold text-[#111827]">{t("crm.section.customerList")}</h2>
                   <p className="mt-2 text-[15px] leading-relaxed text-[#6B7280]">
                     고객 행을 눌러 선택합니다. 선택 시 오른쪽에서 상세·상담·후속 업무를 이어서 다룹니다.
                   </p>
@@ -842,16 +844,16 @@ export function CRMApp({
                           고객명
                         </th>
                         <th className="px-5 py-4 text-[12px] font-semibold uppercase tracking-[0.06em] text-[#6B7280] sm:px-6">
-                          관심 차량
+                          {t("common.interestedVehicle")}
                         </th>
                         <th className="px-5 py-4 text-[12px] font-semibold uppercase tracking-[0.06em] text-[#6B7280] sm:px-6">
-                          상태
+                          {t("common.status")}
                         </th>
                         <th className="px-5 py-4 text-[12px] font-semibold uppercase tracking-[0.06em] text-[#6B7280] sm:px-6">
-                          다음 액션
+                          {t("crm.section.nextAction")}
                         </th>
                         <th className="px-5 py-4 text-[12px] font-semibold uppercase tracking-[0.06em] text-[#6B7280] sm:px-6">
-                          가능성
+                          {t("common.potential")}
                         </th>
                       </tr>
                     </thead>
@@ -936,7 +938,7 @@ export function CRMApp({
                   <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                     <div className="min-w-0 flex-1">
                       <div className="truncate text-[22px] font-semibold tracking-tight text-[#111827]">
-                        {selectedCustomer ? selectedCustomer.name : "상담 고객을 선택하세요"}
+                        {selectedCustomer ? selectedCustomer.name : t("crm.section.customerDetails")}
                       </div>
                       <div className="mt-2 text-[15px] text-[#6B7280]">
                         {selectedCustomer
@@ -953,7 +955,7 @@ export function CRMApp({
                             )
                           }
                         >
-                          전화번호 복사
+                          {t("common.copy")}
                         </button>
                       ) : null}
                     </div>
@@ -999,7 +1001,7 @@ export function CRMApp({
                 <div className="rounded-2xl border border-[#CBD5E1] bg-gradient-to-b from-[#FFFFFF] to-[#F8FAFC] p-6 shadow-[0_4px_24px_-12px_rgba(15,23,42,0.08)]">
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div className="text-[12px] font-bold uppercase tracking-[0.14em] text-[#64748B]">
-                      AI 참고 피드백
+                      {t("crm.section.aiRecommendation")}
                     </div>
                     <button
                       type="button"
@@ -1035,7 +1037,7 @@ export function CRMApp({
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div>
                     <div className="text-[12px] font-bold uppercase tracking-[0.14em] text-[#64748B]">
-                      상담 요약 · 고객 메시지
+                      {t("crm.section.consultationSummary")} · 고객 메시지
                     </div>
                     <div className="mt-2 text-[15px] leading-relaxed text-[#6B7280]">
                       상담/예산/차량 메모를 바탕으로 자동으로 정리됩니다. 필요하면 문장을 수정해도 됩니다.
@@ -1099,7 +1101,7 @@ export function CRMApp({
                             });
                           }}
                         >
-                          메시지 복사
+                          {t("common.copy")}
                         </button>
                       </div>
                     </>
@@ -1114,7 +1116,7 @@ export function CRMApp({
                 >
                   <summary className="flex cursor-pointer list-none items-center justify-between gap-3 rounded-xl px-1 py-1.5 outline-none transition hover:bg-[#F9FAFB]">
                     <div>
-                      <div className="text-[16px] font-semibold text-[#111827]">금융·예산·시세 정보</div>
+                      <div className="text-[16px] font-semibold text-[#111827]">{t("crm.financeMarketInfo")}</div>
                       <div className="mt-1 text-[13px] text-[#6B7280]">필요할 때 펼쳐서 입력·확인</div>
                     </div>
                     <span className="rounded-full border border-[#E5E7EB] bg-[#F3F4F6] px-3 py-1 text-[12px] font-semibold text-[#475569]">
@@ -1317,7 +1319,7 @@ export function CRMApp({
                 >
                   <summary className="flex cursor-pointer list-none items-center justify-between gap-3 rounded-xl px-1 py-1.5 outline-none transition hover:bg-[#F9FAFB]">
                     <div>
-                      <div className="text-[16px] font-semibold text-[#111827]">중고차 정리</div>
+                      <div className="text-[16px] font-semibold text-[#111827]">{t("crm.tradeInSummary")}</div>
                       <div className="mt-1 text-[13px] text-[#6B7280]">검색어 생성 · 연식/주행/사고 기록</div>
                     </div>
                     <span className="rounded-full border border-[#E5E7EB] bg-[#F3F4F6] px-3 py-1 text-[12px] font-semibold text-[#475569]">
@@ -1501,7 +1503,7 @@ export function CRMApp({
                           });
                         }}
                       >
-                        검색어 복사
+                        {t("common.copy")}
                       </button>
                       <button
                         type="button"
@@ -1515,7 +1517,7 @@ export function CRMApp({
                           });
                         }}
                       >
-                        메모 복사
+                        {t("common.copy")}
                       </button>
                     </div>
                     <p className="mt-2 text-[11px] text-[#6B7280]">
@@ -1643,7 +1645,7 @@ export function CRMApp({
                   className="scroll-mt-24 rounded-2xl border border-[#E5E7EB] bg-white p-5 outline-none"
                 >
                   <div className="flex items-center justify-between gap-3">
-                    <div className="text-sm font-semibold">빠른 메시지 템플릿</div>
+                    <div className="text-sm font-semibold">{t("crm.section.templates")}</div>
                     <button
                       onClick={addTemplate}
                       className="rounded-lg border border-[#E5E7EB] bg-white px-3 py-2 text-xs font-semibold hover:bg-[#F3F4F6]"
@@ -1747,7 +1749,7 @@ export function CRMApp({
                   className="scroll-mt-24 rounded-2xl border border-[#E5E7EB] bg-white p-5 outline-none"
                 >
                   <div className="flex items-center justify-between gap-3">
-                    <div className="text-sm font-semibold">상담·출고 일정</div>
+                    <div className="text-sm font-semibold">{t("crm.tab.events")}</div>
                     <button
                       onClick={() => addEvent(selectedCustomer.id)}
                       className="rounded-lg border border-[#E5E7EB] bg-white px-3 py-2 text-xs font-semibold hover:bg-[#F3F4F6]"
@@ -1833,14 +1835,14 @@ export function CRMApp({
                 className="scroll-mt-24 rounded-2xl border border-[#E5E7EB] bg-[#FFFFFF] p-6 shadow-[0_1px_4px_rgba(15,23,42,0.04)] outline-none"
               >
                 <div className="flex flex-wrap items-center justify-between gap-3">
-                  <div className="text-[16px] font-semibold text-[#111827]">운영 요약 · 백업</div>
+                  <div className="text-[16px] font-semibold text-[#111827]">{t("common.backup")}</div>
                   <div className="flex flex-wrap gap-2">
                     <button
                       type="button"
                       onClick={() => downloadText("crm_backup.json", JSON.stringify(state, null, 2))}
                       className="rounded-xl border border-[#E5E7EB] bg-[#F3F4F6] px-4 py-2.5 text-[13px] font-semibold text-[#111827] hover:bg-[#E5E7EB]"
                     >
-                      백업(.json)
+                      {t("common.backup")}(.json)
                     </button>
                     <button
                       type="button"
@@ -1852,14 +1854,14 @@ export function CRMApp({
                       }}
                       className="rounded-xl border border-[#E5E7EB] bg-[#FFFFFF] px-4 py-2.5 text-[13px] font-semibold text-[#64748B] hover:bg-[#F9FAFB]"
                     >
-                      초기화(샘플)
+                      {t("common.reset")}(샘플)
                     </button>
                   </div>
                 </div>
 
                 <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
                   <div className="rounded-2xl border border-[#E5E7EB] bg-[#F9FAFB] p-5">
-                    <div className="text-[13px] font-semibold text-[#111827]">다음 할 일(전체)</div>
+                    <div className="text-[13px] font-semibold text-[#111827]">{t("crm.section.allNextActions")}</div>
                     <div className="mt-4 max-h-[min(420px,50vh)] space-y-2 overflow-y-auto pr-1">
                       {allNextActions.map((a) => {
                         const c = state.customers.find((x) => x.id === a.customerId);
@@ -1893,7 +1895,7 @@ export function CRMApp({
                   </div>
 
                   <div className="rounded-2xl border border-[#E5E7EB] bg-[#F9FAFB] p-5">
-                    <div className="text-[13px] font-semibold text-[#111827]">일정(전체 미리보기)</div>
+                    <div className="text-[13px] font-semibold text-[#111827]">{t("crm.section.eventsPreview")}</div>
                     <div className="mt-4 max-h-[min(420px,50vh)] space-y-2 overflow-y-auto pr-1">
                       {allEvents.slice(0, 24).map((e) => (
                         <div
@@ -1971,7 +1973,7 @@ export function CRMApp({
               className="rounded-2xl border border-[#E5E7EB] bg-[#FFFFFF] p-6 shadow-[0_1px_4px_rgba(15,23,42,0.04)] outline-none"
             >
               <div className="flex flex-wrap items-center justify-between gap-3">
-                <div className="text-[18px] font-semibold text-[#111827]">문자 템플릿</div>
+                <div className="text-[18px] font-semibold text-[#111827]">{t("crm.section.templates")}</div>
                 <button
                   type="button"
                   onClick={addTemplate}
@@ -2014,7 +2016,7 @@ export function CRMApp({
                         }}
                         className="rounded-xl bg-[#F3F4F6] px-4 py-2.5 text-[13px] font-semibold text-[#111827] ring-1 ring-inset ring-[#E5E7EB] hover:bg-[#E5E7EB]"
                       >
-                        {selectedCustomer ? "선택 고객으로 복사" : "복사"}
+                        {selectedCustomer ? `${t("common.select")} · ${t("common.copy")}` : t("common.copy")}
                       </button>
                       <div className="text-[12px] text-[#9CA3AF]">업데이트: {formatDateTime(tpl.updatedAt)}</div>
                     </div>

@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 
 import { InspirationalBackdrop } from "@/app/components/InspirationalBackdrop";
 import { NotebookCover } from "@/app/components/NotebookCover";
+import { LanguageSelect } from "@/app/components/i18n/LanguageSelect";
 import {
   AISecretaryPreview,
   DashboardPreview,
@@ -18,6 +19,7 @@ import { CRMApp } from "@/app/crm/CRMApp";
 import { useAuth } from "@/app/crm/useAuth";
 import { sellerCanUseApp, useSellerProfile } from "@/app/crm/useSellerProfile";
 import { isFirebaseConfigured, isGoogleAuthEnabled } from "@/app/firebase/client";
+import { useLanguage } from "@/app/components/i18n/LanguageProvider";
 
 export default function Home() {
   const { auth, authError, signOut } = useAuth();
@@ -25,6 +27,7 @@ export default function Home() {
   const googleAuthEnabled = isGoogleAuthEnabled();
   const seller = useSellerProfile(auth.status === "signed-in" ? auth.uid : null);
   const [view, setView] = useState<"landing" | "app">("landing");
+  const { t } = useLanguage();
 
   const sellerSignedIn = firebaseReady && auth.status === "signed-in";
 
@@ -58,13 +61,14 @@ export default function Home() {
         <div className="mx-auto flex max-w-[1280px] items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="h-2 w-2 rounded-full bg-[color:var(--accent)]" />
-            <div className="text-sm font-semibold tracking-tight">Sensora Auto CRM</div>
+            <div className="text-sm font-semibold tracking-tight">{t("product.name")}</div>
             <div className="hidden text-xs text-[color:var(--ink-2)] sm:block">
-              작은 시작에서부터 시작된다 · 영업 레이어: Sales Concierge AI
+              {t("brand.slogan")} · Sales Concierge AI
             </div>
             <span className="crm-free-badge hidden sm:inline-flex">무료 사용</span>
           </div>
         <div className="flex items-center gap-2">
+          <LanguageSelect />
           <button
             type="button"
             className="crm-ghost-btn rounded-lg px-2.5 py-1.5 text-[11px] font-medium"
@@ -72,17 +76,17 @@ export default function Home() {
               window.dispatchEvent(new CustomEvent("crm-show-notebook-cover"));
             }}
           >
-            표지
+            {t("header.cover")}
           </button>
           <button
             type="button"
             className="crm-ghost-btn hidden rounded-lg px-2.5 py-1.5 text-[11px] font-medium sm:inline-flex"
             onClick={() => setView((v) => (v === "app" ? "landing" : "app"))}
           >
-            {view === "app" ? "랜딩" : "Workspace"}
+            {view === "app" ? t("header.landing") : t("header.workspace")}
           </button>
           {auth.status === "loading" ? (
-            <div className="text-xs text-[color:var(--ink-2)]">로그인 확인 중…</div>
+            <div className="text-xs text-[color:var(--ink-2)]">{t("auth.checkingLogin")}</div>
           ) : auth.status === "signed-in" ? (
             <>
               <div className="hidden text-xs text-[color:var(--ink-2)] sm:block">
@@ -92,7 +96,7 @@ export default function Home() {
                 className="crm-ghost-btn rounded-lg px-3 py-2 text-xs font-semibold"
                 onClick={signOut}
               >
-                로그아웃
+                {t("auth.signOut")}
               </button>
             </>
           ) : (
@@ -109,7 +113,7 @@ export default function Home() {
                   firebaseReady ? "" : "opacity-55",
                 ].join(" ")}
               >
-                영업 계정 등록
+                {t("auth.salesRegistration")}
               </Link>
             </>
           )}
