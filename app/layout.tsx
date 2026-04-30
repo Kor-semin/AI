@@ -29,14 +29,14 @@ const coverSans = Noto_Sans_KR({
 
 export const metadata: Metadata = {
   title: {
-    default: "자동차 영업 AI 비서",
-    template: "%s · 자동차 영업 AI 비서",
+    default: "Sales Concierge AI",
+    template: "%s · Sales Concierge AI",
   },
   description:
-    "고객 상담, 시승 일정, 출고 준비, 재구매 타이밍까지. 자동차 영업사원의 하루를 놓치지 않도록 정리해주는 AI 업무 파트너.",
+    "고객 상담, 시승 일정, 출고 준비, 재구매 타이밍까지. 고급 자동차 영업사원의 하루를 놓치지 않도록 정리해주는 프리미엄 영업 컨시어지.",
   appleWebApp: {
     capable: true,
-    title: "자동차 영업 AI 비서",
+    title: "Sales Concierge AI",
     statusBarStyle: "default",
   },
   icons: {
@@ -53,8 +53,8 @@ export const viewport: Viewport = {
   initialScale: 1,
   viewportFit: "cover",
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f6f1e7" },
-    { media: "(prefers-color-scheme: dark)", color: "#0b0b0b" },
+    { media: "(prefers-color-scheme: light)", color: "#0b0b0a" },
+    { media: "(prefers-color-scheme: dark)", color: "#0b0b0a" },
   ],
 };
 
