@@ -1,6 +1,20 @@
 "use client";
 
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
+
+import { COVER_QUOTES } from "@/app/components/coverQuotes";
+import {
+  NOTEBOOK_COVER_THEME_KEY,
+  NOTEBOOK_COVER_THEME_LABELS,
+  type NotebookCoverTheme,
+  parseNotebookCoverTheme,
+} from "@/app/components/notebookCoverTheme";
+import { isGoogleAuthEnabled } from "@/app/firebase/client";
+
+/** `public/cover-consultant-hero.png` 표지 전면 배경만 사용 */
+const COVER_HERO_IMG = "/cover-consultant-hero.png";
 
 const STORAGE_KEY = "crm.notebookCoverDismissed";
 
@@ -12,19 +26,24 @@ function readDismissed(): boolean {
   }
 }
 
-/** 전체 화면 다이어리 표지. 클릭·탭 · Enter · Space 로 다음 화면 */
+/** 전체 화면 컨설턴트 표지 — 히어로 사진 + 실버 무드 오버레이 */
 export function NotebookCover() {
+  const router = useRouter();
   const [dismissed, setDismissed] = useState(false);
   const [forceShow, setForceShow] = useState(false);
+  const [quoteIdx, setQuoteIdx] = useState(0);
+  const [coverTheme, setCoverTheme] = useState<NotebookCoverTheme>("natural");
   const panelRef = useRef<HTMLDivElement>(null);
+  const googleAuthEnabled = isGoogleAuthEnabled();
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- 외부 저장소 초기 동기화
     try {
       const params = new URLSearchParams(window.location.search);
       if (params.get("cover") === "1" || params.get("openCover") === "1") {
         sessionStorage.removeItem(STORAGE_KEY);
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- ?cover URL 과 표지 동기화
         setDismissed(false);
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- ?cover URL 과 표지 동기화
         setForceShow(false);
         params.delete("cover");
         params.delete("openCover");
@@ -36,7 +55,18 @@ export function NotebookCover() {
     } catch {
       /* ignore */
     }
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- sessionStorage 초기값
     setDismissed(readDismissed());
+  }, []);
+
+  useEffect(() => {
+    try {
+      const saved =
+        typeof window !== "undefined" ? window.localStorage.getItem(NOTEBOOK_COVER_THEME_KEY) : null;
+      setCoverTheme(parseNotebookCoverTheme(saved));
+    } catch {
+      /* ignore */
+    }
   }, []);
 
   useEffect(() => {
@@ -47,7 +77,13 @@ export function NotebookCover() {
 
   const visible = forceShow || !dismissed;
 
-  const handleOpenNotebook = useCallback(() => {
+  useEffect(() => {
+    if (!visible) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- 표지 열 때마다 랜덤 글귀
+    setQuoteIdx(Math.floor(Math.random() * COVER_QUOTES.length));
+  }, [visible]);
+
+  const dismissAndContinue = useCallback(() => {
     try {
       sessionStorage.setItem(STORAGE_KEY, "1");
     } catch {
@@ -55,7 +91,8 @@ export function NotebookCover() {
     }
     setDismissed(true);
     setForceShow(false);
-  }, []);
+    if (googleAuthEnabled) router.push("/join");
+  }, [router]);
 
   useEffect(() => {
     if (!visible || !panelRef.current) return;
@@ -64,6 +101,8 @@ export function NotebookCover() {
 
   if (!visible) return null;
 
+  const themes: NotebookCoverTheme[] = ["natural", "mono"];
+
   return (
     <div
       ref={panelRef}
@@ -71,53 +110,136 @@ export function NotebookCover() {
       aria-modal="true"
       aria-labelledby="notebook-cover-title"
       tabIndex={0}
-      className="notebook-cover-sheet outline-none [-webkit-tap-highlight-color:transparent]"
-      onClick={handleOpenNotebook}
+      className={`notebook-cover-sheet notebook-cover-sheet-consultant notebook-cover-sheet--tone-${coverTheme} outline-none [-webkit-tap-highlight-color:transparent]`}
+      onClick={dismissAndContinue}
       onKeyDown={(e) => {
         if (e.key !== "Enter" && e.key !== " ") return;
         e.preventDefault();
-        handleOpenNotebook();
+        dismissAndContinue();
       }}
     >
-      <div aria-hidden className="notebook-cover-spine" />
+      <div className="notebook-cover-consultant-hero" aria-hidden>
+        <Image
+          src={COVER_HERO_IMG}
+          alt=""
+          fill
+          priority
+          unoptimized
+          sizes="100vw"
+          className="notebook-cover-hero-photo object-cover object-[center_42%]"
+        />
+        <div className="notebook-cover-hero-dim" aria-hidden />
+        <div className="notebook-cover-tone-scrim" aria-hidden />
+      </div>
 
-      <div className="relative z-[1] flex min-h-[100dvh] min-h-[100svh] w-full cursor-pointer flex-col justify-between pb-[calc(1.25rem+env(safe-area-inset-bottom,0px))] pl-[max(5.5rem,calc(env(safe-area-inset-left,0px)+92px))] pr-[max(28px,calc(env(safe-area-inset-right,0px)+1.75rem))] pt-[max(28px,calc(env(safe-area-inset-top,0px)+1.75rem))] md:mx-auto md:max-w-[min(880px,calc(100vw-56px))]">
-        <header className="shrink-0 border-b border-white/[0.1] pb-6 opacity-96">
-          <div className="flex items-center justify-between gap-3">
-            <span className="text-[11px] font-medium uppercase tracking-[0.45em] text-white/54">
-              Field notes
-            </span>
-            <span className="rounded-full bg-white/[0.08] px-2.5 py-0.5 text-[11px] text-white/62">
-              CRM
-            </span>
+      <div className="notebook-cover-cover-layer notebook-cover-biz-micro notebook-cover-reveal notebook-cover-editorial-shell flex min-h-[100dvh] min-h-[100svh] w-full cursor-pointer flex-col pl-[max(22px,calc(env(safe-area-inset-left,0px)+1.25rem))] pr-[max(22px,calc(env(safe-area-inset-right,0px)+1.25rem))] pb-[calc(1.35rem+env(safe-area-inset-bottom,0px))] pt-[max(28px,calc(env(safe-area-inset-top,0px)+1.85rem))] text-center md:mx-auto md:max-w-[min(760px,calc(100vw-48px))] md:pb-[calc(2rem+env(safe-area-inset-bottom,0px))]">
+        <header className="notebook-cover-cover-header shrink-0 px-3 pb-[1.1rem]">
+          <p className="notebook-cover-cover-kicker-upper font-[family-name:var(--font-cover-serif)] text-[clamp(10px,2.55vw,12px)] font-semibold tracking-[0.2em]">
+            FIELD OPS
+          </p>
+          <p className="notebook-cover-cover-kicker-sub mt-3.5 text-[clamp(12px,2.85vw,14px)] font-semibold leading-[1.45] tracking-[-0.018em]">
+            자동차 영업 · 세일즈 컨설턴트 CRM
+          </p>
+          <p className="notebook-cover-tagline mt-3 text-[clamp(11px,2.5vw,13px)] font-medium leading-[1.6] tracking-[-0.012em]">
+            흩어진 메모를 한곳에. 상담 기록 → 다음 연락 → 출고 전후 일정까지, 두 번째 기억처럼.
+          </p>
+          <div className="mt-4 flex justify-center">
+            <span className="crm-free-badge">무료 사용</span>
           </div>
+          <div aria-hidden className="notebook-cover-kicker-line" />
         </header>
 
-        <div className="flex flex-1 flex-col items-center justify-center px-3">
-          <h1
-            id="notebook-cover-title"
-            className="max-w-[20ch] text-center text-[clamp(1.5rem,5.2vw,2.1875rem)] font-semibold leading-[1.45] tracking-tight text-[#fdfcfa] drop-shadow-[0_1px_18px_rgba(0,0,0,0.45)] sm:max-w-none sm:text-[clamp(1.75rem,3.9vw,2.375rem)]"
-          >
-            자동차 컨설턴트 전용
-            <span className="mt-5 block opacity-93">수첩</span>
-          </h1>
+        <div className="flex min-h-0 flex-1 flex-col px-2 sm:px-4">
+          <div className="flex shrink-0 flex-col items-center pt-[clamp(0.35rem,2.2vh,1.75rem)]">
+            <div className="notebook-cover-cover-title-slot w-full px-2">
+              <h1
+                id="notebook-cover-title"
+                className="notebook-cover-biz-heading notebook-cover-heading-block mx-auto max-w-[min(22ch,calc(100vw-2rem))] text-center sm:max-w-[min(520px,94vw)]"
+              >
+                <span className="notebook-cover-title-primary">자동차 영업</span>
+                <span className="notebook-cover-title-sub">AI 비서형 CRM</span>
+                <span aria-hidden className="notebook-cover-title-shine" />
+              </h1>
+            </div>
+          </div>
 
-          <p className="mt-14 max-w-[26em] text-center text-[clamp(13px,2.95vw,15px)] leading-relaxed text-white/73">
-            상담·견적·재콜이 한 페이지에 만나는
-            <br className="sm:hidden" />{" "}
-            <span className="hidden sm:inline"> </span>
-            매장 현장용 작업 노트입니다.
-          </p>
+          <div className="min-h-[clamp(1.75rem,4.5vh,3rem)] flex-1" aria-hidden />
 
-          <div
-            aria-hidden
-            className="mt-[min(20vh,7.5rem)] h-px w-[min(11rem,calc(100vw-48px))] bg-[linear-gradient(90deg,rgba(255,255,255,.08),rgba(255,255,255,.42),rgba(255,255,255,.08))]"
-          />
+          <div className="mx-auto shrink-0 pb-6">
+            <section className="notebook-cover-quote-stack mx-auto w-full max-w-[min(24.5em,calc(100vw-40px))]">
+              <blockquote
+                id="notebook-cover-quote"
+                aria-live="polite"
+                className="notebook-cover-biz-quote notebook-cover-quote-pane notebook-cover-quote-emphasis rounded-xl px-[1.65rem] py-[1.55rem] text-[clamp(15px,3.35vw,18px)] font-semibold leading-[1.68] tracking-[-0.016em] sm:rounded-[1.1rem] sm:px-7 sm:py-[1.65rem]"
+              >
+                {COVER_QUOTES[quoteIdx >= 0 && quoteIdx < COVER_QUOTES.length ? quoteIdx : 0].map(
+                  (line, i) => (
+                    <span key={i} className="block [&:not(:first-child)]:mt-1.5">
+                      {line}
+                    </span>
+                  ),
+                )}
+              </blockquote>
+
+              <div
+                aria-hidden
+                className="notebook-cover-quote-rules mt-5 flex w-full items-center justify-center gap-3 px-2 opacity-95"
+              >
+                <div className="notebook-cover-quote-rule h-px max-w-[6rem] flex-1 bg-gradient-to-r from-transparent to-transparent" />
+                <div className="notebook-cover-quote-dot size-[5px] rotate-45 border shadow-sm" />
+                <div className="notebook-cover-quote-rule h-px max-w-[6rem] flex-1 bg-gradient-to-r from-transparent to-transparent" />
+              </div>
+            </section>
+
+            <div className="mt-10 px-2 sm:mt-11">
+              <p className="notebook-cover-theme-heading mb-3 font-[family-name:var(--font-cover-serif)] text-[clamp(11px,2.4vw,12px)] font-semibold tracking-[0.12em]">
+                표현 톤
+              </p>
+              <div
+                role="radiogroup"
+                aria-label="표지 표현 자연 색 또는 흑백 선택"
+                className="notebook-cover-theme-bar mx-auto flex w-full max-w-md flex-wrap items-center justify-center gap-2"
+                onClick={(e) => e.stopPropagation()}
+                onPointerDown={(e) => e.stopPropagation()}
+              >
+                {themes.map((t) => (
+                  <button
+                    key={t}
+                    type="button"
+                    role="radio"
+                    aria-checked={coverTheme === t}
+                    className={`notebook-cover-theme-chip ${coverTheme === t ? "notebook-cover-theme-chip--active" : ""}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setCoverTheme(t);
+                      try {
+                        window.localStorage.setItem(NOTEBOOK_COVER_THEME_KEY, t);
+                      } catch {
+                        /* ignore */
+                      }
+                    }}
+                  >
+                    {NOTEBOOK_COVER_THEME_LABELS[t]}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="notebook-cover-biz-micro notebook-cover-cta-wrap mt-[2.65rem] flex flex-col items-center gap-[0.72rem] text-center md:mt-12 md:gap-3">
+              <span className="notebook-cover-cta-chip notebook-cover-cta-main inline-flex min-h-[2.75rem] min-w-[12.25rem] max-w-[min(90vw,20rem)] items-center justify-center rounded-full px-[1.4rem] py-2.5 text-center font-[family-name:var(--font-cover-sans)] text-[clamp(11.25px,2.65vw,12.5px)] font-bold leading-snug tracking-[-0.01em]">
+                {googleAuthEnabled ? "Google 로그인 후 시작하기" : "바로 시작하기"}
+              </span>
+              <span className="notebook-cover-cta-sub text-[clamp(11px,2.55vw,12px)] font-semibold leading-snug tracking-[-0.012em]">
+                {googleAuthEnabled
+                  ? "명함 제출 후 운영 확인(승인) 시 이용 · SMS 없음"
+                  : "MVP(로컬 저장)로 바로 사용 · 로그인은 준비중"}
+              </span>
+              <span className="notebook-cover-cta-hint text-[clamp(10px,2.35vw,10.75px)] font-medium leading-snug tracking-[-0.01em]">
+                화면 탭 또는 Enter
+              </span>
+            </div>
+          </div>
         </div>
-
-        <p className="shrink-0 select-none text-center text-[clamp(11px,2.85vw,13px)] text-white/[0.38] antialiased md:text-[13px]">
-          어디든 클릭하거나 두드려서 다음으로 · Enter / 스페이스
-        </p>
       </div>
     </div>
   );

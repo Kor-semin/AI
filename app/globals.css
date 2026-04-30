@@ -1,15 +1,18 @@
 @import "tailwindcss";
 
 :root {
-  /* Moleskine-ish palette */
-  --background: #f6f1e7; /* warm paper */
-  --foreground: #141414; /* ink */
-  --paper: #fbf7ef;
-  --paper-2: #f1eadc;
-  --ink-2: #2a2a2a;
-  --edge: rgba(20, 20, 20, 0.12);
-  --edge-strong: rgba(20, 20, 20, 0.18);
-  --accent: #1a1a1a; /* cover black */
+  /* Deep navy + gold + ivory */
+  --background: #f6f1e7; /* ivory */
+  --foreground: #0f172a; /* deep navy ink */
+  --paper: #fffaf1; /* clean ivory */
+  --paper-2: #f3ecdf; /* warm divider */
+  --ink-2: #111c33;
+  --edge: rgba(15, 23, 42, 0.12);
+  --edge-strong: rgba(15, 23, 42, 0.18);
+  --accent: #0b1a33; /* deep navy */
+  --gold: #c8a35a;
+  --gold-2: #e3c77a;
+  --gold-ink: rgba(180, 132, 44, 0.98);
 }
 
 @theme inline {
@@ -21,14 +24,17 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0b0b0b;
-    --foreground: #f2f2f2;
-    --paper: #101010;
-    --paper-2: #0c0c0c;
-    --ink-2: #eaeaea;
-    --edge: rgba(242, 242, 242, 0.14);
-    --edge-strong: rgba(242, 242, 242, 0.22);
-    --accent: #f2f2f2;
+    --background: #070b14;
+    --foreground: #f7f1e4;
+    --paper: #0b1222;
+    --paper-2: #0a1020;
+    --ink-2: #f3ecd8;
+    --edge: rgba(231, 225, 208, 0.16);
+    --edge-strong: rgba(231, 225, 208, 0.24);
+    --accent: #f0d38a; /* gold on dark */
+    --gold: #e4c77c;
+    --gold-2: #f1dc9a;
+    --gold-ink: rgba(240, 211, 138, 0.98);
   }
 }
 
@@ -42,13 +48,13 @@ body {
 /* App frame */
 .moleskine-bg {
   background:
-    radial-gradient(1200px 600px at 20% -10%, rgba(0, 0, 0, 0.06), transparent 60%),
-    radial-gradient(900px 500px at 110% 10%, rgba(0, 0, 0, 0.04), transparent 55%),
+    radial-gradient(1200px 600px at 18% -10%, rgba(11, 26, 51, 0.08), transparent 60%),
+    radial-gradient(900px 520px at 112% 12%, rgba(200, 163, 90, 0.11), transparent 58%),
     linear-gradient(to bottom, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0)),
     repeating-linear-gradient(
       to bottom,
-      rgba(20, 20, 20, 0.055) 0px,
-      rgba(20, 20, 20, 0.055) 1px,
+      rgba(15, 23, 42, 0.04) 0px,
+      rgba(15, 23, 42, 0.04) 1px,
       transparent 1px,
       transparent 26px
     ),
@@ -66,7 +72,10 @@ body {
 .moleskine-ink-btn {
   background: var(--accent);
   color: var(--paper);
-  border: 1px solid rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(15, 23, 42, 0.45);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 10px 26px rgba(15, 23, 42, 0.12);
 }
 
 .moleskine-ink-btn:hover {
@@ -80,10 +89,37 @@ body {
 }
 
 .moleskine-ghost-btn:hover {
-  background: rgba(20, 20, 20, 0.04);
+  background: rgba(15, 23, 42, 0.04);
 }
 
-/* 전역 다이어리 표지 오버레이 */
+.crm-free-badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  border: 1px solid rgba(200, 163, 90, 0.55);
+  background: linear-gradient(180deg, rgba(255, 250, 241, 0.92), rgba(243, 236, 223, 0.9));
+  padding: 0.3rem 0.55rem;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: rgba(15, 23, 42, 0.92);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    0 10px 24px rgba(15, 23, 42, 0.08);
+}
+
+@media (prefers-color-scheme: dark) {
+  .crm-free-badge {
+    border-color: rgba(240, 211, 138, 0.55);
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.75), rgba(8, 12, 22, 0.72));
+    color: rgba(240, 211, 138, 0.96);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.05),
+      0 18px 40px rgba(0, 0, 0, 0.35);
+  }
+}
+
+/* 전역 다이어리 표지 — 공통 레이아웃·테마 변형 분리 */
 .notebook-cover-sheet {
   position: fixed;
   inset: 0;
@@ -91,58 +127,744 @@ body {
   isolation: isolate;
   cursor: pointer;
   overflow: hidden;
-  background-color: #171512;
-  background-image:
-    radial-gradient(ellipse 140% 90% at 50% -8%, rgba(255, 255, 245, 0.08), transparent 52%),
-    radial-gradient(ellipse 110% 60% at 100% 100%, rgba(0, 0, 0, 0.45), transparent 52%),
-    radial-gradient(ellipse 80% 50% at 0% 30%, rgba(124, 90, 50, 0.12), transparent 55%),
-    linear-gradient(165deg, #29231c 0%, #171512 42%, #0e0d0b 100%);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.06),
-    inset 0 0 140px rgba(0, 0, 0, 0.25);
 }
 
-@media (prefers-color-scheme: dark) {
-  .notebook-cover-sheet {
-    background-color: #080807;
-    background-image:
-      radial-gradient(ellipse 140% 90% at 50% -8%, rgba(255, 255, 252, 0.06), transparent 52%),
-      radial-gradient(ellipse 110% 60% at 100% 100%, rgba(0, 0, 0, 0.55), transparent 52%),
-      radial-gradient(ellipse 80% 50% at 0% 30%, rgba(180, 130, 70, 0.08), transparent 55%),
-      linear-gradient(165deg, #1a1612 0%, #070706 52%, #020201 100%);
+/* 컨설턴트 히어로 표지 (전면 사진) — 이미지 로딩 중 폴백 */
+.notebook-cover-sheet-consultant {
+  background: linear-gradient(165deg, #eceff2 0%, #cdd5de 46%, #9aa6b6 100%);
+}
+
+.notebook-cover-sheet-consultant.notebook-cover-sheet--tone-mono {
+  background: linear-gradient(155deg, #141416 0%, #2a2a2f 52%, #0c0c0e 100%);
+}
+
+/* 고정 히어로 + 톤 스크림(실버 PNG 기준 하이키·쿨 크롬·웜 스튜디오) */
+.notebook-cover-consultant-hero {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* PNG 원본에 가까운 디스플레이(언옵티마이즈 호환) 스케일 안정화 */
+.notebook-cover-hero-photo {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* 흑백 모드: 채도 완전 제거 + 명암 강조(실제 흑백 필름 느낌) */
+.notebook-cover-sheet--tone-mono .notebook-cover-hero-photo {
+  filter: grayscale(1) saturate(0) contrast(1.22) brightness(0.93);
+}
+
+/* 배경만 살짝 어둡게 — 눈 피로 완화(텍스트 레이어는 그대로) */
+.notebook-cover-hero-dim {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: rgba(15, 23, 42, 0.17);
+}
+
+.notebook-cover-sheet--tone-mono .notebook-cover-hero-dim {
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.42) 0%, rgba(0, 0, 0, 0.28) 45%, rgba(0, 0, 0, 0.36) 100%);
+}
+
+.notebook-cover-tone-scrim {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+
+.notebook-cover-sheet--tone-natural .notebook-cover-tone-scrim {
+  background: linear-gradient(
+    180deg,
+    rgba(250, 251, 253, 0.42) 0%,
+    rgba(249, 250, 252, 0.06) min(40vh, 36%),
+    transparent 53%,
+    transparent 61%,
+    rgba(31, 41, 55, 0.44) 100%
+  );
+}
+
+/* 흑백 배경 오버레이: 색번짐 없이 흑·백·회만 사용 */
+.notebook-cover-sheet--tone-mono .notebook-cover-tone-scrim {
+  background: linear-gradient(
+    185deg,
+    rgba(255, 255, 255, 0.14) 0%,
+    rgba(245, 245, 246, 0.04) min(38vh, 34%),
+    transparent 52%,
+    rgba(0, 0, 0, 0.18) 66%,
+    rgba(0, 0, 0, 0.52) 100%
+  );
+}
+
+/* 표지 테마 칩 — 클릭 시 부모 진입 차단 없이 시각 분리 */
+.notebook-cover-theme-bar {
+  pointer-events: auto;
+}
+
+.notebook-cover-theme-chip {
+  cursor: pointer;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.48);
+  background: rgba(255, 255, 255, 0.36);
+  padding: 9px 14px;
+  font-size: 11.25px;
+  font-weight: 700;
+  letter-spacing: -0.012em;
+  color: rgba(30, 41, 59, 0.9);
+  transition:
+    transform 140ms ease,
+    border-color 160ms ease,
+    background-color 160ms ease;
+}
+
+.notebook-cover-theme-chip:hover {
+  border-color: rgba(148, 163, 184, 0.65);
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.notebook-cover-theme-chip--active {
+  border-color: rgba(100, 116, 139, 0.72);
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    0 0 0 1px rgba(148, 163, 184, 0.25),
+    0 6px 22px rgba(51, 65, 85, 0.1);
+}
+
+/* 실버 포토 무드별 미세 차이만 */
+.notebook-cover-sheet--tone-natural .notebook-cover-theme-chip {
+  border-color: rgba(156, 168, 186, 0.5);
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.notebook-cover-sheet--tone-natural .notebook-cover-theme-chip:hover {
+  border-color: rgba(148, 163, 184, 0.58);
+}
+
+.notebook-cover-sheet--tone-natural .notebook-cover-theme-chip--active {
+  border-color: rgba(203, 213, 225, 0.9);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.98),
+    0 0 0 1px rgba(203, 213, 225, 0.5),
+    0 10px 28px rgba(51, 65, 85, 0.1);
+}
+
+.notebook-cover-sheet--tone-mono .notebook-cover-theme-chip {
+  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(12, 12, 14, 0.45);
+  color: rgba(241, 245, 249, 0.92);
+}
+
+.notebook-cover-sheet--tone-mono .notebook-cover-theme-chip:hover {
+  border-color: rgba(255, 255, 255, 0.38);
+  background: rgba(24, 24, 27, 0.58);
+}
+
+.notebook-cover-sheet--tone-mono .notebook-cover-theme-chip--active {
+  border-color: rgba(250, 250, 250, 0.75);
+  background: rgba(250, 250, 250, 0.98);
+  color: rgba(15, 17, 21, 0.96);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    0 0 0 1px rgba(0, 0, 0, 0.06),
+    0 14px 40px rgba(0, 0, 0, 0.28);
+}
+
+/* 표지: 비즈니스 명조 제목 · 명돋 본문(숙독·고대비) */
+.notebook-cover-biz-heading {
+  font-family: var(--font-cover-serif), ui-serif, "Noto Serif KR", serif;
+}
+
+/* block 자식(h1 내부 두 줄 제목)이 잘리지 않게 — 상위 line-height 과도하게 낮추지 않음 */
+.notebook-cover-heading-block {
+  line-height: normal;
+}
+
+/* 표지 메인 제목 — 위쪽 배치·고대비·은은한 광택 */
+.notebook-cover-title-primary {
+  display: block;
+  font-weight: 900;
+  font-size: clamp(1.75rem, 5.35vw, 2.75rem);
+  line-height: 1.07;
+  letter-spacing: -0.022em;
+  color: #fffdf7;
+  text-shadow:
+    0 1px 0 rgba(0, 0, 0, 0.42),
+    0 4px 22px rgba(0, 0, 0, 0.52),
+    0 0 40px rgba(255, 210, 170, 0.12);
+}
+
+/* 그라데이션 글자 + 같은 요소의 filter 는 Chrome에서 글씨가 통째로 사라지는 버그 유발 → filter 금지, 그림자는 text-shadow */
+.notebook-cover-title-sub {
+  display: block;
+  margin-top: 0.62em;
+  font-weight: 800;
+  font-size: clamp(1.38rem, 3.95vw, 2rem);
+  line-height: 1.2;
+  letter-spacing: -0.018em;
+  background: linear-gradient(145deg, #fffef9 0%, #e8dfd4 38%, #b8986e 88%, #8a6d4e 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  text-shadow:
+    0 3px 18px rgba(0, 0, 0, 0.38),
+    0 12px 32px rgba(0, 0, 0, 0.28);
+}
+
+.notebook-cover-sheet--tone-natural .notebook-cover-title-primary {
+  color: #253041;
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.62),
+    0 6px 3px rgba(255, 255, 255, 0.12),
+    0 14px 36px rgba(255, 255, 255, 0.5),
+    0 22px 48px rgba(15, 23, 42, 0.1);
+}
+
+.notebook-cover-sheet--tone-natural .notebook-cover-title-sub {
+  background: linear-gradient(
+    156deg,
+    #ffffff 0%,
+    #c5d0e3 28%,
+    #4a5f7c 58%,
+    #131b2b 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.88),
+    0 2px 12px rgba(255, 255, 255, 0.55),
+    0 10px 32px rgba(15, 23, 42, 0.18),
+    0 20px 48px rgba(15, 23, 42, 0.12);
+}
+
+/* 흑백 메인 카피: 밝은 글자 + 검은 헤일로로 사진 위에서도 즉시 읽힘 */
+.notebook-cover-sheet--tone-mono .notebook-cover-title-primary {
+  color: #fafafb;
+  text-shadow:
+    0 0 1px rgba(0, 0, 0, 1),
+    0 2px 2px rgba(0, 0, 0, 0.9),
+    0 8px 24px rgba(0, 0, 0, 0.75),
+    0 26px 50px rgba(0, 0, 0, 0.45),
+    0 0 32px rgba(255, 255, 255, 0.1);
+}
+
+.notebook-cover-sheet--tone-mono .notebook-cover-title-sub {
+  background: linear-gradient(
+    154deg,
+    #ffffff 0%,
+    #ebecef 22%,
+    #a1a1aa 52%,
+    #18181b 88%,
+    #050507 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.45),
+    0 3px 8px rgba(0, 0, 0, 0.88),
+    0 14px 40px rgba(0, 0, 0, 0.6),
+    0 26px 56px rgba(0, 0, 0, 0.4);
+}
+
+/* 표지 중앙 — 잡지·수첩 표지 계층(1행 강하게, 2행은 약간 작게 간격 균등) */
+.notebook-cover-sheet-consultant .notebook-cover-cover-title-slot .notebook-cover-title-primary {
+  text-rendering: optimizeLegibility;
+}
+
+.notebook-cover-sheet-consultant.notebook-cover-sheet--tone-natural .notebook-cover-title-primary {
+  font-size: clamp(1.92rem, calc(5.85vw + 0.06rem), 2.86rem);
+  letter-spacing: -0.026em;
+  line-height: 1.065;
+}
+
+.notebook-cover-sheet-consultant.notebook-cover-sheet--tone-natural .notebook-cover-title-sub {
+  font-size: clamp(1.22rem, calc(3.08vw + 0.06rem), 1.74rem);
+  margin-top: 0.62em;
+  line-height: 1.26;
+}
+
+.notebook-cover-sheet-consultant.notebook-cover-sheet--tone-mono .notebook-cover-title-primary {
+  font-size: clamp(1.88rem, calc(5.8vw + 0.06rem), 2.82rem);
+  letter-spacing: -0.024em;
+  line-height: 1.065;
+}
+
+.notebook-cover-sheet-consultant.notebook-cover-sheet--tone-mono .notebook-cover-title-sub {
+  font-size: clamp(1.2rem, calc(3vw + 0.05rem), 1.72rem);
+  margin-top: 0.58em;
+  line-height: 1.26;
+}
+
+.notebook-cover-editorial-shell {
+  text-rendering: optimizeLegibility;
+}
+
+.notebook-cover-sheet-consultant .notebook-cover-title-shine {
+  margin-top: 1.05rem;
+}
+
+.notebook-cover-title-shine {
+  margin-top: 0.85rem;
+  margin-left: auto;
+  margin-right: auto;
+  height: 2px;
+  width: min(10.5rem, 48vw);
+  border-radius: 9999px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(180, 188, 200, 0.35) 18%,
+    rgba(226, 232, 240, 0.9) 50%,
+    rgba(180, 188, 200, 0.35) 82%,
+    transparent
+  );
+  box-shadow: 0 0 20px rgba(148, 163, 184, 0.25);
+  animation: notebook-cover-line-glow 11s ease-in-out infinite;
+}
+
+.notebook-cover-sheet--tone-mono .notebook-cover-title-shine {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(82, 82, 91, 0.6) 16%,
+    rgba(244, 244, 245, 1) 50%,
+    rgba(82, 82, 91, 0.6) 84%,
+    transparent
+  );
+  box-shadow: 0 0 26px rgba(255, 255, 255, 0.4);
+  height: 2.5px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .notebook-cover-title-shine {
+    animation: none;
+    opacity: 0.85;
   }
 }
 
-/* 철·제본 줄 (왼쪽 가장자리) */
-.notebook-cover-spine {
-  pointer-events: none;
-  position: absolute;
-  z-index: 0;
-  top: -2%;
-  bottom: -2%;
-  left: clamp(14px, 4vw, 28px);
-  width: clamp(52px, 10vw, 88px);
-  border-radius: 4px;
-  background: linear-gradient(
-    90deg,
-    rgba(0, 0, 0, 0.72) 0%,
-    rgba(45, 36, 28, 0.95) 22%,
-    rgba(92, 78, 60, 0.35) 50%,
-    rgba(42, 35, 26, 0.88) 78%,
-    rgba(15, 12, 9, 0.95) 100%
-  );
-  box-shadow:
-    inset -2px 0 6px rgba(255, 255, 240, 0.09),
-    inset 3px 0 12px rgba(0, 0, 0, 0.55),
-    4px 0 28px rgba(0, 0, 0, 0.45);
+@keyframes notebook-cover-line-glow {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+
+  50% {
+    opacity: 1;
+  }
 }
 
-.notebook-cover-spine::after {
-  content: "";
-  position: absolute;
-  inset: 18% 14% 22% auto;
-  width: 5px;
-  border-radius: 999px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 250, 0.02));
+.notebook-cover-biz-quote,
+.notebook-cover-biz-caption,
+.notebook-cover-biz-micro {
+  font-family: var(--font-cover-sans), "Noto Sans KR", "Apple SD Gothic Neo", sans-serif;
+}
+
+.notebook-cover-quote-stack {
+  border-radius: 4px;
+}
+
+/* 표지 — 헤더 키커·목차 CTA (밝은 면용 먹색) */
+.notebook-cover-cover-kicker-upper {
+  color: rgba(78, 62, 52, 0.88);
+}
+
+.notebook-cover-sheet--tone-mono .notebook-cover-cover-kicker-upper {
+  color: rgba(48, 62, 82, 0.9);
+}
+
+.notebook-cover-cover-kicker-sub {
+  color: rgba(88, 76, 68, 0.86);
+}
+
+.notebook-cover-cover-kicker-sub,
+.notebook-cover-tagline {
+  font-family: var(--font-cover-sans), "Noto Sans KR", "Apple SD Gothic Neo", sans-serif;
+}
+
+.notebook-cover-sheet--tone-mono .notebook-cover-cover-kicker-sub {
+  color: rgba(72, 82, 96, 0.86);
+}
+
+.notebook-cover-theme-heading {
+  color: rgba(86, 74, 66, 0.86);
+}
+
+.notebook-cover-sheet--tone-mono .notebook-cover-theme-heading {
+  color: rgba(72, 82, 96, 0.86);
+}
+
+.notebook-cover-quote-pane {
+  border: 1px solid rgba(118, 96, 76, 0.2);
+  background: linear-gradient(
+    168deg,
+    rgba(255, 252, 248, 0.88) 0%,
+    rgba(250, 246, 241, 0.78) 100%
+  );
+  color: rgba(54, 46, 40, 0.95);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.75),
+    0 16px 40px rgba(106, 86, 70, 0.12),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.22);
+}
+
+.notebook-cover-sheet--tone-mono .notebook-cover-quote-pane {
+  border-color: rgba(120, 150, 190, 0.22);
+  background: linear-gradient(
+    170deg,
+    rgba(254, 255, 255, 0.92) 0%,
+    rgba(244, 248, 252, 0.82) 100%
+  );
+  color: rgba(38, 50, 66, 0.92);
+}
+
+/* 전면 컨설턴트 히어로 위 글귀 카드 — 프로스트 글래스 */
+.notebook-cover-sheet-consultant .notebook-cover-quote-pane {
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.32);
+  color: rgba(15, 23, 42, 0.95);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.65),
+    0 18px 48px rgba(15, 23, 42, 0.1),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+/* 흑백 표지 글귀: 다크 글래스 + 라이트 텍스트(잡지·다큐먼터리 무드) */
+.notebook-cover-sheet-consultant.notebook-cover-sheet--tone-mono .notebook-cover-quote-pane {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: linear-gradient(
+    165deg,
+    rgba(18, 18, 21, 0.88) 0%,
+    rgba(28, 28, 33, 0.82) 50%,
+    rgba(14, 14, 17, 0.9) 100%
+  );
+  color: rgba(250, 250, 252, 0.98);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 24px 56px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.notebook-cover-sheet-consultant .notebook-cover-quote-emphasis {
+  text-shadow:
+    0 1px 1px rgba(255, 255, 255, 0.2),
+    0 14px 40px rgba(15, 23, 42, 0.12);
+}
+
+.notebook-cover-sheet-consultant.notebook-cover-sheet--tone-mono .notebook-cover-quote-emphasis {
+  text-shadow:
+    0 2px 3px rgba(0, 0, 0, 0.45),
+    0 12px 32px rgba(0, 0, 0, 0.35);
+}
+
+.notebook-cover-sheet-consultant.notebook-cover-sheet--tone-natural .notebook-cover-quote-pane {
+  border-color: rgba(255, 255, 255, 0.66);
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.notebook-cover-sheet-consultant.notebook-cover-sheet--tone-natural .notebook-cover-quote-emphasis {
+  text-shadow:
+    0 1px 2px rgba(255, 255, 255, 0.6),
+    0 14px 40px rgba(15, 23, 42, 0.16);
+}
+
+.notebook-cover-quote-rule {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(120, 100, 86, 0.22) 50%,
+    transparent
+  );
+}
+
+.notebook-cover-sheet--tone-mono .notebook-cover-quote-rule {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.22) 50%, transparent);
+}
+
+.notebook-cover-sheet-consultant.notebook-cover-sheet--tone-mono .notebook-cover-quote-rule {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.28) 50%, transparent);
+}
+
+.notebook-cover-quote-dot {
+  border-color: rgba(130, 110, 96, 0.32);
+  background: rgba(255, 255, 255, 0.65);
+}
+
+.notebook-cover-sheet--tone-mono .notebook-cover-quote-dot {
+  border-color: rgba(255, 255, 255, 0.4);
+  background: rgba(250, 250, 250, 0.85);
+}
+
+.notebook-cover-sheet-consultant.notebook-cover-sheet--tone-mono .notebook-cover-quote-dot {
+  border-color: rgba(255, 255, 255, 0.42);
+}
+
+.notebook-cover-cta-chip {
+  border-color: rgba(110, 92, 78, 0.28);
+  background: rgba(255, 255, 253, 0.7);
+  color: rgba(62, 52, 46, 0.95);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 10px 28px rgba(90, 70, 54, 0.1);
+}
+
+.notebook-cover-sheet--tone-mono .notebook-cover-cta-chip {
+  border-color: rgba(255, 255, 255, 0.32);
+  background: rgba(250, 250, 250, 0.94);
+  color: rgba(15, 17, 21, 0.96);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    0 12px 34px rgba(0, 0, 0, 0.28);
+}
+
+.notebook-cover-cta-hint {
+  color: rgba(71, 85, 105, 0.82);
+}
+
+.notebook-cover-sheet--tone-mono .notebook-cover-cta-hint {
+  color: rgba(96, 108, 124, 0.82);
+}
+
+/* 표지 — 첫 화면 리빌(은은하게) */
+.notebook-cover-reveal {
+  animation: notebook-cover-reveal-motion 0.92s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .notebook-cover-reveal {
+    animation: none !important;
+  }
+}
+
+@keyframes notebook-cover-reveal-motion {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 표지 — 상단 라인 디바이더 */
+.notebook-cover-kicker-line {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 0.85rem;
+  height: 1px;
+  width: min(180px, 46vw);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(110, 90, 76, 0.22) 42%,
+    rgba(110, 90, 76, 0.22) 58%,
+    transparent
+  );
+}
+
+.notebook-cover-sheet--tone-mono .notebook-cover-kicker-line {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.42) 42%,
+    rgba(230, 230, 233, 0.35) 50%,
+    rgba(255, 255, 255, 0.42) 58%,
+    transparent
+  );
+}
+
+.notebook-cover-sheet-consultant .notebook-cover-theme-chip {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.notebook-cover-sheet-consultant .notebook-cover-cta-chip {
+  border-color: rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.42);
+  color: rgba(15, 23, 42, 0.94);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.75),
+    0 12px 32px rgba(15, 23, 42, 0.08);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.notebook-cover-sheet-consultant .notebook-cover-cta-main {
+  background: linear-gradient(165deg, rgba(255, 255, 255, 0.98) 0%, rgba(241, 245, 249, 0.96) 100%);
+  border-color: rgba(255, 255, 255, 0.85);
+  color: rgba(15, 23, 42, 0.98);
+  letter-spacing: 0.06em;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    0 1px 0 rgba(148, 163, 184, 0.4),
+    0 22px 50px rgba(30, 41, 59, 0.2);
+  transition: transform 160ms ease, box-shadow 200ms ease;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .notebook-cover-sheet-consultant .notebook-cover-cta-main {
+    animation: notebook-cover-cta-breathe 3.2s ease-in-out infinite;
+  }
+
+  .notebook-cover-cta-wrap:hover .notebook-cover-cta-main {
+    transform: translateY(-2px);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 1),
+      0 26px 60px rgba(30, 41, 59, 0.24);
+    animation-play-state: paused;
+  }
+}
+
+@keyframes notebook-cover-cta-breathe {
+  0%,
+  100% {
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 1),
+      0 1px 0 rgba(148, 163, 184, 0.4),
+      0 22px 50px rgba(30, 41, 59, 0.2);
+  }
+
+  50% {
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 1),
+      0 1px 0 rgba(148, 163, 184, 0.35),
+      0 26px 58px rgba(30, 41, 59, 0.28);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .notebook-cover-sheet-consultant .notebook-cover-cta-main {
+    animation: none !important;
+    transition: none;
+  }
+}
+
+.notebook-cover-sheet-consultant.notebook-cover-sheet--tone-mono .notebook-cover-cta-main {
+  background: linear-gradient(
+    170deg,
+    rgba(253, 253, 254, 1) 0%,
+    rgba(228, 228, 231, 0.96) 100%
+  );
+  border-color: rgba(255, 255, 255, 0.92);
+}
+
+.notebook-cover-tagline {
+  color: rgba(30, 41, 59, 0.92);
+}
+
+.notebook-cover-sheet-consultant .notebook-cover-tagline {
+  color: rgba(30, 41, 59, 0.88);
+}
+
+.notebook-cover-sheet-consultant.notebook-cover-sheet--tone-mono .notebook-cover-tagline {
+  color: rgba(244, 244, 246, 0.92);
+  text-shadow:
+    0 0 24px rgba(0, 0, 0, 0.5),
+    0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+.notebook-cover-cta-sub {
+  font-family: var(--font-cover-sans), "Noto Sans KR", sans-serif;
+  color: rgba(30, 41, 59, 0.88);
+}
+
+.notebook-cover-sheet-consultant .notebook-cover-cta-sub {
+  color: rgba(30, 41, 59, 0.9);
+}
+
+.notebook-cover-sheet-consultant.notebook-cover-sheet--tone-mono .notebook-cover-cta-sub {
+  color: rgba(237, 237, 240, 0.95);
+  text-shadow: 0 1px 14px rgba(0, 0, 0, 0.45);
+}
+
+.notebook-cover-sheet-consultant .notebook-cover-cover-kicker-upper {
+  color: rgba(51, 65, 85, 0.96);
+  text-shadow:
+    0 1px 2px rgba(255, 255, 255, 0.5),
+    0 14px 32px rgba(255, 255, 255, 0.2);
+}
+
+.notebook-cover-sheet-consultant .notebook-cover-cover-kicker-sub {
+  color: rgba(30, 41, 59, 0.94);
+  text-shadow:
+    0 1px 22px rgba(255, 255, 255, 0.28),
+    0 14px 30px rgba(15, 23, 42, 0.05);
+}
+
+.notebook-cover-sheet-consultant.notebook-cover-sheet--tone-mono .notebook-cover-cover-kicker-upper {
+  color: rgba(250, 250, 250, 0.94);
+  text-shadow:
+    0 2px 3px rgba(0, 0, 0, 0.75),
+    0 22px 40px rgba(0, 0, 0, 0.4);
+}
+
+.notebook-cover-sheet-consultant.notebook-cover-sheet--tone-mono .notebook-cover-cover-kicker-sub {
+  color: rgba(241, 245, 249, 0.92);
+  text-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.7),
+    0 18px 36px rgba(0, 0, 0, 0.35);
+}
+
+.notebook-cover-sheet-consultant .notebook-cover-theme-heading {
+  color: rgba(37, 50, 70, 0.96);
+  letter-spacing: 0.075em;
+}
+
+.notebook-cover-sheet-consultant.notebook-cover-sheet--tone-mono .notebook-cover-theme-heading {
+  color: rgba(244, 244, 248, 0.92);
+  letter-spacing: 0.07em;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+}
+
+.notebook-cover-sheet-consultant.notebook-cover-sheet--tone-mono .notebook-cover-cta-hint {
+  color: rgba(216, 219, 229, 0.86);
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.38);
+}
+
+.notebook-cover-cover-layer {
+  position: relative;
+  z-index: 20;
+}
+
+/* 목차 페이지 — 헤드라인(TOC layout에서 변수 주입) */
+.toc-page-title {
+  font-family: var(--font-toc-serif, ui-serif), "Noto Serif KR", serif;
+}
+
+/* 목차 카드 순차 등장 */
+.toc-grid-item-animate {
+  animation: toc-item-rise 0.65s cubic-bezier(0.22, 1, 0.32, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toc-grid-item-animate {
+    animation: none !important;
+  }
+}
+
+@keyframes toc-item-rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 

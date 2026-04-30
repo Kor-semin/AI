@@ -10,14 +10,21 @@ import {
   signOut,
 } from "firebase/auth";
 import { useEffect, useMemo, useState } from "react";
-import { getFirebaseAuth, isFirebaseConfigured } from "@/app/firebase/client";
+import { getFirebaseAuth, isFirebaseConfigured, isGoogleAuthEnabled } from "@/app/firebase/client";
 
 const REDIRECT_PENDING_KEY = "customer-manager.auth.redirectPending";
 
 export type AuthState =
   | { status: "loading" }
   | { status: "signed-out" }
-  | { status: "signed-in"; uid: string; email?: string | null; name?: string | null };
+  | {
+      status: "signed-in";
+      uid: string;
+      email?: string | null;
+      name?: string | null;
+      /** 휴대폰 인증을 쓴 경우만 채워짐 — 영업 승인 검사에 사용 */
+      phoneNumber?: string | null;
+    };
 
 export function useAuth(): {
   auth: AuthState;
@@ -41,7 +48,14 @@ export function useAuth(): {
     // Start listening immediately so we don't get stuck in "loading".
     const unsub = onAuthStateChanged(a, (user) => {
       if (!user) setAuth({ status: "signed-out" });
-      else setAuth({ status: "signed-in", uid: user.uid, email: user.email, name: user.displayName });
+      else
+        setAuth({
+          status: "signed-in",
+          uid: user.uid,
+          email: user.email,
+          name: user.displayName,
+          phoneNumber: user.phoneNumber,
+        });
     });
 
     void (async () => {
@@ -61,6 +75,7 @@ export function useAuth(): {
             uid: res.user.uid,
             email: res.user.email,
             name: res.user.displayName,
+            phoneNumber: res.user.phoneNumber,
           });
           setAuthError(null);
         } else if (wasPending) {
@@ -73,6 +88,7 @@ export function useAuth(): {
               uid: u.uid,
               email: u.email,
               name: u.displayName,
+              phoneNumber: u.phoneNumber,
             });
             setAuthError(null);
           } else {
@@ -103,6 +119,9 @@ export function useAuth(): {
       signIn: async () => {
         if (!isFirebaseConfigured()) {
           throw new Error("Firebase 설정(.env.local)이 아직 없습니다. 설정 후 서버를 재시작하세요.");
+        }
+        if (!isGoogleAuthEnabled()) {
+          throw new Error("현재 Google 로그인은 잠시 꺼져 있습니다(준비중).");
         }
         setAuthError(null);
         setAuth({ status: "loading" });

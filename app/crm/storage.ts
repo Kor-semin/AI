@@ -109,16 +109,16 @@ export async function subscribeTemplates(
 }
 
 export async function upsertCustomerCloud(uid: string, patch: Partial<Customer> & { id: string }): Promise<void> {
-  const { doc, serverTimestamp, setDoc } = await import("firebase/firestore");
+  const { deleteField, doc, serverTimestamp, setDoc } = await import("firebase/firestore");
   const { getFirebaseDb } = await import("@/app/firebase/client");
   const db = getFirebaseDb();
   const t = nowIso();
   const ref = doc(db, "users", uid, "customers", patch.id);
-  await setDoc(
-    ref,
-    { ...patch, updatedAt: t, updatedAtServer: serverTimestamp() },
-    { merge: true },
-  );
+  const payload: Record<string, unknown> = { ...patch, updatedAt: t, updatedAtServer: serverTimestamp() };
+  if ("paymentType" in patch && patch.paymentType === undefined) {
+    payload.paymentType = deleteField();
+  }
+  await setDoc(ref, payload, { merge: true });
 }
 
 export async function createCustomerCloud(uid: string, customer: Customer): Promise<void> {

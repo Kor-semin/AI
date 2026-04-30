@@ -3,6 +3,7 @@
 import { initializeApp, type FirebaseApp, getApps } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
 export function isFirebaseConfigured() {
   return Boolean(
@@ -11,6 +12,13 @@ export function isFirebaseConfigured() {
       process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID &&
       process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
   );
+}
+
+/** MVP 단계: 필요 시 Google 로그인 기능을 잠시 끌 수 있음 */
+export function isGoogleAuthEnabled() {
+  const v = process.env.NEXT_PUBLIC_ENABLE_GOOGLE_AUTH;
+  if (v == null) return true;
+  return String(v).trim().toLowerCase() !== "false";
 }
 
 function getFirebaseConfig() {
@@ -46,3 +54,6 @@ export function getFirebaseDb() {
   return getFirestore(getFirebaseApp());
 }
 
+export function getFirebaseStorageBucket() {
+  return getStorage(getFirebaseApp());
+}
