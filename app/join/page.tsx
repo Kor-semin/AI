@@ -180,7 +180,8 @@ export default function BetaJoinPage() {
         </form>
 
         <p className="mt-10 text-center text-[11px] leading-relaxed text-[color:var(--ink-2)]">
-          제출 데이터는 현재 브라우저에서만 안내 처리됩니다. 추후 저장소 연결 시 같은 필드명으로 매핑됩니다.
+          운영 환경에서 <code className="rounded bg-white/70 px-1.5 py-0.5 font-mono text-[10px]">NEXT_PUBLIC_BETA_SIGNUP_ENDPOINT</code>{" "}
+          를 설정하면 제출 내용이 Google Sheet(웹훅)로 저장됩니다. 미설정 시에는 데모 안내만 표시됩니다.
         </p>
       </div>
     </main>
