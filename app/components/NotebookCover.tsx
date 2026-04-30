@@ -10,6 +10,7 @@ import {
   type NotebookCoverTheme,
   parseNotebookCoverTheme,
 } from "@/app/components/notebookCoverTheme";
+import { useLanguage } from "@/app/components/i18n/LanguageProvider";
 import { isGoogleAuthEnabled } from "@/app/firebase/client";
 
 const STORAGE_KEY = "crm.notebookCoverDismissed";
@@ -31,6 +32,7 @@ export function NotebookCover() {
   const [coverTheme, setCoverTheme] = useState<NotebookCoverTheme>("natural");
   const panelRef = useRef<HTMLDivElement>(null);
   const googleAuthEnabled = isGoogleAuthEnabled();
+  const { t } = useLanguage();
 
   useEffect(() => {
     try {
@@ -89,6 +91,20 @@ export function NotebookCover() {
     setForceShow(false);
     if (googleAuthEnabled) router.push("/register");
   }, [router]);
+
+  const dismissAndNavigate = useCallback(
+    (href: string) => {
+      try {
+        sessionStorage.setItem(STORAGE_KEY, "1");
+      } catch {
+        /* ignore */
+      }
+      setDismissed(true);
+      setForceShow(false);
+      router.push(href);
+    },
+    [router],
+  );
 
   useEffect(() => {
     if (!visible || !panelRef.current) return;
@@ -153,7 +169,60 @@ export function NotebookCover() {
             </div>
           </div>
 
-          <div className="min-h-[clamp(1.75rem,4.5vh,3rem)] flex-1" aria-hidden />
+          <div className="mt-6 w-full px-2" onClick={(e) => e.stopPropagation()} onPointerDown={(e) => e.stopPropagation()}>
+            <section className="mx-auto w-full max-w-[min(42rem,94vw)] rounded-2xl border border-white/12 bg-white/[0.06] p-5 text-left shadow-[0_18px_60px_-38px_rgba(0,0,0,0.55)] backdrop-blur-md">
+              <div className="flex flex-col gap-1">
+                <div className="text-[12px] font-semibold tracking-[-0.01em] text-[#E5E7EB]">{t("cover.aiGuide.title")}</div>
+                <div className="text-[13px] leading-relaxed text-[#CBD5E1]">{t("cover.aiGuide.subtitle")}</div>
+              </div>
+
+              <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                {[
+                  { n: "1", title: t("cover.aiGuide.step1.title"), desc: t("cover.aiGuide.step1.desc") },
+                  { n: "2", title: t("cover.aiGuide.step2.title"), desc: t("cover.aiGuide.step2.desc") },
+                  { n: "3", title: t("cover.aiGuide.step3.title"), desc: t("cover.aiGuide.step3.desc") },
+                  { n: "4", title: t("cover.aiGuide.step4.title"), desc: t("cover.aiGuide.step4.desc") },
+                ].map((s) => (
+                  <div key={s.n} className="rounded-xl border border-white/10 bg-black/10 p-4">
+                    <div className="flex items-start gap-3">
+                      <div className="mt-0.5 inline-flex size-7 shrink-0 items-center justify-center rounded-full border border-white/18 bg-white/10 text-[12px] font-bold text-[#F8FAFC]">
+                        {s.n}
+                      </div>
+                      <div>
+                        <div className="text-[13px] font-semibold text-[#F8FAFC]">{s.title}</div>
+                        <div className="mt-1 text-[12px] leading-relaxed text-[#CBD5E1]">{s.desc}</div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-4 flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  className="rounded-full border border-white/14 bg-white/[0.08] px-4 py-2 text-[12px] font-semibold text-[#F8FAFC] hover:bg-white/[0.12]"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    dismissAndNavigate("/#ai-demo");
+                  }}
+                >
+                  {t("cover.aiGuide.tryCta")}
+                </button>
+                <button
+                  type="button"
+                  className="rounded-full border border-white/18 bg-white/[0.02] px-4 py-2 text-[12px] font-semibold text-[#E2E8F0] hover:bg-white/[0.06]"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    dismissAndNavigate("/?view=app");
+                  }}
+                >
+                  {t("cover.aiGuide.startCta")}
+                </button>
+              </div>
+            </section>
+          </div>
+
+          <div className="min-h-[clamp(1.25rem,3.25vh,2.5rem)] flex-1" aria-hidden />
 
           <div className="mx-auto shrink-0 pb-6">
             <section className="notebook-cover-quote-stack mx-auto w-full max-w-[min(24.5em,calc(100vw-40px))]">
