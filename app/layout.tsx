@@ -29,14 +29,14 @@ const coverSans = Noto_Sans_KR({
 
 export const metadata: Metadata = {
   title: {
-    default: "자동차 컨설턴트 전용 수첩",
-    template: "%s · 자동차 컨설턴트 전용 수첩",
+    default: "자동차 영업 AI 비서",
+    template: "%s · 자동차 영업 AI 비서",
   },
   description:
-    "매장 현장에서 쓰는 자동차 컨설턴트 전용 수첩 — 고객·일정·문자까지 한 번에.",
+    "고객관리부터 출고 안내서 제작까지, 반복 업무를 대신 정리해주는 자동차 영업사원용 AI 영업 비서.",
   appleWebApp: {
     capable: true,
-    title: "자동차 컨설턴트 전용 수첩",
+    title: "자동차 영업 AI 비서",
     statusBarStyle: "default",
   },
   icons: {

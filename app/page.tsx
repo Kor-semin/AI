@@ -35,9 +35,9 @@ export default function Home() {
         <div className="mx-auto flex max-w-[1280px] items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="h-2 w-2 rounded-full bg-[color:var(--accent)]" />
-            <div className="text-sm font-semibold tracking-tight">자동차 영업 AI 비서형 CRM</div>
+            <div className="text-sm font-semibold tracking-tight">자동차 영업 AI 비서</div>
             <div className="hidden text-xs text-zinc-600 dark:text-zinc-300 sm:block">
-              상담 기록부터 다음 연락까지, 잊지 않게 정리해 드립니다
+              고객을 놓치지 않는 영업사원의 두 번째 기억
             </div>
             <span className="crm-free-badge hidden sm:inline-flex">무료 사용</span>
           </div>

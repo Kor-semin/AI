@@ -138,10 +138,10 @@ export function NotebookCover() {
             FIELD OPS
           </p>
           <p className="notebook-cover-cover-kicker-sub mt-3.5 text-[clamp(12px,2.85vw,14px)] font-semibold leading-[1.45] tracking-[-0.018em]">
-            자동차 영업 · 세일즈 컨설턴트 CRM
+            자동차 영업사원을 위한 AI 영업 비서
           </p>
           <p className="notebook-cover-tagline mt-3 text-[clamp(11px,2.5vw,13px)] font-medium leading-[1.6] tracking-[-0.012em]">
-            흩어진 메모를 한곳에. 상담 기록 → 다음 연락 → 출고 전후 일정까지, 두 번째 기억처럼.
+            고객관리부터 출고 안내서 제작까지, 반복 업무를 대신 정리해주는 앱
           </p>
           <div className="mt-4 flex justify-center">
             <span className="crm-free-badge">무료 사용</span>
@@ -157,7 +157,7 @@ export function NotebookCover() {
                 className="notebook-cover-biz-heading notebook-cover-heading-block mx-auto max-w-[min(22ch,calc(100vw-2rem))] text-center sm:max-w-[min(520px,94vw)]"
               >
                 <span className="notebook-cover-title-primary">자동차 영업</span>
-                <span className="notebook-cover-title-sub">AI 비서형 CRM</span>
+                <span className="notebook-cover-title-sub">AI 영업 비서</span>
                 <span aria-hidden className="notebook-cover-title-shine" />
               </h1>
             </div>
