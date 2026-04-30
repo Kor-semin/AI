@@ -37,7 +37,7 @@ export default function Home() {
             <div className="h-2 w-2 rounded-full bg-[color:var(--accent)]" />
             <div className="text-sm font-semibold tracking-tight">자동차 영업 AI 비서</div>
             <div className="hidden text-xs text-zinc-600 dark:text-zinc-300 sm:block">
-              고객을 놓치지 않는 영업사원의 두 번째 기억
+              고객관리부터 출고 안내, 상담 기록, 다음 할 일까지 한 번에 정리하는 영업 파트너
             </div>
             <span className="crm-free-badge hidden sm:inline-flex">무료 사용</span>
           </div>
@@ -92,7 +92,7 @@ export default function Home() {
                 }}
                 disabled={!firebaseReady || !googleAuthEnabled}
               >
-                {googleAuthEnabled ? "Google 로그인" : "로그인(준비중)"}
+                {googleAuthEnabled ? "Google로 시작하기" : "영업 시작하기"}
               </button>
             </>
           )}

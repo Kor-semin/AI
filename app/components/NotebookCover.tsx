@@ -138,10 +138,11 @@ export function NotebookCover() {
             FIELD OPS
           </p>
           <p className="notebook-cover-cover-kicker-sub mt-3.5 text-[clamp(12px,2.85vw,14px)] font-semibold leading-[1.45] tracking-[-0.018em]">
-            자동차 영업사원을 위한 AI 영업 비서
+            고객을 기억하고, 흐름을 관리하는 프리미엄 업무 파트너
           </p>
           <p className="notebook-cover-tagline mt-3 text-[clamp(11px,2.5vw,13px)] font-medium leading-[1.6] tracking-[-0.012em]">
-            고객관리부터 출고 안내서 제작까지, 반복 업무를 대신 정리해주는 앱
+            고객 상담, 시승 일정, 출고 준비, 재구매 타이밍까지<br className="hidden sm:block" />
+            놓치지 않도록 정리해주는 자동차 영업 AI 비서입니다.
           </p>
           <div className="mt-4 flex justify-center">
             <span className="crm-free-badge">무료 사용</span>
@@ -227,12 +228,12 @@ export function NotebookCover() {
 
             <div className="notebook-cover-biz-micro notebook-cover-cta-wrap mt-[2.65rem] flex flex-col items-center gap-[0.72rem] text-center md:mt-12 md:gap-3">
               <span className="notebook-cover-cta-chip notebook-cover-cta-main inline-flex min-h-[2.75rem] min-w-[12.25rem] max-w-[min(90vw,20rem)] items-center justify-center rounded-full px-[1.4rem] py-2.5 text-center font-[family-name:var(--font-cover-sans)] text-[clamp(11.25px,2.65vw,12.5px)] font-bold leading-snug tracking-[-0.01em]">
-                {googleAuthEnabled ? "Google 로그인 후 시작하기" : "바로 시작하기"}
+                {googleAuthEnabled ? "Google로 시작하기" : "영업 시작하기"}
               </span>
               <span className="notebook-cover-cta-sub text-[clamp(11px,2.55vw,12px)] font-semibold leading-snug tracking-[-0.012em]">
                 {googleAuthEnabled
-                  ? "명함 제출 후 운영 확인(승인) 시 이용 · SMS 없음"
-                  : "MVP(로컬 저장)로 바로 사용 · 로그인은 준비중"}
+                  ? "명함 등록 후 확인(승인) 시 이용 · SMS 발송 없음"
+                  : "로컬에서 먼저 정리해보기 · 로그인은 준비중"}
               </span>
               <span className="notebook-cover-cta-hint text-[clamp(10px,2.35vw,10.75px)] font-medium leading-snug tracking-[-0.01em]">
                 화면 탭 또는 Enter

@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     template: "%s · 자동차 영업 AI 비서",
   },
   description:
-    "고객관리부터 출고 안내서 제작까지, 반복 업무를 대신 정리해주는 자동차 영업사원용 AI 영업 비서.",
+    "고객 상담, 시승 일정, 출고 준비, 재구매 타이밍까지. 자동차 영업사원의 하루를 놓치지 않도록 정리해주는 AI 업무 파트너.",
   appleWebApp: {
     capable: true,
     title: "자동차 영업 AI 비서",
