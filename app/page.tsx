@@ -44,7 +44,7 @@ export default function Home() {
         <div className="flex items-center gap-2">
           <button
             type="button"
-            className="moleskine-ghost-btn rounded-lg px-2.5 py-1.5 text-[11px] font-medium"
+            className="crm-ghost-btn rounded-lg px-2.5 py-1.5 text-[11px] font-medium"
             onClick={() => {
               window.dispatchEvent(new CustomEvent("crm-show-notebook-cover"));
             }}
@@ -53,7 +53,7 @@ export default function Home() {
           </button>
           <Link
             href="/join"
-            className="moleskine-ghost-btn hidden rounded-lg px-2.5 py-1.5 text-[11px] font-medium sm:inline-flex"
+            className="crm-ghost-btn hidden rounded-lg px-2.5 py-1.5 text-[11px] font-medium sm:inline-flex"
           >
             영업 계정 등록
           </Link>
@@ -65,7 +65,7 @@ export default function Home() {
                 {auth.name ?? auth.email ?? auth.uid}
               </div>
               <button
-                className="moleskine-ghost-btn rounded-lg px-3 py-2 text-xs font-semibold"
+                className="crm-ghost-btn rounded-lg px-3 py-2 text-xs font-semibold"
                 onClick={signOut}
               >
                 로그아웃
@@ -80,7 +80,7 @@ export default function Home() {
               ) : null}
               <button
                 className={[
-                  "moleskine-ink-btn rounded-lg px-3 py-2 text-xs font-semibold",
+                  "crm-ink-btn rounded-lg px-3 py-2 text-xs font-semibold",
                   firebaseReady && googleAuthEnabled ? "" : "opacity-50",
                 ].join(" ")}
                 onClick={async () => {
@@ -106,7 +106,7 @@ export default function Home() {
         className="crm-main-shell relative z-10 mx-auto flex w-full max-w-[1280px] flex-1 px-4 py-5 outline-none"
         aria-label="수첩 본문"
       >
-        <div className="moleskine-card relative w-full overflow-hidden rounded-2xl">
+        <div className="crm-card relative w-full overflow-hidden rounded-2xl">
           {sellerLoading ? (
             <div className="flex min-h-[40vh] items-center justify-center px-6 py-16 text-sm text-zinc-600 dark:text-zinc-300">
               영업 계정 상태를 확인하는 중…
@@ -146,13 +146,13 @@ export default function Home() {
               <div className="flex flex-wrap items-center justify-center gap-2">
                 <Link
                   href="/join"
-                  className="moleskine-ink-btn rounded-xl px-5 py-3 text-xs font-semibold"
+                  className="crm-ink-btn rounded-xl px-5 py-3 text-xs font-semibold"
                 >
                   등록 계속하기
                 </Link>
                 <button
                   type="button"
-                  className="moleskine-ghost-btn rounded-xl px-4 py-2.5 text-xs font-semibold"
+                  className="crm-ghost-btn rounded-xl px-4 py-2.5 text-xs font-semibold"
                   onClick={() => signOut()}
                 >
                   다른 Google 계정으로

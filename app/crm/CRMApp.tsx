@@ -713,7 +713,7 @@ export function CRMApp({
           </div>
           <div className="flex flex-col items-end gap-1.5">
             <button
-              className="moleskine-ink-btn rounded-lg px-3 py-2 text-xs font-semibold"
+              className="crm-ink-btn rounded-lg px-3 py-2 text-xs font-semibold"
               onClick={addCustomer}
             >
               + 고객 추가
@@ -926,7 +926,7 @@ export function CRMApp({
               </div>
               <button
                 type="button"
-                className="moleskine-ink-btn mt-3 w-full rounded-lg px-3 py-2 text-xs font-semibold"
+                className="crm-ink-btn mt-3 w-full rounded-lg px-3 py-2 text-xs font-semibold"
                 onClick={addCustomer}
               >
                 첫 고객 등록하기
@@ -2105,7 +2105,7 @@ export function CRMApp({
               <div className="text-sm font-extrabold text-[color:var(--foreground)]">AI 출고 안내서</div>
               <button
                 type="button"
-                className="moleskine-ink-btn rounded-lg px-3 py-2 text-xs font-semibold"
+                className="crm-ink-btn rounded-lg px-3 py-2 text-xs font-semibold"
                 onClick={() => setDeliveryGuideOpen(false)}
               >
                 닫기

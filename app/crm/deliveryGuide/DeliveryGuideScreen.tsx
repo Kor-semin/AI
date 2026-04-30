@@ -105,7 +105,7 @@ export function DeliveryGuideScreen({
           <div className="flex flex-wrap gap-2">
             <button
               type="button"
-              className="moleskine-ink-btn rounded-lg px-3 py-2 text-xs font-semibold"
+              className="crm-ink-btn rounded-lg px-3 py-2 text-xs font-semibold"
               onClick={() => {
                 // 가이드가 비어있다면 생성해둔 뒤 미리보기 활성화
                 if (!guide) onUpsertCustomerGuide(customer.id, safeGuide);
@@ -116,7 +116,7 @@ export function DeliveryGuideScreen({
             </button>
             <button
               type="button"
-              className="moleskine-ghost-btn rounded-lg px-3 py-2 text-xs font-semibold"
+              className="crm-ghost-btn rounded-lg px-3 py-2 text-xs font-semibold"
               onClick={() => alert("PDF 저장은 다음 단계에서 구현합니다.")}
             >
               PDF 저장 준비

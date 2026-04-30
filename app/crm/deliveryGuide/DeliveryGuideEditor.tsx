@@ -211,7 +211,7 @@ export function DeliveryGuideEditor({ customer, guide, onChange, showHeader = tr
         <div className="flex flex-wrap items-center gap-2">
           <button
             type="button"
-            className="moleskine-ink-btn rounded-lg px-3 py-2 text-xs font-semibold"
+            className="crm-ink-btn rounded-lg px-3 py-2 text-xs font-semibold"
             onClick={() => fileInputRef.current?.click()}
             disabled={busy}
           >
@@ -252,7 +252,7 @@ export function DeliveryGuideEditor({ customer, guide, onChange, showHeader = tr
                 />
                 <button
                   type="button"
-                  className="moleskine-ghost-btn rounded-lg px-3 py-2 text-xs font-semibold"
+                  className="crm-ghost-btn rounded-lg px-3 py-2 text-xs font-semibold"
                   onClick={() => onChange(removeImage(guide, img.id))}
                 >
                   이미지 제거
