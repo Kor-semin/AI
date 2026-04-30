@@ -68,7 +68,7 @@ export default function BetaJoinPage() {
           >
             <span aria-hidden>←</span> {t("join.backHome")}
           </Link>
-          <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-[#d7dce2] bg-white/85 px-3 py-1 text-[11px] font-semibold tracking-[0.12em] text-[#5f6675] backdrop-blur-sm">
+          <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-[#d7dce2] bg-white/85 px-3 py-1 text-[12px] font-semibold tracking-[0.02em] text-[#374151] backdrop-blur-sm">
             SENSORA · AUTO CRM
           </div>
           <h1 className="mt-4 text-2xl font-semibold tracking-tight text-[color:var(--foreground)] sm:text-3xl">
@@ -171,7 +171,7 @@ export default function BetaJoinPage() {
             >
               {pending ? t("join.submitting") : t("join.submit")}
             </button>
-            <p className="text-center text-[11px] leading-relaxed text-[color:var(--ink-2)]">
+            <p className="text-center text-[12px] leading-relaxed text-[color:var(--ink-2)]">
               이미 명함 접수 후 승인을 기다리는 경우{" "}
               <Link href="/register" className="font-semibold text-[#5c6370] underline-offset-4 hover:text-[#1e2329] hover:underline">
                 영업 계정 등록
@@ -181,7 +181,7 @@ export default function BetaJoinPage() {
           </div>
         </form>
 
-        <p className="mt-10 text-center text-[11px] leading-relaxed text-[color:var(--ink-2)]">
+        <p className="mt-10 text-center text-[12px] leading-relaxed text-[color:var(--ink-2)]">
           운영 환경에서 <code className="rounded bg-white/70 px-1.5 py-0.5 font-mono text-[10px]">NEXT_PUBLIC_BETA_SIGNUP_ENDPOINT</code>{" "}
           를 설정하면 제출 내용이 Google Sheet(웹훅)로 저장됩니다. 미설정 시에는 데모 안내만 표시됩니다.
         </p>

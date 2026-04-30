@@ -139,7 +139,7 @@ function emptyState(): CRMState {
 function StatCard({ label, value, hint }: { label: string; value: string | number; hint?: string }) {
   return (
     <div className="rounded-2xl border border-[#E5E7EB] bg-[#FFFFFF] p-5 shadow-[0_1px_3px_rgba(15,23,42,0.04)]">
-      <div className="text-[11px] font-semibold uppercase tracking-[0.08em] text-[#9CA3AF]">{label}</div>
+      <div className="text-[12px] font-semibold tracking-[-0.01em] text-[#4B5563]">{label}</div>
       <div className="mt-2 text-3xl font-semibold tabular-nums tracking-tight text-[#111827]">{value}</div>
       {hint ? <div className="mt-2 text-[14px] leading-snug text-[#6B7280]">{hint}</div> : null}
     </div>
@@ -840,19 +840,19 @@ export function CRMApp({
                   <table className="min-w-[880px] w-full text-left">
                     <thead>
                       <tr className="border-b border-[#E5E7EB] bg-[#F9FAFB]">
-                        <th className="px-5 py-4 text-[12px] font-semibold uppercase tracking-[0.06em] text-[#6B7280] sm:px-6">
+                        <th className="px-5 py-4 text-[12px] font-semibold tracking-[-0.01em] text-[#4B5563] sm:px-6">
                           고객명
                         </th>
-                        <th className="px-5 py-4 text-[12px] font-semibold uppercase tracking-[0.06em] text-[#6B7280] sm:px-6">
+                        <th className="px-5 py-4 text-[12px] font-semibold tracking-[-0.01em] text-[#4B5563] sm:px-6">
                           {t("common.interestedVehicle")}
                         </th>
-                        <th className="px-5 py-4 text-[12px] font-semibold uppercase tracking-[0.06em] text-[#6B7280] sm:px-6">
+                        <th className="px-5 py-4 text-[12px] font-semibold tracking-[-0.01em] text-[#4B5563] sm:px-6">
                           {t("common.status")}
                         </th>
-                        <th className="px-5 py-4 text-[12px] font-semibold uppercase tracking-[0.06em] text-[#6B7280] sm:px-6">
+                        <th className="px-5 py-4 text-[12px] font-semibold tracking-[-0.01em] text-[#4B5563] sm:px-6">
                           {t("crm.section.nextAction")}
                         </th>
-                        <th className="px-5 py-4 text-[12px] font-semibold uppercase tracking-[0.06em] text-[#6B7280] sm:px-6">
+                        <th className="px-5 py-4 text-[12px] font-semibold tracking-[-0.01em] text-[#4B5563] sm:px-6">
                           {t("common.potential")}
                         </th>
                       </tr>
@@ -883,7 +883,7 @@ export function CRMApp({
                               >
                                 {c.name}
                               </button>
-                              <div className="mt-1 text-[14px] text-[#9CA3AF]">
+                              <div className="mt-1 text-[14px] font-medium text-[#6B7280]">
                                 {c.phone?.trim() || "연락처 없음"}
                               </div>
                             </td>
@@ -1000,7 +1000,7 @@ export function CRMApp({
               {memoFeedback ? (
                 <div className="rounded-2xl border border-[#CBD5E1] bg-gradient-to-b from-[#FFFFFF] to-[#F8FAFC] p-6 shadow-[0_4px_24px_-12px_rgba(15,23,42,0.08)]">
                   <div className="flex flex-wrap items-start justify-between gap-3">
-                    <div className="text-[12px] font-bold uppercase tracking-[0.14em] text-[#64748B]">
+                    <div className="text-[12px] font-semibold tracking-[-0.01em] text-[#475569]">
                       {t("crm.section.aiRecommendation")}
                     </div>
                     <button
@@ -1036,7 +1036,7 @@ export function CRMApp({
               <div className="rounded-2xl border border-[#E5E7EB] bg-[#FFFFFF] p-6 shadow-sm">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div>
-                    <div className="text-[12px] font-bold uppercase tracking-[0.14em] text-[#64748B]">
+                    <div className="text-[12px] font-semibold tracking-[-0.01em] text-[#475569]">
                       {t("crm.section.consultationSummary")} · 고객 메시지
                     </div>
                     <div className="mt-2 text-[15px] leading-relaxed text-[#6B7280]">
@@ -1132,7 +1132,7 @@ export function CRMApp({
                             key={pt}
                             type="button"
                             className={[
-                              "rounded-full border px-3 py-1.5 text-[11px] font-semibold",
+                              "rounded-full border px-3 py-1.5 text-[12px] font-semibold",
                               selectedCustomer.paymentType === pt
                                 ? "border-[#111827] bg-[#F3F4F6] text-[#111827] shadow-[inset_0_0_0_1px_rgba(17,24,39,0.06)]"
                                 : "border-[#E5E7EB] bg-white text-[#374151] hover:bg-[#F3F4F6]",
@@ -1146,7 +1146,7 @@ export function CRMApp({
                         ))}
                         <button
                           type="button"
-                          className="rounded-full border border-dashed border-[#D1D5DB] px-3 py-1.5 text-[11px] font-semibold text-[#6B7280] hover:bg-[#F3F4F6]"
+                          className="rounded-full border border-dashed border-[#D1D5DB] px-3 py-1.5 text-[12px] font-semibold text-[#4B5563] hover:bg-[#F3F4F6]"
                           onClick={() =>
                             upsertCustomer({ id: selectedCustomer.id, paymentType: undefined })
                           }
@@ -1163,7 +1163,7 @@ export function CRMApp({
                       onChange={(v) => upsertCustomer({ id: selectedCustomer.id, budget: v })}
                     />
                     {budgetWonSelected ? (
-                      <div className="text-[11px] text-[#6B7280]">
+                      <div className="text-[12px] text-[#4B5563]">
                         해석: 약{" "}
                         <span className="font-semibold text-[#111827]">
                           {formatKrwShort(budgetWonSelected)}원
@@ -1190,7 +1190,7 @@ export function CRMApp({
                               <div>
                                 <div className="font-semibold">{pick.label}</div>
                                 {pick.note ? (
-                                  <div className="mt-0.5 text-[11px] text-[#6B7280]">
+                                  <div className="mt-0.5 text-[12px] text-[#4B5563]">
                                     {pick.note}
                                   </div>
                                 ) : null}
@@ -1198,7 +1198,7 @@ export function CRMApp({
                               <div className="flex flex-wrap gap-2">
                                 <button
                                   type="button"
-                                  className="rounded-lg border border-[#E5E7EB] bg-white px-2.5 py-1 text-[11px] font-semibold hover:bg-[#F3F4F6]"
+                                  className="rounded-lg border border-[#E5E7EB] bg-white px-2.5 py-1 text-[12px] font-semibold hover:bg-[#F3F4F6]"
                                   onClick={() =>
                                     upsertCustomer({
                                       id: selectedCustomer.id,
@@ -1210,7 +1210,7 @@ export function CRMApp({
                                 </button>
                                 <button
                                   type="button"
-                                  className="rounded-lg border border-[#E5E7EB] bg-white px-2.5 py-1 text-[11px] font-semibold hover:bg-[#F3F4F6]"
+                                  className="rounded-lg border border-[#E5E7EB] bg-white px-2.5 py-1 text-[12px] font-semibold hover:bg-[#F3F4F6]"
                                   onClick={() => {
                                     const line = `- ${pick.label}${pick.note ? ` (${pick.note})` : ""}\n`;
                                     upsertCustomer({
@@ -1278,7 +1278,7 @@ export function CRMApp({
                         />
                       </div>
                       {marketSummaryLines.length ? (
-                        <ul className="mt-3 list-disc space-y-1 pl-4 text-[11px] text-[#374151]">
+                        <ul className="mt-3 list-disc space-y-1 pl-4 text-[12px] text-[#374151]">
                           {marketSummaryLines.map((line, i) => (
                             <li key={`${i}-${line.slice(0, 24)}`}>{line}</li>
                           ))}
@@ -1520,7 +1520,7 @@ export function CRMApp({
                         {t("common.copy")}
                       </button>
                     </div>
-                    <p className="mt-2 text-[11px] text-[#6B7280]">
+                    <p className="mt-2 text-[12px] text-[#4B5563]">
                       검색어:{" "}
                       <span className="font-medium text-[#374151]">
                         {buildUsedCarSearchQuery(selectedCustomer)}
@@ -1718,7 +1718,7 @@ export function CRMApp({
                               className="w-full min-w-0 border-0 bg-transparent text-sm font-semibold outline-none"
                             />
                           </label>
-                          <div className="text-[11px] text-[#6B7280]">
+                          <div className="text-[12px] font-medium text-[#4B5563]">
                             {a.doneAt ? "완료" : "미완료"}
                           </div>
                         </div>
@@ -1769,7 +1769,7 @@ export function CRMApp({
                             onChange={(ev) => updateEvent(e.id, { title: ev.target.value })}
                             className="w-full min-w-0 border-0 bg-transparent text-sm font-semibold outline-none"
                           />
-                          <div className="text-[11px] text-[#6B7280]">
+                          <div className="text-[12px] font-medium text-[#4B5563]">
                             {formatDateTime(e.startAt)}
                           </div>
                         </div>
@@ -1880,7 +1880,7 @@ export function CRMApp({
                                 {a.doneAt ? "완료 · " : ""}
                                 {a.title}
                               </div>
-                              <div className="shrink-0 text-[13px] text-[#9CA3AF]">
+                              <div className="shrink-0 text-[13px] font-medium text-[#6B7280]">
                                 {formatDateTime(a.dueAt)}
                               </div>
                             </div>
@@ -1904,7 +1904,7 @@ export function CRMApp({
                         >
                           <div className="flex flex-wrap items-center justify-between gap-3">
                             <div className="font-semibold text-[#111827]">{e.title}</div>
-                            <div className="text-[13px] text-[#9CA3AF]">{formatDateTime(e.startAt)}</div>
+                            <div className="text-[13px] font-medium text-[#6B7280]">{formatDateTime(e.startAt)}</div>
                           </div>
                           {e.customerId ? (
                             <button
@@ -1918,7 +1918,7 @@ export function CRMApp({
                               고객: {state.customers.find((x) => x.id === e.customerId)?.name ?? "?"}
                             </button>
                           ) : (
-                            <div className="mt-2 text-[13px] text-[#9CA3AF]">고객 연결 없음</div>
+                            <div className="mt-2 text-[13px] font-medium text-[#6B7280]">고객 연결 없음</div>
                           )}
                         </div>
                       ))}
@@ -1949,13 +1949,13 @@ export function CRMApp({
                     className="flex w-full flex-col rounded-2xl border border-[#E5E7EB] bg-[#FFFFFF] px-5 py-4 text-left transition hover:bg-[#F9FAFB] disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     <span className="text-[17px] font-semibold text-[#111827]">{e.title}</span>
-                    <span className="mt-2 text-[15px] text-[#9CA3AF]">{formatDateTime(e.startAt)}</span>
+                    <span className="mt-2 text-[15px] font-medium text-[#6B7280]">{formatDateTime(e.startAt)}</span>
                     {e.customerId ? (
                       <span className="mt-2 text-[14px] font-semibold text-[#475569]">
                         고객: {state.customers.find((x) => x.id === e.customerId)?.name ?? "?"}
                       </span>
                     ) : (
-                      <span className="mt-2 text-[14px] text-[#9CA3AF]">고객 미연결</span>
+                      <span className="mt-2 text-[14px] font-medium text-[#6B7280]">고객 미연결</span>
                     )}
                   </button>
                 ))}
@@ -2018,7 +2018,7 @@ export function CRMApp({
                       >
                         {selectedCustomer ? `${t("common.select")} · ${t("common.copy")}` : t("common.copy")}
                       </button>
-                      <div className="text-[12px] text-[#9CA3AF]">업데이트: {formatDateTime(tpl.updatedAt)}</div>
+                      <div className="text-[12px] font-medium text-[#6B7280]">업데이트: {formatDateTime(tpl.updatedAt)}</div>
                     </div>
                   </div>
                 ))}
@@ -2072,16 +2072,16 @@ export function CRMApp({
                     <span className="font-semibold text-[#334155]">
                       결과: {ex.percent}% · 등급 {ex.grade}
                     </span>
-                    <div className="mt-1 text-[11px] text-[#6B7280]">
+                    <div className="mt-1 text-[12px] text-[#4B5563]">
                       힌트: {ex.hints.join(" · ")}
                     </div>
                   </div>
-                  <ul className="list-decimal space-y-1.5 pl-4 text-[11px] leading-relaxed text-[#374151]">
+                  <ul className="list-decimal space-y-1.5 pl-4 text-[12px] leading-relaxed text-[#374151]">
                     {ex.breakdown.map((line) => (
                       <li key={line}>{line}</li>
                     ))}
                   </ul>
-                  <div className="text-[11px] text-[#6B7280]">
+                  <div className="text-[12px] text-[#4B5563]">
                     키워드 예시: {LEAD_SCORE_HOTWORDS.join(", ")}
                   </div>
                 </div>

@@ -19,13 +19,13 @@ export function ConciergeSidebar() {
     <aside className="hidden w-[260px] shrink-0 lg:block">
       <div className="sticky top-24 flex min-h-[calc(100vh-8rem)] flex-col rounded-2xl border border-[#1F2937] bg-[#111827] pb-6 pt-5 shadow-[0_12px_40px_rgba(0,0,0,0.12)]">
         <div className="border-b border-[#1F2937] px-5 pb-5">
-          <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#94A3B8]">
+          <div className="text-[12px] font-semibold tracking-[0.08em] text-[#CBD5E1]">
             {t("header.workspace")}
           </div>
           <div className="mt-3 text-[15px] font-semibold leading-snug tracking-tight text-[#F9FAFB]">
             {t("product.name")}
           </div>
-          <div className="mt-1.5 text-[13px] leading-snug text-[#9CA3AF]">
+          <div className="mt-1.5 text-[13px] font-medium leading-snug text-[#CBD5E1]/90">
             Sales Concierge AI 스타일 영업 보조 · B2B AI SaaS
           </div>
         </div>
@@ -39,10 +39,10 @@ export function ConciergeSidebar() {
               <a
                 key={m.label}
                 href={href}
-                className="group flex items-center justify-between rounded-xl px-3 py-2.5 text-[13px] font-medium text-[#E5E7EB] hover:bg-[#1F2937] hover:text-white"
+                className="group flex items-center justify-between rounded-xl px-3 py-2.5 text-[13px] font-semibold text-[#F3F4F6] hover:bg-[#1F2937] hover:text-white"
               >
                 <span>{m.label}</span>
-                <span className="text-[11px] font-medium tracking-wide text-[#64748B] group-hover:text-[#CBD5E1]">
+                <span className="text-[12px] font-medium text-[#CBD5E1]/80 group-hover:text-[#E2E8F0]">
                   {m.hint}
                 </span>
               </a>

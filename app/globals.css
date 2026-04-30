@@ -6,14 +6,15 @@
   --foreground: #111827;
   --paper: #ffffff;
   --paper-2: #f9fafb;
-  --ink-2: #6b7280;
+  /* muted text — 대비를 한 단계 올려 가독성 개선 */
+  --ink-2: #4b5563;
   --edge: #e5e7eb;
   --edge-strong: rgba(148, 163, 184, 0.55);
 
   /* Dark hero / marketing strip */
   --landing-hero-bg: #111318;
   --landing-hero-text: #f4f6f8;
-  --landing-hero-muted: #9ca3af;
+  --landing-hero-muted: #cbd5e1;
 
   --accent: #94a3b8;
   /* Legacy aliases — 브라운·골드 제거 후 슬레이트 계열 유지용 */
@@ -64,6 +65,13 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
     "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", Arial, sans-serif;
+}
+
+/* 한국어 가독성: 너무 얇은 렌더링/과한 자간 방지 */
+html[lang="ko"] body {
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  line-height: 1.55;
 }
 
 /* App frame / join — 밝은 그레이 베이스 */
