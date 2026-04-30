@@ -20,10 +20,10 @@ export function ConciergeSidebar() {
             Workspace
           </div>
           <div className="mt-3 text-[15px] font-semibold leading-snug tracking-tight text-[#F9FAFB]">
-            Sales Concierge AI
+            Sensora Auto CRM
           </div>
           <div className="mt-1.5 text-[13px] leading-snug text-[#9CA3AF]">
-            영업 현장 고객관리
+            Sales Concierge AI 스타일 영업 보조 · B2B AI SaaS
           </div>
         </div>
 

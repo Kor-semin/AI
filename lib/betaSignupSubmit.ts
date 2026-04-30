@@ -1,5 +1,5 @@
 /**
- * Sales Concierge AI — 베타 신청 페이로드.
+ * Sensora Auto CRM — 베타 신청 페이로드.
  * Google Apps Script 웹 앱 등으로 POST할 때 필드명을 그대로 맞추면 됩니다.
  */
 export type BetaSignupPayload = {
@@ -32,7 +32,7 @@ export async function submitBetaSignup(payload: BetaSignupPayload): Promise<Beta
       return { ok: false, error: "submitBetaSignup is client-only" };
     }
 
-    console.info("[Sales Concierge AI · beta signup]", payload);
+    console.info("[Sensora Auto CRM · beta signup]", payload);
 
     if (!endpoint) {
       window.alert("베타 신청 폼을 제출했습니다.\n\n(데모 단계 — 아직 서버에 저장되지 않습니다.)");

@@ -22,7 +22,7 @@ function readDismissed(): boolean {
   }
 }
 
-/** 전체 화면 표지 — Sales Concierge AI (다크 프리미엄, 인물 미사용) */
+/** 전체 화면 표지 — Sensora / Sensora Auto CRM (다크 프리미엄, 인물 미사용) */
 export function NotebookCover() {
   const router = useRouter();
   const [dismissed, setDismissed] = useState(false);
@@ -123,15 +123,15 @@ export function NotebookCover() {
       <div className="notebook-cover-cover-layer notebook-cover-biz-micro notebook-cover-reveal notebook-cover-editorial-shell flex min-h-[100dvh] min-h-[100svh] w-full cursor-pointer flex-col pl-[max(22px,calc(env(safe-area-inset-left,0px)+1.25rem))] pr-[max(22px,calc(env(safe-area-inset-right,0px)+1.25rem))] pb-[calc(1.35rem+env(safe-area-inset-bottom,0px))] pt-[max(28px,calc(env(safe-area-inset-top,0px)+1.85rem))] text-center md:mx-auto md:max-w-[min(760px,calc(100vw-48px))] md:pb-[calc(2rem+env(safe-area-inset-bottom,0px))]">
         <header className="notebook-cover-cover-header shrink-0 px-3 pb-[1.1rem]">
           <p className="notebook-cover-cover-kicker-upper font-[family-name:var(--font-cover-serif)] text-[clamp(10px,2.55vw,12px)] font-semibold tracking-[0.2em]">
-            SALES CONCIERGE
+            SENSORA
           </p>
           <p className="notebook-cover-cover-kicker-sub mt-3.5 text-[clamp(12px,2.85vw,14px)] font-semibold leading-[1.45] tracking-[-0.018em]">
-            오토 세일즈 AI 비서 · 클래식 카 · 라운지
+            Sensora Auto CRM · B2B AI SaaS · Sense + Aura
           </p>
           <p className="notebook-cover-tagline mt-3 text-[clamp(11px,2.5vw,13px)] font-medium leading-[1.6] tracking-[-0.012em]">
-            고급 자동차 영업사원을 위한 프리미엄 고객관리 시스템입니다.
+            작은 시작에서부터 시작된다.
             <br />
-            상담 이력, 관심 차량, 구매 가능성, 후속 연락까지 AI가 정리하고 제안합니다.
+            고객 상담, 관심 차량, 후속 연락, 메시지, 파이프라인을 AI가 정리하고 제안합니다. (Sales Concierge AI 개념)
           </p>
           <div className="mt-4 flex justify-center">
             <span className="crm-free-badge">무료 사용</span>
@@ -146,8 +146,8 @@ export function NotebookCover() {
                 id="notebook-cover-title"
                 className="notebook-cover-biz-heading notebook-cover-heading-block mx-auto max-w-[min(22ch,calc(100vw-2rem))] text-center sm:max-w-[min(520px,94vw)]"
               >
-                <span className="notebook-cover-title-primary">고객을 기억하는</span>
-                <span className="notebook-cover-title-sub">자동차 영업 AI 비서</span>
+                <span className="notebook-cover-title-primary">Sensora Auto CRM</span>
+                <span className="notebook-cover-title-sub">자동차 영업 AI 고객관리</span>
                 <span aria-hidden className="notebook-cover-title-shine" />
               </h1>
             </div>

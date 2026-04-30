@@ -1,3 +1,11 @@
+## Sensora · Sensora Auto CRM
+
+**Sensora**는 B2B AI SaaS 기업입니다. 슬로건: «작은 시작에서부터 시작된다». 브랜드 의미는 Sense + Aura(감각과 방향성)입니다.
+
+**Sensora Auto CRM**은 자동차 영업사원을 위한 AI 고객관리 SaaS입니다. (제품 레이어·UX 참고 개념: Sales Concierge AI)
+
+---
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started

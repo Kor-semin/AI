@@ -184,7 +184,9 @@ export default function JoinPage() {
 
       <div className="relative z-[1] mx-auto w-full max-w-md">
         <header className="mb-8">
-          <p className="text-[11px] font-semibold tracking-[0.18em] text-[#584d42]">SELLER ONBOARDING</p>
+          <p className="text-[11px] font-semibold tracking-[0.18em] text-[#584d42]">
+            SENSORA AUTO CRM · SELLER ONBOARDING
+          </p>
           <h1 className="mt-2 font-semibold tracking-tight text-xl text-[#231d18] sm:text-[1.35rem]">
             영업 계정 등록(명함 접수)
           </h1>
@@ -296,7 +298,7 @@ export default function JoinPage() {
         </div>
 
         <footer className="mt-10 text-center text-[11px] leading-relaxed text-[#766b5f]">
-          SMS 비용 없음. Firebase Spark(무료) 한도는 사용량에 따릅니다.
+          Sensora · Sensora Auto CRM. SMS 비용 없음. Firebase Spark(무료) 한도는 사용량에 따릅니다.
         </footer>
       </div>
     </main>

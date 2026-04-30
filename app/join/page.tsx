@@ -67,19 +67,19 @@ export default function BetaJoinPage() {
             <span aria-hidden>←</span> 홈으로 돌아가기
           </Link>
           <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-[#d7dce2] bg-white/85 px-3 py-1 text-[11px] font-semibold tracking-[0.12em] text-[#5f6675] backdrop-blur-sm">
-            SALES CONCIERGE AI
+            SENSORA · AUTO CRM
           </div>
           <h1 className="mt-4 text-2xl font-semibold tracking-tight text-[color:var(--foreground)] sm:text-3xl">
             베타 신청
           </h1>
           <p className="mt-3 max-w-[42ch] text-sm leading-relaxed text-[color:var(--ink-2)]">
-            고객을 기억하는 자동차 영업 AI 비서 초기 접수입니다. 정보는 검토 후 연락드립니다.
+            Sensora Auto CRM 초기 접수입니다. 정보는 검토 후 연락드립니다. (제품 경험 레이어: Sales Concierge AI)
           </p>
         </div>
 
         <form className="crm-card rounded-[1.35rem] p-6 sm:p-9" onSubmit={(ev) => void handleSubmit(ev)} noValidate>
           <fieldset className="space-y-5 border-0 p-0 [&_legend]:sr-only">
-            <legend>Sales Concierge AI 베타 신청 폼</legend>
+            <legend>Sensora Auto CRM 베타 신청 폼</legend>
 
             <div>
               <label htmlFor="fullName" className="text-[12px] font-semibold text-[color:var(--foreground)]">

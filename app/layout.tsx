@@ -29,14 +29,14 @@ const coverSans = Noto_Sans_KR({
 
 export const metadata: Metadata = {
   title: {
-    default: "Sales Concierge AI",
-    template: "%s · Sales Concierge AI",
+    default: "Sensora Auto CRM",
+    template: "%s · Sensora Auto CRM",
   },
   description:
-    "고급 자동차 영업사원을 위한 프리미엄 고객관리 시스템. 상담 이력, 관심 차량, 구매 가능성, 후속 연락까지 AI가 정리하고 제안합니다.",
+    "Sensora는 뛰어난 감각과 AI 기술로, 작은 시작을 더 큰 가능성으로 확장하는 B2B AI SaaS 기업입니다. Sensora Auto CRM은 자동차 영업사원을 위한 AI 고객관리 SaaS로, 고객 상담·관심 차량·후속 연락·메시지 작성·영업 파이프라인을 AI가 정리하고 제안합니다.",
   appleWebApp: {
     capable: true,
-    title: "Sales Concierge AI",
+    title: "Sensora Auto CRM",
     statusBarStyle: "default",
   },
   icons: {

@@ -721,7 +721,7 @@ export function CRMApp({
           <header className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between lg:gap-8">
             <div className="min-w-0">
               <h1 className="text-[clamp(22px,2.8vw,30px)] font-semibold leading-tight tracking-tight text-[#111827]">
-                자동차 영업 AI 비서형 CRM
+                Sensora Auto CRM
               </h1>
               <p className="mt-2 max-w-xl text-[15px] leading-relaxed text-[#6B7280]">
                 {sync.mode === "cloud" ? "클라우드 동기화" : "로컬 저장"} ·{" "}

@@ -6,7 +6,7 @@ import { ImageSlot } from "./ImageSlot";
 import { SAMPLE_CUSTOMERS } from "./sampleCustomers";
 
 /** 랜딩 교체용 이미지 경로 (`public/images`에 동일 파일명으로 두면 적용됩니다). */
-export const CONCIERGE_IMAGES = {
+export const LANDING_IMAGES = {
   hero: "/images/hero-classic-car.jpg",
   interior: "/images/vintage-car-interior.jpg",
   desk: "/images/concierge-desk.jpg",
@@ -132,7 +132,7 @@ export function HeroSection() {
         >
           <div className="relative h-full scale-[1.06] blur-2xl [&_img]:!rounded-[2rem] [&_img]:!border-transparent [&_img]:!shadow-none">
             <ImageSlot
-              src={CONCIERGE_IMAGES.hero}
+              src={LANDING_IMAGES.hero}
               alt=""
               tone="hero"
               className="!h-full !min-h-[320px]"
@@ -144,16 +144,20 @@ export function HeroSection() {
         <div className="relative z-[1] grid gap-12 lg:grid-cols-[minmax(0,1.06fr)_minmax(340px,420px)] lg:items-start xl:gap-14">
           <div className="max-w-xl">
             <div className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.06] px-3 py-1 text-[11px] font-semibold tracking-[0.12em] text-[color:var(--landing-hero-muted)] backdrop-blur-sm">
-              Sales Concierge AI · 오토 세일즈 AI 비서
+              Sensora · Sense + Aura
             </div>
 
             <h1 className="mt-6 text-[1.65rem] font-semibold tracking-tight text-[color:var(--landing-hero-text)] sm:text-[2.6rem] sm:leading-[1.12] lg:text-[2.75rem]">
-              고객을 기억하는 자동차 영업 AI 비서
+              Sensora Auto CRM
             </h1>
 
+            <p className="mt-3 max-w-[40rem] text-sm font-medium leading-relaxed text-[#c5cad2] sm:text-[15px]">
+              작은 시작에서부터 시작된다
+            </p>
+
             <p className="mt-5 max-w-[40rem] text-sm leading-relaxed text-[color:var(--landing-hero-muted)] sm:text-[15px]">
-              상담 이력, 관심 차량, 구매 가능성, 후속 연락까지 AI가 정리하고 제안합니다. 자동차 영업사원을 위한
-              프리미엄 고객관리 시스템입니다.
+              Sensora Auto CRM은 자동차 영업사원을 위한 AI 고객관리 SaaS입니다. 고객 상담, 관심 차량, 후속 연락,
+              메시지 작성, 영업 파이프라인을 AI가 정리하고 제안합니다. (영업 지원 패러다임: Sales Concierge AI)
             </p>
 
             <div
@@ -219,7 +223,7 @@ export function FeatureSection() {
             className="rounded-2xl border border-[color:var(--edge)] bg-[color:var(--paper)] p-5 shadow-[0_12px_36px_rgba(17,19,24,0.07)] backdrop-blur-sm"
           >
             <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[color:var(--gold-2)]">
-              Concierge
+              Sensora
             </div>
             <div className="mt-3 text-base font-semibold tracking-tight text-[color:var(--foreground)]">
               {it.title}
@@ -243,7 +247,7 @@ export function DashboardPreview() {
       <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
         <div className="rounded-2xl border border-[color:var(--edge)] bg-[color:var(--paper)] p-5 shadow-[0_12px_36px_rgba(17,19,24,0.06)] backdrop-blur-sm">
           <div className="flex items-center justify-between">
-            <div className="text-sm font-semibold text-[color:var(--foreground)]">Concierge Board</div>
+            <div className="text-sm font-semibold text-[color:var(--foreground)]">영업 현황 보드</div>
             <span className="crm-free-badge">Preview</span>
           </div>
           <div className="mt-4 grid grid-cols-2 gap-3">
@@ -267,7 +271,7 @@ export function DashboardPreview() {
 
           <div className="mt-5 overflow-hidden rounded-2xl">
             <ImageSlot
-              src={CONCIERGE_IMAGES.interior}
+              src={LANDING_IMAGES.interior}
               alt=""
               tone="interior"
               className="h-[220px]"
@@ -329,14 +333,14 @@ export function DashboardPreview() {
             </div>
             <div className="mt-3 overflow-hidden rounded-2xl">
               <ImageSlot
-                src={CONCIERGE_IMAGES.workspace}
+                src={LANDING_IMAGES.workspace}
                 alt=""
                 tone="profile"
                 className="h-[180px] sm:h-[220px]"
               />
             </div>
             <div className="mt-3 text-[12px] text-[color:var(--ink-2)]">
-              `LandingSections.tsx`의 <code className="rounded bg-black/35 px-1 py-px">CONCIERGE_IMAGES.workspace</code> 경로에
+              `LandingSections.tsx`의 <code className="rounded bg-black/35 px-1 py-px">LANDING_IMAGES.workspace</code> 경로에
               맞춰 `public/images`를 교체하세요. 로고가 보이는 사진은 사용하지 마세요.
             </div>
           </div>
@@ -407,7 +411,7 @@ export function AISecretaryPreview() {
             <span className="crm-free-badge">Desk</span>
           </div>
           <div className="mt-4 overflow-hidden rounded-2xl">
-            <ImageSlot src={CONCIERGE_IMAGES.desk} alt="" tone="desk" className="h-[320px]" />
+            <ImageSlot src={LANDING_IMAGES.desk} alt="" tone="desk" className="h-[320px]" />
           </div>
         </div>
       </div>
@@ -472,14 +476,15 @@ export function FinalBrandingSection() {
     <section className="mx-auto w-full max-w-[1280px] px-4 pb-20 pt-6">
       <div className="relative overflow-hidden rounded-[2.25rem] border border-[color:rgba(244,246,248,0.1)] bg-[radial-gradient(1000px_640px_at_16%_12%,rgba(168,176,186,0.16),transparent_64%),radial-gradient(920px_560px_at_102%_28%,rgba(55,61,71,0.35),transparent_58%),linear-gradient(160deg,#111318_0%,#171b22_48%,#14171d_100%)] p-8 shadow-[0_24px_56px_rgba(17,19,24,0.18)] sm:p-12">
         <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#a8b0ba]">
-          Sales Concierge AI
+          Sensora
         </div>
         <h3 className="mt-4 text-2xl font-semibold tracking-tight text-[color:var(--landing-hero-text)] sm:text-3xl">
           좋은 영업은 기억에서 시작됩니다. 그러나 훌륭한 영업은 기록과 타이밍에서 완성됩니다.
         </h3>
         <p className="mt-4 max-w-[70ch] text-sm leading-relaxed text-[#c5cad2] sm:text-[15px]">
-          Sales Concierge AI는 자동차 영업사원이 고객을 더 깊이 이해하고, 더 정확한 타이밍에, 더 품격 있게
-          응대할 수 있도록 설계된 고객관리 앱입니다.
+          Sensora는 뛰어난 감각과 AI 기술로, 작은 시작을 더 큰 가능성으로 확장하는 B2B AI SaaS 기업입니다. 첫 제품{" "}
+          <span className="font-semibold text-[#dfe3ea]">Sensora Auto CRM</span>에 Sales Concierge AI 개념의 영업 지원
+          경험을 담았습니다.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Link href="/?view=app#app" className="crm-ink-btn rounded-xl px-5 py-3 text-xs font-semibold">

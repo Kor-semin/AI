@@ -5,7 +5,7 @@
 
 ## 1) Google Sheet 준비
 
-- 새 Google Sheet 생성 (예: `Sales Concierge AI · Beta Signups`)
+- 새 Google Sheet 생성 (예: `Sensora Auto CRM · Beta Signups`)
 - 첫 시트 이름은 임의로 두어도 됩니다 (예: `Sheet1`)
 
 권장 헤더(첫 행):

@@ -2,16 +2,16 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "자동차 컨설턴트 전용 수첩",
-    short_name: "컨설턴트 수첩",
+    name: "Sensora Auto CRM",
+    short_name: "Sensora CRM",
     description:
-      "자동차 컨설턴트 전용 수첩 앱 · 고객·일정·가망(참고) · 클라우드 선택 가입",
+      "Sensora Auto CRM — 자동차 영업 AI 고객관리 SaaS · Sensora는 B2B AI SaaS 기업입니다.",
     start_url: "/",
     scope: "/",
     display: "standalone",
     orientation: "portrait-primary",
-    background_color: "#f6f1e7",
-    theme_color: "#f6f1e7",
+    background_color: "#f4f6f8",
+    theme_color: "#f4f6f8",
     lang: "ko",
     icons: [
       {

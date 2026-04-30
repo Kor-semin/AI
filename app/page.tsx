@@ -58,9 +58,9 @@ export default function Home() {
         <div className="mx-auto flex max-w-[1280px] items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="h-2 w-2 rounded-full bg-[color:var(--accent)]" />
-            <div className="text-sm font-semibold tracking-tight">Sales Concierge AI</div>
+            <div className="text-sm font-semibold tracking-tight">Sensora Auto CRM</div>
             <div className="hidden text-xs text-[color:var(--ink-2)] sm:block">
-              고객을 기억하는 자동차 영업 AI 비서
+              작은 시작에서부터 시작된다 · 영업 레이어: Sales Concierge AI
             </div>
             <span className="crm-free-badge hidden sm:inline-flex">무료 사용</span>
           </div>
