@@ -120,7 +120,76 @@ export type TranslationKey =
   | "landing.aiDemo.applyCta"
   | "landing.crmDemo.sectionTitle"
   | "landing.crmDemo.sectionDesc"
-  | "landing.crmDemo.startCta";
+  | "landing.crmDemo.startCta"
+  | "cover.aiGuide.title"
+  | "cover.aiGuide.subtitle"
+  | "cover.aiGuide.step1.title"
+  | "cover.aiGuide.step1.desc"
+  | "cover.aiGuide.step2.title"
+  | "cover.aiGuide.step2.desc"
+  | "cover.aiGuide.step3.title"
+  | "cover.aiGuide.step3.desc"
+  | "cover.aiGuide.step4.title"
+  | "cover.aiGuide.step4.desc"
+  | "cover.aiGuide.tryCta"
+  | "cover.aiGuide.startCta"
+  | "crm.seasonCare.title"
+  | "crm.seasonCare.intro"
+  | "crm.seasonCare.previewLabel"
+  | "crm.seasonCare.brandLabel"
+  | "crm.seasonCare.brandOtherHint"
+  | "crm.seasonCare.customBrandPlaceholder"
+  | "crm.seasonCare.seasonLabel"
+  | "crm.seasonCare.purposeLabel"
+  | "crm.seasonCare.toneLabel"
+  | "crm.seasonCare.sellerHeading"
+  | "crm.seasonCare.optionalHint"
+  | "crm.seasonCare.sellerName"
+  | "crm.seasonCare.showroom"
+  | "crm.seasonCare.sellerContactField"
+  | "crm.seasonCare.jobTitle"
+  | "crm.seasonCare.generate"
+  | "crm.seasonCare.copy"
+  | "crm.seasonCare.copyToast"
+  | "crm.seasonCare.copyFail"
+  | "crm.seasonCare.copyEmptyHint"
+  | "crm.seasonCare.disclaimer"
+  | "crm.seasonCare.brand.mercedesBenz"
+  | "crm.seasonCare.brand.bmw"
+  | "crm.seasonCare.brand.mini"
+  | "crm.seasonCare.brand.audi"
+  | "crm.seasonCare.brand.porsche"
+  | "crm.seasonCare.brand.lexus"
+  | "crm.seasonCare.brand.volvo"
+  | "crm.seasonCare.brand.genesis"
+  | "crm.seasonCare.brand.other"
+  | "crm.seasonCare.season.springCherry"
+  | "crm.seasonCare.season.summerMonsoon"
+  | "crm.seasonCare.season.summerHeat"
+  | "crm.seasonCare.season.autumnFoliage"
+  | "crm.seasonCare.season.winterCold"
+  | "crm.seasonCare.season.winterSnow"
+  | "crm.seasonCare.season.lunarNewYear"
+  | "crm.seasonCare.season.chuseok"
+  | "crm.seasonCare.season.vacation"
+  | "crm.seasonCare.season.beforeLongTrip"
+  | "crm.seasonCare.season.tireCheck"
+  | "crm.seasonCare.season.batteryCheck"
+  | "crm.seasonCare.season.oilCheck"
+  | "crm.seasonCare.season.wiperAcFilterCheck"
+  | "crm.seasonCare.purpose.greeting"
+  | "crm.seasonCare.purpose.maintenance"
+  | "crm.seasonCare.purpose.tire"
+  | "crm.seasonCare.purpose.promotion"
+  | "crm.seasonCare.purpose.revisit"
+  | "crm.seasonCare.purpose.deliveryCare"
+  | "crm.seasonCare.purpose.reengage"
+  | "crm.seasonCare.purpose.personalBranding"
+  | "crm.seasonCare.tone.polite"
+  | "crm.seasonCare.tone.warm"
+  | "crm.seasonCare.tone.premium"
+  | "crm.seasonCare.tone.brief"
+  | "crm.seasonCare.tone.promo";
 
 type TranslationDict = Partial<Record<TranslationKey, string>>;
 
@@ -217,6 +286,78 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.crmDemo.sectionDesc":
       "오늘 연락할 고객, 계약 가능성, 상담 요약, 출고 안내서를 한 번에 확인합니다.",
     "landing.crmDemo.startCta": "고객관리 시작하기",
+    "cover.aiGuide.title": "AI 사용법",
+    "cover.aiGuide.subtitle":
+      "상담 내용을 입력하면 SensoraGuide가 고객 요약, 다음 액션, 연락 문구를 제안합니다.",
+    "cover.aiGuide.step1.title": "상담 메모 입력",
+    "cover.aiGuide.step1.desc": "고객과 나눈 대화, 관심 차량, 예산, 구매 시기 등을 편하게 기록하세요.",
+    "cover.aiGuide.step2.title": "AI 요약 확인",
+    "cover.aiGuide.step2.desc": "SensoraGuide가 고객의 핵심 니즈와 구매 가능성을 정리합니다.",
+    "cover.aiGuide.step3.title": "다음 액션 추천",
+    "cover.aiGuide.step3.desc": "언제 연락하면 좋을지, 어떤 내용을 안내하면 좋을지 제안합니다.",
+    "cover.aiGuide.step4.title": "메시지와 출고 안내서 활용",
+    "cover.aiGuide.step4.desc": "추천 문구와 출고 안내서를 고객 응대에 바로 활용할 수 있습니다.",
+    "cover.aiGuide.tryCta": "AI 비서 체험하기",
+    "cover.aiGuide.startCta": "고객관리 시작하기",
+    "crm.seasonCare.title": "시즌 케어 메시지",
+    "crm.seasonCare.intro":
+      "계절·정비 명분으로 고객에게 보낼 장문 문자 초안입니다. 선택 값에 맞춰 조합되며 추후 AI 연결을 위해 구조가 분리되어 있습니다.",
+    "crm.seasonCare.previewLabel": "생성 결과",
+    "crm.seasonCare.brandLabel": "브랜드",
+    "crm.seasonCare.brandOtherHint": "기타 브랜드명 입력",
+    "crm.seasonCare.customBrandPlaceholder": "브랜드명 입력",
+    "crm.seasonCare.seasonLabel": "시즌 / 상황",
+    "crm.seasonCare.purposeLabel": "메시지 목적",
+    "crm.seasonCare.toneLabel": "문체 / 톤",
+    "crm.seasonCare.sellerHeading": "영업사원 정보",
+    "crm.seasonCare.optionalHint": "선택 입력",
+    "crm.seasonCare.sellerName": "이름",
+    "crm.seasonCare.showroom": "전시장명",
+    "crm.seasonCare.sellerContactField": "연락처",
+    "crm.seasonCare.jobTitle": "직함",
+    "crm.seasonCare.generate": "메시지 생성",
+    "crm.seasonCare.copy": "복사하기",
+    "crm.seasonCare.copyToast": "클립보드에 복사했습니다.",
+    "crm.seasonCare.copyFail": "복사할 수 없습니다. 텍스트를 길게 눌러 복사해 주세요.",
+    "crm.seasonCare.copyEmptyHint": "먼저 메시지 생성을 실행해 주세요.",
+    "crm.seasonCare.disclaimer":
+      "광고성 문자 발송 시 수신 동의, (광고) 표시, 발신자 명칭, 연락처, 무료수신거부 표기가 필요할 수 있습니다. 실제 발송 전 관련 법규와 회사 정책을 확인하세요.",
+    "crm.seasonCare.brand.mercedesBenz": "Mercedes-Benz",
+    "crm.seasonCare.brand.bmw": "BMW",
+    "crm.seasonCare.brand.mini": "MINI",
+    "crm.seasonCare.brand.audi": "Audi",
+    "crm.seasonCare.brand.porsche": "Porsche",
+    "crm.seasonCare.brand.lexus": "Lexus",
+    "crm.seasonCare.brand.volvo": "Volvo",
+    "crm.seasonCare.brand.genesis": "Genesis",
+    "crm.seasonCare.brand.other": "기타 (직접 입력)",
+    "crm.seasonCare.season.springCherry": "봄 / 벚꽃",
+    "crm.seasonCare.season.summerMonsoon": "여름 / 장마",
+    "crm.seasonCare.season.summerHeat": "여름 / 폭염",
+    "crm.seasonCare.season.autumnFoliage": "가을 / 단풍",
+    "crm.seasonCare.season.winterCold": "겨울 / 한파",
+    "crm.seasonCare.season.winterSnow": "겨울 / 눈길",
+    "crm.seasonCare.season.lunarNewYear": "설 연휴",
+    "crm.seasonCare.season.chuseok": "추석 연휴",
+    "crm.seasonCare.season.vacation": "휴가철",
+    "crm.seasonCare.season.beforeLongTrip": "장거리 운행 전",
+    "crm.seasonCare.season.tireCheck": "타이어 점검",
+    "crm.seasonCare.season.batteryCheck": "배터리 점검",
+    "crm.seasonCare.season.oilCheck": "엔진오일 점검",
+    "crm.seasonCare.season.wiperAcFilterCheck": "와이퍼 / 에어컨 필터 점검",
+    "crm.seasonCare.purpose.greeting": "안부 인사",
+    "crm.seasonCare.purpose.maintenance": "정비 안내",
+    "crm.seasonCare.purpose.tire": "타이어 점검 안내",
+    "crm.seasonCare.purpose.promotion": "프로모션 안내",
+    "crm.seasonCare.purpose.revisit": "재방문 유도",
+    "crm.seasonCare.purpose.deliveryCare": "출고 고객 케어",
+    "crm.seasonCare.purpose.reengage": "장기 미연락 고객 재접촉",
+    "crm.seasonCare.purpose.personalBranding": "영업사원 개인 브랜딩",
+    "crm.seasonCare.tone.polite": "정중한 톤",
+    "crm.seasonCare.tone.warm": "따뜻한 톤",
+    "crm.seasonCare.tone.premium": "프리미엄 톤",
+    "crm.seasonCare.tone.brief": "짧고 담백한 톤",
+    "crm.seasonCare.tone.promo": "장문 홍보 톤",
   },
   en: {
     "brand.name": "Sensora",
@@ -310,6 +451,81 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.crmDemo.sectionDesc":
       "See today’s follow-ups, deal probability, consultation summaries, and delivery guides in one place.",
     "landing.crmDemo.startCta": "Start in CRM",
+    "cover.aiGuide.title": "How to Use AI",
+    "cover.aiGuide.subtitle":
+      "Enter consultation notes and SensoraGuide will suggest customer summaries, next actions, and follow-up messages.",
+    "cover.aiGuide.step1.title": "Enter Consultation Notes",
+    "cover.aiGuide.step1.desc":
+      "Record conversations, vehicle interests, budget, and purchase timing naturally.",
+    "cover.aiGuide.step2.title": "Review AI Summary",
+    "cover.aiGuide.step2.desc":
+      "SensoraGuide organizes the customer’s key needs and deal potential.",
+    "cover.aiGuide.step3.title": "Get Next Actions",
+    "cover.aiGuide.step3.desc": "See when to follow up and what to say next.",
+    "cover.aiGuide.step4.title": "Use Messages and Delivery Guide",
+    "cover.aiGuide.step4.desc":
+      "Apply recommended messages and delivery guides directly to customer communication.",
+    "cover.aiGuide.tryCta": "Try AI Assistant",
+    "cover.aiGuide.startCta": "Start Customer Management",
+    "crm.seasonCare.title": "Season Care Message",
+    "crm.seasonCare.intro":
+      "Draft a longer seasonal care or outreach SMS aligned to dealership context. Outputs are templated locally for now and separated for future AI generation.",
+    "crm.seasonCare.previewLabel": "Generated message",
+    "crm.seasonCare.brandLabel": "Brand",
+    "crm.seasonCare.brandOtherHint": "Custom brand name",
+    "crm.seasonCare.customBrandPlaceholder": "Enter brand name",
+    "crm.seasonCare.seasonLabel": "Season / situation",
+    "crm.seasonCare.purposeLabel": "Purpose",
+    "crm.seasonCare.toneLabel": "Tone",
+    "crm.seasonCare.sellerHeading": "Consultant info",
+    "crm.seasonCare.optionalHint": "Optional",
+    "crm.seasonCare.sellerName": "Name",
+    "crm.seasonCare.showroom": "Showroom",
+    "crm.seasonCare.sellerContactField": "Contact number",
+    "crm.seasonCare.jobTitle": "Title",
+    "crm.seasonCare.generate": "Generate message",
+    "crm.seasonCare.copy": "Copy message",
+    "crm.seasonCare.copyToast": "Copied to clipboard.",
+    "crm.seasonCare.copyFail": "Copy failed. Select the text manually.",
+    "crm.seasonCare.copyEmptyHint": "Generate a message first.",
+    "crm.seasonCare.disclaimer":
+      "Advertising-style messages may require prior consent, an “Ad” marker, sender identity, contact information, and an opt-out line. Confirm local laws and dealer policy before sending.",
+    "crm.seasonCare.brand.mercedesBenz": "Mercedes-Benz",
+    "crm.seasonCare.brand.bmw": "BMW",
+    "crm.seasonCare.brand.mini": "MINI",
+    "crm.seasonCare.brand.audi": "Audi",
+    "crm.seasonCare.brand.porsche": "Porsche",
+    "crm.seasonCare.brand.lexus": "Lexus",
+    "crm.seasonCare.brand.volvo": "Volvo",
+    "crm.seasonCare.brand.genesis": "Genesis",
+    "crm.seasonCare.brand.other": "Other (custom)",
+    "crm.seasonCare.season.springCherry": "Spring / cherry blossoms",
+    "crm.seasonCare.season.summerMonsoon": "Summer / monsoon",
+    "crm.seasonCare.season.summerHeat": "Summer / heat wave",
+    "crm.seasonCare.season.autumnFoliage": "Autumn / foliage",
+    "crm.seasonCare.season.winterCold": "Winter / cold spell",
+    "crm.seasonCare.season.winterSnow": "Winter / snow",
+    "crm.seasonCare.season.lunarNewYear": "Lunar New Year",
+    "crm.seasonCare.season.chuseok": "Chuseok holiday",
+    "crm.seasonCare.season.vacation": "Vacation season",
+    "crm.seasonCare.season.beforeLongTrip": "Before a long trip",
+    "crm.seasonCare.season.tireCheck": "Tyre inspection",
+    "crm.seasonCare.season.batteryCheck": "Battery check",
+    "crm.seasonCare.season.oilCheck": "Engine-oil check",
+    "crm.seasonCare.season.wiperAcFilterCheck": "Wiper / A/C filter check",
+    "crm.seasonCare.purpose.greeting": "Seasonal greeting",
+    "crm.seasonCare.purpose.maintenance": "Service reminder",
+    "crm.seasonCare.purpose.tire": "Tyre-care reminder",
+    "crm.seasonCare.purpose.promotion": "Promotion notice",
+    "crm.seasonCare.purpose.revisit": "Visit follow-up",
+    "crm.seasonCare.purpose.deliveryCare": "Post-delivery care",
+    "crm.seasonCare.purpose.reengage": "Reconnect after silence",
+    "crm.seasonCare.purpose.personalBranding": "Consultant positioning",
+    "crm.seasonCare.tone.polite": "Formal",
+    "crm.seasonCare.tone.warm": "Warm",
+    "crm.seasonCare.tone.premium": "Premium",
+    "crm.seasonCare.tone.brief": "Short & plain",
+    "crm.seasonCare.tone.promo": "Long promotional",
   },
   ja: {},
   "zh-CN": {},

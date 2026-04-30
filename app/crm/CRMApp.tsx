@@ -54,6 +54,19 @@ import { makeId, seedState } from "./seed";
 import { ContactSyncDialog } from "./ContactSyncDialog";
 import { DeliveryGuideScreen } from "@/app/crm/deliveryGuide/DeliveryGuideScreen";
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
+import type { TranslationKey } from "@/lib/i18n";
+import {
+  SEASON_CARE_BRAND_PRESETS,
+  SEASON_CARE_PURPOSES,
+  SEASON_CARE_SEASONS,
+  SEASON_CARE_TONES,
+  generateSeasonCareMessage,
+  seasonCareMessageLocale,
+  type SeasonCareBrandPreset,
+  type SeasonCarePurpose,
+  type SeasonCareSeason,
+  type SeasonCareTone,
+} from "./seasonCareMessage";
 
 const LEAD_SOURCES = [...DEALER_LEAD_SOURCES] satisfies LeadSource[];
 const STAGES = [...DEALER_PIPELINE_STAGES] satisfies PipelineStage[];
@@ -62,6 +75,56 @@ const BRAND_OPTIONS: VehicleBrandId[] = [...VEHICLE_BRANDS];
 
 const PAYMENT_TYPE_OPTIONS: PaymentType[] = ["현금", "할부", "리스", "장기렌트"];
 const ACCIDENT_OPTIONS: UsedCarAccident[] = ["무사고", "단순교환", "사고", "미상"];
+
+const SC_BRAND_OPTIONS: (SeasonCareBrandPreset | "other")[] = [...SEASON_CARE_BRAND_PRESETS, "other"];
+
+const SC_BRAND_TKEY: Record<SeasonCareBrandPreset | "other", TranslationKey> = {
+  "mercedes-benz": "crm.seasonCare.brand.mercedesBenz",
+  bmw: "crm.seasonCare.brand.bmw",
+  mini: "crm.seasonCare.brand.mini",
+  audi: "crm.seasonCare.brand.audi",
+  porsche: "crm.seasonCare.brand.porsche",
+  lexus: "crm.seasonCare.brand.lexus",
+  volvo: "crm.seasonCare.brand.volvo",
+  genesis: "crm.seasonCare.brand.genesis",
+  other: "crm.seasonCare.brand.other",
+};
+
+const SC_SEASON_TKEY: Record<SeasonCareSeason, TranslationKey> = {
+  spring_cherry: "crm.seasonCare.season.springCherry",
+  summer_monsoon: "crm.seasonCare.season.summerMonsoon",
+  summer_heat: "crm.seasonCare.season.summerHeat",
+  autumn_foliage: "crm.seasonCare.season.autumnFoliage",
+  winter_cold: "crm.seasonCare.season.winterCold",
+  winter_snow: "crm.seasonCare.season.winterSnow",
+  holiday_lunar_new_year: "crm.seasonCare.season.lunarNewYear",
+  holiday_chuseok: "crm.seasonCare.season.chuseok",
+  vacation_season: "crm.seasonCare.season.vacation",
+  before_long_trip: "crm.seasonCare.season.beforeLongTrip",
+  tire_check: "crm.seasonCare.season.tireCheck",
+  battery_check: "crm.seasonCare.season.batteryCheck",
+  oil_check: "crm.seasonCare.season.oilCheck",
+  wiper_ac_filter_check: "crm.seasonCare.season.wiperAcFilterCheck",
+};
+
+const SC_PURPOSE_TKEY: Record<SeasonCarePurpose, TranslationKey> = {
+  greeting: "crm.seasonCare.purpose.greeting",
+  maintenance_info: "crm.seasonCare.purpose.maintenance",
+  tire_reminder: "crm.seasonCare.purpose.tire",
+  promotion: "crm.seasonCare.purpose.promotion",
+  revisit: "crm.seasonCare.purpose.revisit",
+  delivery_customer_care: "crm.seasonCare.purpose.deliveryCare",
+  reengage_silent: "crm.seasonCare.purpose.reengage",
+  personal_branding: "crm.seasonCare.purpose.personalBranding",
+};
+
+const SC_TONE_TKEY: Record<SeasonCareTone, TranslationKey> = {
+  polite: "crm.seasonCare.tone.polite",
+  warm: "crm.seasonCare.tone.warm",
+  premium: "crm.seasonCare.tone.premium",
+  brief: "crm.seasonCare.tone.brief",
+  promo: "crm.seasonCare.tone.promo",
+};
 
 function nowIso() {
   return new Date().toISOString();
@@ -154,7 +217,7 @@ export function CRMApp({
   /** `{내이름}` 치환: 로그인 시 구글 이름·이메일 등 */
   sellerDisplayName?: string | null;
 }) {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   // uid=null means local-only mode.
   const [state, setState] = useState<CRMState>(() => emptyState());
   const [selectedCustomerId, setSelectedCustomerId] = useState<string | null>(null);
@@ -174,6 +237,17 @@ export function CRMApp({
   const [leadExplainForId, setLeadExplainForId] = useState<string | null>(null);
   const [toast, setToast] = useState<string | null>(null);
   const [deliveryGuideOpen, setDeliveryGuideOpen] = useState(false);
+
+  const [seasonCareBrand, setSeasonCareBrand] = useState<SeasonCareBrandPreset | "other">("mercedes-benz");
+  const [seasonCareBrandCustom, setSeasonCareBrandCustom] = useState("");
+  const [seasonCareSeason, setSeasonCareSeason] = useState<SeasonCareSeason>("spring_cherry");
+  const [seasonCarePurpose, setSeasonCarePurpose] = useState<SeasonCarePurpose>("greeting");
+  const [seasonCareTone, setSeasonCareTone] = useState<SeasonCareTone>("polite");
+  const [seasonCareSellerName, setSeasonCareSellerName] = useState("");
+  const [seasonCareShowroom, setSeasonCareShowroom] = useState("");
+  const [seasonCareContact, setSeasonCareContact] = useState("");
+  const [seasonCareJobTitle, setSeasonCareJobTitle] = useState("");
+  const [seasonCareOutput, setSeasonCareOutput] = useState("");
 
   const TAB_LABELS: Record<typeof tab, string> = {
     고객: t("crm.tab.customers"),
@@ -199,6 +273,37 @@ export function CRMApp({
     window.setTimeout(() => {
       setToast((prev) => (prev === msg ? null : prev));
     }, 1500);
+  }
+
+  function resetSeasonCareForm() {
+    setSeasonCareBrand("mercedes-benz");
+    setSeasonCareBrandCustom("");
+    setSeasonCareSeason("spring_cherry");
+    setSeasonCarePurpose("greeting");
+    setSeasonCareTone("polite");
+    setSeasonCareSellerName("");
+    setSeasonCareShowroom("");
+    setSeasonCareContact("");
+    setSeasonCareJobTitle("");
+    setSeasonCareOutput("");
+  }
+
+  function runSeasonCareGenerate() {
+    const msg = generateSeasonCareMessage(
+      {
+        brandPreset: seasonCareBrand,
+        brandCustom: seasonCareBrandCustom,
+        season: seasonCareSeason,
+        purpose: seasonCarePurpose,
+        tone: seasonCareTone,
+        sellerName: seasonCareSellerName,
+        showroom: seasonCareShowroom,
+        contact: seasonCareContact,
+        jobTitle: seasonCareJobTitle,
+      },
+      seasonCareMessageLocale(language),
+    );
+    setSeasonCareOutput(msg);
   }
 
   useEffect(() => {
@@ -1982,7 +2087,196 @@ export function CRMApp({
                   + 템플릿
                 </button>
               </div>
-              <div className="mt-6 grid grid-cols-1 gap-5 lg:grid-cols-2">
+
+              <section
+                aria-labelledby="season-care-title"
+                className="mt-8 rounded-2xl border border-[#CBD5E1] bg-[#F9FAFB] p-5 sm:p-6"
+              >
+                <header className="border-b border-[#E5E7EB] pb-4">
+                  <h3 id="season-care-title" className="text-[17px] font-semibold tracking-[-0.01em] text-[#111827]">
+                    {t("crm.seasonCare.title")}
+                  </h3>
+                  <p className="mt-2 text-[14px] font-medium leading-relaxed text-[#6B7280]">
+                    {t("crm.seasonCare.intro")}
+                  </p>
+                </header>
+
+                <div className="mt-5 grid grid-cols-1 gap-4 md:grid-cols-2">
+                  <label className="grid gap-1">
+                    <span className="text-[13px] font-semibold text-[#374151]">{t("crm.seasonCare.brandLabel")}</span>
+                    <select
+                      value={seasonCareBrand}
+                      onChange={(e) => setSeasonCareBrand(e.target.value as SeasonCareBrandPreset | "other")}
+                      className="w-full rounded-xl border border-[#E5E7EB] bg-white px-3 py-3 text-[15px] outline-none focus:border-[#94A3B8]"
+                    >
+                      {SC_BRAND_OPTIONS.map((id) => (
+                        <option key={id} value={id}>
+                          {t(SC_BRAND_TKEY[id])}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label className="grid gap-1">
+                    <span className="text-[13px] font-semibold text-[#374151]">{t("crm.seasonCare.seasonLabel")}</span>
+                    <select
+                      value={seasonCareSeason}
+                      onChange={(e) => setSeasonCareSeason(e.target.value as SeasonCareSeason)}
+                      className="w-full rounded-xl border border-[#E5E7EB] bg-white px-3 py-3 text-[15px] outline-none focus:border-[#94A3B8]"
+                    >
+                      {SEASON_CARE_SEASONS.map((id) => (
+                        <option key={id} value={id}>
+                          {t(SC_SEASON_TKEY[id])}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label className="grid gap-1">
+                    <span className="text-[13px] font-semibold text-[#374151]">{t("crm.seasonCare.purposeLabel")}</span>
+                    <select
+                      value={seasonCarePurpose}
+                      onChange={(e) => setSeasonCarePurpose(e.target.value as SeasonCarePurpose)}
+                      className="w-full rounded-xl border border-[#E5E7EB] bg-white px-3 py-3 text-[15px] outline-none focus:border-[#94A3B8]"
+                    >
+                      {SEASON_CARE_PURPOSES.map((id) => (
+                        <option key={id} value={id}>
+                          {t(SC_PURPOSE_TKEY[id])}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label className="grid gap-1">
+                    <span className="text-[13px] font-semibold text-[#374151]">{t("crm.seasonCare.toneLabel")}</span>
+                    <select
+                      value={seasonCareTone}
+                      onChange={(e) => setSeasonCareTone(e.target.value as SeasonCareTone)}
+                      className="w-full rounded-xl border border-[#E5E7EB] bg-white px-3 py-3 text-[15px] outline-none focus:border-[#94A3B8]"
+                    >
+                      {SEASON_CARE_TONES.map((id) => (
+                        <option key={id} value={id}>
+                          {t(SC_TONE_TKEY[id])}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                </div>
+
+                {seasonCareBrand === "other" ? (
+                  <label className="mt-4 grid gap-1">
+                    <span className="text-[13px] font-semibold text-[#374151]">
+                      {t("crm.seasonCare.brandOtherHint")}
+                    </span>
+                    <input
+                      value={seasonCareBrandCustom}
+                      onChange={(e) => setSeasonCareBrandCustom(e.target.value)}
+                      placeholder={t("crm.seasonCare.customBrandPlaceholder")}
+                      autoComplete="off"
+                      spellCheck={false}
+                      className="w-full rounded-xl border border-[#E5E7EB] bg-white px-3 py-3 text-[15px] outline-none focus:border-[#94A3B8]"
+                    />
+                  </label>
+                ) : null}
+
+                <div className="mt-6 rounded-xl border border-[#E5E7EB] bg-white p-4 sm:p-5">
+                  <div className="text-[13px] font-semibold text-[#111827]">
+                    {t("crm.seasonCare.sellerHeading")}
+                    <span className="ml-2 font-medium text-[#6B7280]">({t("crm.seasonCare.optionalHint")})</span>
+                  </div>
+                  <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                    <label className="grid gap-1">
+                      <span className="text-[13px] font-semibold text-[#374151]">{t("crm.seasonCare.sellerName")}</span>
+                      <input
+                        value={seasonCareSellerName}
+                        onChange={(e) => setSeasonCareSellerName(e.target.value)}
+                        autoComplete="off"
+                        spellCheck={false}
+                        className="rounded-xl border border-[#E5E7EB] bg-[#FFFFFF] px-3 py-2.5 text-[15px] outline-none focus:border-[#94A3B8]"
+                      />
+                    </label>
+                    <label className="grid gap-1">
+                      <span className="text-[13px] font-semibold text-[#374151]">{t("crm.seasonCare.showroom")}</span>
+                      <input
+                        value={seasonCareShowroom}
+                        onChange={(e) => setSeasonCareShowroom(e.target.value)}
+                        autoComplete="off"
+                        spellCheck={false}
+                        className="rounded-xl border border-[#E5E7EB] bg-[#FFFFFF] px-3 py-2.5 text-[15px] outline-none focus:border-[#94A3B8]"
+                      />
+                    </label>
+                    <label className="grid gap-1">
+                      <span className="text-[13px] font-semibold text-[#374151]">
+                        {t("crm.seasonCare.sellerContactField")}
+                      </span>
+                      <input
+                        value={seasonCareContact}
+                        onChange={(e) => setSeasonCareContact(e.target.value)}
+                        autoComplete="off"
+                        spellCheck={false}
+                        inputMode="tel"
+                        className="rounded-xl border border-[#E5E7EB] bg-[#FFFFFF] px-3 py-2.5 text-[15px] outline-none focus:border-[#94A3B8]"
+                      />
+                    </label>
+                    <label className="grid gap-1">
+                      <span className="text-[13px] font-semibold text-[#374151]">{t("crm.seasonCare.jobTitle")}</span>
+                      <input
+                        value={seasonCareJobTitle}
+                        onChange={(e) => setSeasonCareJobTitle(e.target.value)}
+                        autoComplete="off"
+                        spellCheck={false}
+                        className="rounded-xl border border-[#E5E7EB] bg-[#FFFFFF] px-3 py-2.5 text-[15px] outline-none focus:border-[#94A3B8]"
+                      />
+                    </label>
+                  </div>
+                </div>
+
+                <div className="mt-6 flex flex-wrap gap-3">
+                  <button
+                    type="button"
+                    onClick={() => runSeasonCareGenerate()}
+                    className="rounded-xl bg-[#111827] px-5 py-2.5 text-[14px] font-semibold text-white hover:bg-[#1F2937]"
+                  >
+                    {t("crm.seasonCare.generate")}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      if (!seasonCareOutput.trim()) {
+                        showToast(t("crm.seasonCare.copyEmptyHint"));
+                        return;
+                      }
+                      const ok = await copyToClipboard(seasonCareOutput);
+                      showToast(ok ? t("crm.seasonCare.copyToast") : t("crm.seasonCare.copyFail"));
+                    }}
+                    className="rounded-xl bg-[#F3F4F6] px-5 py-2.5 text-[14px] font-semibold text-[#111827] ring-1 ring-inset ring-[#E5E7EB] hover:bg-[#E5E7EB]"
+                  >
+                    {t("crm.seasonCare.copy")}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => resetSeasonCareForm()}
+                    className="rounded-xl bg-[#F3F4F6] px-5 py-2.5 text-[14px] font-semibold text-[#374151] ring-1 ring-inset ring-[#E5E7EB] hover:bg-[#E4E7EC]"
+                  >
+                    {t("common.reset")}
+                  </button>
+                </div>
+
+                <label htmlFor="season-care-output" className="mt-5 grid gap-2">
+                  <span className="text-[13px] font-semibold text-[#374151]">{t("crm.seasonCare.previewLabel")}</span>
+                  <textarea
+                    id="season-care-output"
+                    value={seasonCareOutput}
+                    onChange={(e) => setSeasonCareOutput(e.target.value)}
+                    rows={14}
+                    className="min-h-[280px] w-full resize-y rounded-xl border border-[#E5E7EB] bg-white px-4 py-3 text-[15px] leading-relaxed text-[#111827] outline-none focus:border-[#94A3B8]"
+                    spellCheck={false}
+                  />
+                </label>
+
+                <p className="mt-4 text-[12px] font-medium leading-relaxed text-[#6B7280]">
+                  {t("crm.seasonCare.disclaimer")}
+                </p>
+              </section>
+
+              <div className="mt-10 grid grid-cols-1 gap-5 lg:grid-cols-2">
                 {state.templates.map((tpl) => (
                   <div
                     key={tpl.id}
