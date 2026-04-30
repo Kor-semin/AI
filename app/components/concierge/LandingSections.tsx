@@ -5,6 +5,14 @@ import Link from "next/link";
 import { ImageSlot } from "./ImageSlot";
 import { SAMPLE_CUSTOMERS } from "./sampleCustomers";
 
+/** 랜딩 교체용 이미지 경로 (`public/images`에 동일 파일명으로 두면 적용됩니다). */
+export const CONCIERGE_IMAGES = {
+  hero: "/images/hero-classic-car.jpg",
+  interior: "/images/vintage-car-interior.jpg",
+  desk: "/images/concierge-desk.jpg",
+  workspace: "/images/sales-dashboard-workspace.jpg",
+} as const;
+
 function SectionShell({
   id,
   kicker,
@@ -40,165 +48,134 @@ function SectionShell({
   );
 }
 
-type FilmStripItem =
-  | { key: string; kind: "img"; src: string; label: string; href: string }
-  | { key: string; kind: "studyPlaceholder"; label: string; href: string };
-
-export function HeroSection({ onEnter }: { onEnter: () => void }) {
-  const filmstrip: FilmStripItem[] = [
-    {
-      key: "cabin",
-      kind: "img",
-      src: "/images/interior.png",
-      label: "Vintage cabin",
-      href: "#dashboard-preview",
-    },
-    {
-      key: "study",
-      kind: "studyPlaceholder",
-      label: "프리미엄 업무실",
-      href: "#ai-secretary",
-    },
-    {
-      key: "workspace",
-      kind: "img",
-      src: "/images/profile-workspace.png",
-      label: "Workspace",
-      href: "#dashboard-preview",
-    },
-  ];
-
+function HeroDashboardPreviewCard() {
   return (
-    <section className="mx-auto w-full max-w-[1280px] px-4 pb-14 pt-12 sm:pb-20 sm:pt-16">
-      <div className="relative min-h-[min(88vh,720px)] overflow-hidden rounded-[2rem] border border-[color:var(--edge)] shadow-[0_34px_90px_rgba(0,0,0,0.68)]">
-        <div className="pointer-events-none absolute inset-0">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/images/interior.png"
-            alt=""
-            className="h-full w-full object-cover object-[52%_50%]"
-          />
-        </div>
-        {/* 읽기 쉬운 왼쪽·하단 어둠 + 가벼운 골드 광택 */}
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[#0b0b0a]/97 via-[#0b0b0a]/78 to-[#0b0b0a]/12 sm:via-[#0b0b0a]/55 sm:to-transparent" />
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0b0b0a]/92 via-transparent to-[#0b0b0a]/45" />
-        <div className="pointer-events-none absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-[color:var(--gold)]/55 to-transparent sm:inset-x-14" />
-
-        <div className="relative z-10 flex min-h-[min(88vh,720px)] flex-col justify-between gap-12 px-6 py-10 sm:px-11 sm:py-14 lg:flex-row lg:items-end">
-          <div className="flex max-w-xl flex-col justify-center lg:justify-center lg:self-center lg:pb-0">
-            <div className="inline-flex items-center gap-2 rounded-full border border-[color:var(--edge)] bg-black/38 px-3 py-1 text-[11px] font-semibold tracking-[0.12em] text-[color:var(--gold)] backdrop-blur-md">
-              SALES CONCIERGE AI · 오토 세일즈 AI 비서
+    <div className="relative overflow-hidden rounded-2xl border border-[color:var(--edge)] bg-[color:var(--paper)] shadow-[inset_0_0_0_1px_rgba(199,164,106,0.07),0_22px_60px_rgba(0,0,0,0.45)]">
+      <div className="relative border-b border-[color:var(--edge)] bg-[color:var(--paper-2)]/45 px-5 py-4">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[color:var(--gold-2)]">
+              대시보드 미리보기
             </div>
-            <h1 className="mt-5 max-w-[16ch] text-3xl font-semibold tracking-tight text-[color:var(--foreground)] sm:text-5xl lg:max-w-none">
-              고객을 기억하는 자동차 영업 AI 비서
-            </h1>
-            <p className="mt-5 max-w-[62ch] text-sm leading-relaxed text-[color:var(--foreground)]/82 sm:text-[15px]">
-              고급 자동차 영업사원을 위한 프리미엄 고객관리 시스템. 상담 이력, 관심 차량, 구매 가능성,
-              후속 연락까지 AI가 정리하고 제안합니다.
-            </p>
-
-            <div
-              aria-hidden
-              className="mt-7 h-px w-full max-w-sm bg-gradient-to-r from-transparent via-[color:var(--gold)]/55 to-transparent"
-            />
-
-            <div className="mt-9 flex flex-wrap items-center gap-3">
-              <button
-                type="button"
-                className="crm-ink-btn rounded-xl px-5 py-3 text-xs font-semibold"
-                onClick={onEnter}
-              >
-                고객관리 시작하기
-              </button>
-              <a href="#ai-secretary" className="crm-ghost-btn rounded-xl px-5 py-3 text-xs font-semibold">
-                AI 비서 체험하기
-              </a>
-            </div>
-
-            <div className="mt-10 rounded-2xl border border-[color:var(--edge)] bg-black/42 p-5 backdrop-blur-md">
-              <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[color:var(--gold-2)]">
-                Concierge note
-              </div>
-              <div className="mt-3 text-sm font-semibold text-[color:var(--foreground)]">
-                고객을 기억하고, 다음 행동을 제안하고, 영업의 흐름을 관리합니다.
-              </div>
-              <div className="mt-2 text-[12px] leading-relaxed text-[color:var(--foreground)]/70">
-                클래식카·프라이빗 라운지 톤. 과한 연출 없이 깊은 기록과 타이밍을 우선합니다.
-              </div>
-            </div>
+            <div className="mt-1 text-sm font-semibold text-[color:var(--foreground)]">오늘의 영업 현황</div>
           </div>
-
-          <div className="grid w-full max-w-xl shrink-0 grid-cols-3 gap-3 self-end sm:gap-4 lg:max-w-md">
-            {[
-              { k: "오늘 상담", v: "3" },
-              { k: "후속 연락", v: "5" },
-              { k: "우선순위", v: "High" },
-            ].map((m) => (
-              <div
-                key={m.k}
-                className="rounded-2xl border border-[color:var(--edge)] bg-black/52 px-4 py-3 shadow-[inset_0_0_0_1px_rgba(199,164,106,0.08)] backdrop-blur-md"
-              >
-                <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[color:var(--gold-2)] sm:text-[11px]">
-                  {m.k}
-                </div>
-                <div className="mt-2 text-lg font-semibold tabular-nums text-[color:var(--foreground)]">{m.v}</div>
-              </div>
-            ))}
-          </div>
+          <span className="crm-free-badge shrink-0">Beta</span>
         </div>
       </div>
 
-      {/* 나머지 씬(인테리어·데스크·워크스페이스) 프리뷰 필름스트립 */}
-      <div className="mt-8 grid gap-4 sm:grid-cols-3">
-        {filmstrip.map((f) =>
-          f.kind === "studyPlaceholder" ? (
-            <a
-              key={f.key}
-              href={f.href}
-              className="group overflow-hidden rounded-2xl border border-[color:var(--edge)] bg-[color:var(--paper)]/40 shadow-[0_18px_46px_rgba(0,0,0,0.45)] transition-transform duration-200 hover:border-[color:var(--gold)]/55 hover:[transform:translateY(-3px)]"
+      <div className="relative space-y-4 p-5">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+          {[
+            { title: "오늘 연락할 고객", value: "5", hint: "우선 순위대로 정렬" },
+            { title: "계약 가능성 높은 고객", value: "3", hint: "견적 검토 단계 포함" },
+            { title: "후속 연락 필요", value: "7", hint: "48시간 내 액션" },
+          ].map((m) => (
+            <div
+              key={m.title}
+              className="rounded-xl border border-[color:var(--edge)] bg-[color:var(--paper-2)]/60 px-3 py-3"
             >
-              <div className="relative aspect-[16/10] overflow-hidden">
-                <div
-                  aria-hidden
-                  className="absolute inset-0 bg-[linear-gradient(135deg,#15120f_0%,#0b0b0a_42%,#1a1612_88%)]"
-                />
-                <div
-                  aria-hidden
-                  className="absolute -left-[18%] top-[8%] h-[58%] w-[72%] rounded-full bg-[radial-gradient(circle,rgba(199,164,106,0.28),transparent_68%)] opacity-95 blur-xl transition duration-[220ms] group-hover:opacity-100"
-                />
-                <div
-                  aria-hidden
-                  className="absolute inset-x-[12%] top-[52%] h-px bg-gradient-to-r from-transparent via-[color:var(--gold)]/40 to-transparent"
-                />
-                <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#0b0b0a]/92 to-transparent p-4 pt-14">
-                  <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[color:var(--gold)]">
-                    {f.label}
-                  </div>
-                </div>
+              <div className="text-[10px] font-semibold uppercase leading-snug tracking-[0.12em] text-[color:var(--gold-2)]">
+                {m.title}
               </div>
-            </a>
-          ) : (
-            <a
-              key={f.key}
-              href={f.href}
-              className="group overflow-hidden rounded-2xl border border-[color:var(--edge)] bg-[color:var(--paper)]/40 shadow-[0_18px_46px_rgba(0,0,0,0.45)] transition-transform duration-200 hover:border-[color:var(--gold)]/55 hover:[transform:translateY(-3px)]"
-            >
-              <div className="relative aspect-[16/10] overflow-hidden">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={f.src}
-                  alt=""
-                  className="h-full w-full object-cover transition duration-[220ms] group-hover:scale-[1.03]"
-                />
-                <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#0b0b0a]/88 to-transparent p-4 pt-14">
-                  <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[color:var(--gold)]">
-                    {f.label}
-                  </div>
-                </div>
+              <div className="mt-2 text-2xl font-semibold tabular-nums tracking-tight text-[color:var(--foreground)]">
+                {m.value}
               </div>
+              <div className="mt-1 text-[10px] text-[color:var(--ink-2)]">{m.hint}</div>
+            </div>
+          ))}
+        </div>
+
+        <div className="rounded-xl border border-[color:var(--edge)] bg-[color:var(--paper-2)]/40 p-4">
+          <div className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[color:var(--gold-2)]">
+            AI 추천 메시지
+          </div>
+          <p className="mt-2 text-[13px] font-medium leading-relaxed text-[color:var(--foreground)]">
+            「지난 상담에서 승차감과 가족 이동이 핵심이었습니다. 오늘은 프리미엄 세단의 유지·보증을 짧게
+            정리한 뒤, 금융 조건을 제안하면 응답률이 좋습니다.」
+          </p>
+        </div>
+
+        <div className="rounded-xl border border-[color:var(--edge)] bg-[color:var(--paper-2)]/30 p-4">
+          <div className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[color:var(--gold-2)]">
+            최근 상담 요약
+          </div>
+          <p className="mt-2 text-[12px] leading-relaxed text-[color:var(--ink-2)]">
+            김민준 · 관심: 프리미엄 세단 · 예산 2,800~3,200만 원대 · 상태: 견적 검토 · 다음: 오후 금융 안내 발송
+          </p>
+        </div>
+
+        <p className="text-center text-[10px] font-medium uppercase tracking-[0.14em] text-[color:var(--ink-2)]">
+          샘플 UI · 실제 데이터와 다를 수 있습니다
+        </p>
+      </div>
+    </div>
+  );
+}
+
+export function HeroSection() {
+  return (
+    <section className="relative mx-auto w-full max-w-[1280px] px-4 pb-16 pt-12 sm:pb-20 sm:pt-16">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(900px_560px_at_14%_-8%,rgba(199,164,106,0.10),transparent_58%),radial-gradient(760px_520px_at_104%_100%,rgba(232,220,200,0.05),transparent_58%),linear-gradient(180deg,#0b0b0a_0%,#10100e_50%,#0b0b0a_100%)]"
+      />
+
+      {/* 배경 장식: 영역 일부만, 흐리게 보조 노출 */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -right-[14%] top-[10%] hidden aspect-[5/4] h-[340px] w-[460px] overflow-hidden rounded-[2rem] opacity-[0.11] saturate-[0.85] lg:block xl:h-[380px]"
+        style={{ maskImage: "radial-gradient(ellipse 82% 78% at 68% 48%,black 55%,transparent 100%)", WebkitMaskImage: "radial-gradient(ellipse 82% 78% at 68% 48%,black 55%,transparent 100%)" }}
+      >
+        <div className="relative h-full scale-[1.06] [&_img]:!rounded-[2rem] [&_img]:!border-transparent [&_img]:!shadow-none blur-2xl">
+          <ImageSlot
+            src={CONCIERGE_IMAGES.hero}
+            alt=""
+            tone="hero"
+            className="!h-full !min-h-[360px]"
+          />
+        </div>
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#0b0b0a]/75 via-transparent to-[#0b0b0a]/50" />
+      </div>
+
+      <div className="relative z-[1] grid gap-14 lg:grid-cols-[minmax(0,1.06fr)_minmax(340px,420px)] lg:items-start xl:gap-16">
+        <div className="max-w-xl">
+          <div className="inline-flex items-center gap-2 rounded-full border border-[color:var(--edge)] bg-[color:var(--paper)]/65 px-3 py-1 text-[11px] font-semibold tracking-[0.12em] text-[color:var(--gold)] backdrop-blur">
+            Sales Concierge AI · 오토 세일즈 AI 비서
+          </div>
+
+          <h1 className="mt-6 text-[1.65rem] font-semibold tracking-tight text-[color:var(--foreground)] sm:text-[2.6rem] sm:leading-[1.12] lg:text-[2.75rem]">
+            고객을 기억하는 자동차 영업 AI 비서
+          </h1>
+
+          <p className="mt-5 max-w-[40rem] text-sm leading-relaxed text-[color:var(--foreground)] sm:text-[15px]">
+            상담 이력, 관심 차량, 구매 가능성, 후속 연락까지 AI가 정리하고 제안합니다. 자동차 영업사원을 위한
+            프리미엄 고객관리 시스템입니다.
+          </p>
+
+          <div
+            aria-hidden
+            className="mt-7 h-px w-full max-w-xs bg-gradient-to-r from-transparent via-[color:var(--gold)]/45 to-transparent"
+          />
+
+          <div className="mt-10 flex flex-wrap items-center gap-3">
+            <Link href="/join" className="crm-ink-btn rounded-xl px-5 py-3 text-xs font-semibold">
+              베타 신청하기
+            </Link>
+            <a href="#dashboard-preview" className="crm-ghost-btn rounded-xl px-5 py-3 text-xs font-semibold">
+              데모 보기
             </a>
-          ),
-        )}
+          </div>
+
+          <ul className="mt-8 space-y-2 text-[12px] leading-relaxed text-[color:var(--ink-2)] sm:text-[13px]">
+            <li>상담·견적·후속까지 오늘 해야 할 우선 순위가 한 화면에 모입니다.</li>
+            <li>요약과 제안은 상담 맥락을 따라가며 근거를 남깁니다.</li>
+            <li>브랜드 로고 노출 없이 데모로 흐름을 먼저 확인할 수 있습니다.</li>
+          </ul>
+        </div>
+
+        <div className="lg:sticky lg:top-[5.75rem]">
+          <HeroDashboardPreviewCard />
+        </div>
       </div>
     </section>
   );
@@ -228,7 +205,7 @@ export function FeatureSection() {
     <SectionShell
       kicker="Features"
       title="고급 영업 루틴을 위한, 조용한 생산성"
-      subtitle="클래식카·프라이빗 라운지 톤의 프리미엄 세일즈 컨시어지. 과시보다 깊은 기록과 타이밍을 우선합니다."
+      subtitle="고급스러운 SaaS 레이아웃으로 상담 기록과 후속 타이밍을 안정적으로 잡도록 설계했습니다."
     >
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {items.map((it) => (
@@ -284,7 +261,12 @@ export function DashboardPreview() {
           </div>
 
           <div className="mt-5 overflow-hidden rounded-2xl">
-            <ImageSlot src="/images/interior.png" alt="" tone="interior" className="h-[220px]" />
+            <ImageSlot
+              src={CONCIERGE_IMAGES.interior}
+              alt=""
+              tone="interior"
+              className="h-[220px]"
+            />
           </div>
         </div>
 
@@ -342,14 +324,15 @@ export function DashboardPreview() {
             </div>
             <div className="mt-3 overflow-hidden rounded-2xl">
               <ImageSlot
-                src="/images/profile-workspace.png"
+                src={CONCIERGE_IMAGES.workspace}
                 alt=""
                 tone="profile"
                 className="h-[180px] sm:h-[220px]"
               />
             </div>
             <div className="mt-3 text-[12px] text-[color:var(--ink-2)]">
-              `/public/images/profile-workspace.png`로 교체할 수 있습니다. 로고가 보이는 사진은 사용하지 마세요.
+              `LandingSections.tsx`의 <code className="rounded bg-black/35 px-1 py-px">CONCIERGE_IMAGES.workspace</code> 경로에
+              맞춰 `public/images`를 교체하세요. 로고가 보이는 사진은 사용하지 마세요.
             </div>
           </div>
         </div>
@@ -419,12 +402,7 @@ export function AISecretaryPreview() {
             <span className="crm-free-badge">Desk</span>
           </div>
           <div className="mt-4 overflow-hidden rounded-2xl">
-            <ImageSlot
-              src="/images/profile-workspace.png"
-              alt=""
-              tone="desk"
-              className="h-[320px]"
-            />
+            <ImageSlot src={CONCIERGE_IMAGES.desk} alt="" tone="desk" className="h-[320px]" />
           </div>
         </div>
       </div>

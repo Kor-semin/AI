@@ -17,7 +17,7 @@ export function ImageSlot({ src, alt, className, tone = "hero" }: Props) {
     const base =
       "relative overflow-hidden rounded-2xl border border-[color:var(--edge)] bg-[color:var(--paper)] shadow-[0_22px_60px_rgba(0,0,0,0.55)]";
     const glow = "after:pointer-events-none after:absolute after:inset-0 after:content-['']";
-    const tones: Record<Props["tone"], string> = {
+    const tones: Record<NonNullable<Props["tone"]>, string> = {
       hero:
         "bg-[radial-gradient(1200px_760px_at_22%_12%,rgba(199,164,106,0.18),transparent_62%),radial-gradient(980px_720px_at_112%_20%,rgba(232,220,200,0.07),transparent_58%),linear-gradient(160deg,#0f0e0c_0%,#15120f_44%,#0b0b0a_100%)]",
       interior:

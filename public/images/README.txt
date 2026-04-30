@@ -1,9 +1,14 @@
-Luxury concierge 이미지 (PNG)
+랜딩 이미지 (`public/images`)
 
-브랜드 로고가 보이는 사진은 사용하지 마세요.
+브랜드 로고·엠블럼이 보이는 사진, 담배/시가가 강조되는 장면은 사용하지 마세요.
 
-현재 포함된 에셋(동일 디렉터리):
-- interior.png … 빈티지 캐빈(히어로 배경 및 프리뷰)
-- profile-workspace.png … 워크스페이스·AI Secretary 영역 및 대시보드 프리뷰
+경로는 `app/components/concierge/LandingSections.tsx` 상단의 `CONCIERGE_IMAGES`에서 한 번에 바꿉니다.
 
-프리미엄 업무실 썸네일은 고정 사진 대신 CSS 무드 카드로 표시합니다. 실제 책상 사진을 넣으려면 `LandingSections.tsx`의 filmstrip `studyPlaceholder` 항목을 이미지로 교체하면 됩니다.
+권장 파일명(JPG 또는 동일 이름으로 교체):
+
+- hero-classic-car.jpg … Hero 오른쪽/배경 보조 장식만(전면 배경 아님)
+- vintage-car-interior.jpg … 대시보드 프리뷰 등 내장 톤
+- concierge-desk.jpg … AI Secretary 우측 데스크 슬롯
+- sales-dashboard-workspace.jpg … 대시보드 하단 고객 워크스페이스 슬롯
+
+파일이 없으면 `ImageSlot` 플레이스홀이 표시됩니다.

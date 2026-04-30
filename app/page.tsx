@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { InspirationalBackdrop } from "@/app/components/InspirationalBackdrop";
 import { NotebookCover } from "@/app/components/NotebookCover";
@@ -45,21 +45,6 @@ export default function Home() {
     } catch {
       /* ignore */
     }
-  }, []);
-
-  const enterApp = useCallback(() => {
-    setView("app");
-    try {
-      const params = new URLSearchParams(window.location.search);
-      params.set("view", "app");
-      const next = `${window.location.pathname}?${params.toString()}${window.location.hash}`;
-      window.history.replaceState(null, "", next);
-    } catch {
-      /* ignore */
-    }
-    requestAnimationFrame(() => {
-      document.getElementById("app")?.scrollIntoView({ behavior: "smooth", block: "start" });
-    });
   }, []);
 
   return (
@@ -146,7 +131,7 @@ export default function Home() {
       <main className="relative z-10 flex-1">
         {view === "landing" ? (
           <>
-            <HeroSection onEnter={enterApp} />
+            <HeroSection />
             <FeatureSection />
             <DashboardPreview />
             <AISecretaryPreview />
