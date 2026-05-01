@@ -212,16 +212,14 @@ export function NotebookCover() {
           key={pageIdx}
         >
           <header className="shrink-0 px-1 pb-4 text-center sm:pb-5">
-            {pageIdx === 0 ? (
-              <div className="pointer-events-none flex justify-center pb-3 sm:pb-4">
-                <SensoraAnimatedMark
-                  size={88}
-                  animated
-                  className="max-[380px]:scale-[0.92] motion-reduce:opacity-95"
-                  label={t("product.name")}
-                />
-              </div>
-            ) : null}
+            <div className="pointer-events-none flex justify-center pb-3 sm:pb-4">
+              <SensoraAnimatedMark
+                size={pageIdx === 0 ? 96 : 72}
+                animated={pageIdx === 0}
+                className={pageIdx === 0 ? "max-[380px]:scale-[0.94] motion-reduce:opacity-95" : ""}
+                label={pageIdx === 0 ? t("product.name") : undefined}
+              />
+            </div>
             <p className="notebook-cover-cover-kicker-upper font-[family-name:var(--font-cover-serif)] text-[clamp(10px,2.55vw,12px)] font-semibold tracking-[0.2em]">
               SENSORA
             </p>

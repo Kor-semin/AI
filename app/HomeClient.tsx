@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 
 import { InspirationalBackdrop } from "@/app/components/InspirationalBackdrop";
 import { NotebookCover } from "@/app/components/NotebookCover";
+import { SensoraAnimatedMark } from "@/app/components/SensoraAnimatedMark";
 import { LanguageSelect } from "@/app/components/i18n/LanguageSelect";
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
 import { ConciergeSidebar } from "@/app/components/concierge/ConciergeSidebar";
@@ -106,11 +107,13 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
             </>
           ) : (
             <>
-              <div className="flex items-center gap-3">
-                <div className="h-2 w-2 shrink-0 rounded-full bg-[color:var(--accent)]" />
-                <div className="text-sm font-semibold tracking-tight">{t("product.name")}</div>
-                <div className="hidden text-xs text-[color:var(--ink-2)] xl:block">{t("brand.subline")}</div>
-                <span className="crm-free-badge hidden sm:inline-flex text-[12px] font-extrabold">무료 사용</span>
+              <div className="flex min-w-0 items-center gap-2.5 sm:gap-3">
+                <SensoraAnimatedMark size={40} animated={false} className="shrink-0" />
+                <div className="min-w-0">
+                  <div className="text-sm font-semibold tracking-tight">{t("product.name")}</div>
+                  <div className="hidden text-xs text-[color:var(--ink-2)] xl:block">{t("brand.subline")}</div>
+                </div>
+                <span className="crm-free-badge hidden shrink-0 sm:inline-flex text-[12px] font-extrabold">무료 사용</span>
               </div>
               <div className="relative z-[1] flex items-center gap-2">
                 <span className="relative z-[1]">

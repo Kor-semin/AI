@@ -1,5 +1,6 @@
 "use client";
 
+import { SensoraAnimatedMark } from "@/app/components/SensoraAnimatedMark";
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
 
 type SidebarEntry =
@@ -23,6 +24,9 @@ export function ConciergeSidebar() {
     <aside className="hidden w-[260px] shrink-0 lg:block">
       <div className="sticky top-24 flex min-h-[calc(100vh-8rem)] flex-col rounded-[22px] border border-[#374151] bg-[#111827] pb-6 pt-5 shadow-[0_12px_40px_rgba(0,0,0,0.1)]">
         <div className="border-b border-[#1F2937] px-5 pb-5">
+          <div className="pointer-events-none flex justify-start pb-4">
+            <SensoraAnimatedMark size={52} animated={false} />
+          </div>
           <div className="text-[12px] font-semibold tracking-[0.08em] text-[#CBD5E1]">
             {t("header.workspace")}
           </div>
