@@ -972,3 +972,26 @@ html[lang="ko"] body {
     0 4px 14px rgba(17, 24, 39, 0.04);
 }
 
+/* 랜딩 한 장면 Hero — 다음 섹션이 들여다보이지 않게 하단에 은은한 페이드 */
+.landing-showroom-hero-scene {
+  isolation: isolate;
+}
+
+.landing-showroom-hero-scene::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: clamp(64px, 11vw, 112px);
+  background: linear-gradient(to bottom, rgba(244, 246, 248, 0), rgba(244, 246, 248, 0.97));
+  z-index: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-showroom-hero-scene::after {
+    opacity: 0.65;
+    height: 40px;
+  }
+}
+

@@ -184,9 +184,13 @@ export type TranslationKey =
   | "landing.crmDemo.sectionTitle"
   | "landing.crmDemo.sectionDesc"
   | "landing.crmDemo.startCta"
+  | "landing.showroom.hero.quietFuture"
+  | "landing.showroom.hero.senseAuraTag"
   | "landing.showroom.hero.leadLine1"
   | "landing.showroom.hero.leadLine2"
   | "landing.showroom.hero.desc"
+  | "landing.showroom.bridge.line1"
+  | "landing.showroom.bridge.line2"
   | "landing.showroom.heroPreview.needsSnippet"
   | "landing.showroom.heroPreview.smsSnippet"
   | "landing.showroom.heroPreview.followupSnippet"
@@ -450,18 +454,22 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.crmDemo.sectionDesc":
       "오늘 연락할 고객, 계약 가능성, 상담 요약, 출고 안내서를 한 번에 확인합니다.",
     "landing.crmDemo.startCta": "고객관리 시작하기",
-    "landing.showroom.hero.leadLine1": "자동차 영업의 모든 흐름을",
-    "landing.showroom.hero.leadLine2": "AI가 조용하게 정리합니다.",
+    "landing.showroom.hero.quietFuture": "조용한 미래감",
+    "landing.showroom.hero.senseAuraTag": "Sense · Aura",
+    "landing.showroom.hero.leadLine1": "고객의 말을 감각으로 읽고,",
+    "landing.showroom.hero.leadLine2": "영업의 다음 흐름으로 정리합니다.",
     "landing.showroom.hero.desc":
-      "고객 상담, 후속 연락, 금융 조건, 출고 안내까지. SensoraGuide가 영업사원의 다음 행동을 제안합니다.",
+      "상담 기록, 후속 연락, 금융 조건, 출고 안내까지. SensoraGuide가 영업사원의 다음 행동을 조용하게 제안합니다.",
+    "landing.showroom.bridge.line1": "상담은 기록으로,",
+    "landing.showroom.bridge.line2": "기록은 다음 행동으로.",
     "landing.showroom.heroPreview.needsSnippet": "패밀리 이동·승차감·승하차 동선 중심. 예산 검토 다음 단계: 금융 조건 초안 안내.",
     "landing.showroom.heroPreview.smsSnippet": "말씀해 주신 기준 위주로 짧게 정리해 두었습니다. 오늘 편하실 때 조건 초안부터 함께 보시죠.",
     "landing.showroom.heroPreview.followupSnippet": "내일 오전 · 금융 옵션 정리 후 연락",
-    "landing.showroom.flow.title": "하루의 영업 흐름을 한 화면에서",
+    "landing.showroom.flow.title": "상담에서 후속까지, 한 흐름으로 안정적으로",
     "landing.showroom.flow.desc":
-      "상담 기록, 고객 니즈, 다음 연락, 발송 문구를 하나의 흐름으로 정리합니다.",
-    "landing.showroom.flow.mock.contactTitle": "오늘 연락할 고객",
-    "landing.showroom.flow.mock.contactBody": "김민준 · 견적 검토 · 금융 조건 회신 필요",
+      "상담 → 니즈 → 발송 문자 → 후속 연락 순으로 업무 블록을 이어 두어 바쁜 딜플로어에서 빠져나가지 않게 합니다.",
+    "landing.showroom.flow.mock.contactTitle": "상담 정리 · 기록",
+    "landing.showroom.flow.mock.contactBody": "김민준 시승 상담 · 견적 단계 진입 · 회신 대기 확인",
     "landing.showroom.flow.mock.needsTitle": "고객 니즈 요약",
     "landing.showroom.flow.mock.needsBody": "패밀리 이동, 승하차 편의, 월 부담·보증 선택지 비교 필요",
     "landing.showroom.flow.mock.smsTitle": "발송 문자",
@@ -469,7 +477,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
       "지난번 말씀 기준으로 정리했습니다. 오늘 잠깐이라도 시간 내주시면 조건 초안 차분히 안내드리겠습니다.",
     "landing.showroom.flow.mock.followupTitle": "후속 연락",
     "landing.showroom.flow.mock.followupBody": "내일 오전 11시 재연락 · 전화",
-    "landing.showroom.guide.title": "고객의 말을 영업의 다음 행동으로 바꿉니다.",
+    "landing.showroom.guide.title": "고객의 신호가 영업 액션으로 이어지는 지점입니다.",
     "landing.showroom.guide.desc":
       "SensoraGuide는 상담 메모를 읽고 고객 니즈, 영업 포인트, 고객 발송 문장을 정리합니다. 민감한 상담 원문은 그대로 되풀이하지 않고, 승차감·승하차 편의성·예산·일정처럼 응대 기준으로 바꿔줍니다.",
     "landing.showroom.guide.memoLabel": "상담 메모",
@@ -725,20 +733,24 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.crmDemo.sectionDesc":
       "See today’s follow-ups, deal probability, consultation summaries, and delivery guides in one place.",
     "landing.crmDemo.startCta": "Start in CRM",
-    "landing.showroom.hero.leadLine1": "Every step of automotive sales—",
-    "landing.showroom.hero.leadLine2": "composed quietly, end to end.",
+    "landing.showroom.hero.quietFuture": "Quiet futurism",
+    "landing.showroom.hero.senseAuraTag": "Sense · Aura",
+    "landing.showroom.hero.leadLine1": "Reads what customers hint at—and",
+    "landing.showroom.hero.leadLine2": "lays out the quiet next beats of the deal.",
     "landing.showroom.hero.desc":
-      "Consultations through follow-ups, finance conditions, and hand-off cues. SensoraGuide suggests what to address next—with calm precision.",
+      "Notes, follow-ups, finance terms, delivery readiness. SensoraGuide proposes the next salesperson move—lightly, beside you—not out in front.",
+    "landing.showroom.bridge.line1": "Consultation settles into notes,",
+    "landing.showroom.bridge.line2": "notes guide the disciplined next touch.",
     "landing.showroom.heroPreview.needsSnippet":
       "Family use, cabin comfort, easy entry/exit. Next: align on financing options calmly.",
     "landing.showroom.heroPreview.smsSnippet":
       "Summarized what you prioritized last time—happy to walk through preliminary terms whenever works today.",
     "landing.showroom.heroPreview.followupSnippet": "Tomorrow AM · Financing outline, then callback",
-    "landing.showroom.flow.title": "A full day—on one deliberate screen.",
+    "landing.showroom.flow.title": "From consultation cues to dependable follow‑through.",
     "landing.showroom.flow.desc":
-      "Notes, needs, the next outreach, and a send-ready SMS line—woven into one flow.",
-    "landing.showroom.flow.mock.contactTitle": "Today’s outreach",
-    "landing.showroom.flow.mock.contactBody": "Minjun Kim · Estimate review · finance reply pending",
+      "Consultation · needs · outbound SMS · next follow-up stacked in one calm SaaS‑style rail so nothing slips on the showroom floor.",
+    "landing.showroom.flow.mock.contactTitle": "Consultation notes",
+    "landing.showroom.flow.mock.contactBody": "Minjun · test drive recap · quoting stage entered · pending reply flagged",
     "landing.showroom.flow.mock.needsTitle": "Needs distilled",
     "landing.showroom.flow.mock.needsBody": "Family hauling, ingress/egress ease, weighing monthly burden vs coverage choices.",
     "landing.showroom.flow.mock.smsTitle": "Outbound SMS",
@@ -746,7 +758,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
       "Tight recap from our last conversation—could we carve a few quiet minutes later today for preliminary financing terms?",
     "landing.showroom.flow.mock.followupTitle": "Next follow-up",
     "landing.showroom.flow.mock.followupBody": "Tomorrow · 11:00 · outbound call",
-    "landing.showroom.guide.title": "Turn spoken intent into disciplined next acts.",
+    "landing.showroom.guide.title": "Where customer signals tighten into salesperson action.",
     "landing.showroom.guide.desc":
       "SensoraGuide reads memo lines and organizes needs, sales angles, and customer-facing copy—to practical criteria like ride ease, ergonomics, budget, timing—without repeating sensitive detail verbatim.",
     "landing.showroom.guide.memoLabel": "Consultation memo",
