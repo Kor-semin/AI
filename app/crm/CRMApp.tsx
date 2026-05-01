@@ -287,9 +287,9 @@ const CRM_SEARCH_FEATURES: {
   },
   {
     id: "followup",
-    title: "다음 연락 · 후속 액션",
-    subtitle: "고객 카드에서 후속 일정과 할 일을 이어서 관리합니다.",
-    keywords: ["후속", "다음연락", "다음 연락", "연락"],
+    title: "다음 연락 · 할 일",
+    subtitle: "고객 카드에서 다음 연락 일정과 할 일을 이어서 관리합니다.",
+    keywords: ["사후관리", "후속", "다음연락", "다음 연락", "연락"],
   },
   {
     id: "customer-list",
@@ -360,12 +360,15 @@ export function CRMApp({
   sellerDisplayName,
   activeSection,
   onActiveSectionChange,
+  onOpenLandingView,
 }: {
   uid?: string | null;
   /** `{내이름}` 치환: 로그인 시 구글 이름·이메일 등 */
   sellerDisplayName?: string | null;
   activeSection: CrmSection;
   onActiveSectionChange: (s: CrmSection) => void;
+  /** 설정 등에서 소개(랜딩) 페이지로 전환할 때 호출 */
+  onOpenLandingView?: () => void;
 }) {
   const { t, language } = useLanguage();
   // uid=null means local-only mode.
@@ -924,9 +927,9 @@ export function CRMApp({
   const storageModeLabel =
     sync.mode === "cloud"
       ? sync.status === "error"
-        ? `클라우드 동기화(오류${sync.message ? `: ${sync.message}` : ""})`
-        : "클라우드 동기화 — 이 기기에서 수정한 내용이 계정에 저장됩니다."
-      : "이 기기 브라우저에 로컬 저장됩니다. 다른 기기와 자동 동기화되지 않습니다.";
+        ? `계정 동기화를 일시적으로 진행하지 못했습니다${sync.message ? ` (${sync.message})` : ""}. 잠시 후 다시 확인해 주세요.`
+        : "로그인한 계정 기준으로 저장됩니다. 이 기기에서 고객·일정·메모를 수정하면 클라우드에 반영되며, 접속한 다른 기기와 맞춰집니다."
+      : "현재 고객 정보는 이 기기 브라우저에 저장됩니다.\n다른 기기와 자동으로 동기화되지 않습니다.\n중요한 고객 정보는 별도로 백업해 주세요. (「일정」 등에서 백업 기능을 활용할 수 있습니다.)";
 
   useEffect(() => {
     if (activeSection === "followup") setTab("다음할일");
@@ -1544,10 +1547,10 @@ export function CRMApp({
             id="crm-section-title"
             className="scroll-mt-24 rounded-2xl border border-[#E5E7EB] bg-white px-4 py-3 shadow-sm lg:hidden"
           >
-            <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#94A3B8]">
+            <p className="text-[17px] font-semibold text-[#111827]">{CRM_SECTION_LABELS[activeSection].title}</p>
+            <p className="mt-0.5 text-[12px] font-medium leading-snug text-[#64748B]">
               {CRM_SECTION_LABELS[activeSection].subtitle}
             </p>
-            <p className="mt-1 text-[17px] font-semibold text-[#111827]">{CRM_SECTION_LABELS[activeSection].title}</p>
           </div>
 
           {showSellerToolsRow ? (
@@ -1688,6 +1691,12 @@ export function CRMApp({
               workspaceSalesStyleLabel={workspaceSalesStyleLabel}
               storageModeLabel={storageModeLabel}
               onShowCover={() => window.dispatchEvent(new CustomEvent("crm-show-notebook-cover"))}
+              onOpenLanding={onOpenLandingView}
+              onOpenAddressBookImport={() => {
+                onActiveSectionChange("customers");
+                setTab("고객");
+                window.setTimeout(() => setImportContactsOpen(true), 0);
+              }}
             />
           ) : null}
 
@@ -1751,7 +1760,7 @@ export function CRMApp({
                 <div className="border-b border-[#E5E7EB] px-5 py-5 sm:px-6">
                   <h2 className="text-[18px] font-semibold text-[#111827]">{t("crm.section.customerList")}</h2>
                   <p className="mt-2 text-[15px] leading-relaxed text-[#6B7280]">
-                    고객 행을 눌러 선택합니다. 선택 시 오른쪽에서 상세·상담·후속 업무를 이어서 다룹니다.
+                    고객 행을 눌러 선택합니다. 선택 시 오른쪽에서 상세·상담·다음 연락까지 이어서 다룹니다.
                   </p>
                 </div>
                 <div className="overflow-x-auto xl:overflow-y-auto xl:[max-height:calc(100vh-20rem)]">
@@ -1834,7 +1843,7 @@ export function CRMApp({
                   <div className="border-t border-[#E5E7EB] px-8 py-14 text-center">
                     <p className="text-[18px] font-semibold text-[#111827]">등록된 고객이 없습니다</p>
                     <p className="mx-auto mt-3 max-w-md text-[15px] leading-relaxed text-[#6B7280]">
-                      첫 고객을 추가하고 상담 메모와 후속 할 일을 이어 가 보세요.
+                      첫 고객을 추가하거나 「주소록 가져오기」로 불러와 상담과 일정을 이어 가 보세요.
                     </p>
                     <button
                       type="button"
@@ -3381,7 +3390,7 @@ export function CRMApp({
                 }
               />
               <Field
-                label="후속 할 일"
+                label="처리할 업무"
                 value={createCustomerDraft.nextActionText}
                 placeholder="예: 견적서 발송 필요"
                 onChange={(v) =>

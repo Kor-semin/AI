@@ -97,7 +97,7 @@ export const SAMPLE_CUSTOMERS: SampleCustomer[] = [
     phone: "010-8841-7002",
     brand: "Audi",
     interestedVehicle: "A6",
-    status: "후속 연락 필요",
+    status: "다음 연락 필요",
     potential: 69,
     budget: "7,000만~8,000만 원",
     purchaseTiming: "2개월 이내",

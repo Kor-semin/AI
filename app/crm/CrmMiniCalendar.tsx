@@ -161,7 +161,7 @@ export function CrmMiniCalendar({
   return (
     <section
       id="crm-mini-calendar"
-      className="scroll-mt-28 rounded-2xl border border-[#E5E7EB] bg-[#FFFFFF] px-4 py-4 shadow-[0_1px_4px_rgba(15,23,42,0.04)] sm:px-5 sm:py-5"
+      className="scroll-mt-28 rounded-2xl border border-[#CBD5E1] bg-[#FFFFFF] px-4 py-4 shadow-[0_1px_6px_rgba(15,23,42,0.06)] sm:px-5 sm:py-5"
       aria-label="미니 캘린더"
     >
       <div className="flex flex-wrap items-center justify-between gap-2 gap-y-3">
@@ -198,15 +198,15 @@ export function CrmMiniCalendar({
         </div>
       </div>
 
-      <div className="mt-4 grid grid-cols-7 gap-1 text-center text-[11px] font-semibold text-[#94A3B8]">
+      <div className="mt-4 grid grid-cols-7 gap-px rounded-lg border border-[#94A3B8]/35 bg-[#94A3B8]/35 text-center">
         {["일", "월", "화", "수", "목", "금", "토"].map((w) => (
-          <div key={w} className="py-1">
+          <div key={w} className="bg-[#F1F5F9] py-2 text-[12px] font-bold tracking-wide text-[#334155]">
             {w}
           </div>
         ))}
       </div>
 
-      <div className="mt-1 grid grid-cols-7 gap-1">
+      <div className="mt-px grid grid-cols-7 gap-px rounded-lg border border-[#CBD5E1] bg-[#CBD5E1]/60 p-px">
         {cells.map((dt, idx) =>
           dt ? (
             <button
@@ -214,53 +214,61 @@ export function CrmMiniCalendar({
               type="button"
               onClick={() => setSelected(dt)}
               className={[
-                "relative flex min-h-[40px] flex-col items-center justify-center rounded-xl border px-0.5 py-1 text-[13px] font-semibold transition touch-manipulation",
+                "relative flex min-h-[42px] flex-col items-center justify-center rounded-md border bg-[#FFFFFF] px-0.5 py-1 text-[13px] font-semibold transition touch-manipulation",
                 selected && sameDay(selected, dt) ?
-                  "border-[#111827] bg-[#F1F5F9] text-[#111827]"
-                : sameDay(new Date(), dt) ? "border-[#CBD5E1] bg-[#FFFBEB] text-[#92400E]"
-                : "border-transparent bg-[#FAFBFC] text-[#475569] hover:bg-[#F1F5F9]",
+                  "border-[#0F172A] bg-[#E2E8F0] text-[#0F172A] ring-1 ring-[#0F172A]/90"
+                : sameDay(new Date(), dt) ? "border-[#475569] bg-[#F8FAFC] text-[#0F172A]"
+                : "border-[#E2E8F0] text-[#475569] hover:z-[1] hover:border-[#94A3B8]",
               ].join(" ")}
             >
-              <span>{dt.getDate()}</span>
+              <span className={sameDay(new Date(), dt) && !(selected && sameDay(selected, dt)) ? "font-bold" : ""}>
+                {dt.getDate()}
+              </span>
               {(() => {
                 const k = isoDayKeyLocal(dt);
                 const n = itemsByDay.get(k)?.length ?? 0;
                 return n ?
-                    <span className="mt-0.5 h-1.5 min-w-[6px] rounded-full bg-[#64748B]" aria-hidden />
+                    <span className="mt-0.5 h-1.5 min-w-[7px] rounded-full bg-[#334155]" aria-hidden />
                   : null;
               })()}
             </button>
           ) : (
-            <div key={idx} className="min-h-[40px]" />
+            <div key={idx} className="min-h-[42px] rounded-md bg-[#F8FAFC]/80" />
           ),
         )}
       </div>
 
-      <div className="mt-5 rounded-xl border border-[#EEF1F5] bg-[#FAFBFC] px-3 py-3 sm:px-4">
-        <div className="text-[12px] font-semibold text-[#64748B]">
+      <div className="crm-mini-cal-list-shell mt-6 border-t border-[#CBD5E1] pt-5">
+        <div className="text-[13px] font-bold text-[#0F172A]">
           {selected.toLocaleDateString("ko-KR", { month: "long", day: "numeric", weekday: "short" })}
         </div>
+        <p className="mt-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-[#64748B]">
+          해당 날짜 일정
+        </p>
         {list.length === 0 ? (
-          <p className="mt-2 text-[13px] text-[#6B7280]">선택한 날짜의 일정이 없습니다.</p>
+          <p className="mt-3 text-[13px] text-[#64748B]">선택한 날짜에 예정된 항목이 없습니다.</p>
         ) : (
-          <ul className="mt-3 space-y-2">
+          <ul className="mt-4 space-y-2">
             {list.map((it) => (
               <li key={it.id}>
                 <button
                   type="button"
-                  className="w-full rounded-lg border border-[#E5E7EB] bg-[#FFFFFF] px-3 py-2.5 text-left text-[13px] leading-snug text-[#374151] transition hover:bg-[#F8FAFC] touch-manipulation"
+                  className="w-full rounded-lg border border-[#CBD5E1] bg-[#FFFFFF] px-3 py-2.5 text-left text-[13px] leading-snug text-[#1E293B] shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition hover:border-[#94A3B8] hover:bg-[#F8FAFC] touch-manipulation"
                   onClick={() => {
                     if (it.customerId && onPickCustomer) onPickCustomer(it.customerId);
                   }}
                   disabled={!it.customerId}
                 >
-                  {it.kind === "event" ?
-                    `[일정] ${it.label}`
-                  : it.kind === "next" ?
-                    `[후속] ${it.label}`
-                  : it.kind === "delivery" ?
-                    `[출고] ${it.label}`
-                  : `[연락] ${it.label}`}
+                  <span className="font-semibold text-[#0F172A]">
+                    {it.kind === "event" ?
+                      "[일정]"
+                    : it.kind === "next" ?
+                      "[사후관리]"
+                    : it.kind === "delivery" ?
+                      "[출고]"
+                    : "[다음 연락]"}
+                  </span>{" "}
+                  <span className="font-medium text-[#334155]">{it.label}</span>
                 </button>
               </li>
             ))}

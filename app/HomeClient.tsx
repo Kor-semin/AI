@@ -83,6 +83,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
 
   const openAppWorkspace = useCallback(() => {
     setView("app");
+    setCrmSection("ai");
     void router.push("/?view=app#crm-ai-assistant");
   }, [router]);
 
@@ -138,100 +139,89 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
 
       <header
         className={[
-          "sticky top-0 z-30 isolate border-b px-5 pb-3 backdrop-blur-md sm:px-6",
-          /** iOS 상태바/notch 회피: 과도하게 커지지 않도록 max(원래 패딩, safe-area) */
-          "pt-[max(12px,calc(env(safe-area-inset-top,0px)+0.5rem))]",
+          "sticky top-0 z-30 isolate border-b backdrop-blur-md",
+          /** iPhone 상태바/notch 안전영역을 반영해 헤더 콘텐츠가 겹치지 않도록 */
+          "px-4 pb-3 pt-[max(14px,calc(env(safe-area-inset-top,0px)+10px))] sm:px-6",
           view === "landing" ? "border-[#E5E7EB] bg-[#F4F6F8]/88" : "border-[color:var(--edge)] bg-[color:var(--background)]/72",
         ].join(" ")}
       >
         <div
           className={[
-            "mx-auto flex max-w-[1280px]",
-            view === "landing" ? "flex-col gap-3 sm:flex-row sm:items-center sm:justify-between" : "flex-row items-center justify-between gap-3",
+            "mx-auto flex w-full min-w-0 max-w-[1280px]",
+            view === "landing"
+              ? "flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-4"
+              : "flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4",
           ].join(" ")}
         >
           {view === "landing" ? (
             <>
-              <div className="min-w-0">
-                <div className="text-sm font-semibold tracking-tight text-[#111827]">{t("product.name")}</div>
-                <p className="mt-0.5 text-[11px] leading-snug text-[#4B5563] sm:max-w-[28rem] sm:text-xs sm:leading-normal">{t("brand.slogan")}</p>
+              <div className="min-w-0 shrink-0 sm:max-w-[min(100%,24rem)] sm:pr-4">
+                <div className="text-[15px] font-semibold leading-tight tracking-tight text-[#111827] sm:text-base">{t("product.name")}</div>
+                <p className="mt-1 text-[11px] leading-snug text-[#4B5563] sm:text-xs">{t("brand.slogan")}</p>
               </div>
-              <div className="relative z-[1] flex flex-wrap items-center gap-2 sm:justify-end">
-                <span className="relative z-[1]">
-                  <LanguageSelect />
-                </span>
-                {auth.status === "loading" ? (
-                  <span className="hidden text-[11px] text-[#6B7280] sm:inline">{t("auth.checkingLogin")}</span>
-                ) : auth.status === "signed-in" ? (
-                  <>
-                    <span className="hidden max-w-[8rem] truncate text-[11px] text-[#4B5563] sm:inline">{auth.name ?? auth.email ?? auth.uid}</span>
-                    <button
-                      type="button"
-                      className="crm-ghost-btn inline-flex min-h-[44px] items-center rounded-xl border border-[#E5E7EB] bg-white px-3 py-2 text-xs font-semibold text-[#111827]"
-                      onClick={signOut}
-                    >
-                      {t("auth.signOut")}
-                    </button>
-                  </>
-                ) : authError ? (
-                  <span className="max-w-[7rem] truncate text-[10px] font-medium text-[#B91C1C] sm:max-w-[12rem] sm:text-xs" title={authError}>
-                    {authError}
-                  </span>
-                ) : null}
-                <button
-                  type="button"
-                  onClick={openAppWorkspace}
-                  className="relative z-[20] inline-flex min-h-[44px] cursor-pointer items-center justify-center whitespace-nowrap rounded-xl bg-[#111827] px-3 py-2 text-xs font-semibold text-white transition-colors hover:bg-[#1f2937] touch-manipulation"
-                >
-                  {t("cta.tryAppExperience")}
-                </button>
-                <Link
-                  href="/join"
-                  prefetch={false}
-                  className="relative z-[20] inline-flex min-h-[44px] items-center justify-center whitespace-nowrap rounded-xl border border-[#E5E7EB] bg-white px-3 py-2 text-xs font-semibold text-[#111827] transition-colors hover:bg-[#F9FAFB] touch-manipulation"
-                >
-                  {t("cta.joinBeta")}
-                </Link>
+              <div className="relative z-[1] flex w-full min-w-0 flex-col gap-3 sm:w-auto sm:max-w-[min(100%,28rem)] sm:items-end">
+                <div className="flex min-w-0 flex-wrap items-center gap-2 sm:justify-end">
+                  <LanguageSelect dense />
+                  {auth.status === "loading" ? (
+                    <span className="text-[11px] text-[#6B7280]">{t("auth.checkingLogin")}</span>
+                  ) : auth.status === "signed-in" ? (
+                    <>
+                      <span className="hidden max-w-[10rem] truncate text-[11px] text-[#4B5563] lg:inline">{auth.name ?? auth.email ?? auth.uid}</span>
+                      <button
+                        type="button"
+                        className="crm-ghost-btn inline-flex min-h-[44px] shrink-0 items-center rounded-xl border border-[#E5E7EB] bg-white px-3 py-2 text-xs font-semibold text-[#111827] touch-manipulation"
+                        onClick={signOut}
+                      >
+                        {t("auth.signOut")}
+                      </button>
+                    </>
+                  ) : authError ? (
+                    <span className="max-w-full truncate text-[10px] font-medium text-[#B91C1C] sm:max-w-[14rem] sm:text-xs" title={authError}>
+                      {authError}
+                    </span>
+                  ) : null}
+                </div>
+                <div className="grid w-full min-w-0 grid-cols-2 gap-2 sm:flex sm:w-auto sm:flex-shrink-0 sm:flex-nowrap sm:justify-end sm:gap-2">
+                  <button
+                    type="button"
+                    onClick={openAppWorkspace}
+                    className="relative z-[20] inline-flex min-h-[48px] w-full cursor-pointer items-center justify-center rounded-xl bg-[#111827] px-3 py-2.5 text-[13px] font-semibold text-white transition-colors hover:bg-[#1f2937] touch-manipulation sm:min-h-[44px] sm:w-auto sm:px-5"
+                  >
+                    {t("cta.tryAppExperience")}
+                  </button>
+                  <Link
+                    href="/join"
+                    prefetch={false}
+                    className="relative z-[20] inline-flex min-h-[48px] w-full items-center justify-center rounded-xl border border-[#E5E7EB] bg-white px-3 py-2.5 text-center text-[13px] font-semibold text-[#111827] transition-colors hover:bg-[#F9FAFB] touch-manipulation sm:min-h-[44px] sm:w-auto sm:px-5"
+                  >
+                    {t("cta.joinBeta")}
+                  </Link>
+                </div>
               </div>
             </>
           ) : (
             <>
-              <div className="flex min-w-0 items-center gap-2.5 sm:gap-3">
+              <div className="flex min-w-0 flex-1 items-center gap-2.5 sm:gap-3">
                 <SensoraAnimatedMark size={40} animated={false} className="shrink-0" />
                 <div className="min-w-0">
-                  <div className="text-sm font-semibold tracking-tight">{t("product.name")}</div>
-                  <div className="hidden text-xs text-[color:var(--ink-2)] xl:block">{t("brand.subline")}</div>
+                  <div className="truncate text-sm font-semibold tracking-tight">{t("product.name")}</div>
+                  <div className="truncate text-[11px] text-[color:var(--ink-2)] sm:text-xs">{t("brand.subline")}</div>
                 </div>
-                <span className="crm-free-badge hidden shrink-0 sm:inline-flex text-[12px] font-extrabold">무료 사용</span>
               </div>
-              <div className="relative z-[1] flex items-center gap-2">
-                <span className="relative z-[1]">
-                  <LanguageSelect />
+              <div className="relative z-[1] flex w-full min-w-0 flex-wrap items-center justify-end gap-2 sm:w-auto sm:justify-end">
+                <span className="relative z-[1] shrink-0">
+                  <LanguageSelect dense />
                 </span>
-                <button
-                  type="button"
-                  className="crm-ghost-btn inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg px-2.5 py-2 text-[11px] font-medium touch-manipulation sm:min-h-0 sm:py-1.5"
-                  onClick={() => {
-                    window.dispatchEvent(new CustomEvent("crm-show-notebook-cover"));
-                  }}
-                >
-                  {t("header.cover")}
-                </button>
-                <button
-                  type="button"
-                  className="crm-ghost-btn inline-flex min-h-[44px] max-w-[6.75rem] items-center justify-center truncate rounded-lg px-2.5 py-2 text-[11px] font-medium touch-manipulation sm:max-w-none sm:min-h-0 sm:py-1.5"
-                  title={t("header.landing")}
-                  onClick={() => setView("landing")}
-                >
-                  {t("header.landing")}
-                </button>
                 {auth.status === "loading" ? (
                   <div className="text-xs text-[color:var(--ink-2)]">{t("auth.checkingLogin")}</div>
                 ) : auth.status === "signed-in" ? (
                   <>
-                    <div className="hidden text-xs text-[color:var(--ink-2)] sm:block">{auth.name ?? auth.email ?? auth.uid}</div>
+                    <div className="hidden max-w-[10rem] truncate text-xs text-[color:var(--ink-2)] sm:block">
+                      {auth.name ?? auth.email ?? auth.uid}
+                    </div>
                     <button
-                      className="crm-ghost-btn inline-flex min-h-[44px] items-center rounded-lg px-3 py-2 text-xs font-semibold touch-manipulation"
+                      type="button"
+                      className="crm-ghost-btn inline-flex min-h-[44px] shrink-0 items-center rounded-lg px-3 py-2 text-xs font-semibold touch-manipulation"
                       onClick={signOut}
                     >
                       {t("auth.signOut")}
@@ -240,14 +230,14 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                 ) : (
                   <>
                     {authError ? (
-                      <div className="max-w-[520px] text-xs font-medium text-[#B91C1C]">로그인 오류: {authError}</div>
+                      <div className="max-w-full text-xs font-medium text-[#B91C1C] sm:max-w-[14rem]" title={authError}>
+                        로그인 오류 · 다시 시도
+                      </div>
                     ) : null}
                     <Link
                       href="/register"
-                      className={[
-                        "crm-ink-btn inline-flex min-h-[44px] items-center rounded-lg px-3 py-2 text-xs font-semibold touch-manipulation",
-                        firebaseReady ? "" : "opacity-55",
-                      ].join(" ")}
+                      prefetch={false}
+                      className="inline-flex min-h-[44px] shrink-0 items-center rounded-lg border border-[#CBD5E1] bg-white px-3 py-2 text-xs font-semibold text-[#334155] touch-manipulation transition hover:bg-[#F8FAFC] sm:shadow-none"
                     >
                       {t("auth.salesRegistration")}
                     </Link>
@@ -332,6 +322,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                     }
                     activeSection={crmSection}
                     onActiveSectionChange={navigateCrmSection}
+                    onOpenLandingView={() => setView("landing")}
                   />
                 ) : null}
 

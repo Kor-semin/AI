@@ -186,6 +186,7 @@ export type TranslationKey =
   | "landing.crmDemo.startCta"
   | "landing.showroom.hero.quietFuture"
   | "landing.showroom.hero.senseAuraTag"
+  | "landing.showroom.hero.kickerBadge"
   | "landing.showroom.hero.leadLine1"
   | "landing.showroom.hero.leadLine2"
   | "landing.showroom.hero.desc"
@@ -243,6 +244,7 @@ export type TranslationKey =
   | "cover.onboarding.page3.workspaceCta"
   | "cover.onboarding.page3.aiCta"
   | "cover.onboarding.themeLabel"
+  | "cover.onboarding.themeHint"
   | "crm.seasonCare.title"
   | "crm.seasonCare.intro"
   | "crm.seasonCare.previewLabel"
@@ -316,9 +318,9 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "brand.name": "Sensora",
     "product.name": "Sensora Auto CRM",
     "brand.slogan": "작은 시작에서부터 시작된다",
-    "brand.identity": "B2B AI SaaS Company",
+    "brand.identity": "자동차 영업을 위한 업무 소프트웨어",
     "brand.subline": "자동차 영업 워크스페이스",
-    "product.shortDesc": "자동차 영업사원을 위한 AI 고객관리 SaaS",
+    "product.shortDesc": "자동차 영업사원을 위한 고객 상담·일정 정리 도구",
     "hero.description":
       "고객 상담, 관심 차량, 후속 연락, 메시지 작성, 영업 파이프라인을 AI가 정리하고 제안합니다.",
     "cta.joinBeta": "베타 신청하기",
@@ -328,7 +330,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "cta.tryAIDemo": "AI 비서 체험하기",
     "header.cover": "표지",
     "header.landing": "랜딩",
-    "header.workspace": "Workspace",
+    "header.workspace": "영업 업무",
     "auth.checkingLogin": "로그인 확인 중…",
     "auth.signOut": "로그아웃",
     "auth.salesRegistration": "영업 계정 등록",
@@ -351,7 +353,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "register.continueWithGoogle": "Google로 시작하기",
     "crm.stat.todayFollowups": "오늘 연락",
     "crm.stat.dealProbability": "계약 가능성",
-    "crm.stat.followupNeeded": "후속 연락",
+    "crm.stat.followupNeeded": "예정된 할 일",
     "crm.stat.recentConsultations": "최근 상담",
     "crm.addCustomer": "고객 추가",
     "crm.nextAction": "다음 액션",
@@ -373,7 +375,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.section.templates": "문자 템플릿",
     "crm.workspaceAi.title": "AI 비서 (작업)",
     "crm.workspaceAi.subtitle":
-      "Sensora Flow: 명시 버튼에서만 새 제안이 만들어지고 저장된 CRM 필드와 섞이지 않습니다. 저장·복사·후속은 원하는 항목만 적용하세요.",
+      "「다시 분석」 등 버튼을 눌렀을 때만 새 제안이 만들어집니다. 저장·복사·다음 연락 등은 확인 후 원하는 항목만 적용하세요.",
     "crm.workspaceAi.customerPickLabel": "고객",
     "crm.workspaceAi.selectPlaceholder": "고객을 선택해 주세요",
     "crm.workspaceAi.pickCustomer": "워크플로를 시작하려면 고객을 선택하거나 새로 추가하세요.",
@@ -385,8 +387,8 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.workspaceAi.copySms": "문자 복사",
     "crm.workspaceAi.saveMemo": "CRM에 저장",
     "crm.workspaceAi.saveToast": "상담 메모가 저장되었습니다.",
-    "crm.workspaceAi.createFollowUp": "후속 연락 만들기",
-    "crm.workspaceAi.followUpToast": "후속 연락이 추가되었습니다.",
+    "crm.workspaceAi.createFollowUp": "다음 연락 만들기",
+    "crm.workspaceAi.followUpToast": "다음 연락이 추가되었습니다.",
     "crm.workspaceAi.smsCopyToast": "문자 초안을 복사했습니다.",
     "crm.workspaceAi.followUpDefaultTitle": "다음 연락",
     "crm.workspaceAi.analyzing": "정리 중…",
@@ -416,7 +418,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.feature.profile.title": "고객 CRM",
     "landing.feature.profile.desc": "상담과 기록을 한곳에 두고, 다음 연락까지 자연스럽게 이어집니다.",
     "landing.feature.memory.title": "AI 비서",
-    "landing.feature.memory.desc": "SensoraGuide가 메모를 기준으로 니즈·포인트·발송 문장을 간결하게 묶어줍니다.",
+    "landing.feature.memory.desc": "상담 메모를 기준으로 니즈·영업 포인트·발송 문장 초안을 한 화면에 정리합니다.",
     "landing.feature.followup.title": "시즌 케어 메시지",
     "landing.feature.followup.desc": "계절·점검·안부 명분에 맞춰, 짧은 메시지 초안을 차분한 톤으로 정리합니다.",
     "landing.feature.delivery.title": "출고 안내서",
@@ -463,30 +465,31 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.aiDemo.statusBarReady": "SensoraGuide · 분석 완료",
     "landing.aiDemo.betaJoinShort": "베타 신청",
     "landing.aiDemo.applyShort": "CRM 적용",
-    "landing.aiDemo.simpleHint": "짧게 입력하면 바로 초안 형태만 미리 확인할 수 있어요. 저장·후속 업무는 워크스페이스에서 이어지면 됩니다.",
+    "landing.aiDemo.simpleHint": "짧게 입력하면 바로 초안 형태만 미리 확인할 수 있어요. 저장·다음 연락은 워크스페이스에서 이어지면 됩니다.",
     "landing.aiDemo.previewHeading": "결과 미리보기",
     "landing.aiDemo.continueInWorkspace": "앱 워크스페이스에서 계속하기",
     "landing.aiDemo.loadSampleSnippet": "예시 문장 불러오기",
     "landing.aiDemo.previewWorkspaceNote":
-      "실제 저장·복사·후속 연락은 워크스페이스의 AI 비서 패널에서 이어 할 수 있습니다.",
+      "실제 저장·복사·다음 연락은 워크스페이스의 AI 비서 화면에서 이어 할 수 있습니다.",
     "landing.crmDemo.sectionTitle": "고객관리 흐름을 한 화면에",
     "landing.crmDemo.sectionDesc":
       "오늘 연락할 고객, 계약 가능성, 상담 요약, 출고 안내서를 한 번에 확인합니다.",
     "landing.crmDemo.startCta": "고객관리 시작하기",
     "landing.showroom.hero.quietFuture": "조용한 미래감",
     "landing.showroom.hero.senseAuraTag": "Sense · Aura",
-    "landing.showroom.hero.leadLine1": "고객의 말을 감각으로 읽고,",
-    "landing.showroom.hero.leadLine2": "영업의 다음 흐름으로 정리합니다.",
+    "landing.showroom.hero.kickerBadge": "차량 영업 현장을 위한 정리형 CRM",
+    "landing.showroom.hero.leadLine1": "상담 내용을 바탕으로",
+    "landing.showroom.hero.leadLine2": "다음 행동과 발송 문구를 정리합니다.",
     "landing.showroom.hero.desc":
-      "상담 기록, 후속 연락, 금융 조건, 출고 안내까지. SensoraGuide가 영업사원의 다음 행동을 조용하게 제안합니다.",
+      "상담 기록, 금융 조건, 출고 안내까지 한 흐름으로 묶습니다. AI 비서가 니즈와 안내 문장 초안을 정리·제안하고, 저장과 수정은 항상 영업사원이 결정합니다.",
     "landing.showroom.bridge.line1": "상담은 기록으로,",
     "landing.showroom.bridge.line2": "기록은 다음 행동으로.",
     "landing.showroom.heroPreview.needsSnippet": "패밀리 이동·승차감·승하차 동선 중심. 예산 검토 다음 단계: 금융 조건 초안 안내.",
     "landing.showroom.heroPreview.smsSnippet": "말씀해 주신 기준 위주로 짧게 정리해 두었습니다. 오늘 편하실 때 조건 초안부터 함께 보시죠.",
     "landing.showroom.heroPreview.followupSnippet": "내일 오전 · 금융 옵션 정리 후 연락",
-    "landing.showroom.flow.title": "상담에서 후속까지, 한 흐름으로 안정적으로",
+    "landing.showroom.flow.title": "상담에서 다음 연락까지, 한 흐름으로",
     "landing.showroom.flow.desc":
-      "상담 → 니즈 → 발송 문자 → 후속 연락 순으로 업무 블록을 이어 두어 바쁜 딜플로어에서 빠져나가지 않게 합니다.",
+      "상담 → 니즈 → 발송 문자 → 다음 연락 순으로 업무 블록을 이어 두어 바쁜 딜플로어에서 빠져나가지 않게 합니다.",
     "landing.showroom.flow.mock.contactTitle": "상담 정리 · 기록",
     "landing.showroom.flow.mock.contactBody": "김민준 시승 상담 · 견적 단계 진입 · 회신 대기 확인",
     "landing.showroom.flow.mock.needsTitle": "고객 니즈 요약",
@@ -494,7 +497,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.showroom.flow.mock.smsTitle": "발송 문자",
     "landing.showroom.flow.mock.smsBody":
       "지난번 말씀 기준으로 정리했습니다. 오늘 잠깐이라도 시간 내주시면 조건 초안 차분히 안내드리겠습니다.",
-    "landing.showroom.flow.mock.followupTitle": "후속 연락",
+    "landing.showroom.flow.mock.followupTitle": "다음 연락",
     "landing.showroom.flow.mock.followupBody": "내일 오전 11시 재연락 · 전화",
     "landing.showroom.guide.title": "고객의 신호가 영업 액션으로 이어지는 지점입니다.",
     "landing.showroom.guide.desc":
@@ -502,9 +505,9 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.showroom.guide.memoLabel": "상담 메모",
     "landing.showroom.guide.memoQuote": "가족 이동이 많고 승하차 편의성을 중요하게 보심.",
     "landing.showroom.guide.guideQuote": "2열 공간, 승하차 동선, 탑승 편안함을 중심으로 안내하세요.",
-    "landing.showroom.features.title": "영업사원을 위한 조용한 자동화",
+    "landing.showroom.features.title": "영업 현장 업무가 덜 헤매도록 돕습니다",
     "landing.showroom.closing.desc":
-      "Sensora는 자동차 영업사원의 상담과 후속 관리를 하나의 흐름으로 정리합니다.",
+      "상담·고객 응대·사후관리까지 한 흐름으로 묶어, 오늘 해야 할 일을 분명하게 보여 줍니다.",
     "cover.aiGuide.title": "AI 사용법",
     "cover.aiGuide.subtitle":
       "상담 내용을 입력하면 SensoraGuide가 고객 요약, 다음 액션, 연락 문구를 제안합니다.",
@@ -521,12 +524,12 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "cover.aiGuide.memoExampleHint": "상담 메모 예시는 홈 `#ai-demo`에서 바로 불러올 수 있어요.",
     "cover.onboarding.page1.title": "Sensora Auto CRM",
     "cover.onboarding.page1.description":
-      "자동차 영업사원을 위한 AI 고객관리 앱입니다.\n고객 상담, 후속 연락, 발송 문구를 한 곳에서 정리합니다.",
+      "자동차 영업사원을 위한 AI 고객관리 앱입니다.\n고객 상담, 다음 연락, 발송 문구를 한 곳에서 정리합니다.",
     "cover.onboarding.page2.title": "무엇을 도와드릴까요?",
     "cover.onboarding.page2.customer": "고객관리\n연락처·상담·관심 차량을 카드 단위로 정리합니다.",
     "cover.onboarding.page2.ai":
       "AI 비서\n상담 메모를 두면 고객 니즈·영업 포인트·발송 문구 초안을 제안합니다.",
-    "cover.onboarding.page2.followup": "후속 연락\n재연락 시점과 통화·문자 메모를 한 흐름으로 묶습니다.",
+    "cover.onboarding.page2.followup": "사후관리\n다음 연락·일정과 메모를 한 흐름으로 묶습니다.",
     "cover.onboarding.page2.season":
       "시즌 케어 메시지\n계절·명분에 맞는 고객 메시지 초안을 차분하게 준비합니다.",
     "cover.onboarding.page2.delivery": "출고 안내서\n출고 전후 고객 안내와 체크 항목을 문서처럼 정리합니다.",
@@ -538,10 +541,12 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "cover.onboarding.start": "시작하기",
     "cover.onboarding.close": "닫기",
     "cover.onboarding.startApp": "앱 시작하기",
-    "cover.onboarding.goWorkspace": "Workspace로 이동",
-    "cover.onboarding.page3.workspaceCta": "Workspace 시작하기",
-    "cover.onboarding.page3.aiCta": "AI 비서로 이동하기",
-    "cover.onboarding.themeLabel": "표현 톤",
+    "cover.onboarding.goWorkspace": "바로 업무 화면",
+    "cover.onboarding.page3.workspaceCta": "업무 화면으로 들어가기",
+    "cover.onboarding.page3.aiCta": "AI 비서 화면으로",
+    "cover.onboarding.themeLabel": "화면 표현 스타일",
+    "cover.onboarding.themeHint":
+      "표지 화면의 분위기만 바꿉니다. 자연은 은은한 색감, 흑백은 낮은 채도 톤입니다.",
     "crm.seasonCare.title": "시즌 케어 메시지",
     "crm.seasonCare.intro":
       "계절·정비 명분으로 고객에게 보낼 장문 문자 초안입니다. 선택 값에 맞춰 조합되며 추후 AI 연결을 위해 구조가 분리되어 있습니다.",
@@ -617,7 +622,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "brand.name": "Sensora",
     "product.name": "Sensora Auto CRM",
     "brand.slogan": "Every great system begins with a small start.",
-    "brand.identity": "B2B AI SaaS Company",
+    "brand.identity": "Work software for automotive sales teams",
     "brand.subline": "Automotive sales workspace",
     "product.shortDesc": "AI customer management SaaS for automotive sales professionals.",
     "hero.description":
@@ -777,6 +782,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.crmDemo.startCta": "Start in CRM",
     "landing.showroom.hero.quietFuture": "Quiet futurism",
     "landing.showroom.hero.senseAuraTag": "Sense · Aura",
+    "landing.showroom.hero.kickerBadge": "Structured CRM for automotive sales",
     "landing.showroom.hero.leadLine1": "Reads what customers hint at—and",
     "landing.showroom.hero.leadLine2": "lays out the quiet next beats of the deal.",
     "landing.showroom.hero.desc":
@@ -850,10 +856,12 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "cover.onboarding.start": "Enter workspace",
     "cover.onboarding.close": "Close",
     "cover.onboarding.startApp": "Launch app",
-    "cover.onboarding.goWorkspace": "Go to Workspace",
-    "cover.onboarding.page3.workspaceCta": "Open Workspace",
+    "cover.onboarding.goWorkspace": "Open workspace",
+    "cover.onboarding.page3.workspaceCta": "Open workspace",
     "cover.onboarding.page3.aiCta": "Open AI assistant",
     "cover.onboarding.themeLabel": "Visual tone",
+    "cover.onboarding.themeHint":
+      "Fine-tunes the cover’s lightness and softness. Does not affect core CRM workflows.",
     "crm.seasonCare.title": "Season Care Message",
     "crm.seasonCare.intro":
       "Draft a longer seasonal care or outreach SMS aligned to dealership context. Outputs are templated locally for now and separated for future AI generation.",

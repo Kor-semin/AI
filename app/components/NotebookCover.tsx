@@ -12,7 +12,7 @@ import {
 import { SensoraAnimatedMark } from "@/app/components/SensoraAnimatedMark";
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
 import { useAuth } from "@/app/crm/useAuth";
-import { sellerCanUseApp, useSellerProfile } from "@/app/crm/useSellerProfile";
+import { useSellerProfile } from "@/app/crm/useSellerProfile";
 import { isFirebaseConfigured } from "@/app/firebase/client";
 
 const STORAGE_KEY = "crm.notebookCoverDismissed";
@@ -46,11 +46,23 @@ function tocCard(raw: string): { title: string; line: string } {
   return { title: raw.trim(), line: "" };
 }
 
-const ghostBtn =
-  "inline-flex min-h-[44px] touch-manipulation items-center justify-center rounded-full border border-white/22 bg-transparent px-5 text-[13px] font-semibold leading-none text-[#E8EDF6] hover:bg-white/[0.07] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CBD5E1]/80 disabled:cursor-not-allowed disabled:opacity-35";
+/** 상단 닫기·보조 선택 — 과하지 않게 */
+const onboardCloseBtn =
+  "inline-flex touch-manipulation items-center justify-center rounded-lg border border-transparent px-2.5 py-1.5 text-[11px] font-medium tracking-[-0.01em] text-[#94A3B8] transition motion-reduce:transition-none hover:bg-white/[0.06] hover:text-[#E2E8F0] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#94A3B8]/65";
 
-const primaryBtn =
-  "inline-flex min-h-[44px] touch-manipulation items-center justify-center rounded-full border border-white/14 bg-white/[0.13] px-5 text-[13px] font-semibold leading-none text-[#F8FAFC] hover:bg-white/[0.17] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CBD5E1]/80";
+/** 주 버튼: 밝은 면으로 대비 강화 */
+const onboardPrimaryBtn =
+  "inline-flex min-h-[48px] w-full max-w-[280px] touch-manipulation items-center justify-center self-center rounded-full bg-white px-6 text-[14px] font-semibold leading-none text-[#0f172a] shadow-[0_14px_36px_-14px_rgba(0,0,0,0.55)] transition motion-reduce:transition-none hover:bg-[#F8FAFC] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/85 disabled:cursor-not-allowed disabled:opacity-40 motion-reduce:shadow-md";
+
+/** 보조 버튼 */
+const onboardGhostBtn =
+  "inline-flex min-h-[44px] w-full max-w-[280px] touch-manipulation items-center justify-center self-center rounded-full border border-white/32 bg-transparent px-6 text-[13px] font-semibold leading-none text-[#E8EDF6] transition motion-reduce:transition-none hover:bg-white/[0.08] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#94A3B8]/50 disabled:cursor-not-allowed disabled:opacity-35";
+
+const onboardNavMutedBtn =
+  "inline-flex min-h-[44px] min-w-[5.25rem] flex-1 touch-manipulation items-center justify-center rounded-full border border-white/22 px-4 text-[13px] font-semibold leading-none text-[#CBD5E1] transition motion-reduce:transition-none hover:bg-white/[0.07] hover:text-[#F1F5F9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#94A3B8]/65 disabled:cursor-not-allowed disabled:opacity-[0.38] motion-reduce:hover:bg-transparent";
+
+const onboardNavPrimaryBtn =
+  "inline-flex min-h-[44px] min-w-[5.25rem] flex-1 touch-manipulation items-center justify-center rounded-full border border-white/14 bg-white/[0.14] px-4 text-[13px] font-semibold leading-none text-[#F8FAFC] transition motion-reduce:transition-none hover:bg-white/[0.2] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CBD5E1]/80 motion-reduce:hover:bg-white/[0.14]";
 
 /** 전체 화면 표지 — 3페이지 온보딩 (Sense + Aura, 실버·그레이 톤) */
 export function NotebookCover() {
@@ -68,8 +80,6 @@ export function NotebookCover() {
   const seller = useSellerProfile(sellerUid);
   const sellerSignedIn = firebaseReady && auth.status === "signed-in";
   const sellerLoading = sellerSignedIn && seller.loading;
-  const sellerApproved = sellerCanUseApp(seller.profile);
-  const showWorkspaceCta = sellerSignedIn && !sellerLoading && !seller.error && sellerApproved;
 
   useEffect(() => {
     try {
@@ -197,202 +207,180 @@ export function NotebookCover() {
         aria-modal="true"
         aria-labelledby="notebook-cover-panel-heading"
         tabIndex={-1}
-        className="notebook-cover-cover-layer notebook-cover-biz-micro notebook-cover-reveal notebook-cover-editorial-shell relative z-10 mx-auto flex min-h-[100dvh] min-h-[100svh] w-full max-w-[min(760px,calc(100vw-48px))] flex-col overflow-y-auto overscroll-contain pl-[max(22px,calc(env(safe-area-inset-left,0px)+1.25rem))] pr-[max(22px,calc(env(safe-area-inset-right,0px)+1.25rem))] pb-[max(1.5rem,calc(1.35rem+env(safe-area-inset-bottom,0px)))] pt-[max(28px,calc(env(safe-area-inset-top,0px)+1.85rem))] text-center md:pb-[calc(2rem+env(safe-area-inset-bottom,0px))]"
+        className="notebook-cover-cover-layer notebook-cover-biz-micro notebook-cover-reveal notebook-cover-editorial-shell relative z-10 mx-auto flex min-h-[100dvh] min-h-[100svh] w-full max-w-[min(720px,calc(100vw-48px))] flex-col overflow-y-auto overscroll-contain pl-[max(22px,calc(env(safe-area-inset-left,0px)+1.25rem))] pr-[max(22px,calc(env(safe-area-inset-right,0px)+1.25rem))] pb-[max(1rem,calc(0.75rem+env(safe-area-inset-bottom,0px)))] pt-[max(12px,calc(env(safe-area-inset-top,0px)+0.75rem))] text-center"
         onClick={(e) => e.stopPropagation()}
         onPointerDown={(e) => e.stopPropagation()}
       >
-        <div className="flex shrink-0 items-center justify-end px-1 pb-2">
-          <button type="button" className={ghostBtn} onClick={dismissQuiet}>
+        <div className="flex shrink-0 justify-end pb-2">
+          <button type="button" className={onboardCloseBtn} onClick={dismissQuiet} aria-label={t("cover.onboarding.close")}>
             {t("cover.onboarding.close")}
           </button>
         </div>
 
-        <div
-          className="notebook-cover-onboard-pane flex min-h-0 flex-1 flex-col px-2 sm:px-4"
-          key={pageIdx}
-        >
-          <header className="shrink-0 px-1 pb-4 text-center sm:pb-5">
-            <div className="pointer-events-none flex justify-center pb-3 sm:pb-4">
+        <div className={`flex flex-1 flex-col justify-center px-1 py-6 sm:px-5 ${pageIdx >= 1 ? "max-lg:justify-start max-lg:pt-4" : ""}`} key={pageIdx}>
+          <div className="mx-auto flex w-full max-w-[min(420px,92vw)] flex-col items-center">
+            <div className="pointer-events-none mb-6 flex shrink-0 justify-center sm:mb-8">
               <SensoraAnimatedMark
-                size={pageIdx === 0 ? 96 : 72}
+                size={pageIdx === 0 ? 104 : 80}
                 animated={pageIdx === 0}
-                className={pageIdx === 0 ? "max-[380px]:scale-[0.94] motion-reduce:opacity-95" : ""}
+                className={pageIdx === 0 ? "max-[380px]:scale-[0.98] motion-reduce:opacity-[0.96]" : ""}
                 label={pageIdx === 0 ? t("product.name") : undefined}
               />
             </div>
-            <p className="notebook-cover-cover-kicker-upper font-[family-name:var(--font-cover-serif)] text-[clamp(10px,2.55vw,12px)] font-semibold tracking-[0.2em]">
+            <p className="notebook-cover-cover-kicker-upper shrink-0 font-[family-name:var(--font-cover-serif)] text-[clamp(10px,2.4vw,12px)] font-semibold tracking-[0.22em]">
               SENSORA
             </p>
-            {pageIdx === 0 ? (
-              <div className="mt-3 flex justify-center">
-                <span className="crm-free-badge">무료 사용</span>
-              </div>
-            ) : null}
             <h1
               id="notebook-cover-panel-heading"
-              className="mt-4 text-balance text-[clamp(1.35rem,4.5vw,1.85rem)] font-semibold leading-[1.25] tracking-[-0.03em] text-[#F8FAFC] sm:mt-5"
+              className="mt-5 max-w-[20ch] text-balance text-[clamp(1.32rem,4.35vw,1.82rem)] font-semibold leading-[1.22] tracking-[-0.03em] text-[#F8FAFC]"
             >
               {heading}
             </h1>
-          </header>
 
-          <div className="mx-auto w-full max-w-[min(26rem,94vw)] flex-1 text-left">
-            {pageIdx === 0 ? (
-              <div className="space-y-4 text-[13px] leading-relaxed text-[#CBD5E1] sm:text-[14px]">
-                {splitLines(t("cover.onboarding.page1.description")).map((line) => (
-                  <p key={line}>{line}</p>
-                ))}
-                <div className="flex flex-col gap-2.5 pt-2 sm:flex-row sm:flex-wrap">
-                  <button
-                    type="button"
-                    className={`${primaryBtn} w-full sm:w-auto sm:min-w-[10.5rem]`}
-                    onClick={() => dismissAndNavigate(WORKSPACE_AI_HASH)}
-                  >
-                    {t("cover.onboarding.startApp")}
-                  </button>
-                  <button
-                    type="button"
-                    className={`${ghostBtn} w-full sm:w-auto sm:min-w-[10.5rem]`}
-                    onClick={() => dismissAndNavigate("/register")}
-                  >
-                    {t("auth.salesRegistration")}
-                  </button>
-                  {showWorkspaceCta ? (
+            <div className="mt-6 w-full shrink-0 text-left">
+              {pageIdx === 0 ? (
+                <div className="mx-auto flex w-full max-w-[280px] flex-col items-center">
+                  <div className="w-full space-y-3 text-center text-[13px] leading-relaxed text-[#CBD5E1] sm:text-[14px]">
+                    {splitLines(t("cover.onboarding.page1.description")).map((line) => (
+                      <p key={line}>{line}</p>
+                    ))}
+                  </div>
+                  <div className="mt-7 flex w-full flex-col items-center gap-3">
                     <button
                       type="button"
-                      className={`${ghostBtn} w-full border-white/30 sm:w-auto sm:min-w-[10.5rem]`}
+                      className={onboardPrimaryBtn}
                       onClick={() => dismissAndNavigate(WORKSPACE_PATH)}
                     >
-                      {t("cover.onboarding.goWorkspace")}
+                      {t("cover.onboarding.startApp")}
                     </button>
-                  ) : null}
-                  {sellerLoading ? (
-                    <p className="w-full text-center text-[12px] text-[#94A3B8] sm:text-left">
-                      {t("auth.checkingLogin")}
+                    <button type="button" className={onboardGhostBtn} onClick={() => dismissAndNavigate("/register")}>
+                      {t("auth.salesRegistration")}
+                    </button>
+                    {sellerLoading ? (
+                      <p className="text-center text-[12px] text-[#94A3B8]">{t("auth.checkingLogin")}</p>
+                    ) : null}
+                  </div>
+                </div>
+              ) : null}
+
+              {pageIdx === 1 ? (
+                <div className="mx-auto w-full max-w-[min(26rem,94vw)]">
+                  <ul className="grid gap-2.5 sm:gap-3">
+                    {tocKeys.map((key) => {
+                      const { title, line } = tocCard(t(key));
+                      return (
+                        <li
+                          key={key}
+                          className="notebook-cover-toc-pane rounded-[18px] border border-white/12 bg-black/[0.08] px-4 py-3 backdrop-blur-sm sm:px-5 sm:py-3.5"
+                        >
+                          <p className="text-[13px] font-semibold text-[#F8FAFC]">{title}</p>
+                          {line ? <p className="mt-1 text-[12px] leading-snug text-[#94A3B8]">{line}</p> : null}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              ) : null}
+
+              {pageIdx === 2 ? (
+                <div className="mx-auto flex w-full max-w-[280px] flex-col items-center gap-8">
+                  <div className="w-full space-y-3 text-center text-[13px] leading-relaxed text-[#CBD5E1] sm:text-[14px]">
+                    {splitLines(t("cover.onboarding.page3.description")).map((line) => (
+                      <p key={line}>{line}</p>
+                    ))}
+                  </div>
+                  <details className="notebook-cover-theme-panel w-full rounded-[16px] border border-white/10 bg-black/[0.06] px-4 py-3 text-left backdrop-blur-sm [&_summary::-webkit-details-marker]:hidden">
+                    <summary className="cursor-pointer list-none text-center text-[12px] font-semibold tracking-[0.08em] text-[#CBD5E1] hover:text-[#F1F5F9] motion-reduce:transition-none">
+                      {t("cover.onboarding.themeLabel")}
+                    </summary>
+                    <p className="mt-3 text-center text-[11px] leading-relaxed text-[#94A3B8]">
+                      {t("cover.onboarding.themeHint")}
                     </p>
-                  ) : null}
+                    <div
+                      role="radiogroup"
+                      aria-label={t("cover.onboarding.themeLabel")}
+                      className="notebook-cover-theme-bar mt-4 flex w-full flex-wrap items-center justify-center gap-2"
+                      onClick={(e) => e.stopPropagation()}
+                      onPointerDown={(e) => e.stopPropagation()}
+                    >
+                      {themes.map((th) => (
+                        <button
+                          key={th}
+                          type="button"
+                          role="radio"
+                          aria-checked={coverTheme === th}
+                          className={`notebook-cover-theme-chip min-h-[44px] ${coverTheme === th ? "notebook-cover-theme-chip--active" : ""}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setCoverTheme(th);
+                            try {
+                              window.localStorage.setItem(NOTEBOOK_COVER_THEME_KEY, th);
+                            } catch {
+                              /* ignore */
+                            }
+                          }}
+                        >
+                          {NOTEBOOK_COVER_THEME_LABELS[th]}
+                        </button>
+                      ))}
+                    </div>
+                  </details>
+
+                  <div className="flex w-full flex-col items-center gap-3">
+                    <button type="button" className={onboardPrimaryBtn} onClick={() => dismissAndNavigate(WORKSPACE_PATH)}>
+                      {t("cover.onboarding.page3.workspaceCta")}
+                    </button>
+                    <button type="button" className={onboardGhostBtn} onClick={() => dismissAndNavigate(WORKSPACE_AI_HASH)}>
+                      {t("cover.onboarding.page3.aiCta")}
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ) : null}
-
-            {pageIdx === 1 ? (
-              <div className="space-y-3">
-                <ul className="grid gap-2.5 sm:gap-3">
-                  {tocKeys.map((key) => {
-                    const { title, line } = tocCard(t(key));
-                    return (
-                      <li
-                        key={key}
-                        className="rounded-[18px] border border-white/12 bg-black/[0.08] px-4 py-3 backdrop-blur-sm sm:px-5 sm:py-3.5"
-                      >
-                        <p className="text-[13px] font-semibold text-[#F8FAFC]">{title}</p>
-                        {line ? <p className="mt-1 text-[12px] leading-snug text-[#94A3B8]">{line}</p> : null}
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            ) : null}
-
-            {pageIdx === 2 ? (
-              <div className="space-y-5">
-                <div className="space-y-3 text-[13px] leading-relaxed text-[#CBD5E1] sm:text-[14px]">
-                  {splitLines(t("cover.onboarding.page3.description")).map((line) => (
-                    <p key={line}>{line}</p>
-                  ))}
-                </div>
-                <div className="flex flex-col gap-2.5">
-                  <button
-                    type="button"
-                    className={`${primaryBtn} w-full justify-center`}
-                    onClick={() => dismissAndNavigate(WORKSPACE_PATH)}
-                  >
-                    {t("cover.onboarding.page3.workspaceCta")}
-                  </button>
-                  <button
-                    type="button"
-                    className={`${ghostBtn} w-full justify-center`}
-                    onClick={() => dismissAndNavigate(WORKSPACE_AI_HASH)}
-                  >
-                    {t("cover.onboarding.page3.aiCta")}
-                  </button>
-                </div>
-              </div>
-            ) : null}
-          </div>
-
-          <div className="mt-8 shrink-0 px-2">
-            <nav className="flex justify-center gap-2.5" aria-label="Onboarding steps">
-              {Array.from({ length: LAST_PAGE + 1 }, (_, i) => (
-                <button
-                  key={i}
-                  type="button"
-                  aria-current={pageIdx === i ? "step" : undefined}
-                  aria-label={`${i + 1} / ${LAST_PAGE + 1}`}
-                  className={[
-                    "h-2.5 min-w-[2.5rem] max-w-[3rem] rounded-full border border-white/12 transition-[opacity,transform] motion-reduce:transition-none",
-                    pageIdx === i ? "bg-white/75 opacity-100" : "bg-white/18 opacity-55 hover:opacity-80",
-                  ].join(" ")}
-                  onClick={() => setPageIdx(i)}
-                />
-              ))}
-            </nav>
-
-            <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
-              <button
-                type="button"
-                className={ghostBtn}
-                disabled={pageIdx === 0}
-                onClick={() => setPageIdx((p) => Math.max(0, p - 1))}
-              >
-                {t("cover.onboarding.prev")}
-              </button>
-              {pageIdx < LAST_PAGE ? (
-                <button type="button" className={primaryBtn} onClick={() => setPageIdx((p) => Math.min(LAST_PAGE, p + 1))}>
-                  {t("cover.onboarding.next")}
-                </button>
-              ) : (
-                <button type="button" className={primaryBtn} onClick={() => dismissAndNavigate(WORKSPACE_PATH)}>
-                  {t("cover.onboarding.start")}
-                </button>
-              )}
-            </div>
-
-            <div className="mt-8 border-t border-white/10 pt-6">
-              <p className="mb-3 text-center font-[family-name:var(--font-cover-serif)] text-[clamp(11px,2.4vw,12px)] font-semibold tracking-[0.12em] text-[#CBD5E1]">
-                {t("cover.onboarding.themeLabel")}
-              </p>
-              <div
-                role="radiogroup"
-                aria-label={t("cover.onboarding.themeLabel")}
-                className="notebook-cover-theme-bar mx-auto flex w-full max-w-md flex-wrap items-center justify-center gap-2"
-                onClick={(e) => e.stopPropagation()}
-                onPointerDown={(e) => e.stopPropagation()}
-              >
-                {themes.map((th) => (
-                  <button
-                    key={th}
-                    type="button"
-                    role="radio"
-                    aria-checked={coverTheme === th}
-                    className={`notebook-cover-theme-chip min-h-[44px] ${coverTheme === th ? "notebook-cover-theme-chip--active" : ""}`}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setCoverTheme(th);
-                      try {
-                        window.localStorage.setItem(NOTEBOOK_COVER_THEME_KEY, th);
-                      } catch {
-                        /* ignore */
-                      }
-                    }}
-                  >
-                    {NOTEBOOK_COVER_THEME_LABELS[th]}
-                  </button>
-                ))}
-              </div>
+              ) : null}
             </div>
           </div>
         </div>
+
+        <footer className="mx-auto mt-8 flex w-full max-w-[420px] shrink-0 flex-col gap-6 px-1 pb-[max(0.5rem,env(safe-area-inset-bottom,0px))] pt-2">
+          <nav className="flex justify-center gap-2 motion-reduce:gap-2" aria-label="온보딩 단계">
+            {Array.from({ length: LAST_PAGE + 1 }, (_, i) => (
+              <button
+                key={i}
+                type="button"
+                aria-current={pageIdx === i ? "step" : undefined}
+                aria-label={`${i + 1} / ${LAST_PAGE + 1}`}
+                className={[
+                  "h-2 min-w-[2.25rem] max-w-[2.75rem] rounded-full border border-white/14 transition-[opacity,transform] motion-reduce:transition-none",
+                  pageIdx === i ? "scale-100 bg-white/80 opacity-100" : "bg-white/20 opacity-50 hover:opacity-75 motion-reduce:transform-none",
+                ].join(" ")}
+                onClick={() => setPageIdx(i)}
+              />
+            ))}
+          </nav>
+
+          <div className="flex flex-row gap-3">
+            <button
+              type="button"
+              className={onboardNavMutedBtn}
+              disabled={pageIdx === 0}
+              onClick={() => setPageIdx((p) => Math.max(0, p - 1))}
+            >
+              {t("cover.onboarding.prev")}
+            </button>
+            {pageIdx < LAST_PAGE ? (
+              <button
+                type="button"
+                className={onboardNavPrimaryBtn}
+                onClick={() => setPageIdx((p) => Math.min(LAST_PAGE, p + 1))}
+              >
+                {t("cover.onboarding.next")}
+              </button>
+            ) : (
+              <button type="button" className={onboardNavPrimaryBtn} onClick={() => dismissAndNavigate(WORKSPACE_PATH)}>
+                {t("cover.onboarding.start")}
+              </button>
+            )}
+          </div>
+        </footer>
       </div>
     </div>
   );

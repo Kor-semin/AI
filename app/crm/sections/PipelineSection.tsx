@@ -14,7 +14,7 @@ export function PipelineSection({ customers, onSelectCustomer }: PipelineSection
   return (
     <div className="flex flex-col gap-4">
       <div>
-        <h2 className="text-[20px] font-semibold text-[#111827]">영업 파이프라인</h2>
+        <h2 className="text-[20px] font-semibold text-[#111827]">영업 단계</h2>
         <p className="mt-1 text-[14px] text-[#6B7280]">단계별로 고객을 모아 보았습니다. 행을 누르면 고객 화면으로 이동합니다.</p>
       </div>
 

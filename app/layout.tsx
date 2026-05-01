@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     template: "%s · Sensora Auto CRM",
   },
   description:
-    "Sensora는 뛰어난 감각과 AI 기술로, 작은 시작을 더 큰 가능성으로 확장하는 B2B AI SaaS 기업입니다. Sensora Auto CRM은 자동차 영업사원을 위한 AI 고객관리 SaaS로, 고객 상담·관심 차량·후속 연락·메시지 작성·영업 파이프라인을 AI가 정리하고 제안합니다.",
+    "Sensora Auto CRM은 자동차 영업사원을 위한 고객 상담·일정 정리 도구입니다. 상담 기록과 다음 연락·문자 초안 등을 한 흐름에서 다룹니다.",
   appleWebApp: {
     capable: true,
     title: "Sensora Auto CRM",

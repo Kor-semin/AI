@@ -166,15 +166,9 @@ function ShowroomHero({ onOpenAppWorkspace }: { onOpenAppWorkspace: () => void }
     >
       <div className="relative z-[2] mx-auto grid w-full max-w-[1260px] items-center gap-11 sm:gap-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)] lg:gap-x-12 lg:gap-y-10 xl:grid-cols-[minmax(0,1fr)_minmax(0,1.42fr)] xl:gap-x-16 2xl:gap-x-[4.75rem]">
         <div className="min-w-0 lg:max-w-[34rem] xl:max-w-[36rem] 2xl:max-w-none">
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-            <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#64748B]">
-              {t("landing.showroom.hero.quietFuture")}
-            </span>
-            <span className="text-[13px] font-semibold tracking-[-0.02em] text-[#475569]" aria-hidden>
-              ·
-            </span>
-            <span className="text-[12px] font-semibold uppercase tracking-[0.18em] text-[#111827]/80">
-              {t("landing.showroom.hero.senseAuraTag")}
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+            <span className="rounded-full border border-[#E2E8F0] bg-white/80 px-3 py-1 text-[11px] font-semibold tracking-[0.06em] text-[#475569] backdrop-blur-sm sm:text-[12px]">
+              {t("landing.showroom.hero.kickerBadge")}
             </span>
           </div>
           <h1 className="mt-6 text-[clamp(2.25rem,6.2vw,5.25rem)] font-semibold leading-[1.04] tracking-[-0.036em] text-[#111827] sm:mt-8">

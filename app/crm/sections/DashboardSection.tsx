@@ -22,7 +22,7 @@ export type DashboardSectionProps = {
   customers: Customer[];
   nextActions: NextAction[];
   events: CalendarEvent[];
-  /** 오늘 기한 미완료 후속 요약 라벨 */
+  /** 오늘 기한 미완료 할 일 요약 라벨 */
   todayDueLines: string[];
   recentMemoLines: { name: string; excerpt: string; id: string }[];
   onPickCustomer: (id: string) => void;
@@ -52,7 +52,7 @@ export function DashboardSection({
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <StatCard label="오늘 연락(기한)" value={todayFollowUps} hint="오늘 해야 할 후속" />
         <StatCard label="계약 가능성 높은 고객" value={highPotential} hint="가망 A·S·66%+" />
-        <StatCard label="예정된 후속(미완료)" value={followUpOpen} hint="전체 미완료 업무" />
+        <StatCard label="예정된 할 일(미완료)" value={followUpOpen} hint="전체 미완료 업무" />
         <StatCard label="최근 상담(7일)" value={recentConsult} hint="기록이 갱신된 고객" />
       </div>
 
@@ -68,9 +68,9 @@ export function DashboardSection({
 
       <section className="rounded-2xl border border-[#E5E7EB] bg-white px-5 py-5 shadow-sm sm:px-6">
         <h3 className="text-[16px] font-semibold text-[#111827]">놓치면 안 되는 연락</h3>
-        <p className="mt-1 text-[13px] text-[#6B7280]">오늘 기한인 후속만 요약했습니다.</p>
+        <p className="mt-1 text-[13px] text-[#6B7280]">오늘 기한인 연락·할 일만 요약했습니다.</p>
         {todayDueLines.length === 0 ? (
-          <p className="mt-4 text-[14px] text-[#94A3B8]">오늘 기한 후속이 없습니다.</p>
+          <p className="mt-4 text-[14px] text-[#94A3B8]">오늘 기한인 항목이 없습니다.</p>
         ) : (
           <ul className="mt-4 space-y-2 text-[14px] text-[#374151]">
             {todayDueLines.slice(0, 8).map((line, i) => (
@@ -85,7 +85,7 @@ export function DashboardSection({
           className="mt-4 min-h-[44px] rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] px-4 py-2 text-[13px] font-semibold text-[#374151] touch-manipulation"
           onClick={() => onGoSection("followup")}
         >
-          후속 연락 화면으로 →
+          사후관리 화면으로 →
         </button>
       </section>
 

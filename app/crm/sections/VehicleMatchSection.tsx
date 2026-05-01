@@ -27,8 +27,9 @@ export function VehicleMatchSection({ customer, memoForAnalysis, onOpenCustomers
       <div>
         <h2 className="text-[20px] font-semibold text-[#111827]">차량·조건 매칭</h2>
         <p className="mt-2 text-[14px] leading-relaxed text-[#6B7280]">
-          관심 모델은 존중하되, 가족용·7인승·험로·예산·법인 금융 등 실제 조건이 함께 있으면 선택지를 나눠 볼 수 있습니다. 아래는 저장된
-          메모를 <strong>바꾸지 않고</strong> 데모 규칙으로 정리한 참고용 요약입니다.
+          적합(fit) 보이는 모델과, 메모에 드러난 조건·예산 간격(gap)을 함께 짚는 방향으로 보면 설명이 더 단순해집니다. 관심 모델은
+          존중하되 가족·좌석·예산·금융 방식 같은 실무 조건을 나란히 두고 비교합니다. 아래는 저장된 메모를{" "}
+          <strong>바꾸지 않고</strong> 데모 규칙으로 정리한 참고 요약입니다.
         </p>
       </div>
 

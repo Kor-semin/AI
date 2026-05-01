@@ -40,13 +40,18 @@ export function ConsultingNotesSection({
           onChange={(e) => onSelectCustomerId(e.target.value || null)}
           className="min-h-[44px] w-full max-w-md rounded-xl border border-[#E5E7EB] bg-white px-3 py-3 text-[14px] outline-none focus:border-[#94A3B8]"
         >
-          <option value="">고객을 선택하세요</option>
+          <option value="">고객 선택</option>
           {sorted.map((c) => (
             <option key={c.id} value={c.id}>
               {c.name}
             </option>
           ))}
         </select>
+        {customers.length === 0 ? (
+          <p className="text-[13px] text-[#64748B]">
+            등록된 고객이 없습니다. 상단 「고객 추가」 또는 고객관리에서 「주소록 가져오기」를 이용해 주세요.
+          </p>
+        ) : null}
       </label>
 
       {!selectedCustomerId ? (
