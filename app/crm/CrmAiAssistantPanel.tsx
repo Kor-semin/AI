@@ -31,6 +31,7 @@ export type CrmAiAssistantPanelProps = {
   flowDraftMemo: string;
   flowDraftInsights: DemoConsultingResponse | null;
   onAnalyzeOrRefresh: () => void;
+  onNewProposal: () => void;
   onRewriteSmsDraft: () => void;
   onCopySms: () => void;
   onSaveMemoToCrm: () => void;
@@ -52,6 +53,7 @@ export function CrmAiAssistantPanel({
   flowDraftMemo,
   flowDraftInsights,
   onAnalyzeOrRefresh,
+  onNewProposal,
   onRewriteSmsDraft,
   onCopySms,
   onSaveMemoToCrm,
@@ -65,7 +67,7 @@ export function CrmAiAssistantPanel({
     <section
       id="crm-ai-assistant"
       tabIndex={-1}
-      className="scroll-mt-28 rounded-[22px] border border-[#E5E7EB] bg-[#FAFBFC] px-5 py-5 shadow-[0_2px_10px_-4px_rgba(15,23,42,0.06)] sm:px-6"
+      className="scroll-mt-[max(7rem,calc(5rem+env(safe-area-inset-top,0px)))] rounded-[22px] border border-[#E5E7EB] bg-[#FAFBFC] px-5 py-5 shadow-[0_2px_10px_-4px_rgba(15,23,42,0.06)] sm:px-6"
       aria-labelledby="crm-ai-assistant-title"
     >
       <div className="flex flex-wrap items-start justify-between gap-3 border-b border-[#EEF1F5] pb-4">
@@ -79,11 +81,6 @@ export function CrmAiAssistantPanel({
           <p className="mt-3 max-w-[72ch] rounded-[12px] border border-[#E2E8F0] bg-[#F8FAFC]/90 px-3 py-2 text-[11px] leading-snug text-[#64748B]">
             {t("crm.sensoraFlow.banner")}
           </p>
-          {workspaceAiCoachTopics ? (
-            <p className="mt-2 text-[11px] font-semibold leading-snug text-[#475569]">
-              {t("landing.aiDemo.careCoachLabel")} · {workspaceAiCoachTopics}
-            </p>
-          ) : null}
         </div>
         {workspaceAiBusy && selectedCustomerId ? (
           <span className="shrink-0 text-[12px] font-semibold text-[#64748B]" aria-live="polite">
@@ -161,31 +158,57 @@ export function CrmAiAssistantPanel({
         </div>
       </div>
 
-      <div className="mt-6 grid gap-4 lg:grid-cols-3">
-        <div className="flex min-h-0 flex-col rounded-[14px] border border-[#E5E7EB] bg-white p-4 shadow-sm lg:col-span-1">
-          <div className="flex flex-wrap items-center gap-2">
-            <h3 className="text-[12px] font-semibold text-[#475569]">{t("crm.workspaceAi.needsHeading")}</h3>
+      <div className="mt-6 grid gap-4 sm:grid-cols-2">
+        <div className="flex min-h-0 min-w-0 flex-col rounded-[14px] border border-[#E5E7EB] bg-white p-4 shadow-sm">
+          <div className="flex flex-wrap items-start gap-x-2 gap-y-1">
+            <div className="min-w-0">
+              <div className="text-[11px] font-extrabold uppercase tracking-[0.1em] text-[#64748B]">{t("crm.workspaceAi.consultSummaryHeading")}</div>
+              <p className="mt-1 text-[10px] font-medium leading-snug text-[#94A3B8]">{t("crm.workspaceAi.consultSummaryLead")}</p>
+            </div>
             <span className={SENSORA_FLOW_AI_BADGE}>{t("crm.sensoraFlow.aiSuggestionBadge")}</span>
           </div>
-          <div className="mt-3 max-h-[min(260px,calc(100vh-20rem))] min-h-[88px] flex-1 overflow-y-auto whitespace-pre-line text-[14px] leading-relaxed text-[#111827]">
+          <div className="mt-3 max-h-[min(220px,42vh)] min-h-[88px] flex-1 overflow-y-auto break-words whitespace-pre-line text-[14px] leading-relaxed text-[#111827]">
             {flowDraftInsights ? flowDraftInsights.summary : "—"}
           </div>
         </div>
-        <div className="flex min-h-0 flex-col rounded-[14px] border border-[#E5E7EB] bg-white p-4 shadow-sm lg:col-span-1">
-          <div className="flex flex-wrap items-center gap-2">
-            <h3 className="text-[12px] font-semibold text-[#475569]">{t("crm.workspaceAi.salesHeading")}</h3>
+
+        <div className="flex min-h-0 min-w-0 flex-col rounded-[14px] border border-[#E5E7EB] bg-[#FAFCFF] p-4 shadow-sm ring-1 ring-inset ring-[#E8EEF7]">
+          <div className="flex flex-wrap items-start gap-x-2 gap-y-1">
+            <div className="min-w-0">
+              <div className="text-[11px] font-extrabold uppercase tracking-[0.1em] text-[#475569]">{t("crm.workspaceAi.needsHeading")}</div>
+              <p className="mt-1 text-[10px] font-medium leading-snug text-[#64748B]">{t("crm.workspaceAi.customerNeedsHelper")}</p>
+            </div>
             <span className={SENSORA_FLOW_AI_BADGE}>{t("crm.sensoraFlow.aiSuggestionBadge")}</span>
           </div>
-          <div className="mt-3 max-h-[min(260px,calc(100vh-20rem))] min-h-[88px] flex-1 overflow-y-auto whitespace-pre-line text-[14px] leading-relaxed text-[#111827]">
+          <div className="mt-3 max-h-[min(220px,42vh)] min-h-[88px] flex-1 overflow-y-auto break-words text-[14px] leading-relaxed text-[#111827]">
+            {workspaceAiCoachTopics ? (
+              <p className="whitespace-pre-line font-medium text-[#0F172A]">{workspaceAiCoachTopics}</p>
+            ) : flowDraftInsights ? (
+              <p className="text-[13px] italic text-[#64748B]">{t("crm.workspaceAi.customerNeedsPlaceholder")}</p>
+            ) : (
+              <span className="text-[#94A3B8]">—</span>
+            )}
+          </div>
+        </div>
+
+        <div className="flex min-h-0 min-w-0 flex-col rounded-[14px] border border-[#E5E7EB] bg-white p-4 shadow-sm">
+          <div className="flex flex-wrap items-center gap-2">
+            <h3 className="text-[11px] font-extrabold uppercase tracking-[0.1em] text-[#64748B]">{t("crm.workspaceAi.salesHeading")}</h3>
+            <span className={SENSORA_FLOW_AI_BADGE}>{t("crm.sensoraFlow.aiSuggestionBadge")}</span>
+          </div>
+          <p className="mt-1 text-[10px] font-medium leading-snug text-[#94A3B8]">{t("crm.workspaceAi.nextActionLead")}</p>
+          <div className="mt-3 max-h-[min(220px,42vh)] min-h-[88px] flex-1 overflow-y-auto break-words whitespace-pre-line text-[14px] leading-relaxed text-[#111827]">
             {flowDraftInsights ? flowDraftInsights.nextAction : "—"}
           </div>
         </div>
-        <div className="flex min-h-0 flex-col rounded-[14px] border border-[#E5E7EB] bg-white p-4 shadow-sm lg:col-span-1">
+
+        <div className="flex min-h-0 min-w-0 flex-col rounded-[14px] border border-[#E5E7EB] bg-white p-4 shadow-sm">
           <div className="flex flex-wrap items-center gap-2">
-            <h3 className="text-[12px] font-semibold text-[#475569]">{t("crm.workspaceAi.smsHeading")}</h3>
+            <h3 className="text-[11px] font-extrabold uppercase tracking-[0.1em] text-[#64748B]">{t("crm.workspaceAi.smsHeading")}</h3>
             <span className={SENSORA_FLOW_AI_BADGE}>{t("crm.sensoraFlow.aiSuggestionBadge")}</span>
           </div>
-          <div className="mt-3 max-h-[min(260px,calc(100vh-20rem))] min-h-[88px] flex-1 overflow-y-auto whitespace-pre-line text-[14px] leading-relaxed text-[#111827]">
+          <p className="mt-1 text-[10px] font-medium leading-snug text-[#94A3B8]">{t("crm.workspaceAi.smsDraftLead")}</p>
+          <div className="mt-3 max-h-[min(220px,42vh)] min-h-[88px] flex-1 overflow-y-auto break-words whitespace-pre-line text-[14px] leading-relaxed text-[#111827]">
             {flowDraftInsights ? flowDraftInsights.message : "—"}
           </div>
         </div>
@@ -208,7 +231,7 @@ export function CrmAiAssistantPanel({
           type="button"
           disabled={!selectedCustomerId || !workspaceAiMemoDraft.trim()}
           className="min-h-[44px] touch-manipulation rounded-[12px] border border-[#D1D5DB] bg-white px-4 text-[13px] font-semibold text-[#111827] hover:bg-[#F9FAFB] disabled:cursor-not-allowed disabled:opacity-45"
-          onClick={onAnalyzeOrRefresh}
+          onClick={onNewProposal}
         >
           {t("crm.sensoraFlow.newProposal")}
         </button>
@@ -224,11 +247,11 @@ export function CrmAiAssistantPanel({
 
       <p className="mt-5 max-w-[68ch] text-[12px] leading-relaxed text-[#64748B]">{t("crm.sensoraFlow.appliedEditableHint")}</p>
 
-      <div className="sticky bottom-1 z-[3] mt-6 flex flex-wrap gap-2 rounded-[14px] border border-[#E5E7EB] bg-[#FFFFFF]/96 px-3 py-3 shadow-[0_6px_24px_-12px_rgba(15,23,42,0.12)] backdrop-blur-sm">
+      <div className="sticky bottom-1 z-[3] mt-6 flex w-full max-w-full min-w-0 flex-col gap-2 rounded-[14px] border border-[#E5E7EB] bg-[#FFFFFF]/96 px-3 py-3 shadow-[0_6px_24px_-12px_rgba(15,23,42,0.12)] backdrop-blur-sm sm:flex-row sm:flex-wrap sm:items-stretch">
         <button
           type="button"
           disabled={!selectedCustomerId || !flowDraftInsights || !flowDraftInsights.message.trim()}
-          className="min-h-[44px] flex-1 touch-manipulation rounded-[12px] bg-[#111827] px-4 text-[13px] font-semibold text-white hover:bg-[#1F2937] disabled:cursor-not-allowed disabled:opacity-45 sm:flex-none"
+          className="min-h-[44px] w-full min-w-0 shrink-0 touch-manipulation rounded-[12px] bg-[#111827] px-4 text-[13px] font-semibold text-white hover:bg-[#1F2937] disabled:cursor-not-allowed disabled:opacity-45 sm:w-auto sm:min-w-[8.5rem] sm:flex-1"
           onClick={onCopySms}
         >
           {t("crm.workspaceAi.copySms")}
@@ -236,7 +259,7 @@ export function CrmAiAssistantPanel({
         <button
           type="button"
           disabled={!selectedCustomerId}
-          className="min-h-[44px] flex-1 touch-manipulation rounded-[12px] border border-[#E5E7EB] bg-white px-4 text-[13px] font-semibold text-[#111827] hover:bg-[#F9FAFB] disabled:cursor-not-allowed disabled:opacity-45 sm:flex-none"
+          className="min-h-[44px] w-full min-w-0 shrink-0 touch-manipulation rounded-[12px] border border-[#E5E7EB] bg-white px-4 text-[13px] font-semibold text-[#111827] hover:bg-[#F9FAFB] disabled:cursor-not-allowed disabled:opacity-45 sm:w-auto sm:min-w-[8.25rem] sm:flex-1"
           onClick={onSaveMemoToCrm}
         >
           {t("crm.workspaceAi.saveMemo")}
@@ -244,7 +267,7 @@ export function CrmAiAssistantPanel({
         <button
           type="button"
           disabled={!selectedCustomerId || !flowDraftInsights?.nextAction?.trim()}
-          className="min-h-[44px] flex-1 touch-manipulation rounded-[12px] border border-[#E5E7EB] bg-[#F3F4F6] px-4 text-[13px] font-semibold text-[#374151] ring-1 ring-inset ring-[#E5E7EB] hover:bg-[#E8EAED] disabled:cursor-not-allowed disabled:opacity-45 sm:flex-none"
+          className="min-h-[44px] w-full min-w-0 shrink-0 touch-manipulation rounded-[12px] border border-[#E5E7EB] bg-[#F3F4F6] px-4 text-[13px] font-semibold text-[#374151] ring-1 ring-inset ring-[#E5E7EB] hover:bg-[#E8EAED] disabled:cursor-not-allowed disabled:opacity-45 sm:w-auto sm:min-w-[8.75rem] sm:flex-1"
           onClick={onCreateFollowUpFromInsights}
         >
           {t("crm.workspaceAi.createFollowUp")}

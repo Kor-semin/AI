@@ -6,12 +6,45 @@ import type { Customer, DeliveryGuide } from "@/app/crm/types";
 import { DeliveryGuideEditor } from "@/app/crm/deliveryGuide/DeliveryGuideEditor";
 import { DeliveryGuidePreview } from "@/app/crm/deliveryGuide/DeliveryGuidePreview";
 import { ensureGuide } from "@/app/crm/deliveryGuide/deliveryGuideUtils";
+import { formatDeliveryGuideShareText } from "@/app/crm/deliveryGuide/formatDeliveryGuideShare";
+
+async function copyTextToClipboard(text: string): Promise<boolean> {
+  if (typeof window === "undefined") return false;
+  try {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+  } catch {
+    /* 폴백 */
+  }
+  try {
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.readOnly = true;
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    ta.style.left = "0";
+    ta.style.top = "0";
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    ta.setSelectionRange(0, text.length);
+    const ok = document.execCommand("copy");
+    ta.remove();
+    return ok;
+  } catch {
+    return false;
+  }
+}
 
 type Props = {
   customers: Customer[];
   selectedCustomerId: string;
   onSelectCustomerId: (id: string) => void;
   onUpsertCustomerGuide: (customerId: string, guide: DeliveryGuide) => void;
+  /** 복사 결과·준비 중 안내 등 */
+  onNotify?: (message: string) => void;
 };
 
 export function DeliveryGuideScreen({
@@ -19,6 +52,7 @@ export function DeliveryGuideScreen({
   selectedCustomerId,
   onSelectCustomerId,
   onUpsertCustomerGuide,
+  onNotify,
 }: Props) {
   const customer = useMemo(
     () => customers.find((c) => c.id === selectedCustomerId) ?? null,
@@ -102,10 +136,10 @@ export function DeliveryGuideScreen({
               버튼을 누르면 현재 입력값으로 문서 형태 미리보기가 표시됩니다.
             </div>
           </div>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex max-w-full min-w-0 flex-wrap gap-2">
             <button
               type="button"
-              className="crm-ink-btn rounded-lg px-3 py-2 text-xs font-semibold"
+              className="crm-ink-btn min-h-[44px] shrink-0 rounded-lg px-3 py-2 text-xs font-semibold touch-manipulation"
               onClick={() => {
                 // 가이드가 비어있다면 생성해둔 뒤 미리보기 활성화
                 if (!guide) onUpsertCustomerGuide(customer.id, safeGuide);
@@ -116,10 +150,23 @@ export function DeliveryGuideScreen({
             </button>
             <button
               type="button"
-              className="crm-ghost-btn rounded-lg px-3 py-2 text-xs font-semibold"
-              onClick={() => alert("PDF 저장은 다음 단계에서 구현합니다.")}
+              className="crm-ghost-btn min-h-[44px] shrink-0 rounded-lg px-3 py-2 text-xs font-semibold touch-manipulation"
+              onClick={() => {
+                const text = formatDeliveryGuideShareText(customer, guide ?? safeGuide);
+                void copyTextToClipboard(text).then((ok) => {
+                  onNotify?.(ok ? "안내서 요약 텍스트를 복사했습니다." : "복사에 실패했습니다. 텍스트 영역에서 길게 눌러 복사해 주세요.");
+                });
+              }}
             >
-              PDF 저장 준비
+              안내서 텍스트 복사
+            </button>
+            <button
+              type="button"
+              title="준비 중인 기능입니다"
+              className="crm-ghost-btn min-h-[44px] shrink-0 rounded-lg border border-dashed border-[#CBD5E1] px-3 py-2 text-xs font-semibold text-[#64748B] touch-manipulation hover:bg-[#F8FAFC]"
+              onClick={() => onNotify?.("PDF 저장은 준비 중인 기능입니다.")}
+            >
+              PDF 저장(준비 중)
             </button>
           </div>
         </div>

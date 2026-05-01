@@ -467,6 +467,28 @@ export function CRMApp({
     }, 0);
   }
 
+  /** 같은 메모로도 제안 카드 전체를 새로 뽑아 볼 때(내부 변동 — 저장·자동 반영 없음). */
+  function runSensoraFlowNewProposal() {
+    if (!selectedCustomerId) return;
+    const snap = workspaceAiMemoDraft.trim();
+    if (!snap) {
+      showToast(t("crm.sensoraFlow.needMemoForAnalyze"));
+      return;
+    }
+    setWorkspaceAiBusy(true);
+    smsRewriteNonceRef.current += 1;
+    const salt = "\u2060".repeat(smsRewriteNonceRef.current);
+    window.setTimeout(() => {
+      setFlowDraftMemo(snap);
+      setFlowDraftInsights(
+        generateDemoConsultingResponse(`${snap}${salt}`, {
+          salesStyle: workspaceSalesStyle,
+        }),
+      );
+      window.setTimeout(() => setWorkspaceAiBusy(false), 220);
+    }, 0);
+  }
+
   /** 문자 초안만 다시 채우기(de·규칙 엔진: snapshot에 nonce를 붙여 재계산 후 message만 교체). */
   function runSensoraFlowRewriteSmsDraft() {
     if (!selectedCustomerId) return;
@@ -1717,6 +1739,7 @@ export function CRMApp({
                 flowDraftMemo={flowDraftMemo}
                 flowDraftInsights={flowDraftInsights}
                 onAnalyzeOrRefresh={runSensoraFlowAnalyzeOrRefresh}
+                onNewProposal={runSensoraFlowNewProposal}
                 onRewriteSmsDraft={runSensoraFlowRewriteSmsDraft}
                 onCopySms={() => {
                   const text = flowDraftInsights?.message.trim();
@@ -3429,8 +3452,8 @@ export function CRMApp({
       />
 
       {deliveryGuideOpen && selectedCustomer ? (
-        <div className="fixed inset-0 z-[320] flex items-end justify-center bg-black/40 p-3 backdrop-blur-sm sm:items-center">
-          <div className="max-h-[92vh] w-full max-w-[920px] overflow-hidden rounded-2xl border border-[#E5E7EB] bg-[#FFFFFF] shadow-2xl">
+        <div className="fixed inset-0 z-[320] flex items-end justify-center bg-black/40 px-3 pb-3 pt-[max(12px,calc(env(safe-area-inset-top,0px)+8px))] backdrop-blur-sm sm:items-center sm:px-4 sm:pb-5 sm:pt-5">
+          <div className="max-h-[min(92dvh,92vh)] w-full max-w-[920px] overflow-hidden rounded-2xl border border-[#E5E7EB] bg-[#FFFFFF] shadow-2xl">
             <div className="flex items-center justify-between gap-2 border-b border-[#E5E7EB] bg-[#F9FAFB] px-4 py-3">
               <div className="text-sm font-extrabold text-[#111827]">AI 출고 안내서</div>
               <button
@@ -3450,6 +3473,7 @@ export function CRMApp({
                 onUpsertCustomerGuide={(customerId, nextGuide) =>
                   upsertCustomer({ id: customerId, deliveryGuide: nextGuide })
                 }
+                onNotify={showToast}
               />
             </div>
           </div>

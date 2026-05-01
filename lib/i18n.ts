@@ -100,7 +100,13 @@ export type TranslationKey =
   | "crm.workspaceAi.pickCustomer"
   | "crm.workspaceAi.memoLabel"
   | "crm.workspaceAi.toneLabel"
+  | "crm.workspaceAi.consultSummaryHeading"
+  | "crm.workspaceAi.consultSummaryLead"
+  | "crm.workspaceAi.nextActionLead"
+  | "crm.workspaceAi.smsDraftLead"
   | "crm.workspaceAi.needsHeading"
+  | "crm.workspaceAi.customerNeedsHelper"
+  | "crm.workspaceAi.customerNeedsPlaceholder"
   | "crm.workspaceAi.salesHeading"
   | "crm.workspaceAi.smsHeading"
   | "crm.workspaceAi.copySms"
@@ -383,9 +389,16 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.workspaceAi.pickCustomer": "워크플로를 시작하려면 고객을 선택하거나 새로 추가하세요.",
     "crm.workspaceAi.memoLabel": "상담 메모",
     "crm.workspaceAi.toneLabel": "문구 톤",
+    "crm.workspaceAi.consultSummaryHeading": "상담 요약",
+    "crm.workspaceAi.consultSummaryLead": "케어 코치 카드와 별개로, 상담 진행 요약입니다.",
     "crm.workspaceAi.needsHeading": "고객 니즈",
-    "crm.workspaceAi.salesHeading": "영업 포인트",
-    "crm.workspaceAi.smsHeading": "발송 문자",
+    "crm.workspaceAi.customerNeedsHelper": "메모·배려 맥락에서 읽힌 포인트",
+    "crm.workspaceAi.customerNeedsPlaceholder":
+      "메모에 승차감·가족·금융 등 구체 맥락이 있으면, AI 비서 카드에 배려·관심 포인트가 표시됩니다.",
+    "crm.workspaceAi.nextActionLead": "전화·문자 전 확인할 업무 순서 제안입니다.",
+    "crm.workspaceAi.salesHeading": "다음 행동",
+    "crm.workspaceAi.smsHeading": "검토용 문자 초안",
+    "crm.workspaceAi.smsDraftLead": "발송 전 수정·검토하는 초안입니다.",
     "crm.workspaceAi.copySms": "문자 복사",
     "crm.workspaceAi.saveMemo": "CRM에 저장",
     "crm.workspaceAi.saveToast": "상담 메모가 저장되었습니다.",
@@ -688,9 +701,16 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.workspaceAi.pickCustomer": "Select or add a customer to begin.",
     "crm.workspaceAi.memoLabel": "Consultation memo",
     "crm.workspaceAi.toneLabel": "Message tone",
+    "crm.workspaceAi.consultSummaryHeading": "Consultation summary",
+    "crm.workspaceAi.consultSummaryLead": "High-level recap—separate from the care-coach cues card.",
     "crm.workspaceAi.needsHeading": "Customer needs",
-    "crm.workspaceAi.salesHeading": "Sales angles",
-    "crm.workspaceAi.smsHeading": "Outbound SMS",
+    "crm.workspaceAi.customerNeedsHelper": "Signals from memo & care cues",
+    "crm.workspaceAi.customerNeedsPlaceholder":
+      "Add specifics (comfort, family, financing, timing) so care/interest cues appear here.",
+    "crm.workspaceAi.nextActionLead": "Suggested task order before you call or text.",
+    "crm.workspaceAi.salesHeading": "Next actions",
+    "crm.workspaceAi.smsHeading": "SMS draft for review",
+    "crm.workspaceAi.smsDraftLead": "Draft for you to edit and verify before sending.",
     "crm.workspaceAi.copySms": "Copy message",
     "crm.workspaceAi.saveMemo": "Save to CRM",
     "crm.workspaceAi.saveToast": "Memo saved.",
