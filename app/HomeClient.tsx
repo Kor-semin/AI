@@ -48,62 +48,118 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
       <InspirationalBackdrop />
       {showNotebookCover ? <NotebookCover /> : null}
 
-      <header className="sticky top-0 z-20 border-b border-[color:var(--edge)] bg-[color:var(--background)]/72 px-4 py-3 backdrop-blur-md">
-        <div className="mx-auto flex max-w-[1280px] items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="h-2 w-2 rounded-full bg-[color:var(--accent)]" />
-            <div className="text-sm font-semibold tracking-tight">{t("product.name")}</div>
-            <div className="hidden text-xs text-[color:var(--ink-2)] sm:block">{t("brand.slogan")} · Sales Concierge AI</div>
-            <span className="crm-free-badge hidden sm:inline-flex text-[12px] font-extrabold">무료 사용</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <LanguageSelect />
-            <button
-              type="button"
-              className="crm-ghost-btn inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg px-2.5 py-2 text-[11px] font-medium touch-manipulation sm:min-h-0 sm:py-1.5"
-              onClick={() => {
-                window.dispatchEvent(new CustomEvent("crm-show-notebook-cover"));
-              }}
-            >
-              {t("header.cover")}
-            </button>
-            <button
-              type="button"
-              className="crm-ghost-btn inline-flex min-h-[44px] max-w-[6.75rem] items-center justify-center truncate rounded-lg px-2.5 py-2 text-[11px] font-medium touch-manipulation sm:max-w-none sm:min-h-0 sm:py-1.5"
-              title={view === "app" ? t("header.landing") : t("header.workspace")}
-              onClick={() => setView((v) => (v === "app" ? "landing" : "app"))}
-            >
-              {view === "app" ? t("header.landing") : t("header.workspace")}
-            </button>
-            {auth.status === "loading" ? (
-              <div className="text-xs text-[color:var(--ink-2)]">{t("auth.checkingLogin")}</div>
-            ) : auth.status === "signed-in" ? (
-              <>
-                <div className="hidden text-xs text-[color:var(--ink-2)] sm:block">{auth.name ?? auth.email ?? auth.uid}</div>
-                <button
-                  className="crm-ghost-btn inline-flex min-h-[44px] items-center rounded-lg px-3 py-2 text-xs font-semibold touch-manipulation"
-                  onClick={signOut}
-                >
-                  {t("auth.signOut")}
-                </button>
-              </>
-            ) : (
-              <>
-                {authError ? (
-                  <div className="max-w-[520px] text-xs font-medium text-[#B91C1C]">로그인 오류: {authError}</div>
+      <header
+        className={[
+          "sticky top-0 z-20 border-b px-4 py-3 backdrop-blur-md",
+          view === "landing" ? "border-[#E5E7EB] bg-[#F4F6F8]/80" : "border-[color:var(--edge)] bg-[color:var(--background)]/72",
+        ].join(" ")}
+      >
+        <div
+          className={[
+            "mx-auto flex max-w-[1280px]",
+            view === "landing" ? "flex-col gap-3 sm:flex-row sm:items-center sm:justify-between" : "flex-row items-center justify-between gap-3",
+          ].join(" ")}
+        >
+          {view === "landing" ? (
+            <>
+              <div className="min-w-0">
+                <div className="text-sm font-semibold tracking-tight text-[#111827]">{t("product.name")}</div>
+                <p className="mt-0.5 text-[11px] leading-snug text-[#4B5563] sm:max-w-[28rem] sm:text-xs sm:leading-normal">{t("brand.slogan")}</p>
+              </div>
+              <div className="flex flex-wrap items-center gap-2 sm:justify-end">
+                <LanguageSelect />
+                {auth.status === "loading" ? (
+                  <span className="hidden text-[11px] text-[#6B7280] sm:inline">{t("auth.checkingLogin")}</span>
+                ) : auth.status === "signed-in" ? (
+                  <>
+                    <span className="hidden max-w-[8rem] truncate text-[11px] text-[#4B5563] sm:inline">{auth.name ?? auth.email ?? auth.uid}</span>
+                    <button
+                      type="button"
+                      className="crm-ghost-btn inline-flex min-h-[44px] items-center rounded-xl border border-[#E5E7EB] bg-white px-3 py-2 text-xs font-semibold text-[#111827]"
+                      onClick={signOut}
+                    >
+                      {t("auth.signOut")}
+                    </button>
+                  </>
+                ) : authError ? (
+                  <span className="max-w-[7rem] truncate text-[10px] font-medium text-[#B91C1C] sm:max-w-[12rem] sm:text-xs" title={authError}>
+                    {authError}
+                  </span>
                 ) : null}
                 <Link
-                  href="/register"
-                  className={[
-                    "crm-ink-btn inline-flex min-h-[44px] items-center rounded-lg px-3 py-2 text-xs font-semibold touch-manipulation",
-                    firebaseReady ? "" : "opacity-55",
-                  ].join(" ")}
+                  href="/?view=app#crm-ai-assistant"
+                  prefetch={false}
+                  className="inline-flex min-h-[44px] items-center justify-center whitespace-nowrap rounded-xl bg-[#111827] px-3 py-2 text-xs font-semibold text-white transition-colors hover:bg-[#1f2937]"
                 >
-                  {t("auth.salesRegistration")}
+                  {t("cta.tryAppExperience")}
                 </Link>
-              </>
-            )}
-          </div>
+                <Link
+                  href="/join"
+                  prefetch={false}
+                  className="inline-flex min-h-[44px] items-center justify-center whitespace-nowrap rounded-xl border border-[#E5E7EB] bg-white px-3 py-2 text-xs font-semibold text-[#111827] transition-colors hover:bg-[#F9FAFB]"
+                >
+                  {t("cta.joinBeta")}
+                </Link>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="flex items-center gap-3">
+                <div className="h-2 w-2 shrink-0 rounded-full bg-[color:var(--accent)]" />
+                <div className="text-sm font-semibold tracking-tight">{t("product.name")}</div>
+                <div className="hidden text-xs text-[color:var(--ink-2)] xl:block">{t("brand.subline")}</div>
+                <span className="crm-free-badge hidden sm:inline-flex text-[12px] font-extrabold">무료 사용</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <LanguageSelect />
+                <button
+                  type="button"
+                  className="crm-ghost-btn inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg px-2.5 py-2 text-[11px] font-medium touch-manipulation sm:min-h-0 sm:py-1.5"
+                  onClick={() => {
+                    window.dispatchEvent(new CustomEvent("crm-show-notebook-cover"));
+                  }}
+                >
+                  {t("header.cover")}
+                </button>
+                <button
+                  type="button"
+                  className="crm-ghost-btn inline-flex min-h-[44px] max-w-[6.75rem] items-center justify-center truncate rounded-lg px-2.5 py-2 text-[11px] font-medium touch-manipulation sm:max-w-none sm:min-h-0 sm:py-1.5"
+                  title={t("header.landing")}
+                  onClick={() => setView("landing")}
+                >
+                  {t("header.landing")}
+                </button>
+                {auth.status === "loading" ? (
+                  <div className="text-xs text-[color:var(--ink-2)]">{t("auth.checkingLogin")}</div>
+                ) : auth.status === "signed-in" ? (
+                  <>
+                    <div className="hidden text-xs text-[color:var(--ink-2)] sm:block">{auth.name ?? auth.email ?? auth.uid}</div>
+                    <button
+                      className="crm-ghost-btn inline-flex min-h-[44px] items-center rounded-lg px-3 py-2 text-xs font-semibold touch-manipulation"
+                      onClick={signOut}
+                    >
+                      {t("auth.signOut")}
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    {authError ? (
+                      <div className="max-w-[520px] text-xs font-medium text-[#B91C1C]">로그인 오류: {authError}</div>
+                    ) : null}
+                    <Link
+                      href="/register"
+                      className={[
+                        "crm-ink-btn inline-flex min-h-[44px] items-center rounded-lg px-3 py-2 text-xs font-semibold touch-manipulation",
+                        firebaseReady ? "" : "opacity-55",
+                      ].join(" ")}
+                    >
+                      {t("auth.salesRegistration")}
+                    </Link>
+                  </>
+                )}
+              </div>
+            </>
+          )}
         </div>
       </header>
 

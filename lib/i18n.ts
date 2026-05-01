@@ -41,6 +41,7 @@ export type TranslationKey =
   | "product.name"
   | "brand.slogan"
   | "brand.identity"
+  | "brand.subline"
   | "product.shortDesc"
   | "hero.description"
   | "cta.joinBeta"
@@ -282,6 +283,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "product.name": "Sensora Auto CRM",
     "brand.slogan": "작은 시작에서부터 시작된다",
     "brand.identity": "B2B AI SaaS Company",
+    "brand.subline": "자동차 영업 워크스페이스",
     "product.shortDesc": "자동차 영업사원을 위한 AI 고객관리 SaaS",
     "hero.description":
       "고객 상담, 관심 차량, 후속 연락, 메시지 작성, 영업 파이프라인을 AI가 정리하고 제안합니다.",
@@ -541,6 +543,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "product.name": "Sensora Auto CRM",
     "brand.slogan": "Every great system begins with a small start.",
     "brand.identity": "B2B AI SaaS Company",
+    "brand.subline": "Automotive sales workspace",
     "product.shortDesc": "AI customer management SaaS for automotive sales professionals.",
     "hero.description":
       "Sensora organizes customer conversations, vehicle interests, follow-ups, message drafts, and sales pipelines with AI.",
