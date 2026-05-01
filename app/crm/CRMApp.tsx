@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type {
   CalendarEvent,
   CRMState,
@@ -392,6 +392,11 @@ export function CRMApp({
   const [sellerNickname, setSellerNickname] = useState("");
   const [importContactsOpen, setImportContactsOpen] = useState(false);
   const [contactFileGuideOpen, setContactFileGuideOpen] = useState(false);
+  const openCustomersImportHub = useCallback(() => {
+    onActiveSectionChange("customers");
+    setTab("고객");
+    setImportContactsOpen(true);
+  }, [onActiveSectionChange]);
   const [leadExplainForId, setLeadExplainForId] = useState<string | null>(null);
   const [toast, setToast] = useState<string | null>(null);
   const [deliveryGuideOpen, setDeliveryGuideOpen] = useState(false);
@@ -1716,11 +1721,8 @@ export function CRMApp({
               storageModeLabel={storageModeLabel}
               onShowCover={() => window.dispatchEvent(new CustomEvent("crm-show-notebook-cover"))}
               onOpenLanding={onOpenLandingView}
-              onOpenAddressBookImport={() => {
-                onActiveSectionChange("customers");
-                setTab("고객");
-                window.setTimeout(() => setImportContactsOpen(true), 0);
-              }}
+              onOpenContactImportGuide={() => setContactFileGuideOpen(true)}
+              onOpenAddressBookImport={openCustomersImportHub}
             />
           ) : null}
 
@@ -3446,6 +3448,7 @@ export function CRMApp({
       <ContactImportFileGuideModal
         open={contactFileGuideOpen}
         onClose={() => setContactFileGuideOpen(false)}
+        onProceedToImport={openCustomersImportHub}
       />
 
       <ImportContactsPanel

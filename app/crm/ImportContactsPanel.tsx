@@ -464,6 +464,18 @@ export function ImportContactsPanel({
                 Google 연락처에서 CSV 또는 vCard로 내보낸 뒤, 이 화면에 파일로 올리거나 내용만 붙여 넣으세요. 이름·전화 등
                 흔한 열 이름은 자동으로 읽히는 편입니다.
               </p>
+              {onOpenFileGuide ? (
+                <button
+                  type="button"
+                  className="min-h-[40px] max-w-full touch-manipulation text-left text-[12px] font-semibold text-[#334155] underline decoration-[#CBD5E1] underline-offset-2 hover:text-[#0F172A]"
+                  onClick={(ev) => {
+                    ev.stopPropagation();
+                    onOpenFileGuide();
+                  }}
+                >
+                  연락처 파일 준비 방법 보기
+                </button>
+              ) : null}
               <details className="rounded-lg border border-dashed border-[#CBD5E1] bg-white px-3 py-2 text-[12px] text-[#64748B]">
                 <summary className="cursor-pointer font-semibold text-[#334155]">
                   2차 확장 예정 · Google People API (OAuth)
@@ -494,6 +506,18 @@ export function ImportContactsPanel({
                 아이폰 연락처에서 공유하거나 내보낸 <strong>.vcf</strong> 파일을 올려 주세요. 이름·전화·이메일·메모 노트를
                 가능한 범위에서 반영합니다(원문 유지).
               </p>
+              {onOpenFileGuide ? (
+                <button
+                  type="button"
+                  className="min-h-[40px] max-w-full touch-manipulation text-left text-[12px] font-semibold text-[#334155] underline decoration-[#CBD5E1] underline-offset-2 hover:text-[#0F172A]"
+                  onClick={(ev) => {
+                    ev.stopPropagation();
+                    onOpenFileGuide();
+                  }}
+                >
+                  연락처 파일 준비 방법 보기
+                </button>
+              ) : null}
               <button
                 type="button"
                 className="min-h-[44px] rounded-xl bg-[#111827] px-5 py-2.5 text-[14px] font-semibold text-white touch-manipulation"

@@ -47,7 +47,7 @@ export function ContactImportFileGuideModal({
 
   return (
     <div
-      className={`fixed inset-0 z-[340] flex items-end justify-center overflow-y-auto bg-black/55 px-3 pb-[max(12px,calc(env(safe-area-inset-bottom,0px)+8px))] pt-[max(12px,calc(env(safe-area-inset-top,0px)+8px))] backdrop-blur-sm max-[480px]:[scrollbar-width:none] max-[480px]:[-ms-overflow-style:none] max-[480px]:[&::-webkit-scrollbar]:hidden sm:items-center sm:p-4`}
+      className="fixed inset-0 z-[340] flex items-center justify-center overflow-y-auto bg-black/55 p-3 pb-[max(12px,calc(env(safe-area-inset-bottom,0px)+8px))] pt-[max(12px,calc(env(safe-area-inset-top,0px)+8px))] backdrop-blur-sm [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden sm:p-4"
       role="presentation"
       onClick={onClose}
       onKeyDown={(e) => {
@@ -71,10 +71,8 @@ export function ContactImportFileGuideModal({
           </h2>
         </div>
 
-        <div
-          className="min-h-0 flex-1 overflow-y-auto px-4 py-3 sm:px-6 sm:py-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
-        >
-          <p className="text-[13px] leading-relaxed text-[#475569]">
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 pb-2 pt-3 sm:px-6 sm:pb-3 sm:pt-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+          <p className="scroll-mt-2 text-[13px] leading-relaxed text-[#475569]">
             휴대폰 기종과 OS 버전에 따라 연락처 앱의 메뉴 이름은 조금씩 다를 수 있습니다. 내보내기로 만든 파일을 Sensora에
             올린 뒤, 미리보기에서 내용을 확인하고 저장하면 됩니다.
           </p>
