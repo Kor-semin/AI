@@ -211,18 +211,23 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
             </>
           ) : (
             <>
-              <div className="flex min-w-0 flex-1 items-start gap-2.5 sm:items-center sm:gap-3">
-                <SensoraAnimatedMark size={40} animated={false} className="shrink-0" />
+              <button
+                type="button"
+                className="flex min-w-0 flex-1 cursor-pointer items-start gap-2.5 rounded-xl border border-transparent p-1 text-left outline-none transition hover:border-[color:var(--edge)] hover:bg-[color:var(--paper-2)] focus-visible:ring-2 focus-visible:ring-[#94A3B8] sm:items-center sm:gap-3 sm:p-1.5"
+                onClick={() => navigateCrmSection("dashboard")}
+                aria-label={`${t("product.name")} — 요약 화면으로 이동`}
+              >
+                <SensoraAnimatedMark size={40} animated={false} className="pointer-events-none shrink-0" />
                 <div className="flex min-w-0 flex-1 flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
                   <div className="min-w-0">
                     <div className="truncate text-sm font-semibold tracking-tight">{t("product.name")}</div>
                     <div className="truncate text-[11px] text-[color:var(--ink-2)] sm:text-xs">{t("brand.subline")}</div>
                   </div>
-                  <p className="shrink-0 text-[10px] leading-snug text-[color:var(--ink-2)] sm:max-w-[14rem] sm:text-right sm:text-[11px]" role="note">
+                  <p className="pointer-events-none shrink-0 text-[10px] leading-snug text-[color:var(--ink-2)] sm:max-w-[14rem] sm:text-right sm:text-[11px]" role="note">
                     {t("header.zoomHint")}
                   </p>
                 </div>
-              </div>
+              </button>
               <div className="relative z-[1] flex w-full min-w-0 flex-wrap items-center justify-end gap-2 sm:w-auto sm:justify-end">
                 <span className="relative z-[1] shrink-0">
                   <LanguageSelect dense />

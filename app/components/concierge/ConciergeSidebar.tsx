@@ -7,7 +7,7 @@ import { useLanguage } from "@/app/components/i18n/LanguageProvider";
 
 function navButtonClass(active: boolean): string {
   return [
-    "group relative flex min-h-[48px] shrink-0 touch-manipulation items-center justify-between gap-3 rounded-lg py-2.5 text-[15px] font-bold outline-none ring-offset-2 ring-offset-[#111827] focus-visible:ring-2 focus-visible:ring-[#64748B]",
+    "group relative flex min-h-[50px] shrink-0 touch-manipulation items-center justify-between gap-3 rounded-xl py-2.5 text-[16px] font-bold outline-none ring-offset-2 ring-offset-[#111827] focus-visible:ring-2 focus-visible:ring-[#64748B]",
     active
       ? "bg-[#0F172A] pl-[calc(12px+0.375rem)] pr-3 text-[#F8FAFC] ring-2 ring-inset ring-[#334155]/90 before:absolute before:left-[3px] before:top-2 before:bottom-2 before:w-[3px] before:rounded-full before:bg-[#E2E8F0]"
       : "px-3.5 text-[#E5E7EB] hover:bg-[#1e293b] hover:text-white",
@@ -40,8 +40,8 @@ export function ConciergeSidebar({
             <span>{title}</span>
             <span
               className={[
-                "text-[13px] font-semibold tracking-[-0.01em]",
-                active ? "text-[#CBD5E1]" : "text-[#94A3B8] group-hover:text-[#E2E8F0]",
+                "text-[14px] font-semibold tracking-[-0.01em]",
+                active ? "text-[#E2E8F0]" : "text-[#94A3B8] group-hover:text-[#E2E8F0]",
               ].join(" ")}
             >
               {subtitle}
@@ -59,37 +59,40 @@ export function ConciergeSidebar({
         className="landing-mobile-nav-shell relative lg:hidden -mx-1 mb-4"
         aria-label="업무 영역 메뉴"
       >
-        <div
-          className="flex snap-x snap-mandatory gap-2 overflow-x-auto overflow-y-hidden pb-2 pt-2 [scrollbar-width:thin]"
-          role="presentation"
-          style={{
-            scrollbarColor: "#CBD5E1 transparent",
-          }}
-        >
-          {CRM_SECTION_ORDER.map((section) => {
-            const active = activeSection === section;
-            const { title, subtitle } = CRM_SECTION_LABELS[section];
-            return (
-              <button
-                key={`m-${section}`}
-                type="button"
-                onClick={() => onNavigate(section)}
-                className={[
-                  "min-w-[7.75rem] max-w-[46vw] shrink-0 snap-start touch-manipulation rounded-lg border px-3.5 py-2.5 text-left shadow-sm transition",
-                  active
-                    ? "border-[#111827] bg-[#0F172A] text-[#F8FAFC] ring-2 ring-[#111827]"
-                    : "border-[#CBD5E1] bg-[#FFFFFF] text-[#0F172A] hover:border-[#94A3B8]",
-                ].join(" ")}
-                aria-current={active ? "page" : undefined}
-                aria-label={`${title}, ${subtitle}`}
-              >
-                <span className="block text-[14px] font-bold leading-snug">{title}</span>
-                <span className={`mt-0.5 block text-[11px] font-semibold leading-snug ${active ? "text-[#94A3B8]" : "text-[#64748B]"}`}>
-                  {subtitle}
-                </span>
-              </button>
-            );
-          })}
+        <div className="rounded-2xl border-2 border-[#94A3B8] bg-[#E2E8F0] px-2 py-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.45)]">
+          <p className="sr-only">가로로 스크롤하여 메뉴를 선택합니다.</p>
+          <div
+            className="crm-mobile-section-rail flex snap-x snap-mandatory gap-2 overflow-x-auto overflow-y-hidden px-0.5 pb-1 pt-0.5 [scrollbar-width:thin]"
+            role="presentation"
+            style={{
+              scrollbarColor: "#64748B transparent",
+            }}
+          >
+            {CRM_SECTION_ORDER.map((section) => {
+              const active = activeSection === section;
+              const { title, subtitle } = CRM_SECTION_LABELS[section];
+              return (
+                <button
+                  key={`m-${section}`}
+                  type="button"
+                  onClick={() => onNavigate(section)}
+                  className={[
+                    "min-w-[8.25rem] max-w-[48vw] shrink-0 snap-start touch-manipulation rounded-xl border-2 px-3.5 py-3 text-left shadow-md transition",
+                    active
+                      ? "border-[#0F172A] bg-[#0F172A] text-[#F8FAFC] ring-2 ring-[#CBD5E1]/90"
+                      : "border-[#64748B] bg-[#FFFFFF] text-[#0F172A] hover:border-[#0F172A] hover:bg-[#F8FAFC]",
+                  ].join(" ")}
+                  aria-current={active ? "page" : undefined}
+                  aria-label={`${title}, ${subtitle}`}
+                >
+                  <span className="block text-[15px] font-bold leading-snug">{title}</span>
+                  <span className={`mt-1 block text-[12px] font-semibold leading-snug ${active ? "text-[#94A3B8]" : "text-[#475569]"}`}>
+                    {subtitle}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
         </div>
       </nav>
 

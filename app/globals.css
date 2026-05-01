@@ -1071,12 +1071,13 @@ html[lang="ko"] body {
     content: "";
     pointer-events: none;
     position: absolute;
-    right: -1px;
-    top: 0;
-    bottom: 12px;
+    right: 4px;
+    top: 12px;
+    bottom: 24px;
     width: 2rem;
-    background: linear-gradient(90deg, transparent, rgb(244 246 248));
-    z-index: 1;
+    border-radius: 0 12px 12px 0;
+    background: linear-gradient(90deg, transparent, rgb(226 232 240));
+    z-index: 2;
   }
 }
 

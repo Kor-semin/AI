@@ -1545,10 +1545,10 @@ export function CRMApp({
 
           <div
             id="crm-section-title"
-            className="scroll-mt-24 rounded-2xl border border-[#E5E7EB] bg-white px-4 py-3 shadow-sm lg:hidden"
+            className="scroll-mt-24 rounded-2xl border-2 border-[#CBD5E1] bg-[#F8FAFC] px-4 py-4 shadow-[0_2px_10px_rgba(15,23,42,0.06)] lg:hidden"
           >
-            <p className="text-[17px] font-semibold text-[#111827]">{CRM_SECTION_LABELS[activeSection].title}</p>
-            <p className="mt-0.5 text-[12px] font-medium leading-snug text-[#64748B]">
+            <p className="text-[18px] font-bold tracking-tight text-[#0F172A]">{CRM_SECTION_LABELS[activeSection].title}</p>
+            <p className="mt-1 text-[13px] font-semibold leading-snug text-[#475569]">
               {CRM_SECTION_LABELS[activeSection].subtitle}
             </p>
           </div>
