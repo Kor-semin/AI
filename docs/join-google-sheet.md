@@ -1,5 +1,8 @@
 # /join → Google Sheet 연결 (Apps Script)
 
+**프로덕션 페이지 URL (예):** https://customer-manager-seven.vercel.app/join  
+(동일 빌드 보조 도메인: https://ai-neon-alpha.vercel.app/join)
+
 `/join` 페이지는 클라이언트에서 `NEXT_PUBLIC_BETA_SIGNUP_ENDPOINT`로 JSON `POST`를 보냅니다.  
 이 값을 **Google Apps Script 웹 앱 URL**로 설정하면, 제출 데이터가 Google Sheet에 저장됩니다.
 

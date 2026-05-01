@@ -4,6 +4,13 @@
 
 **Sensora Auto CRM**은 자동차 영업사원을 위한 AI 고객관리 SaaS입니다. (제품 레이어·UX 참고 개념: Sales Concierge AI)
 
+### 공개 URL (Vercel Production)
+
+- **대표 URL (베타·외부 공용):** https://customer-manager-seven.vercel.app  
+  - 웹 랜딩: `/` · 앱 워크스페이스: `/?view=app` · AI 비서 진입 예: `/?view=app#crm-ai-assistant`  
+- **보조 도메인 (동일 배포):** https://ai-neon-alpha.vercel.app  
+- **미리보기용 긴 deployment URL** (`…-projects.vercel.app` 등)은 내부 검증용으로 두고, **베타 사용자에게는 공유하지 않습니다.**
+
 ---
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
