@@ -273,7 +273,7 @@ export function ImportContactsPanel({
     }
 
     if (creates.length === 0 && merges.length === 0) {
-      showToast("저장할 항목이 없습니다. 체크박스와 처리 방식을 확인해 주세요.");
+      showToast("저장할 항목이 없습니다. 체크박스와 저장 방식을 확인해 주세요.");
       return;
     }
 
@@ -423,7 +423,8 @@ export function ImportContactsPanel({
           {tab === "file" ? (
             <div className="space-y-3">
               <p className="text-[12px] text-[#64748B]">
-                `.csv`, `.txt`, `.vcf` 업로드. 아이폰에서 공유한 vCard 또는 Google 내보내기 CSV를 사용할 수 있습니다.
+                .csv, .txt, .vcf 파일을 업로드할 수 있습니다. iPhone에서 만든 vCard나 Google 연락처에서 내보낸 CSV 파일을
+                사용할 수 있습니다.
               </p>
               {onOpenFileGuide ? (
                 <button
@@ -434,7 +435,7 @@ export function ImportContactsPanel({
                     onOpenFileGuide();
                   }}
                 >
-                  연락처 파일 준비 방법 보기
+                  파일 준비 방법
                 </button>
               ) : null}
               <button
@@ -506,7 +507,7 @@ export function ImportContactsPanel({
 
         <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-[#E5E7EB] pt-4">
           <div className="text-[13px] font-semibold text-[#111827]">
-            가져오기 큐 <span className="tabular-nums text-[#64748B]">({staging.length})</span>
+            가져올 연락처 <span className="tabular-nums text-[#64748B]">({staging.length})</span>
           </div>
           <button
             type="button"
@@ -516,7 +517,7 @@ export function ImportContactsPanel({
               setPreviewRows(null);
             }}
           >
-            큐 비우기
+            목록 비우기
           </button>
           <button
             type="button"
@@ -538,7 +539,7 @@ export function ImportContactsPanel({
                   <th className="border-b border-[#E5E7EB] px-2 py-2">이메일</th>
                   <th className="border-b border-[#E5E7EB] px-2 py-2">관심/메모 요약 표시</th>
                   <th className="border-b border-[#E5E7EB] px-2 py-2">중복</th>
-                  <th className="border-b border-[#E5E7EB] px-2 py-2">처리</th>
+                  <th className="border-b border-[#E5E7EB] px-2 py-2">저장 방식</th>
                 </tr>
               </thead>
               <tbody>
