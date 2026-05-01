@@ -1087,7 +1087,12 @@ html[lang="ko"] body {
 }
 
 .notebook-cover-sheet-consultant.notebook-cover-sheet--tone-mono .notebook-cover-theme-panel {
-  border-color: rgba(226, 232, 240, 0.18);
-  background: rgba(15, 23, 42, 0.12);
+  border-color: rgba(226, 232, 240, 0.22);
+  background: rgba(15, 23, 42, 0.36);
+}
+
+/* 표지 내부: 흑백 선택 시 로고·본문 카드 채도를 함께 낮춤 */
+.notebook-cover-sheet--tone-mono .notebook-cover-logo-wrap {
+  filter: saturate(0.28) brightness(1.03);
 }
 

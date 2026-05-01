@@ -233,9 +233,13 @@ export function NotebookCover() {
           </button>
         </div>
 
-        <div className={`flex flex-1 flex-col justify-center px-1 py-6 sm:px-5 ${pageIdx >= 1 ? "max-lg:justify-start max-lg:pt-4" : ""}`} key={pageIdx}>
-          <div className="mx-auto flex w-full max-w-[min(420px,92vw)] flex-col items-center">
-            <div className="pointer-events-none mb-6 flex shrink-0 justify-center sm:mb-8">
+        <div
+          className={`notebook-cover-inner-stage flex flex-1 flex-col justify-center px-1 py-8 sm:px-5 sm:py-10 ${pageIdx >= 1 ? "max-lg:justify-start max-lg:pt-6" : ""}`}
+          key={pageIdx}
+          data-notebook-cover-tone={coverTheme}
+        >
+          <div className="notebook-cover-inner-stack mx-auto flex w-full max-w-[min(420px,92vw)] flex-col items-center gap-0">
+            <div className="notebook-cover-logo-wrap pointer-events-none mb-7 flex shrink-0 justify-center sm:mb-9">
               <SensoraAnimatedMark
                 size={pageIdx === 0 ? 104 : 80}
                 animated={pageIdx === 0}
@@ -248,12 +252,12 @@ export function NotebookCover() {
             </p>
             <h1
               id="notebook-cover-panel-heading"
-              className="mt-5 max-w-[20ch] text-balance text-[clamp(1.32rem,4.35vw,1.82rem)] font-semibold leading-[1.22] tracking-[-0.03em] text-[#F8FAFC]"
+              className="mt-4 max-w-[22ch] text-balance text-[clamp(1.32rem,4.35vw,1.82rem)] font-semibold leading-[1.22] tracking-[-0.03em] text-[#F8FAFC] sm:mt-5"
             >
               {heading}
             </h1>
 
-            <div className="mt-6 w-full shrink-0 text-left">
+            <div className="notebook-cover-body-block mt-7 w-full shrink-0 text-left sm:mt-8">
               {pageIdx === 0 ? (
                 <div className="mx-auto flex w-full max-w-[280px] flex-col items-center">
                   <div className="w-full space-y-3 text-center text-[13px] leading-relaxed text-[#CBD5E1] sm:text-[14px]">
@@ -299,14 +303,14 @@ export function NotebookCover() {
               ) : null}
 
               {pageIdx === 2 ? (
-                <div className="mx-auto flex w-full max-w-[280px] flex-col items-center gap-8">
+                <div className="mx-auto flex w-full max-w-[min(26rem,94vw)] flex-col items-center gap-5 sm:gap-6">
                   <div className="w-full space-y-3 text-center text-[13px] leading-relaxed text-[#CBD5E1] sm:text-[14px]">
                     {splitLines(t("cover.onboarding.page3.description")).map((line) => (
                       <p key={line}>{line}</p>
                     ))}
                   </div>
-                  <details className="notebook-cover-theme-panel w-full rounded-[16px] border border-white/10 bg-black/[0.06] px-4 py-3 text-left backdrop-blur-sm [&_summary::-webkit-details-marker]:hidden">
-                    <summary className="cursor-pointer list-none text-center text-[12px] font-semibold tracking-[0.08em] text-[#CBD5E1] hover:text-[#F1F5F9] motion-reduce:transition-none">
+                  <details className="notebook-cover-theme-panel w-full rounded-[16px] border border-white/12 bg-black/[0.08] px-4 py-3.5 text-left shadow-[0_8px_28px_rgba(0,0,0,0.2)] backdrop-blur-sm [&_summary::-webkit-details-marker]:hidden">
+                    <summary className="cursor-pointer list-none text-center text-[12px] font-semibold tracking-[0.08em] text-[#E2E8F0] hover:text-[#F8FAFC] motion-reduce:transition-none">
                       {t("cover.onboarding.themeLabel")}
                     </summary>
                     <p className="mt-3 text-center text-[11px] leading-relaxed text-[#94A3B8]">
@@ -315,7 +319,7 @@ export function NotebookCover() {
                     <div
                       role="radiogroup"
                       aria-label={t("cover.onboarding.themeLabel")}
-                      className="notebook-cover-theme-bar mt-4 flex w-full flex-wrap items-center justify-center gap-2"
+                      className="notebook-cover-theme-bar mt-3.5 flex w-full flex-wrap items-center justify-center gap-2 border-t border-white/8 pt-3.5"
                       onClick={(e) => e.stopPropagation()}
                       onPointerDown={(e) => e.stopPropagation()}
                     >
@@ -342,7 +346,7 @@ export function NotebookCover() {
                     </div>
                   </details>
 
-                  <div className="flex w-full flex-col items-center gap-3">
+                  <div className="flex w-full max-w-[280px] flex-col items-center gap-3">
                     <button type="button" className={onboardPrimaryBtn} onClick={() => dismissAndNavigate(WORKSPACE_PATH)}>
                       {t("cover.onboarding.page3.workspaceCta")}
                     </button>
@@ -356,7 +360,7 @@ export function NotebookCover() {
           </div>
         </div>
 
-        <footer className="mx-auto mt-8 flex w-full max-w-[420px] shrink-0 flex-col gap-6 px-1 pb-[max(0.5rem,env(safe-area-inset-bottom,0px))] pt-2">
+        <footer className="mx-auto mt-6 flex w-full max-w-[420px] shrink-0 flex-col gap-5 px-1 pb-[max(0.5rem,env(safe-area-inset-bottom,0px))] pt-4 sm:mt-8 sm:gap-6">
           <nav className="flex justify-center gap-2 motion-reduce:gap-2" aria-label="온보딩 단계">
             {Array.from({ length: LAST_PAGE + 1 }, (_, i) => (
               <button
