@@ -4,7 +4,7 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "Sensora Auto CRM",
     short_name: "Sensora",
-    description: "자동차 영업사원을 위한 AI 고객관리 SaaS",
+    description: "차량 영업을 위한 상담·고객·사후관리 정리 도구",
     start_url: "/",
     scope: "/",
     display: "standalone",

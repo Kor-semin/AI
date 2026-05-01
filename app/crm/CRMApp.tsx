@@ -2642,7 +2642,7 @@ export function CRMApp({
                   className="scroll-mt-24 rounded-2xl border border-[#E5E7EB] bg-white p-5 outline-none"
                 >
                   <div className="flex items-center justify-between gap-3">
-                    <div className="text-sm font-semibold">다음 연락 · 후속 액션</div>
+                    <div className="text-sm font-semibold">다음 연락 · 할 일</div>
                     <button
                       onClick={() => addNextAction(selectedCustomer.id)}
                       className="rounded-lg border border-[#E5E7EB] bg-white px-3 py-2 text-xs font-semibold hover:bg-[#F3F4F6]"

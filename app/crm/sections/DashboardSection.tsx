@@ -50,7 +50,7 @@ export function DashboardSection({
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <StatCard label="오늘 연락(기한)" value={todayFollowUps} hint="오늘 해야 할 후속" />
+        <StatCard label="오늘 연락(기한)" value={todayFollowUps} hint="약속된 연락·미팅 기준" />
         <StatCard label="계약 가능성 높은 고객" value={highPotential} hint="가망 A·S·66%+" />
         <StatCard label="예정된 할 일(미완료)" value={followUpOpen} hint="전체 미완료 업무" />
         <StatCard label="최근 상담(7일)" value={recentConsult} hint="기록이 갱신된 고객" />

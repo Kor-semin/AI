@@ -14,7 +14,7 @@ const TOC_ENTRIES: ReadonlyArray<{
   { step: "03", label: "고객·차량 정보", href: "/#crm-block-profile" },
   { step: "04", label: "금융 조건·메모", href: "/#crm-block-budget" },
   { step: "05", label: "금융 안내 문구", href: "/#crm-block-quick-tpl" },
-  { step: "06", label: "금융 후속 액션", href: "/#crm-block-next" },
+  { step: "06", label: "금융 다음 안내", href: "/#crm-block-next" },
   { step: "07", label: "상담 · 출고 일정", href: "/#crm-block-events" },
   { step: "08", label: "템플릿 관리", href: "/?tab=templates#crm-block-templates" },
   { step: "09", label: "실적 요약 · 백업", href: "/#crm-block-global" },
@@ -56,7 +56,7 @@ export default function TocPage() {
             자동차 금융 컨설턴트 목차
           </h1>
           <div className="mx-auto mt-7 max-w-[min(42ch,calc(100vw-4rem))] space-y-4 text-pretty text-center text-[clamp(1.06rem,2.75vw,1.28rem)] font-semibold leading-relaxed tracking-[-0.012em] text-[#54483e]">
-            <p>상담부터 금융 안내, 후속 관리까지 흐름에 맞게 이동합니다.</p>
+            <p>상담부터 금융 안내, 사후관리까지 흐름에 맞게 이동합니다.</p>
             <p className="px-2 text-[#2a231c]">항목을 눌러 바로 해당 구역으로 갑니다.</p>
           </div>
         </header>

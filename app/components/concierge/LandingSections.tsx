@@ -148,7 +148,7 @@ export function LandingShowroom({ onOpenAppWorkspace }: { onOpenAppWorkspace: ()
         <SensoraGuideSectionInner />
       </RevealSection>
       <RevealSection className="mx-auto w-full max-w-[1200px] px-5 py-14 sm:px-6 sm:py-20 lg:py-24">
-        <QuietAutomationSectionInner />
+        <SalesFeatureGridInner />
       </RevealSection>
       <RevealSection className="mx-auto w-full max-w-[1200px] px-5 pb-20 pt-10 sm:px-6 sm:pb-28">
         <FinalShowroomCTAInner onOpenAppWorkspace={onOpenAppWorkspace} />
@@ -314,7 +314,7 @@ function SensoraGuideSectionInner() {
   );
 }
 
-function QuietAutomationSectionInner() {
+function SalesFeatureGridInner() {
   const { t } = useLanguage();
   const tiles = (
     [
