@@ -245,6 +245,8 @@ export function CRMApp({
   const didHydrateRef = useRef(false);
   const [sync, setSync] = useState<SyncStatus>({ mode: uid ? "cloud" : "local", status: "idle" });
   const cloudPartsRef = useRef<Partial<CRMState>>({});
+  /** Firestore 에코 전 onSnapshot 덮어쓰기에 낙관적으로 추가된 고객 행 유지 */
+  const pendingCustomerCreatesRef = useRef<Set<string>>(new Set());
 
   const SEARCH_SHORTCUT_HINT = "(Ctrl+K)";
   const SELLER_NICK_KEY = "crm.sellerNickname";
@@ -471,8 +473,23 @@ export function CRMApp({
             events: p.events,
             templates: p.templates,
           };
-          setState(migrateCRMState(next));
-          setSelectedCustomerId((prev) => prev ?? next.customers[0]?.id ?? null);
+          const migrated = migrateCRMState(next);
+
+          setState((prev) => {
+            for (const c of migrated.customers) {
+              pendingCustomerCreatesRef.current.delete(c.id);
+            }
+            const cloudIds = new Set(migrated.customers.map((c) => c.id));
+            const pendingLocals = prev.customers.filter(
+              (c) => pendingCustomerCreatesRef.current.has(c.id) && !cloudIds.has(c.id),
+            );
+            const mergedCustomers = [...pendingLocals, ...migrated.customers].sort((a, b) =>
+              b.updatedAt.localeCompare(a.updatedAt),
+            );
+            return { ...migrated, customers: mergedCustomers };
+          });
+
+          setSelectedCustomerId((sel) => sel ?? migrated.customers[0]?.id ?? null);
           didHydrateRef.current = true;
           setSync({ mode: "cloud", status: "idle" });
         };
@@ -518,10 +535,23 @@ export function CRMApp({
   }, [uid]);
 
   useEffect(() => {
-    if (!didHydrateRef.current) return;
+    if (!didHydrateRef.current) {
+      // 클라우드 첫 hydrate 전이라도 사용자가 고객을 추가하면 로컬 백업 허용
+      if (!(uid && pendingCustomerCreatesRef.current.size > 0 && state.customers.length > 0)) {
+        return;
+      }
+    }
     // Always keep a local copy (offline fallback / quick restore).
     saveState(state);
-  }, [state]);
+  }, [state, uid]);
+
+  useEffect(() => {
+    setSelectedCustomerId((sel) => {
+      if (!sel) return null;
+      if (state.customers.some((c) => c.id === sel)) return sel;
+      return state.customers[0]?.id ?? null;
+    });
+  }, [state.customers]);
 
   const customersFiltered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -665,6 +695,10 @@ export function CRMApp({
   }, [state.customers, state.nextActions]);
 
   function upsertCustomer(patch: Partial<Customer> & { id: string }) {
+    if ("name" in patch && typeof patch.name === "string" && !patch.name.trim()) {
+      showToast("고객명을 입력해 주세요.");
+      return;
+    }
     setState((prev) => {
       const now = nowIso();
       const exists = prev.customers.some((c) => c.id === patch.id);
@@ -686,12 +720,16 @@ export function CRMApp({
       setSync({ mode: "cloud", status: "syncing" });
       void upsertCustomerCloud(uid, patch)
         .then(() => setSync({ mode: "cloud", status: "idle" }))
-        .catch((e) => setSync({ mode: "cloud", status: "error", message: String(e) }));
+        .catch((e) => {
+          setSync({ mode: "cloud", status: "error", message: String(e) });
+          showToast(`고객 정보를 저장하지 못했습니다: ${String(e)}`);
+        });
     }
   }
 
   function addCustomer() {
     const id = makeId("cus");
+    pendingCustomerCreatesRef.current.add(id);
     const t = nowIso();
     const customer: Customer = {
       id,
@@ -709,7 +747,10 @@ export function CRMApp({
       setSync({ mode: "cloud", status: "syncing" });
       void createCustomerCloud(uid, customer)
         .then(() => setSync({ mode: "cloud", status: "idle" }))
-        .catch((e) => setSync({ mode: "cloud", status: "error", message: String(e) }));
+        .catch((e) => {
+          setSync({ mode: "cloud", status: "error", message: String(e) });
+          showToast(`고객 추가를 클라우드에 반영하지 못했습니다. 네트워크·권한을 확인해 주세요. (${String(e)})`);
+        });
     }
   }
 
@@ -729,6 +770,7 @@ export function CRMApp({
       leadSource: "전화·매장방문",
       stage: "신규 문의",
     }));
+    batch.forEach((c) => pendingCustomerCreatesRef.current.add(c.id));
     setState((prev) => ({ ...prev, customers: [...batch, ...prev.customers] }));
     setSelectedCustomerId(batch[0]!.id);
     setTab("고객");
@@ -739,7 +781,10 @@ export function CRMApp({
       setSync({ mode: "cloud", status: "syncing" });
       void Promise.all(batch.map((c) => createCustomerCloud(uid!, c)))
         .then(() => setSync({ mode: "cloud", status: "idle" }))
-        .catch((e) => setSync({ mode: "cloud", status: "error", message: String(e) }));
+        .catch((e) => {
+          setSync({ mode: "cloud", status: "error", message: String(e) });
+          showToast(`일부 고객이 클라우드에 저장되지 않았을 수 있습니다. (${String(e)})`);
+        });
     }
 
     alert(
@@ -748,6 +793,7 @@ export function CRMApp({
   }
 
   function deleteCustomer(id: string) {
+    pendingCustomerCreatesRef.current.delete(id);
     setState((prev) => ({
       ...prev,
       customers: prev.customers.filter((c) => c.id !== id),
