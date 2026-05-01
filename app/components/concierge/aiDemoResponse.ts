@@ -204,7 +204,7 @@ export function formatCareNeedsGuideTopicsUi(input: string, lang: "ko" | "en"): 
 }
 
 const CARE_ADVISOR_SHARED_KO =
-  "질환명·신체 상태를 문자에서 되풀이하기보다, 승하차 편의성·시트 착좌감·실내 동선·정숙성처럼 ‘차량을 쓸 때 확인할 포인트’로 바꿔 안내하는 편이 좋습니다.";
+  "고객님이 말씀하신 개인적인 상황을 반복해서 언급하기보다는, 승하차 편의성·2열 공간·실내 동선처럼 차량을 실제로 사용하실 때 확인할 기준으로 안내하는 것이 좋습니다.";
 
 const CARE_ADVISOR_BY_CAT: Record<CareNeedCategory, string[]> = {
   back_spine: [
@@ -217,7 +217,7 @@ const CARE_ADVISOR_BY_CAT: Record<CareNeedCategory, string[]> = {
     "특정 고객군에게 ‘적합’ 같은 단정은 피하고, 동선·좌석·트렁크 적재 순서처럼 체험 순서형으로 적습니다.",
   ],
   elderly_family: [
-    "다음 연락에서는 병원 이동 같은 개별 상황을 반복해 말하기보다, 승하차 편의성·2열 공간·시트 착좌감·실내 동선처럼 차량 사용 기준 위주로 안내하는 편이 좋습니다.",
+    "다음 연락에서는 고객님께서 말씀하신 개인적인 배경을 장황하게 되풀이하기보다, 승하차 편의성·2열 공간·시트 착좌감·실내 동선처럼 차량 사용 기준 위주로 안내하는 편이 좋습니다.",
     "시승 때 동승하시는 가족분의 탑승·내리기 동선과 높이감까지 함께 보실 수 있게 짧은 순서로 유도하면 좋습니다.",
   ],
   pregnancy_child: ["카시트·유모차는 실제 차량별 넉넉함이 달라 시승·매장 재확인을 권하면 좋습니다."],
@@ -329,31 +329,32 @@ function buildSmsCareBodiesForPrimaryKo(
   switch (primary) {
     case "elderly_family":
       return [
-        `지난 상담 때 말씀주신 가족분과 함께 이동하시는 상황과 승하차 편의성을 기준으로, 고객님께서 관심 가져 주신 ${modelLabel}의 주요 포인트를 정리해보았습니다.`,
+        `지난 상담 때 말씀주신 가족분과 함께 이동하시는 상황과 승하차 편의성을 기준으로, 고객님께서 관심 가져주신 ${modelLabel}의 주요 포인트를 정리해보았습니다.`,
         `${modelLabel}${tp} 2열 공간, 승하차 동선, 시트 착좌감, 탑승 시 안정감 등을 함께 확인해보시면 좋습니다.`,
-        `특히 동승하시는 가족분께서 타고 내리실 때의 높이감과 실내 공간은 실제로 탑승해보셨을 때 체감이 가장 정확하기 때문에, 시승 때 함께 확인해보시면 좋겠습니다.`,
+        `특히 가족분께서 타고 내리실 때의 높이감과 2열 공간은 실제로 탑승해보셨을 때 가장 정확하게 느끼실 수 있습니다.`,
+        `고객님께서 말씀주신 기준을 바탕으로, ${modelLabel}의 승차감과 2열 편의성을 중심으로 안내드릴 수 있도록 준비하겠습니다.`,
       ];
     case "pregnancy_child":
       return [
-        `지난 상담 때 말씀주신 자녀·유아 동승과 카시트·유모차 활용을 기준으로, 고객님께서 관심 가져 주신 ${modelLabel}의 주요 포인트를 정리해보았습니다.`,
+        `지난 상담 때 말씀주신 자녀·유아 동승과 카시트·유모차 활용을 기준으로, 고객님께서 관심 가져주신 ${modelLabel}의 주요 포인트를 정리해보았습니다.`,
         `${modelLabel}${tp} 2열 간격과 트렁크 활용성, 안전·편의 사양, 승하차 동선까지 함께 확인해 보실 수 있습니다.`,
         `카시트·유모차는 차량별로 실제 넉넉함이 크게 다를 수 있어, 매장 또는 시승에서 직접 맞춰보시길 추천드립니다.`,
       ];
     case "neck_shoulder_joint":
       return [
-        `지난 상담 때 말씀주신 승하차 높이와 도어 개방감 위주 기준으로, 고객님께서 관심 가져 주신 ${modelLabel}의 주요 포인트를 정리해보았습니다.`,
+        `지난 상담 때 말씀주신 승하차 높이와 도어 개방감 위주 기준으로, 고객님께서 관심 가져주신 ${modelLabel}의 주요 포인트를 정리해보았습니다.`,
         `${modelLabel}${tp} 시트 포지션, 문턱·스텝 느낌, 후석 접근까지 함께 보시면 선택에 도움이 됩니다.`,
         `주차 환경에 따라 도어 개방 폭이 달라질 수 있어, 실제로 오르내리실 때의 동선을 시승에서 한 번씩 비교해보시면 좋습니다.`,
       ];
     case "motion_sensitivity":
       return [
-        `지난 상담 때 말씀주신 정숙성과 부드러운 주행 체감을 기준으로, 고객님께서 관심 가져 주신 ${modelLabel}의 주요 포인트를 정리해보았습니다.`,
+        `지난 상담 때 말씀주신 정숙성과 부드러운 주행 체감을 기준으로, 고객님께서 관심 가져주신 ${modelLabel}의 주요 포인트를 정리해보았습니다.`,
         `${modelLabel}${tp} 저속·고속 구간에서의 가감속 느낌과 실내 소음을 함께 확인해보시면 좋습니다.`,
         `민감도는 사람마다 다르니, 시승 때 직접 체감해 보시는 것이 가장 정확합니다.`,
       ];
     case "long_distance_fatigue":
       return [
-        `지난 상담 때 말씀주신 장거리 운행과 주행 보조 기능을 함께 보시려는 기준으로, 고객님께서 관심 가져 주신 ${modelLabel}의 주요 포인트를 정리해보았습니다.`,
+        `지난 상담 때 말씀주신 장거리 운행과 주행 보조 기능을 함께 보시려는 기준으로, 고객님께서 관심 가져주신 ${modelLabel}의 주요 포인트를 정리해보았습니다.`,
         `${modelLabel}${tp} 시트 장시간 편안함과 크루즈·보조 기능 구성은 실주행 패턴과 맞는지 차분히 확인해보시면 좋습니다.`,
         `고속 크루즈 중 실내 안정감은 차량별로 크게 다를 수 있어 시승에서 한 번 확인하시길 추천드립니다.`,
       ];
@@ -402,43 +403,132 @@ function smsTrimLines(input: string) {
     .trim();
 }
 
-/** E-Class · X5 / Countryman 같은 모델 토큰을 메모에서 끌어냅니다(데모 목적의 가벼운 추출). */
+/** 숫자+한글(예: 7시리즈, 5시리즈)·Class 접미까지 잘리지 않게 모델 꼬리를 정규화합니다. */
+function trimModelSlugTailKo(slug: string): string {
+  return slug.replace(/\s{2,}/g, " ").replace(/^[,\s\-–]+/, "").trim();
+}
+
+/** 브랜드 접두 뒤에 오는 차량 타입 문자열 한 덩어리(예: 7시리즈, X5 시리즈, E-Class). */
+function extractModelAfterBrandInclusive(rawRemainder: string): string | null {
+  const remainder = stripNoise(rawRemainder.replace(/^[,:：\-–]+/, ""));
+  if (!remainder) return null;
+
+  const clauseSplit =
+    /\s(?=고객님(?:은|은|이|가|께서)?\b)|\s(?:그리고|그런데|추천\s*차량|관심\s*차량|저희|지난|오늘|다음\b)/;
+  let head = remainder.split(/\r?\n/).map(stripNoise).find(Boolean) ?? remainder;
+  const clauseIdx = head.search(clauseSplit);
+  if (clauseIdx > 0) head = head.slice(0, clauseIdx).trim();
+  head = trimModelSlugTailKo(head);
+
+  /** E-Class / S-Class (한 글자 시리즈 + Class) */
+  const letterClassHit = /^([A-Za-z])\s*[-–]\s*Class\b|^([A-Za-z])\s+Class\b/i.exec(head);
+  const letterForClass = letterClassHit?.[1] ?? letterClassHit?.[2];
+  if (letterForClass) return `${letterForClass.toUpperCase()}-Class`;
+
+  /** 숫자+시리즈/클래스(공백 없는 경우·있는 경우 모두) */
+  const digitSeriesKo = /^(\d+)\s*(시리즈|클래스|클래스명)/u.exec(head);
+  if (digitSeriesKo?.[1] && digitSeriesKo[2])
+    return `${digitSeriesKo[1]}${digitSeriesKo[2]}`.trim();
+  const digitHangul = /^(\d+[가-힣]+)/u.exec(head)?.[1];
+  if (digitHangul) return digitHangul;
+
+  /** Genesis GV80 · G90 등 */
+  const gCode =
+    /^((?:GV\d{1,4}[A-Za-z]?))\b|^((?:G\d{2,4}))\b|^((?:EQ[A-Za-z]\d+[A-Za-z]*))\b|^((?:RS|XC)\d{2,4})\b/i.exec(head);
+  const gTok = gCode?.slice(1).find(Boolean);
+  if (gTok) return gTok.trim();
+
+  /** 라틴·숫자 혼합 코드 + 선택 한글 ‘시리즈/클래스’ */
+  const latinHead =
+    /^([A-Za-z0-9][A-Za-z0-9‑\-+]*(?:\s+[a-z][a-z0-9]{0,10}){0,3})\b(.*)?$/iu.exec(head);
+  if (latinHead?.[1]) {
+    const base = trimModelSlugTailKo(latinHead[1]);
+    if (/^\d$/u.test(base)) return null;
+    const restRaw = latinHead[2] ? trimModelSlugTailKo(latinHead[2]) : "";
+    const koSeries = /^([가-힣]{2,12})\b/u.exec(restRaw)?.[1];
+    if (koSeries && /시리즈|클래스|클래스명/u.test(koSeries))
+      return trimModelSlugTailKo(`${base} ${koSeries}`);
+    return base;
+  }
+
+  return null;
+}
+
+function prettifyExtractedLatinModelSlug(cleaned: string): string {
+  const c = cleaned.trim();
+  if (!c || /[가-힣]/.test(c)) return c;
+  if (/^i\d{1,3}$/i.test(c)) return c;
+  /** xDrive, Hybrid+ 등 소문자 토큰만 선별적으로 보정 */
+  return c.replace(/\bxdrive\b/gi, "xDrive").replace(/\bHybrid\+\b|\bHybrid\b/gi, (m) => (m.includes("+") ? "Hybrid+" : "Hybrid")).replace(/\b(?:e-tron|etron)\b/gi, "e-tron").replace(/\bclass\b(?=$)/gi, "Class").replace(/^([a-z]+\d*)$/i, (w) =>
+    /^gv\d+[a-z]?$/i.test(w) ?
+      `${w.slice(0, 2).toUpperCase()}${w.slice(2)}`
+    : /^g\d+/i.test(w) ?
+      w.toUpperCase()
+    : /^[a-z]+$/i.test(w) ?
+      w.toUpperCase()
+    : w.replace(/^(.)/u, (_m, x: string) => x.toUpperCase()),
+  );
+}
+
+/** E-Class · X5 · BMW 7시리즈 / Countryman 같은 모델 토큰을 메모에서 끌어냅니다(데모 목적의 가벼운 추출). */
 function extractLikelyVehicleModel(raw: string): string | null {
   const normalized = stripNoise(raw);
-  const brandModel =
-    /\b(Mercedes-Benz|Mercedes|Benz|메르세데스|벤츠|BMW|MINI|Audi|Genesis|Genesis_|제네시스|Porsche|포르쉐|Lexus|렉서스|Volvo|볼보)\s+([A-Za-z0-9][A-Za-z0-9‑\-+]*)+/i.exec(
-      normalized,
-    );
-  if (brandModel?.[2]) {
-    const brand = brandModel[1];
-    const model = brandModel[2];
+
+  const brandRe =
+    /\b(Mercedes-Benz|Mercedes|Benz|메르세데스|벤츠|BMW|MINI|Audi|Genesis|Genesis_|제네시스|Porsche|포르쉐|Lexus|렉서스|Volvo|볼보)/i;
+
+  const brandHit = brandRe.exec(normalized);
+  if (brandHit?.[1]) {
+    const brandRaw = brandHit[1];
+    const idx = brandHit.index + brandHit[0].length;
+    const after = normalized.slice(Math.max(idx, 0)).replace(/^[,\s:：]+/, "");
+
     const prettyBrand =
-      /^mercedes|^benz|^메르세데스|^벤츠/i.test(brand) ? "Mercedes-Benz"
-      : /^bmw$/i.test(brand) ? "BMW"
-      : /^mini$/i.test(brand) ? "MINI"
-      : /^audi$/i.test(brand) ? "Audi"
-      : /^gen|^제네시스/i.test(brand) ? "Genesis"
-      : /^porsche|^포르쉐/i.test(brand) ? "Porsche"
-      : /^lexus|^렉서스/i.test(brand) ? "Lexus"
-      : /^volvo|^볼보/i.test(brand) ? "Volvo"
-      : brand;
+      /^mercedes|^benz|^메르세데스|^벤츠/i.test(brandRaw) ? "Mercedes-Benz"
+      : /^bmw$/i.test(brandRaw) ? "BMW"
+      : /^mini$/i.test(brandRaw) ? "MINI"
+      : /^audi$/i.test(brandRaw) ? "Audi"
+      : /^gen|^제네시스/i.test(brandRaw) ? "Genesis"
+      : /^porsche|^포르쉐/i.test(brandRaw) ? "Porsche"
+      : /^lexus|^렉서스/i.test(brandRaw) ? "Lexus"
+      : /^volvo|^볼보/i.test(brandRaw) ? "Volvo"
+      : brandRaw;
 
-    const cleanModel =
-      /^genesis$/i.test(model) ? (normalized.match(/G\d{2,4}/i)?.[0] ?? model).toUpperCase() : model;
-    const upperModel = /^[a-z]+$/.test(cleanModel)
-      ? cleanModel.toUpperCase()
-      : cleanModel.replace(/^./, (c) => c.toUpperCase());
+    let modelSlug = extractModelAfterBrandInclusive(after);
 
-    return `${prettyBrand} ${upperModel}`;
+    /** Genesis 본문 G코드 우선(G80, GV80 등) */
+    if (/^gen|^제네시스/i.test(brandRaw) && (!modelSlug || /^genesis$/i.test(modelSlug))) {
+      modelSlug =
+        normalized.match(/\bGV\d+[A-Za-z]?\b/i)?.[0] ??
+        normalized.match(/\bG\d{2,4}\b/i)?.[0] ??
+        modelSlug;
+    }
+
+    if (modelSlug) {
+      modelSlug =
+        /^genesis$/i.test(trimModelSlugTailKo(modelSlug)) ?
+          (normalized.match(/\bG\d{2,4}\b|\bGV\d+[A-Za-z]?\b/i)?.[0] ?? modelSlug)
+        : modelSlug;
+
+      const cleaned = trimModelSlugTailKo(modelSlug);
+      const displayModel =
+        /[가-힣]/.test(cleaned) ? cleaned : prettifyExtractedLatinModelSlug(cleaned);
+
+      return `${prettyBrand} ${displayModel}`.replace(/\s+/g, " ").trim();
+    }
   }
 
   const knownModelCodes =
-    /\b(G\d{2,4}|E[-–]?\s*Class|S[-–]?\s*Class|GLE|GLC|GLS|X\d|XM|XC\d{2}|A\d|RS\d+|Cayenne|Macan|Taycan|E-Tron|e-tron|Countryman|SUV)\b/i;
+    /\b(G\d{2,4}|GV\d+[A-Za-z]?|G90|E[-–]?\s*Class|S[-–]?\s*Class|GLE|GLC|GLS|X\d|XM|XC\d{2}|A\d|RS\d+|Cayenne|Macan|Taycan|E-Tron|e-tron|Countryman|SUV)\b/i;
 
   const vehicleToken =
     normalized.match(/\b([A-Za-z]{1}[A-Za-z0-9‑\-+]+\s+(?:Countryman|SUV|Hybrid|Hybrid\+)\b)/i)?.[1] ??
-    normalized.match(/\b(G\d{2,4}|E[-–]?\s*Class|S[-–]?\s*Class|[A-Za-z]+\s*Countryman|[A-Za-z]+\s*Hybrid\+?|[A-Za-z]{1,6}\s*SUV)\b/i)?.[0] ??
+    normalized.match(/\b(G\d{2,4}|GV\d+[A-Za-z]?|E[-–]?\s*Class|S[-–]?\s*Class|[A-Za-z]+\s*Countryman|[A-Za-z]+\s*Hybrid\+?|[A-Za-z]{1,10}\s*SUV)\b/i)?.[0] ??
     normalized.match(knownModelCodes)?.[0];
+
+  /** 브랜드 없는 국내식 “7시리즈” 표기 등 */
+  const seriesKoOnly = /\b(\d+)\s*(시리즈|클래스)\b/u.exec(normalized);
+  if (!vehicleToken?.trim() && seriesKoOnly?.[1]) return `${seriesKoOnly[1]}${seriesKoOnly[2]}`;
 
   const hit = typeof vehicleToken === "string" ? vehicleToken.trim() : vehicleToken ?? null;
 
@@ -1134,9 +1224,9 @@ ${emptyCloseKo}`)
         return `고객님께서 ${interestModelKo}와(과) 함께 비교하고 계신 점을 기준으로, ${budgetLead}예산 범위에서 ${sedanBit}, 장거리 주행 시 피로도까지 함께 보실 수 있도록 말씀 주신 기준으로 조건을 정리해보았습니다.`;
       }
       if (interestModelKo) {
-        return `고객님께서 관심 가져 주신 ${interestModelKo}를 기준으로, ${budgetLead}예산 범위에서 ${sedanBit}, 장거리 주행 시 피로도까지 함께 보실 수 있도록 말씀 주신 기준으로 조건을 정리해보았습니다.`;
+        return `고객님께서 관심 가져주신 ${interestModelKo}를 기준으로, ${budgetLead}예산 범위에서 ${sedanBit}, 장거리 주행 시 피로도까지 함께 보실 수 있도록 말씀 주신 기준으로 조건을 정리해보았습니다.`;
       }
-      return `고객님께서 관심 가져 주신 모델을 기준으로, ${budgetLead}예산 범위에서 ${sedanBit}, 장거리 주행 시 피로도까지 함께 보실 수 있도록 말씀 주신 기준으로 조건을 정리해보았습니다.`;
+      return `고객님께서 관심 가져주신 모델을 기준으로, ${budgetLead}예산 범위에서 ${sedanBit}, 장거리 주행 시 피로도까지 함께 보실 수 있도록 말씀 주신 기준으로 조건을 정리해보았습니다.`;
     }
 
     const dealMidApplicable =
@@ -1157,7 +1247,9 @@ ${emptyCloseKo}`)
         lines.push("");
         lines.push(smsTrimLines(para));
       }
-      if (dealMidApplicable && (interestModelKo || compare || f.budgetPhrase || vehicleType || f.discountIntent)) {
+      const appendStructuredDealMid =
+        !!(f.budgetPhrase || compare || f.discountIntent || f.postureDiscomfort);
+      if (dealMidApplicable && appendStructuredDealMid) {
         lines.push("");
         lines.push(smsTrimLines(buildDealMidKo()));
       }
@@ -1165,7 +1257,7 @@ ${emptyCloseKo}`)
       const clause = buildCareRecallClauseKo(careNeedsKo);
       lines.push(
         smsTrimLines(
-          `지난 상담 때 말씀주신 ${clause} 기준으로, 고객님께서 관심 가져 주신 ${modelLabel}의 주요 포인트를 말씀 주신 기준으로 정리해보았습니다.`,
+          `지난 상담 때 말씀주신 ${clause} 기준으로, 고객님께서 관심 가져주신 ${modelLabel}의 주요 포인트를 말씀 주신 기준으로 정리해보았습니다.`,
         ),
       );
       lines.push("");
@@ -1294,16 +1386,16 @@ ${emptyCloseKo}`)
           `${interestModelKo}${tp} ${bodyCore} 고객님께 잘 맞을 수 있는 차량으로 보입니다.`
         : `${interestModelKo}${tp} 말씀주신 기준에 맞춰 실 차량 상태와 금융 라인까지 함께 확인해 보실 수 있습니다.`;
     } else if (bodyCore) {
-      vehicleParagraph = `고객님께서 관심 가져 주신 모델은 ${bodyCore} 고객님께 잘 맞을 수 있는 차량입니다.`;
+      vehicleParagraph = `고객님께서 관심 가져주신 모델은 ${bodyCore} 고객님께 잘 맞을 수 있는 차량입니다.`;
     } else if (finance) {
       vehicleParagraph =
-        `고객님께서 관심 가져 주신 모델은 말씀주신 조건 위주로 다시 차분히 확인하시기 좋은 차량입니다.`;
+        `고객님께서 관심 가져주신 모델은 말씀주신 조건 위주로 다시 차분히 확인하시기 좋은 차량입니다.`;
       if (compare)
         vehicleParagraph +=
           ` 비교가 걱정되시면 고객님께서 보시는 기준으로 핵심 차이만 나눠 안내 드리겠습니다.`;
     } else {
       vehicleParagraph =
-        `고객님께서 관심 가져 주신 모델은 상담에서 주신 포인트를 기준으로 다시 보시기 좋은 차량입니다.`;
+        `고객님께서 관심 가져주신 모델은 상담에서 주신 포인트를 기준으로 다시 보시기 좋은 차량입니다.`;
       if (compare)
         vehicleParagraph += ` 다른 모델과의 차이는 핵심만 차분하게 비교 안내 드리겠습니다.`;
     }
@@ -1318,7 +1410,7 @@ ${emptyCloseKo}`)
     lines.push("");
     lines.push(
       smsTrimLines(
-        `지난 상담 때 말씀주신 ${openingRecallJoined} 바탕으로, 고객님께서 관심 가져 주신 모델의 주요 장점을 한 번 더 안내드리고자 연락드렸습니다.`,
+        `지난 상담 때 말씀주신 ${openingRecallJoined} 바탕으로, 고객님께서 관심 가져주신 모델의 주요 장점을 한 번 더 안내드리고자 연락드렸습니다.`,
       ),
     );
 
