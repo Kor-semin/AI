@@ -941,14 +941,34 @@ html[lang="ko"] body {
   }
 }
 
-/* 랜딩 쇼룸 — 은은한 프리미엄 톤 */
+/* 랜딩 쇼룸 — 은은한 프리미엄 톤 (대형 화면에서 빈 느낌 완화) */
 .landing-showroom-hero-shell {
   background-color: #f4f6f8;
-  background-image: radial-gradient(
-      ellipse 115% 72% at 50% -28%,
-      rgba(148, 163, 184, 0.16),
-      transparent 52%
+  background-image:
+    radial-gradient(
+      ellipse 165% 100% at 50% -12%,
+      rgba(148, 163, 184, 0.2),
+      transparent 62%
     ),
-    radial-gradient(70% 42% at 100% 104%, rgba(229, 231, 235, 0.85), transparent 55%);
+    radial-gradient(
+      ellipse 110% 95% at 108% 18%,
+      rgba(203, 213, 225, 0.28),
+      transparent 58%
+    ),
+    radial-gradient(ellipse 95% 72% at -12% 92%, rgba(229, 231, 235, 0.82), transparent 62%),
+    linear-gradient(175deg, rgba(252, 252, 253, 0.96) 0%, #f4f6f8 45%, #eef1f6 100%);
+}
+
+.landing-showroom-preview-card-shadow {
+  box-shadow:
+    0 40px 110px rgba(17, 24, 39, 0.095),
+    0 16px 40px rgba(17, 24, 39, 0.055),
+    0 1px 0 rgba(255, 255, 255, 0.75) inset;
+}
+
+.landing-showroom-flow-card-shadow {
+  box-shadow:
+    0 28px 72px rgba(17, 24, 39, 0.07),
+    0 4px 14px rgba(17, 24, 39, 0.04);
 }
 
