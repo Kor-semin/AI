@@ -95,6 +95,19 @@ const SENSORA_FLOW_AI_BADGE =
 const PAYMENT_TYPE_OPTIONS: PaymentType[] = ["현금", "할부", "리스", "장기렌트"];
 const ACCIDENT_OPTIONS: UsedCarAccident[] = ["무사고", "단순교환", "사고", "미상"];
 
+/** 새 고객 추가 모달 기본 초기값(고객명은 사용자 입력 필수 — 저장 전에는 고객을 만들지 않음) */
+const CREATE_CUSTOMER_INITIAL = {
+  name: "",
+  phone: "",
+  leadSource: "전화·매장방문" as LeadSource,
+  stage: "신규 문의" as PipelineStage,
+  vehicleBrand: "" as string,
+  interestedModel: "",
+  memo: "",
+  nextContactAt: undefined as string | undefined,
+  nextActionText: "",
+};
+
 const SC_BRAND_OPTIONS: (SeasonCareBrandPreset | "other")[] = [...SEASON_CARE_BRAND_PRESETS, "other"];
 
 const SC_BRAND_TKEY: Record<SeasonCareBrandPreset | "other", TranslationKey> = {
@@ -258,6 +271,10 @@ export function CRMApp({
   const [leadExplainForId, setLeadExplainForId] = useState<string | null>(null);
   const [toast, setToast] = useState<string | null>(null);
   const [deliveryGuideOpen, setDeliveryGuideOpen] = useState(false);
+  const [createCustomerOpen, setCreateCustomerOpen] = useState(false);
+  const [createCustomerDraft, setCreateCustomerDraft] = useState({ ...CREATE_CUSTOMER_INITIAL });
+  const createCustomerDraftRef = useRef(createCustomerDraft);
+  createCustomerDraftRef.current = createCustomerDraft;
 
   const [seasonCareBrand, setSeasonCareBrand] = useState<SeasonCareBrandPreset | "other">("mercedes-benz");
   const [seasonCareBrandCustom, setSeasonCareBrandCustom] = useState("");
@@ -408,6 +425,21 @@ export function CRMApp({
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
+
+  useEffect(() => {
+    if (!createCustomerOpen) return undefined;
+    function onEsc(e: KeyboardEvent) {
+      if (e.key !== "Escape") return;
+      const t = e.target as HTMLElement | null;
+      const tag = t?.tagName;
+      if (tag === "SELECT") return;
+      e.preventDefault();
+      setCreateCustomerOpen(false);
+      setCreateCustomerDraft({ ...CREATE_CUSTOMER_INITIAL });
+    }
+    window.addEventListener("keydown", onEsc);
+    return () => window.removeEventListener("keydown", onEsc);
+  }, [createCustomerOpen]);
 
   useEffect(() => {
     const t = window.setTimeout(() => {
@@ -727,30 +759,68 @@ export function CRMApp({
     }
   }
 
-  function addCustomer() {
+  function openCreateCustomerModal() {
+    setCreateCustomerDraft({ ...CREATE_CUSTOMER_INITIAL });
+    setCreateCustomerOpen(true);
+  }
+
+  function closeCreateCustomerModal() {
+    setCreateCustomerOpen(false);
+    setCreateCustomerDraft({ ...CREATE_CUSTOMER_INITIAL });
+  }
+
+  async function submitCreateCustomer() {
+    const d = createCustomerDraftRef.current;
+    const nameTrim = d.name.trim();
+    if (!nameTrim) {
+      showToast("고객명을 입력해 주세요.");
+      return;
+    }
+
     const id = makeId("cus");
-    pendingCustomerCreatesRef.current.add(id);
     const t = nowIso();
+    const brandStr = (d.vehicleBrand ?? "").trim();
+    const vehicleBrand = brandStr ? (brandStr as VehicleBrandId) : undefined;
+
     const customer: Customer = {
       id,
       createdAt: t,
       updatedAt: t,
-      name: "새 고객",
-      leadSource: "전화·매장방문",
-      stage: "신규 문의",
+      name: nameTrim,
+      phone: d.phone.trim() ? d.phone.trim() : undefined,
+      leadSource: d.leadSource,
+      stage: d.stage,
+      vehicleBrand,
+      interestedModel: d.interestedModel.trim() ? d.interestedModel.trim() : undefined,
+      memo: d.memo.trim() ? d.memo.trim() : undefined,
+      nextContactAt: d.nextContactAt,
     };
-    setState((prev) => ({ ...prev, customers: [customer, ...prev.customers] }));
-    setSelectedCustomerId(id);
-    setTab("고객");
+    const nextLine = d.nextActionText.trim();
+
+    const finishSuccess = () => {
+      pendingCustomerCreatesRef.current.add(id);
+      setState((prev) => ({ ...prev, customers: [customer, ...prev.customers] }));
+      setSelectedCustomerId(id);
+      setTab("고객");
+      setCreateCustomerOpen(false);
+      setCreateCustomerDraft({ ...CREATE_CUSTOMER_INITIAL });
+      showToast("고객이 추가되었습니다.");
+      if (nextLine) addNextAction(id, nextLine, { skipTabSwitch: true });
+    };
 
     if (uid) {
       setSync({ mode: "cloud", status: "syncing" });
-      void createCustomerCloud(uid, customer)
-        .then(() => setSync({ mode: "cloud", status: "idle" }))
-        .catch((e) => {
-          setSync({ mode: "cloud", status: "error", message: String(e) });
-          showToast(`고객 추가를 클라우드에 반영하지 못했습니다. 네트워크·권한을 확인해 주세요. (${String(e)})`);
-        });
+      try {
+        await createCustomerCloud(uid, customer);
+        setSync({ mode: "cloud", status: "idle" });
+        finishSuccess();
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : String(e);
+        setSync({ mode: "cloud", status: "error", message: msg });
+        showToast(`저장하지 못했습니다. 다시 시도해 주세요. (${msg})`);
+      }
+    } else {
+      finishSuccess();
     }
   }
 
@@ -810,7 +880,11 @@ export function CRMApp({
     }
   }
 
-  function addNextAction(customerId: string, titleOverride?: string) {
+  function addNextAction(
+    customerId: string,
+    titleOverride?: string,
+    opts?: { skipTabSwitch?: boolean },
+  ) {
     const raw = titleOverride?.trim();
     const title =
       raw && raw.length > 0
@@ -827,7 +901,7 @@ export function CRMApp({
       title,
     };
     setState((prev) => ({ ...prev, nextActions: [action, ...prev.nextActions] }));
-    setTab("다음할일");
+    if (!opts?.skipTabSwitch) setTab("다음할일");
 
     if (uid) {
       setSync({ mode: "cloud", status: "syncing" });
@@ -1025,7 +1099,7 @@ export function CRMApp({
               <button
                 type="button"
                 className="min-h-[44px] shrink-0 rounded-[20px] bg-[#111827] px-5 py-3 text-[15px] font-semibold text-white shadow-sm transition hover:bg-[#1F2937] focus:outline-none focus:ring-2 focus:ring-[#94A3B8] sm:w-auto sm:whitespace-nowrap touch-manipulation"
-                onClick={addCustomer}
+                onClick={openCreateCustomerModal}
               >
                 + {t("crm.addCustomer")}
               </button>
@@ -1196,7 +1270,7 @@ export function CRMApp({
                     <button
                       type="button"
                       className="mt-8 rounded-xl bg-[#111827] px-6 py-3 text-[15px] font-semibold text-white hover:bg-[#1F2937]"
-                      onClick={addCustomer}
+                      onClick={openCreateCustomerModal}
                     >
                       고객 추가하기
                     </button>
@@ -2801,6 +2875,151 @@ export function CRMApp({
                 onClick={() => setLeadExplainForId(null)}
               >
                 닫기
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
+
+      {createCustomerOpen ? (
+        <div
+          role="presentation"
+          className="fixed inset-0 z-[330] flex items-end justify-center bg-black/45 backdrop-blur-sm sm:items-center sm:p-3"
+          onClick={closeCreateCustomerModal}
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="crm-create-customer-title"
+            className="flex max-h-[92dvh] w-full max-w-[520px] flex-col rounded-t-[22px] border border-[#E5E7EB] bg-[#FFFFFF] shadow-2xl sm:rounded-[22px]"
+            onMouseDown={(e) => e.stopPropagation()}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex shrink-0 items-center justify-between gap-2 border-b border-[#E5E7EB] bg-[#F9FAFB] px-4 py-3 sm:px-5">
+              <h2 id="crm-create-customer-title" className="text-[16px] font-extrabold text-[#111827]">
+                새 고객 추가
+              </h2>
+              <button
+                type="button"
+                className="crm-ghost-btn min-h-[44px] shrink-0 rounded-xl px-3 py-2 text-[13px] font-semibold text-[#374151]"
+                aria-label="닫기"
+                onClick={closeCreateCustomerModal}
+              >
+                닫기
+              </button>
+            </div>
+            <form
+              id="crm-create-customer-form"
+              className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto overscroll-contain px-4 py-4 sm:gap-5 sm:px-6 sm:py-5"
+              onSubmit={(e) => {
+                e.preventDefault();
+                void submitCreateCustomer();
+              }}
+            >
+              <Field
+                label="고객명 *"
+                value={createCustomerDraft.name}
+                placeholder="예: 홍길동"
+                onChange={(v) => setCreateCustomerDraft((prev) => ({ ...prev, name: v }))}
+              />
+              <Field
+                label="연락처"
+                value={createCustomerDraft.phone}
+                placeholder="010-0000-0000"
+                onChange={(v) => setCreateCustomerDraft((prev) => ({ ...prev, phone: v }))}
+              />
+              <SelectField
+                label="유입 경로"
+                value={createCustomerDraft.leadSource}
+                options={[...LEAD_SOURCES]}
+                onChange={(v) =>
+                  setCreateCustomerDraft((prev) => ({
+                    ...prev,
+                    leadSource: v as LeadSource,
+                  }))
+                }
+              />
+              <SelectField
+                label="상담 단계"
+                value={createCustomerDraft.stage}
+                options={[...STAGES]}
+                onChange={(v) =>
+                  setCreateCustomerDraft((prev) => ({
+                    ...prev,
+                    stage: v as PipelineStage,
+                  }))
+                }
+              />
+              <SelectField
+                label="브랜드"
+                placeholderOption="선택 안 함"
+                value={createCustomerDraft.vehicleBrand}
+                options={[...BRAND_OPTIONS]}
+                onChange={(brandStr) =>
+                  setCreateCustomerDraft((prev) => ({
+                    ...prev,
+                    vehicleBrand: brandStr,
+                    interestedModel:
+                      brandStr !== prev.vehicleBrand ? "" : prev.interestedModel,
+                  }))
+                }
+              />
+              {(createCustomerDraft.vehicleBrand ?? "").trim() &&
+              createCustomerDraft.vehicleBrand !== "기타" ? (
+                <SelectField
+                  label="관심 차종"
+                  placeholderOption="선택 안 함 · 목록 외 차종은 브랜드를 ‘기타’로 선택"
+                  value={createCustomerDraft.interestedModel}
+                  options={[...vehicleModelsFor(createCustomerDraft.vehicleBrand as VehicleBrandId)]}
+                  onChange={(v) => setCreateCustomerDraft((prev) => ({ ...prev, interestedModel: v }))}
+                />
+              ) : (
+                <Field
+                  label="관심 차량"
+                  value={createCustomerDraft.interestedModel}
+                  placeholder="예: GV80 5인승 디젤 또는 자유 입력"
+                  onChange={(v) =>
+                    setCreateCustomerDraft((prev) => ({ ...prev, interestedModel: v }))
+                  }
+                />
+              )}
+              <TextArea
+                label="상담 메모"
+                value={createCustomerDraft.memo}
+                placeholder="상담 중 파악한 요구사항 등"
+                onChange={(v) => setCreateCustomerDraft((prev) => ({ ...prev, memo: v }))}
+              />
+              <DateTimeField
+                label="다음 연락 예정"
+                valueIso={createCustomerDraft.nextContactAt}
+                placeholder="예: 내일 오후 재통화"
+                onChangeIso={(iso) =>
+                  setCreateCustomerDraft((prev) => ({ ...prev, nextContactAt: iso }))
+                }
+              />
+              <Field
+                label="후속 할 일"
+                value={createCustomerDraft.nextActionText}
+                placeholder="예: 견적서 발송 필요"
+                onChange={(v) =>
+                  setCreateCustomerDraft((prev) => ({ ...prev, nextActionText: v }))
+                }
+              />
+            </form>
+            <div className="flex shrink-0 flex-col-reverse gap-2 border-t border-[#E5E7EB] bg-[#FFFFFF] px-4 py-4 sm:flex-row sm:justify-end sm:gap-3 sm:px-6">
+              <button
+                type="button"
+                className="min-h-[44px] shrink-0 rounded-xl border border-[#E5E7EB] bg-[#FFFFFF] px-5 py-2.5 text-[14px] font-semibold text-[#374151] hover:bg-[#F9FAFB] touch-manipulation"
+                onClick={closeCreateCustomerModal}
+              >
+                취소
+              </button>
+              <button
+                type="submit"
+                form="crm-create-customer-form"
+                className="min-h-[44px] shrink-0 rounded-xl bg-[#111827] px-6 py-2.5 text-[14px] font-semibold text-white shadow-sm hover:bg-[#1F2937] touch-manipulation"
+              >
+                저장
               </button>
             </div>
           </div>
