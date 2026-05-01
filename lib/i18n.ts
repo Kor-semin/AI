@@ -123,6 +123,12 @@ export type TranslationKey =
   | "landing.aiDemo.nextActionTitle"
   | "landing.aiDemo.recommendedMessageTitle"
   | "landing.aiDemo.liveNotice"
+  | "landing.aiDemo.salesStyleLabel"
+  | "landing.aiDemo.salesStyle.polite"
+  | "landing.aiDemo.salesStyle.simple"
+  | "landing.aiDemo.salesStyle.premium"
+  | "landing.aiDemo.salesStyle.friendly"
+  | "landing.aiDemo.salesStyle.active"
   | "landing.aiDemo.emptyNotice"
   | "landing.aiDemo.aiResponseLabel"
   | "landing.aiDemo.aiResponseExample"
@@ -290,7 +296,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.aiDemo.sampleDataNotice":
       "아래 정보는 기능 체험을 위한 가상 샘플 고객입니다.",
     "landing.aiDemo.inputExample":
-      "고객은 조용한 승차감과 가족 이동을 중요하게 생각했고, 금융 조건을 궁금해했습니다.",
+      "고객은 조용한 승차감과 가족 이동을 중요하게 생각했고, 선납금·보증금을 반영한 리스와 할부 견적서 라인 검토 및 월 납입금 확인을 원했습니다.",
     "landing.aiDemo.status": "상담 내용을 분석하고 있습니다…",
     "landing.aiDemo.readyStatus": "SensoraGuide · 데모 응답 준비됨",
     "landing.aiDemo.resetExample": "예시 다시 넣기",
@@ -298,6 +304,12 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.aiDemo.nextActionTitle": "다음 액션",
     "landing.aiDemo.recommendedMessageTitle": "추천 메시지",
     "landing.aiDemo.liveNotice": "입력값은 저장되지 않습니다. (데모)",
+    "landing.aiDemo.salesStyleLabel": "영업사원 스타일",
+    "landing.aiDemo.salesStyle.polite": "정중한 스타일",
+    "landing.aiDemo.salesStyle.simple": "담백한 스타일",
+    "landing.aiDemo.salesStyle.premium": "프리미엄 스타일",
+    "landing.aiDemo.salesStyle.friendly": "친근한 스타일",
+    "landing.aiDemo.salesStyle.active": "적극적인 스타일",
     "landing.aiDemo.emptyNotice": "상담 메모를 입력하면 요약/다음 액션/추천 메시지가 바뀝니다.",
     "landing.aiDemo.aiResponseLabel": "AI 요약",
     "landing.aiDemo.aiResponseExample":
@@ -468,7 +480,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.aiDemo.sampleDataNotice":
       "The information below is sample data for product demonstration.",
     "landing.aiDemo.inputExample":
-      "The customer values a quiet ride and family comfort, and asked about financing options.",
+      "The customer values a quiet ride and family comfort, and asked for lease vs installment quote lines—including down payment, deposit, and monthly payment—with a printable quote attachment later.",
     "landing.aiDemo.status": "Analyzing your consultation notes…",
     "landing.aiDemo.readyStatus": "SensoraGuide · Ready",
     "landing.aiDemo.resetExample": "Restore example",
@@ -476,6 +488,12 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.aiDemo.nextActionTitle": "Next action",
     "landing.aiDemo.recommendedMessageTitle": "Recommended message",
     "landing.aiDemo.liveNotice": "Your input is not stored. (Demo)",
+    "landing.aiDemo.salesStyleLabel": "Sales outreach style",
+    "landing.aiDemo.salesStyle.polite": "Polite & courteous",
+    "landing.aiDemo.salesStyle.simple": "Plain & concise",
+    "landing.aiDemo.salesStyle.premium": "Premium & calm",
+    "landing.aiDemo.salesStyle.friendly": "Friendly & warm",
+    "landing.aiDemo.salesStyle.active": "Light follow-up prompts",
     "landing.aiDemo.emptyNotice": "Enter a memo to see the summary, next action, and message update.",
     "landing.aiDemo.aiResponseLabel": "AI Summary",
     "landing.aiDemo.aiResponseExample":

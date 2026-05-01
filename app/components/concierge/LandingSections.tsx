@@ -7,7 +7,21 @@ import { ImageSlot } from "./ImageSlot";
 import { SAMPLE_CUSTOMERS } from "./sampleCustomers";
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
 import { SensoraGuide } from "@/app/components/concierge/SensoraGuide";
-import { generateDemoConsultingResponse } from "@/app/components/concierge/aiDemoResponse";
+import {
+  generateDemoConsultingResponse,
+  type DemoSalesStyle,
+} from "@/app/components/concierge/aiDemoResponse";
+import type { TranslationKey } from "@/lib/i18n";
+
+const SALES_STYLE_I18N_KEY: Record<DemoSalesStyle, TranslationKey> = {
+  polite: "landing.aiDemo.salesStyle.polite",
+  simple: "landing.aiDemo.salesStyle.simple",
+  premium: "landing.aiDemo.salesStyle.premium",
+  friendly: "landing.aiDemo.salesStyle.friendly",
+  active: "landing.aiDemo.salesStyle.active",
+};
+
+const SALES_STYLE_ORDER: DemoSalesStyle[] = ["polite", "simple", "premium", "friendly", "active"];
 
 /** 랜딩 교체용 이미지 경로 (`public/images`에 동일 파일명으로 두면 적용됩니다). */
 export const LANDING_IMAGES = {
@@ -213,6 +227,7 @@ export function AIDemoSection() {
   const exampleText = t("landing.aiDemo.inputExample");
   const MANUAL_SENTINEL = "";
   const [memo, setMemo] = useState(exampleText);
+  const [salesStyle, setSalesStyle] = useState<DemoSalesStyle>("polite");
   const [sampleId, setSampleId] = useState<string>(() => MANUAL_SENTINEL);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [debouncedMemo, setDebouncedMemo] = useState(exampleText);
@@ -274,7 +289,10 @@ export function AIDemoSection() {
     };
   }, [memo]);
 
-  const response = useMemo(() => generateDemoConsultingResponse(debouncedMemo), [debouncedMemo]);
+  const response = useMemo(
+    () => generateDemoConsultingResponse(debouncedMemo, { salesStyle }),
+    [debouncedMemo, salesStyle],
+  );
 
   return (
     <section id="ai-demo" className="mx-auto w-full max-w-[1280px] scroll-mt-24 px-4 py-14 sm:py-18">
@@ -293,8 +311,8 @@ export function AIDemoSection() {
             <div className="mt-1 text-[12px] font-medium leading-relaxed text-[#6B7280]">
               {t("landing.aiDemo.inputHint")}
             </div>
-            <label className="mt-4 grid gap-1 md:grid-cols-[220px_minmax(0,1fr)] md:items-end md:gap-3">
-              <div className="grid gap-1">
+            <div className="mt-4 grid gap-4 md:grid-cols-2 md:gap-6">
+              <label className="grid gap-1">
                 <div className="text-[13px] font-semibold text-[#374151]">{t("landing.aiDemo.sampleCustomerLabel")}</div>
                 <select
                   value={sampleId}
@@ -319,11 +337,26 @@ export function AIDemoSection() {
                     </option>
                   ))}
                 </select>
-              </div>
-              <div className="text-[12px] font-medium leading-relaxed text-[#6B7280] md:pb-3">
-                {t("landing.aiDemo.sampleDataNotice")}
-              </div>
-            </label>
+              </label>
+              <label className="grid gap-1">
+                <div className="text-[13px] font-semibold text-[#374151]">{t("landing.aiDemo.salesStyleLabel")}</div>
+                <select
+                  value={salesStyle}
+                  onChange={(e) => setSalesStyle(e.target.value as DemoSalesStyle)}
+                  className="w-full rounded-xl border border-[#E5E7EB] bg-white px-3 py-3 text-[14px] font-medium text-[#111827] outline-none focus:border-[#94A3B8]"
+                  aria-label={t("landing.aiDemo.salesStyleLabel")}
+                >
+                  {SALES_STYLE_ORDER.map((sid) => (
+                    <option key={sid} value={sid}>
+                      {t(SALES_STYLE_I18N_KEY[sid])}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+            <div className="mt-2 text-[12px] font-medium leading-relaxed text-[#6B7280]">
+              {t("landing.aiDemo.sampleDataNotice")}
+            </div>
             <textarea
               ref={textareaRef}
               id="ai-demo-memo"
