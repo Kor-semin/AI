@@ -58,6 +58,7 @@ import {
 } from "@/app/components/concierge/aiDemoResponse";
 import { makeId, seedState } from "./seed";
 import { ContactSyncDialog } from "./ContactSyncDialog";
+import { CrmMiniCalendar } from "@/app/crm/CrmMiniCalendar";
 import { DeliveryGuideScreen } from "@/app/crm/deliveryGuide/DeliveryGuideScreen";
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
 import type { TranslationKey } from "@/lib/i18n";
@@ -1481,6 +1482,24 @@ export function CRMApp({
               </button>
             ))}
           </nav>
+
+          {tab === "고객" ? (
+            <CrmMiniCalendar
+              customers={state.customers}
+              nextActions={state.nextActions}
+              events={state.events}
+              onPickCustomer={(id) => {
+                setSelectedCustomerId(id);
+                setTab("고객");
+                window.setTimeout(() => {
+                  document.getElementById("crm-detail-panel")?.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                  });
+                }, 50);
+              }}
+            />
+          ) : null}
 
           <div
             id="crm-overview-stats"
