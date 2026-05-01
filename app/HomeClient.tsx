@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { InspirationalBackdrop } from "@/app/components/InspirationalBackdrop";
 import { NotebookCover } from "@/app/components/NotebookCover";
@@ -25,6 +25,16 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
   const seller = useSellerProfile(auth.status === "signed-in" ? auth.uid : null);
   const [view, setView] = useState<"landing" | "app">(initialView);
   const { t } = useLanguage();
+
+  useEffect(() => {
+    if (view !== "app") return;
+    const id = typeof window !== "undefined" && window.location.hash.startsWith("#") ? window.location.hash.slice(1) : "";
+    if (!id) return;
+    const tScroll = window.setTimeout(() => {
+      document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 120);
+    return () => window.clearTimeout(tScroll);
+  }, [view]);
 
   const sellerSignedIn = firebaseReady && auth.status === "signed-in";
 
@@ -54,7 +64,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
             <LanguageSelect />
             <button
               type="button"
-              className="crm-ghost-btn inline-flex min-h-[42px] min-w-[42px] items-center justify-center rounded-lg px-2.5 py-2 text-[11px] font-medium touch-manipulation sm:min-h-0 sm:py-1.5"
+              className="crm-ghost-btn inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg px-2.5 py-2 text-[11px] font-medium touch-manipulation sm:min-h-0 sm:py-1.5"
               onClick={() => {
                 window.dispatchEvent(new CustomEvent("crm-show-notebook-cover"));
               }}
@@ -63,7 +73,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
             </button>
             <button
               type="button"
-              className="crm-ghost-btn inline-flex min-h-[42px] max-w-[6.75rem] items-center justify-center truncate rounded-lg px-2.5 py-2 text-[11px] font-medium touch-manipulation sm:max-w-none sm:min-h-0 sm:py-1.5"
+              className="crm-ghost-btn inline-flex min-h-[44px] max-w-[6.75rem] items-center justify-center truncate rounded-lg px-2.5 py-2 text-[11px] font-medium touch-manipulation sm:max-w-none sm:min-h-0 sm:py-1.5"
               title={view === "app" ? t("header.landing") : t("header.workspace")}
               onClick={() => setView((v) => (v === "app" ? "landing" : "app"))}
             >
@@ -75,7 +85,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
               <>
                 <div className="hidden text-xs text-[color:var(--ink-2)] sm:block">{auth.name ?? auth.email ?? auth.uid}</div>
                 <button
-                  className="crm-ghost-btn inline-flex min-h-[42px] items-center rounded-lg px-3 py-2 text-xs font-semibold touch-manipulation"
+                  className="crm-ghost-btn inline-flex min-h-[44px] items-center rounded-lg px-3 py-2 text-xs font-semibold touch-manipulation"
                   onClick={signOut}
                 >
                   {t("auth.signOut")}
@@ -89,7 +99,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                 <Link
                   href="/register"
                   className={[
-                    "crm-ink-btn inline-flex min-h-[42px] items-center rounded-lg px-3 py-2 text-xs font-semibold touch-manipulation",
+                    "crm-ink-btn inline-flex min-h-[44px] items-center rounded-lg px-3 py-2 text-xs font-semibold touch-manipulation",
                     firebaseReady ? "" : "opacity-55",
                   ].join(" ")}
                 >

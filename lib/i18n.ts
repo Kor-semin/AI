@@ -89,6 +89,24 @@ export type TranslationKey =
   | "crm.section.allNextActions"
   | "crm.section.eventsPreview"
   | "crm.section.templates"
+  | "crm.workspaceAi.title"
+  | "crm.workspaceAi.subtitle"
+  | "crm.workspaceAi.customerPickLabel"
+  | "crm.workspaceAi.selectPlaceholder"
+  | "crm.workspaceAi.pickCustomer"
+  | "crm.workspaceAi.memoLabel"
+  | "crm.workspaceAi.toneLabel"
+  | "crm.workspaceAi.needsHeading"
+  | "crm.workspaceAi.salesHeading"
+  | "crm.workspaceAi.smsHeading"
+  | "crm.workspaceAi.copySms"
+  | "crm.workspaceAi.saveMemo"
+  | "crm.workspaceAi.saveToast"
+  | "crm.workspaceAi.createFollowUp"
+  | "crm.workspaceAi.followUpToast"
+  | "crm.workspaceAi.smsCopyToast"
+  | "crm.workspaceAi.followUpDefaultTitle"
+  | "crm.workspaceAi.analyzing"
   | "common.copy"
   | "common.save"
   | "common.reset"
@@ -136,6 +154,19 @@ export type TranslationKey =
   | "landing.aiDemo.messageExample"
   | "landing.aiDemo.applyCta"
   | "landing.aiDemo.careCoachLabel"
+  | "landing.aiDemo.tabNeeds"
+  | "landing.aiDemo.tabSales"
+  | "landing.aiDemo.tabSms"
+  | "landing.aiDemo.copySms"
+  | "landing.aiDemo.statusBarAnalyzing"
+  | "landing.aiDemo.statusBarReady"
+  | "landing.aiDemo.betaJoinShort"
+  | "landing.aiDemo.applyShort"
+  | "landing.aiDemo.simpleHint"
+  | "landing.aiDemo.previewHeading"
+  | "landing.aiDemo.continueInWorkspace"
+  | "landing.aiDemo.loadSampleSnippet"
+  | "landing.aiDemo.previewWorkspaceNote"
   | "landing.crmDemo.sectionTitle"
   | "landing.crmDemo.sectionDesc"
   | "landing.crmDemo.startCta"
@@ -151,6 +182,7 @@ export type TranslationKey =
   | "cover.aiGuide.step4.desc"
   | "cover.aiGuide.tryCta"
   | "cover.aiGuide.startCta"
+  | "cover.aiGuide.memoExampleHint"
   | "crm.seasonCare.title"
   | "crm.seasonCare.intro"
   | "crm.seasonCare.previewLabel"
@@ -172,6 +204,9 @@ export type TranslationKey =
   | "crm.seasonCare.copyFail"
   | "crm.seasonCare.copyEmptyHint"
   | "crm.seasonCare.disclaimer"
+  | "crm.seasonCare.stepConditions"
+  | "crm.seasonCare.stepSender"
+  | "crm.seasonCare.adNoticeHeading"
   | "crm.seasonCare.brand.mercedesBenz"
   | "crm.seasonCare.brand.bmw"
   | "crm.seasonCare.brand.mini"
@@ -273,6 +308,24 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.section.allNextActions": "전체 다음 할 일",
     "crm.section.eventsPreview": "일정 미리보기",
     "crm.section.templates": "문자 템플릿",
+    "crm.workspaceAi.title": "AI 비서 (작업)",
+    "crm.workspaceAi.subtitle": "메모 기준으로 초안을 만들고, 저장·복사·후속 연락까지 한 패널에서 처리합니다.",
+    "crm.workspaceAi.customerPickLabel": "고객",
+    "crm.workspaceAi.selectPlaceholder": "고객을 선택해 주세요",
+    "crm.workspaceAi.pickCustomer": "워크플로를 시작하려면 고객을 선택하거나 새로 추가하세요.",
+    "crm.workspaceAi.memoLabel": "상담 메모",
+    "crm.workspaceAi.toneLabel": "문구 톤",
+    "crm.workspaceAi.needsHeading": "고객 니즈",
+    "crm.workspaceAi.salesHeading": "영업 포인트",
+    "crm.workspaceAi.smsHeading": "발송 문자",
+    "crm.workspaceAi.copySms": "문자 복사",
+    "crm.workspaceAi.saveMemo": "CRM에 저장",
+    "crm.workspaceAi.saveToast": "상담 메모가 저장되었습니다.",
+    "crm.workspaceAi.createFollowUp": "후속 연락 만들기",
+    "crm.workspaceAi.followUpToast": "후속 연락이 추가되었습니다.",
+    "crm.workspaceAi.smsCopyToast": "문자 초안을 복사했습니다.",
+    "crm.workspaceAi.followUpDefaultTitle": "다음 연락",
+    "crm.workspaceAi.analyzing": "정리 중…",
     "common.copy": "복사",
     "common.save": "저장",
     "common.reset": "초기화",
@@ -325,6 +378,20 @@ export const translations: Record<LanguageCode, TranslationDict> = {
       "안녕하세요. 지난 상담에서 말씀하신 승차감과 가족 이동 편의성을 기준으로 정리해봤습니다. 오늘 편하실 때 금융 조건까지 함께 안내드리겠습니다.",
     "landing.aiDemo.applyCta": "CRM에 적용하기",
     "landing.aiDemo.careCoachLabel": "SensoraGuide · 배려 응대 포인트",
+    "landing.aiDemo.tabNeeds": "고객 니즈",
+    "landing.aiDemo.tabSales": "영업 포인트",
+    "landing.aiDemo.tabSms": "발송 문자",
+    "landing.aiDemo.copySms": "문자 복사",
+    "landing.aiDemo.statusBarAnalyzing": "SensoraGuide · 분석 중…",
+    "landing.aiDemo.statusBarReady": "SensoraGuide · 분석 완료",
+    "landing.aiDemo.betaJoinShort": "베타 신청",
+    "landing.aiDemo.applyShort": "CRM 적용",
+    "landing.aiDemo.simpleHint": "짧게 입력하면 바로 초안 형태만 미리 확인할 수 있어요. 저장·후속 업무는 워크스페이스에서 이어지면 됩니다.",
+    "landing.aiDemo.previewHeading": "결과 미리보기",
+    "landing.aiDemo.continueInWorkspace": "앱 워크스페이스에서 계속하기",
+    "landing.aiDemo.loadSampleSnippet": "예시 문장 불러오기",
+    "landing.aiDemo.previewWorkspaceNote":
+      "실제 저장·복사·후속 연락은 워크스페이스의 AI 비서 패널에서 이어 할 수 있습니다.",
     "landing.crmDemo.sectionTitle": "고객관리 흐름을 한 화면에",
     "landing.crmDemo.sectionDesc":
       "오늘 연락할 고객, 계약 가능성, 상담 요약, 출고 안내서를 한 번에 확인합니다.",
@@ -342,6 +409,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "cover.aiGuide.step4.desc": "추천 문구와 출고 안내서를 고객 응대에 바로 활용할 수 있습니다.",
     "cover.aiGuide.tryCta": "AI 비서 체험하기",
     "cover.aiGuide.startCta": "고객관리 시작하기",
+    "cover.aiGuide.memoExampleHint": "상담 메모 예시는 홈 `#ai-demo`에서 바로 불러올 수 있어요.",
     "crm.seasonCare.title": "시즌 케어 메시지",
     "crm.seasonCare.intro":
       "계절·정비 명분으로 고객에게 보낼 장문 문자 초안입니다. 선택 값에 맞춰 조합되며 추후 AI 연결을 위해 구조가 분리되어 있습니다.",
@@ -365,6 +433,9 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.seasonCare.copyEmptyHint": "먼저 메시지 생성을 실행해 주세요.",
     "crm.seasonCare.disclaimer":
       "광고성 문자 발송 시 수신 동의, (광고) 표시, 발신자 명칭, 연락처, 무료수신거부 표기가 필요할 수 있습니다. 실제 발송 전 관련 법규와 회사 정책을 확인하세요.",
+    "crm.seasonCare.stepConditions": "1 · 조건 선택",
+    "crm.seasonCare.stepSender": "2 · 발신자 정보",
+    "crm.seasonCare.adNoticeHeading": "광고·정보 문자 안내",
     "crm.seasonCare.brand.mercedesBenz": "Mercedes-Benz",
     "crm.seasonCare.brand.bmw": "BMW",
     "crm.seasonCare.brand.mini": "MINI",
@@ -466,6 +537,24 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.section.allNextActions": "All Next Actions",
     "crm.section.eventsPreview": "Schedule Preview",
     "crm.section.templates": "Message Templates",
+    "crm.workspaceAi.title": "AI assistant (workspace)",
+    "crm.workspaceAi.subtitle": "Draft from your memo, then copy, save, or create a follow-up in one panel.",
+    "crm.workspaceAi.customerPickLabel": "Customer",
+    "crm.workspaceAi.selectPlaceholder": "Select a customer",
+    "crm.workspaceAi.pickCustomer": "Select or add a customer to begin.",
+    "crm.workspaceAi.memoLabel": "Consultation memo",
+    "crm.workspaceAi.toneLabel": "Message tone",
+    "crm.workspaceAi.needsHeading": "Customer needs",
+    "crm.workspaceAi.salesHeading": "Sales angles",
+    "crm.workspaceAi.smsHeading": "Outbound SMS",
+    "crm.workspaceAi.copySms": "Copy message",
+    "crm.workspaceAi.saveMemo": "Save to CRM",
+    "crm.workspaceAi.saveToast": "Memo saved.",
+    "crm.workspaceAi.createFollowUp": "Create follow-up",
+    "crm.workspaceAi.followUpToast": "Follow-up added.",
+    "crm.workspaceAi.smsCopyToast": "Message copied.",
+    "crm.workspaceAi.followUpDefaultTitle": "Follow-up",
+    "crm.workspaceAi.analyzing": "Working…",
     "common.copy": "Copy",
     "common.save": "Save",
     "common.reset": "Reset",
@@ -518,6 +607,21 @@ export const translations: Record<LanguageCode, TranslationDict> = {
       "Hello—based on what you shared about ride comfort and family convenience, I summarized the key points. When you’re free today, I can also walk you through financing options.",
     "landing.aiDemo.applyCta": "Apply in CRM",
     "landing.aiDemo.careCoachLabel": "SensoraGuide · Accessible care cues",
+    "landing.aiDemo.tabNeeds": "Customer needs",
+    "landing.aiDemo.tabSales": "Sales angles",
+    "landing.aiDemo.tabSms": "SMS draft",
+    "landing.aiDemo.copySms": "Copy message",
+    "landing.aiDemo.statusBarAnalyzing": "SensoraGuide · Analyzing…",
+    "landing.aiDemo.statusBarReady": "SensoraGuide · Analysis complete",
+    "landing.aiDemo.betaJoinShort": "Beta",
+    "landing.aiDemo.applyShort": "Use CRM",
+    "landing.aiDemo.simpleHint":
+      "Paste a quick memo to preview a lightweight draft—save and workflows continue in your workspace.",
+    "landing.aiDemo.previewHeading": "Draft preview",
+    "landing.aiDemo.continueInWorkspace": "Continue in workspace",
+    "landing.aiDemo.loadSampleSnippet": "Load sample text",
+    "landing.aiDemo.previewWorkspaceNote":
+      "Saving, copying, and follow-ups are handled in the workspace AI assistant panel.",
     "landing.crmDemo.sectionTitle": "The CRM flow—at a glance",
     "landing.crmDemo.sectionDesc":
       "See today’s follow-ups, deal probability, consultation summaries, and delivery guides in one place.",
@@ -538,6 +642,8 @@ export const translations: Record<LanguageCode, TranslationDict> = {
       "Apply recommended messages and delivery guides directly to customer communication.",
     "cover.aiGuide.tryCta": "Try AI Assistant",
     "cover.aiGuide.startCta": "Start Customer Management",
+    "cover.aiGuide.memoExampleHint":
+      "Sample memo lines are easiest to load from the home page section `#ai-demo`.",
     "crm.seasonCare.title": "Season Care Message",
     "crm.seasonCare.intro":
       "Draft a longer seasonal care or outreach SMS aligned to dealership context. Outputs are templated locally for now and separated for future AI generation.",
@@ -561,6 +667,9 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.seasonCare.copyEmptyHint": "Generate a message first.",
     "crm.seasonCare.disclaimer":
       "Advertising-style messages may require prior consent, an “Ad” marker, sender identity, contact information, and an opt-out line. Confirm local laws and dealer policy before sending.",
+    "crm.seasonCare.stepConditions": "1 · Scenario",
+    "crm.seasonCare.stepSender": "2 · Sender details",
+    "crm.seasonCare.adNoticeHeading": "Advertising & compliance note",
     "crm.seasonCare.brand.mercedesBenz": "Mercedes-Benz",
     "crm.seasonCare.brand.bmw": "BMW",
     "crm.seasonCare.brand.mini": "MINI",

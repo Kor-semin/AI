@@ -67,12 +67,12 @@ export function PwaInstallHint() {
 
   return (
     <div
-      className={`pointer-events-auto fixed inset-x-0 bottom-0 z-[100] pb-[calc(0.5rem+env(safe-area-inset-bottom))] pl-[calc(1rem+env(safe-area-inset-left))] pr-[calc(1rem+env(safe-area-inset-right))] pt-1 ${preferReducedMotion() ? "" : "motion-safe:transition-[opacity,transform] motion-safe:duration-200"} `}
+      className={`pointer-events-auto fixed inset-x-0 bottom-0 z-[92] pb-[calc(0.5rem+env(safe-area-inset-bottom))] pl-[calc(1rem+env(safe-area-inset-left))] pr-[calc(1rem+env(safe-area-inset-right))] pt-1 ${preferReducedMotion() ? "" : "motion-safe:transition-[opacity,transform] motion-safe:duration-200"}`}
     >
-      <div className="mx-auto flex max-w-lg flex-col gap-2 rounded-xl border border-[#E5E7EB]/90 bg-[#111827]/95 px-3 py-3 text-[13px] leading-snug text-[#F9FAFB] shadow-[0_-8px_32px_rgba(15,23,42,0.28)] backdrop-blur-md">
+      <div className="mx-auto flex max-w-lg flex-col gap-2 rounded-[20px] border border-[#E5E7EB]/90 bg-[#111827]/95 px-3 py-3 text-[13px] leading-snug text-[#F9FAFB] shadow-[0_-8px_32px_rgba(15,23,42,0.22)] backdrop-blur-md">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0 flex-1">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#C9A962]">{t("pwa.install.title")}</p>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-[#CBD5E1]">{t("pwa.install.title")}</p>
             <p className="mt-2 font-medium text-[#E5E7EB]">{t("pwa.install.description")}</p>
             {ios ? <p className="mt-1.5 text-[12px] leading-relaxed text-[#CBD5E1]">{t("pwa.install.ios")}</p> : null}
             {!ios && android ? (
@@ -83,7 +83,7 @@ export function PwaInstallHint() {
             type="button"
             aria-label={t("pwa.install.dismiss")}
             onClick={dismiss}
-            className="crm-ghost-btn shrink-0 rounded-lg px-3 py-2 text-[11px] font-semibold text-[#F9FAFB] ring-1 ring-inset ring-white/20 hover:bg-white/10"
+            className="crm-ghost-btn min-h-[44px] shrink-0 touch-manipulation rounded-lg px-3 py-2 text-[12px] font-semibold text-[#F9FAFB] ring-1 ring-inset ring-white/20 hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-[#94A3B8]"
           >
             {t("pwa.install.dismiss")}
           </button>

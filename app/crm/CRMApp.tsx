@@ -50,6 +50,11 @@ import {
   summarizeMarketVsBudget,
 } from "./recommendations";
 import { getMemoFeedback } from "./memoFeedback";
+import {
+  formatCareNeedsGuideTopicsUi,
+  generateDemoConsultingResponse,
+  type DemoSalesStyle,
+} from "@/app/components/concierge/aiDemoResponse";
 import { makeId, seedState } from "./seed";
 import { ContactSyncDialog } from "./ContactSyncDialog";
 import { DeliveryGuideScreen } from "@/app/crm/deliveryGuide/DeliveryGuideScreen";
@@ -72,6 +77,15 @@ const LEAD_SOURCES = [...DEALER_LEAD_SOURCES] satisfies LeadSource[];
 const STAGES = [...DEALER_PIPELINE_STAGES] satisfies PipelineStage[];
 
 const BRAND_OPTIONS: VehicleBrandId[] = [...VEHICLE_BRANDS];
+
+const WORKSPACE_AI_STYLE_KEYS: Record<DemoSalesStyle, TranslationKey> = {
+  polite: "landing.aiDemo.salesStyle.polite",
+  simple: "landing.aiDemo.salesStyle.simple",
+  premium: "landing.aiDemo.salesStyle.premium",
+  friendly: "landing.aiDemo.salesStyle.friendly",
+  active: "landing.aiDemo.salesStyle.active",
+};
+const WORKSPACE_AI_STYLE_ORDER: DemoSalesStyle[] = ["polite", "simple", "premium", "friendly", "active"];
 
 const PAYMENT_TYPE_OPTIONS: PaymentType[] = ["현금", "할부", "리스", "장기렌트"];
 const ACCIDENT_OPTIONS: UsedCarAccident[] = ["무사고", "단순교환", "사고", "미상"];
@@ -201,10 +215,10 @@ function emptyState(): CRMState {
 
 function StatCard({ label, value, hint }: { label: string; value: string | number; hint?: string }) {
   return (
-    <div className="rounded-2xl border border-[#E5E7EB] bg-[#FFFFFF] p-5 shadow-[0_1px_3px_rgba(15,23,42,0.04)]">
+    <div className="rounded-[22px] border border-[#E5E7EB] bg-[#FFFFFF] px-5 py-4 shadow-[0_1px_3px_rgba(15,23,42,0.04)]">
       <div className="text-[12px] font-semibold tracking-[-0.01em] text-[#4B5563]">{label}</div>
-      <div className="mt-2 text-3xl font-semibold tabular-nums tracking-tight text-[#111827]">{value}</div>
-      {hint ? <div className="mt-2 text-[14px] leading-snug text-[#6B7280]">{hint}</div> : null}
+      <div className="mt-2 text-2xl font-semibold tabular-nums tracking-tight text-[#111827]">{value}</div>
+      {hint ? <div className="mt-2 text-[13px] leading-snug text-[#6B7280]">{hint}</div> : null}
     </div>
   );
 }
@@ -248,6 +262,10 @@ export function CRMApp({
   const [seasonCareContact, setSeasonCareContact] = useState("");
   const [seasonCareJobTitle, setSeasonCareJobTitle] = useState("");
   const [seasonCareOutput, setSeasonCareOutput] = useState("");
+  const [workspaceAiMemoDraft, setWorkspaceAiMemoDraft] = useState("");
+  const [workspaceAiDebounced, setWorkspaceAiDebounced] = useState("");
+  const [workspaceAiBusy, setWorkspaceAiBusy] = useState(false);
+  const [workspaceSalesStyle, setWorkspaceSalesStyle] = useState<DemoSalesStyle>("polite");
 
   const TAB_LABELS: Record<typeof tab, string> = {
     고객: t("crm.tab.customers"),
@@ -497,6 +515,49 @@ export function CRMApp({
     [selectedCustomer],
   );
 
+  useEffect(() => {
+    setWorkspaceAiBusy(false);
+    if (!selectedCustomerId) {
+      setWorkspaceAiMemoDraft("");
+      setWorkspaceAiDebounced("");
+      return;
+    }
+    const c = state.customers.find((row) => row.id === selectedCustomerId);
+    const m = c?.memo ?? "";
+    setWorkspaceAiMemoDraft(m);
+    setWorkspaceAiDebounced(m);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- 초기 선택 시점의 메모만 불러오기(편집 중 덮어쓰기 방지)
+  }, [selectedCustomerId]);
+
+  useEffect(() => {
+    if (!selectedCustomerId) return;
+    setWorkspaceAiBusy(true);
+    let t2: number | undefined;
+    const t1 = window.setTimeout(() => {
+      setWorkspaceAiDebounced(workspaceAiMemoDraft);
+      t2 = window.setTimeout(() => setWorkspaceAiBusy(false), 220);
+    }, 380);
+    return () => {
+      window.clearTimeout(t1);
+      if (t2) window.clearTimeout(t2);
+    };
+  }, [workspaceAiMemoDraft, selectedCustomerId]);
+
+  const workspaceAiInsights = useMemo(
+    () => generateDemoConsultingResponse(workspaceAiDebounced, { salesStyle: workspaceSalesStyle }),
+    [workspaceAiDebounced, workspaceSalesStyle],
+  );
+
+  const workspaceAiCoachTopics = useMemo(() => {
+    if (!workspaceAiDebounced.trim()) return null;
+    const langUi: "ko" | "en" = language === "ko" ? "ko" : "en";
+    return formatCareNeedsGuideTopicsUi(workspaceAiDebounced, langUi);
+  }, [workspaceAiDebounced, language]);
+
+  const workspaceCustomerOptions = useMemo(() => {
+    return [...state.customers].sort((a, b) => a.name.localeCompare(b.name, "ko-KR"));
+  }, [state.customers]);
+
   const quickTemplates = useMemo(() => {
     const tpls = [...state.templates];
     if (!selectedCustomer) return tpls.slice(0, 10);
@@ -647,14 +708,21 @@ export function CRMApp({
     }
   }
 
-  function addNextAction(customerId: string) {
+  function addNextAction(customerId: string, titleOverride?: string) {
+    const raw = titleOverride?.trim();
+    const title =
+      raw && raw.length > 0
+        ? raw.length > 140
+          ? `${raw.slice(0, 137)}…`
+          : raw
+        : "다음 할 일";
     const t = nowIso();
     const action: NextAction = {
       id: makeId("act"),
       customerId,
       createdAt: t,
       dueAt: new Date(Date.now() + 1000 * 60 * 60).toISOString(),
-      title: "다음 할 일",
+      title,
     };
     setState((prev) => ({ ...prev, nextActions: [action, ...prev.nextActions] }));
     setTab("다음할일");
@@ -825,7 +893,7 @@ export function CRMApp({
     <>
       <div id="crm-main" className="w-full min-w-0 pb-8 lg:pb-10">
         <div className="mx-auto flex w-full max-w-[1580px] flex-col gap-6 px-2 sm:px-4 xl:px-0">
-          <header className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between lg:gap-8">
+          <header className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between lg:gap-6">
             <div className="min-w-0">
               <h1 className="text-[clamp(22px,2.8vw,30px)] font-semibold leading-tight tracking-tight text-[#111827]">
                 {t("product.name")}
@@ -849,12 +917,12 @@ export function CRMApp({
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder={`이름 · 연락처 · 차종 · 메모 (${SEARCH_SHORTCUT_HINT})`}
                   title="어디서나 Ctrl+K (⌘K) 로 포커스"
-                  className="w-full rounded-xl border border-[#E5E7EB] bg-[#FFFFFF] px-4 py-3.5 text-[15px] text-[#111827] outline-none transition focus:border-[#94A3B8] focus:ring-2 focus:ring-[#CBD5E1]/65"
+                  className="min-h-[44px] w-full rounded-[20px] border border-[#E5E7EB] bg-[#FFFFFF] px-4 py-3 text-[15px] text-[#111827] outline-none transition focus:border-[#94A3B8] focus:ring-2 focus:ring-[#CBD5E1]/65"
                 />
               </label>
               <button
                 type="button"
-                className="shrink-0 rounded-xl bg-[#111827] px-6 py-3.5 text-[15px] font-semibold text-white shadow-sm transition hover:bg-[#1F2937] focus:outline-none focus:ring-2 focus:ring-[#94A3B8] sm:w-auto sm:whitespace-nowrap"
+                className="min-h-[44px] shrink-0 rounded-[20px] bg-[#111827] px-5 py-3 text-[15px] font-semibold text-white shadow-sm transition hover:bg-[#1F2937] focus:outline-none focus:ring-2 focus:ring-[#94A3B8] sm:w-auto sm:whitespace-nowrap touch-manipulation"
                 onClick={addCustomer}
               >
                 + {t("crm.addCustomer")}
@@ -877,7 +945,7 @@ export function CRMApp({
             <div className="flex flex-wrap gap-2">
               <button
                 type="button"
-                className="rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] px-5 py-2.5 text-[14px] font-semibold text-[#111827] ring-1 ring-inset ring-[#E5E7EB] transition hover:bg-[#F3F4F6]"
+                className="min-h-[44px] rounded-[20px] border border-[#E5E7EB] bg-[#F9FAFB] px-5 py-2.5 text-[14px] font-semibold text-[#111827] ring-1 ring-inset ring-[#E5E7EB] transition hover:bg-[#F3F4F6] touch-manipulation"
                 onClick={() => setContactSyncOpen(true)}
               >
                 연락처 연동
@@ -885,10 +953,10 @@ export function CRMApp({
               {selectedCustomer ? (
                 <button
                   type="button"
-                  className="rounded-xl border border-[#E5E7EB] bg-[#FFFFFF] px-5 py-2.5 text-[14px] font-semibold text-[#374151] transition hover:bg-[#F9FAFB]"
+                  className="min-h-[44px] rounded-[20px] border border-[#E5E7EB] bg-[#FFFFFF] px-5 py-2.5 text-[14px] font-semibold text-[#374151] transition hover:bg-[#F9FAFB] touch-manipulation"
                   onClick={() => setDeliveryGuideOpen(true)}
                 >
-                  AI 출고 안내서
+                  출고 안내
                 </button>
               ) : null}
             </div>
@@ -904,7 +972,7 @@ export function CRMApp({
                 type="button"
                 onClick={() => setTab(t)}
                 className={[
-                  "-mb-px px-5 py-3 text-[14px] font-semibold transition",
+                  "min-h-[44px] -mb-px touch-manipulation px-5 py-3 text-[14px] font-semibold outline-none transition focus-visible:rounded-t-lg focus-visible:ring-2 focus-visible:ring-[#CBD5E1]",
                   tab === t
                     ? "border-b-2 border-[#111827] text-[#111827]"
                     : "border-b-2 border-transparent text-[#6B7280] hover:text-[#111827]",
@@ -942,9 +1010,9 @@ export function CRMApp({
                   </p>
                 </div>
                 <div className="overflow-x-auto xl:overflow-y-auto xl:[max-height:calc(100vh-20rem)]">
-                  <table className="min-w-[880px] w-full text-left">
-                    <thead>
-                      <tr className="border-b border-[#E5E7EB] bg-[#F9FAFB]">
+                  <table className="min-w-[880px] w-full border-collapse text-left">
+                    <thead className="sticky top-0 z-[2] backdrop-blur-sm">
+                      <tr className="border-b border-[#E5E7EB] bg-[#F9FAFB]/95 shadow-[inset_0_-1px_0_0_#E5E7EB]">
                         <th className="px-5 py-4 text-[12px] font-semibold tracking-[-0.01em] text-[#4B5563] sm:px-6">
                           고객명
                         </th>
@@ -1037,9 +1105,9 @@ export function CRMApp({
               <section
                 id="crm-detail-panel"
                 tabIndex={-1}
-                className="flex min-h-[48vh] min-w-0 flex-col gap-5 xl:max-h-[calc(100vh-13rem)] xl:overflow-y-auto"
+                className="flex min-h-[48vh] min-w-0 flex-col gap-4 xl:max-h-[calc(100vh-13rem)] xl:overflow-y-auto"
               >
-                <header id="crm-detail-header" className="scroll-mt-28 rounded-2xl border border-[#E5E7EB] bg-[#FFFFFF] px-6 py-5 shadow-sm">
+                <header id="crm-detail-header" className="scroll-mt-28 rounded-[22px] border border-[#E5E7EB] bg-[#FFFFFF] px-5 py-4 shadow-[0_2px_8px_-4px_rgba(15,23,42,0.06)] sm:px-6">
                   <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                     <div className="min-w-0 flex-1">
                       <div className="truncate text-[22px] font-semibold tracking-tight text-[#111827]">
@@ -1071,39 +1139,195 @@ export function CRMApp({
                           onClick={() => setDeliveryGuideOpen(true)}
                           className="rounded-xl border border-[#E5E7EB] bg-[#FFFFFF] px-4 py-2.5 text-[13px] font-semibold text-[#111827] hover:bg-[#F9FAFB]"
                         >
-                          AI 출고 안내서
+                          출고 안내
                         </button>
                         <button
                           type="button"
                           onClick={() => addNextAction(selectedCustomer.id)}
-                          className="rounded-xl border border-[#E5E7EB] bg-[#FFFFFF] px-4 py-2.5 text-[13px] font-semibold hover:bg-[#F3F4F6]"
+                          className="min-h-[44px] rounded-xl border border-[#E5E7EB] bg-[#FFFFFF] px-4 py-2.5 text-[13px] font-semibold hover:bg-[#F3F4F6] touch-manipulation"
                         >
-                          + 다음 연락
+                          + 연락
                         </button>
                         <button
                           type="button"
                           onClick={() => addEvent(selectedCustomer.id)}
-                          className="rounded-xl border border-[#E5E7EB] bg-[#FFFFFF] px-4 py-2.5 text-[13px] font-semibold hover:bg-[#F3F4F6]"
+                          className="min-h-[44px] rounded-xl border border-[#E5E7EB] bg-[#FFFFFF] px-4 py-2.5 text-[13px] font-semibold hover:bg-[#F3F4F6] touch-manipulation"
                         >
                           + 일정
                         </button>
                         <button
                           type="button"
                           onClick={() => exportCustomerSummary(selectedCustomer)}
-                          className="rounded-xl bg-[#111827] px-4 py-2.5 text-[13px] font-semibold text-white hover:bg-[#1F2937]"
+                          className="min-h-[44px] rounded-xl bg-[#111827] px-4 py-2.5 text-[13px] font-semibold text-white hover:bg-[#1F2937] touch-manipulation"
                         >
-                          요약 내보내기
+                          요약
                         </button>
                       </div>
                     ) : null}
                   </div>
                 </header>
 
-                <div className="flex flex-col gap-6">
+                <section
+                  id="crm-ai-assistant"
+                  tabIndex={-1}
+                  className="scroll-mt-28 rounded-[22px] border border-[#E5E7EB] bg-[#FAFBFC] px-5 py-5 shadow-[0_2px_10px_-4px_rgba(15,23,42,0.06)] sm:px-6"
+                  aria-labelledby="crm-ai-assistant-title"
+                >
+                  <div className="flex flex-wrap items-start justify-between gap-3 border-b border-[#EEF1F5] pb-4">
+                    <div className="min-w-0">
+                      <h2 id="crm-ai-assistant-title" className="text-[17px] font-semibold text-[#111827]">
+                        {t("crm.workspaceAi.title")}
+                      </h2>
+                      <p className="mt-1 max-w-[56ch] text-[13px] leading-relaxed text-[#6B7280]">
+                        {t("crm.workspaceAi.subtitle")}
+                      </p>
+                      {workspaceAiCoachTopics ? (
+                        <p className="mt-2 text-[11px] font-semibold leading-snug text-[#475569]">
+                          {t("landing.aiDemo.careCoachLabel")} · {workspaceAiCoachTopics}
+                        </p>
+                      ) : null}
+                    </div>
+                    {workspaceAiBusy && selectedCustomerId ? (
+                      <span className="shrink-0 text-[12px] font-semibold text-[#64748B]" aria-live="polite">
+                        {t("crm.workspaceAi.analyzing")}
+                      </span>
+                    ) : null}
+                  </div>
+
+                  <div className="mt-5 grid gap-5 lg:grid-cols-[minmax(180px,220px)_minmax(0,1fr)]">
+                    <div className="flex flex-col gap-4">
+                      <label className="grid gap-1.5">
+                        <span className="text-[12px] font-semibold text-[#374151]">{t("crm.workspaceAi.customerPickLabel")}</span>
+                        <select
+                          value={selectedCustomerId ?? ""}
+                          onChange={(e) => setSelectedCustomerId(e.target.value ? e.target.value : null)}
+                          className="min-h-[44px] w-full rounded-[14px] border border-[#E5E7EB] bg-white px-3 py-3 text-[14px] font-medium text-[#111827] outline-none focus:border-[#94A3B8] focus:ring-2 focus:ring-[#CBD5E1]/55"
+                          aria-label={t("crm.workspaceAi.selectPlaceholder")}
+                        >
+                          <option value="">{t("crm.workspaceAi.selectPlaceholder")}</option>
+                          {workspaceCustomerOptions.map((cust) => (
+                            <option key={cust.id} value={cust.id}>
+                              {cust.name}
+                              {cust.interestedModel?.trim()
+                                ? ` · ${cust.interestedModel}`
+                                : ""}
+                            </option>
+                          ))}
+                        </select>
+                      </label>
+                      {!selectedCustomerId ? (
+                        <p className="rounded-[14px] border border-dashed border-[#CBD5E1] bg-white px-3 py-2 text-[13px] text-[#64748B]">
+                          {t("crm.workspaceAi.pickCustomer")}
+                        </p>
+                      ) : null}
+                      <label className="grid gap-1.5">
+                        <span className="text-[12px] font-semibold text-[#374151]">{t("crm.workspaceAi.toneLabel")}</span>
+                        <select
+                          value={workspaceSalesStyle}
+                          onChange={(e) =>
+                            setWorkspaceSalesStyle(e.target.value as DemoSalesStyle)
+                          }
+                          disabled={!selectedCustomerId}
+                          className="min-h-[44px] w-full rounded-[14px] border border-[#E5E7EB] bg-white px-3 py-3 text-[14px] font-medium outline-none disabled:cursor-not-allowed disabled:bg-[#F3F4F6] disabled:opacity-65"
+                          aria-label={t("crm.workspaceAi.toneLabel")}
+                        >
+                          {WORKSPACE_AI_STYLE_ORDER.map((sid) => (
+                            <option key={sid} value={sid}>
+                              {t(WORKSPACE_AI_STYLE_KEYS[sid])}
+                            </option>
+                          ))}
+                        </select>
+                      </label>
+                    </div>
+                    <label className="grid min-h-0 gap-2">
+                      <span className="text-[13px] font-semibold text-[#374151]">{t("crm.workspaceAi.memoLabel")}</span>
+                      <textarea
+                        value={workspaceAiMemoDraft}
+                        onChange={(e) => setWorkspaceAiMemoDraft(e.target.value)}
+                        disabled={!selectedCustomerId}
+                        rows={8}
+                        spellCheck={false}
+                        autoComplete="off"
+                        className="min-h-[180px] w-full resize-y rounded-[14px] border border-[#E5E7EB] bg-white px-4 py-3 text-[14px] leading-relaxed text-[#111827] outline-none focus:border-[#94A3B8] disabled:cursor-not-allowed disabled:bg-[#F3F4F6]"
+                        placeholder=""
+                      />
+                    </label>
+                  </div>
+
+                  <div className="mt-6 grid gap-4 lg:grid-cols-3">
+                    <div className="flex min-h-0 flex-col rounded-[14px] border border-[#E5E7EB] bg-white p-4 shadow-sm lg:col-span-1">
+                      <h3 className="text-[12px] font-semibold text-[#475569]">{t("crm.workspaceAi.needsHeading")}</h3>
+                      <div className="mt-3 max-h-[min(260px,calc(100vh-20rem))] min-h-[88px] flex-1 overflow-y-auto whitespace-pre-line text-[14px] leading-relaxed text-[#111827]">
+                        {workspaceAiDebounced.trim() ? workspaceAiInsights.summary : "—"}
+                      </div>
+                    </div>
+                    <div className="flex min-h-0 flex-col rounded-[14px] border border-[#E5E7EB] bg-white p-4 shadow-sm lg:col-span-1">
+                      <h3 className="text-[12px] font-semibold text-[#475569]">{t("crm.workspaceAi.salesHeading")}</h3>
+                      <div className="mt-3 max-h-[min(260px,calc(100vh-20rem))] min-h-[88px] flex-1 overflow-y-auto whitespace-pre-line text-[14px] leading-relaxed text-[#111827]">
+                        {workspaceAiDebounced.trim() ? workspaceAiInsights.nextAction : "—"}
+                      </div>
+                    </div>
+                    <div className="flex min-h-0 flex-col rounded-[14px] border border-[#E5E7EB] bg-white p-4 shadow-sm lg:col-span-1">
+                      <h3 className="text-[12px] font-semibold text-[#475569]">{t("crm.workspaceAi.smsHeading")}</h3>
+                      <div className="mt-3 max-h-[min(260px,calc(100vh-20rem))] min-h-[88px] flex-1 overflow-y-auto whitespace-pre-line text-[14px] leading-relaxed text-[#111827]">
+                        {workspaceAiDebounced.trim() ? workspaceAiInsights.message : "—"}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="sticky bottom-1 z-[3] mt-6 flex flex-wrap gap-2 rounded-[14px] border border-[#E5E7EB] bg-[#FFFFFF]/96 px-3 py-3 shadow-[0_6px_24px_-12px_rgba(15,23,42,0.12)] backdrop-blur-sm">
+                    <button
+                      type="button"
+                      disabled={!selectedCustomerId || !workspaceAiDebounced.trim()}
+                      className="min-h-[44px] flex-1 touch-manipulation rounded-[12px] bg-[#111827] px-4 text-[13px] font-semibold text-white hover:bg-[#1F2937] disabled:cursor-not-allowed disabled:opacity-45 sm:flex-none"
+                      onClick={() => {
+                        const text = workspaceAiInsights.message.trim();
+                        if (!text || !selectedCustomerId) return;
+                        void copyToClipboard(text).then((ok) => {
+                          if (ok) showToast(t("crm.workspaceAi.smsCopyToast"));
+                          else showToast(t("crm.seasonCare.copyFail"));
+                        });
+                      }}
+                    >
+                      {t("crm.workspaceAi.copySms")}
+                    </button>
+                    <button
+                      type="button"
+                      disabled={!selectedCustomerId}
+                      className="min-h-[44px] flex-1 touch-manipulation rounded-[12px] border border-[#E5E7EB] bg-white px-4 text-[13px] font-semibold text-[#111827] hover:bg-[#F9FAFB] disabled:cursor-not-allowed disabled:opacity-45 sm:flex-none"
+                      onClick={() => {
+                        if (!selectedCustomerId) return;
+                        upsertCustomer({ id: selectedCustomerId, memo: workspaceAiMemoDraft });
+                        showToast(t("crm.workspaceAi.saveToast"));
+                      }}
+                    >
+                      {t("crm.workspaceAi.saveMemo")}
+                    </button>
+                    <button
+                      type="button"
+                      disabled={!selectedCustomerId || !workspaceAiDebounced.trim()}
+                      className="min-h-[44px] flex-1 touch-manipulation rounded-[12px] border border-[#E5E7EB] bg-[#F3F4F6] px-4 text-[13px] font-semibold text-[#374151] ring-1 ring-inset ring-[#E5E7EB] hover:bg-[#E8EAED] disabled:cursor-not-allowed disabled:opacity-45 sm:flex-none"
+                      onClick={() => {
+                        if (!selectedCustomerId) return;
+                        const raw = workspaceAiInsights.nextAction
+                          .split("\n")
+                          .map((ln) => ln.trim())
+                          .find((ln) => ln.length > 0);
+                        const line = raw?.replace(/^[-•*]\s*/, "") ?? t("crm.workspaceAi.followUpDefaultTitle");
+                        addNextAction(selectedCustomerId, line);
+                        showToast(t("crm.workspaceAi.followUpToast"));
+                      }}
+                    >
+                      {t("crm.workspaceAi.createFollowUp")}
+                    </button>
+                  </div>
+                </section>
+
+                <div className="flex flex-col gap-4">
           {selectedCustomer ? (
             <>
               {memoFeedback ? (
-                <div className="rounded-2xl border border-[#CBD5E1] bg-gradient-to-b from-[#FFFFFF] to-[#F8FAFC] p-6 shadow-[0_4px_24px_-12px_rgba(15,23,42,0.08)]">
+                <div className="rounded-[22px] border border-[#E5E7EB] bg-gradient-to-b from-[#FFFFFF] to-[#F4F6F8] px-5 py-4 shadow-[0_4px_20px_-12px_rgba(15,23,42,0.06)] sm:p-5">
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div className="text-[12px] font-semibold tracking-[-0.01em] text-[#475569]">
                       {t("crm.section.aiRecommendation")}
@@ -1113,7 +1337,7 @@ export function CRMApp({
                       onClick={() => setDeliveryGuideOpen(true)}
                       className="rounded-lg bg-[#111827] px-3 py-1.5 text-[12px] font-semibold text-white hover:bg-[#1F2937]"
                     >
-                      출고 안내서
+                      출고 안내
                     </button>
                   </div>
                   <ul className="mt-4 space-y-3 text-[16px] leading-relaxed text-[#111827]">
@@ -1138,18 +1362,23 @@ export function CRMApp({
                 </div>
               ) : null}
 
-              <div className="rounded-2xl border border-[#E5E7EB] bg-[#FFFFFF] p-6 shadow-sm">
-                <div className="flex flex-wrap items-start justify-between gap-3">
-                  <div>
-                    <div className="text-[12px] font-semibold tracking-[-0.01em] text-[#475569]">
+              <details
+                open
+                className="scroll-mt-24 rounded-[22px] border border-[#E5E7EB] bg-[#FFFFFF] px-5 py-4 shadow-[0_2px_8px_-4px_rgba(15,23,42,0.06)] sm:p-5"
+              >
+                <summary className="list-none rounded-xl px-1 py-2 outline-none transition hover:bg-[#FAFBFC] focus-visible:ring-2 focus-visible:ring-[#CBD5E1] [&::-webkit-details-marker]:hidden">
+                  <div className="min-w-0">
+                    <div className="text-[13px] font-semibold tracking-[-0.01em] text-[#475569]">
                       {t("crm.section.consultationSummary")} · 고객 메시지
                     </div>
-                    <div className="mt-2 text-[15px] leading-relaxed text-[#6B7280]">
+                    <div className="mt-2 text-[14px] leading-relaxed text-[#6B7280]">
                       상담/예산/차량 메모를 바탕으로 자동으로 정리됩니다. 필요하면 문장을 수정해도 됩니다.
                     </div>
                   </div>
-                </div>
-                {(() => {
+                  <span className="sr-only">드래프트 문자 영역 접기 또는 펼치기</span>
+                </summary>
+                <div className="border-t border-[#F4F6F8] pt-4">
+                  {(() => {
                   const q = buildUsedCarSearchQuery(selectedCustomer);
                   const lines: string[] = [];
                   lines.push(`안녕하세요 ${selectedCustomer.name}님. ${myName}입니다.`);
@@ -1187,7 +1416,7 @@ export function CRMApp({
                     <>
                       <textarea
                         rows={7}
-                        className="mt-4 w-full resize-y rounded-xl border border-[#E5E7EB] bg-white px-4 py-3 text-[14px] text-[#374151] outline-none focus:border-[#94A3B8]"
+                        className="mt-4 w-full min-h-[144px] resize-y rounded-xl border border-[#E5E7EB] bg-white px-4 py-3 text-[14px] text-[#374151] outline-none focus:border-[#94A3B8]"
                         value={text}
                         readOnly
                         autoComplete="off"
@@ -1198,7 +1427,7 @@ export function CRMApp({
                       <div className="mt-3 flex flex-wrap gap-2">
                         <button
                           type="button"
-                          className="rounded-xl bg-[#111827] px-4 py-2.5 text-[13px] font-semibold text-white hover:bg-[#1F2937]"
+                          className="min-h-[44px] rounded-xl bg-[#111827] px-4 py-2.5 text-[13px] font-semibold text-white hover:bg-[#1F2937] touch-manipulation"
                           onClick={() => {
                             void copyToClipboard(text).then((ok) => {
                               if (ok) showToast("문자 내용 복사 완료");
@@ -1212,9 +1441,10 @@ export function CRMApp({
                     </>
                   );
                 })()}
-              </div>
+                </div>
+              </details>
 
-              <div className="flex flex-col gap-6">
+              <div className="flex flex-col gap-4">
                 <details
                   id="crm-block-budget"
                   className="scroll-mt-24 rounded-2xl border border-[#E5E7EB] bg-[#FFFFFF] p-5"
@@ -1634,12 +1864,17 @@ export function CRMApp({
                   </div>
                 </details>
 
-                <div
+                <details
                   id="crm-block-profile"
                   tabIndex={-1}
-                  className="scroll-mt-24 rounded-2xl border border-[#E5E7EB] bg-white p-5 outline-none"
+                  className="scroll-mt-24 rounded-[22px] border border-[#E5E7EB] bg-white p-5 outline-none"
                 >
-                  <div className="text-sm font-semibold">고객·상담 정보</div>
+                  <summary className="flex cursor-pointer list-none items-center justify-between gap-2 rounded-xl px-1 py-2 outline-none transition hover:bg-[#F9FAFB] focus-visible:ring-2 focus-visible:ring-[#CBD5E1] [&::-webkit-details-marker]:hidden">
+                    <span className="text-[15px] font-semibold text-[#111827]">고객·상담 정보</span>
+                    <span className="rounded-full border border-[#E5E7EB] bg-[#F3F4F6] px-2.5 py-1 text-[11px] font-semibold text-[#64748B]">
+                      펼치기
+                    </span>
+                  </summary>
                   <div className="mt-4 grid grid-cols-1 gap-3">
                     <Field
                       label="고객명"
@@ -1742,7 +1977,7 @@ export function CRMApp({
                       }
                     />
                   </div>
-                </div>
+                </details>
 
                 <div
                   id="crm-block-quick-tpl"
@@ -2090,149 +2325,155 @@ export function CRMApp({
 
               <section
                 aria-labelledby="season-care-title"
-                className="mt-8 rounded-2xl border border-[#CBD5E1] bg-[#F9FAFB] p-5 sm:p-6"
+                className="mt-8 rounded-[22px] border border-[#E5E7EB] bg-[#FAFBFC] p-5 sm:p-6"
               >
                 <header className="border-b border-[#E5E7EB] pb-4">
                   <h3 id="season-care-title" className="text-[17px] font-semibold tracking-[-0.01em] text-[#111827]">
                     {t("crm.seasonCare.title")}
                   </h3>
-                  <p className="mt-2 text-[14px] font-medium leading-relaxed text-[#6B7280]">
+                  <p className="mt-2 text-[13px] font-medium leading-relaxed text-[#6B7280]">
                     {t("crm.seasonCare.intro")}
                   </p>
                 </header>
 
-                <div className="mt-5 grid grid-cols-1 gap-4 md:grid-cols-2">
-                  <label className="grid gap-1">
-                    <span className="text-[13px] font-semibold text-[#374151]">{t("crm.seasonCare.brandLabel")}</span>
-                    <select
-                      value={seasonCareBrand}
-                      onChange={(e) => setSeasonCareBrand(e.target.value as SeasonCareBrandPreset | "other")}
-                      className="w-full rounded-xl border border-[#E5E7EB] bg-white px-3 py-3 text-[15px] outline-none focus:border-[#94A3B8]"
-                    >
-                      {SC_BRAND_OPTIONS.map((id) => (
-                        <option key={id} value={id}>
-                          {t(SC_BRAND_TKEY[id])}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                  <label className="grid gap-1">
-                    <span className="text-[13px] font-semibold text-[#374151]">{t("crm.seasonCare.seasonLabel")}</span>
-                    <select
-                      value={seasonCareSeason}
-                      onChange={(e) => setSeasonCareSeason(e.target.value as SeasonCareSeason)}
-                      className="w-full rounded-xl border border-[#E5E7EB] bg-white px-3 py-3 text-[15px] outline-none focus:border-[#94A3B8]"
-                    >
-                      {SEASON_CARE_SEASONS.map((id) => (
-                        <option key={id} value={id}>
-                          {t(SC_SEASON_TKEY[id])}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                  <label className="grid gap-1">
-                    <span className="text-[13px] font-semibold text-[#374151]">{t("crm.seasonCare.purposeLabel")}</span>
-                    <select
-                      value={seasonCarePurpose}
-                      onChange={(e) => setSeasonCarePurpose(e.target.value as SeasonCarePurpose)}
-                      className="w-full rounded-xl border border-[#E5E7EB] bg-white px-3 py-3 text-[15px] outline-none focus:border-[#94A3B8]"
-                    >
-                      {SEASON_CARE_PURPOSES.map((id) => (
-                        <option key={id} value={id}>
-                          {t(SC_PURPOSE_TKEY[id])}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                  <label className="grid gap-1">
-                    <span className="text-[13px] font-semibold text-[#374151]">{t("crm.seasonCare.toneLabel")}</span>
-                    <select
-                      value={seasonCareTone}
-                      onChange={(e) => setSeasonCareTone(e.target.value as SeasonCareTone)}
-                      className="w-full rounded-xl border border-[#E5E7EB] bg-white px-3 py-3 text-[15px] outline-none focus:border-[#94A3B8]"
-                    >
-                      {SEASON_CARE_TONES.map((id) => (
-                        <option key={id} value={id}>
-                          {t(SC_TONE_TKEY[id])}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
+                <div className="mt-6 space-y-8">
+                  <div>
+                    <p className="text-[13px] font-semibold text-[#111827]">{t("crm.seasonCare.stepConditions")}</p>
+                    <div className="mt-3 grid grid-cols-1 gap-3 md:grid-cols-2">
+                      <label className="grid gap-1">
+                        <span className="text-[13px] font-semibold text-[#374151]">{t("crm.seasonCare.brandLabel")}</span>
+                        <select
+                          value={seasonCareBrand}
+                          onChange={(e) =>
+                            setSeasonCareBrand(e.target.value as SeasonCareBrandPreset | "other")
+                          }
+                          className="min-h-[44px] w-full rounded-[14px] border border-[#E5E7EB] bg-white px-3 py-3 text-[15px] outline-none focus:border-[#94A3B8] focus:ring-2 focus:ring-[#CBD5E1]/65"
+                        >
+                          {SC_BRAND_OPTIONS.map((id) => (
+                            <option key={id} value={id}>
+                              {t(SC_BRAND_TKEY[id])}
+                            </option>
+                          ))}
+                        </select>
+                      </label>
+                      <label className="grid gap-1">
+                        <span className="text-[13px] font-semibold text-[#374151]">{t("crm.seasonCare.seasonLabel")}</span>
+                        <select
+                          value={seasonCareSeason}
+                          onChange={(e) => setSeasonCareSeason(e.target.value as SeasonCareSeason)}
+                          className="min-h-[44px] w-full rounded-[14px] border border-[#E5E7EB] bg-white px-3 py-3 text-[15px] outline-none focus:border-[#94A3B8] focus:ring-2 focus:ring-[#CBD5E1]/65"
+                        >
+                          {SEASON_CARE_SEASONS.map((id) => (
+                            <option key={id} value={id}>
+                              {t(SC_SEASON_TKEY[id])}
+                            </option>
+                          ))}
+                        </select>
+                      </label>
+                      <label className="grid gap-1">
+                        <span className="text-[13px] font-semibold text-[#374151]">{t("crm.seasonCare.purposeLabel")}</span>
+                        <select
+                          value={seasonCarePurpose}
+                          onChange={(e) => setSeasonCarePurpose(e.target.value as SeasonCarePurpose)}
+                          className="min-h-[44px] w-full rounded-[14px] border border-[#E5E7EB] bg-white px-3 py-3 text-[15px] outline-none focus:border-[#94A3B8] focus:ring-2 focus:ring-[#CBD5E1]/65"
+                        >
+                          {SEASON_CARE_PURPOSES.map((id) => (
+                            <option key={id} value={id}>
+                              {t(SC_PURPOSE_TKEY[id])}
+                            </option>
+                          ))}
+                        </select>
+                      </label>
+                      <label className="grid gap-1">
+                        <span className="text-[13px] font-semibold text-[#374151]">{t("crm.seasonCare.toneLabel")}</span>
+                        <select
+                          value={seasonCareTone}
+                          onChange={(e) => setSeasonCareTone(e.target.value as SeasonCareTone)}
+                          className="min-h-[44px] w-full rounded-[14px] border border-[#E5E7EB] bg-white px-3 py-3 text-[15px] outline-none focus:border-[#94A3B8] focus:ring-2 focus:ring-[#CBD5E1]/65"
+                        >
+                          {SEASON_CARE_TONES.map((id) => (
+                            <option key={id} value={id}>
+                              {t(SC_TONE_TKEY[id])}
+                            </option>
+                          ))}
+                        </select>
+                      </label>
+                    </div>
+
+                    {seasonCareBrand === "other" ? (
+                      <label className="mt-4 grid gap-1">
+                        <span className="text-[13px] font-semibold text-[#374151]">{t("crm.seasonCare.brandOtherHint")}</span>
+                        <input
+                          value={seasonCareBrandCustom}
+                          onChange={(e) => setSeasonCareBrandCustom(e.target.value)}
+                          placeholder={t("crm.seasonCare.customBrandPlaceholder")}
+                          autoComplete="off"
+                          spellCheck={false}
+                          className="min-h-[44px] w-full rounded-[14px] border border-[#E5E7EB] bg-white px-3 py-3 text-[15px] outline-none focus:border-[#94A3B8]"
+                        />
+                      </label>
+                    ) : null}
+                  </div>
+
+                  <div className="rounded-[18px] border border-[#E5E7EB] bg-white p-4 shadow-[inset_0_1px_0_rgba(255,255,255,1)] sm:p-5">
+                    <p className="text-[13px] font-semibold text-[#111827]">{t("crm.seasonCare.stepSender")}</p>
+                    <p className="mt-1 text-[13px] text-[#6B7280]">
+                      {t("crm.seasonCare.sellerHeading")}{" "}
+                      <span className="font-medium">({t("crm.seasonCare.optionalHint")})</span>
+                    </p>
+                    <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                      <label className="grid gap-1">
+                        <span className="text-[13px] font-semibold text-[#374151]">{t("crm.seasonCare.sellerName")}</span>
+                        <input
+                          value={seasonCareSellerName}
+                          onChange={(e) => setSeasonCareSellerName(e.target.value)}
+                          autoComplete="off"
+                          spellCheck={false}
+                          className="min-h-[44px] rounded-[14px] border border-[#E5E7EB] bg-[#FFFFFF] px-3 py-2.5 text-[15px] outline-none focus:border-[#94A3B8]"
+                        />
+                      </label>
+                      <label className="grid gap-1">
+                        <span className="text-[13px] font-semibold text-[#374151]">{t("crm.seasonCare.showroom")}</span>
+                        <input
+                          value={seasonCareShowroom}
+                          onChange={(e) => setSeasonCareShowroom(e.target.value)}
+                          autoComplete="off"
+                          spellCheck={false}
+                          className="min-h-[44px] rounded-[14px] border border-[#E5E7EB] bg-[#FFFFFF] px-3 py-2.5 text-[15px] outline-none focus:border-[#94A3B8]"
+                        />
+                      </label>
+                      <label className="grid gap-1">
+                        <span className="text-[13px] font-semibold text-[#374151]">
+                          {t("crm.seasonCare.sellerContactField")}
+                        </span>
+                        <input
+                          value={seasonCareContact}
+                          onChange={(e) => setSeasonCareContact(e.target.value)}
+                          autoComplete="off"
+                          spellCheck={false}
+                          inputMode="tel"
+                          className="min-h-[44px] rounded-[14px] border border-[#E5E7EB] bg-[#FFFFFF] px-3 py-2.5 text-[15px] outline-none focus:border-[#94A3B8]"
+                        />
+                      </label>
+                      <label className="grid gap-1">
+                        <span className="text-[13px] font-semibold text-[#374151]">{t("crm.seasonCare.jobTitle")}</span>
+                        <input
+                          value={seasonCareJobTitle}
+                          onChange={(e) => setSeasonCareJobTitle(e.target.value)}
+                          autoComplete="off"
+                          spellCheck={false}
+                          className="min-h-[44px] rounded-[14px] border border-[#E5E7EB] bg-[#FFFFFF] px-3 py-2.5 text-[15px] outline-none focus:border-[#94A3B8]"
+                        />
+                      </label>
+                    </div>
+                  </div>
                 </div>
 
-                {seasonCareBrand === "other" ? (
-                  <label className="mt-4 grid gap-1">
-                    <span className="text-[13px] font-semibold text-[#374151]">
-                      {t("crm.seasonCare.brandOtherHint")}
-                    </span>
-                    <input
-                      value={seasonCareBrandCustom}
-                      onChange={(e) => setSeasonCareBrandCustom(e.target.value)}
-                      placeholder={t("crm.seasonCare.customBrandPlaceholder")}
-                      autoComplete="off"
-                      spellCheck={false}
-                      className="w-full rounded-xl border border-[#E5E7EB] bg-white px-3 py-3 text-[15px] outline-none focus:border-[#94A3B8]"
-                    />
-                  </label>
-                ) : null}
-
-                <div className="mt-6 rounded-xl border border-[#E5E7EB] bg-white p-4 sm:p-5">
-                  <div className="text-[13px] font-semibold text-[#111827]">
-                    {t("crm.seasonCare.sellerHeading")}
-                    <span className="ml-2 font-medium text-[#6B7280]">({t("crm.seasonCare.optionalHint")})</span>
-                  </div>
-                  <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                    <label className="grid gap-1">
-                      <span className="text-[13px] font-semibold text-[#374151]">{t("crm.seasonCare.sellerName")}</span>
-                      <input
-                        value={seasonCareSellerName}
-                        onChange={(e) => setSeasonCareSellerName(e.target.value)}
-                        autoComplete="off"
-                        spellCheck={false}
-                        className="rounded-xl border border-[#E5E7EB] bg-[#FFFFFF] px-3 py-2.5 text-[15px] outline-none focus:border-[#94A3B8]"
-                      />
-                    </label>
-                    <label className="grid gap-1">
-                      <span className="text-[13px] font-semibold text-[#374151]">{t("crm.seasonCare.showroom")}</span>
-                      <input
-                        value={seasonCareShowroom}
-                        onChange={(e) => setSeasonCareShowroom(e.target.value)}
-                        autoComplete="off"
-                        spellCheck={false}
-                        className="rounded-xl border border-[#E5E7EB] bg-[#FFFFFF] px-3 py-2.5 text-[15px] outline-none focus:border-[#94A3B8]"
-                      />
-                    </label>
-                    <label className="grid gap-1">
-                      <span className="text-[13px] font-semibold text-[#374151]">
-                        {t("crm.seasonCare.sellerContactField")}
-                      </span>
-                      <input
-                        value={seasonCareContact}
-                        onChange={(e) => setSeasonCareContact(e.target.value)}
-                        autoComplete="off"
-                        spellCheck={false}
-                        inputMode="tel"
-                        className="rounded-xl border border-[#E5E7EB] bg-[#FFFFFF] px-3 py-2.5 text-[15px] outline-none focus:border-[#94A3B8]"
-                      />
-                    </label>
-                    <label className="grid gap-1">
-                      <span className="text-[13px] font-semibold text-[#374151]">{t("crm.seasonCare.jobTitle")}</span>
-                      <input
-                        value={seasonCareJobTitle}
-                        onChange={(e) => setSeasonCareJobTitle(e.target.value)}
-                        autoComplete="off"
-                        spellCheck={false}
-                        className="rounded-xl border border-[#E5E7EB] bg-[#FFFFFF] px-3 py-2.5 text-[15px] outline-none focus:border-[#94A3B8]"
-                      />
-                    </label>
-                  </div>
-                </div>
-
-                <div className="mt-6 flex flex-wrap gap-3">
+                <div className="sticky bottom-4 z-[5] mt-8 flex flex-wrap gap-3 rounded-[16px] border border-[#E5E7EB] bg-[#FFFFFF]/94 px-3 py-3 shadow-[0_8px_28px_-12px_rgba(15,23,42,0.12)] backdrop-blur-md">
                   <button
                     type="button"
                     onClick={() => runSeasonCareGenerate()}
-                    className="rounded-xl bg-[#111827] px-5 py-2.5 text-[14px] font-semibold text-white hover:bg-[#1F2937]"
+                    className="min-h-[44px] rounded-[14px] bg-[#111827] px-5 py-2.5 text-[14px] font-semibold text-white hover:bg-[#1F2937] touch-manipulation"
                   >
                     {t("crm.seasonCare.generate")}
                   </button>
@@ -2246,34 +2487,37 @@ export function CRMApp({
                       const ok = await copyToClipboard(seasonCareOutput);
                       showToast(ok ? t("crm.seasonCare.copyToast") : t("crm.seasonCare.copyFail"));
                     }}
-                    className="rounded-xl bg-[#F3F4F6] px-5 py-2.5 text-[14px] font-semibold text-[#111827] ring-1 ring-inset ring-[#E5E7EB] hover:bg-[#E5E7EB]"
+                    className="min-h-[44px] rounded-[14px] bg-[#F3F4F6] px-5 py-2.5 text-[14px] font-semibold text-[#111827] ring-1 ring-inset ring-[#E5E7EB] hover:bg-[#E5E7EB] touch-manipulation"
                   >
                     {t("crm.seasonCare.copy")}
                   </button>
                   <button
                     type="button"
                     onClick={() => resetSeasonCareForm()}
-                    className="rounded-xl bg-[#F3F4F6] px-5 py-2.5 text-[14px] font-semibold text-[#374151] ring-1 ring-inset ring-[#E5E7EB] hover:bg-[#E4E7EC]"
+                    className="min-h-[44px] rounded-[14px] bg-[#FFFFFF] px-5 py-2.5 text-[14px] font-semibold text-[#374151] ring-1 ring-inset ring-[#E5E7EB] hover:bg-[#F9FAFB] touch-manipulation"
                   >
                     {t("common.reset")}
                   </button>
                 </div>
 
-                <label htmlFor="season-care-output" className="mt-5 grid gap-2">
+                <label htmlFor="season-care-output" className="mt-6 grid gap-3">
                   <span className="text-[13px] font-semibold text-[#374151]">{t("crm.seasonCare.previewLabel")}</span>
                   <textarea
                     id="season-care-output"
                     value={seasonCareOutput}
                     onChange={(e) => setSeasonCareOutput(e.target.value)}
-                    rows={14}
-                    className="min-h-[280px] w-full resize-y rounded-xl border border-[#E5E7EB] bg-white px-4 py-3 text-[15px] leading-relaxed text-[#111827] outline-none focus:border-[#94A3B8]"
+                    rows={16}
+                    className="min-h-[min(440px,calc(100vh-16rem))] w-full resize-y rounded-[14px] border border-[#E5E7EB] bg-white px-4 py-3 text-[15px] leading-relaxed text-[#111827] outline-none focus:border-[#94A3B8]"
                     spellCheck={false}
                   />
                 </label>
 
-                <p className="mt-4 text-[12px] font-medium leading-relaxed text-[#6B7280]">
-                  {t("crm.seasonCare.disclaimer")}
-                </p>
+                <details className="mt-6 rounded-[16px] border border-[#E5E7EB] bg-[#FFFFFF] px-4 py-3">
+                  <summary className="cursor-pointer list-none text-[12px] font-semibold leading-snug text-[#475569] outline-none focus-visible:ring-2 focus-visible:ring-[#CBD5E1] [&::-webkit-details-marker]:hidden">
+                    {t("crm.seasonCare.adNoticeHeading")}
+                  </summary>
+                  <p className="mt-2 text-[12px] font-medium leading-relaxed text-[#6B7280]">{t("crm.seasonCare.disclaimer")}</p>
+                </details>
               </section>
 
               <div className="mt-10 grid grid-cols-1 gap-5 lg:grid-cols-2">

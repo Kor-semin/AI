@@ -169,38 +169,52 @@ export function NotebookCover() {
             </div>
           </div>
 
-          <div className="mt-6 w-full px-2" onClick={(e) => e.stopPropagation()} onPointerDown={(e) => e.stopPropagation()}>
-            <section className="mx-auto w-full max-w-[min(42rem,94vw)] rounded-2xl border border-white/12 bg-white/[0.06] p-5 text-left shadow-[0_18px_60px_-38px_rgba(0,0,0,0.55)] backdrop-blur-md">
-              <div className="flex flex-col gap-1">
+          <div
+            className="mt-5 w-full px-2 sm:mt-5"
+            onClick={(e) => e.stopPropagation()}
+            onPointerDown={(e) => e.stopPropagation()}
+          >
+            <section className="mx-auto w-full max-w-[min(42rem,min(94vw,26rem))] rounded-[22px] border border-white/12 bg-white/[0.06] px-4 py-4 text-left shadow-[0_16px_50px_-36px_rgba(0,0,0,0.5)] backdrop-blur-md sm:max-w-[min(42rem,94vw)] sm:px-5 sm:py-[1.1rem] md:max-w-[min(42rem,94vw)]">
+              <div className="flex flex-col gap-0.5">
                 <div className="text-[12px] font-semibold tracking-[-0.01em] text-[#E5E7EB]">{t("cover.aiGuide.title")}</div>
-                <div className="text-[13px] leading-relaxed text-[#CBD5E1]">{t("cover.aiGuide.subtitle")}</div>
+                <div className="text-[12px] leading-snug text-[#CBD5E1]">{t("cover.aiGuide.subtitle")}</div>
               </div>
 
-              <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              <div className="mt-3.5 grid grid-cols-4 gap-1.5 sm:grid-cols-2">
                 {[
                   { n: "1", title: t("cover.aiGuide.step1.title"), desc: t("cover.aiGuide.step1.desc") },
                   { n: "2", title: t("cover.aiGuide.step2.title"), desc: t("cover.aiGuide.step2.desc") },
                   { n: "3", title: t("cover.aiGuide.step3.title"), desc: t("cover.aiGuide.step3.desc") },
                   { n: "4", title: t("cover.aiGuide.step4.title"), desc: t("cover.aiGuide.step4.desc") },
                 ].map((s) => (
-                  <div key={s.n} className="rounded-xl border border-white/10 bg-black/10 p-4">
-                    <div className="flex items-start gap-3">
-                      <div className="mt-0.5 inline-flex size-7 shrink-0 items-center justify-center rounded-full border border-white/18 bg-white/10 text-[12px] font-bold text-[#F8FAFC]">
+                  <div
+                    key={s.n}
+                    className="min-w-0 rounded-[14px] border border-white/10 bg-black/[0.07] px-2 py-2 text-center sm:rounded-[16px] sm:p-3 sm:text-left"
+                    title={`${s.title} — ${s.desc}`}
+                  >
+                    <div className="mx-auto mb-1 inline-flex size-7 shrink-0 items-center justify-center rounded-full border border-white/16 bg-white/10 text-[12px] font-bold text-[#F8FAFC] sm:hidden">
+                      {s.n}
+                    </div>
+                    <div className="hidden gap-3 sm:flex">
+                      <span className="mt-0.5 inline-flex size-7 shrink-0 items-center justify-center rounded-full border border-white/16 bg-white/10 text-[12px] font-bold text-[#F8FAFC]">
                         {s.n}
-                      </div>
-                      <div>
-                        <div className="text-[13px] font-semibold text-[#F8FAFC]">{s.title}</div>
-                        <div className="mt-1 text-[12px] leading-relaxed text-[#CBD5E1]">{s.desc}</div>
+                      </span>
+                      <div className="min-w-0 flex-1">
+                        <div className="truncate text-[12px] font-semibold leading-tight text-[#F8FAFC]">{s.title}</div>
+                        <div className="mt-0.5 line-clamp-2 text-[11px] leading-snug text-[#94A3B8]">{s.desc}</div>
                       </div>
                     </div>
+                    <span className="truncate text-[10.5px] font-semibold leading-tight text-[#F9FAFB] line-clamp-2 sm:hidden">{s.title}</span>
                   </div>
                 ))}
               </div>
 
-              <div className="mt-4 flex flex-wrap gap-2">
+              <p className="mt-3 border-t border-white/10 pt-3 text-[11px] leading-snug text-[#94A3B8]">{t("cover.aiGuide.memoExampleHint")}</p>
+
+              <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:flex-wrap">
                 <button
                   type="button"
-                  className="rounded-full border border-white/14 bg-white/[0.08] px-4 py-2 text-[12px] font-semibold text-[#F8FAFC] hover:bg-white/[0.12]"
+                  className="min-h-[44px] shrink-0 touch-manipulation rounded-full border border-white/14 bg-white/[0.1] px-5 text-[13px] font-semibold leading-none text-[#F8FAFC] hover:bg-white/[0.14] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CBD5E1]/80"
                   onClick={(e) => {
                     e.stopPropagation();
                     dismissAndNavigate("/#ai-demo");
@@ -210,10 +224,10 @@ export function NotebookCover() {
                 </button>
                 <button
                   type="button"
-                  className="rounded-full border border-white/18 bg-white/[0.02] px-4 py-2 text-[12px] font-semibold text-[#E2E8F0] hover:bg-white/[0.06]"
+                  className="min-h-[44px] shrink-0 touch-manipulation rounded-full border border-white/18 bg-transparent px-5 text-[13px] font-semibold leading-none text-[#E8EDF6] hover:bg-white/[0.06] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CBD5E1]/80"
                   onClick={(e) => {
                     e.stopPropagation();
-                    dismissAndNavigate("/?view=app");
+                    dismissAndNavigate("/?view=app#crm-ai-assistant");
                   }}
                 >
                   {t("cover.aiGuide.startCta")}
@@ -222,7 +236,7 @@ export function NotebookCover() {
             </section>
           </div>
 
-          <div className="min-h-[clamp(1.25rem,3.25vh,2.5rem)] flex-1" aria-hidden />
+          <div className="min-h-[clamp(0.85rem,2.5vh,1.85rem)] flex-1" aria-hidden />
 
           <div className="mx-auto shrink-0 pb-6">
             <section className="notebook-cover-quote-stack mx-auto w-full max-w-[min(24.5em,calc(100vw-40px))]">
