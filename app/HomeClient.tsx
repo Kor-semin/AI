@@ -141,7 +141,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
         className={[
           "sticky top-0 z-30 isolate border-b backdrop-blur-md",
           /** iPhone 상태바/notch 안전영역을 반영해 헤더 콘텐츠가 겹치지 않도록 */
-          "px-4 pb-3 pt-[max(14px,calc(env(safe-area-inset-top,0px)+10px))] sm:px-6",
+          "px-4 pb-3 pt-[max(14px,calc(env(safe-area-inset-top,0px)+12px))] sm:px-6",
           view === "landing" ? "border-[#E5E7EB] bg-[#F4F6F8]/88" : "border-[color:var(--edge)] bg-[color:var(--background)]/72",
         ].join(" ")}
       >

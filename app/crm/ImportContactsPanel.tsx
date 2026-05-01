@@ -40,12 +40,11 @@ type PreviewRow = {
   resolution: "add_new" | "skip" | "merge_memo";
 };
 
-function privacyNotice(): string {
-  return (
-    "선택한 연락처, 업로드한 파일, 붙여넣은 내용만 가져옵니다. " +
-    "가져오기 전 미리보기에서 확인할 수 있으며, 기존 고객 정보는 자동으로 덮어쓰지 않습니다."
-  );
-}
+const IMPORT_PRIVACY_POINTS = [
+  "Sensora는 사용자가 직접 선택한 연락처만 가져옵니다.",
+  "가져온 정보는 저장 전 사용자가 확인할 수 있습니다.",
+  "AI는 고객 정보를 임의로 수정하거나 덮어쓰지 않습니다.",
+] as const;
 
 function tryParseImportRawText(text: string): NormalizedImportedContact[] {
   const t = text.trim();
@@ -303,7 +302,7 @@ export function ImportContactsPanel({
 
   return (
     <div
-      className="fixed inset-0 z-[300] flex items-start justify-center overflow-y-auto bg-black/50 p-4 pb-10 pt-8 sm:pt-12"
+      className="fixed inset-0 z-[300] flex items-start justify-center overflow-y-auto bg-black/50 px-4 pb-[max(2.5rem,calc(env(safe-area-inset-bottom,0px)+1rem))] pt-[max(2rem,calc(env(safe-area-inset-top,0px)+1rem))] sm:pb-10 sm:pt-12"
       onClick={() => onClose()}
       onKeyDown={(e) => e.key === "Escape" && onClose()}
     >
@@ -317,9 +316,18 @@ export function ImportContactsPanel({
         <h2 id="import-contacts-title" className="text-lg font-bold text-[#111827]">
           주소록 가져오기
         </h2>
-        <p className="mt-2 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-2 text-[12px] leading-relaxed text-[#475569]">
-          {privacyNotice()}
-        </p>
+        <div className="mt-2 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-3 text-[12px] leading-relaxed text-[#475569]">
+          <p className="font-semibold text-[#334155]">개인정보·연락처 처리 안내</p>
+          <ul className="mt-2 list-disc space-y-1.5 pl-5 text-[13px] text-[#475569]">
+            {IMPORT_PRIVACY_POINTS.map((line) => (
+              <li key={line}>{line}</li>
+            ))}
+          </ul>
+          <p className="mt-2 border-t border-[#E2E8F0] pt-2 text-[11px] text-[#64748B]">
+            붙여넣기·파일 업로드는 사용자가 직접 넣은 내용만 반영됩니다. 기존 고객 카드는 전화번호 동일 여부 등을 미리보기에서
+            확인한 뒤에만 병합·추가됩니다.
+          </p>
+        </div>
 
         <div className="mt-4 flex flex-wrap gap-2">
           {tabBtn("device", "휴대폰 선택")}

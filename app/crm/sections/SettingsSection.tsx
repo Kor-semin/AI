@@ -66,6 +66,7 @@ export function SettingsSection({
         <p className="mt-3 text-[14px] leading-[1.65] text-[#64748B]">
           문자 템플릿 등에 사용할 이름입니다.
         </p>
+        <p className="mt-3 text-[12px] leading-[1.65] text-[#94A3B8]">입력 즉시 이 브라우저(기기)에 저장되며, 별도의 저장 버튼은 필요 없습니다.</p>
         <label className="mt-4 grid gap-2">
           <span className="text-[12px] font-semibold text-[#374151]">내 이름</span>
           <input
@@ -108,9 +109,14 @@ export function SettingsSection({
 
       <section className={SECTION_MUTED}>
         <h3 className="text-[16px] font-bold tracking-tight text-[#111827]">연락처 가져오기 · 개인정보</h3>
-        <p className="mt-3 text-[14px] leading-[1.7] text-[#4B5563]">
-          선택한 연락처만, 업로드한 파일·붙여넣은 내용만 반영합니다. 저장 전에는 항상 미리보기로 확인합니다. 같은 이름이 있어도
-          기존 고객 정보를 자동으로 덮어쓰지 않습니다.
+        <ul className="mt-3 list-disc space-y-2 pl-5 text-[14px] font-medium leading-[1.7] text-[#374151]">
+          <li>Sensora는 사용자가 직접 선택한 연락처만 가져옵니다.</li>
+          <li>가져온 정보는 저장 전 사용자가 확인할 수 있습니다.</li>
+          <li>AI는 고객 정보를 임의로 수정하거나 덮어쓰지 않습니다.</li>
+        </ul>
+        <p className="mt-3 text-[13px] leading-[1.65] text-[#64748B]">
+          붙여넣기·파일 업로드는 직접 넣은 내용만 반영합니다. 이름이 비슷해도 기존 고객 카드는 미리보기에서 확인한 뒤에만
+          병합·추가됩니다.
         </p>
         {onOpenAddressBookImport ? (
           <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
