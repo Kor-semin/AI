@@ -54,7 +54,7 @@ export default function BetaJoinPage() {
     "mt-2 w-full rounded-xl border border-[#d7dce2] bg-[#fafbfc] px-4 py-3 text-sm text-[#1e2329] shadow-[inset_0_1px_2px_rgba(17,19,24,0.03)] placeholder:text-[#8a929e] focus:border-[#a8b0ba] focus:outline-none focus:ring-[3px] focus:ring-[rgba(168,176,186,0.22)]";
 
   return (
-    <main className="crm-bg relative min-h-[100dvh] min-h-[100svh] overflow-x-hidden px-[max(1rem,env(safe-area-inset-left))] pb-[max(2rem,env(safe-area-inset-bottom))] pr-[max(1rem,env(safe-area-inset-right))] pt-[max(1.25rem,env(safe-area-inset-top))]">
+    <main className="crm-bg relative min-h-[100dvh] min-h-[100svh] overflow-x-hidden px-[max(1rem,env(safe-area-inset-left))] pb-[max(2rem,calc(8rem+env(safe-area-inset-bottom,0px)))] max-sm:pb-[max(2rem,calc(8.5rem+env(safe-area-inset-bottom,0px)))] pr-[max(1rem,env(safe-area-inset-right))] pt-[max(1.25rem,env(safe-area-inset-top))]">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(760px_480px_at_10%_-4%,rgba(148,163,184,0.18),transparent_58%),radial-gradient(640px_400px_at_100%_0%,rgba(255,255,255,0.9),transparent_55%)]"

@@ -180,7 +180,7 @@ export default function JoinPage() {
     (profile == null || profile.approvalStatus === "needs_card" || wasRejected);
 
   return (
-    <main className="relative flex min-h-[100dvh] min-h-[100svh] flex-col overflow-x-hidden bg-[#ebe5dc] px-[max(1.15rem,env(safe-area-inset-left))] pb-[max(1.5rem,env(safe-area-inset-bottom))] pr-[max(1.15rem,env(safe-area-inset-right))] pt-[max(1.1rem,env(safe-area-inset-top))] text-[#2a251f]">
+    <main className="relative flex min-h-[100dvh] min-h-[100svh] flex-col overflow-x-hidden bg-[#ebe5dc] px-[max(1.15rem,env(safe-area-inset-left))] pb-[max(1.5rem,calc(8rem+env(safe-area-inset-bottom,0px)))] max-sm:pb-[max(1.5rem,calc(8.5rem+env(safe-area-inset-bottom,0px)))] pr-[max(1.15rem,env(safe-area-inset-right))] pt-[max(1.1rem,env(safe-area-inset-top))] text-[#2a251f]">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_120%_92%_at_48%_-6%,rgba(255,252,246,0.96),transparent_54%)]" />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_82%_50%_at_103%_-2%,rgba(255,218,178,0.18),transparent_58%)]" />
 

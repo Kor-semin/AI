@@ -187,9 +187,9 @@ html[lang="ko"] body {
 .notebook-cover-sheet {
   position: fixed;
   inset: 0;
-  z-index: 60;
+  z-index: 100;
   isolation: isolate;
-  cursor: pointer;
+  cursor: default;
   overflow: hidden;
 }
 
@@ -992,6 +992,29 @@ html[lang="ko"] body {
   .landing-showroom-hero-scene::after {
     opacity: 0.65;
     height: 40px;
+  }
+}
+
+/* Notebook onboarding — light page enter (disabled when user prefers reduced motion) */
+@keyframes notebook-cover-onboard-enter {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 8px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.notebook-cover-onboard-pane {
+  animation: notebook-cover-onboard-enter 280ms cubic-bezier(0.22, 1, 0.32, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .notebook-cover-onboard-pane {
+    animation: none;
   }
 }
 

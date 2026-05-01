@@ -71,15 +71,17 @@ function RevealSection({
   children: React.ReactNode;
 }) {
   const { ref, revealed } = useShowroomReveal();
+  const interact = revealed ? "pointer-events-auto" : "pointer-events-none";
   const innerStyles = revealed
     ? "translate-y-0 opacity-100 duration-[480ms] sm:duration-[780ms]"
-    : "opacity-0 max-sm:translate-y-2 sm:-translate-y-4";
+    : "opacity-0 max-sm:translate-y-2 sm:translate-y-0";
 
   return (
     <section id={id} ref={ref} className={className}>
       <div
         className={[
-          "ease-[cubic-bezier(0.22,1,0.32,1)] will-change-[opacity,transform] motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:transition-none",
+          "ease-[cubic-bezier(0.22,1,0.32,1)] will-change-[opacity,transform] motion-reduce:pointer-events-auto motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:transition-none",
+          interact,
           innerStyles,
         ].join(" ")}
       >
@@ -187,10 +189,10 @@ function ShowroomHero() {
             {t("landing.showroom.hero.desc")}
           </p>
           <div className="mt-10 flex max-w-full flex-col gap-3.5 sm:mt-12 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-5 sm:gap-y-3 lg:gap-x-6">
-            <Link href={APP_WORKSPACE_AI} prefetch={false} className={heroPrimaryBtn}>
+            <Link href={APP_WORKSPACE_AI} prefetch={false} className={`relative z-[3] ${heroPrimaryBtn}`}>
               {t("cta.tryAppExperience")}
             </Link>
-            <Link href={JOIN_PATH} prefetch={false} className={heroGhostBtn}>
+            <Link href={JOIN_PATH} prefetch={false} className={`relative z-[3] ${heroGhostBtn}`}>
               {t("cta.joinBeta")}
             </Link>
           </div>

@@ -224,6 +224,25 @@ export type TranslationKey =
   | "cover.aiGuide.tryCta"
   | "cover.aiGuide.startCta"
   | "cover.aiGuide.memoExampleHint"
+  | "cover.onboarding.page1.title"
+  | "cover.onboarding.page1.description"
+  | "cover.onboarding.page2.title"
+  | "cover.onboarding.page2.customer"
+  | "cover.onboarding.page2.ai"
+  | "cover.onboarding.page2.followup"
+  | "cover.onboarding.page2.season"
+  | "cover.onboarding.page2.delivery"
+  | "cover.onboarding.page3.title"
+  | "cover.onboarding.page3.description"
+  | "cover.onboarding.next"
+  | "cover.onboarding.prev"
+  | "cover.onboarding.start"
+  | "cover.onboarding.close"
+  | "cover.onboarding.startApp"
+  | "cover.onboarding.goWorkspace"
+  | "cover.onboarding.page3.workspaceCta"
+  | "cover.onboarding.page3.aiCta"
+  | "cover.onboarding.themeLabel"
   | "crm.seasonCare.title"
   | "crm.seasonCare.intro"
   | "crm.seasonCare.previewLabel"
@@ -500,6 +519,29 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "cover.aiGuide.tryCta": "AI 비서 체험하기",
     "cover.aiGuide.startCta": "고객관리 시작하기",
     "cover.aiGuide.memoExampleHint": "상담 메모 예시는 홈 `#ai-demo`에서 바로 불러올 수 있어요.",
+    "cover.onboarding.page1.title": "Sensora Auto CRM",
+    "cover.onboarding.page1.description":
+      "자동차 영업사원을 위한 AI 고객관리 앱입니다.\n고객 상담, 후속 연락, 발송 문구를 한 곳에서 정리합니다.",
+    "cover.onboarding.page2.title": "무엇을 도와드릴까요?",
+    "cover.onboarding.page2.customer": "고객관리\n연락처·상담·관심 차량을 카드 단위로 정리합니다.",
+    "cover.onboarding.page2.ai":
+      "AI 비서\n상담 메모를 두면 고객 니즈·영업 포인트·발송 문구 초안을 제안합니다.",
+    "cover.onboarding.page2.followup": "후속 연락\n재연락 시점과 통화·문자 메모를 한 흐름으로 묶습니다.",
+    "cover.onboarding.page2.season":
+      "시즌 케어 메시지\n계절·명분에 맞는 고객 메시지 초안을 차분하게 준비합니다.",
+    "cover.onboarding.page2.delivery": "출고 안내서\n출고 전후 고객 안내와 체크 항목을 문서처럼 정리합니다.",
+    "cover.onboarding.page3.title": "한 번 기록하면, 다음 행동까지 이어집니다.",
+    "cover.onboarding.page3.description":
+      "상담 메모를 남기면 SensoraGuide가 고객 니즈, 영업 포인트, 고객에게 보낼 문장을 제안합니다.\nAI는 제안만 하고, 저장과 수정은 사용자가 직접 결정합니다.",
+    "cover.onboarding.next": "다음",
+    "cover.onboarding.prev": "이전",
+    "cover.onboarding.start": "시작하기",
+    "cover.onboarding.close": "닫기",
+    "cover.onboarding.startApp": "앱 시작하기",
+    "cover.onboarding.goWorkspace": "Workspace로 이동",
+    "cover.onboarding.page3.workspaceCta": "Workspace 시작하기",
+    "cover.onboarding.page3.aiCta": "AI 비서로 이동하기",
+    "cover.onboarding.themeLabel": "표현 톤",
     "crm.seasonCare.title": "시즌 케어 메시지",
     "crm.seasonCare.intro":
       "계절·정비 명분으로 고객에게 보낼 장문 문자 초안입니다. 선택 값에 맞춰 조합되며 추후 AI 연결을 위해 구조가 분리되어 있습니다.",
@@ -786,6 +828,32 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "cover.aiGuide.startCta": "Start Customer Management",
     "cover.aiGuide.memoExampleHint":
       "Sample memo lines are easiest to load from the home page section `#ai-demo`.",
+    "cover.onboarding.page1.title": "Sensora Auto CRM",
+    "cover.onboarding.page1.description":
+      "An AI-assisted CRM tailored for showroom sales.\nKeep consultations, follow-ups, and outbound copy in one place.",
+    "cover.onboarding.page2.title": "What can we help you with?",
+    "cover.onboarding.page2.customer":
+      "Customer records\nContacts, consultations, and vehicle interest—organized card by card.",
+    "cover.onboarding.page2.ai":
+      "AI assistant\nLeave a memo—SensoraGuide proposes needs, sales angles, and draft messages.",
+    "cover.onboarding.page2.followup":
+      "Follow-up\nReconnect timing with call & SMS notes in one calm workspace rail.",
+    "cover.onboarding.page2.season":
+      "Seasonal care messages\nPrepare composed customer messages anchored to seasons and prompts.",
+    "cover.onboarding.page2.delivery":
+      "Delivery guide\nStructure pre- and post-delivery reassurance like a concise checklist.",
+    "cover.onboarding.page3.title": "One note captures the cue—until the disciplined next touch.",
+    "cover.onboarding.page3.description":
+      "After you save a memo, SensoraGuide suggests needs, sales emphasis, and phrasing customers can hear.\nIt proposes—you decide what lands in the CRM record.",
+    "cover.onboarding.next": "Next",
+    "cover.onboarding.prev": "Back",
+    "cover.onboarding.start": "Enter workspace",
+    "cover.onboarding.close": "Close",
+    "cover.onboarding.startApp": "Launch app",
+    "cover.onboarding.goWorkspace": "Go to Workspace",
+    "cover.onboarding.page3.workspaceCta": "Open Workspace",
+    "cover.onboarding.page3.aiCta": "Open AI assistant",
+    "cover.onboarding.themeLabel": "Visual tone",
     "crm.seasonCare.title": "Season Care Message",
     "crm.seasonCare.intro":
       "Draft a longer seasonal care or outreach SMS aligned to dealership context. Outputs are templated locally for now and separated for future AI generation.",

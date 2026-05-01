@@ -50,8 +50,8 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
 
       <header
         className={[
-          "sticky top-0 z-20 border-b px-4 py-3 backdrop-blur-md",
-          view === "landing" ? "border-[#E5E7EB] bg-[#F4F6F8]/80" : "border-[color:var(--edge)] bg-[color:var(--background)]/72",
+          "sticky top-0 z-30 isolate border-b px-5 py-3 backdrop-blur-md sm:px-6",
+          view === "landing" ? "border-[#E5E7EB] bg-[#F4F6F8]/88" : "border-[color:var(--edge)] bg-[color:var(--background)]/72",
         ].join(" ")}
       >
         <div
@@ -66,8 +66,10 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                 <div className="text-sm font-semibold tracking-tight text-[#111827]">{t("product.name")}</div>
                 <p className="mt-0.5 text-[11px] leading-snug text-[#4B5563] sm:max-w-[28rem] sm:text-xs sm:leading-normal">{t("brand.slogan")}</p>
               </div>
-              <div className="flex flex-wrap items-center gap-2 sm:justify-end">
-                <LanguageSelect />
+              <div className="relative z-[1] flex flex-wrap items-center gap-2 sm:justify-end">
+                <span className="relative z-[1]">
+                  <LanguageSelect />
+                </span>
                 {auth.status === "loading" ? (
                   <span className="hidden text-[11px] text-[#6B7280] sm:inline">{t("auth.checkingLogin")}</span>
                 ) : auth.status === "signed-in" ? (
@@ -110,8 +112,10 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                 <div className="hidden text-xs text-[color:var(--ink-2)] xl:block">{t("brand.subline")}</div>
                 <span className="crm-free-badge hidden sm:inline-flex text-[12px] font-extrabold">무료 사용</span>
               </div>
-              <div className="flex items-center gap-2">
-                <LanguageSelect />
+              <div className="relative z-[1] flex items-center gap-2">
+                <span className="relative z-[1]">
+                  <LanguageSelect />
+                </span>
                 <button
                   type="button"
                   className="crm-ghost-btn inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg px-2.5 py-2 text-[11px] font-medium touch-manipulation sm:min-h-0 sm:py-1.5"
@@ -169,7 +173,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
         {view === "app" ? (
           <div
             id="app"
-            className="min-h-[calc(100dvh-3.25rem)] scroll-mt-24 bg-[#F4F6F8] px-4 pb-12 pt-6 sm:px-6 lg:min-h-[calc(100dvh-3.5rem)]"
+            className="min-h-[calc(100dvh-3.25rem)] scroll-mt-24 bg-[#F4F6F8] px-4 pb-12 pt-6 max-sm:pb-[max(7rem,calc(4.5rem+env(safe-area-inset-bottom,0px)))] sm:px-6 lg:min-h-[calc(100dvh-3.5rem)]"
           >
             <div className="mx-auto flex w-full max-w-[1520px] gap-6 lg:gap-8">
               <ConciergeSidebar />
