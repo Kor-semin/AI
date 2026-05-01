@@ -206,7 +206,12 @@ export type TranslationKey =
   | "crm.seasonCare.tone.warm"
   | "crm.seasonCare.tone.premium"
   | "crm.seasonCare.tone.brief"
-  | "crm.seasonCare.tone.promo";
+  | "crm.seasonCare.tone.promo"
+  | "pwa.install.title"
+  | "pwa.install.description"
+  | "pwa.install.ios"
+  | "pwa.install.android"
+  | "pwa.install.dismiss";
 
 type TranslationDict = Partial<Record<TranslationKey, string>>;
 
@@ -394,6 +399,14 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.seasonCare.tone.premium": "프리미엄 톤",
     "crm.seasonCare.tone.brief": "짧고 담백한 톤",
     "crm.seasonCare.tone.promo": "장문 홍보 톤",
+    "pwa.install.title": "앱처럼 사용하기",
+    "pwa.install.description":
+      "앱처럼 사용하려면 브라우저 메뉴에서 ‘홈 화면에 추가’를 선택하세요.",
+    "pwa.install.ios":
+      "iPhone에서는 Safari 공유 버튼을 누른 뒤 ‘홈 화면에 추가’를 선택하세요.",
+    "pwa.install.android":
+      "Android에서는 Chrome 메뉴에서 ‘앱 설치’ 또는 ‘홈 화면에 추가’를 선택하세요.",
+    "pwa.install.dismiss": "닫기",
   },
   en: {
     "brand.name": "Sensora",
@@ -581,6 +594,14 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.seasonCare.tone.premium": "Premium",
     "crm.seasonCare.tone.brief": "Short & plain",
     "crm.seasonCare.tone.promo": "Long promotional",
+    "pwa.install.title": "Install Sensora like an app",
+    "pwa.install.description":
+      "To use Sensora like an app, open your browser menu and choose ‘Add to Home screen’.",
+    "pwa.install.ios":
+      "On iPhone Safari, tap the Share button, then choose ‘Add to Home Screen’.",
+    "pwa.install.android":
+      "On Android Chrome, choose ‘Install app’ or ‘Add to Home screen’ from the ⋮ menu.",
+    "pwa.install.dismiss": "Dismiss",
   },
   ja: {},
   "zh-CN": {},

@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Noto_Sans_KR, Noto_Serif_KR } from "next/font/google";
 import "./globals.css";
 import { LanguageProvider } from "@/app/components/i18n/LanguageProvider";
+import { PwaInstallHint } from "@/app/components/PwaInstallHint";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,14 +39,14 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     title: "Sensora Auto CRM",
-    statusBarStyle: "default",
+    statusBarStyle: "black-translucent",
   },
   icons: {
     icon: [
-      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
-      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
+      { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icons/icon-512.png", sizes: "512x512", type: "image/png" },
     ],
-    apple: [{ url: "/icon-192.png", sizes: "192x192" }],
+    apple: [{ url: "/icons/apple-touch-icon.png", sizes: "180x180" }],
   },
 };
 
@@ -54,8 +55,8 @@ export const viewport: Viewport = {
   initialScale: 1,
   viewportFit: "cover",
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#eef1f4" },
-    { media: "(prefers-color-scheme: dark)", color: "#eef1f4" },
+    { media: "(prefers-color-scheme: light)", color: "#111827" },
+    { media: "(prefers-color-scheme: dark)", color: "#111827" },
   ],
 };
 
@@ -69,8 +70,11 @@ export default function RootLayout({
       lang="ko"
       className={`${geistSans.variable} ${geistMono.variable} ${coverSerif.variable} ${coverSans.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
-        <LanguageProvider>{children}</LanguageProvider>
+      <body className="flex min-h-full flex-col">
+        <LanguageProvider>
+          {children}
+          <PwaInstallHint />
+        </LanguageProvider>
       </body>
     </html>
   );

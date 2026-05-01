@@ -54,7 +54,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
             <LanguageSelect />
             <button
               type="button"
-              className="crm-ghost-btn rounded-lg px-2.5 py-1.5 text-[11px] font-medium"
+              className="crm-ghost-btn inline-flex min-h-[42px] min-w-[42px] items-center justify-center rounded-lg px-2.5 py-2 text-[11px] font-medium touch-manipulation sm:min-h-0 sm:py-1.5"
               onClick={() => {
                 window.dispatchEvent(new CustomEvent("crm-show-notebook-cover"));
               }}
@@ -63,7 +63,8 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
             </button>
             <button
               type="button"
-              className="crm-ghost-btn hidden rounded-lg px-2.5 py-1.5 text-[11px] font-medium sm:inline-flex"
+              className="crm-ghost-btn inline-flex min-h-[42px] max-w-[6.75rem] items-center justify-center truncate rounded-lg px-2.5 py-2 text-[11px] font-medium touch-manipulation sm:max-w-none sm:min-h-0 sm:py-1.5"
+              title={view === "app" ? t("header.landing") : t("header.workspace")}
               onClick={() => setView((v) => (v === "app" ? "landing" : "app"))}
             >
               {view === "app" ? t("header.landing") : t("header.workspace")}
@@ -73,7 +74,10 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
             ) : auth.status === "signed-in" ? (
               <>
                 <div className="hidden text-xs text-[color:var(--ink-2)] sm:block">{auth.name ?? auth.email ?? auth.uid}</div>
-                <button className="crm-ghost-btn rounded-lg px-3 py-2 text-xs font-semibold" onClick={signOut}>
+                <button
+                  className="crm-ghost-btn inline-flex min-h-[42px] items-center rounded-lg px-3 py-2 text-xs font-semibold touch-manipulation"
+                  onClick={signOut}
+                >
                   {t("auth.signOut")}
                 </button>
               </>
@@ -84,7 +88,10 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                 ) : null}
                 <Link
                   href="/register"
-                  className={["crm-ink-btn rounded-lg px-3 py-2 text-xs font-semibold", firebaseReady ? "" : "opacity-55"].join(" ")}
+                  className={[
+                    "crm-ink-btn inline-flex min-h-[42px] items-center rounded-lg px-3 py-2 text-xs font-semibold touch-manipulation",
+                    firebaseReady ? "" : "opacity-55",
+                  ].join(" ")}
                 >
                   {t("auth.salesRegistration")}
                 </Link>
