@@ -180,7 +180,7 @@ export function ImportContactsPanel({
         if (!name && !tel && !email) continue;
         rows.push(
           normalizeImportedContact({
-            name: name || (tel ? "(이름없음)" : "이름 미입력"),
+            name: name || (tel ? "이름 없음" : "이름 미입력"),
             phone: tel || undefined,
             email: email || undefined,
           }),
@@ -302,7 +302,7 @@ export function ImportContactsPanel({
 
   return (
     <div
-      className="fixed inset-0 z-[300] flex items-start justify-center overflow-y-auto bg-black/50 px-4 pb-[max(2.5rem,calc(env(safe-area-inset-bottom,0px)+1rem))] pt-[max(2rem,calc(env(safe-area-inset-top,0px)+1rem))] sm:pb-10 sm:pt-12"
+      className="fixed inset-0 z-[300] flex items-start justify-center overflow-y-auto bg-black/50 px-4 pb-[max(2.5rem,calc(env(safe-area-inset-bottom,0px)+1rem))] pt-[max(2rem,calc(env(safe-area-inset-top,0px)+1rem))] max-[480px]:[scrollbar-width:none] max-[480px]:[-ms-overflow-style:none] max-[480px]:[&::-webkit-scrollbar]:hidden sm:pb-10 sm:pt-12"
       onClick={() => onClose()}
       onKeyDown={(e) => e.key === "Escape" && onClose()}
     >
@@ -310,25 +310,27 @@ export function ImportContactsPanel({
         role="dialog"
         aria-modal="true"
         aria-labelledby="import-contacts-title"
-        className="my-auto w-full max-w-4xl rounded-2xl border border-[#E5E7EB] bg-[#FFFFFF] p-4 shadow-xl sm:p-6"
+        className="my-auto w-full max-w-4xl rounded-2xl border border-[#E5E7EB] bg-[#FFFFFF] p-3 shadow-xl max-[480px]:max-h-[min(92dvh,920px)] max-[480px]:overflow-y-auto max-[480px]:[scrollbar-width:none] max-[480px]:[-ms-overflow-style:none] max-[480px]:[&::-webkit-scrollbar]:hidden sm:max-h-none sm:overflow-visible sm:p-6"
         onClick={(ev) => ev.stopPropagation()}
       >
         <h2 id="import-contacts-title" className="text-lg font-bold text-[#111827]">
           주소록 가져오기
         </h2>
-        <div className="mt-2 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-3 text-[12px] leading-relaxed text-[#475569]">
+        <div className="mt-2 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-2.5 text-[12px] leading-relaxed text-[#475569] sm:py-3">
           <p className="font-semibold text-[#334155]">개인정보·연락처 처리 안내</p>
-          <p className="mt-2 text-[13px] leading-relaxed text-[#475569]">
-            iPhone, Google 연락처, Galaxy/Samsung 연락처에서 연락처 파일을 준비한 뒤 업로드할 수 있습니다.
-          </p>
-          <p className="mt-2 text-[13px] leading-relaxed text-[#334155]">
-            업로드한 연락처는 미리보기에서 확인한 뒤, 선택한 항목만 저장됩니다.
-          </p>
-          <p className="mt-2 text-[13px] leading-relaxed text-[#334155]">
-            Sensora는 고객 정보를 임의로 수집하거나 자동 저장하지 않습니다.
-          </p>
+          <div className="mt-1.5 space-y-1.5 text-[13px] leading-snug sm:mt-2 sm:leading-relaxed">
+            <p className="text-[#475569]">
+              iPhone, Google 연락처, Galaxy/Samsung 연락처에서 연락처 파일을 준비한 뒤 업로드할 수 있습니다.
+            </p>
+            <p className="text-[#334155]">
+              업로드한 연락처는 미리보기에서 확인한 뒤, 선택한 항목만 저장됩니다.
+            </p>
+            <p className="text-[#334155]">
+              Sensora는 고객 정보를 임의로 수집하거나 자동 저장하지 않습니다.
+            </p>
+          </div>
           <p className="mt-2 border-t border-[#E2E8F0] pt-2 text-[11px] leading-snug text-[#64748B]">
-            붙여넣기·파일 업로드·휴대폰에서 선택하는 경우에도, 본인이 넣거나 고른 내용만 목록에 반영됩니다.
+            붙여넣기·파일·휴대폰에서 고른 연락처도 본인이 넣은 내용만 목록에 반영됩니다.
           </p>
         </div>
 
@@ -359,12 +361,13 @@ export function ImportContactsPanel({
           {tab === "device" ? (
             <div className="space-y-3">
               <p className="text-[12px] leading-relaxed text-[#64748B]">
-                Android(Chrome 등)에서만 지원될 수 있는 Contact Picker API입니다. 사용자가 직접 고른 연락처만
-                가져옵니다. 주소록 전체에 자동 접근하지 않습니다.
+                Android(Chrome 등)에서 지원하는 연락처 선택 화면입니다. 직접 고른 사람만 목록에 담으며, 서버나 앱이
+                주소록 전체를 열어보지 않습니다.
               </p>
               {onIos ? (
                 <p className="text-[12px] font-semibold text-[#B45309]">
-                  iPhone Safari에서는 이 API를 기대하기 어렵습니다. «iPhone 안내» 탭의 .vcf 업로드를 사용해 주세요.
+                  iPhone Safari에서는 이 방식을 쓰기 어렵습니다. “iPhone 안내” 탭에서 안내된 방식으로 vCard 파일을
+                  올려 주세요.
                 </p>
               ) : null}
               <button
@@ -415,7 +418,7 @@ export function ImportContactsPanel({
                 className="min-h-[44px] rounded-xl border border-[#111827] bg-white px-5 py-2.5 text-[14px] font-semibold text-[#111827] touch-manipulation"
                 onClick={() => ingestPaste()}
               >
-                목록에 추가 (파싱)
+                목록에 추가
               </button>
             </div>
           ) : null}
@@ -458,8 +461,8 @@ export function ImportContactsPanel({
           {tab === "google" ? (
             <div className="space-y-3">
               <p className="text-[12px] leading-relaxed text-[#475569]">
-                Google Contacts에서 CSV 또는 vCard로 내보낸 뒤 여기 업로드하거나 내용을 붙여넣으세요.
-                표준 헤더(예: Name, Phone 1 - Value, E-mail 1 - Value, Notes)를 인식합니다.
+                Google 연락처에서 CSV 또는 vCard로 내보낸 뒤, 이 화면에 파일로 올리거나 내용만 붙여 넣으세요. 이름·전화 등
+                흔한 열 이름은 자동으로 읽히는 편입니다.
               </p>
               <details className="rounded-lg border border-dashed border-[#CBD5E1] bg-white px-3 py-2 text-[12px] text-[#64748B]">
                 <summary className="cursor-pointer font-semibold text-[#334155]">
@@ -488,8 +491,8 @@ export function ImportContactsPanel({
           {tab === "iphone" ? (
             <div className="space-y-3 text-[13px] leading-relaxed">
               <p>
-                아이폰 연락처 앱에서 연락처를 공유하거나 내보낸 <strong>.vcf</strong> 파일을 업로드하세요. 이름·전화·이메일·메모
-                노트를 가능한 범위에서 반영합니다(원문 보존, AI 수정 없음).
+                아이폰 연락처에서 공유하거나 내보낸 <strong>.vcf</strong> 파일을 올려 주세요. 이름·전화·이메일·메모 노트를
+                가능한 범위에서 반영합니다(원문 유지).
               </p>
               <button
                 type="button"
@@ -533,19 +536,19 @@ export function ImportContactsPanel({
             <table className="min-w-[720px] w-full border-collapse text-left text-[12px]">
               <thead className="bg-[#F1F5F9] text-[11px] font-semibold uppercase tracking-wide text-[#64748B]">
                 <tr>
-                  <th className="border-b border-[#E5E7EB] px-2 py-2">저장</th>
-                  <th className="border-b border-[#E5E7EB] px-2 py-2">이름</th>
-                  <th className="border-b border-[#E5E7EB] px-2 py-2">전화</th>
-                  <th className="border-b border-[#E5E7EB] px-2 py-2">이메일</th>
-                  <th className="border-b border-[#E5E7EB] px-2 py-2">관심/메모 요약 표시</th>
-                  <th className="border-b border-[#E5E7EB] px-2 py-2">중복</th>
-                  <th className="border-b border-[#E5E7EB] px-2 py-2">저장 방식</th>
+                  <th className="border-b border-[#E5E7EB] px-1.5 py-1.5 sm:px-2 sm:py-2">저장</th>
+                  <th className="border-b border-[#E5E7EB] px-1.5 py-1.5 sm:px-2 sm:py-2">이름</th>
+                  <th className="border-b border-[#E5E7EB] px-1.5 py-1.5 sm:px-2 sm:py-2">전화</th>
+                  <th className="border-b border-[#E5E7EB] px-1.5 py-1.5 sm:px-2 sm:py-2">이메일</th>
+                  <th className="border-b border-[#E5E7EB] px-1.5 py-1.5 normal-case sm:px-2 sm:py-2">관심·메모</th>
+                  <th className="border-b border-[#E5E7EB] px-1.5 py-1.5 sm:px-2 sm:py-2">중복</th>
+                  <th className="border-b border-[#E5E7EB] px-1.5 py-1.5 normal-case sm:px-2 sm:py-2">저장 방식</th>
                 </tr>
               </thead>
               <tbody>
                 {previewRows.map((row) => (
                   <tr key={row.key} className="hover:bg-[#FAFBFC]">
-                    <td className="border-b border-[#F1F5F9] px-2 py-2 align-top">
+                    <td className="border-b border-[#F1F5F9] px-1.5 py-1.5 align-top sm:px-2 sm:py-2">
                       <input
                         type="checkbox"
                         className="h-5 w-5 touch-manipulation"
@@ -562,14 +565,16 @@ export function ImportContactsPanel({
                         }}
                       />
                     </td>
-                    <td className="border-b border-[#F1F5F9] px-2 py-2 align-top font-medium text-[#111827]">
+                    <td className="border-b border-[#F1F5F9] px-1.5 py-1.5 align-top font-medium text-[#111827] sm:px-2 sm:py-2">
                       {row.draft.name}
                     </td>
-                    <td className="border-b border-[#F1F5F9] px-2 py-2 align-top">
+                    <td className="border-b border-[#F1F5F9] px-1.5 py-1.5 align-top sm:px-2 sm:py-2">
                       {row.draft.phone ?? "—"}
                     </td>
-                    <td className="border-b border-[#F1F5F9] px-2 py-2 align-top break-all">{row.draft.email ?? "—"}</td>
-                    <td className="border-b border-[#F1F5F9] px-2 py-2 align-top text-[11px] text-[#475569]">
+                    <td className="border-b border-[#F1F5F9] px-1.5 py-1.5 align-top break-all sm:px-2 sm:py-2">
+                      {row.draft.email ?? "—"}
+                    </td>
+                    <td className="border-b border-[#F1F5F9] px-1.5 py-1.5 align-top text-[11px] text-[#475569] sm:px-2 sm:py-2">
                       {row.draft.interestedModelHint ?
                         <>
                           <div className="font-semibold text-[#334155]">관심/조직:</div>
@@ -587,10 +592,10 @@ export function ImportContactsPanel({
                         !row.draft.interestedModelHint && "—"
                       )}
                     </td>
-                    <td className="border-b border-[#F1F5F9] px-2 py-2 align-top text-[11px] text-[#92400E]">
+                    <td className="border-b border-[#F1F5F9] px-1.5 py-1.5 align-top text-[11px] text-[#92400E] sm:px-2 sm:py-2">
                       {dupLabel(row.duplicate)}
                     </td>
-                    <td className="border-b border-[#F1F5F9] px-2 py-2 align-top">
+                    <td className="border-b border-[#F1F5F9] px-1.5 py-1.5 align-top sm:px-2 sm:py-2">
                       <select
                         value={row.resolution}
                         className="min-h-[44px] w-full max-w-[11rem] rounded-lg border border-[#E5E7EB] bg-white px-2 py-2 text-[12px] font-medium touch-manipulation"

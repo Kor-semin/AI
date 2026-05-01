@@ -539,7 +539,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "cover.aiGuide.memoExampleHint": "상담 메모 예시는 홈 `#ai-demo`에서 바로 불러올 수 있어요.",
     "cover.onboarding.page1.title": "Sensora Auto CRM",
     "cover.onboarding.page1.description":
-      "자동차 영업사원을 위한 AI 고객관리 앱입니다.\n고객 상담, 다음 연락, 발송 문구를 한 곳에서 정리합니다.",
+      "전시장·상담 현장에서 고객 이야기와 다음 연락, 보낼 문구까지 한곳에 이어 둘 수 있습니다.\n기록을 쌓아 가면 오늘 할 일이 더 선명해집니다.",
     "cover.onboarding.page2.title": "무엇을 도와드릴까요?",
     "cover.onboarding.page2.customer": "고객관리\n상담 메모와 관심 차량을 한 흐름으로 정리합니다.",
     "cover.onboarding.page2.ai": "AI 비서\n상담 내용을 바탕으로 검토용 초안을 제안합니다.",
@@ -549,7 +549,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "cover.onboarding.page2.delivery": "출고 안내서\n출고 전후 고객 안내와 체크 항목을 문서처럼 정리합니다.",
     "cover.onboarding.page3.title": "한 번 기록하면, 다음 행동까지 이어집니다.",
     "cover.onboarding.page3.description":
-      "상담 메모를 남기면 SensoraGuide가 고객 니즈, 영업 포인트, 고객에게 보낼 문장을 제안합니다.\nAI는 제안만 하고, 저장과 수정은 사용자가 직접 결정합니다.",
+      "상담 메모를 남기면 Sensora AI 비서 화면에서 요약과 보낼 문장 초안을 검토용으로 제안합니다.\n제안은 참고용이며, 저장·수정은 항상 본인이 결정합니다.",
     "cover.onboarding.next": "다음",
     "cover.onboarding.prev": "이전",
     "cover.onboarding.start": "시작하기",
@@ -858,7 +858,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
       "Sample memo lines are easiest to load from the home page section `#ai-demo`.",
     "cover.onboarding.page1.title": "Sensora Auto CRM",
     "cover.onboarding.page1.description":
-      "An AI-assisted CRM tailored for showroom sales.\nKeep consultations, follow-ups, and outbound copy in one place.",
+      "Keep consultation notes, next touches, and outbound wording in one calm workspace.\nSmall records add up to a clearer day.",
     "cover.onboarding.page2.title": "What can we help you with?",
     "cover.onboarding.page2.customer":
       "Customer records\nConsultation notes and vehicle interest in one simple flow.",
@@ -872,7 +872,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
       "Delivery guide\nStructure pre- and post-delivery reassurance like a concise checklist.",
     "cover.onboarding.page3.title": "One note captures the cue—until the disciplined next touch.",
     "cover.onboarding.page3.description":
-      "After you save a memo, SensoraGuide suggests needs, sales emphasis, and phrasing customers can hear.\nIt proposes—you decide what lands in the CRM record.",
+      "After a memo, the Sensora AI assistant screen suggests review-ready summaries and message drafts.\nSuggestions are for review; you choose what to save or change.",
     "cover.onboarding.next": "Next",
     "cover.onboarding.prev": "Back",
     "cover.onboarding.start": "Enter workspace",
