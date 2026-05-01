@@ -1,10 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 
 import { ImageSlot } from "./ImageSlot";
 import { SAMPLE_CUSTOMERS } from "./sampleCustomers";
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
+import { SensoraGuide } from "@/app/components/concierge/SensoraGuide";
+import { generateDemoConsultingResponse } from "@/app/components/concierge/aiDemoResponse";
 
 /** 랜딩 교체용 이미지 경로 (`public/images`에 동일 파일명으로 두면 적용됩니다). */
 export const LANDING_IMAGES = {
@@ -171,9 +174,22 @@ export function HeroSection() {
               <Link href="/join" className="crm-ink-btn rounded-xl px-5 py-3 text-xs font-semibold">
                 {t("cta.joinBeta")}
               </Link>
-              <a href="#ai-demo" className="crm-outline-light-btn rounded-xl px-5 py-3 text-xs font-semibold">
+              <button
+                type="button"
+                className="crm-outline-light-btn rounded-xl px-5 py-3 text-xs font-semibold"
+                onClick={() => {
+                  const el = document.getElementById("ai-demo");
+                  if (!el) return;
+                  const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false;
+                  el.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+                  window.setTimeout(() => {
+                    const ta = document.getElementById("ai-demo-memo") as HTMLTextAreaElement | null;
+                    ta?.focus();
+                  }, reduce ? 0 : 120);
+                }}
+              >
                 {t("cta.tryAIDemo")}
-              </a>
+              </button>
             </div>
 
             <ul className="mt-8 space-y-2 text-[12px] leading-relaxed text-[#8b94a1] sm:text-[13px]">
@@ -194,8 +210,74 @@ export function HeroSection() {
 
 export function AIDemoSection() {
   const { t } = useLanguage();
+  const exampleText = t("landing.aiDemo.inputExample");
+  const MANUAL_SENTINEL = "";
+  const [memo, setMemo] = useState(exampleText);
+  const [sampleId, setSampleId] = useState<string>(() => MANUAL_SENTINEL);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [debouncedMemo, setDebouncedMemo] = useState(exampleText);
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+  const lastExampleRef = useRef(exampleText);
+  const skipTypingDebounceRef = useRef(false);
+
+  function applySampleMemo(nextMemo: string) {
+    setMemo(nextMemo);
+    setDebouncedMemo(nextMemo);
+    skipTypingDebounceRef.current = true;
+    setIsAnalyzing(true);
+    window.setTimeout(() => setIsAnalyzing(false), 420);
+  }
+
+  function syncSampleIdFromMemo(nextMemo: string) {
+    const hit = SAMPLE_CUSTOMERS.find((c) => c.memo === nextMemo)?.id ?? MANUAL_SENTINEL;
+    setSampleId(hit);
+  }
+
+  useEffect(() => {
+    // If the user hasn't edited (still on the prior example), swap to the new locale example.
+    const prevExample = lastExampleRef.current;
+
+    let nextMemo = "";
+    let nextDebouncedMemo = "";
+
+    setMemo((prev) => {
+      nextMemo = prev === prevExample ? exampleText : prev;
+      return nextMemo;
+    });
+    setDebouncedMemo((prev) => {
+      nextDebouncedMemo = prev === prevExample ? exampleText : prev;
+      return nextDebouncedMemo;
+    });
+
+    // After React applies both updates above, remap sample selection vs manual entry.
+    const resolvedMemo = nextMemo || nextDebouncedMemo;
+    syncSampleIdFromMemo(resolvedMemo);
+
+    lastExampleRef.current = exampleText;
+  }, [exampleText]);
+
+  useEffect(() => {
+    if (skipTypingDebounceRef.current) {
+      skipTypingDebounceRef.current = false;
+      return;
+    }
+    setIsAnalyzing(true);
+    let t2: number | undefined;
+    const t1 = window.setTimeout(() => {
+      setDebouncedMemo(memo);
+      // Keep the "analyzing" state briefly visible, but don't stall UX.
+      t2 = window.setTimeout(() => setIsAnalyzing(false), 420);
+    }, 380);
+    return () => {
+      window.clearTimeout(t1);
+      if (t2) window.clearTimeout(t2);
+    };
+  }, [memo]);
+
+  const response = useMemo(() => generateDemoConsultingResponse(debouncedMemo), [debouncedMemo]);
+
   return (
-    <section id="ai-demo" className="mx-auto w-full max-w-[1280px] px-4 py-14 sm:py-18">
+    <section id="ai-demo" className="mx-auto w-full max-w-[1280px] scroll-mt-24 px-4 py-14 sm:py-18">
       <div className="grid gap-6 lg:grid-cols-[0.98fr_1.02fr] lg:items-start">
         <div className="rounded-2xl border border-[color:var(--edge)] bg-[color:var(--paper)] p-7 shadow-[0_12px_36px_rgba(17,19,24,0.08)]">
           <div className="text-[12px] font-semibold tracking-[-0.01em] text-[#475569]">{t("landing.aiDemo.sectionTitle")}</div>
@@ -208,8 +290,71 @@ export function AIDemoSection() {
 
           <div className="mt-6 rounded-2xl border border-[#E5E7EB] bg-[#F9FAFB] p-5">
             <div className="text-[12px] font-semibold text-[#374151]">{t("landing.aiDemo.inputLabel")}</div>
-            <div className="mt-3 rounded-xl border border-[#E5E7EB] bg-white px-4 py-3 text-[14px] leading-relaxed text-[#111827]">
-              {t("landing.aiDemo.inputExample")}
+            <div className="mt-1 text-[12px] font-medium leading-relaxed text-[#6B7280]">
+              {t("landing.aiDemo.inputHint")}
+            </div>
+            <label className="mt-4 grid gap-1 md:grid-cols-[220px_minmax(0,1fr)] md:items-end md:gap-3">
+              <div className="grid gap-1">
+                <div className="text-[13px] font-semibold text-[#374151]">{t("landing.aiDemo.sampleCustomerLabel")}</div>
+                <select
+                  value={sampleId}
+                  onChange={(e) => {
+                    const nextId = e.target.value;
+                    if (!nextId) {
+                      setSampleId("");
+                      applySampleMemo(exampleText);
+                      return;
+                    }
+                    const cust = SAMPLE_CUSTOMERS.find((c) => c.id === nextId);
+                    if (!cust) return;
+                    setSampleId(nextId);
+                    applySampleMemo(cust.memo);
+                  }}
+                  className="w-full rounded-xl border border-[#E5E7EB] bg-white px-3 py-3 text-[14px] font-medium text-[#111827] outline-none focus:border-[#94A3B8]"
+                >
+                  <option value="">{t("landing.aiDemo.sampleCustomerPlaceholder")}</option>
+                  {SAMPLE_CUSTOMERS.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.name} · {c.interestedVehicle}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="text-[12px] font-medium leading-relaxed text-[#6B7280] md:pb-3">
+                {t("landing.aiDemo.sampleDataNotice")}
+              </div>
+            </label>
+            <textarea
+              ref={textareaRef}
+              id="ai-demo-memo"
+              value={memo}
+              onChange={(e) => {
+                const v = e.target.value;
+                setMemo(v);
+                syncSampleIdFromMemo(v);
+              }}
+              placeholder={t("landing.aiDemo.inputExample")}
+              rows={7}
+              spellCheck={false}
+              autoComplete="off"
+              autoCorrect="off"
+              autoCapitalize="off"
+              className="mt-3 w-full resize-y rounded-xl border border-[#E5E7EB] bg-white px-4 py-3 text-[15px] leading-relaxed text-[#111827] outline-none focus:border-[#94A3B8]"
+            />
+            <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
+              <div className="text-[12px] font-medium text-[#6B7280]">{t("landing.aiDemo.liveNotice")}</div>
+              <button
+                type="button"
+                className="rounded-lg bg-[#F3F4F6] px-3 py-2 text-[12px] font-semibold text-[#111827] ring-1 ring-inset ring-[#E5E7EB] hover:bg-[#E5E7EB]"
+                onClick={() => {
+                  setSampleId("");
+                  applySampleMemo(exampleText);
+                  textareaRef.current?.focus();
+                  textareaRef.current?.setSelectionRange(0, exampleText.length);
+                }}
+              >
+                {t("landing.aiDemo.resetExample")}
+              </button>
             </div>
           </div>
 
@@ -223,44 +368,34 @@ export function AIDemoSection() {
           </div>
         </div>
 
-        <div className="relative overflow-hidden rounded-[1.75rem] border border-[#CBD5E1]/70 bg-[radial-gradient(900px_560px_at_30%_0%,rgba(148,163,184,0.22),transparent_58%),radial-gradient(820px_520px_at_100%_30%,rgba(59,130,246,0.18),transparent_60%),linear-gradient(180deg,rgba(255,255,255,0.85),rgba(248,250,252,0.75))] p-6 shadow-[0_26px_70px_-34px_rgba(15,23,42,0.35)] backdrop-blur-sm">
-          <div className="pointer-events-none absolute inset-0 opacity-[0.85] [mask-image:radial-gradient(ellipse_80%_70%_at_50%_35%,black_55%,transparent_100%)]">
-            <div className="absolute inset-0 bg-[linear-gradient(115deg,rgba(148,163,184,0.18),transparent_45%,rgba(59,130,246,0.14))]" />
-            <div className="absolute inset-0 bg-[radial-gradient(700px_420px_at_32%_22%,rgba(226,232,240,0.8),transparent_55%)]" />
-          </div>
+        <SensoraGuide status={isAnalyzing ? t("landing.aiDemo.status") : t("landing.aiDemo.readyStatus")}>
+          {memo.trim().length === 0 ? (
+            <div className="mb-4 rounded-2xl border border-white/60 bg-white/45 px-4 py-3 text-[13px] font-medium leading-relaxed text-[#334155] shadow-[0_12px_36px_rgba(15,23,42,0.12)] backdrop-blur-lg">
+              {t("landing.aiDemo.emptyNotice")}
+            </div>
+          ) : null}
 
-          <div className="relative">
-            <div className="inline-flex items-center gap-2 rounded-full border border-[#CBD5E1]/70 bg-white/70 px-3 py-1 text-[12px] font-semibold text-[#334155] shadow-[0_1px_10px_rgba(15,23,42,0.06)]">
-              <span className="relative inline-flex size-2">
-                <span className="absolute inset-0 rounded-full bg-[#60A5FA] opacity-40 motion-reduce:animate-none [animation:sensora-pulse-ring_1.9s_ease-out_infinite]" />
-                <span className="relative inline-block size-2 rounded-full bg-[#2563EB]" />
-              </span>
-              {t("landing.aiDemo.status")}
+          <div className="grid gap-4">
+            <div className="relative overflow-hidden rounded-2xl border border-white/70 bg-white/55 p-5 shadow-[0_18px_50px_-28px_rgba(15,23,42,0.35)] backdrop-blur-lg motion-reduce:transform-none motion-reduce:animate-none [animation:sensora-float_5.5s_ease-in-out_infinite]">
+              <div className="text-[12px] font-semibold text-[#334155]">{t("landing.aiDemo.summaryTitle")}</div>
+              <div className="mt-3 text-[15px] leading-relaxed text-[#111827]">{response.summary}</div>
             </div>
 
-            <div className="mt-6 grid gap-4">
-              <div className="relative overflow-hidden rounded-2xl border border-white/70 bg-white/55 p-5 shadow-[0_18px_50px_-28px_rgba(15,23,42,0.35)] backdrop-blur-lg motion-reduce:transform-none motion-reduce:animate-none [animation:sensora-float_5.5s_ease-in-out_infinite]">
-                <div className="text-[12px] font-semibold text-[#334155]">{t("landing.aiDemo.aiResponseLabel")}</div>
-                <div className="mt-3 text-[15px] leading-relaxed text-[#111827]">
-                  <span className="block overflow-hidden whitespace-nowrap motion-reduce:whitespace-normal motion-reduce:w-auto [width:0%] motion-reduce:[animation:none] [animation:sensora-type_1.8s_steps(44,end)_0.15s_forwards]">
-                    {t("landing.aiDemo.aiResponseExample")}
-                  </span>
-                </div>
-              </div>
-
-              <div className="relative overflow-hidden rounded-2xl border border-white/70 bg-white/55 p-5 shadow-[0_18px_50px_-28px_rgba(15,23,42,0.35)] backdrop-blur-lg motion-reduce:transform-none motion-reduce:animate-none [animation:sensora-float_5.5s_ease-in-out_infinite] [animation-delay:-1.8s]">
-                <div className="text-[12px] font-semibold text-[#334155]">{t("landing.aiDemo.messageLabel")}</div>
-                <div className="mt-3 text-[15px] leading-relaxed text-[#111827]">
-                  <span className="block overflow-hidden whitespace-nowrap motion-reduce:whitespace-normal motion-reduce:w-auto [width:0%] motion-reduce:[animation:none] [animation:sensora-type_1.9s_steps(52,end)_0.25s_forwards]">
-                    {t("landing.aiDemo.messageExample")}
-                  </span>
-                </div>
-              </div>
+            <div className="relative overflow-hidden rounded-2xl border border-white/70 bg-white/55 p-5 shadow-[0_18px_50px_-28px_rgba(15,23,42,0.35)] backdrop-blur-lg motion-reduce:transform-none motion-reduce:animate-none [animation:sensora-float_5.5s_ease-in-out_infinite] [animation-delay:-1.2s]">
+              <div className="text-[12px] font-semibold text-[#334155]">{t("landing.aiDemo.nextActionTitle")}</div>
+              <div className="mt-3 text-[15px] leading-relaxed text-[#111827]">{response.nextAction}</div>
             </div>
 
-            <div aria-hidden className="pointer-events-none absolute -bottom-16 -right-24 size-[360px] rounded-full bg-[radial-gradient(circle,rgba(59,130,246,0.18),transparent_60%)] blur-2xl" />
+            <div className="relative overflow-hidden rounded-2xl border border-white/70 bg-white/55 p-5 shadow-[0_18px_50px_-28px_rgba(15,23,42,0.35)] backdrop-blur-lg motion-reduce:transform-none motion-reduce:animate-none [animation:sensora-float_5.5s_ease-in-out_infinite] [animation-delay:-2.1s]">
+              <div className="text-[12px] font-semibold text-[#334155]">{t("landing.aiDemo.recommendedMessageTitle")}</div>
+              <div className="mt-3 whitespace-pre-line text-[15px] leading-relaxed text-[#111827]">
+                {response.message}
+              </div>
+            </div>
           </div>
-        </div>
+
+          <div aria-hidden className="pointer-events-none absolute -bottom-16 -right-24 size-[360px] rounded-full bg-[radial-gradient(circle,rgba(59,130,246,0.18),transparent_60%)] blur-2xl" />
+        </SensoraGuide>
       </div>
     </section>
   );
@@ -295,9 +430,9 @@ export function CRMDemoSection() {
                 </thead>
                 <tbody className="divide-y divide-[color:var(--edge)] bg-[color:var(--paper)]/30">
                   {SAMPLE_CUSTOMERS.slice(0, 4).map((c) => (
-                    <tr key={c.name}>
+                    <tr key={c.id}>
                       <td className="px-4 py-3 font-semibold text-[color:var(--foreground)]">{c.name}</td>
-                      <td className="px-4 py-3 text-[color:var(--ink-2)]">{c.vehicle}</td>
+                      <td className="px-4 py-3 text-[color:var(--ink-2)]">{c.interestedVehicle}</td>
                       <td className="px-4 py-3 text-[color:var(--ink-2)]">{c.status}</td>
                       <td className="px-4 py-3 text-[color:var(--ink-2)]">{c.nextAction}</td>
                     </tr>
@@ -446,21 +581,19 @@ export function DashboardPreview() {
               </thead>
               <tbody className="divide-y divide-[color:var(--edge)] bg-[color:var(--paper)]/30">
                 {SAMPLE_CUSTOMERS.map((c) => (
-                  <tr key={c.name}>
+                  <tr key={c.id}>
                     <td className="px-4 py-3 font-semibold text-[color:var(--foreground)]">
                       {c.name}
                       <span
                         className={[
                           "ml-2 inline-flex rounded-full border px-2 py-0.5 text-[10px] font-semibold tracking-[0.08em]",
-                          c.priority === "High"
-                            ? "border-[#c5cad3] text-[color:var(--foreground)]"
-                            : "border-[color:var(--edge)] text-[color:var(--ink-2)]",
+                          "border-[color:var(--edge)] text-[color:var(--ink-2)]",
                         ].join(" ")}
                       >
-                        {c.priority}
+                        {c.brand}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-[color:var(--ink-2)]">{c.vehicle}</td>
+                    <td className="px-4 py-3 text-[color:var(--ink-2)]">{c.interestedVehicle}</td>
                     <td className="px-4 py-3 text-[color:var(--ink-2)]">{c.status}</td>
                     <td className="px-4 py-3 text-[color:var(--ink-2)]">{c.nextAction}</td>
                   </tr>

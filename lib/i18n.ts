@@ -111,8 +111,19 @@ export type TranslationKey =
   | "landing.aiDemo.sectionTitle"
   | "landing.aiDemo.sectionDesc"
   | "landing.aiDemo.inputLabel"
+  | "landing.aiDemo.inputHint"
+  | "landing.aiDemo.sampleCustomerLabel"
+  | "landing.aiDemo.sampleCustomerPlaceholder"
+  | "landing.aiDemo.sampleDataNotice"
   | "landing.aiDemo.inputExample"
   | "landing.aiDemo.status"
+  | "landing.aiDemo.readyStatus"
+  | "landing.aiDemo.resetExample"
+  | "landing.aiDemo.summaryTitle"
+  | "landing.aiDemo.nextActionTitle"
+  | "landing.aiDemo.recommendedMessageTitle"
+  | "landing.aiDemo.liveNotice"
+  | "landing.aiDemo.emptyNotice"
   | "landing.aiDemo.aiResponseLabel"
   | "landing.aiDemo.aiResponseExample"
   | "landing.aiDemo.messageLabel"
@@ -272,9 +283,22 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.aiDemo.sectionDesc":
       "상담 메모를 입력하면 AI가 고객 요약, 다음 액션, 연락 문구를 즉시 제안합니다.",
     "landing.aiDemo.inputLabel": "상담 메모 (예시)",
+    "landing.aiDemo.inputHint":
+      "직접 입력하거나 아래 샘플 고객을 선택해 보세요. 입력은 약간의 디바운스 후 갱신되고, 샘플 선택 시에는 즉시 반영됩니다.",
+    "landing.aiDemo.sampleCustomerLabel": "샘플 고객 선택",
+    "landing.aiDemo.sampleCustomerPlaceholder": "직접 입력 또는 샘플 고객 선택",
+    "landing.aiDemo.sampleDataNotice":
+      "아래 정보는 기능 체험을 위한 가상 샘플 고객입니다.",
     "landing.aiDemo.inputExample":
       "고객은 조용한 승차감과 가족 이동을 중요하게 생각했고, 금융 조건을 궁금해했습니다.",
-    "landing.aiDemo.status": "AI가 상담 내용을 정리하고 있습니다…",
+    "landing.aiDemo.status": "상담 내용을 분석하고 있습니다…",
+    "landing.aiDemo.readyStatus": "SensoraGuide · 데모 응답 준비됨",
+    "landing.aiDemo.resetExample": "예시 다시 넣기",
+    "landing.aiDemo.summaryTitle": "상담 요약",
+    "landing.aiDemo.nextActionTitle": "다음 액션",
+    "landing.aiDemo.recommendedMessageTitle": "추천 메시지",
+    "landing.aiDemo.liveNotice": "입력값은 저장되지 않습니다. (데모)",
+    "landing.aiDemo.emptyNotice": "상담 메모를 입력하면 요약/다음 액션/추천 메시지가 바뀝니다.",
     "landing.aiDemo.aiResponseLabel": "AI 요약",
     "landing.aiDemo.aiResponseExample":
       "이 고객은 실용성과 고급감을 함께 고려하는 고객입니다. 오늘은 월 납입금, 장기 보유 가치, 가족 이동 편의성을 중심으로 연락하는 것이 좋습니다.",
@@ -437,9 +461,22 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.aiDemo.sectionDesc":
       "Paste a consultation memo and Sensora will instantly suggest a customer summary, next actions, and a follow-up message.",
     "landing.aiDemo.inputLabel": "Consultation memo (example)",
+    "landing.aiDemo.inputHint":
+      "Type your memo—or pick a sample customer below. Typing waits briefly (debounced); sample selections update immediately.",
+    "landing.aiDemo.sampleCustomerLabel": "Select Sample Customer",
+    "landing.aiDemo.sampleCustomerPlaceholder": "Enter manually or select a sample customer",
+    "landing.aiDemo.sampleDataNotice":
+      "The information below is sample data for product demonstration.",
     "landing.aiDemo.inputExample":
       "The customer values a quiet ride and family comfort, and asked about financing options.",
-    "landing.aiDemo.status": "Sensora is organizing your consultation notes…",
+    "landing.aiDemo.status": "Analyzing your consultation notes…",
+    "landing.aiDemo.readyStatus": "SensoraGuide · Ready",
+    "landing.aiDemo.resetExample": "Restore example",
+    "landing.aiDemo.summaryTitle": "Consultation summary",
+    "landing.aiDemo.nextActionTitle": "Next action",
+    "landing.aiDemo.recommendedMessageTitle": "Recommended message",
+    "landing.aiDemo.liveNotice": "Your input is not stored. (Demo)",
+    "landing.aiDemo.emptyNotice": "Enter a memo to see the summary, next action, and message update.",
     "landing.aiDemo.aiResponseLabel": "AI Summary",
     "landing.aiDemo.aiResponseExample":
       "This customer is balancing practicality with premium comfort. Today, focus your outreach on monthly payments, long-term value, and family-friendly convenience.",
