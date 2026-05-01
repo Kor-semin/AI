@@ -72,8 +72,8 @@ export function ContactImportFileGuideModal({
         </div>
 
         <p className="mt-4 text-[13px] leading-relaxed text-[#475569]">
-          휴대폰 기종과 OS 버전에 따라 메뉴 이름은 조금 다를 수 있습니다. 내보내기로 만든 파일을 Sensora에 업로드하고,
-          미리보기에서 확인한 뒤 저장하세요.
+          휴대폰 기종과 OS 버전에 따라 연락처 앱의 메뉴 이름은 조금씩 다를 수 있습니다. 내보내기로 만든 파일을 Sensora에
+          올린 뒤, 미리보기에서 내용을 확인하고 저장하면 됩니다.
         </p>
 
         <div className="mt-4 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-4 py-3 text-[13px] leading-relaxed text-[#334155]">
