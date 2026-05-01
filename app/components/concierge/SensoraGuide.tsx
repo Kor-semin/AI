@@ -4,9 +4,12 @@ import React from "react";
 
 export function SensoraGuide({
   status,
+  coachSubtitle,
   children,
 }: {
   status: string;
+  /** 배려 포인트 감지 등 짧은 데모 힌트(선택) */
+  coachSubtitle?: string | null;
   children: React.ReactNode;
 }) {
   return (
@@ -17,12 +20,19 @@ export function SensoraGuide({
       </div>
 
       <div className="relative">
-        <div className="inline-flex items-center gap-2 rounded-full border border-[#CBD5E1]/70 bg-white/70 px-3 py-1 text-[12px] font-semibold text-[#334155] shadow-[0_1px_10px_rgba(15,23,42,0.06)]">
-          <span className="relative inline-flex size-2">
-            <span className="absolute inset-0 rounded-full bg-[#60A5FA] opacity-40 motion-reduce:animate-none [animation:sensora-pulse-ring_1.9s_ease-out_infinite]" />
-            <span className="relative inline-block size-2 rounded-full bg-[#2563EB]" />
-          </span>
-          {status}
+        <div className="flex flex-wrap items-start gap-2">
+          <div className="inline-flex items-center gap-2 rounded-full border border-[#CBD5E1]/70 bg-white/70 px-3 py-1 text-[12px] font-semibold text-[#334155] shadow-[0_1px_10px_rgba(15,23,42,0.06)]">
+            <span className="relative inline-flex size-2">
+              <span className="absolute inset-0 rounded-full bg-[#60A5FA] opacity-40 motion-reduce:animate-none [animation:sensora-pulse-ring_1.9s_ease-out_infinite]" />
+              <span className="relative inline-block size-2 rounded-full bg-[#2563EB]" />
+            </span>
+            {status}
+          </div>
+          {coachSubtitle ? (
+            <div className="max-w-[min(100%,38rem)] rounded-full border border-[#94a3b8]/40 bg-white/55 px-3 py-1 text-[11px] font-semibold leading-snug text-[#475569]">
+              {coachSubtitle}
+            </div>
+          ) : null}
         </div>
 
         <div className="mt-6">{children}</div>

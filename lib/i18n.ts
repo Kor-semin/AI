@@ -135,6 +135,7 @@ export type TranslationKey =
   | "landing.aiDemo.messageLabel"
   | "landing.aiDemo.messageExample"
   | "landing.aiDemo.applyCta"
+  | "landing.aiDemo.careCoachLabel"
   | "landing.crmDemo.sectionTitle"
   | "landing.crmDemo.sectionDesc"
   | "landing.crmDemo.startCta"
@@ -323,6 +324,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.aiDemo.messageExample":
       "안녕하세요. 지난 상담에서 말씀하신 승차감과 가족 이동 편의성을 기준으로 정리해봤습니다. 오늘 편하실 때 금융 조건까지 함께 안내드리겠습니다.",
     "landing.aiDemo.applyCta": "CRM에 적용하기",
+    "landing.aiDemo.careCoachLabel": "SensoraGuide · 배려 응대 포인트",
     "landing.crmDemo.sectionTitle": "고객관리 흐름을 한 화면에",
     "landing.crmDemo.sectionDesc":
       "오늘 연락할 고객, 계약 가능성, 상담 요약, 출고 안내서를 한 번에 확인합니다.",
@@ -515,6 +517,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.aiDemo.messageExample":
       "Hello—based on what you shared about ride comfort and family convenience, I summarized the key points. When you’re free today, I can also walk you through financing options.",
     "landing.aiDemo.applyCta": "Apply in CRM",
+    "landing.aiDemo.careCoachLabel": "SensoraGuide · Accessible care cues",
     "landing.crmDemo.sectionTitle": "The CRM flow—at a glance",
     "landing.crmDemo.sectionDesc":
       "See today’s follow-ups, deal probability, consultation summaries, and delivery guides in one place.",

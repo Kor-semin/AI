@@ -1,13 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { ImageSlot } from "./ImageSlot";
 import { SAMPLE_CUSTOMERS } from "./sampleCustomers";
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
 import { SensoraGuide } from "@/app/components/concierge/SensoraGuide";
 import {
+  formatCareNeedsGuideTopicsUi,
   generateDemoConsultingResponse,
   type DemoSalesStyle,
 } from "@/app/components/concierge/aiDemoResponse";
@@ -22,6 +23,30 @@ const SALES_STYLE_I18N_KEY: Record<DemoSalesStyle, TranslationKey> = {
 };
 
 const SALES_STYLE_ORDER: DemoSalesStyle[] = ["polite", "simple", "premium", "friendly", "active"];
+
+/** Pipeline 등 랜딩 데모에서 AI Demo와 샘플 memo를 동기화할 때 사용 */
+export const SENSORA_AI_DEMO_SAMPLE_EVENT = "sensora:select-sample-customer" as const;
+
+function dispatchSelectSampleCustomer(customerId: string) {
+  window.dispatchEvent(
+    new CustomEvent(SENSORA_AI_DEMO_SAMPLE_EVENT, { detail: { customerId } }),
+  );
+}
+
+function scrollToAidemoFocusMemo() {
+  if (typeof window.history?.replaceState === "function") {
+    window.history.replaceState(null, "", "#ai-demo");
+  }
+  const el = document.getElementById("ai-demo");
+  const reduce =
+    typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  el?.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+  window.setTimeout(() => {
+    (document.getElementById("ai-demo-memo") as HTMLTextAreaElement | null)?.focus();
+  }, reduce ? 0 : 260);
+}
+
+const PIPELINE_STAGE_LABELS = ["신규", "상담", "견적", "검토", "출고", "재구매"] as const;
 
 /** 랜딩 교체용 이미지 경로 (`public/images`에 동일 파일명으로 두면 적용됩니다). */
 export const LANDING_IMAGES = {
@@ -223,7 +248,7 @@ export function HeroSection() {
 }
 
 export function AIDemoSection() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const exampleText = t("landing.aiDemo.inputExample");
   const MANUAL_SENTINEL = "";
   const [memo, setMemo] = useState(exampleText);
@@ -235,13 +260,26 @@ export function AIDemoSection() {
   const lastExampleRef = useRef(exampleText);
   const skipTypingDebounceRef = useRef(false);
 
-  function applySampleMemo(nextMemo: string) {
+  const applySampleMemo = useCallback((nextMemo: string) => {
     setMemo(nextMemo);
     setDebouncedMemo(nextMemo);
     skipTypingDebounceRef.current = true;
     setIsAnalyzing(true);
     window.setTimeout(() => setIsAnalyzing(false), 420);
-  }
+  }, []);
+
+  useEffect(() => {
+    function onSelectSample(ev: Event) {
+      const id = (ev as CustomEvent<{ customerId?: string }>).detail?.customerId;
+      if (!id || typeof id !== "string") return;
+      const cust = SAMPLE_CUSTOMERS.find((c) => c.id === id);
+      if (!cust) return;
+      setSampleId(id);
+      applySampleMemo(cust.memo);
+    }
+    window.addEventListener(SENSORA_AI_DEMO_SAMPLE_EVENT, onSelectSample);
+    return () => window.removeEventListener(SENSORA_AI_DEMO_SAMPLE_EVENT, onSelectSample);
+  }, [applySampleMemo]);
 
   function syncSampleIdFromMemo(nextMemo: string) {
     const hit = SAMPLE_CUSTOMERS.find((c) => c.memo === nextMemo)?.id ?? MANUAL_SENTINEL;
@@ -293,6 +331,14 @@ export function AIDemoSection() {
     () => generateDemoConsultingResponse(debouncedMemo, { salesStyle }),
     [debouncedMemo, salesStyle],
   );
+
+  const careCoachLine = useMemo(() => {
+    if (!debouncedMemo.trim()) return null;
+    const langUi: "ko" | "en" = language === "ko" ? "ko" : "en";
+    const topics = formatCareNeedsGuideTopicsUi(debouncedMemo, langUi);
+    if (!topics) return null;
+    return `${t("landing.aiDemo.careCoachLabel")} · ${topics}`;
+  }, [debouncedMemo, language, t]);
 
   return (
     <section id="ai-demo" className="mx-auto w-full max-w-[1280px] scroll-mt-24 px-4 py-14 sm:py-18">
@@ -401,7 +447,10 @@ export function AIDemoSection() {
           </div>
         </div>
 
-        <SensoraGuide status={isAnalyzing ? t("landing.aiDemo.status") : t("landing.aiDemo.readyStatus")}>
+        <SensoraGuide
+          status={isAnalyzing ? t("landing.aiDemo.status") : t("landing.aiDemo.readyStatus")}
+          coachSubtitle={careCoachLine}
+        >
           {memo.trim().length === 0 ? (
             <div className="mb-4 rounded-2xl border border-white/60 bg-white/45 px-4 py-3 text-[13px] font-medium leading-relaxed text-[#334155] shadow-[0_12px_36px_rgba(15,23,42,0.12)] backdrop-blur-lg">
               {t("landing.aiDemo.emptyNotice")}
@@ -486,14 +535,32 @@ export function CRMDemoSection() {
           </p>
           <div className="mt-5 overflow-x-auto">
             <div className="grid min-w-[820px] grid-cols-6 gap-3">
-              {["신규", "상담", "견적", "검토", "출고", "재구매"].map((s) => (
-                <div key={s} className="rounded-2xl border border-[color:var(--edge)] bg-[color:var(--paper-2)]/55 p-3">
-                  <div className="text-[12px] font-semibold text-[color:var(--gold-ink)]">{s}</div>
-                  <div className="mt-2 rounded-xl border border-[color:var(--edge)] bg-white px-3 py-2 text-[12px] font-semibold text-[color:var(--foreground)]">
-                    샘플 카드
+              {PIPELINE_STAGE_LABELS.map((stageLabel, idx) => {
+                const cust = SAMPLE_CUSTOMERS[idx] ?? SAMPLE_CUSTOMERS[0];
+                return (
+                  <div
+                    key={stageLabel}
+                    className="rounded-2xl border border-[color:var(--edge)] bg-[color:var(--paper-2)]/55 p-3"
+                  >
+                    <div className="text-[12px] font-semibold text-[color:var(--gold-ink)]">{stageLabel}</div>
+                    <button
+                      type="button"
+                      aria-label={`${cust.name}: AI 비서 체험 예시 불러오기`}
+                      title={cust.name}
+                      className="mt-2 w-full touch-manipulation rounded-xl border border-[color:var(--edge)] bg-white px-2 py-2.5 text-left text-[12px] font-semibold leading-snug text-[color:var(--foreground)] shadow-[inset_0_1px_2px_rgba(17,19,24,0.04)] transition hover:bg-[color:var(--paper-2)]/80 hover:shadow-sm active:scale-[0.99]"
+                      onClick={() => {
+                        dispatchSelectSampleCustomer(cust.id);
+                        scrollToAidemoFocusMemo();
+                      }}
+                    >
+                      <span className="block">{cust.name}</span>
+                      <span className="mt-1 block truncate text-[11px] font-medium text-[color:var(--ink-2)]">
+                        {cust.interestedVehicle}
+                      </span>
+                    </button>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 

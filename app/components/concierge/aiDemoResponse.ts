@@ -25,6 +25,221 @@ export type DemoConsultingOptions = {
   financeQuote?: DemoFinanceQuoteSummary | null;
 };
 
+/** 상담 메모 속 건강·배려 맥락을 차량 기준 포인트로 바꿀 때 쓰는 분류입니다. */
+export type CareNeedCategory =
+  | "back_spine"
+  | "neck_shoulder_joint"
+  | "mobility_accessibility"
+  | "elderly_family"
+  | "pregnancy_child"
+  | "motion_sensitivity"
+  | "long_distance_fatigue";
+
+export type CareNeeds = {
+  categories: CareNeedCategory[];
+  /** 요약용·안내 카드 등에 쓰이는 차량 고객 관점 표현 */
+  customerFacingPhrases: string[];
+  advisorGuidance: string[];
+  vehicleCheckpoints: string[];
+};
+
+const CARE_CATEGORY_PRIORITY: Record<CareNeedCategory, number> = {
+  elderly_family: 10,
+  mobility_accessibility: 20,
+  pregnancy_child: 30,
+  motion_sensitivity: 40,
+  long_distance_fatigue: 50,
+  back_spine: 60,
+  neck_shoulder_joint: 70,
+};
+
+const CARE_NEED_EMPTY: CareNeeds = {
+  categories: [],
+  customerFacingPhrases: [],
+  advisorGuidance: [],
+  vehicleCheckpoints: [],
+};
+
+function uniqKeepOrder(lines: string[]) {
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const ln of lines) {
+    const t = ln.trim();
+    if (!t || seen.has(t)) continue;
+    seen.add(t);
+    out.push(t);
+  }
+  return out;
+}
+
+function sortCareCategories(cats: CareNeedCategory[]): CareNeedCategory[] {
+  return [...new Set(cats)].sort((a, b) => CARE_CATEGORY_PRIORITY[a] - CARE_CATEGORY_PRIORITY[b]);
+}
+
+/**
+ * 규칙 기반 배려 포인트 감지 · 의료/단정 표현은 생성하지 않고 차량 활용 포인트로만 변환합니다.
+ * (외부 AI API 없음, 저장 없음.)
+ */
+export function detectCareNeedsKo(input: string): CareNeeds {
+  const raw = input.replace(/\s+/g, " ").trim();
+  if (!/[가-힣]/.test(raw)) return CARE_NEED_EMPTY;
+
+  const hit: CareNeedCategory[] = [];
+
+  const back =
+    /허리|척추|디스크|요통|허리통증|오래\s*앉기\s*힘듦|오래\s*앉아|오래\s*앉는\s*것/i.test(raw);
+  const neckJoint =
+    /목|어깨|무릎|관절염|무릎이?\s*불편|다리\s*불편|다리가?\s*불편|관절이?\s*불편/i.test(raw) ||
+    (/통증/.test(raw) && !back && /목|어깨|무릎|관절|다리/i.test(raw));
+  const mobility = /장애(?:인)?|거동\s*불편|휠체어|보행\s*보조|보호자\s*동승/i.test(raw);
+  const elderly =
+    /부모님|어머니|어머님|아버지|아버님|고령|어르신|병원에|병원\s*(?:이동|다니)|가족\s*케어|가족\s*돌봄|돌봄|모시고/i.test(raw);
+  const pregnancyChild = /임산부|임신|아기|아이들?|자녀|카시트|유모차|등하원/i.test(raw);
+  const motion = /(?:차)?멀미|소음|예민|정숙|조용함?|조용한|부드러운\s*주행/i.test(raw);
+  const longDrive =
+    /장거리|출장|고속도로|오래\s*운전|운전\s*피로|피로가\s*적|장시간\s*운전/i.test(raw);
+
+  if (back) hit.push("back_spine");
+  if (neckJoint) hit.push("neck_shoulder_joint");
+  if (mobility) hit.push("mobility_accessibility");
+  if (elderly) hit.push("elderly_family");
+  if (pregnancyChild) hit.push("pregnancy_child");
+  if (motion) hit.push("motion_sensitivity");
+  if (longDrive) hit.push("long_distance_fatigue");
+
+  const categories = sortCareCategories(hit);
+  if (categories.length === 0) return CARE_NEED_EMPTY;
+
+  const customerFacingPhrases = uniqKeepOrder(
+    categories.flatMap((c) => CARE_CUSTOMER_PHRASES[c] ?? []),
+  );
+  const advisorGuidance = uniqKeepOrder([
+    CARE_ADVISOR_SHARED_KO,
+    ...categories.flatMap((c) => CARE_ADVISOR_BY_CAT[c] ?? []),
+  ]);
+  const vehicleCheckpoints = uniqKeepOrder(categories.flatMap((c) => CARE_VEHICLE_CHECKS[c] ?? []));
+
+  return {
+    categories,
+    customerFacingPhrases,
+    advisorGuidance,
+    vehicleCheckpoints,
+  };
+}
+
+/** SensoraGuide 등 UI용 짧은 감지 문구(ko·en 라벨 호출부에서 선택). */
+export function formatCareNeedsGuideTopicsKo(input: string): string {
+  const care = detectCareNeedsKo(input);
+  if (!care.categories.length) return "";
+
+  const labelByCat = (c: CareNeedCategory) =>
+    CARE_UI_TOPIC_KO[c] ?? c.replace(/_/g, " ");
+
+  return uniqKeepOrder(care.categories.map(labelByCat)).slice(0, 4).join(" · ");
+}
+
+const CARE_UI_TOPIC_EN: Partial<Record<CareNeedCategory, string>> = {
+  back_spine: "Seat comfort · ride quality",
+  neck_shoulder_joint: "Ingress/egress · doors",
+  mobility_accessibility: "Cabin access path",
+  elderly_family: "Rear-seat access",
+  pregnancy_child: "Second row · cargo",
+  motion_sensitivity: "Quiet cabin · gentle ride",
+  long_distance_fatigue: "Long trips · assists",
+};
+
+export function formatCareNeedsGuideTopicsUi(input: string, lang: "ko" | "en"): string {
+  const care = detectCareNeedsKo(input);
+  if (!care.categories.length) return "";
+
+  const map =
+    lang === "en"
+      ? (c: CareNeedCategory) => CARE_UI_TOPIC_EN[c] ?? CARE_UI_TOPIC_KO[c] ?? c.replace(/_/g, " ")
+      : (c: CareNeedCategory) => CARE_UI_TOPIC_KO[c] ?? c.replace(/_/g, " ");
+
+  return uniqKeepOrder(care.categories.map(map)).slice(0, 4).join(" · ");
+}
+
+const CARE_ADVISOR_SHARED_KO =
+  "질환명·신체 상태를 문자에서 되풀이하기보다, 승하차 편의성·시트 착좌감·실내 동선·정숙성처럼 ‘차량을 쓸 때 확인할 포인트’로 바꿔 안내하는 편이 좋습니다.";
+
+const CARE_ADVISOR_BY_CAT: Record<CareNeedCategory, string[]> = {
+  back_spine: [
+    "등·허리 맥락은 과장하지 말고, 착좌감과 장거리 체감은 시승에서 직접 비교 확인하도록 짧게 제안하면 좋습니다.",
+  ],
+  neck_shoulder_joint: [
+    "승하차 발판 높이·도어 각도는 문장 숫자보다 현장 체험 순서 안내가 자연스럽습니다.",
+  ],
+  mobility_accessibility: [
+    "특정 고객군에게 ‘적합’ 같은 단정은 피하고, 동선·좌석·트렁크 적재 순서처럼 체험 순서형으로 적습니다.",
+  ],
+  elderly_family: [
+    "병원·이동 맥락은 과시하지 않고 동승하시는 분의 편안한 승차·내리기와 후석 공간을 중심으로 짚습니다.",
+  ],
+  pregnancy_child: ["카시트·유모차는 실제 차량별 넉넉함이 달라 시승·매장 재확인을 권하면 좋습니다."],
+  motion_sensitivity: [
+    "민감하신 분도 편하게 읽히도록 가감속·실내 소음 같은 ‘운행 체감’만 담백히 언급합니다.",
+  ],
+  long_distance_fatigue: [
+    "장거리는 연비 과시보다 시트 피로·주행 보조 인지 순서처럼 ‘운전 상황’ 위주가 자연스럽습니다.",
+  ],
+};
+
+const CARE_CUSTOMER_PHRASES: Record<CareNeedCategory, string[]> = {
+  back_spine: ["장시간 이동 시 편안한 시트 착좌감과 승차감"],
+  neck_shoulder_joint: ["승하차 높이와 도어 개방감, 시트 포지션"],
+  mobility_accessibility: ["동승하시는 분의 편안한 승차·내리기와 실내 동선"],
+  elderly_family: ["동승하시는 가족분을 위한 승하차 편의와 넉넉한 후석 공간"],
+  pregnancy_child: ["카시트·유모차를 고려한 후석 활용과 트렁크 공간"],
+  motion_sensitivity: ["정숙한 실내 분위기와 차분한 가감속 시 승차감"],
+  long_distance_fatigue: ["장거리 주행 부담을 줄일 수 있는 시트 편안함과 안정적인 주행 체감·주행 보조"],
+};
+
+const CARE_VEHICLE_CHECKS: Record<CareNeedCategory, string[]> = {
+  back_spine: ["시트 조절 가능 범위", "충격·진동에 대한 장거리 체감(시승)", "등받이 형태 현장 확인"],
+  neck_shoulder_joint: ["승하차 스텝·문턱 높이", "도어 스윙 각도와 주차 장소별 개방 폭"],
+  mobility_accessibility: ["승하차 동선 폭·시트 높낮이 단계형 안내"],
+  elderly_family: ["후석 진입 높이·문턱 높낮이", "도어 헤드룸 및 손잡이 위치", "안전·편의 사양 톤 과장 금지"],
+  pregnancy_child: ["2열 카시트 설치 간격", "후석 무릎 공간 유모차 적재 여부 현장 확인"],
+  motion_sensitivity: ["저속 회생제동 가감속 체감", "RPM·풍절음 구간별 체험 순서 안내"],
+  long_distance_fatigue: ["시트 패키지 레벨", "헤드업·어댑티브 기능 체험 순서", "고속 크루즈 중 실내 진동 체감"],
+};
+
+const CARE_UI_TOPIC_KO: Partial<Record<CareNeedCategory, string>> = {
+  back_spine: "착좌감·승차감",
+  neck_shoulder_joint: "승하차·도어",
+  mobility_accessibility: "실내 동선",
+  elderly_family: "동승·후석",
+  pregnancy_child: "2열·트렁크",
+  motion_sensitivity: "정숙·승차감",
+  long_distance_fatigue: "장거리·보조장치",
+};
+
+function buildCareRecallClauseKo(care: CareNeeds): string {
+  const parts = care.customerFacingPhrases.slice(0, 2);
+  if (parts.length === 0) return "편안한 이동과 실내 활용 관점에서의 기준";
+  if (parts.length === 1) return parts[0];
+  return `${parts[0]} 및 ${parts[1]}`;
+}
+
+function buildCareSummaryLeadSentenceKo(label: string, care: CareNeeds): string {
+  const frags = care.categories.map((c) => CARE_SUMMARY_FRAG_KO[c]).filter(Boolean) as string[];
+  const uniq = uniqKeepOrder(frags);
+  const head = uniq.slice(0, 2).join(" 및 ");
+  if (!head.trim()) return `${label} 고객님은 말씀 주신 활용 목적 안에서 차량 조건을 함께 검토하고 있습니다.`;
+  return `${label} 고객님은 ${head} 차량 활용 관점에서 함께 고려하고 계십니다.`;
+}
+
+const CARE_SUMMARY_FRAG_KO: Record<CareNeedCategory, string> = {
+  back_spine: "장시간 이동 시 편안한 착좌감과 승차감",
+  neck_shoulder_joint: "승하차 편의성과 도어·시트 포지션 감각",
+  mobility_accessibility: "실내 동선과 승하차 동선까지 함께 보시는 편안한 이동",
+  elderly_family: "동승하시는 분의 승차·내리기 편안함과 후석 공간",
+  pregnancy_child: "자녀·유아 동승 조건까지 반영한 후석 공간 활용과 트렁크 활용성",
+  motion_sensitivity: "정숙성과 차분한 운행 시의 승차감",
+  long_distance_fatigue: "출장 등 장거리 운행을 전제로 한 시트 편안함과 주행 보조·실내 안정감",
+};
+
 function hasHangul(input: string) {
   return /[가-힣]/.test(input);
 }
@@ -38,7 +253,7 @@ function detectVehicleType(input: string): "SUV" | "세단" | "전기차" | null
   const s = input.toLowerCase();
   if (s.includes("suv")) return "SUV";
   if (s.includes("세단")) return "세단";
-  if (s.includes("전기차") || s.includes("ev")) return "전기차";
+  if (s.includes("전기차") || /\bev\d|\bev\b|아이오닉|테슬라|전기 차/i.test(s)) return "전기차";
   return null;
 }
 
@@ -99,6 +314,140 @@ function extractLikelyVehicleModel(raw: string): string | null {
   if (!generic) return null;
 
   return generic.includes("‑") ? generic.replace(/‑/g, "-") : generic;
+}
+
+/** 기아·현대 진영 EV·실사용 모델 토큰(데모 규칙). */
+function extractDomesticLeadModelKo(raw: string): string | null {
+  const n = stripNoise(raw);
+  const kiaEv =
+    /\b(?:기아|kia)\s*[·•.]?\s*ev\s*[-]?\s*(\d{1,2})\b/i.exec(n) ??
+    /\b(?:기아|kia)[^\d]{0,6}\bev\s*[-]?\s*(\d{1,2})\b/i.exec(n);
+  if (kiaEv?.[1]) return `KIA EV${kiaEv[1]}`;
+  const evLoose =
+    /\bev\s*[-]?\s*(\d{1,3})\b/i.exec(n) ??
+    /\b(ev\d{2,})\b/i.exec(n);
+  if (/\b(?:기아|kia|현대)\b/i.test(n) && evLoose?.[1]) {
+    const digits = /\d+/.exec(evLoose[1])?.[0];
+    if (digits) return /현대\b/i.test(n) ? `현대 EV${digits}` : `KIA EV${digits}`;
+  }
+  if (/\bev\b/i.test(n) && /\b(?:기아|kia)\b/i.test(n)) {
+    const nm = /\bev\s*[-]?\s*(\d{1,2})\b/i.exec(n);
+    if (nm?.[1]) return `KIA EV${nm[1]}`;
+  }
+  return null;
+}
+
+/** 메모 우선 순위: 기아 등 → 유럽/수입 패턴 추출기. */
+function extractInterestModelInclusive(raw: string): string | null {
+  return extractDomesticLeadModelKo(raw) ?? extractLikelyVehicleModel(raw);
+}
+
+type DemoMemoFactsKo = {
+  customerLabel: string | null;
+  postureDiscomfort: boolean;
+  primaryModelKo: string | null;
+  compareCue: boolean;
+  sedanCue: boolean;
+  suvCue: boolean;
+  evCue: boolean;
+  budgetPhrase: string | null;
+  tradeInEstimatePhrase: string | null;
+  discountIntent: boolean;
+  sincereTone: boolean;
+};
+
+function extractCustomerLabelKo(raw: string): string | null {
+  const t = raw.trim();
+  const labeled =
+    /\b([\u3131-\uD79D]{2,6})(?:님| 고객님)\b/.exec(stripNoise(t))?.[1] ??
+    /\b([\u3131-\uD79D]{2,6})\s+고객님\b/.exec(stripNoise(t))?.[1];
+  if (labeled) return labeled.replace(/\s+$/, "");
+
+  const first = (raw.split(/\r?\n/).map((l) => l.trim()).find((l) => l.length > 0) ?? "").trim();
+  if (/^[\u3131-\uD79D]{2,6}$/.test(first)) return first;
+  return null;
+}
+
+/** 예: "4천만 원대", "약 4,000만 원" */
+function extractBudgetPhraseKo(raw: string): string | null {
+  if (!/(?:예산|잡음|예상).*?(만|원|천)|\d\s*천\s*만|\d청만원|만원\s*대?/i.test(raw)) return null;
+  const n = stripNoise(raw);
+  const compact = n.replace(/\s+/g, "");
+
+  const thC = compact.match(/예산[^\d]{0,12}(\d)천만원(?:대)?(?:으로)?/i);
+  if (thC?.[1]) return `약 ${thC[1]}천만 원대`;
+
+  const th = /\b(\d+)\s*천\s*만\s*원(?:대|\s*으로\s*잡)?/i.exec(n);
+  if (th?.[1]) return `약 ${th[1]}천만 원대`;
+
+  const mw = /\b예산[^\d]{0,20}(\d{2,6})\s*만\s*(?:원|원대)?/i.exec(n);
+  if (mw?.[1]) return `약 ${mw[1]}만 원 내외`;
+
+  return null;
+}
+
+/** 중고/대차 맥락에서 숫자+만 원 조각 */
+function extractTradeInEstimateKo(raw: string): string | null {
+  if (!/중고|대차|기존\s*차량|중고차|중고 차|매각/i.test(raw)) return null;
+
+  const n = stripNoise(raw);
+  const th = /\b(\d+)\s*천\s*만\s*원\b/i.exec(n);
+  if (th?.[1]) return `${th[1]}천만 원`;
+
+  const amt =
+    /(?:중고(?:차)?|대차|기존\s*차(?:량)?)[^0-9]{0,48}(?:현재\s*)?(?:약\s*)?(\d{2,7})\s*만\s*(?:원|원정도|정도)?/i.exec(
+      n,
+    ) ?? /(?:약\s*)?(\d{2,7})\s*만\s*(?:원|원정도|정도)\s*(?:나올|예상|정도|수준)/i.exec(n);
+  if (amt?.[1]) return `약 ${amt[1]}만 원`;
+
+  return null;
+}
+
+function extractDemoMemoFactsKo(input: string): DemoMemoFactsKo {
+  const raw = stripNoise(input);
+  const n = raw;
+  const postureDiscomfort = /허리|허리통증|디스크|요통|불편하|불편감|통증\b|등이\s*아|아파|아프신/i.test(raw);
+
+  const primaryModelKo = extractInterestModelInclusive(raw);
+
+  const compareCue =
+    /비교|함께\s*비교|타브랜드|다른\s*브랜드|모델별\s*비교|맞으시면서|대안과|비교하/i.test(raw);
+
+  const sedanCue = /세단\b/i.test(raw);
+  const suvCue = /\bSUV\b|승합|suv\b/i.test(raw);
+  const evCue = /\bev\d|\bev\b|전기차|전기 차/i.test(raw);
+
+  const discountIntent = /할인|프로모션|프로모|혜택|인센티브|\b프로모\b/i.test(raw);
+
+  const sincereTone = /진심|진정성|성의|정성|전달하고|어떻게\s*전달/i.test(raw);
+
+  return {
+    customerLabel: extractCustomerLabelKo(input),
+    postureDiscomfort,
+    primaryModelKo,
+    compareCue,
+    sedanCue,
+    suvCue,
+    evCue,
+    budgetPhrase: extractBudgetPhraseKo(raw),
+    tradeInEstimatePhrase: extractTradeInEstimateKo(raw),
+    discountIntent,
+    sincereTone,
+  };
+}
+
+/** 구체 디테일이 있으면 풍부한 한국어 SMS를 씁니다. */
+function memoHasConcreteKo(f: DemoMemoFactsKo, inputLen: number): boolean {
+  return (
+    inputLen >= 20 &&
+    (f.postureDiscomfort ||
+      !!f.primaryModelKo ||
+      !!f.budgetPhrase ||
+      !!f.tradeInEstimatePhrase ||
+      f.discountIntent ||
+      f.compareCue ||
+      f.sincereTone)
+  );
 }
 
 type FinanceSignals = {
@@ -218,12 +567,30 @@ export function generateDemoConsultingResponse(
 ): DemoConsultingResponse {
   const input = (inputRaw ?? "").trim();
   const ko = hasHangul(input) || input.length === 0;
-  const vehicleType = detectVehicleType(input);
+  let vehicleType = detectVehicleType(input);
+  const memoFactsKo: DemoMemoFactsKo | null = ko ? extractDemoMemoFactsKo(input) : null;
+  const careNeedsKo = ko ? detectCareNeedsKo(input) : CARE_NEED_EMPTY;
+  const memoConcreteFactsKo = !!(memoFactsKo && memoHasConcreteKo(memoFactsKo, input.length));
+  const memoCareRichKo = careNeedsKo.categories.length > 0 && input.length >= 15;
+  const memoRichKo = memoConcreteFactsKo || memoCareRichKo;
+
+  if (ko && memoFactsKo) {
+    if (!vehicleType && memoFactsKo.suvCue) vehicleType = "SUV";
+    else if (!vehicleType && memoFactsKo.sedanCue) vehicleType = "세단";
+    else if (!vehicleType && memoFactsKo.evCue) vehicleType = "전기차";
+  }
+
   const salesStyle: DemoSalesStyle = options?.salesStyle ?? "polite";
   const financeSignals = mergeQuoteHintsFromOptions(input, options);
 
-  const rideComfort = hasAny(input, ["승차감", "조용", "정숙", "정숙성"]);
-  const family = hasAny(input, ["가족", "아이", "등하원"]);
+  const motionCare = careNeedsKo.categories.includes("motion_sensitivity");
+  const rideComfort =
+    hasAny(input, ["승차감", "조용", "정숙", "정숙성"]) ||
+    !!(memoFactsKo?.postureDiscomfort || motionCare);
+
+  const family =
+    hasAny(input, ["가족", "아이", "등하원"]) ||
+    careNeedsKo.categories.some((c) => c === "elderly_family" || c === "pregnancy_child");
 
   const financeTopic =
     hasAny(input, [
@@ -255,26 +622,40 @@ export function generateDemoConsultingResponse(
     !!options?.financeQuote;
 
   const finance = financeTopic || financeSignals.mentionQuote;
-  const tradeIn = hasAny(input, ["중고차", "트레이드인", "대차", "기존차", "기존 차량", "매각"]);
+  const tradeIn =
+    hasAny(input, ["중고차", "트레이드인", "대차", "기존차", "기존 차량", "매각"]) ||
+    !!memoFactsKo?.tradeInEstimatePhrase;
   const deliverySoon = hasAny(input, ["출고", "일정", "빨리", "빠르게", "빠른"]);
-  const compare = hasAny(input, ["고민", "비교", "타브랜드", "다른 브랜드"]);
+  const compare =
+    hasAny(input, ["고민", "비교", "타브랜드", "다른 브랜드"]) || !!(memoFactsKo?.compareCue);
   const wantsTestDrive = hasAny(input, ["시승", "테스트 드라이브", "test drive"]);
 
   const focus: string[] = [];
-  if (rideComfort) focus.push("정숙·승차감");
+  if (careNeedsKo.categories.length > 0) focus.push("배려 응대 포인트(체험형 안내)");
+  if (memoFactsKo?.postureDiscomfort) focus.push("허리·자세 고려 승차감/착좌감");
+  else if (rideComfort) focus.push("정숙·승차감");
   if (family) focus.push("가족 이동 편의");
   if (finance) focus.push("금융·견적");
   if (tradeIn) focus.push("기존 차량 대차/매각");
   if (deliverySoon) focus.push("출고 가능 일정");
   if (vehicleType) focus.push(`관심 차종(${vehicleType})`);
   if (compare) focus.push("비교 포인트 정리");
+  if (memoFactsKo?.primaryModelKo) focus.push(`관심 차량 메모 반영 (${memoFactsKo.primaryModelKo})`);
 
   function buildOpeningRecallFragmentsKo(): string[] {
     const frags: string[] = [];
-    if (rideComfort) frags.push("조용한 승차감과 정숙성");
+    if (careNeedsKo.categories.length > 0) {
+      frags.push(buildCareRecallClauseKo(careNeedsKo));
+    } else if (memoFactsKo?.postureDiscomfort && rideComfort)
+      frags.push("허리 부담을 고려해 승차감과 시트 착좌감");
+    else if (rideComfort) frags.push("조용한 승차감과 정숙성");
     if (family) frags.push("가족 이동 편의성");
 
     let financeRecall = "";
+    if (memoFactsKo?.budgetPhrase && !finance) {
+      frags.push(`예산(${memoFactsKo.budgetPhrase})`);
+    }
+
     if (finance) {
       if (financeSignals.downPayment && financeSignals.deposit) financeRecall = "선납금과 보증금을 포함한 금융 조건";
       else if (financeSignals.downPayment && financeSignals.monthlyPayment) financeRecall = "선납과 월 납입 조건";
@@ -403,88 +784,332 @@ ${emptyCloseKo}`)
     };
   }
 
-  const interestModelKo = extractLikelyVehicleModel(input);
+  const interestModelKo = memoFactsKo?.primaryModelKo ?? extractLikelyVehicleModel(input);
   const customerNameKo =
-    /\b([\u3131-\uD79D]{2,4})님\b/.exec(input)?.[1] ??
-    /\b([\u3131-\uD79D]{2,4}) 고객님\b/.exec(input)?.[1] ??
-    null;
+    memoFactsKo?.customerLabel ??
+    (/\b([\u3131-\uD79D]{2,6})님\b/.exec(input)?.[1] ??
+      /\b([\u3131-\uD79D]{2,6}) 고객님\b/.exec(input)?.[1] ??
+      null);
 
   const focusText = focus.length ? focus.join(" · ") : ko ? "핵심 니즈" : "key needs";
   const openingRecallJoined = joinOpeningRecallKo(buildOpeningRecallFragmentsKo());
 
-  const summaryLines: string[] = [];
-  summaryLines.push(
-    ko ? `이 고객은 ${focusText}를 중심으로 검토하고 있습니다.` : `This customer is prioritizing ${focusText}.`,
-  );
-  if (vehicleType)
-    summaryLines.push(ko ? `관심 차종은 ${vehicleType}로 보입니다.` : `Likely vehicle interest: ${vehicleType}.`);
-  if (compare)
-    summaryLines.push(
-      ko
-        ? "비교 차량 대비 차이를 짧게 정리하면 결정 피로를 줄여 줄 수 있습니다."
-        : "A tight comparison checklist will reduce decision fatigue.",
-    );
-  if (finance) {
-    const partsKo: string[] = [];
-    if (financeSignals.installment) partsKo.push("할부");
-    if (financeSignals.lease) partsKo.push("리스");
-    if (financeSignals.longRent) partsKo.push("장기렌트");
-    const prod = partsKo.length ? `${partsKo.join("/")} 안내가 적절합니다` : "금융·월 납입 조건 확인이 필요합니다";
-    summaryLines.push(
-      ko
-        ? `${prod}. 말씀 주신 금액 단위(선납·보증금·월 납입 등)와 견적서 기준 라인만 맞춰 고객에게 전달할 수 있습니다.`
-        : `Financing (${prod})—align upfront/monthly/residual wording with quote lines before texting.`,
-    );
+  function koSummaryConcreteParagraph(): string {
+    const f = memoFactsKo!;
+    const label = (f.customerLabel ?? "해당").trim();
+    const parts: string[] = [];
+
+    if (careNeedsKo.categories.length > 0) {
+      parts.push(buildCareSummaryLeadSentenceKo(label, careNeedsKo).trim());
+    } else {
+      parts.push(`${label} 고객님`);
+
+      const bodyConcern = f.postureDiscomfort
+        ? "말씀주신 편안함 기준으로 승차감과 시트 착좌감을 차량 활용 포인트로 중요하게 보고 계십니다."
+        : rideComfort
+          ? "승차감 중심으로 차량을 보고 계십니다."
+          : "메모 상 니즈 기준으로 검토 중입니다.";
+
+      parts.push(bodyConcern.trim());
+    }
+
+    const fusedCompareBudgetSedan =
+      !!(f.primaryModelKo && compare && f.budgetPhrase && (vehicleType === "세단" || f.sedanCue));
+
+    if (fusedCompareBudgetSedan && f.primaryModelKo && f.budgetPhrase) {
+      const bp = stripNoise(f.budgetPhrase).replace(/^약\s*/, "예산 ");
+      parts.push(`${f.primaryModelKo}와 비교하면서 ${bp}의 승차감 좋은 세단을 검토 중입니다.`);
+    } else if (f.primaryModelKo && compare) {
+      parts.push(`${f.primaryModelKo} 모델을 기준 차량 삼아 비교 검토하고 계신 점도 함께 반영해야 합니다.`);
+      if (f.budgetPhrase) parts.push(`예산은 ${stripNoise(f.budgetPhrase)} 검토 단계입니다.`);
+    } else if (f.primaryModelKo) parts.push(`${f.primaryModelKo} 후보 모델에 관심이 있습니다.`);
+
+    if (!fusedCompareBudgetSedan && vehicleType) parts.push(`관심 차종은 메모 기준 ${vehicleType} 방향입니다.`);
+
+    if (!(f.primaryModelKo && compare) && f.budgetPhrase)
+      parts.push(`예산은 ${stripNoise(f.budgetPhrase)} 검토 단계입니다.`);
+    if (f.tradeInEstimatePhrase)
+      parts.push(
+        `기존 차량은 ${stripNoise(f.tradeInEstimatePhrase)} 수준의 대차 가능성을 현재 참고 가능한 범위로 고려하고 계십니다.`,
+      );
+
+    if (f.discountIntent) parts.push(`적용 가능한 할인이나 프로모션을 고객께 전달해 드릴 필요가 있습니다. 과장하지 않도록 구체적인 조건 명시가 중요합니다.`);
+    if (f.sincereTone)
+      parts.push(`부담을 주지 않는 톤으로 진정성 있는 안내 방식으로 연락하는 것이 적절합니다.`);
+
+    return parts.join(" ");
   }
-  if (tradeIn)
+
+  function koNextActionConcrete(): string[] {
+    const f = memoFactsKo!;
+    const out: string[] = [];
+    if (careNeedsKo.categories.length > 0) {
+      out.push(...careNeedsKo.advisorGuidance.slice(0, 3));
+    }
+    if (f.postureDiscomfort || rideComfort) {
+      if (careNeedsKo.categories.length > 0) {
+        out.push(
+          "시승·재방문 때 착좌감·승하차 동선·장거리 체감은 고객님이 직접 비교 확인하실 수 있게 짧은 순서로 안내하는 편이 좋습니다.",
+        );
+      } else {
+        out.push(
+          "다음 연락에서는 편안한 착좌감과 승차감, 시트 높낮이, 장거리 주행 시 피로감을 차분하게 짚는 것부터 시작하는 편이 자연스럽습니다.",
+        );
+      }
+    }
+
+    const modelBit =
+      interestModelKo && compare
+        ? `${interestModelKo}와 비교 중이시라면 단순 할인보다 실제 주행감, 착좌감, 예산 범위와 중고·대차 추정까지 한 번에 짚어 안내하는 흐름이 자연스럽습니다.`
+      : compare ? "비교 차량이 있다면 헤드업만 길게 쓰지 말고, 고객님이 중요하게 보는 기준 2~3가지 안에서 차이만 정리합니다."
+      : "";
+
+    if (modelBit) out.push(modelBit);
+
+    if (f.budgetPhrase || finance) {
+      const lead = f.budgetPhrase ? `${f.budgetPhrase}과(와) 연결되는 ` : "";
+      out.push(
+        `${lead}라인별 조건과 월 출금 흐름을 확인한 뒤, 현재 확인 가능한 조건 기준으로만 문자 톤을 맞춥니다.`,
+      );
+    }
+
+    if (tradeIn && f.tradeInEstimatePhrase) {
+      out.push(
+        `${f.tradeInEstimatePhrase} 같은 추정 폭만 먼저 공유했는지 재확인하고, 진단 순서까지 고객이 이해하는 문장 순서인지 문자를 검토합니다.`,
+      );
+    } else if (tradeIn)
+      out.push("대차/매각 흐름은 중고 추정 → 성능점검 → 확정순이라는 순서 메모가 문자에 명확한지 확인합니다.");
+
+    if (f.discountIntent) {
+      out.push(
+        "할인 및 프로모션은 ‘좋은 기회입니다’ 과장 표현 없이 현재 게시 또는 승인된 조건 기준으로 차분하게 전달하는 것이 목표입니다.",
+      );
+    }
+    out.push(`메모에 적힌 고객명·예산 수치·관심 모델 이름이 문자에 그대로 반영됐는지 마지막으로 한 번 더 확인합니다.`);
+
+    return uniqKeepOrder(out.filter(Boolean));
+  }
+
+  const summaryLines: string[] = [];
+
+  if (ko && memoRichKo && memoFactsKo) summaryLines.push(koSummaryConcreteParagraph());
+  else {
     summaryLines.push(
-      ko
-        ? "기존 차량은 중고 진단 순서와 대략 감액 가능성까지 함께 언급하는 편이 좋습니다."
-        : "Mention inspection flow and indicative trade-in valuation range.",
+      ko ? `이 고객은 ${focusText}를 중심으로 검토하고 있습니다.` : `This customer is prioritizing ${focusText}.`,
     );
-  if (deliverySoon)
-    summaryLines.push(
-      ko ? "출고 가능 시점과 준비 절차가 궁금해할 가능성이 큽니다." : "Likely attentive to delivery readiness and timelines.",
-    );
+    if (vehicleType)
+      summaryLines.push(ko ? `관심 차종은 ${vehicleType}로 보입니다.` : `Likely vehicle interest: ${vehicleType}.`);
+    if (compare)
+      summaryLines.push(
+        ko
+          ? "비교 차량 대비 차이를 짧게 정리하면 결정 피로를 줄여 줄 수 있습니다."
+          : "A tight comparison checklist will reduce decision fatigue.",
+      );
+    if (finance) {
+      const partsKo: string[] = [];
+      if (financeSignals.installment) partsKo.push("할부");
+      if (financeSignals.lease) partsKo.push("리스");
+      if (financeSignals.longRent) partsKo.push("장기렌트");
+      const prod = partsKo.length ? `${partsKo.join("/")} 안내가 적절합니다` : "금융·월 납입 조건 확인이 필요합니다";
+      summaryLines.push(
+        ko
+          ? `${prod}. 말씀 주신 금액 단위(선납·보증금·월 납입 등)와 견적서 기준 라인만 맞춰 고객에게 전달할 수 있습니다.`
+          : `Financing (${prod})—align upfront/monthly/residual wording with quote lines before texting.`,
+      );
+    }
+    if (tradeIn)
+      summaryLines.push(
+        ko
+          ? "기존 차량은 중고 진단 순서와 대략 감액 가능성까지 함께 언급하는 편이 좋습니다."
+          : "Mention inspection flow and indicative trade-in valuation range.",
+      );
+    if (deliverySoon)
+      summaryLines.push(
+        ko ? "출고 가능 시점과 준비 절차가 궁금해할 가능성이 큽니다." : "Likely attentive to delivery readiness and timelines.",
+      );
+  }
 
   const nextActionParts: string[] = [];
-  nextActionParts.push(
-    ko
-      ? "고객이 말씀하신 숫자·조건 단위 그대로 견적서 항목이 맞는지 재확인한 뒤, 문자에는 ‘정리해 두었음/안내드릴 수 있음’ 형태로 가볍게 전달합니다."
-      : "Re-check memo numbers against quote line items before sending SMS—keep tone factual.",
-  );
-  if (vehicleType)
+  if (ko && memoRichKo && memoFactsKo) nextActionParts.push(...koNextActionConcrete());
+  else {
     nextActionParts.push(
-      ko ? `${vehicleType} 기준 핵심 트림 2안과 옵션만 짧게 남겨 문자에 붙입니다.` : `Attach 2 ${vehicleType} trims + key options.`,
+      ko
+        ? "고객이 말씀하신 숫자·조건 단위 그대로 기록과 맞춰 문자에 반영했는지 확인한 뒤, 과장 표현 없이 현재 확인 가능한 조건 기준으로 적어 두었음을 간단히 전달합니다."
+        : "Re-check memo numbers against quote line items before sending SMS—keep tone factual.",
     );
-  if (rideComfort)
-    nextActionParts.push(ko ? "정숙성·주행 피치는 숫자 과시보다 고객이 체감할 표현으로만 짚습니다." : "Describe ride quietly—no overstated specs.");
-  if (family)
-    nextActionParts.push(
-      ko ? "카시트·2열 편의는 체험 매장에서 확인 가능한 순서까지 짧게 제안합니다." : "Suggest in-store checks for seating/fit.",
-    );
-  if (finance) {
-    const finHint =
-      ko ?
-        financeSignals.mentionQuote
-          ? "견적 관련 문자에는 변동 가능 문구까지 한 줄 붙였는지 검토합니다."
-          : "초기 비용과 월 납입 라인만 중복 없이 문자에 두면 읽기 부담이 줄어듭니다."
-      : financeSignals.mentionQuote
-        ? "Double-check SMS includes lender/registration caveat when quote keywords fired."
-        : "Keep upfront + monthly-only lines terse.";
+    if (vehicleType)
+      nextActionParts.push(
+        ko ? `${vehicleType} 기준 핵심 트림 2안과 옵션만 짧게 남겨 문자에 붙입니다.` : `Attach 2 ${vehicleType} trims + key options.`,
+      );
+    if (rideComfort)
+      nextActionParts.push(ko ? "정숙성·주행 피치는 숫자 과시보다 고객이 체감할 표현으로만 짚습니다." : "Describe ride quietly—no overstated specs.");
+    if (family)
+      nextActionParts.push(
+        ko ? "카시트·2열 편의는 체험 매장에서 확인 가능한 순서까지 짧게 제안합니다." : "Suggest in-store checks for seating/fit.",
+      );
+    if (finance) {
+      const finHint =
+        ko ?
+          financeSignals.mentionQuote
+            ? "견적 관련 문자에는 변동 가능 문구까지 한 줄 붙였는지 검토합니다."
+            : "초기 비용과 월 납입 라인만 중복 없이 문자에 두면 읽기 부담이 줄어듭니다."
+        : financeSignals.mentionQuote
+          ? "Double-check SMS includes lender/registration caveat when quote keywords fired."
+          : "Keep upfront + monthly-only lines terse.";
 
-    nextActionParts.push(finHint);
+      nextActionParts.push(finHint);
+    }
+    if (tradeIn)
+      nextActionParts.push(
+        ko ?
+          "중고 가격 확인 → 진단 순서까지 문자에 순서 메모와 추정금액이 일치했는지 봅니다."
+        : "Ensure trade-in flow language matches memo.",
+      );
+    if (deliverySoon)
+      nextActionParts.push(ko ? "재고 가능일과 주문 납기를 나누어 한 줄씩 문자에 넣습니다." : "Split inventory vs ordered lead-times.");
+    if (compare)
+      nextActionParts.push(ko ? "비교 차량 명칭 받은 경우에만 ‘핵심 차이 세 가지’로 요약합니다." : "Summarize three differences only once comparables are named.");
   }
-  if (tradeIn)
-    nextActionParts.push(
-      ko ? "중고 가격 확인 → 진단 순서까지 고정 멘트로 정리했는지 문자에 반영되어 있는지 봅니다." : "Ensure trade-in flow language matches memo.",
-    );
-  if (deliverySoon)
-    nextActionParts.push(ko ? "재고 가능일과 주문 납기를 나누어 한 줄씩 문자에 넣습니다." : "Split inventory vs ordered lead-times.");
-  if (compare)
-    nextActionParts.push(ko ? "비교 차량 명칭 받은 경우에만 ‘핵심 차이 세 가지’로 요약합니다." : "Summarize three differences only once comparables are named.");
+
+  function buildStructuredKoSms(): string {
+    const f = memoFactsKo!;
+    const tone = koSmsStyleTone(salesStyle);
+    const customer = customerNameKo ? `${customerNameKo}님` : "OO님";
+
+    function topicParticleSms(phrase: string): "은" | "는" {
+      const t = phrase.trim();
+      if (!t) return "는";
+      const last = t[t.length - 1];
+      const c = last.codePointAt(0)!;
+      if (c >= 0xac00 && c <= 0xd7a3) return (c - 0xac00) % 28 !== 0 ? "은" : "는";
+      return "는";
+    }
+
+    const modelLabel = interestModelKo ?? "관심 모델";
+
+    const lines: string[] = [];
+    lines.push(`안녕하세요,`, `${customer}.`, "[브랜드/전시장명] [영업사원명] [직급]입니다.", "");
+
+    const budgetLead = f.budgetPhrase ? `${f.budgetPhrase} ` : "";
+    const sedanBit =
+      vehicleType === "세단" || f.sedanCue ? "승차감과 시트 착좌감이 좋은 세단" : "승차감과 시트 착좌감";
+
+    function buildDealMidKo(): string {
+      if (interestModelKo && compare) {
+        return `고객님께서 ${interestModelKo}와(과) 함께 비교하고 계신 점을 기준으로, ${budgetLead}예산 범위에서 ${sedanBit}, 장거리 주행 시 피로도까지 함께 보실 수 있도록 말씀 주신 기준으로 조건을 정리해보았습니다.`;
+      }
+      if (interestModelKo) {
+        return `고객님께서 관심 가져 주신 ${interestModelKo}를 기준으로, ${budgetLead}예산 범위에서 ${sedanBit}, 장거리 주행 시 피로도까지 함께 보실 수 있도록 말씀 주신 기준으로 조건을 정리해보았습니다.`;
+      }
+      return `고객님께서 관심 가져 주신 모델을 기준으로, ${budgetLead}예산 범위에서 ${sedanBit}, 장거리 주행 시 피로도까지 함께 보실 수 있도록 말씀 주신 기준으로 조건을 정리해보았습니다.`;
+    }
+
+    const dealMidApplicable =
+      !!(f.budgetPhrase || compare || interestModelKo || f.postureDiscomfort || rideComfort);
+
+    const hasCareAudience = careNeedsKo.categories.length > 0;
+
+    if (hasCareAudience) {
+      const clause = buildCareRecallClauseKo(careNeedsKo);
+      lines.push(
+        smsTrimLines(
+          `지난 상담 때 말씀주신 ${clause} 기준으로, 고객님께서 관심 가져 주신 ${modelLabel}의 주요 포인트를 말씀 주신 기준으로 정리해보았습니다.`,
+        ),
+      );
+      lines.push("");
+      const tpMod = topicParticleSms(modelLabel);
+      lines.push(
+        smsTrimLines(
+          `${modelLabel}${tpMod} 시트 착좌감, 실내 공간, 승하차 동선, 주행 시 안정감 등을 함께 확인해보시면 좋을 차량입니다.`,
+        ),
+      );
+      lines.push("");
+      lines.push(
+        smsTrimLines(
+          `특히 실제로 탑승해 보셨을 때 느껴지는 착좌감과 승하차 높이는 말씀주신 편안함 기준과 잘 맞는지 시승 때 직접 확인해보시는 것이 좋습니다.`,
+        ),
+      );
+      if (dealMidApplicable && (interestModelKo || compare || f.budgetPhrase || vehicleType || f.discountIntent)) {
+        lines.push("");
+        lines.push(smsTrimLines(buildDealMidKo()));
+      }
+    } else if (f.postureDiscomfort) {
+      lines.push(
+        smsTrimLines(
+          `지난 상담 때 말씀주신 편안함과 승차감을 중요하게 보신다는 내용 참고하였습니다.`,
+        ),
+      );
+      lines.push("");
+      lines.push(smsTrimLines(buildDealMidKo()));
+    } else {
+      lines.push(
+        smsTrimLines(`지난 상담 때 말씀주신 ${openingRecallJoined} 바탕으로 다시 연락드렸습니다.`),
+      );
+      lines.push("");
+      lines.push(smsTrimLines(buildDealMidKo()));
+    }
+
+    if (!hasCareAudience) {
+      lines.push("");
+      lines.push(
+        smsTrimLines(
+          `시승이나 재방문 때 실제 착좌감과 주행 피로 여부는 차량마다 체감이 달라질 수 있어, 현장에서 직접 확인해 보시는 것까지 함께 안내드리겠습니다.`,
+        ),
+      );
+    }
+
+    if (f.discountIntent) {
+      lines.push("");
+      lines.push(
+        smsTrimLines(
+          `특히 이번에 현재 확인 가능한 조건 기준으로 적용 가능한 할인 안내가 있어, 단순히 가격만 안내드리기보다는 고객님께서 중요하게 보시는 승차감과 예산 기준에 실제로 맞는지 비교하시기 편하도록 함께 확인해보시면 좋을 것 같아 연락드렸습니다.`,
+        ),
+      );
+    }
+
+    if (f.sincereTone && !f.discountIntent) {
+      lines.push("");
+      lines.push(
+        smsTrimLines(
+          `고객님께서 말씀주신 포인트를 부담 없이 전달드리기 위해 현재 확인 가능한 조건 기준으로 간단히 정리했습니다.`,
+        ),
+      );
+    }
+
+    if (tradeIn) {
+      lines.push("");
+      if (f.tradeInEstimatePhrase) {
+        lines.push(
+          smsTrimLines(
+            `기존 차량은 현재 기준으로 ${stripNoise(f.tradeInEstimatePhrase)} 수준의 대차 가능성을 먼저 보고 있으며, 이후 성능점검장에서 실제 상태를 확인한 뒤 최종 금액이 정리될 예정입니다. 특별한 감가 요인이 없다면 대략적인 범위에서 크게 달라지지는 않을 가능성이 높습니다.`,
+          ),
+        );
+      } else {
+        lines.push(
+          smsTrimLines(`
+기존 차량 매각도 함께 고려하고 계신 것으로 기억하고 있습니다.
+중고차 가격을 먼저 확인해보고, 이후 성능점검장에서 실제 상태를 확인할 예정입니다.
+특별한 감가 요인이 없다면 안내드린 대략적인 금액에서 크게 달라지지는 않을 가능성이 높습니다.`),
+        );
+      }
+    }
+
+    if (wantsTestDrive) {
+      lines.push("");
+      lines.push(smsTrimLines(`시승 일정 관련해서 말씀 주신 내용 참고했습니다.\n${tone.prepareTd}`));
+    }
+
+    lines.push("");
+    lines.push(tone.confirmClose);
+    if (tone.inviteQ && salesStyle !== "simple") lines.push(tone.inviteQ);
+    lines.push("감사합니다.");
+
+    return smsTrimLines(lines.join("\n"));
+  }
 
   function buildOutboundSmsKo(): string {
+    if (memoRichKo && memoFactsKo) return buildStructuredKoSms();
+
     function topicParticle(phrase: string): "은" | "는" {
       const t = phrase.trim();
       if (!t) return "는";
@@ -565,9 +1190,7 @@ ${emptyCloseKo}`)
 
     if (wantsTestDrive) {
       lines.push("");
-      lines.push(smsTrimLines(`
-다음 주 월요일 시승을 원하신다고 하셨는데,
-${tone.prepareTd}`));
+      lines.push(smsTrimLines(`시승 일정 관련해서 말씀 주신 내용 참고했습니다.\n${tone.prepareTd}`));
     }
 
     lines.push("");
