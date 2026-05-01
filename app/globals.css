@@ -941,3 +941,14 @@ html[lang="ko"] body {
   }
 }
 
+/* 랜딩 쇼룸 — 은은한 프리미엄 톤 */
+.landing-showroom-hero-shell {
+  background-color: #f4f6f8;
+  background-image: radial-gradient(
+      ellipse 115% 72% at 50% -28%,
+      rgba(148, 163, 184, 0.16),
+      transparent 52%
+    ),
+    radial-gradient(70% 42% at 100% 104%, rgba(229, 231, 235, 0.85), transparent 55%);
+}
+

@@ -8,11 +8,7 @@ import { NotebookCover } from "@/app/components/NotebookCover";
 import { LanguageSelect } from "@/app/components/i18n/LanguageSelect";
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
 import { ConciergeSidebar } from "@/app/components/concierge/ConciergeSidebar";
-import {
-  AIDemoSection,
-  CRMDemoSection,
-  HeroSection,
-} from "@/app/components/concierge/LandingSections";
+import { LandingShowroom } from "@/app/components/concierge/LandingSections";
 import { CRMApp } from "@/app/crm/CRMApp";
 import { useAuth } from "@/app/crm/useAuth";
 import { sellerCanUseApp, useSellerProfile } from "@/app/crm/useSellerProfile";
@@ -111,14 +107,8 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
         </div>
       </header>
 
-      <main className="relative z-10 flex-1">
-        {view === "landing" ? (
-          <>
-            <HeroSection />
-            <AIDemoSection />
-            <CRMDemoSection />
-          </>
-        ) : null}
+      <main className={`relative z-10 flex-1 ${view === "landing" ? "bg-[#F4F6F8]" : ""}`}>
+        {view === "landing" ? <LandingShowroom /> : null}
 
         {view === "app" ? (
           <div
