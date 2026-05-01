@@ -621,6 +621,64 @@ function prettifyExtractedLatinModelSlug(cleaned: string): string {
   );
 }
 
+/** 메모 속 “a6랑 비교”, “BMW 5시리즈랑 비교” 등 비교 상대 차명(조사 없는 표기용). */
+function extractComparePeerModelKo(raw: string): string | null {
+  const n = stripNoise(raw);
+  const brandFirst =
+    /\b(BMW|MINI|Audi|Mercedes(?:-Benz)?|Benz|메르세데스|벤츠|Genesis|제네시스|Porsche|포르쉐|Lexus|렉서스|Volvo|볼보)\s+([^\n,·]{1,40}?)\s*(?:랑|이랑|와|과|하고)\s*비교/i.exec(
+      n,
+    );
+  if (brandFirst?.[1] && brandFirst[2]) {
+    const br = brandFirst[1];
+    const prettyBrand =
+      /^bmw$/i.test(br) ? "BMW"
+      : /^mini$/i.test(br) ? "MINI"
+      : /^audi$/i.test(br) ? "Audi"
+      : /mercedes|benz|메르세데스|벤츠/i.test(br) ? "Mercedes-Benz"
+      : /^gen|^제네시스/i.test(br) ? "Genesis"
+      : /porsche|포르쉐/i.test(br) ? "Porsche"
+      : /lexus|렉서스/i.test(br) ? "Lexus"
+      : /volvo|볼보/i.test(br) ? "Volvo"
+      : br;
+    const tail = trimModelSlugTailKo(brandFirst[2].replace(/\s+/g, " ").trim());
+    if (!tail) return null;
+    const modelPart = /[가-힣]/.test(tail) ? tail : prettifyExtractedLatinModelSlug(tail);
+    return `${prettyBrand} ${modelPart}`.replace(/\s+/g, " ").trim();
+  }
+  const latinPeer = /\b([A-Za-z]{1,4}\d{0,2})\s*(?:랑|이랑|와|과|하고)\s*비교/i.exec(n);
+  if (latinPeer?.[1]) {
+    const tok = latinPeer[1].trim();
+    if (tok.length < 2) return null;
+    return prettifyExtractedLatinModelSlug(tok);
+  }
+  return null;
+}
+
+function sellerIntroLineKo(): string {
+  return "담당 영업사원입니다.";
+}
+
+function explicitTestDriveIntentKo(raw: string): boolean {
+  return /시승|재방문|전시장\s*방문|매장\s*방문|딜러\s*방문|체험\s*주행|test\s*drive/i.test(stripNoise(raw));
+}
+
+/** 비교 고객 + 금융·조건 중심 문단을 우선할 때 */
+function financeAnchoredForComparisonKo(input: string, financeSignals: FinanceSignals, financeFlag: boolean): boolean {
+  if (!financeFlag) return false;
+  const n = stripNoise(input);
+  return (
+    financeSignals.monthlyPayment ||
+    financeSignals.downPayment ||
+    financeSignals.deposit ||
+    financeSignals.lease ||
+    financeSignals.installment ||
+    financeSignals.longRent ||
+    financeSignals.initialCost ||
+    financeSignals.mentionQuote ||
+    /\b프로모션|프로모|예산|가격|조건|금융|월\s*납|월납입|납입|할부|리스|장기\s*렌트|출고\s*빠|출고\s*일/i.test(n)
+  );
+}
+
 /** E-Class · X5 · BMW 7시리즈 / Countryman 같은 모델 토큰을 메모에서 끌어냅니다(데모 목적의 가벼운 추출). */
 function extractLikelyVehicleModel(raw: string): string | null {
   const normalized = stripNoise(raw);
@@ -745,8 +803,21 @@ function extractCustomerLabelKo(raw: string): string | null {
   return null;
 }
 
+/** 예: "가격은 1억5천까지", "1억 5천 만원" → 고객·요약 표기용 */
+function extractBudgetEokCheonPhraseKo(raw: string): string | null {
+  const n = stripNoise(raw);
+  if (!/[가-힣]*\s*억/i.test(n) && !/\d\s*억/.test(n)) return null;
+  const c = n.replace(/\s+/g, "");
+  const xy = c.match(/(\d)\s*억\s*(\d{1,2})\s*천/) ?? c.match(/(\d)억(\d{1,2})천/);
+  if (xy?.[1] && xy[2] != null) return `${xy[1]}억 ${xy[2]}천만 원`;
+  return null;
+}
+
 /** 예: "4천만 원대", "약 4,000만 원" */
 function extractBudgetPhraseKo(raw: string): string | null {
+  const eok = extractBudgetEokCheonPhraseKo(raw);
+  if (eok) return eok;
+
   if (!/(?:예산|잡음|예상).*?(만|원|천)|\d\s*천\s*만|\d청만원|만원\s*대?/i.test(raw)) return null;
   const n = stripNoise(raw);
   const compact = n.replace(/\s+/g, "");
@@ -787,8 +858,13 @@ function extractDemoMemoFactsKo(input: string): DemoMemoFactsKo {
 
   const primaryModelKo = extractInterestModelInclusive(raw);
 
+  const compareNegation =
+    /\b비교\s*모델\s*없음\b|\b비교\s*없음\b|\b비교\s*안\s*함\b|\b안\s*비교\b|\b비교\s*(?:안|못)\s*해|\b모델\s*없음\b.*비교|\b비교\s*[^\n]{0,6}없/i.test(raw);
   const compareCue =
-    /비교|함께\s*비교|타브랜드|다른\s*브랜드|모델별\s*비교|맞으시면서|대안과|비교하/i.test(raw);
+    !compareNegation &&
+    (/비교\s*중|함께\s*비교|타브랜드|다른\s*브랜드|모델별\s*비교|랑\s*비교|이랑\s*비교|와\s*비교|과\s*비교|하고\s*비교|비교하고|비교중|비교\s*하/i.test(
+      raw,
+    ));
 
   const sedanCue = /세단\b/i.test(raw);
   const suvCue = /\bSUV\b|승합|suv\b/i.test(raw);
@@ -810,6 +886,97 @@ function extractDemoMemoFactsKo(input: string): DemoMemoFactsKo {
     tradeInEstimatePhrase: extractTradeInEstimateKo(raw),
     discountIntent,
     sincereTone,
+  };
+}
+
+/** 차량 매출 특화 신호가 있으면 짧아도 분석 깊게 씁니다. */
+function memoHasSalesConsultingSignalsKo(raw: string): boolean {
+  const n = stripNoise(raw);
+  if (n.replace(/\s+/g, "").length < 14) return false;
+  return (
+    /법인\s*리스|법인리스|7인승|오프로드|험로|비포장|주말[^\n]{0,10}(?:통화|연락)|평일[^\n]{0,10}저녁|업무\s*용|금융|할부|\d\s*억\s*\d{0,3}\s*천|\d억\d천|보러\s*옴|시리즈|대형\s*세단/i.test(
+      n,
+    )
+  );
+}
+
+type SalesMemoProfileKo = {
+  usageFamily: boolean;
+  usageSevenSeater: boolean;
+  usageOffroad: boolean;
+  usageLongTrip: boolean;
+  usageCommute: boolean;
+  usageCorporate: boolean;
+  financeCorporateLease: boolean;
+  contactWeekendCall: boolean;
+  contactWeekdayEvening: boolean;
+  contactSmsPrefer: boolean;
+  contactPhonePrefer: boolean;
+  fitGapActive: boolean;
+  usageStressScore: number;
+};
+
+/** 관심 모델명이 패밀리·비포장로와 괴리될 가능성이 큰 대형 플래그십 세단 후보일 때 참. */
+function interestLooksLikeLuxurySedanForFitKo(model: string | null, raw: string): boolean {
+  if (!model && !/시리즈|클래스|세단|S[-–]?Class|E[-–]?Class|\bA6\b|\bA8\b|\b740\b/i.test(raw)) return false;
+  if (detectInterestUtilityHeavyKo(model, raw)) return false;
+  const blob = `${model ?? ""} ${stripNoise(raw)}`.toLowerCase();
+  return /\bbmw\s*7|\b740[iIdD]?\b|\b760[bB]?\b|\b730\b|\b7\s*시리즈\b|벤츠[^\n]{0,10}s[-–]\s*class|메르세데스[^\n]{0,14}s[-–]|s[-–]\s*class\b|마이바흐|아우디[^\n]{0,8}a8|\ba8\s*l?\b|\b제네시스[^\n]{0,6}\s*g90\b|\bg90\b|\b대형\s*세단\b/i.test(
+    blob,
+  );
+}
+
+/** SUV·대형패밀리·험로친화 이름이 명시된 관심 모델이면 피팅 갭에서 제외 */
+function detectInterestUtilityHeavyKo(model: string | null, raw: string): boolean {
+  const b = `${model ?? ""} ${stripNoise(raw)}`;
+  return /\b(?:X[1-9]\d?\b|GLE|GLS|GLB|GV\d+[A-Za-z]?|카니발|팰리세이드|스타리아|티볼리|무쏘|랭글러|디펜더|브롱코|SUV\b|픽업)\b/i.test(b);
+}
+
+function analyzeSalesMemoProfileKo(rawInput: string, interestModel: string | null): SalesMemoProfileKo {
+  const raw = stripNoise(rawInput);
+  const trip = deriveMemoTripContextKo(raw);
+
+  const usageFamily = /가족용|가족과|가족\s*케어|패밀리|패밀리카/i.test(raw);
+  /** `\b`는 한글 경계와 맞지 않아 ‘7인승.’처럼 끝나는 표기에서 누락되지 않게 앵커만 둡니다. */
+  const usageSevenSeater =
+    /(?:^|[^0-9])7\s*인승|7명(?:\s*탑)?승|(?:^|[\s,，.])(세븐)(?:[\s,，.]|$)/i.test(raw);
+  const usageOffroad = /오프로드|비포장|험로|물\s*건너|\bOFF\b|오프\b/i.test(raw);
+  const usageLongTrip = trip.longPrefer;
+  const usageCommute = /출퇴근|출근|퇴근|데일리|통근\b/i.test(raw);
+  const usageCorporate = /\b법인\b|업무\s*용|직장[^\n]{0,6}(?:차|근무)|영업\b.*차량/i.test(raw);
+
+  const financeCorporateLease = /법인\s*리스|법인리스/i.test(raw);
+
+  const contactWeekendCall =
+    /주말[^\n]{0,10}(?:통화|연락)|(?:통화|연락)[^\n]{0,10}주말|주말\s*중|주말\s*선호/i.test(raw);
+  const contactWeekdayEvening = /평일[^\n]{0,12}저녁|저녁[^\n]{0,12}(?:통화|연락)/i.test(raw);
+  const contactSmsPrefer = /문자[^\n]{0,8}(?:선호|주세요)|문자\s*로\s*연락/i.test(raw);
+  const contactPhonePrefer =
+    /전화[^\n]{0,8}(?:선호|주세요)|통화[^\n]{0,8}(?:선호|주세요)|전화\s*연락/i.test(raw);
+
+  let usageStressScore = 0;
+  if (usageFamily) usageStressScore++;
+  if (usageSevenSeater) usageStressScore++;
+  if (usageOffroad) usageStressScore++;
+
+  const hasInterestVisit = !!(interestModel?.trim()) || /\b보러\s*옴|\b방문\b|\b봐주/i.test(raw);
+  const luxSedan = interestLooksLikeLuxurySedanForFitKo(interestModel, rawInput);
+  const fitGapActive = hasInterestVisit && luxSedan && usageStressScore >= 2;
+
+  return {
+    usageFamily,
+    usageSevenSeater,
+    usageOffroad,
+    usageLongTrip,
+    usageCommute,
+    usageCorporate,
+    financeCorporateLease,
+    contactWeekendCall,
+    contactWeekdayEvening,
+    contactSmsPrefer,
+    contactPhonePrefer,
+    fitGapActive,
+    usageStressScore,
   };
 }
 
@@ -937,6 +1104,103 @@ function mergeQuoteHintsFromOptions(
   };
 }
 
+/** 비교·금융 중심 발송 문자(시승 기본값 제외·플레이스홀더 없음). */
+function buildComparisonIntentSmsKo(opts: {
+  customerLine: string;
+  /** 조사 붙이지 않고 문장 헤드에 넣을 비교 대상 차명 */
+  peerLabel: string | null;
+  financeAnchored: boolean;
+  promoCue: boolean;
+  deliveryCue: boolean;
+  /** 승차감·착좌 후순위 문단 여부 */
+  hasComfortSignals: boolean;
+  testDriveExplicit: boolean;
+  salesStyle: DemoSalesStyle;
+  tradeIn: boolean;
+  tradePhrase: string | null;
+}): string {
+  const tone = koSmsStyleTone(opts.salesStyle);
+  const lines: string[] = [];
+  lines.push("안녕하세요,", `${opts.customerLine}.`);
+  lines.push(sellerIntroLineKo());
+  lines.push("");
+
+  if (opts.financeAnchored) {
+    lines.push("지난 상담 때 말씀주신 월 납입 조건과 금융 방식 기준으로 다시 살펴보고 있습니다.");
+    lines.push("");
+    if (opts.peerLabel) {
+      lines.push(
+        `${opts.peerLabel}도 함께 비교 중이시라면, 차량 금액만으로 보기보다 초기 비용·월 납입금·옵션 구성·출고 가능 시점을 같은 기준으로 맞춰보시면 실제 선택에 더 도움이 됩니다.`,
+      );
+    } else {
+      lines.push(
+        "비교 중이신 모델이 있는 경우에는 장점만 보기보다, 실제 구매 조건을 같은 기준으로 맞춰보는 편이 중요합니다.",
+      );
+      lines.push("");
+      lines.push(
+        "월 납입금, 초기 비용, 금융 조건, 옵션 구성, 출고 가능 시점을 함께 비교하시면 고객님께 더 맞는 선택지가 분명해집니다.",
+      );
+    }
+    lines.push("");
+    lines.push(
+      opts.peerLabel ?
+        `${opts.peerLabel} 모델을 함께 보실 때에는 상대 모델을 깎아내리지 않고, 확인 가능한 조건 위주로만 차분히 짚어드리겠습니다.`
+      : "확인 가능한 조건 위주로만 차분히 짚어드리겠습니다.",
+    );
+    if (opts.promoCue || opts.deliveryCue) {
+      lines.push("");
+      const bits: string[] = [];
+      if (opts.promoCue) bits.push("프로모션");
+      if (opts.deliveryCue) bits.push("출고 가능 시점·납기");
+      lines.push(`${bits.join("과 ")}도 가능한 범위에서 과장 없이 함께 안내드리겠습니다.`);
+    }
+  } else {
+    lines.push("지난 상담 내용 기준으로 연락드립니다.");
+    lines.push("");
+    lines.push(
+      "비교 중이신 모델이 있는 경우에는 차량의 장점만 보기보다, 실제 구매 조건을 같은 기준으로 맞춰보는 것이 중요합니다.",
+    );
+    lines.push("");
+    lines.push(
+      "월 납입금, 초기 비용, 금융 조건, 옵션 구성, 출고 가능 시점을 함께 비교하시면 고객님께 더 맞는 선택지가 분명해집니다.",
+    );
+    lines.push("");
+    lines.push("관심 모델 기준으로 부담이 크지 않은 조건부터 차분히 안내드리겠습니다.");
+  }
+
+  if (opts.hasComfortSignals && opts.financeAnchored) {
+    lines.push("");
+    lines.push(
+      "추가로 승차감이나 시트 착좌감이 중요하시라면, 제원 숫자보다는 평소 운행 환경에서 불편함이 적은 구성 위주로 같이 보시는 편이 좋습니다.",
+    );
+  } else if (opts.hasComfortSignals && !opts.financeAnchored) {
+    lines.push("");
+    lines.push(
+      "승차감이나 시트 착좌감도 중요하시다면, 평소 운행 환경에서 불편함이 적은 구성 위주로 같이 보시는 편이 좋습니다.",
+    );
+  }
+
+  if (opts.tradeIn) {
+    lines.push("");
+    lines.push(
+      opts.tradePhrase ?
+        `기존 차량은 대략 ${stripNoise(opts.tradePhrase)} 수준으로 먼저 참고 가능하며, 이후 상태 확인 후 확정되는 흐름입니다.`
+      : `기존 차량 매각은 추정부터 성능 확인까지 순서대로 진행된다는 점을 함께 안내드릴게요.`,
+    );
+  }
+
+  if (opts.testDriveExplicit) {
+    lines.push("");
+    lines.push(smsTrimLines(`시승 일정 관련해서 말씀 주신 내용 참고했습니다.\n${tone.prepareTd}`));
+  }
+
+  lines.push("");
+  lines.push("궁금하신 부분은 편하게 말씀 주세요.");
+  lines.push("감사합니다.");
+
+  return smsTrimLines(lines.join("\n"));
+}
+
 /** Single entry-point for replacing with real AI later. */
 export function generateDemoConsultingResponse(
   inputRaw: string,
@@ -951,7 +1215,8 @@ export function generateDemoConsultingResponse(
   const memoConcreteFactsKo = !!(memoFactsKo && memoHasConcreteKo(memoFactsKo, input.length));
   const memoCareRichKo =
     careNeedsKo.categories.length > 0 && stripNoise(input).replace(/\s+/g, "").length >= 8;
-  const memoRichKo = memoConcreteFactsKo || memoCareRichKo;
+  const memoRichKo =
+    memoConcreteFactsKo || memoCareRichKo || (ko && memoHasSalesConsultingSignalsKo(input));
 
   if (ko && memoFactsKo) {
     if (!vehicleType && memoFactsKo.suvCue) vehicleType = "SUV";
@@ -978,6 +1243,7 @@ export function generateDemoConsultingResponse(
       "장기렌트",
       "장기 렌트",
       "금융",
+      "금융 조건",
       "월납입",
       "월 납입",
       "월납",
@@ -996,6 +1262,12 @@ export function generateDemoConsultingResponse(
       "초기 비용",
       "초기비용",
       "만기",
+      "프로모션",
+      "예산",
+      "가격",
+      "조건",
+      "법인리스",
+      "법인 리스",
     ]) ||
     !!options?.quoteSummary ||
     !!options?.financeQuote;
@@ -1005,8 +1277,13 @@ export function generateDemoConsultingResponse(
     hasAny(input, ["중고차", "트레이드인", "대차", "기존차", "기존 차량", "매각"]) ||
     !!memoFactsKo?.tradeInEstimatePhrase;
   const deliverySoon = hasAny(input, ["출고", "일정", "빨리", "빠르게", "빠른"]);
+  const compareMemoNegation =
+    /\b비교\s*모델\s*없음\b|\b비교\s*없음\b|\b모델\s*없음\b/i.test(stripNoise(input));
   const compare =
-    hasAny(input, ["고민", "비교", "타브랜드", "다른 브랜드"]) || !!(memoFactsKo?.compareCue);
+    !compareMemoNegation &&
+    (hasAny(input, ["고민", "타브랜드", "다른 브랜드"]) ||
+      !!(memoFactsKo?.compareCue) ||
+      /\b비교\s*중|\b비교중\b|\b함께\s*비교|\b랑\s*비교|\b이랑\s*비교|\b와\s*비교|\b과\s*비교|\b하고\s*비교\b/i.test(stripNoise(input)));
   const wantsTestDrive = hasAny(input, ["시승", "테스트 드라이브", "test drive"]);
 
   const focus: string[] = [];
@@ -1154,9 +1431,9 @@ export function generateDemoConsultingResponse(
         ? smsTrimLines(`
 안녕하세요,
 OO님.
-저희 브랜드 [브랜드/전시장명] [영업사원명] [직급]입니다.
+${sellerIntroLineKo()}
 
-상담 메모를 작성해 주시면 말씀주신 기준으로 차량 장점과 금융 조건까지 부담 없이 정리해 안내드릴 수 있도록 문자로 드리겠습니다.
+상담 메모를 작성해 주시면 차량 관심 포인트와 금융 조건까지 부담 없이 문자로 안내드릴게요.
 
 ${emptyCloseKo}`)
         : `Hello—once you paste a memo, I’ll summarize the vehicle highlights and financing in a customer-ready note.\n${emptyCloseEn}`,
@@ -1164,6 +1441,8 @@ ${emptyCloseKo}`)
   }
 
   const interestModelKo = memoFactsKo?.primaryModelKo ?? extractLikelyVehicleModel(input);
+  const salesProfileKo = ko ? analyzeSalesMemoProfileKo(input, interestModelKo) : null;
+
   const customerNameKo =
     memoFactsKo?.customerLabel ??
     (/\b([\u3131-\uD79D]{2,6})님\b/.exec(input)?.[1] ??
@@ -1175,6 +1454,38 @@ ${emptyCloseKo}`)
 
   function koSummaryConcreteParagraph(): string {
     const f = memoFactsKo!;
+    if (salesProfileKo?.fitGapActive && interestModelKo) {
+      const sp = salesProfileKo;
+      const uso: string[] = [];
+      if (sp.usageFamily) uso.push("가족용");
+      if (sp.usageSevenSeater) uso.push("7인승");
+      if (sp.usageOffroad) uso.push("오프로드 주행");
+      const usoTxt =
+        uso.length >= 2 ? `${uso.slice(0, -1).join(", ")} 및 ${uso[uso.length - 1]!}`
+        : uso.length === 1 ? uso[0]!
+        : "실제 활용 조건";
+      const corp = sp.financeCorporateLease ? ", 법인리스 조건" : "";
+      const bud = f.budgetPhrase ? stripNoise(f.budgetPhrase).replace(/^약\s*/, "") : "";
+      const lead = [
+        `고객은 ${interestModelKo}에 관심을 가지고 방문했지만, ${usoTxt}${corp}까지 함께 고려하고 있습니다.`,
+      ];
+      const contactNote = sp.contactWeekendCall
+        ? "주말 통화를 선호합니다."
+        : sp.contactWeekdayEvening
+          ? "평일 저녁 연락을 선호합니다."
+          : sp.contactSmsPrefer
+            ? "문자 연락을 선호합니다."
+            : sp.contactPhonePrefer
+              ? "전화 연락을 선호합니다."
+              : null;
+      const tail =
+        bud && contactNote ? `예산은 ${bud}까지이며, ${contactNote}`
+        : bud ? `예산은 ${bud}까지입니다.`
+        : contactNote ?? "";
+      if (tail) lead.push(tail);
+      return lead.join(" ").replace(/\s+/g, " ").trim();
+    }
+
     const label = (f.customerLabel ?? "해당").trim();
     const parts: string[] = [];
 
@@ -1222,6 +1533,35 @@ ${emptyCloseKo}`)
   function koNextActionConcrete(): string[] {
     const f = memoFactsKo!;
     const out: string[] = [];
+    if (salesProfileKo?.fitGapActive && interestModelKo) {
+      const sp = salesProfileKo;
+      const spaceBits: string[] = [];
+      if (sp.usageSevenSeater) spaceBits.push("7인승 공간");
+      if (sp.usageOffroad) spaceBits.push("오프로드 주행 환경");
+      if (!spaceBits.length && sp.usageFamily) spaceBits.push("가족 동승 활용");
+      const spaceCue =
+        spaceBits.length >= 2 ? `${spaceBits[0]!}과 ${spaceBits[1]!}` : spaceBits[0] ?? "실제 용도";
+      out.push(
+        `${interestModelKo} 관심은 유지하되, ${spaceCue}까지 함께 보면 SUV·대형 SUV·7인승 선택지도 비교가 필요할 수 있다는 점을 ‘맞지 않다·부적합’류 표현 없이 부드럽게 안내합니다.`,
+      );
+      const sched = sp.contactWeekendCall
+        ? "주말 통화 일정을 제안합니다."
+        : sp.contactWeekdayEvening
+          ? "평일 저녁 연락 일정을 제안합니다."
+          : sp.contactSmsPrefer || sp.contactPhonePrefer
+            ? "문자 또는 통화 채널 선호를 반영해 일정만 짧게 잡습니다."
+            : "연락 선호를 확인한 뒤 일정을 제안합니다.";
+      if (sp.financeCorporateLease && f.budgetPhrase) {
+        out.push(`법인리스 조건과 예산 범위(${stripNoise(f.budgetPhrase)})를 정리하고 ${sched}`);
+      } else if (sp.financeCorporateLease) {
+        out.push(`법인리스 조건을 정리하고 ${sched}`);
+      } else if (f.budgetPhrase) {
+        out.push(`예산 범위(${stripNoise(f.budgetPhrase)})만 과장 없이 재확인한 뒤 ${sched}`);
+      } else {
+        out.push(sched);
+      }
+    }
+
     if (careNeedsKo.categories.length > 0) {
       out.push(...careNeedsKo.advisorGuidance.slice(0, 3));
     }
@@ -1249,7 +1589,7 @@ ${emptyCloseKo}`)
 
     if (modelBit) out.push(modelBit);
 
-    if (f.budgetPhrase || finance) {
+    if ((f.budgetPhrase || finance) && !(salesProfileKo?.fitGapActive && interestModelKo)) {
       const lead = f.budgetPhrase ? `${f.budgetPhrase}과(와) 연결되는 ` : "";
       out.push(
         `${lead}라인별 조건과 월 출금 흐름을 확인한 뒤, 현재 확인 가능한 조건 기준으로만 문자 톤을 맞춥니다.`,
@@ -1356,10 +1696,102 @@ ${emptyCloseKo}`)
       nextActionParts.push(ko ? "비교 차량 명칭 받은 경우에만 ‘핵심 차이 세 가지’로 요약합니다." : "Summarize three differences only once comparables are named.");
   }
 
+  function buildSalesUsageClauseKo(p: SalesMemoProfileKo): string {
+    const chunks: string[] = [];
+    if (p.usageSevenSeater || p.usageFamily)
+      chunks.push("가족분들과 함께 이용하실 7인승 공간");
+    else if (p.usageFamily) chunks.push("가족 이동");
+    if (p.usageOffroad) chunks.push("오프로드 주행 환경");
+    if (p.financeCorporateLease) chunks.push("법인리스");
+    if (p.usageCommute) chunks.push("출퇴근 위주의 일상 주행");
+    if (p.usageLongTrip && !p.usageOffroad) chunks.push("장거리 운행");
+    if (chunks.length === 0) return "말씀해 주신 용도";
+    if (chunks.length === 1) return chunks[0]!;
+    if (chunks.length === 2) return `${chunks[0]}과 ${chunks[1]}`;
+    return `${chunks.slice(0, -1).join(", ")} 및 ${chunks[chunks.length - 1]}`;
+  }
+
+  function buildSalesUsageShortKo(p: SalesMemoProfileKo): string {
+    const xs: string[] = [];
+    if (p.usageSevenSeater || p.usageFamily) xs.push("7인승 활용");
+    if (p.usageOffroad) xs.push("오프로드 주행 빈도");
+    if (!xs.length && p.usageCorporate) xs.push("업무 활용");
+    return xs.length ? xs.join("과 ") : "말씀해 주신 용도";
+  }
+
+  /** 관심 플래그십 세단 vs 가족·7인승·험로 등 병행 니즈 고객 문자(단정·부정 표현 없음). */
+  function buildSalesMemoFitOutboundSmsKo(): string {
+    if (!salesProfileKo?.fitGapActive || !interestModelKo || !memoFactsKo) {
+      return "";
+    }
+    const p = salesProfileKo;
+    const customer = customerNameKo ? `${customerNameKo}님` : "OO님";
+    const model = interestModelKo;
+
+    const usageClause = buildSalesUsageClauseKo(p);
+    const usageShort = buildSalesUsageShortKo(p);
+
+    const budgetRaw = memoFactsKo.budgetPhrase ? stripNoise(memoFactsKo.budgetPhrase) : "";
+    const finBits: string[] = [];
+    if (budgetRaw) finBits.push(`${budgetRaw} 예산`);
+    if (p.financeCorporateLease) finBits.push("법인리스 조건");
+    const finLead =
+      finBits.length === 0 ? "" : finBits.length === 1 ? `${finBits[0]}` : `${finBits.slice(0, -1).join(", ")} 및 ${finBits[finBits.length - 1]}`;
+
+    const closing =
+      p.contactWeekendCall ? "주말 중 편하신 시간에 짧게 통화드리겠습니다."
+      : p.contactWeekdayEvening ? "평일 저녁 편하신 시간에 연락드리겠습니다."
+      : p.contactSmsPrefer ? "문자로 요약을 먼저 보내드린 뒤 연락드리겠습니다."
+      : p.contactPhonePrefer ? "통화 편하실 때 짧게 안내드리겠습니다."
+      : "편하신 때 연락드리겠습니다.";
+
+    const financeClose = finLead ? `말씀주신 ${finLead} 기준으로 정리해서, ${closing}` : closing;
+
+    return smsTrimLines(
+      `안녕하세요,\n${customer}.\n${sellerIntroLineKo()}\n\n` +
+        `지난 상담 때 말씀주신 ${model}와 함께, ${usageClause}까지 기준으로 정리해보고 있습니다.\n\n` +
+        `${model}는 고급스러운 승차감과 후석 편의성이 강점인 모델이라 충분히 매력적인 선택지입니다.\n\n` +
+        `다만 고객님께서 말씀주신 ${usageShort}까지 함께 고려하면, 실제 사용 목적에 맞는 선택지도 함께 비교해보시는 것이 좋겠습니다.\n\n` +
+        `${financeClose}\n\n감사합니다.`,
+    );
+  }
+
   function buildStructuredKoSms(): string {
     const f = memoFactsKo!;
     const tone = koSmsStyleTone(salesStyle);
     const customer = customerNameKo ? `${customerNameKo}님` : "OO님";
+    const cmpPeerMemo = extractComparePeerModelKo(input);
+
+    if (salesProfileKo?.fitGapActive && interestModelKo) {
+      const fitSms = buildSalesMemoFitOutboundSmsKo();
+      if (fitSms.trim()) return fitSms;
+    }
+    const testDriveExplicitStruct = explicitTestDriveIntentKo(input);
+
+    const comparisonSmsEligible =
+      memoRichKo &&
+      compare &&
+      !!memoFactsKo &&
+      !!(cmpPeerMemo || memoFactsKo.compareCue);
+
+    if (comparisonSmsEligible) {
+      return buildComparisonIntentSmsKo({
+        customerLine: customer,
+        peerLabel: cmpPeerMemo ?? interestModelKo ?? null,
+        financeAnchored: financeAnchoredForComparisonKo(input, financeSignals, finance),
+        promoCue: !!(memoFactsKo.discountIntent || /\b프로모션|프로모\b/i.test(stripNoise(input))),
+        deliveryCue: deliverySoon,
+        hasComfortSignals: !!(
+          memoFactsKo.postureDiscomfort ||
+          rideComfort ||
+          careNeedsKo.categories.length > 0
+        ),
+        testDriveExplicit: testDriveExplicitStruct,
+        salesStyle,
+        tradeIn,
+        tradePhrase: memoFactsKo.tradeInEstimatePhrase ?? null,
+      });
+    }
 
     function topicParticleSms(phrase: string): "은" | "는" {
       const t = phrase.trim();
@@ -1373,7 +1805,7 @@ ${emptyCloseKo}`)
     const modelLabel = interestModelKo ?? "관심 모델";
 
     const lines: string[] = [];
-    lines.push(`안녕하세요,`, `${customer}.`, "[브랜드/전시장명] [영업사원명] [직급]입니다.", "");
+    lines.push(`안녕하세요,`, `${customer}.`, sellerIntroLineKo(), "");
 
     const budgetLead = f.budgetPhrase ? `${f.budgetPhrase} ` : "";
     const sedanBit =
@@ -1383,17 +1815,21 @@ ${emptyCloseKo}`)
       const budgetFrag = f.budgetPhrase ? `${budgetLead}예산 범위에서 ` : "";
       const rideMid =
         memoTripCtx.longPrefer && !memoTripCtx.shortPrefer ?
-          `${sedanBit}, 장거리 주행 시 피로도까지 함께 보실 수 있도록 `
-        : memoTripCtx.shortPrefer && !memoTripCtx.longPrefer ?
-          `${sedanBit}, 일상 속 짧은 주행에서도 착좌감과 주행 안정감을 함께 보실 수 있도록 `
-        : `${sedanBit}, 말씀 주신 패턴에 맞게 편안한 착좌감과 주행감을 함께 확인하실 수 있도록 `;
+          `${sedanBit}, 장거리 주행 시 피로까지 함께 보실 수 있도록 `
+        :         memoTripCtx.shortPrefer && !memoTripCtx.longPrefer ?
+          `${sedanBit}, 일상 주행에서도 착좌감과 안정감을 함께 보실 수 있도록 `
+        : `${sedanBit}, 평소 운행 패턴에 맞게 착좌감과 주행감을 함께 확인하실 수 있도록 `;
       if (interestModelKo && compare) {
-        return `고객님께서 ${interestModelKo}와(과) 함께 비교하고 계신 점을 기준으로, ${budgetFrag}${rideMid}말씀 주신 기준으로 조건을 정리해보았습니다.`;
+        const peerCmp = cmpPeerMemo;
+        const cmpHint = peerCmp
+          ? `${peerCmp} 모델을 함께 검토 중이신 점을 참고하여, `
+          : `${interestModelKo} 모델 기준으로 여러 선택지를 함께 보시는 점을 참고하여, `;
+        return `${cmpHint}${budgetFrag}${rideMid}필요하신 정보 위주로 정리해 두었습니다.`;
       }
       if (interestModelKo) {
-        return `고객님께서 관심 가져주신 ${interestModelKo}를 기준으로, ${budgetFrag}${rideMid}말씀 주신 기준으로 조건을 정리해보았습니다.`;
+        return `고객님께서 관심 가져주신 ${interestModelKo}를 기준으로, ${budgetFrag}${rideMid}필요하신 정보 위주로 정리해 두었습니다.`;
       }
-      return `고객님께서 관심 가져주신 모델을 기준으로, ${budgetFrag}${rideMid}말씀 주신 기준으로 조건을 정리해보았습니다.`;
+      return `고객님께서 관심 가져주신 모델을 기준으로, ${budgetFrag}${rideMid}필요하신 정보 위주로 정리해 두었습니다.`;
     }
 
     const dealMidApplicable =
@@ -1430,7 +1866,7 @@ ${emptyCloseKo}`)
       const clause = buildCareRecallClauseKo(careNeedsKo);
       lines.push(
         smsTrimLines(
-          `지난 상담 때 말씀주신 ${clause} 기준으로, 고객님께서 관심 가져주신 ${modelLabel}의 주요 포인트를 말씀 주신 기준으로 정리해보았습니다.`,
+          `지난 상담 때 말씀주신 ${clause}를 바탕으로, 고객님께서 관심 가져주신 ${modelLabel}의 주요 포인트를 한데 모아 보았습니다.`,
         ),
       );
       lines.push("");
@@ -1442,7 +1878,9 @@ ${emptyCloseKo}`)
       lines.push("");
       lines.push(
         smsTrimLines(
-          `특히 실제로 탑승해 보셨을 때 느껴지는 착좌감과 승하차 높이는 말씀주신 편안함 기준과 잘 맞는지 시승 때 직접 확인해보시는 것이 좋습니다.`,
+          wantsTestDrive ?
+            `특히 실제로 탑승해 보셨을 때 느껴지는 착좌감과 승하차 높이는 말씀주신 편안함 기준과 잘 맞는지 차량 안에서 참고만 해 보셔도 좋습니다.`
+          : `특히 착좌감과 승하차 높이는 사람마다 체감이 달라, 원하시면 방문 또는 시승 때 가볍게 비교만 해 보셔도 충분합니다.`,
         ),
       );
       if (dealMidApplicable && (interestModelKo || compare || f.budgetPhrase || vehicleType || f.discountIntent)) {
@@ -1465,11 +1903,11 @@ ${emptyCloseKo}`)
       lines.push(smsTrimLines(buildDealMidKo()));
     }
 
-    if (!hasCareAudience) {
+    if (!hasCareAudience && (!compare || wantsTestDrive || testDriveExplicitStruct)) {
       lines.push("");
       lines.push(
         smsTrimLines(
-          `시승이나 재방문 때 실제 착좌감과 주행 피로 여부는 차량마다 체감이 달라질 수 있어, 현장에서 직접 확인해 보시는 것까지 함께 안내드리겠습니다.`,
+          `시승이나 재방문 때 실제 착좌감과 주행 피로 여부는 차량마다 체감이 달라질 수 있어, 필요하시면 현장에서 참고용으로 확인하실 수 있게 안내드리겠습니다.`,
         ),
       );
     }
@@ -1516,8 +1954,13 @@ ${emptyCloseKo}`)
     }
 
     lines.push("");
-    if (hasCareAudience) lines.push(CARE_SMS_SCHEDULE_PREPARE_CLOSE_KO);
-    else lines.push(tone.confirmClose);
+    if (hasCareAudience) {
+      lines.push(
+        wantsTestDrive || testDriveExplicitStruct ?
+          CARE_SMS_SCHEDULE_PREPARE_CLOSE_KO
+        : "원하실 때 일정만 알려주시면 차량 설명을 준비해 두겠습니다. 부담되지 않는 범위에서 천천히 결정해 주셔도 괜찮습니다.",
+      );
+    } else lines.push(tone.confirmClose);
     if (tone.inviteQ && salesStyle !== "simple") lines.push(tone.inviteQ);
     lines.push("감사합니다.");
 
@@ -1578,7 +2021,7 @@ ${emptyCloseKo}`)
     const lines: string[] = [];
     lines.push(`안녕하세요,`);
     lines.push(`${customer}.`);
-    lines.push("[브랜드/전시장명] [영업사원명] [직급]입니다.");
+    lines.push(sellerIntroLineKo());
 
     lines.push("");
     lines.push(
@@ -1711,7 +2154,7 @@ ${emptyCloseKo}`)
 
     const linesEn: string[] = [];
     linesEn.push(stripNoise(`Hello, ${customer}.`));
-    linesEn.push("[Brand / Showroom] [Name] [Title]");
+    linesEn.push("This is your sales representative.");
 
     linesEn.push("");
     linesEn.push(
