@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
 
 import { InspirationalBackdrop } from "@/app/components/InspirationalBackdrop";
 import { NotebookCover } from "@/app/components/NotebookCover";
@@ -21,16 +22,62 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
   const googleAuthEnabled = isGoogleAuthEnabled();
   const seller = useSellerProfile(auth.status === "signed-in" ? auth.uid : null);
   const [view, setView] = useState<"landing" | "app">(initialView);
+  const router = useRouter();
   const { t } = useLanguage();
 
+  /** SSR → CSR navigation: searchParams 변경 시에는 state가 따라가야 함(useState 초기값은 1회만). */
   useEffect(() => {
-    if (view !== "app") return;
-    const id = typeof window !== "undefined" && window.location.hash.startsWith("#") ? window.location.hash.slice(1) : "";
-    if (!id) return;
-    const tScroll = window.setTimeout(() => {
-      document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 120);
-    return () => window.clearTimeout(tScroll);
+    setView(initialView);
+  }, [initialView]);
+
+  /** 브라우저 뒤로/앞으로 시 URL만 바뀌는 경우까지 view 동기화 */
+  useEffect(() => {
+    const onPop = () => {
+      try {
+        const qs = new URLSearchParams(window.location.search);
+        setView(qs.get("view") === "app" ? "app" : "landing");
+      } catch {
+        /* ignore */
+      }
+    };
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, []);
+
+  const openAppWorkspace = useCallback(() => {
+    setView("app");
+    void router.push("/?view=app#crm-ai-assistant");
+  }, [router]);
+
+  useEffect(() => {
+    if (view !== "app") return undefined;
+    const prefersReduce =
+      typeof window.matchMedia !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let cancelled = false;
+    const scrollToHash = () => {
+      const rawHash =
+        typeof window !== "undefined" && window.location.hash.startsWith("#")
+          ? window.location.hash.slice(1)
+          : "crm-ai-assistant";
+      const id = rawHash.trim() ? rawHash.trim() : "crm-ai-assistant";
+      document.getElementById(id)?.scrollIntoView({
+        behavior: prefersReduce ? "auto" : "smooth",
+        block: "start",
+      });
+    };
+    const timers = [
+      window.setTimeout(() => {
+        if (!cancelled) scrollToHash();
+      }, 90),
+      window.setTimeout(() => {
+        if (!cancelled) scrollToHash();
+      }, 320),
+    ];
+    return () => {
+      cancelled = true;
+      for (const tmr of timers) window.clearTimeout(tmr);
+    };
   }, [view]);
 
   const sellerSignedIn = firebaseReady && auth.status === "signed-in";
@@ -51,7 +98,9 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
 
       <header
         className={[
-          "sticky top-0 z-30 isolate border-b px-5 py-3 backdrop-blur-md sm:px-6",
+          "sticky top-0 z-30 isolate border-b px-5 pb-3 backdrop-blur-md sm:px-6",
+          /** iOS 상태바/notch 회피: 과도하게 커지지 않도록 max(원래 패딩, safe-area) */
+          "pt-[max(12px,calc(env(safe-area-inset-top,0px)+0.5rem))]",
           view === "landing" ? "border-[#E5E7EB] bg-[#F4F6F8]/88" : "border-[color:var(--edge)] bg-[color:var(--background)]/72",
         ].join(" ")}
       >
@@ -89,17 +138,17 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                     {authError}
                   </span>
                 ) : null}
-                <Link
-                  href="/?view=app#crm-ai-assistant"
-                  prefetch={false}
-                  className="inline-flex min-h-[44px] items-center justify-center whitespace-nowrap rounded-xl bg-[#111827] px-3 py-2 text-xs font-semibold text-white transition-colors hover:bg-[#1f2937]"
+                <button
+                  type="button"
+                  onClick={openAppWorkspace}
+                  className="relative z-[20] inline-flex min-h-[44px] cursor-pointer items-center justify-center whitespace-nowrap rounded-xl bg-[#111827] px-3 py-2 text-xs font-semibold text-white transition-colors hover:bg-[#1f2937] touch-manipulation"
                 >
                   {t("cta.tryAppExperience")}
-                </Link>
+                </button>
                 <Link
                   href="/join"
                   prefetch={false}
-                  className="inline-flex min-h-[44px] items-center justify-center whitespace-nowrap rounded-xl border border-[#E5E7EB] bg-white px-3 py-2 text-xs font-semibold text-[#111827] transition-colors hover:bg-[#F9FAFB]"
+                  className="relative z-[20] inline-flex min-h-[44px] items-center justify-center whitespace-nowrap rounded-xl border border-[#E5E7EB] bg-white px-3 py-2 text-xs font-semibold text-[#111827] transition-colors hover:bg-[#F9FAFB] touch-manipulation"
                 >
                   {t("cta.joinBeta")}
                 </Link>
@@ -171,7 +220,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
       </header>
 
       <main className={`relative z-10 flex-1 ${view === "landing" ? "bg-[#F4F6F8]" : ""}`}>
-        {view === "landing" ? <LandingShowroom /> : null}
+        {view === "landing" ? <LandingShowroom onOpenAppWorkspace={openAppWorkspace} /> : null}
 
         {view === "app" ? (
           <div

@@ -5,7 +5,6 @@ import { useEffect, useRef, useState } from "react";
 
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
 
-const APP_WORKSPACE_AI = "/?view=app#crm-ai-assistant" as const;
 const JOIN_PATH = "/join" as const;
 
 const cardChrome =
@@ -135,10 +134,10 @@ function HeroPreviewTile() {
   );
 }
 
-export function LandingShowroom() {
+export function LandingShowroom({ onOpenAppWorkspace }: { onOpenAppWorkspace: () => void }) {
   return (
     <div className="overflow-x-hidden bg-[#F4F6F8]">
-      <ShowroomHero />
+      <ShowroomHero onOpenAppWorkspace={onOpenAppWorkspace} />
       <RevealSection className="relative mx-auto w-full max-w-[1280px] overflow-x-hidden">
         <ShowroomBridge />
       </RevealSection>
@@ -152,13 +151,13 @@ export function LandingShowroom() {
         <QuietAutomationSectionInner />
       </RevealSection>
       <RevealSection className="mx-auto w-full max-w-[1200px] px-5 pb-20 pt-10 sm:px-6 sm:pb-28">
-        <FinalShowroomCTAInner />
+        <FinalShowroomCTAInner onOpenAppWorkspace={onOpenAppWorkspace} />
       </RevealSection>
     </div>
   );
 }
 
-function ShowroomHero() {
+function ShowroomHero({ onOpenAppWorkspace }: { onOpenAppWorkspace: () => void }) {
   const { t } = useLanguage();
 
   return (
@@ -189,10 +188,10 @@ function ShowroomHero() {
             {t("landing.showroom.hero.desc")}
           </p>
           <div className="mt-10 flex max-w-full flex-col gap-3.5 sm:mt-12 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-5 sm:gap-y-3 lg:gap-x-6">
-            <Link href={APP_WORKSPACE_AI} prefetch={false} className={`relative z-[3] ${heroPrimaryBtn}`}>
+            <button type="button" onClick={onOpenAppWorkspace} className={`relative z-20 cursor-pointer touch-manipulation pointer-events-auto ${heroPrimaryBtn}`}>
               {t("cta.tryAppExperience")}
-            </Link>
-            <Link href={JOIN_PATH} prefetch={false} className={`relative z-[3] ${heroGhostBtn}`}>
+            </button>
+            <Link href={JOIN_PATH} prefetch={false} className={`relative z-20 touch-manipulation pointer-events-auto ${heroGhostBtn}`}>
               {t("cta.joinBeta")}
             </Link>
           </div>
@@ -352,7 +351,7 @@ function QuietAutomationSectionInner() {
   );
 }
 
-function FinalShowroomCTAInner() {
+function FinalShowroomCTAInner({ onOpenAppWorkspace }: { onOpenAppWorkspace: () => void }) {
   const { t } = useLanguage();
 
   return (
@@ -360,10 +359,10 @@ function FinalShowroomCTAInner() {
       <p className="text-[clamp(1.25rem,3vw,1.625rem)] font-semibold tracking-[-0.02em] text-[#111827]">{t("brand.slogan")}</p>
       <p className="mt-5 max-w-[48ch] text-[15px] leading-relaxed text-[#4B5563] sm:text-[16px]">{t("landing.showroom.closing.desc")}</p>
       <div className="mt-10 flex flex-wrap justify-center gap-3">
-        <Link href={APP_WORKSPACE_AI} prefetch={false} className={primaryBtn}>
+        <button type="button" onClick={onOpenAppWorkspace} className={`relative z-20 cursor-pointer touch-manipulation pointer-events-auto ${primaryBtn}`}>
           {t("cta.openAppWorkspace")}
-        </Link>
-        <Link href={JOIN_PATH} prefetch={false} className={ghostBtn}>
+        </button>
+        <Link href={JOIN_PATH} prefetch={false} className={`relative z-20 touch-manipulation pointer-events-auto ${ghostBtn}`}>
           {t("cta.joinBeta")}
         </Link>
       </div>
