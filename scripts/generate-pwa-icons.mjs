@@ -115,9 +115,9 @@ async function png(name, svgString, size) {
   await sharp(Buffer.from(svgString, "utf8")).resize(size, size).png({ compressionLevel: 9 }).toFile(join(iconsDir, name));
 }
 
-await png("icon-192.png", svgNebulaS, 192);
-await png("icon-512.png", svgNebulaS, 512);
-await png("apple-touch-icon.png", svgNebulaS, 180);
+await png("icon-192-v2.png", svgNebulaS, 192);
+await png("icon-512-v2.png", svgNebulaS, 512);
+await png("apple-touch-icon-v2.png", svgNebulaS, 180);
 
 const inner = Math.floor(512 * 0.72);
 const pad = Math.floor((512 - inner) / 2);
@@ -131,6 +131,6 @@ await sharp(Buffer.from(svgNebulaS, "utf8"))
     background: BG,
   })
   .png({ compressionLevel: 9 })
-  .toFile(join(iconsDir, "icon-512-maskable.png"));
+  .toFile(join(iconsDir, "icon-512-maskable-v2.png"));
 
-console.log("Wrote PNGs to public/icons/ (wide nebula S ribbon + haze)");
+console.log("Wrote PNGs to public/icons/ (*-v2.png, wide nebula S ribbon + haze)");
