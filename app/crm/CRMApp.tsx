@@ -36,7 +36,6 @@ import { migrateCRMState } from "./migrate";
 import { DEALER_LEAD_SOURCES, DEALER_PIPELINE_STAGES } from "./constants";
 import type { VehicleBrandId } from "./vehicleCatalog";
 import { vehicleModelsFor, VEHICLE_BRANDS } from "./vehicleCatalog";
-import type { ParsedRow } from "./importContacts";
 import {
   explainPurchaseIntent,
   LEAD_SCORE_HOTWORDS,
@@ -57,7 +56,8 @@ import {
   type DemoSalesStyle,
 } from "@/app/components/concierge/aiDemoResponse";
 import { makeId, seedState } from "./seed";
-import { ContactSyncDialog } from "./ContactSyncDialog";
+import { ImportContactsPanel, type ImportContactsCommitPayload } from "./ImportContactsPanel";
+import type { NormalizedImportedContact } from "./contactImport/normalizeImportedContact";
 import { CrmMiniCalendar } from "@/app/crm/CrmMiniCalendar";
 import { DeliveryGuideScreen } from "@/app/crm/deliveryGuide/DeliveryGuideScreen";
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
@@ -161,6 +161,36 @@ const SC_TONE_TKEY: Record<SeasonCareTone, TranslationKey> = {
 
 function nowIso() {
   return new Date().toISOString();
+}
+
+function mergeImportedCustomerMemo(existing: string | undefined, append: string): string {
+  const a = (existing ?? "").trim();
+  const b = (append ?? "").trim();
+  if (!b) return a;
+  if (!a) return b;
+  return `${a}\n\n— 주소록 가져오기·메모 추가(원문 유지) —\n${b}`;
+}
+
+function computeCustomersAfterContactImport(
+  prev: Customer[],
+  payload: ImportContactsCommitPayload,
+  t: string,
+): Customer[] {
+  const chunksById = new Map<string, string[]>();
+  for (const m of payload.merges) {
+    const xs = chunksById.get(m.customerId) ?? [];
+    xs.push(m.memoAppend);
+    chunksById.set(m.customerId, xs);
+  }
+
+  const adjusted = prev.map((c) => {
+    const chunks = chunksById.get(c.id);
+    if (!chunks?.length) return c;
+    const memo = chunks.reduce((acc, bit) => mergeImportedCustomerMemo(acc, bit), c.memo ?? "");
+    return { ...c, memo, updatedAt: t };
+  });
+
+  return [...payload.creates, ...adjusted];
 }
 
 function formatDateTime(iso?: string) {
@@ -357,8 +387,7 @@ export function CRMApp({
   const crmSearchWrapRef = useRef<HTMLDivElement | null>(null);
   /** 문자 템플릿 `{내이름}` : 로컬 입력이 있으면 우선 */
   const [sellerNickname, setSellerNickname] = useState("");
-  const [contactSyncOpen, setContactSyncOpen] = useState(false);
-  const [pasteText, setPasteText] = useState("");
+  const [importContactsOpen, setImportContactsOpen] = useState(false);
   const [leadExplainForId, setLeadExplainForId] = useState<string | null>(null);
   const [toast, setToast] = useState<string | null>(null);
   const [deliveryGuideOpen, setDeliveryGuideOpen] = useState(false);
@@ -1054,41 +1083,58 @@ export function CRMApp({
     }
   }
 
-  function ingestPastedContacts(rows: ParsedRow[]) {
-    if (rows.length === 0) {
-      alert("인식된 연락처가 없습니다. 전화번호·이름 형식으로 붙여넣어 보세요.");
-      return;
-    }
+  function buildCustomerFromImportedDraft(draft: NormalizedImportedContact): Customer {
     const t = nowIso();
-    const batch: Customer[] = rows.map((row) => ({
+    return {
       id: makeId("cus"),
       createdAt: t,
       updatedAt: t,
-      name: row.name || "신규",
-      phone: row.phone,
-      memo: row.memo,
+      name: draft.name,
+      phone: draft.phone,
+      email: draft.email,
+      memo: draft.memoRaw,
+      interestedModel: draft.interestedModelHint,
       leadSource: "전화·매장방문",
       stage: "신규 문의",
-    }));
-    batch.forEach((c) => pendingCustomerCreatesRef.current.add(c.id));
-    setState((prev) => ({ ...prev, customers: [...batch, ...prev.customers] }));
-    setSelectedCustomerId(batch[0]!.id);
-    setTab("고객");
-    setContactSyncOpen(false);
-    setPasteText("");
+    };
+  }
 
-    if (uid) {
-      setSync({ mode: "cloud", status: "syncing" });
-      void Promise.all(batch.map((c) => createCustomerCloud(uid!, c)))
-        .then(() => setSync({ mode: "cloud", status: "idle" }))
-        .catch((e) => {
-          setSync({ mode: "cloud", status: "error", message: String(e) });
-          showToast(`일부 고객이 클라우드에 저장되지 않았을 수 있습니다. (${String(e)})`);
+  function handleCommitImportContactsHub(payload: ImportContactsCommitPayload) {
+    const t = nowIso();
+    const mergeIds = [...new Set(payload.merges.map((m) => m.customerId))];
+
+    setState((prev) => {
+      const nextCustomers = computeCustomersAfterContactImport(prev.customers, payload, t);
+      payload.creates.forEach((c) => pendingCustomerCreatesRef.current.add(c.id));
+
+      if (uid) {
+        queueMicrotask(() => {
+          setSync({ mode: "cloud", status: "syncing" });
+          void Promise.all([
+            ...payload.creates.map((c) => createCustomerCloud(uid!, c)),
+            ...mergeIds.map((id) => {
+              const memo = nextCustomers.find((c) => c.id === id)?.memo;
+              return upsertCustomerCloud(uid!, { id, memo });
+            }),
+          ])
+            .then(() => setSync({ mode: "cloud", status: "idle" }))
+            .catch((e) => {
+              setSync({ mode: "cloud", status: "error", message: String(e) });
+              showToast(`클라우드 동기화에 실패했을 수 있습니다. (${String(e)})`);
+            });
         });
-    }
+      }
 
-    alert(
-      `연락처 ${batch.length}명을 불러왔습니다. 정보를 확인·수정해 주세요.\n구글·네이버 등은 「연락처 연동」에서 페이지를 연 뒤 복사·붙여넣기 또는 .vcf로 가져오면 됩니다.`,
+      return { ...prev, customers: nextCustomers };
+    });
+
+    setSelectedCustomerId((sel) => payload.creates[0]?.id ?? mergeIds[0] ?? sel);
+    setTab("고객");
+
+    showToast(
+      payload.creates.length || payload.merges.length ?
+        `주소록 반영: 신규 ${payload.creates.length}명, 메모 병합 ${payload.merges.length}건`
+      : "저장된 변경이 없습니다.",
     );
   }
 
@@ -1446,9 +1492,9 @@ export function CRMApp({
               <button
                 type="button"
                 className="min-h-[44px] rounded-[20px] border border-[#E5E7EB] bg-[#F9FAFB] px-5 py-2.5 text-[14px] font-semibold text-[#111827] ring-1 ring-inset ring-[#E5E7EB] transition hover:bg-[#F3F4F6] touch-manipulation"
-                onClick={() => setContactSyncOpen(true)}
+                onClick={() => setImportContactsOpen(true)}
               >
-                연락처 연동
+                주소록 가져오기
               </button>
               {selectedCustomer ? (
                 <button
@@ -3369,12 +3415,13 @@ export function CRMApp({
         </div>
       ) : null}
 
-      <ContactSyncDialog
-        open={contactSyncOpen}
-        onClose={() => setContactSyncOpen(false)}
-        pasteText={pasteText}
-        setPasteText={setPasteText}
-        onIngestFromParsed={ingestPastedContacts}
+      <ImportContactsPanel
+        open={importContactsOpen}
+        onClose={() => setImportContactsOpen(false)}
+        existingCustomers={state.customers}
+        onCommit={handleCommitImportContactsHub}
+        makeId={makeId}
+        buildCustomer={buildCustomerFromImportedDraft}
         showToast={showToast}
       />
 
