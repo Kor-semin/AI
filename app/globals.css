@@ -1018,3 +1018,76 @@ html[lang="ko"] body {
   }
 }
 
+/* Sensora in-app mark — Quiet Nebula S mood (subtle aura / drift / stars; no blur filter). */
+@keyframes sensora-aura-breathe {
+  0%,
+  100% {
+    opacity: 0.86;
+    transform: translate(256px, 256px) scale(1) translate(-256px, -256px);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translate(256px, 256px) scale(1.018) translate(-256px, -256px);
+  }
+}
+
+@keyframes sensora-nebula-drift {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+
+  33% {
+    transform: translate(0.92px, -0.85px);
+  }
+
+  66% {
+    transform: translate(-0.62px, 0.55px);
+  }
+}
+
+@keyframes sensora-star-shimmer {
+  0%,
+  100% {
+    opacity: 0.28;
+  }
+
+  50% {
+    opacity: 0.48;
+  }
+}
+
+.sensora-mark-drift-layer {
+  transform-box: fill-box;
+  animation: sensora-nebula-drift 14s ease-in-out infinite;
+}
+
+.sensora-mark-aura-layer {
+  transform-origin: 256px 256px;
+  transform-box: fill-box;
+  animation: sensora-aura-breathe 8s ease-in-out infinite;
+}
+
+.sensora-mark-star--a {
+  animation: sensora-star-shimmer 7s ease-in-out infinite;
+}
+
+.sensora-mark-star--b {
+  animation: sensora-star-shimmer 7.6s ease-in-out infinite;
+  animation-delay: 1.7s;
+}
+
+.sensora-mark-star--c {
+  animation: sensora-star-shimmer 8.2s ease-in-out infinite;
+  animation-delay: 3.25s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sensora-animated-mark *,
+  .sensora-animated-mark *::before,
+  .sensora-animated-mark *::after {
+    animation: none !important;
+  }
+}
+
