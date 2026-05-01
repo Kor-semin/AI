@@ -541,10 +541,9 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "cover.onboarding.page1.description":
       "자동차 영업사원을 위한 AI 고객관리 앱입니다.\n고객 상담, 다음 연락, 발송 문구를 한 곳에서 정리합니다.",
     "cover.onboarding.page2.title": "무엇을 도와드릴까요?",
-    "cover.onboarding.page2.customer": "고객관리\n연락처·상담·관심 차량을 카드 단위로 정리합니다.",
-    "cover.onboarding.page2.ai":
-      "AI 비서\n상담 메모를 두면 고객 니즈·영업 포인트·발송 문구 초안을 제안합니다.",
-    "cover.onboarding.page2.followup": "사후관리\n다음 연락·일정과 메모를 한 흐름으로 묶습니다.",
+    "cover.onboarding.page2.customer": "고객관리\n상담 메모와 관심 차량을 한 흐름으로 정리합니다.",
+    "cover.onboarding.page2.ai": "AI 비서\n상담 내용을 바탕으로 검토용 초안을 제안합니다.",
+    "cover.onboarding.page2.followup": "사후관리\n다음 연락과 출고 안내를 놓치지 않도록 돕습니다.",
     "cover.onboarding.page2.season":
       "시즌 케어 메시지\n계절·명분에 맞는 고객 메시지 초안을 차분하게 준비합니다.",
     "cover.onboarding.page2.delivery": "출고 안내서\n출고 전후 고객 안내와 체크 항목을 문서처럼 정리합니다.",
@@ -862,11 +861,11 @@ export const translations: Record<LanguageCode, TranslationDict> = {
       "An AI-assisted CRM tailored for showroom sales.\nKeep consultations, follow-ups, and outbound copy in one place.",
     "cover.onboarding.page2.title": "What can we help you with?",
     "cover.onboarding.page2.customer":
-      "Customer records\nContacts, consultations, and vehicle interest—organized card by card.",
+      "Customer records\nConsultation notes and vehicle interest in one simple flow.",
     "cover.onboarding.page2.ai":
-      "AI assistant\nLeave a memo—SensoraGuide proposes needs, sales angles, and draft messages.",
+      "AI assistant\nSuggests review-ready drafts grounded in your consultation notes.",
     "cover.onboarding.page2.followup":
-      "Follow-up\nReconnect timing with call & SMS notes in one calm workspace rail.",
+      "After-sales care\nKeeps next touches and delivery guidance from slipping through.",
     "cover.onboarding.page2.season":
       "Seasonal care messages\nPrepare composed customer messages anchored to seasons and prompts.",
     "cover.onboarding.page2.delivery":

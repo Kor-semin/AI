@@ -189,8 +189,6 @@ export function NotebookCover() {
     "cover.onboarding.page2.customer",
     "cover.onboarding.page2.ai",
     "cover.onboarding.page2.followup",
-    "cover.onboarding.page2.season",
-    "cover.onboarding.page2.delivery",
   ] as const;
 
   const heading =
@@ -223,25 +221,43 @@ export function NotebookCover() {
         aria-modal="true"
         aria-labelledby="notebook-cover-panel-heading"
         tabIndex={-1}
-        className="notebook-cover-cover-layer notebook-cover-biz-micro notebook-cover-reveal notebook-cover-editorial-shell relative z-10 mx-auto flex min-h-[100dvh] min-h-[100svh] w-full max-w-[min(720px,calc(100vw-48px))] flex-col overflow-y-auto overscroll-contain pl-[max(22px,calc(env(safe-area-inset-left,0px)+1.25rem))] pr-[max(22px,calc(env(safe-area-inset-right,0px)+1.25rem))] pb-[max(1rem,calc(0.75rem+env(safe-area-inset-bottom,0px)))] pt-[max(12px,calc(env(safe-area-inset-top,0px)+0.75rem))] text-center"
+        className={[
+          "notebook-cover-cover-layer notebook-cover-biz-micro notebook-cover-reveal notebook-cover-editorial-shell relative z-10 mx-auto flex min-h-[100dvh] min-h-[100svh] w-full max-w-[min(720px,calc(100vw-48px))] flex-col pl-[max(22px,calc(env(safe-area-inset-left,0px)+1.25rem))] pr-[max(22px,calc(env(safe-area-inset-right,0px)+1.25rem))] pb-[max(1rem,calc(0.75rem+env(safe-area-inset-bottom,0px)))] pt-[max(12px,calc(env(safe-area-inset-top,0px)+0.75rem))] text-center",
+          pageIdx === 1
+            ? "max-[480px]:overflow-y-hidden max-[480px]:overscroll-none"
+            : "overflow-y-auto overscroll-contain",
+        ].join(" ")}
         onClick={(e) => e.stopPropagation()}
         onPointerDown={(e) => e.stopPropagation()}
       >
-        <div className="flex shrink-0 justify-end pb-2">
+        <div className={`flex shrink-0 justify-end ${pageIdx === 1 ? "max-[480px]:pb-0 pb-2" : "pb-2"}`}>
           <button type="button" className={onboardCloseBtn} onClick={dismissQuiet} aria-label={t("cover.onboarding.close")}>
             {t("cover.onboarding.close")}
           </button>
         </div>
 
         <div
-          className={`notebook-cover-inner-stage flex flex-1 flex-col justify-center px-1 py-8 sm:px-5 sm:py-10 ${pageIdx >= 1 ? "max-lg:justify-start max-lg:pt-6" : ""}`}
+          className={[
+            "notebook-cover-inner-stage flex flex-1 flex-col px-1 sm:px-5",
+            pageIdx === 0 ? "justify-center py-8 sm:py-10"
+            : pageIdx === 1
+              ? "min-h-0 justify-center py-5 max-[480px]:py-2 max-[480px]:pb-2 sm:py-10"
+              : `justify-center py-8 sm:py-10 max-lg:justify-start max-lg:pt-6`,
+          ].join(" ")}
           key={pageIdx}
           data-notebook-cover-tone={coverTheme}
         >
           <div className="notebook-cover-inner-stack mx-auto flex w-full max-w-[min(420px,92vw)] flex-col items-center gap-0">
-            <div className="notebook-cover-logo-wrap pointer-events-none mb-7 flex shrink-0 justify-center sm:mb-9">
+            <div
+              className={[
+                "notebook-cover-logo-wrap pointer-events-none flex shrink-0 justify-center",
+                pageIdx === 0 ? "mb-7 sm:mb-9"
+                : pageIdx === 1 ? "mb-3 max-[480px]:mb-1.5 sm:mb-9"
+                : "mb-7 sm:mb-9",
+              ].join(" ")}
+            >
               <SensoraAnimatedMark
-                size={pageIdx === 0 ? 104 : 80}
+                size={pageIdx === 0 ? 104 : pageIdx === 1 ? 68 : 80}
                 animated={pageIdx === 0}
                 className={pageIdx === 0 ? "max-[380px]:scale-[0.98] motion-reduce:opacity-[0.96]" : ""}
                 label={pageIdx === 0 ? t("product.name") : undefined}
@@ -252,12 +268,24 @@ export function NotebookCover() {
             </p>
             <h1
               id="notebook-cover-panel-heading"
-              className="mt-4 max-w-[22ch] text-balance text-[clamp(1.32rem,4.35vw,1.82rem)] font-semibold leading-[1.22] tracking-[-0.03em] text-[#F8FAFC] sm:mt-5"
+              className={[
+                "max-w-[22ch] text-balance text-[clamp(1.32rem,4.35vw,1.82rem)] font-semibold leading-[1.22] tracking-[-0.03em] text-[#F8FAFC]",
+                pageIdx === 0 ? "mt-4 sm:mt-5"
+                : pageIdx === 1 ? "mt-2 max-[480px]:mt-1 sm:mt-5"
+                : "mt-4 sm:mt-5",
+              ].join(" ")}
             >
               {heading}
             </h1>
 
-            <div className="notebook-cover-body-block mt-7 w-full shrink-0 text-left sm:mt-8">
+            <div
+              className={[
+                "notebook-cover-body-block w-full shrink-0 text-left",
+                pageIdx === 0 ? "mt-7 sm:mt-8"
+                : pageIdx === 1 ? "mt-4 max-[480px]:mt-2 sm:mt-8"
+                : "mt-7 sm:mt-8",
+              ].join(" ")}
+            >
               {pageIdx === 0 ? (
                 <div className="mx-auto flex w-full max-w-[280px] flex-col items-center">
                   <div className="w-full space-y-3 text-center text-[13px] leading-relaxed text-[#CBD5E1] sm:text-[14px]">
@@ -285,16 +313,20 @@ export function NotebookCover() {
 
               {pageIdx === 1 ? (
                 <div className="mx-auto w-full max-w-[min(26rem,94vw)]">
-                  <ul className="grid gap-2.5 sm:gap-3">
+                  <ul className="grid gap-2 max-[480px]:gap-1.5 sm:gap-3">
                     {tocKeys.map((key) => {
                       const { title, line } = tocCard(t(key));
                       return (
                         <li
                           key={key}
-                          className="notebook-cover-toc-pane rounded-[18px] border border-white/12 bg-black/[0.08] px-4 py-3 backdrop-blur-sm sm:px-5 sm:py-3.5"
+                          className="notebook-cover-toc-pane rounded-[14px] border border-white/12 bg-black/[0.08] px-3 py-2 backdrop-blur-sm max-[480px]:rounded-xl max-[480px]:py-1.5 sm:rounded-[18px] sm:px-5 sm:py-3.5"
                         >
-                          <p className="text-[13px] font-semibold text-[#F8FAFC]">{title}</p>
-                          {line ? <p className="mt-1 text-[12px] leading-snug text-[#94A3B8]">{line}</p> : null}
+                          <p className="text-[13px] font-semibold leading-tight text-[#F8FAFC]">{title}</p>
+                          {line ?
+                            <p className="mt-0.5 text-[12px] leading-snug text-[#B4C4D6] max-[480px]:text-[11.5px] sm:mt-1">
+                              {line}
+                            </p>
+                          : null}
                         </li>
                       );
                     })}
@@ -360,7 +392,14 @@ export function NotebookCover() {
           </div>
         </div>
 
-        <footer className="mx-auto mt-6 flex w-full max-w-[420px] shrink-0 flex-col gap-5 px-1 pb-[max(0.5rem,env(safe-area-inset-bottom,0px))] pt-4 sm:mt-8 sm:gap-6">
+        <footer
+          className={[
+            "mx-auto flex w-full max-w-[420px] shrink-0 flex-col px-1 pb-[max(0.5rem,env(safe-area-inset-bottom,0px))]",
+            pageIdx === 1
+              ? "mt-6 gap-5 pt-4 max-[480px]:mt-1 max-[480px]:gap-2.5 max-[480px]:pt-1 sm:mt-8 sm:gap-6"
+              : "mt-6 gap-5 pt-4 sm:mt-8 sm:gap-6",
+          ].join(" ")}
+        >
           <nav className="flex justify-center gap-2 motion-reduce:gap-2" aria-label="온보딩 단계">
             {Array.from({ length: LAST_PAGE + 1 }, (_, i) => (
               <button
