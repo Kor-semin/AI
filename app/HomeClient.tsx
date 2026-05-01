@@ -10,6 +10,11 @@ import { SensoraAnimatedMark } from "@/app/components/SensoraAnimatedMark";
 import { LanguageSelect } from "@/app/components/i18n/LanguageSelect";
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
 import { ConciergeSidebar } from "@/app/components/concierge/ConciergeSidebar";
+import {
+  crmSectionToHash,
+  hashToCrmSection,
+  type CrmSection,
+} from "@/app/crm/crmSectionTypes";
 import { LandingShowroom } from "@/app/components/concierge/LandingSections";
 import { CRMApp } from "@/app/crm/CRMApp";
 import { useAuth } from "@/app/crm/useAuth";
@@ -22,13 +27,45 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
   const googleAuthEnabled = isGoogleAuthEnabled();
   const seller = useSellerProfile(auth.status === "signed-in" ? auth.uid : null);
   const [view, setView] = useState<"landing" | "app">(initialView);
+  const [crmSection, setCrmSection] = useState<CrmSection>("dashboard");
   const router = useRouter();
   const { t } = useLanguage();
+
+  const navigateCrmSection = useCallback(
+    (s: CrmSection) => {
+      setCrmSection(s);
+      if (typeof window === "undefined") return;
+      try {
+        const qs = new URLSearchParams(window.location.search);
+        qs.set("view", "app");
+        const h = crmSectionToHash(s);
+        const next = `${window.location.pathname}?${qs.toString()}#${h}`;
+        window.history.replaceState(null, "", next);
+      } catch {
+        /* ignore */
+      }
+    },
+    [],
+  );
 
   /** SSR → CSR navigation: searchParams 변경 시에는 state가 따라가야 함(useState 초기값은 1회만). */
   useEffect(() => {
     setView(initialView);
   }, [initialView]);
+
+  /** 앱 진입 시·해시 변경 시 섹션 동기화 */
+  useEffect(() => {
+    if (view !== "app" || typeof window === "undefined") return;
+    const syncFromHash = () => {
+      const raw = window.location.hash.replace(/^#/, "").trim();
+      const mapped = raw ? hashToCrmSection(raw) : null;
+      if (mapped) setCrmSection(mapped);
+      else if (!raw) setCrmSection("dashboard");
+    };
+    syncFromHash();
+    window.addEventListener("hashchange", syncFromHash);
+    return () => window.removeEventListener("hashchange", syncFromHash);
+  }, [view]);
 
   /** 브라우저 뒤로/앞으로 시 URL만 바뀌는 경우까지 view 동기화 */
   useEffect(() => {
@@ -59,12 +96,15 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
       const rawHash =
         typeof window !== "undefined" && window.location.hash.startsWith("#")
           ? window.location.hash.slice(1)
-          : "crm-ai-assistant";
-      const id = rawHash.trim() ? rawHash.trim() : "crm-ai-assistant";
-      document.getElementById(id)?.scrollIntoView({
-        behavior: prefersReduce ? "auto" : "smooth",
-        block: "start",
-      });
+          : "";
+      const id = rawHash.trim() ? rawHash.trim() : "crm-section-dashboard";
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({
+          behavior: prefersReduce ? "auto" : "smooth",
+          block: "start",
+        });
+      }
     };
     const timers = [
       window.setTimeout(() => {
@@ -78,7 +118,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
       cancelled = true;
       for (const tmr of timers) window.clearTimeout(tmr);
     };
-  }, [view]);
+  }, [view, crmSection]);
 
   const sellerSignedIn = firebaseReady && auth.status === "signed-in";
 
@@ -227,8 +267,8 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
             id="app"
             className="min-h-[calc(100dvh-3.25rem)] scroll-mt-24 bg-[#F4F6F8] px-4 pb-12 pt-6 max-sm:pb-[max(7rem,calc(4.5rem+env(safe-area-inset-bottom,0px)))] sm:px-6 lg:min-h-[calc(100dvh-3.5rem)]"
           >
-            <div className="mx-auto flex w-full max-w-[1520px] gap-6 lg:gap-8">
-              <ConciergeSidebar />
+            <div className="mx-auto flex w-full max-w-[1520px] flex-col gap-2 lg:flex-row lg:gap-8">
+              <ConciergeSidebar activeSection={crmSection} onNavigate={navigateCrmSection} />
               <div className="relative min-h-[60vh] min-w-0 flex-1 rounded-2xl">
                 {sellerLoading ? (
                   <div className="flex min-h-[40vh] items-center justify-center rounded-2xl border border-[#E5E7EB] bg-white px-6 py-16 text-base text-[#6B7280]">
@@ -290,6 +330,8 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                     sellerDisplayName={
                       auth.status === "signed-in" ? auth.name?.trim() || auth.email?.split("@")[0] || "" : ""
                     }
+                    activeSection={crmSection}
+                    onActiveSectionChange={navigateCrmSection}
                   />
                 ) : null}
 

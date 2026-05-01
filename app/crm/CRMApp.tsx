@@ -58,6 +58,17 @@ import {
 import { makeId, seedState } from "./seed";
 import { ImportContactsPanel, type ImportContactsCommitPayload } from "./ImportContactsPanel";
 import type { NormalizedImportedContact } from "./contactImport/normalizeImportedContact";
+import type { CrmSection } from "./crmSectionTypes";
+import { CRM_SECTION_LABELS } from "./crmSectionTypes";
+import { DashboardSection } from "./sections/DashboardSection";
+import { ConsultingNotesSection } from "./sections/ConsultingNotesSection";
+import { PipelineSection } from "./sections/PipelineSection";
+import { VehicleMatchSection } from "./sections/VehicleMatchSection";
+import { FollowUpSection } from "./sections/FollowUpSection";
+import { SettingsSection } from "./sections/SettingsSection";
+import { CustomersSection } from "./sections/CustomersSection";
+import { AiSecretarySection } from "./sections/AiSecretarySection";
+import { CrmAiAssistantPanel } from "./CrmAiAssistantPanel";
 import { CrmMiniCalendar } from "@/app/crm/CrmMiniCalendar";
 import { DeliveryGuideScreen } from "@/app/crm/deliveryGuide/DeliveryGuideScreen";
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
@@ -87,12 +98,6 @@ const WORKSPACE_AI_STYLE_KEYS: Record<DemoSalesStyle, TranslationKey> = {
   friendly: "landing.aiDemo.salesStyle.friendly",
   active: "landing.aiDemo.salesStyle.active",
 };
-const WORKSPACE_AI_STYLE_ORDER: DemoSalesStyle[] = ["polite", "simple", "premium", "friendly", "active"];
-
-/** Sensora Flow · 미리보기 카드 헤더용 “AI 제안” 배지 */
-const SENSORA_FLOW_AI_BADGE =
-  "inline-flex shrink-0 items-center rounded-full bg-[#E8EDF4] px-2 py-[2px] text-[10px] font-semibold uppercase tracking-[0.1em] text-[#475569]";
-
 const PAYMENT_TYPE_OPTIONS: PaymentType[] = ["현금", "할부", "리스", "장기렌트"];
 const ACCIDENT_OPTIONS: UsedCarAccident[] = ["무사고", "단순교환", "사고", "미상"];
 
@@ -350,23 +355,17 @@ function emptyState(): CRMState {
   return { version: 1, customers: [], nextActions: [], events: [], templates: [] };
 }
 
-function StatCard({ label, value, hint }: { label: string; value: string | number; hint?: string }) {
-  return (
-    <div className="rounded-[22px] border border-[#E5E7EB] bg-[#FFFFFF] px-5 py-4 shadow-[0_1px_3px_rgba(15,23,42,0.04)]">
-      <div className="text-[12px] font-semibold tracking-[-0.01em] text-[#4B5563]">{label}</div>
-      <div className="mt-2 text-2xl font-semibold tabular-nums tracking-tight text-[#111827]">{value}</div>
-      {hint ? <div className="mt-2 text-[13px] leading-snug text-[#6B7280]">{hint}</div> : null}
-    </div>
-  );
-}
-
 export function CRMApp({
   uid,
   sellerDisplayName,
+  activeSection,
+  onActiveSectionChange,
 }: {
   uid?: string | null;
   /** `{내이름}` 치환: 로그인 시 구글 이름·이메일 등 */
   sellerDisplayName?: string | null;
+  activeSection: CrmSection;
+  onActiveSectionChange: (s: CrmSection) => void;
 }) {
   const { t, language } = useLanguage();
   // uid=null means local-only mode.
@@ -887,6 +886,71 @@ export function CRMApp({
     return { dueToday, highPotential, followUp, recentConsult };
   }, [state.customers, state.nextActions]);
 
+  const dashboardTodayDueLines = useMemo(() => {
+    const dayStart = new Date();
+    dayStart.setHours(0, 0, 0, 0);
+    const dayEnd = new Date(dayStart);
+    dayEnd.setHours(23, 59, 59, 999);
+    const lines: string[] = [];
+    for (const a of state.nextActions) {
+      if (a.doneAt || !a.dueAt) continue;
+      const when = new Date(a.dueAt);
+      if (when < dayStart || when > dayEnd) continue;
+      const c = state.customers.find((x) => x.id === a.customerId);
+      lines.push(`${c?.name ?? "?"} — ${a.title} (${formatDateTime(a.dueAt)})`);
+    }
+    return lines;
+  }, [state.customers, state.nextActions]);
+
+  const dashboardRecentMemoLines = useMemo(() => {
+    const sorted = [...state.customers].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+    return sorted.slice(0, 6).map((c) => {
+      const m = (c.memo ?? "").trim();
+      return {
+        id: c.id,
+        name: c.name,
+        excerpt: m ? m.slice(0, 120) : "(메모 없음)",
+      };
+    });
+  }, [state.customers]);
+
+  const showWorkspaceTabs = activeSection === "customers" || activeSection === "followup";
+  const showSellerToolsRow =
+    activeSection === "customers" ||
+    activeSection === "followup" ||
+    activeSection === "consulting" ||
+    activeSection === "ai";
+  const workspaceSalesStyleLabel = t(WORKSPACE_AI_STYLE_KEYS[workspaceSalesStyle]);
+  const storageModeLabel =
+    sync.mode === "cloud"
+      ? sync.status === "error"
+        ? `클라우드 동기화(오류${sync.message ? `: ${sync.message}` : ""})`
+        : "클라우드 동기화 — 이 기기에서 수정한 내용이 계정에 저장됩니다."
+      : "이 기기 브라우저에 로컬 저장됩니다. 다른 기기와 자동 동기화되지 않습니다.";
+
+  useEffect(() => {
+    if (activeSection === "followup") setTab("다음할일");
+  }, [activeSection]);
+
+  useEffect(() => {
+    if (activeSection === "ai") setTab("고객");
+  }, [activeSection]);
+
+  useEffect(() => {
+    if (activeSection === "customers") setTab("고객");
+  }, [activeSection]);
+
+  useEffect(() => {
+    if (activeSection !== "ai") return undefined;
+    const tmr = window.setTimeout(() => {
+      document.getElementById("crm-ai-assistant")?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 140);
+    return () => window.clearTimeout(tmr);
+  }, [activeSection]);
+
   function upsertCustomer(patch: Partial<Customer> & { id: string }) {
     if ("name" in patch && typeof patch.name === "string" && !patch.name.trim()) {
       showToast("고객명을 입력해 주세요.");
@@ -929,6 +993,7 @@ export function CRMApp({
     setSearchQuery("");
     setSearchOpen(false);
     setSelectedCustomerId(customerId);
+    onActiveSectionChange("customers");
     setTab("고객");
     window.setTimeout(() => {
       document.getElementById("crm-detail-panel")?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -938,21 +1003,20 @@ export function CRMApp({
   function handleOpenAiAssistantFromSearch() {
     setSearchQuery("");
     setSearchOpen(false);
-    setTab("고객");
-    window.setTimeout(() => {
-      document.getElementById("crm-ai-assistant")?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 60);
+    onActiveSectionChange("ai");
   }
 
   function handleOpenCreateCustomerFromSearch() {
     setSearchQuery("");
     setSearchOpen(false);
+    onActiveSectionChange("customers");
     openCreateCustomerModal();
   }
 
   function handleOpenSeasonCareFromSearch() {
     setSearchQuery("");
     setSearchOpen(false);
+    onActiveSectionChange("customers");
     setTab("템플릿");
     window.setTimeout(() => {
       document.getElementById("season-care")?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -962,6 +1026,7 @@ export function CRMApp({
   function handleOpenDeliveryGuideFromSearch() {
     setSearchQuery("");
     setSearchOpen(false);
+    onActiveSectionChange("customers");
     setTab("고객");
     window.setTimeout(() => {
       if (selectedCustomerId) {
@@ -977,21 +1042,19 @@ export function CRMApp({
   function handleOpenFollowupFromSearch() {
     setSearchQuery("");
     setSearchOpen(false);
-    setTab("고객");
+    onActiveSectionChange("followup");
     window.setTimeout(() => {
-      const next = document.getElementById("crm-block-next");
-      if (next) {
-        next.scrollIntoView({ behavior: "smooth", block: "start" });
-      } else {
-        document.getElementById("crm-customer-table")?.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
-      if (!selectedCustomerId) showToast("고객을 선택하면 후속 연락을 바로 작성할 수 있어요.");
-    }, 60);
+      document.getElementById("crm-workspace-next")?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 120);
   }
 
   function handleOpenCustomerListFromSearch() {
     setSearchQuery("");
     setSearchOpen(false);
+    onActiveSectionChange("customers");
     setTab("고객");
     window.setTimeout(() => {
       document.getElementById("crm-customer-table")?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -1060,6 +1123,7 @@ export function CRMApp({
       pendingCustomerCreatesRef.current.add(id);
       setState((prev) => ({ ...prev, customers: [customer, ...prev.customers] }));
       setSelectedCustomerId(id);
+      onActiveSectionChange("customers");
       setTab("고객");
       setCreateCustomerOpen(false);
       setCreateCustomerDraft({ ...CREATE_CUSTOMER_INITIAL });
@@ -1476,60 +1540,74 @@ export function CRMApp({
             </div>
           </header>
 
-          <div className="flex flex-wrap items-center gap-2 sm:justify-between">
-            <label className="flex flex-1 flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
-              <span className="whitespace-nowrap text-[13px] font-semibold text-[#374151]">
-                내 이름 · 템플릿 치환
-              </span>
-              <input
-                value={sellerNickname}
-                onChange={(e) => persistSellerNickname(e.target.value)}
-                placeholder="예: 김실장"
-                className="max-w-xs flex-1 rounded-xl border border-[#E5E7EB] bg-[#FFFFFF] px-4 py-2.5 text-[15px] text-[#111827] outline-none focus:border-[#94A3B8]"
-              />
-            </label>
-            <div className="flex flex-wrap gap-2">
-              <button
-                type="button"
-                className="min-h-[44px] rounded-[20px] border border-[#E5E7EB] bg-[#F9FAFB] px-5 py-2.5 text-[14px] font-semibold text-[#111827] ring-1 ring-inset ring-[#E5E7EB] transition hover:bg-[#F3F4F6] touch-manipulation"
-                onClick={() => setImportContactsOpen(true)}
-              >
-                주소록 가져오기
-              </button>
-              {selectedCustomer ? (
-                <button
-                  type="button"
-                  className="min-h-[44px] rounded-[20px] border border-[#E5E7EB] bg-[#FFFFFF] px-5 py-2.5 text-[14px] font-semibold text-[#374151] transition hover:bg-[#F9FAFB] touch-manipulation"
-                  onClick={() => setDeliveryGuideOpen(true)}
-                >
-                  출고 안내
-                </button>
-              ) : null}
-            </div>
+          <div
+            id="crm-section-title"
+            className="scroll-mt-24 rounded-2xl border border-[#E5E7EB] bg-white px-4 py-3 shadow-sm lg:hidden"
+          >
+            <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#94A3B8]">
+              {CRM_SECTION_LABELS[activeSection].subtitle}
+            </p>
+            <p className="mt-1 text-[17px] font-semibold text-[#111827]">{CRM_SECTION_LABELS[activeSection].title}</p>
           </div>
 
-          <nav
-            className="flex flex-wrap gap-1 border-b border-[#E5E7EB]"
-            aria-label="업무 영역"
-          >
-            {(["고객", "다음할일", "일정", "템플릿"] as const).map((t) => (
-              <button
-                key={t}
-                type="button"
-                onClick={() => setTab(t)}
-                className={[
-                  "min-h-[44px] -mb-px touch-manipulation px-5 py-3 text-[14px] font-semibold outline-none transition focus-visible:rounded-t-lg focus-visible:ring-2 focus-visible:ring-[#CBD5E1]",
-                  tab === t
-                    ? "border-b-2 border-[#111827] text-[#111827]"
-                    : "border-b-2 border-transparent text-[#6B7280] hover:text-[#111827]",
-                ].join(" ")}
-              >
-                {TAB_LABELS[t]}
-              </button>
-            ))}
-          </nav>
+          {showSellerToolsRow ? (
+            <div className="flex flex-wrap items-center gap-2 sm:justify-between">
+              <label className="flex flex-1 flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
+                <span className="whitespace-nowrap text-[13px] font-semibold text-[#374151]">
+                  내 이름 · 템플릿 치환
+                </span>
+                <input
+                  value={sellerNickname}
+                  onChange={(e) => persistSellerNickname(e.target.value)}
+                  placeholder="예: 김실장"
+                  className="max-w-xs flex-1 rounded-xl border border-[#E5E7EB] bg-[#FFFFFF] px-4 py-2.5 text-[15px] text-[#111827] outline-none focus:border-[#94A3B8]"
+                />
+              </label>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  className="min-h-[44px] rounded-[20px] border border-[#E5E7EB] bg-[#F9FAFB] px-5 py-2.5 text-[14px] font-semibold text-[#111827] ring-1 ring-inset ring-[#E5E7EB] transition hover:bg-[#F3F4F6] touch-manipulation"
+                  onClick={() => setImportContactsOpen(true)}
+                >
+                  주소록 가져오기
+                </button>
+                {selectedCustomer ? (
+                  <button
+                    type="button"
+                    className="min-h-[44px] rounded-[20px] border border-[#E5E7EB] bg-[#FFFFFF] px-5 py-2.5 text-[14px] font-semibold text-[#374151] transition hover:bg-[#F9FAFB] touch-manipulation"
+                    onClick={() => setDeliveryGuideOpen(true)}
+                  >
+                    출고 안내
+                  </button>
+                ) : null}
+              </div>
+            </div>
+          ) : null}
 
-          {tab === "고객" ? (
+          {showWorkspaceTabs ? (
+            <nav
+              className="flex flex-wrap gap-1 border-b border-[#E5E7EB]"
+              aria-label="업무 영역"
+            >
+              {(["고객", "다음할일", "일정", "템플릿"] as const).map((tabKey) => (
+                <button
+                  key={tabKey}
+                  type="button"
+                  onClick={() => setTab(tabKey)}
+                  className={[
+                    "min-h-[44px] -mb-px touch-manipulation px-5 py-3 text-[14px] font-semibold outline-none transition focus-visible:rounded-t-lg focus-visible:ring-2 focus-visible:ring-[#CBD5E1]",
+                    tab === tabKey
+                      ? "border-b-2 border-[#111827] text-[#111827]"
+                      : "border-b-2 border-transparent text-[#6B7280] hover:text-[#111827]",
+                  ].join(" ")}
+                >
+                  {TAB_LABELS[tabKey]}
+                </button>
+              ))}
+            </nav>
+          ) : null}
+
+          {activeSection === "customers" && tab === "고객" ? (
             <CrmMiniCalendar
               customers={state.customers}
               nextActions={state.nextActions}
@@ -1547,21 +1625,124 @@ export function CRMApp({
             />
           ) : null}
 
-          <div
-            id="crm-overview-stats"
-            className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4"
-          >
-            <StatCard label={t("crm.stat.todayFollowups")} value={overviewStats.dueToday} hint="오늘 기한 후속" />
-            <StatCard
-              label={t("crm.stat.dealProbability")}
-              value={overviewStats.highPotential}
-              hint="가망등급 A·S 및 66%+"
-            />
-            <StatCard label={t("crm.stat.followupNeeded")} value={overviewStats.followUp} hint="미완료 업무 수" />
-            <StatCard label={t("crm.stat.recentConsultations")} value={overviewStats.recentConsult} hint="7일 내 기록 수정" />
-          </div>
+          {activeSection === "dashboard" ? (
+            <div id="crm-section-dashboard" className="scroll-mt-24">
+              <DashboardSection
+                todayFollowUps={overviewStats.dueToday}
+                highPotential={overviewStats.highPotential}
+                followUpOpen={overviewStats.followUp}
+                recentConsult={overviewStats.recentConsult}
+                customers={state.customers}
+                nextActions={state.nextActions}
+                events={state.events}
+                todayDueLines={dashboardTodayDueLines}
+                recentMemoLines={dashboardRecentMemoLines}
+                onPickCustomer={(id) => setSelectedCustomerId(id)}
+                onGoSection={onActiveSectionChange}
+              />
+            </div>
+          ) : null}
 
-          {tab === "고객" ? (
+          {activeSection === "consulting" ? (
+            <ConsultingNotesSection
+              customers={state.customers}
+              selectedCustomerId={selectedCustomerId}
+              onSelectCustomerId={setSelectedCustomerId}
+              memoDraft={workspaceAiMemoDraft}
+              onMemoDraftChange={setWorkspaceAiMemoDraft}
+              onSaveMemo={() => {
+                if (!selectedCustomerId) return;
+                upsertCustomer({ id: selectedCustomerId, memo: workspaceAiMemoDraft });
+                showToast("상담 메모를 저장했습니다.");
+              }}
+              onGoAi={() => onActiveSectionChange("ai")}
+              disabledSave={
+                !selectedCustomerId ||
+                workspaceAiMemoDraft.trim() === (selectedCustomer?.memo ?? "").trim()
+              }
+            />
+          ) : null}
+
+          {activeSection === "pipeline" ? (
+            <PipelineSection
+              customers={state.customers}
+              onSelectCustomer={(id) => {
+                setSelectedCustomerId(id);
+                onActiveSectionChange("customers");
+              }}
+            />
+          ) : null}
+
+          {activeSection === "vehicle" ? (
+            <VehicleMatchSection
+              customer={selectedCustomer}
+              memoForAnalysis={selectedCustomer?.memo ?? ""}
+              onOpenCustomers={() => onActiveSectionChange("customers")}
+            />
+          ) : null}
+
+          {activeSection === "settings" ? (
+            <SettingsSection
+              sellerNickname={sellerNickname}
+              onNicknameChange={persistSellerNickname}
+              workspaceSalesStyleLabel={workspaceSalesStyleLabel}
+              storageModeLabel={storageModeLabel}
+              onShowCover={() => window.dispatchEvent(new CustomEvent("crm-show-notebook-cover"))}
+            />
+          ) : null}
+
+          {activeSection === "ai" ? (
+            <AiSecretarySection>
+              <CrmAiAssistantPanel
+                t={t}
+                workspaceAiCoachTopics={workspaceAiCoachTopics}
+                workspaceAiBusy={workspaceAiBusy}
+                selectedCustomerId={selectedCustomerId}
+                onCustomerIdChange={setSelectedCustomerId}
+                workspaceCustomerOptions={workspaceCustomerOptions}
+                workspaceSalesStyle={workspaceSalesStyle}
+                onWorkspaceSalesStyleChange={setWorkspaceSalesStyle}
+                workspaceAiMemoDraft={workspaceAiMemoDraft}
+                onWorkspaceAiMemoDraftChange={setWorkspaceAiMemoDraft}
+                memoDiffersFromFlowSnapshot={memoDiffersFromFlowSnapshot}
+                flowDraftMemo={flowDraftMemo}
+                flowDraftInsights={flowDraftInsights}
+                onAnalyzeOrRefresh={runSensoraFlowAnalyzeOrRefresh}
+                onRewriteSmsDraft={runSensoraFlowRewriteSmsDraft}
+                onCopySms={() => {
+                  const text = flowDraftInsights?.message.trim();
+                  if (!text || !selectedCustomerId) return;
+                  void copyToClipboard(text).then((ok) => {
+                    if (ok) showToast(t("crm.workspaceAi.smsCopyToast"));
+                    else showToast(t("crm.seasonCare.copyFail"));
+                  });
+                }}
+                onSaveMemoToCrm={() => {
+                  if (!selectedCustomerId) return;
+                  upsertCustomer({ id: selectedCustomerId, memo: workspaceAiMemoDraft });
+                  smsRewriteNonceRef.current = 0;
+                  const trimmed = workspaceAiMemoDraft.trim();
+                  setFlowDraftMemo(trimmed);
+                  setFlowDraftInsights(null);
+                  showToast(t("crm.workspaceAi.saveToast"));
+                }}
+                onCreateFollowUpFromInsights={() => {
+                  if (!selectedCustomerId || !flowDraftInsights) return;
+                  const raw = flowDraftInsights.nextAction
+                    .split("\n")
+                    .map((ln) => ln.trim())
+                    .find((ln) => ln.length > 0);
+                  const line =
+                    raw?.replace(/^[-•*]\s*/, "") ?? t("crm.workspaceAi.followUpDefaultTitle");
+                  addNextAction(selectedCustomerId, line);
+                  showToast(t("crm.workspaceAi.followUpToast"));
+                }}
+              />
+            </AiSecretarySection>
+          ) : null}
+
+          {showWorkspaceTabs && tab === "고객" ? (
+            <CustomersSection>
             <div className="flex min-w-0 flex-col gap-6 xl:grid xl:grid-cols-[minmax(0,1.06fr)_minmax(336px,0.94fr)] xl:items-start xl:gap-8">
               <div
                 id="crm-customer-table"
@@ -1731,228 +1912,19 @@ export function CRMApp({
                   </div>
                 </header>
 
-                <section
-                  id="crm-ai-assistant"
-                  tabIndex={-1}
-                  className="scroll-mt-28 rounded-[22px] border border-[#E5E7EB] bg-[#FAFBFC] px-5 py-5 shadow-[0_2px_10px_-4px_rgba(15,23,42,0.06)] sm:px-6"
-                  aria-labelledby="crm-ai-assistant-title"
-                >
-                  <div className="flex flex-wrap items-start justify-between gap-3 border-b border-[#EEF1F5] pb-4">
-                    <div className="min-w-0">
-                      <h2 id="crm-ai-assistant-title" className="text-[17px] font-semibold text-[#111827]">
-                        {t("crm.workspaceAi.title")}
-                      </h2>
-                      <p className="mt-1 max-w-[58ch] text-[13px] leading-relaxed text-[#6B7280]">
-                        {t("crm.workspaceAi.subtitle")}
-                      </p>
-                      <p className="mt-3 max-w-[72ch] rounded-[12px] border border-[#E2E8F0] bg-[#F8FAFC]/90 px-3 py-2 text-[11px] leading-snug text-[#64748B]">
-                        {t("crm.sensoraFlow.banner")}
-                      </p>
-                      {workspaceAiCoachTopics ? (
-                        <p className="mt-2 text-[11px] font-semibold leading-snug text-[#475569]">
-                          {t("landing.aiDemo.careCoachLabel")} · {workspaceAiCoachTopics}
-                        </p>
-                      ) : null}
-                    </div>
-                    {workspaceAiBusy && selectedCustomerId ? (
-                      <span className="shrink-0 text-[12px] font-semibold text-[#64748B]" aria-live="polite">
-                        {t("crm.workspaceAi.analyzing")}
-                      </span>
-                    ) : null}
-                  </div>
-
-                  <div className="mt-5 grid gap-5 lg:grid-cols-[minmax(180px,220px)_minmax(0,1fr)]">
-                    <div className="flex flex-col gap-4">
-                      <label className="grid gap-1.5">
-                        <span className="text-[12px] font-semibold text-[#374151]">{t("crm.workspaceAi.customerPickLabel")}</span>
-                        <select
-                          value={selectedCustomerId ?? ""}
-                          onChange={(e) => setSelectedCustomerId(e.target.value ? e.target.value : null)}
-                          className="min-h-[44px] w-full rounded-[14px] border border-[#E5E7EB] bg-white px-3 py-3 text-[14px] font-medium text-[#111827] outline-none focus:border-[#94A3B8] focus:ring-2 focus:ring-[#CBD5E1]/55"
-                          aria-label={t("crm.workspaceAi.selectPlaceholder")}
-                        >
-                          <option value="">{t("crm.workspaceAi.selectPlaceholder")}</option>
-                          {workspaceCustomerOptions.map((cust) => (
-                            <option key={cust.id} value={cust.id}>
-                              {cust.name}
-                              {cust.interestedModel?.trim()
-                                ? ` · ${cust.interestedModel}`
-                                : ""}
-                            </option>
-                          ))}
-                        </select>
-                      </label>
-                      {!selectedCustomerId ? (
-                        <p className="rounded-[14px] border border-dashed border-[#CBD5E1] bg-white px-3 py-2 text-[13px] text-[#64748B]">
-                          {t("crm.workspaceAi.pickCustomer")}
-                        </p>
-                      ) : null}
-                      <label className="grid gap-1.5">
-                        <span className="text-[12px] font-semibold text-[#374151]">{t("crm.workspaceAi.toneLabel")}</span>
-                        <select
-                          value={workspaceSalesStyle}
-                          onChange={(e) =>
-                            setWorkspaceSalesStyle(e.target.value as DemoSalesStyle)
-                          }
-                          disabled={!selectedCustomerId}
-                          className="min-h-[44px] w-full rounded-[14px] border border-[#E5E7EB] bg-white px-3 py-3 text-[14px] font-medium outline-none disabled:cursor-not-allowed disabled:bg-[#F3F4F6] disabled:opacity-65"
-                          aria-label={t("crm.workspaceAi.toneLabel")}
-                        >
-                          {WORKSPACE_AI_STYLE_ORDER.map((sid) => (
-                            <option key={sid} value={sid}>
-                              {t(WORKSPACE_AI_STYLE_KEYS[sid])}
-                            </option>
-                          ))}
-                        </select>
-                      </label>
-                      <p className="rounded-[12px] border border-dashed border-[#E5E7EB] bg-[#FAFBFC] px-2 py-2 text-[11px] leading-snug text-[#64748B]">
-                        {t("crm.sensoraFlow.toneHintsReanalyze")}
-                      </p>
-                    </div>
-                    <div className="grid min-h-0 gap-2">
-                      <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
-                        <span className="text-[13px] font-semibold text-[#374151]">{t("crm.workspaceAi.memoLabel")}</span>
-                        <span className="rounded-full bg-[#F1F5F9] px-2 py-0.5 text-[11px] font-semibold text-[#475569]">
-                          {t("crm.sensoraFlow.memoUserEditableHint")}
-                        </span>
-                      </div>
-                      <textarea
-                        value={workspaceAiMemoDraft}
-                        onChange={(e) => setWorkspaceAiMemoDraft(e.target.value)}
-                        disabled={!selectedCustomerId}
-                        rows={8}
-                        spellCheck={false}
-                        autoComplete="off"
-                        className="min-h-[180px] w-full resize-y rounded-[14px] border border-[#E5E7EB] bg-white px-4 py-3 text-[14px] leading-relaxed text-[#111827] outline-none focus:border-[#94A3B8] disabled:cursor-not-allowed disabled:bg-[#F3F4F6]"
-                        placeholder=""
-                      />
-                      {memoDiffersFromFlowSnapshot && selectedCustomerId ? (
-                        <p className="rounded-[12px] border border-dashed border-amber-200/95 bg-[#FFFBEB] px-3 py-2 text-[12px] font-medium leading-snug text-[#92400E]">
-                          {t("crm.sensoraFlow.memoStaleHint")}
-                        </p>
-                      ) : null}
-                    </div>
-                  </div>
-
-                  <div className="mt-6 grid gap-4 lg:grid-cols-3">
-                    <div className="flex min-h-0 flex-col rounded-[14px] border border-[#E5E7EB] bg-white p-4 shadow-sm lg:col-span-1">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <h3 className="text-[12px] font-semibold text-[#475569]">{t("crm.workspaceAi.needsHeading")}</h3>
-                        <span className={SENSORA_FLOW_AI_BADGE}>{t("crm.sensoraFlow.aiSuggestionBadge")}</span>
-                      </div>
-                      <div className="mt-3 max-h-[min(260px,calc(100vh-20rem))] min-h-[88px] flex-1 overflow-y-auto whitespace-pre-line text-[14px] leading-relaxed text-[#111827]">
-                        {flowDraftInsights ? flowDraftInsights.summary : "—"}
-                      </div>
-                    </div>
-                    <div className="flex min-h-0 flex-col rounded-[14px] border border-[#E5E7EB] bg-white p-4 shadow-sm lg:col-span-1">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <h3 className="text-[12px] font-semibold text-[#475569]">{t("crm.workspaceAi.salesHeading")}</h3>
-                        <span className={SENSORA_FLOW_AI_BADGE}>{t("crm.sensoraFlow.aiSuggestionBadge")}</span>
-                      </div>
-                      <div className="mt-3 max-h-[min(260px,calc(100vh-20rem))] min-h-[88px] flex-1 overflow-y-auto whitespace-pre-line text-[14px] leading-relaxed text-[#111827]">
-                        {flowDraftInsights ? flowDraftInsights.nextAction : "—"}
-                      </div>
-                    </div>
-                    <div className="flex min-h-0 flex-col rounded-[14px] border border-[#E5E7EB] bg-white p-4 shadow-sm lg:col-span-1">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <h3 className="text-[12px] font-semibold text-[#475569]">{t("crm.workspaceAi.smsHeading")}</h3>
-                        <span className={SENSORA_FLOW_AI_BADGE}>{t("crm.sensoraFlow.aiSuggestionBadge")}</span>
-                      </div>
-                      <div className="mt-3 max-h-[min(260px,calc(100vh-20rem))] min-h-[88px] flex-1 overflow-y-auto whitespace-pre-line text-[14px] leading-relaxed text-[#111827]">
-                        {flowDraftInsights ? flowDraftInsights.message : "—"}
-                      </div>
-                    </div>
-                  </div>
-
-                  {selectedCustomerId && !flowDraftInsights ? (
-                    <p className="mt-4 text-[12px] leading-snug text-[#64748B]">{t("crm.sensoraFlow.previewEmptyHint")}</p>
-                  ) : null}
-
-                  <div className="mt-6 flex flex-wrap items-center gap-2 border-t border-[#EEEFF3] pt-5">
-                    <button
-                      type="button"
-                      disabled={!selectedCustomerId || !workspaceAiMemoDraft.trim()}
-                      className="min-h-[44px] touch-manipulation rounded-[12px] bg-[#111827] px-4 text-[13px] font-semibold text-white hover:bg-[#1F2937] disabled:cursor-not-allowed disabled:opacity-45"
-                      onClick={runSensoraFlowAnalyzeOrRefresh}
-                    >
-                      {t("crm.sensoraFlow.analyzeAgain")}
-                    </button>
-                    <button
-                      type="button"
-                      disabled={!selectedCustomerId || !workspaceAiMemoDraft.trim()}
-                      className="min-h-[44px] touch-manipulation rounded-[12px] border border-[#D1D5DB] bg-white px-4 text-[13px] font-semibold text-[#111827] hover:bg-[#F9FAFB] disabled:cursor-not-allowed disabled:opacity-45"
-                      onClick={runSensoraFlowAnalyzeOrRefresh}
-                    >
-                      {t("crm.sensoraFlow.newProposal")}
-                    </button>
-                    <button
-                      type="button"
-                      disabled={
-                        !selectedCustomerId ||
-                        !(flowDraftMemo.trim() ? true : workspaceAiMemoDraft.trim().length > 0)
-                      }
-                      className="min-h-[44px] touch-manipulation rounded-[12px] border border-[#D1D5DB] bg-[#F8FAFC] px-4 text-[13px] font-semibold text-[#334155] ring-1 ring-inset ring-[#E5E7EB] hover:bg-[#F1F5F9] disabled:cursor-not-allowed disabled:opacity-45"
-                      onClick={runSensoraFlowRewriteSmsDraft}
-                    >
-                      {t("crm.sensoraFlow.rewriteSms")}
-                    </button>
-                  </div>
-
-                  <p className="mt-5 max-w-[68ch] text-[12px] leading-relaxed text-[#64748B]">{t("crm.sensoraFlow.appliedEditableHint")}</p>
-
-                  <div className="sticky bottom-1 z-[3] mt-6 flex flex-wrap gap-2 rounded-[14px] border border-[#E5E7EB] bg-[#FFFFFF]/96 px-3 py-3 shadow-[0_6px_24px_-12px_rgba(15,23,42,0.12)] backdrop-blur-sm">
-                    <button
-                      type="button"
-                      disabled={
-                        !selectedCustomerId || !flowDraftInsights || !flowDraftInsights.message.trim()
-                      }
-                      className="min-h-[44px] flex-1 touch-manipulation rounded-[12px] bg-[#111827] px-4 text-[13px] font-semibold text-white hover:bg-[#1F2937] disabled:cursor-not-allowed disabled:opacity-45 sm:flex-none"
-                      onClick={() => {
-                        const text = flowDraftInsights?.message.trim();
-                        if (!text || !selectedCustomerId) return;
-                        void copyToClipboard(text).then((ok) => {
-                          if (ok) showToast(t("crm.workspaceAi.smsCopyToast"));
-                          else showToast(t("crm.seasonCare.copyFail"));
-                        });
-                      }}
-                    >
-                      {t("crm.workspaceAi.copySms")}
-                    </button>
-                    <button
-                      type="button"
-                      disabled={!selectedCustomerId}
-                      className="min-h-[44px] flex-1 touch-manipulation rounded-[12px] border border-[#E5E7EB] bg-white px-4 text-[13px] font-semibold text-[#111827] hover:bg-[#F9FAFB] disabled:cursor-not-allowed disabled:opacity-45 sm:flex-none"
-                      onClick={() => {
-                        if (!selectedCustomerId) return;
-                        upsertCustomer({ id: selectedCustomerId, memo: workspaceAiMemoDraft });
-                        smsRewriteNonceRef.current = 0;
-                        const trimmed = workspaceAiMemoDraft.trim();
-                        setFlowDraftMemo(trimmed);
-                        setFlowDraftInsights(null);
-                        showToast(t("crm.workspaceAi.saveToast"));
-                      }}
-                    >
-                      {t("crm.workspaceAi.saveMemo")}
-                    </button>
-                    <button
-                      type="button"
-                      disabled={!selectedCustomerId || !flowDraftInsights?.nextAction?.trim()}
-                      className="min-h-[44px] flex-1 touch-manipulation rounded-[12px] border border-[#E5E7EB] bg-[#F3F4F6] px-4 text-[13px] font-semibold text-[#374151] ring-1 ring-inset ring-[#E5E7EB] hover:bg-[#E8EAED] disabled:cursor-not-allowed disabled:opacity-45 sm:flex-none"
-                      onClick={() => {
-                        if (!selectedCustomerId || !flowDraftInsights) return;
-                        const raw = flowDraftInsights.nextAction
-                          .split("\n")
-                          .map((ln) => ln.trim())
-                          .find((ln) => ln.length > 0);
-                        const line = raw?.replace(/^[-•*]\s*/, "") ?? t("crm.workspaceAi.followUpDefaultTitle");
-                        addNextAction(selectedCustomerId, line);
-                        showToast(t("crm.workspaceAi.followUpToast"));
-                      }}
-                    >
-                      {t("crm.workspaceAi.createFollowUp")}
-                    </button>
-                  </div>
-                </section>
+                <div className="rounded-[18px] border border-[#E5E7EB] bg-[#FAFBFC] px-4 py-3 shadow-[inset_0_0_0_1px_rgba(241,245,249,0.85)]">
+                  <p className="text-[12px] font-medium leading-relaxed text-[#64748B]">
+                    상담 메모 분석과 발송 문자 초안은 <span className="font-semibold text-[#475569]">Sensora AI 비서</span> 화면에서
+                    진행합니다. 메모는 고객 카드 또는 상담 메뉴에서 직접 수정합니다.
+                  </p>
+                  <button
+                    type="button"
+                    className="mt-3 min-h-[44px] rounded-xl bg-[#111827] px-4 py-2 text-[13px] font-semibold text-white touch-manipulation hover:bg-[#1F2937]"
+                    onClick={() => onActiveSectionChange("ai")}
+                  >
+                    AI 비서 열기
+                  </button>
+                </div>
 
                 <div className="flex flex-col gap-4">
           {selectedCustomer ? (
@@ -2794,7 +2766,25 @@ export function CRMApp({
                 </div>
               </section>
             </div>
-          ) : tab === "다음할일" ? (
+            </CustomersSection>
+          ) : showWorkspaceTabs && tab === "다음할일" ? (
+            <FollowUpSection>
+              <CrmMiniCalendar
+                customers={state.customers}
+                nextActions={state.nextActions}
+                events={state.events}
+                onPickCustomer={(id) => {
+                  setSelectedCustomerId(id);
+                  onActiveSectionChange("customers");
+                  setTab("고객");
+                  window.setTimeout(() => {
+                    document.getElementById("crm-detail-panel")?.scrollIntoView({
+                      behavior: "smooth",
+                      block: "start",
+                    });
+                  }, 50);
+                }}
+              />
             <div id="crm-workspace-next" className="space-y-6">
               <p className="text-[15px] leading-relaxed text-[#6B7280]">
                 선택한 고객과 무관하게 <span className="font-semibold text-[#374151]">모든 다음 연락</span>을 한눈에
@@ -2842,6 +2832,7 @@ export function CRMApp({
                             type="button"
                             onClick={() => {
                               setSelectedCustomerId(a.customerId);
+                              onActiveSectionChange("customers");
                               setTab("고객");
                             }}
                             className="w-full rounded-xl border border-[#E5E7EB] bg-[#FFFFFF] p-4 text-left text-[14px] transition hover:bg-[#F9FAFB]"
@@ -2883,6 +2874,7 @@ export function CRMApp({
                               className="mt-2 text-[13px] font-semibold text-[#475569] underline underline-offset-4 hover:text-[#111827]"
                               onClick={() => {
                                 setSelectedCustomerId(e.customerId!);
+                                onActiveSectionChange("customers");
                                 setTab("고객");
                               }}
                             >
@@ -2901,7 +2893,8 @@ export function CRMApp({
                 </div>
               </div>
             </div>
-          ) : tab === "일정" ? (
+            </FollowUpSection>
+          ) : showWorkspaceTabs && tab === "일정" ? (
             <div id="crm-workspace-events" className="space-y-4">
               <p className="text-[15px] leading-relaxed text-[#6B7280]">
                 모든 상담·출고 일정입니다. 카드를 누르면 해당 고객 화면으로 이동합니다.
@@ -2915,6 +2908,7 @@ export function CRMApp({
                     onClick={() => {
                       if (!e.customerId) return;
                       setSelectedCustomerId(e.customerId);
+                      onActiveSectionChange("customers");
                       setTab("고객");
                     }}
                     className="flex w-full flex-col rounded-2xl border border-[#E5E7EB] bg-[#FFFFFF] px-5 py-4 text-left transition hover:bg-[#F9FAFB] disabled:cursor-not-allowed disabled:opacity-60"
@@ -2937,7 +2931,7 @@ export function CRMApp({
                 ) : null}
               </div>
             </div>
-          ) : (
+          ) : showWorkspaceTabs && tab === "템플릿" ? (
             <div
               id="crm-block-templates"
               tabIndex={-1}
@@ -3199,7 +3193,7 @@ export function CRMApp({
                 ) : null}
               </div>
             </div>
-          )}
+          ) : null}
         </div>
       </div>
 
