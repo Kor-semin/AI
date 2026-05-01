@@ -21,7 +21,148 @@
 
 ---
 
-## 2. Sensora 내부 팀 역할 (요약)
+## 2. Sensora upper teams (상위 조직)
+
+**Sensora**는 **대표님 확정 기준**에 따라, **Sensora.Management** 아래 다섯 개의 **상위 팀**으로 운영됩니다.
+
+요청서에 **Development**, **ProductExperience**, **BrandGrowth**, **Operations**, **Risk**가 언급되면, 아래 포함 역할들의 원칙을 함께 적용합니다.
+
+### 조직 트리
+
+```
+대표
+└─ Sensora.Management
+   ├─ Sensora.Development
+   │  ├─ Sensora.DevGuide
+   │  ├─ Sensora.QA
+   │  └─ Sensora.Security
+   │
+   ├─ Sensora.ProductExperience
+   │  ├─ Sensora.Product
+   │  ├─ Sensora.Copy
+   │  ├─ Sensora.Design
+   │  └─ Sensora.QA
+   │
+   ├─ Sensora.BrandGrowth
+   │  ├─ Sensora.Brand
+   │  ├─ Sensora.Marketing
+   │  ├─ Sensora.Copy
+   │  └─ Sensora.imageAI
+   │
+   ├─ Sensora.Operations
+   │  ├─ Sensora.Finance
+   │  ├─ Sensora.Legal
+   │  ├─ Sensora.Marketing
+   │  └─ Sensora.Audit
+   │
+   └─ Sensora.Risk
+      ├─ Sensora.Audit
+      ├─ Sensora.Security
+      └─ Sensora.Legal
+```
+
+### Sensora.Development
+
+**Development**는 코드, QA 실행, 빌드, 커밋, 배포, 기술적 보안을 책임집니다.
+
+**포함 역할:** Sensora.DevGuide, Sensora.QA, Sensora.Security
+
+**주요 책임:**
+
+- 승인된 요청을 안전한 구현 계획으로 변환  
+- AGENTS.md 및 건드리지 말 파일 규칙 준수  
+- 코드 변경 시 `npm run build` 실행  
+- 기능별 커밋 분리 유지  
+- Vercel 배포 커밋 SHA 검증  
+- 구현 전 기술·보안 리스크 검토  
+
+### Sensora.ProductExperience
+
+**ProductExperience**는 웹·앱의 **실제 사용자 경험**을 책임집니다.
+
+**포함 역할:** Sensora.Product, Sensora.Copy, Sensora.Design, Sensora.QA
+
+**주요 책임:**
+
+- 제품 플로우·메뉴 구조  
+- 모바일 사용성  
+- 화면 명확성  
+- 한국 베타 사용자용 카피  
+- 버튼·카드·여백·타이포·사용성 점검  
+- 자동차 영업 현장 사용자가 이해하기 쉽게 쓰일 수 있는지 확인  
+
+### Sensora.BrandGrowth
+
+**BrandGrowth**는 브랜드·마케팅·대외 메시지·비주얼 자산을 책임집니다.
+
+**포함 역할:** Sensora.Brand, Sensora.Marketing, Sensora.Copy, Sensora.imageAI
+
+**주요 책임:**
+
+- 브랜드 톤  
+- 랜딩·베타 모집 문구  
+- 마케팅 이미지·설명 비주얼  
+- 블로그·Notion·발표 자료 등  
+- 과장된 AI 표현·저가형 스타트업 인상 지양 (**확정 로고/PWA/아이콘 변경은 별도 지시 시에만**)  
+
+### Sensora.Operations
+
+**Operations**는 사업 운영·재무·법무 준비·베타 운영·실무적 회사 계획을 책임집니다.
+
+**포함 역할:** Sensora.Finance, Sensora.Legal, Sensora.Marketing, Sensora.Audit
+
+**주요 책임:**
+
+- 예산·비용 계획  
+- 가족·투자자 설명 자료  
+- 베타 사용자 운영  
+- 가격·사업 계획  
+- 개인정보 처리방침·이용약관 준비 **지원**(법적 확정 문구는 전문가 검토 전제)  
+- 상표·특허·세무·법률 검토 준비, 필요 시 **전문가 검토 표시**  
+
+### Sensora.Risk
+
+**Risk**는 감사·보안·법적 리스크·개인정보·고객 데이터·배포 리스크를 책임집니다.
+
+**포함 역할:** Sensora.Audit, Sensora.Security, Sensora.Legal
+
+**주요 책임:**
+
+- 개인정보·보안 리스크 검토  
+- 고객 데이터 처리 방식 점검  
+- 자동 수집·자동 덮어쓰기로 **오인**될 표현·동작 방지  
+- 법률·상표·특허·정책 리스크 검토  
+- 위험한 카피·과장 검토  
+- 커밋·배포 리스크 점검  
+- 불안전한 요청 중단 또는 **더 안전한 대안** 제안  
+
+### 상위 팀 이름이 요청에 있을 때 (How to use upper teams)
+
+앞으로 Cursor 요청에는 상위 팀이 명시될 수 있습니다.
+
+**예시:**
+
+- 「**Development** 기준으로 구현해줘」  
+- 「**ProductExperience** 기준으로 모바일 UX를 점검해줘」  
+- 「**BrandGrowth** 기준으로 랜딩 문구를 정리해줘」  
+- 「**Operations** 기준으로 베타 운영 자료를 정리해줘」  
+- 「**Risk** 기준으로 개인정보와 보안 리스크를 먼저 봐줘」  
+
+**매핑:** 요청에 상위 팀이 있으면, **포함된 개별 역할**의 원칙을 함께 적용합니다.
+
+| 상위 팀 | 포함 관점 요약 |
+|---------|----------------|
+| Development | DevGuide · QA · Security 기준 준수 |
+| ProductExperience | Product · Copy · Design · QA |
+| BrandGrowth | Brand · Marketing · Copy · imageAI |
+| Operations | Finance · Legal · Marketing · Audit |
+| Risk | Audit · Security · Legal |
+
+일부 역할(QA·Copy·Marketing·Audit 등)은 **여러 상위 팀에 걸쳐** 있으므로, 요청 문맥과 우선순위를 함께 봅니다.
+
+---
+
+## 3. Sensora 내부 팀 역할 (요약)
 
 | 역할 | 관심사 |
 |------|--------|
@@ -42,7 +183,7 @@
 
 ---
 
-## 3. 공통 개발 원칙
+## 4. 공통 개발 원칙
 
 1. 작업 전 **`git status`** 확인  
 2. **관련 파일만** 수정 (무관한 리팩터·파일 혼입 금지)  
@@ -57,7 +198,7 @@
 
 ---
 
-## 4. 건드리지 말 파일 (기본)
+## 5. 건드리지 말 파일 (기본)
 
 다음은 **별도 지시가 없으면 수정하지 않습니다.**
 
@@ -70,7 +211,7 @@
 
 ---
 
-## 5. QA-only 요청 원칙
+## 6. QA-only 요청 원칙
 
 - **코드 수정 금지** — **보고만**  
 - **commit / push 금지**  
@@ -78,7 +219,7 @@
 
 ---
 
-## 6. Audit / Security 우선 검토
+## 7. Audit / Security 우선 검토
 
 - 개인정보·**주소록 가져오기**·**고객 메모**·**localStorage**·**Firestore**·**파일 업로드**는 **민감**하게 다룸  
 - **자동 수집**, **자동 덮어쓰기**, **AI가 대신 판단**하는 듯한 표현·동작 지양  
@@ -87,7 +228,7 @@
 
 ---
 
-## 7. Cursor 작업 완료 보고 형식
+## 8. Cursor 작업 완료 보고 형식
 
 작업 완료 후 아래 항목을 채워 보고합니다.
 
@@ -103,7 +244,7 @@
 
 ---
 
-## 8. 대표 URL
+## 9. 대표 URL
 
 | 용도 | URL |
 |------|-----|
@@ -114,7 +255,7 @@
 
 ---
 
-## 9. 참고 (Copy / Brand 톤)
+## 10. 참고 (Copy / Brand 톤)
 
 - 선호: 상담 내용 정리, **검토용 초안** 제안, 다음 행동 안내, **사용자·영업사원의 최종 판단**  
 - 지양: 「조용히 제안」, 「AI가 다 해줌」, 「완벽 자동화」, 「영업을 대신」, **Sales Concierge AI**, **B2B AI SaaS**, **후속관리** 등  
