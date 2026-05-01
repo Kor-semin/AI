@@ -42,11 +42,8 @@ type PreviewRow = {
   resolution: "add_new" | "skip" | "merge_memo";
 };
 
-const IMPORT_PRIVACY_POINTS = [
-  "Sensora는 사용자가 직접 선택한 연락처만 가져옵니다.",
-  "가져온 정보는 저장 전 사용자가 확인할 수 있습니다.",
-  "AI는 고객 정보를 임의로 수정하거나 덮어쓰지 않습니다.",
-] as const;
+const importGuideButtonClass =
+  "inline-flex min-h-[40px] w-full max-w-full touch-manipulation items-center justify-center rounded-xl border border-[#E2E8F0] bg-[#FFFFFF] px-3 py-2 text-[12px] font-semibold text-[#334155] shadow-[0_1px_2px_rgba(15,23,42,0.04)] hover:bg-[#F8FAFC] sm:w-auto sm:min-w-[12rem]";
 
 function tryParseImportRawText(text: string): NormalizedImportedContact[] {
   const t = text.trim();
@@ -321,28 +318,31 @@ export function ImportContactsPanel({
         </h2>
         <div className="mt-2 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-3 text-[12px] leading-relaxed text-[#475569]">
           <p className="font-semibold text-[#334155]">개인정보·연락처 처리 안내</p>
-          <ul className="mt-2 list-disc space-y-1.5 pl-5 text-[13px] text-[#475569]">
-            {IMPORT_PRIVACY_POINTS.map((line) => (
-              <li key={line}>{line}</li>
-            ))}
-          </ul>
-          <p className="mt-2 border-t border-[#E2E8F0] pt-2 text-[11px] text-[#64748B]">
-            붙여넣기·파일 업로드는 사용자가 직접 넣은 내용만 반영됩니다. 기존 고객 카드는 전화번호 동일 여부 등을 미리보기에서
-            확인한 뒤에만 병합·추가됩니다.
+          <p className="mt-2 text-[13px] leading-relaxed text-[#475569]">
+            iPhone, Google 연락처, Galaxy/Samsung 연락처에서 연락처 파일을 준비한 뒤 업로드할 수 있습니다.
+          </p>
+          <p className="mt-2 text-[13px] leading-relaxed text-[#334155]">
+            업로드한 연락처는 미리보기에서 확인한 뒤, 선택한 항목만 저장됩니다.
+          </p>
+          <p className="mt-2 text-[13px] leading-relaxed text-[#334155]">
+            Sensora는 고객 정보를 임의로 수집하거나 자동 저장하지 않습니다.
+          </p>
+          <p className="mt-2 border-t border-[#E2E8F0] pt-2 text-[11px] leading-snug text-[#64748B]">
+            붙여넣기·파일 업로드·휴대폰에서 선택하는 경우에도, 본인이 넣거나 고른 내용만 목록에 반영됩니다.
           </p>
         </div>
 
         {onOpenFileGuide ? (
-          <div className="mt-3">
+          <div className="mt-3 flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
             <button
               type="button"
-              className="min-h-[44px] w-full touch-manipulation rounded-xl border border-[#CBD5E1] bg-[#FFFFFF] px-4 py-2.5 text-[13px] font-semibold text-[#1E40AF] hover:bg-[#F8FAFC]"
+              className={importGuideButtonClass}
               onClick={(ev) => {
                 ev.stopPropagation();
                 onOpenFileGuide();
               }}
             >
-              연락처 파일 만드는 방법 보기
+              연락처 파일 준비 방법 보기
             </button>
           </div>
         ) : null}
@@ -392,13 +392,13 @@ export function ImportContactsPanel({
               {onOpenFileGuide ? (
                 <button
                   type="button"
-                  className="min-h-[40px] w-full max-w-[100%] touch-manipulation text-left text-[13px] font-semibold text-[#2563EB] underline decoration-[#BFDBFE] underline-offset-2 hover:text-[#1D4ED8]"
+                  className="min-h-[40px] max-w-full touch-manipulation text-left text-[12px] font-semibold text-[#334155] underline decoration-[#CBD5E1] underline-offset-2 hover:text-[#0F172A]"
                   onClick={(ev) => {
                     ev.stopPropagation();
                     onOpenFileGuide();
                   }}
                 >
-                  연락처 파일 만드는 방법 보기
+                  연락처 파일 준비 방법 보기
                 </button>
               ) : null}
               <textarea
@@ -428,13 +428,13 @@ export function ImportContactsPanel({
               {onOpenFileGuide ? (
                 <button
                   type="button"
-                  className="min-h-[40px] w-full max-w-[100%] touch-manipulation text-left text-[13px] font-semibold text-[#2563EB] underline decoration-[#BFDBFE] underline-offset-2 hover:text-[#1D4ED8]"
+                  className="min-h-[40px] max-w-full touch-manipulation text-left text-[12px] font-semibold text-[#334155] underline decoration-[#CBD5E1] underline-offset-2 hover:text-[#0F172A]"
                   onClick={(ev) => {
                     ev.stopPropagation();
                     onOpenFileGuide();
                   }}
                 >
-                  연락처 파일 만드는 방법 보기
+                  연락처 파일 준비 방법 보기
                 </button>
               ) : null}
               <button

@@ -3,10 +3,16 @@
 import { useEffect } from "react";
 
 const COMMON_LINES = [
-  "Sensora는 CSV 또는 VCF 연락처 파일을 지원합니다.",
-  "업로드한 연락처는 바로 저장되지 않으며, 저장 전 미리보기에서 확인할 수 있습니다.",
-  "선택한 고객만 저장할 수 있습니다.",
-  "기존 고객 정보는 자동으로 덮어쓰지 않습니다.",
+  "CSV와 vCard(.vcf) 형식 파일을 업로드하거나, 같은 내용을 붙여넣어 목록에 넣을 수 있습니다.",
+  "전화번호가 같은 기존 고객은 미리보기에서 표시합니다. 새로 만들지 않거나 메모만 이어 붙일 수 있습니다.",
+] as const;
+
+const QUICK_DEVICE_NOTES = [
+  "iPhone: iCloud 연락처 또는 Mac 연락처 앱에서 vCard로 내보낼 수 있습니다.",
+  "Google 연락처: contacts.google.com에서 CSV 또는 vCard로 내보낼 수 있습니다.",
+  "Galaxy/Samsung: 연락처 앱의 내보내기 기능을 사용해 vCard 파일을 만들 수 있습니다.",
+  "업로드 전 이름·전화번호·중복 연락처를 한 번 둘러봐 주세요.",
+  "저장 전 미리보기에서 필요한 연락처만 골라 저장합니다.",
 ] as const;
 
 const accordionClass =
@@ -57,7 +63,7 @@ export function ContactImportFileGuideModal({
       >
         <div className="flex flex-wrap items-start justify-between gap-3 border-b border-[#E5E7EB] pb-4">
           <h2 id="contact-file-guide-title" className="text-[17px] font-bold tracking-tight text-[#111827]">
-            연락처 파일 만드는 방법
+            연락처 파일 준비 방법
           </h2>
           <button
             type="button"
@@ -67,6 +73,13 @@ export function ContactImportFileGuideModal({
             닫기
           </button>
         </div>
+
+        <p className="mt-4 text-[12px] font-semibold text-[#334155]">기기별로 파일을 만드는 요약</p>
+        <ul className="mt-2 list-disc space-y-1.5 pl-5 text-[13px] leading-relaxed text-[#475569]">
+          {QUICK_DEVICE_NOTES.map((line) => (
+            <li key={line}>{line}</li>
+          ))}
+        </ul>
 
         <ul className="mt-4 list-disc space-y-2 pl-5 text-[13px] leading-relaxed text-[#475569]">
           {COMMON_LINES.map((line) => (
