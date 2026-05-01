@@ -184,6 +184,94 @@ function clampText(s: string, n = 80) {
   return `${t.slice(0, n)}…`;
 }
 
+/** 검색·바로가기 매칭용: 소문자 + 공백 제거 */
+function normalizeSearchFold(s: string): string {
+  return (s ?? "").toLowerCase().replace(/\s+/g, "");
+}
+
+/** 목록용 연락처 마스킹(뒤 자리 가림) */
+function maskPhoneForSearchList(phone?: string): string {
+  const raw = (phone ?? "").replace(/[^\d+]/g, "");
+  if (!raw) return "—";
+  const d = raw.replace(/^\+82/, "0").replace(/\D/g, "");
+  if (d.length >= 10) return `${d.slice(0, 3)}-${d.slice(3, 7)}-****`;
+  if (d.length >= 7) return `${d.slice(0, 3)}-${d.slice(3)}-**`;
+  if (d.length >= 4) return `${d.slice(0, 3)}-**`;
+  return `${d.slice(0, Math.min(3, d.length))}***`;
+}
+
+type CrmSearchFeatureId =
+  | "ai-assistant"
+  | "create-customer"
+  | "season-care"
+  | "delivery"
+  | "followup"
+  | "customer-list";
+
+const CRM_SEARCH_FEATURES: {
+  id: CrmSearchFeatureId;
+  title: string;
+  subtitle: string;
+  keywords: string[];
+}[] = [
+  {
+    id: "ai-assistant",
+    title: "Sensora AI 비서로 이동",
+    subtitle: "상담 메모를 정리하고 고객 발송 문구를 제안합니다.",
+    keywords: [
+      "AI비서",
+      "sensora ai 비서",
+      "sensora ai",
+      "AI 비서",
+      "에이아이",
+      "비서",
+      "상담정리",
+      "상담 정리",
+      "상담메모",
+      "AI",
+    ],
+  },
+  {
+    id: "create-customer",
+    title: "새 고객 추가",
+    subtitle: "새 고객 정보를 입력합니다.",
+    keywords: ["고객추가", "고객 추가", "신규고객", "신규 고객", "고객등록", "고객 등록"],
+  },
+  {
+    id: "season-care",
+    title: "시즌 케어 메시지",
+    subtitle: "계절·상황별 고객 연락 문구를 준비합니다.",
+    keywords: ["시즌케어", "시즌 케어", "시즌", "계절문자", "계절 문자"],
+  },
+  {
+    id: "delivery",
+    title: "출고 안내",
+    subtitle: "출고 준비·인도 정보를 확인합니다.",
+    keywords: ["출고", "출고안내", "출고 안내", "차량인도", "차량 인도"],
+  },
+  {
+    id: "followup",
+    title: "다음 연락 · 후속 액션",
+    subtitle: "고객 카드에서 후속 일정과 할 일을 이어서 관리합니다.",
+    keywords: ["후속", "다음연락", "다음 연락", "연락"],
+  },
+  {
+    id: "customer-list",
+    title: "고객 목록으로 이동",
+    subtitle: "등록된 고객표를 확인합니다.",
+    keywords: ["고객 목록", "고객목록", "목록", "고객리스트"],
+  },
+];
+
+function crmFeatureMatchesQuery(normQuery: string, keywords: string[]): boolean {
+  if (normQuery.length < 2) return false;
+  return keywords.some((kw) => {
+    const nk = normalizeSearchFold(kw);
+    if (!nk) return false;
+    return nk.includes(normQuery) || normQuery.includes(nk);
+  });
+}
+
 function downloadText(filename: string, text: string) {
   const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
   const url = URL.createObjectURL(blob);
@@ -253,7 +341,8 @@ export function CRMApp({
   // uid=null means local-only mode.
   const [state, setState] = useState<CRMState>(() => emptyState());
   const [selectedCustomerId, setSelectedCustomerId] = useState<string | null>(null);
-  const [query, setQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchOpen, setSearchOpen] = useState(false);
   const [tab, setTab] = useState<"고객" | "다음할일" | "일정" | "템플릿">("고객");
   const didHydrateRef = useRef(false);
   const [sync, setSync] = useState<SyncStatus>({ mode: uid ? "cloud" : "local", status: "idle" });
@@ -261,9 +350,10 @@ export function CRMApp({
   /** Firestore 에코 전 onSnapshot 덮어쓰기에 낙관적으로 추가된 고객 행 유지 */
   const pendingCustomerCreatesRef = useRef<Set<string>>(new Set());
 
-  const SEARCH_SHORTCUT_HINT = "(Ctrl+K)";
+  const SEARCH_SHORTCUT_HINT = "Ctrl+K";
   const SELLER_NICK_KEY = "crm.sellerNickname";
   const searchInputRef = useRef<HTMLInputElement | null>(null);
+  const crmSearchWrapRef = useRef<HTMLDivElement | null>(null);
   /** 문자 템플릿 `{내이름}` : 로컬 입력이 있으면 우선 */
   const [sellerNickname, setSellerNickname] = useState("");
   const [contactSyncOpen, setContactSyncOpen] = useState(false);
@@ -418,8 +508,12 @@ export function CRMApp({
           return;
         }
         e.preventDefault();
-        searchInputRef.current?.focus();
-        searchInputRef.current?.select();
+        const inp = searchInputRef.current;
+        inp?.focus();
+        inp?.select();
+        window.setTimeout(() => {
+          if (inp && normalizeSearchFold(inp.value).length >= 1) setSearchOpen(true);
+        }, 0);
       }
     }
     window.addEventListener("keydown", onKey);
@@ -586,16 +680,53 @@ export function CRMApp({
   }, [state.customers]);
 
   const customersFiltered = useMemo(() => {
-    const q = query.trim().toLowerCase();
     const list = [...state.customers].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
-    if (!q) return list;
+    const nq = normalizeSearchFold(searchQuery);
+    if (!nq) return list;
     return list.filter((c) => {
-      const hay = `${c.name} ${c.phone ?? ""} ${c.email ?? ""} ${c.vehicleBrand ?? ""} ${
-        c.interestedModel ?? ""
-      } ${c.compareVehicles ?? ""} ${c.purchaseTiming ?? ""} ${c.memo ?? ""} ${c.personalityMemo ?? ""} ${c.leadSource} ${c.stage}`.toLowerCase();
-      return hay.includes(q);
+      const hay = normalizeSearchFold(
+        `${c.name} ${c.phone ?? ""} ${c.vehicleBrand ?? ""} ${c.interestedModel ?? ""} ${c.memo ?? ""} ${c.leadSource} ${c.stage}`,
+      );
+      return hay.includes(nq);
     });
-  }, [query, state.customers]);
+  }, [searchQuery, state.customers]);
+
+  const customerSearchResults = useMemo(() => customersFiltered.slice(0, 5), [customersFiltered]);
+
+  const featureSearchResults = useMemo(() => {
+    const nq = normalizeSearchFold(searchQuery);
+    if (nq.length < 2) return [];
+    const hits = CRM_SEARCH_FEATURES.filter((f) => crmFeatureMatchesQuery(nq, f.keywords));
+    return hits.slice(0, 5);
+  }, [searchQuery]);
+
+  useEffect(() => {
+    function onMouseDown(ev: MouseEvent) {
+      const wrap = crmSearchWrapRef.current;
+      if (!wrap || !searchOpen) return;
+      const target = ev.target;
+      if (target instanceof Node && wrap.contains(target)) return;
+      setSearchOpen(false);
+    }
+    document.addEventListener("mousedown", onMouseDown);
+    return () => document.removeEventListener("mousedown", onMouseDown);
+  }, [searchOpen]);
+
+  useEffect(() => {
+    function onEsc(e: KeyboardEvent) {
+      if (e.key !== "Escape") return;
+      if (createCustomerOpen) return;
+      if (!searchOpen) return;
+      e.preventDefault();
+      setSearchOpen(false);
+    }
+    window.addEventListener("keydown", onEsc);
+    return () => window.removeEventListener("keydown", onEsc);
+  }, [searchOpen, createCustomerOpen]);
+
+  useEffect(() => {
+    if (createCustomerOpen) setSearchOpen(false);
+  }, [createCustomerOpen]);
 
   const selectedCustomer = useMemo(
     () => state.customers.find((c) => c.id === selectedCustomerId) ?? null,
@@ -762,6 +893,104 @@ export function CRMApp({
   function openCreateCustomerModal() {
     setCreateCustomerDraft({ ...CREATE_CUSTOMER_INITIAL });
     setCreateCustomerOpen(true);
+  }
+
+  function handleSelectCustomerSearchResult(customerId: string) {
+    setSearchQuery("");
+    setSearchOpen(false);
+    setSelectedCustomerId(customerId);
+    setTab("고객");
+    window.setTimeout(() => {
+      document.getElementById("crm-detail-panel")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 60);
+  }
+
+  function handleOpenAiAssistantFromSearch() {
+    setSearchQuery("");
+    setSearchOpen(false);
+    setTab("고객");
+    window.setTimeout(() => {
+      document.getElementById("crm-ai-assistant")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 60);
+  }
+
+  function handleOpenCreateCustomerFromSearch() {
+    setSearchQuery("");
+    setSearchOpen(false);
+    openCreateCustomerModal();
+  }
+
+  function handleOpenSeasonCareFromSearch() {
+    setSearchQuery("");
+    setSearchOpen(false);
+    setTab("템플릿");
+    window.setTimeout(() => {
+      document.getElementById("season-care")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 60);
+  }
+
+  function handleOpenDeliveryGuideFromSearch() {
+    setSearchQuery("");
+    setSearchOpen(false);
+    setTab("고객");
+    window.setTimeout(() => {
+      if (selectedCustomerId) {
+        setDeliveryGuideOpen(true);
+        document.getElementById("crm-detail-header")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      } else {
+        document.getElementById("crm-detail-header")?.scrollIntoView({ behavior: "smooth", block: "start" });
+        showToast("출고 안내를 열려면 고객을 먼저 선택해 주세요.");
+      }
+    }, 60);
+  }
+
+  function handleOpenFollowupFromSearch() {
+    setSearchQuery("");
+    setSearchOpen(false);
+    setTab("고객");
+    window.setTimeout(() => {
+      const next = document.getElementById("crm-block-next");
+      if (next) {
+        next.scrollIntoView({ behavior: "smooth", block: "start" });
+      } else {
+        document.getElementById("crm-customer-table")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+      if (!selectedCustomerId) showToast("고객을 선택하면 후속 연락을 바로 작성할 수 있어요.");
+    }, 60);
+  }
+
+  function handleOpenCustomerListFromSearch() {
+    setSearchQuery("");
+    setSearchOpen(false);
+    setTab("고객");
+    window.setTimeout(() => {
+      document.getElementById("crm-customer-table")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 60);
+  }
+
+  function activateSearchFeature(id: CrmSearchFeatureId) {
+    switch (id) {
+      case "ai-assistant":
+        handleOpenAiAssistantFromSearch();
+        break;
+      case "create-customer":
+        handleOpenCreateCustomerFromSearch();
+        break;
+      case "season-care":
+        handleOpenSeasonCareFromSearch();
+        break;
+      case "delivery":
+        handleOpenDeliveryGuideFromSearch();
+        break;
+      case "followup":
+        handleOpenFollowupFromSearch();
+        break;
+      case "customer-list":
+        handleOpenCustomerListFromSearch();
+        break;
+      default:
+        break;
+    }
   }
 
   function closeCreateCustomerModal() {
@@ -1085,17 +1314,111 @@ export function CRMApp({
               </p>
             </div>
             <div className="flex w-full min-w-0 flex-col gap-3 sm:flex-row sm:items-stretch lg:max-w-[540px]">
-              <label className="min-w-0 flex-1">
-                <span className="sr-only">{t("common.search")}</span>
-                <input
-                  ref={searchInputRef}
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  placeholder={`이름 · 연락처 · 차종 · 메모 (${SEARCH_SHORTCUT_HINT})`}
-                  title="어디서나 Ctrl+K (⌘K) 로 포커스"
-                  className="min-h-[44px] w-full rounded-[20px] border border-[#E5E7EB] bg-[#FFFFFF] px-4 py-3 text-[15px] text-[#111827] outline-none transition focus:border-[#94A3B8] focus:ring-2 focus:ring-[#CBD5E1]/65"
-                />
-              </label>
+              <div ref={crmSearchWrapRef} className="relative min-w-0 flex-1">
+                <label className="block min-w-0">
+                  <span className="sr-only">고객·기능 통합 검색</span>
+                  <input
+                    ref={searchInputRef}
+                    type="search"
+                    autoComplete="off"
+                    autoCorrect="off"
+                    spellCheck={false}
+                    value={searchQuery}
+                    onChange={(e) => {
+                      const v = e.target.value;
+                      setSearchQuery(v);
+                      setSearchOpen(normalizeSearchFold(v).length >= 1);
+                    }}
+                    onFocus={() => {
+                      if (normalizeSearchFold(searchQuery).length >= 1) setSearchOpen(true);
+                    }}
+                    placeholder={`고객명, 차량, AI비서, 시즌케어를 검색하세요 (${SEARCH_SHORTCUT_HINT})`}
+                    title="어디서나 Ctrl+K (⌘K)로 포커스"
+                    role="combobox"
+                    aria-expanded={
+                      searchOpen && normalizeSearchFold(searchQuery).length >= 1
+                    }
+                    aria-controls="crm-unified-search-results"
+                    aria-autocomplete="list"
+                    className="min-h-[44px] w-full rounded-[20px] border border-[#E5E7EB] bg-[#FFFFFF] px-4 py-3 text-[15px] text-[#111827] outline-none transition focus:border-[#94A3B8] focus:ring-2 focus:ring-[#CBD5E1]/65"
+                  />
+                </label>
+                {searchOpen && normalizeSearchFold(searchQuery).length >= 1 ? (
+                  <div
+                    id="crm-unified-search-results"
+                    role="listbox"
+                    className="pointer-events-auto absolute left-0 right-0 top-[calc(100%+4px)] z-50 flex max-h-[min(440px,calc(100vh-7rem))] flex-col overflow-hidden rounded-[18px] border border-[#E5E7EB] bg-[#FFFFFF] shadow-[0_12px_40px_-12px_rgba(15,23,42,0.2)] sm:max-h-[min(480px,calc(100vh-6rem))]"
+                  >
+                    <div className="max-h-[min(440px,calc(100vh-7rem))] overflow-y-auto overscroll-contain px-1 py-2 sm:max-h-[min(480px,calc(100vh-6rem))]">
+                      {customerSearchResults.length === 0 && featureSearchResults.length === 0 ? (
+                        <p className="px-4 py-8 text-center text-[14px] leading-relaxed text-[#64748B]">
+                          고객명 또는 기능명을 입력해 주세요.
+                        </p>
+                      ) : (
+                        <>
+                          {customerSearchResults.length > 0 ? (
+                            <div className="pb-2">
+                              <div className="px-3 pb-1 pt-1 text-[11px] font-bold uppercase tracking-wider text-[#94A3B8]">
+                                고객
+                              </div>
+                              <ul className="space-y-0.5">
+                                {customerSearchResults.map((c) => {
+                                  const vehicle =
+                                    [c.vehicleBrand, c.interestedModel].filter(Boolean).join(" ").trim() ||
+                                    "—";
+                                  return (
+                                    <li key={c.id}>
+                                      <button
+                                        type="button"
+                                        role="option"
+                                        className="w-full rounded-[14px] px-3 py-2.5 text-left text-[15px] font-semibold leading-snug text-[#111827] transition hover:bg-[#F1F5F9]"
+                                        onMouseDown={(e) => e.preventDefault()}
+                                        onClick={() => handleSelectCustomerSearchResult(c.id)}
+                                      >
+                                        <span className="text-[#64748B]">[고객]</span> {c.name} · {vehicle} ·{" "}
+                                        <span className="font-medium text-[#475569]">
+                                          {maskPhoneForSearchList(c.phone)}
+                                        </span>
+                                      </button>
+                                    </li>
+                                  );
+                                })}
+                              </ul>
+                            </div>
+                          ) : null}
+                          {featureSearchResults.length > 0 ? (
+                            <div className={customerSearchResults.length > 0 ? "border-t border-[#F1F5F9] pt-2" : ""}>
+                              <div className="px-3 pb-1 pt-1 text-[11px] font-bold uppercase tracking-wider text-[#94A3B8]">
+                                바로가기
+                              </div>
+                              <ul className="space-y-0.5">
+                                {featureSearchResults.map((f) => (
+                                  <li key={f.id}>
+                                    <button
+                                      type="button"
+                                      role="option"
+                                      className="flex w-full flex-col rounded-[14px] px-3 py-2.5 text-left transition hover:bg-[#F1F5F9]"
+                                      onMouseDown={(e) => e.preventDefault()}
+                                      onClick={() => activateSearchFeature(f.id)}
+                                    >
+                                      <span className="text-[15px] font-semibold leading-snug text-[#111827]">
+                                        <span className="text-[#64748B]">[바로가기]</span> {f.title}
+                                      </span>
+                                      <span className="mt-1 text-[13px] leading-relaxed text-[#64748B]">
+                                        {f.subtitle}
+                                      </span>
+                                    </button>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          ) : null}
+                        </>
+                      )}
+                    </div>
+                  </div>
+                ) : null}
+              </div>
               <button
                 type="button"
                 className="min-h-[44px] shrink-0 rounded-[20px] bg-[#111827] px-5 py-3 text-[15px] font-semibold text-white shadow-sm transition hover:bg-[#1F2937] focus:outline-none focus:ring-2 focus:ring-[#94A3B8] sm:w-auto sm:whitespace-nowrap touch-manipulation"
@@ -2567,8 +2890,9 @@ export function CRMApp({
               </div>
 
               <section
+                id="season-care"
                 aria-labelledby="season-care-title"
-                className="mt-8 rounded-[22px] border border-[#E5E7EB] bg-[#FAFBFC] p-5 sm:p-6"
+                className="mt-8 scroll-mt-28 rounded-[22px] border border-[#E5E7EB] bg-[#FAFBFC] p-5 sm:p-6"
               >
                 <header className="border-b border-[#E5E7EB] pb-4">
                   <h3 id="season-care-title" className="text-[17px] font-semibold tracking-[-0.01em] text-[#111827]">
