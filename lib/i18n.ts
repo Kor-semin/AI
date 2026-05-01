@@ -110,6 +110,17 @@ export type TranslationKey =
   | "crm.workspaceAi.smsCopyToast"
   | "crm.workspaceAi.followUpDefaultTitle"
   | "crm.workspaceAi.analyzing"
+  | "crm.sensoraFlow.banner"
+  | "crm.sensoraFlow.memoUserEditableHint"
+  | "crm.sensoraFlow.memoStaleHint"
+  | "crm.sensoraFlow.toneHintsReanalyze"
+  | "crm.sensoraFlow.aiSuggestionBadge"
+  | "crm.sensoraFlow.appliedEditableHint"
+  | "crm.sensoraFlow.previewEmptyHint"
+  | "crm.sensoraFlow.needMemoForAnalyze"
+  | "crm.sensoraFlow.analyzeAgain"
+  | "crm.sensoraFlow.newProposal"
+  | "crm.sensoraFlow.rewriteSms"
   | "common.copy"
   | "common.save"
   | "common.reset"
@@ -338,7 +349,8 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.section.eventsPreview": "일정 미리보기",
     "crm.section.templates": "문자 템플릿",
     "crm.workspaceAi.title": "AI 비서 (작업)",
-    "crm.workspaceAi.subtitle": "메모 기준으로 초안을 만들고, 저장·복사·후속 연락까지 한 패널에서 처리합니다.",
+    "crm.workspaceAi.subtitle":
+      "Sensora Flow: 명시 버튼에서만 새 제안이 만들어지고 저장된 CRM 필드와 섞이지 않습니다. 저장·복사·후속은 원하는 항목만 적용하세요.",
     "crm.workspaceAi.customerPickLabel": "고객",
     "crm.workspaceAi.selectPlaceholder": "고객을 선택해 주세요",
     "crm.workspaceAi.pickCustomer": "워크플로를 시작하려면 고객을 선택하거나 새로 추가하세요.",
@@ -355,6 +367,19 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.workspaceAi.smsCopyToast": "문자 초안을 복사했습니다.",
     "crm.workspaceAi.followUpDefaultTitle": "다음 연락",
     "crm.workspaceAi.analyzing": "정리 중…",
+    "crm.sensoraFlow.banner":
+      "Sensora Flow · AI 제안은 미리보기일 뿐이며 저장된 CRM 데이터와 분리되어 있습니다. AI는 명시 버튼(다시 분석·문자 다시 작성)을 눌렀을 때만 새 제안을 만듭니다. 메모 수정 중에는 자동 재분석·자동 덮어쓰기를 하지 않습니다.",
+    "crm.sensoraFlow.memoUserEditableHint": "저장 후 고객 상세에서 언제든 직접 수정 가능합니다.",
+    "crm.sensoraFlow.memoStaleHint": "메모가 마지막 분석본과 다릅니다. 제안 맞춤을 위해 「다시 분석」 또는 「제안 새로 만들기」를 눌러 주세요.",
+    "crm.sensoraFlow.toneHintsReanalyze": "문구 톤을 바꾼 경우에도 새 제안을 보려면 분석 버튼이 필요합니다.",
+    "crm.sensoraFlow.aiSuggestionBadge": "AI 제안",
+    "crm.sensoraFlow.appliedEditableHint":
+      "적용되어 CRM에 들어 간 메모·다음 행동·발송 문자는 같은 화면·고객 상세에서 직접 고칩니다. 수정 중 AI가 자동으로 끼어들지 않습니다.",
+    "crm.sensoraFlow.previewEmptyHint": "아래에서 「다시 분석」 또는 「제안 새로 만들기」로 제안 카드를 채워 주세요.",
+    "crm.sensoraFlow.needMemoForAnalyze": "메모 내용을 먼저 입력해 주세요.",
+    "crm.sensoraFlow.analyzeAgain": "다시 분석",
+    "crm.sensoraFlow.newProposal": "제안 새로 만들기",
+    "crm.sensoraFlow.rewriteSms": "문자 다시 작성",
     "common.copy": "복사",
     "common.save": "저장",
     "common.reset": "초기화",
@@ -598,7 +623,8 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.section.eventsPreview": "Schedule Preview",
     "crm.section.templates": "Message Templates",
     "crm.workspaceAi.title": "AI assistant (workspace)",
-    "crm.workspaceAi.subtitle": "Draft from your memo, then copy, save, or create a follow-up in one panel.",
+    "crm.workspaceAi.subtitle":
+      "Sensora Flow: proposals refresh only via explicit buttons. CRM rows stay untouched until you copy, save, or add follow-ups deliberately.",
     "crm.workspaceAi.customerPickLabel": "Customer",
     "crm.workspaceAi.selectPlaceholder": "Select a customer",
     "crm.workspaceAi.pickCustomer": "Select or add a customer to begin.",
@@ -615,6 +641,19 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.workspaceAi.smsCopyToast": "Message copied.",
     "crm.workspaceAi.followUpDefaultTitle": "Follow-up",
     "crm.workspaceAi.analyzing": "Working…",
+    "crm.sensoraFlow.banner":
+      "Sensora Flow · AI output is preview-only—separate from stored CRM rows. Sensora proposes again only after explicit actions (analyze again · rewrite SMS). While you edit memo text there is no auto re‑analysis or auto‑overwrite.",
+    "crm.sensoraFlow.memoUserEditableHint": "After saving, edit anytime in customer details.",
+    "crm.sensoraFlow.memoStaleHint": "Memo changed since last analysis · choose “Analyze again” or “New proposal”.",
+    "crm.sensoraFlow.toneHintsReanalyze": "Tone changes apply on the next explicit analysis.",
+    "crm.sensoraFlow.aiSuggestionBadge": "AI proposal",
+    "crm.sensoraFlow.appliedEditableHint":
+      "Anything applied to memo, follow-ups, or SMS lives as normal CRM data—edit freely on this workspace or detail views; AI never silently overwrites.",
+    "crm.sensoraFlow.previewEmptyHint": "Use Analyze again or New proposal to populate suggestion cards.",
+    "crm.sensoraFlow.needMemoForAnalyze": "Add memo text before asking for proposals.",
+    "crm.sensoraFlow.analyzeAgain": "Analyze again",
+    "crm.sensoraFlow.newProposal": "Fresh proposal",
+    "crm.sensoraFlow.rewriteSms": "Rewrite SMS draft",
     "common.copy": "Copy",
     "common.save": "Save",
     "common.reset": "Reset",

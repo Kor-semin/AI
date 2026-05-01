@@ -53,6 +53,7 @@ import { getMemoFeedback } from "./memoFeedback";
 import {
   formatCareNeedsGuideTopicsUi,
   generateDemoConsultingResponse,
+  type DemoConsultingResponse,
   type DemoSalesStyle,
 } from "@/app/components/concierge/aiDemoResponse";
 import { makeId, seedState } from "./seed";
@@ -86,6 +87,10 @@ const WORKSPACE_AI_STYLE_KEYS: Record<DemoSalesStyle, TranslationKey> = {
   active: "landing.aiDemo.salesStyle.active",
 };
 const WORKSPACE_AI_STYLE_ORDER: DemoSalesStyle[] = ["polite", "simple", "premium", "friendly", "active"];
+
+/** Sensora Flow · 미리보기 카드 헤더용 “AI 제안” 배지 */
+const SENSORA_FLOW_AI_BADGE =
+  "inline-flex shrink-0 items-center rounded-full bg-[#E8EDF4] px-2 py-[2px] text-[10px] font-semibold uppercase tracking-[0.1em] text-[#475569]";
 
 const PAYMENT_TYPE_OPTIONS: PaymentType[] = ["현금", "할부", "리스", "장기렌트"];
 const ACCIDENT_OPTIONS: UsedCarAccident[] = ["무사고", "단순교환", "사고", "미상"];
@@ -263,9 +268,16 @@ export function CRMApp({
   const [seasonCareJobTitle, setSeasonCareJobTitle] = useState("");
   const [seasonCareOutput, setSeasonCareOutput] = useState("");
   const [workspaceAiMemoDraft, setWorkspaceAiMemoDraft] = useState("");
-  const [workspaceAiDebounced, setWorkspaceAiDebounced] = useState("");
+  /** 분석 버튼이 마지막으로 참조한 메모 스냅샷(Sensora Flow · flowDraft). 입력 중 자동 변경 없음 */
+  const [flowDraftMemo, setFlowDraftMemo] = useState("");
+  /** generateDemoConsultingResponse 결과 캐시 — 저장으로 CRM 필드 자동 변경 없음 */
+  const [flowDraftInsights, setFlowDraftInsights] = useState<DemoConsultingResponse | null>(null);
   const [workspaceAiBusy, setWorkspaceAiBusy] = useState(false);
   const [workspaceSalesStyle, setWorkspaceSalesStyle] = useState<DemoSalesStyle>("polite");
+  /** 고객 전환 시 generate에 최신 스타일 주입(disabled ESLint 고객 id 전용 이펙트) */
+  const workspaceSalesStyleRef = useRef(workspaceSalesStyle);
+  workspaceSalesStyleRef.current = workspaceSalesStyle;
+  const smsRewriteNonceRef = useRef(0);
 
   const TAB_LABELS: Record<typeof tab, string> = {
     고객: t("crm.tab.customers"),
@@ -291,6 +303,54 @@ export function CRMApp({
     window.setTimeout(() => {
       setToast((prev) => (prev === msg ? null : prev));
     }, 1500);
+  }
+
+  /** Sensora Flow: 명시적 분석 클릭 시에만 flowDraft 업데이트 (입력 중 자동 재분석 없음) */
+  function runSensoraFlowAnalyzeOrRefresh() {
+    if (!selectedCustomerId) return;
+    const snap = workspaceAiMemoDraft.trim();
+    if (!snap) {
+      showToast(t("crm.sensoraFlow.needMemoForAnalyze"));
+      return;
+    }
+    setWorkspaceAiBusy(true);
+    smsRewriteNonceRef.current = 0;
+    window.setTimeout(() => {
+      setFlowDraftMemo(snap);
+      setFlowDraftInsights(
+        generateDemoConsultingResponse(snap, {
+          salesStyle: workspaceSalesStyle,
+        }),
+      );
+      window.setTimeout(() => setWorkspaceAiBusy(false), 220);
+    }, 0);
+  }
+
+  /** 문자 초안만 다시 채우기(de·규칙 엔진: snapshot에 nonce를 붙여 재계산 후 message만 교체). */
+  function runSensoraFlowRewriteSmsDraft() {
+    if (!selectedCustomerId) return;
+    const snapshot = flowDraftMemo.trim();
+    if (!snapshot) {
+      showToast(t("crm.sensoraFlow.needMemoForAnalyze"));
+      return;
+    }
+    if (!flowDraftInsights) {
+      runSensoraFlowAnalyzeOrRefresh();
+      return;
+    }
+    setWorkspaceAiBusy(true);
+    smsRewriteNonceRef.current += 1;
+    const salt = "\u2060".repeat(smsRewriteNonceRef.current);
+    window.setTimeout(() => {
+      const fresh = generateDemoConsultingResponse(`${snapshot}${salt}`, {
+        salesStyle: workspaceSalesStyle,
+      });
+      setFlowDraftInsights((prev) => {
+        if (!prev) return fresh;
+        return { summary: prev.summary, nextAction: prev.nextAction, message: fresh.message };
+      });
+      window.setTimeout(() => setWorkspaceAiBusy(false), 220);
+    }, 0);
   }
 
   function resetSeasonCareForm() {
@@ -517,42 +577,38 @@ export function CRMApp({
 
   useEffect(() => {
     setWorkspaceAiBusy(false);
+    smsRewriteNonceRef.current = 0;
     if (!selectedCustomerId) {
       setWorkspaceAiMemoDraft("");
-      setWorkspaceAiDebounced("");
+      setFlowDraftMemo("");
+      setFlowDraftInsights(null);
       return;
     }
     const c = state.customers.find((row) => row.id === selectedCustomerId);
     const m = c?.memo ?? "";
+    const trimmed = m.trim();
     setWorkspaceAiMemoDraft(m);
-    setWorkspaceAiDebounced(m);
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- 초기 선택 시점의 메모만 불러오기(편집 중 덮어쓰기 방지)
+    setFlowDraftMemo(trimmed);
+    setFlowDraftInsights(
+      trimmed
+        ? generateDemoConsultingResponse(m, {
+            salesStyle: workspaceSalesStyleRef.current,
+          })
+        : null,
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- 고객 전환 시점만 동기화(타이핑 중 재분석·덮어쓰기 방지)
   }, [selectedCustomerId]);
 
-  useEffect(() => {
-    if (!selectedCustomerId) return;
-    setWorkspaceAiBusy(true);
-    let t2: number | undefined;
-    const t1 = window.setTimeout(() => {
-      setWorkspaceAiDebounced(workspaceAiMemoDraft);
-      t2 = window.setTimeout(() => setWorkspaceAiBusy(false), 220);
-    }, 380);
-    return () => {
-      window.clearTimeout(t1);
-      if (t2) window.clearTimeout(t2);
-    };
-  }, [workspaceAiMemoDraft, selectedCustomerId]);
-
-  const workspaceAiInsights = useMemo(
-    () => generateDemoConsultingResponse(workspaceAiDebounced, { salesStyle: workspaceSalesStyle }),
-    [workspaceAiDebounced, workspaceSalesStyle],
+  const memoDiffersFromFlowSnapshot = useMemo(
+    () => workspaceAiMemoDraft.trim() !== flowDraftMemo.trim(),
+    [workspaceAiMemoDraft, flowDraftMemo],
   );
 
   const workspaceAiCoachTopics = useMemo(() => {
-    if (!workspaceAiDebounced.trim()) return null;
+    if (!flowDraftInsights || !flowDraftMemo.trim()) return null;
     const langUi: "ko" | "en" = language === "ko" ? "ko" : "en";
-    return formatCareNeedsGuideTopicsUi(workspaceAiDebounced, langUi);
-  }, [workspaceAiDebounced, language]);
+    return formatCareNeedsGuideTopicsUi(flowDraftMemo, langUi);
+  }, [flowDraftMemo, flowDraftInsights, language]);
 
   const workspaceCustomerOptions = useMemo(() => {
     return [...state.customers].sort((a, b) => a.name.localeCompare(b.name, "ko-KR"));
@@ -1178,8 +1234,11 @@ export function CRMApp({
                       <h2 id="crm-ai-assistant-title" className="text-[17px] font-semibold text-[#111827]">
                         {t("crm.workspaceAi.title")}
                       </h2>
-                      <p className="mt-1 max-w-[56ch] text-[13px] leading-relaxed text-[#6B7280]">
+                      <p className="mt-1 max-w-[58ch] text-[13px] leading-relaxed text-[#6B7280]">
                         {t("crm.workspaceAi.subtitle")}
+                      </p>
+                      <p className="mt-3 max-w-[72ch] rounded-[12px] border border-[#E2E8F0] bg-[#F8FAFC]/90 px-3 py-2 text-[11px] leading-snug text-[#64748B]">
+                        {t("crm.sensoraFlow.banner")}
                       </p>
                       {workspaceAiCoachTopics ? (
                         <p className="mt-2 text-[11px] font-semibold leading-snug text-[#475569]">
@@ -1238,9 +1297,17 @@ export function CRMApp({
                           ))}
                         </select>
                       </label>
+                      <p className="rounded-[12px] border border-dashed border-[#E5E7EB] bg-[#FAFBFC] px-2 py-2 text-[11px] leading-snug text-[#64748B]">
+                        {t("crm.sensoraFlow.toneHintsReanalyze")}
+                      </p>
                     </div>
-                    <label className="grid min-h-0 gap-2">
-                      <span className="text-[13px] font-semibold text-[#374151]">{t("crm.workspaceAi.memoLabel")}</span>
+                    <div className="grid min-h-0 gap-2">
+                      <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                        <span className="text-[13px] font-semibold text-[#374151]">{t("crm.workspaceAi.memoLabel")}</span>
+                        <span className="rounded-full bg-[#F1F5F9] px-2 py-0.5 text-[11px] font-semibold text-[#475569]">
+                          {t("crm.sensoraFlow.memoUserEditableHint")}
+                        </span>
+                      </div>
                       <textarea
                         value={workspaceAiMemoDraft}
                         onChange={(e) => setWorkspaceAiMemoDraft(e.target.value)}
@@ -1251,37 +1318,89 @@ export function CRMApp({
                         className="min-h-[180px] w-full resize-y rounded-[14px] border border-[#E5E7EB] bg-white px-4 py-3 text-[14px] leading-relaxed text-[#111827] outline-none focus:border-[#94A3B8] disabled:cursor-not-allowed disabled:bg-[#F3F4F6]"
                         placeholder=""
                       />
-                    </label>
+                      {memoDiffersFromFlowSnapshot && selectedCustomerId ? (
+                        <p className="rounded-[12px] border border-dashed border-amber-200/95 bg-[#FFFBEB] px-3 py-2 text-[12px] font-medium leading-snug text-[#92400E]">
+                          {t("crm.sensoraFlow.memoStaleHint")}
+                        </p>
+                      ) : null}
+                    </div>
                   </div>
 
                   <div className="mt-6 grid gap-4 lg:grid-cols-3">
                     <div className="flex min-h-0 flex-col rounded-[14px] border border-[#E5E7EB] bg-white p-4 shadow-sm lg:col-span-1">
-                      <h3 className="text-[12px] font-semibold text-[#475569]">{t("crm.workspaceAi.needsHeading")}</h3>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <h3 className="text-[12px] font-semibold text-[#475569]">{t("crm.workspaceAi.needsHeading")}</h3>
+                        <span className={SENSORA_FLOW_AI_BADGE}>{t("crm.sensoraFlow.aiSuggestionBadge")}</span>
+                      </div>
                       <div className="mt-3 max-h-[min(260px,calc(100vh-20rem))] min-h-[88px] flex-1 overflow-y-auto whitespace-pre-line text-[14px] leading-relaxed text-[#111827]">
-                        {workspaceAiDebounced.trim() ? workspaceAiInsights.summary : "—"}
+                        {flowDraftInsights ? flowDraftInsights.summary : "—"}
                       </div>
                     </div>
                     <div className="flex min-h-0 flex-col rounded-[14px] border border-[#E5E7EB] bg-white p-4 shadow-sm lg:col-span-1">
-                      <h3 className="text-[12px] font-semibold text-[#475569]">{t("crm.workspaceAi.salesHeading")}</h3>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <h3 className="text-[12px] font-semibold text-[#475569]">{t("crm.workspaceAi.salesHeading")}</h3>
+                        <span className={SENSORA_FLOW_AI_BADGE}>{t("crm.sensoraFlow.aiSuggestionBadge")}</span>
+                      </div>
                       <div className="mt-3 max-h-[min(260px,calc(100vh-20rem))] min-h-[88px] flex-1 overflow-y-auto whitespace-pre-line text-[14px] leading-relaxed text-[#111827]">
-                        {workspaceAiDebounced.trim() ? workspaceAiInsights.nextAction : "—"}
+                        {flowDraftInsights ? flowDraftInsights.nextAction : "—"}
                       </div>
                     </div>
                     <div className="flex min-h-0 flex-col rounded-[14px] border border-[#E5E7EB] bg-white p-4 shadow-sm lg:col-span-1">
-                      <h3 className="text-[12px] font-semibold text-[#475569]">{t("crm.workspaceAi.smsHeading")}</h3>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <h3 className="text-[12px] font-semibold text-[#475569]">{t("crm.workspaceAi.smsHeading")}</h3>
+                        <span className={SENSORA_FLOW_AI_BADGE}>{t("crm.sensoraFlow.aiSuggestionBadge")}</span>
+                      </div>
                       <div className="mt-3 max-h-[min(260px,calc(100vh-20rem))] min-h-[88px] flex-1 overflow-y-auto whitespace-pre-line text-[14px] leading-relaxed text-[#111827]">
-                        {workspaceAiDebounced.trim() ? workspaceAiInsights.message : "—"}
+                        {flowDraftInsights ? flowDraftInsights.message : "—"}
                       </div>
                     </div>
                   </div>
 
+                  {selectedCustomerId && !flowDraftInsights ? (
+                    <p className="mt-4 text-[12px] leading-snug text-[#64748B]">{t("crm.sensoraFlow.previewEmptyHint")}</p>
+                  ) : null}
+
+                  <div className="mt-6 flex flex-wrap items-center gap-2 border-t border-[#EEEFF3] pt-5">
+                    <button
+                      type="button"
+                      disabled={!selectedCustomerId || !workspaceAiMemoDraft.trim()}
+                      className="min-h-[44px] touch-manipulation rounded-[12px] bg-[#111827] px-4 text-[13px] font-semibold text-white hover:bg-[#1F2937] disabled:cursor-not-allowed disabled:opacity-45"
+                      onClick={runSensoraFlowAnalyzeOrRefresh}
+                    >
+                      {t("crm.sensoraFlow.analyzeAgain")}
+                    </button>
+                    <button
+                      type="button"
+                      disabled={!selectedCustomerId || !workspaceAiMemoDraft.trim()}
+                      className="min-h-[44px] touch-manipulation rounded-[12px] border border-[#D1D5DB] bg-white px-4 text-[13px] font-semibold text-[#111827] hover:bg-[#F9FAFB] disabled:cursor-not-allowed disabled:opacity-45"
+                      onClick={runSensoraFlowAnalyzeOrRefresh}
+                    >
+                      {t("crm.sensoraFlow.newProposal")}
+                    </button>
+                    <button
+                      type="button"
+                      disabled={
+                        !selectedCustomerId ||
+                        !(flowDraftMemo.trim() ? true : workspaceAiMemoDraft.trim().length > 0)
+                      }
+                      className="min-h-[44px] touch-manipulation rounded-[12px] border border-[#D1D5DB] bg-[#F8FAFC] px-4 text-[13px] font-semibold text-[#334155] ring-1 ring-inset ring-[#E5E7EB] hover:bg-[#F1F5F9] disabled:cursor-not-allowed disabled:opacity-45"
+                      onClick={runSensoraFlowRewriteSmsDraft}
+                    >
+                      {t("crm.sensoraFlow.rewriteSms")}
+                    </button>
+                  </div>
+
+                  <p className="mt-5 max-w-[68ch] text-[12px] leading-relaxed text-[#64748B]">{t("crm.sensoraFlow.appliedEditableHint")}</p>
+
                   <div className="sticky bottom-1 z-[3] mt-6 flex flex-wrap gap-2 rounded-[14px] border border-[#E5E7EB] bg-[#FFFFFF]/96 px-3 py-3 shadow-[0_6px_24px_-12px_rgba(15,23,42,0.12)] backdrop-blur-sm">
                     <button
                       type="button"
-                      disabled={!selectedCustomerId || !workspaceAiDebounced.trim()}
+                      disabled={
+                        !selectedCustomerId || !flowDraftInsights || !flowDraftInsights.message.trim()
+                      }
                       className="min-h-[44px] flex-1 touch-manipulation rounded-[12px] bg-[#111827] px-4 text-[13px] font-semibold text-white hover:bg-[#1F2937] disabled:cursor-not-allowed disabled:opacity-45 sm:flex-none"
                       onClick={() => {
-                        const text = workspaceAiInsights.message.trim();
+                        const text = flowDraftInsights?.message.trim();
                         if (!text || !selectedCustomerId) return;
                         void copyToClipboard(text).then((ok) => {
                           if (ok) showToast(t("crm.workspaceAi.smsCopyToast"));
@@ -1298,6 +1417,10 @@ export function CRMApp({
                       onClick={() => {
                         if (!selectedCustomerId) return;
                         upsertCustomer({ id: selectedCustomerId, memo: workspaceAiMemoDraft });
+                        smsRewriteNonceRef.current = 0;
+                        const trimmed = workspaceAiMemoDraft.trim();
+                        setFlowDraftMemo(trimmed);
+                        setFlowDraftInsights(null);
                         showToast(t("crm.workspaceAi.saveToast"));
                       }}
                     >
@@ -1305,11 +1428,11 @@ export function CRMApp({
                     </button>
                     <button
                       type="button"
-                      disabled={!selectedCustomerId || !workspaceAiDebounced.trim()}
+                      disabled={!selectedCustomerId || !flowDraftInsights?.nextAction?.trim()}
                       className="min-h-[44px] flex-1 touch-manipulation rounded-[12px] border border-[#E5E7EB] bg-[#F3F4F6] px-4 text-[13px] font-semibold text-[#374151] ring-1 ring-inset ring-[#E5E7EB] hover:bg-[#E8EAED] disabled:cursor-not-allowed disabled:opacity-45 sm:flex-none"
                       onClick={() => {
-                        if (!selectedCustomerId) return;
-                        const raw = workspaceAiInsights.nextAction
+                        if (!selectedCustomerId || !flowDraftInsights) return;
+                        const raw = flowDraftInsights.nextAction
                           .split("\n")
                           .map((ln) => ln.trim())
                           .find((ln) => ln.length > 0);
