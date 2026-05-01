@@ -71,6 +71,12 @@ export type DeliveryGuide = {
   interiorColor?: string;
   deliveryPlace?: string;
 
+  /** 입금 계좌 — 기본 빈값, 사용자 입력 */
+  deliveryBankName?: string;
+  deliveryAccountNumber?: string;
+  deliveryAccountHolder?: string;
+  deliveryPaymentNote?: string;
+
   services?: DeliveryGuideServiceItems;
   pricing?: DeliveryGuidePricing;
   images?: DeliveryGuideImage[];

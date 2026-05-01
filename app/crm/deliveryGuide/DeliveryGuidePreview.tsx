@@ -1,6 +1,7 @@
 "use client";
 
 import type { Customer, DeliveryGuide } from "@/app/crm/types";
+import { deliveryAccountEntered, formatDeliveryAccountShareText } from "@/app/crm/deliveryGuide/formatDeliveryAccount";
 
 function formatDate(iso?: string): string {
   if (!iso) return "-";
@@ -133,6 +134,43 @@ export function DeliveryGuidePreview({ customer, guide }: { customer: Customer; 
             <KV label="월 납입금" value={pick(pricing.monthlyPayment)} />
             <KV label="초기부담금" value={pick(pricing.upfrontPayment)} />
           </div>
+        </div>
+      </section>
+
+      {/* 입금 계좌 */}
+      <section className={pageShell} aria-label="입금 계좌 안내">
+        <div className={pageTitle}>입금 계좌 안내</div>
+        <div className={pageMeta}>고객 전달 문구 및 서류 하단 정리용(선택).</div>
+        <div className="mt-5">
+          <div className={h2}>결제 준비 · 입금 정보</div>
+          {deliveryAccountEntered(guide) ? (
+            <div className="mt-4 rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] p-4 text-[13px] leading-relaxed text-[#374151]">
+              <KV label="은행명" value={pick(guide.deliveryBankName)} />
+              <div className="mt-3">
+                <KV label="계좌번호" value={pick(guide.deliveryAccountNumber)} />
+              </div>
+              <div className="mt-3">
+                <KV label="예금주" value={pick(guide.deliveryAccountHolder)} />
+              </div>
+              {(guide.deliveryPaymentNote ?? "").trim() ? (
+                <div className="mt-3 rounded-lg border border-dashed border-[#CBD5E1] bg-[#FFFFFF] px-3 py-2 text-[12px] text-[#475569] whitespace-pre-wrap">
+                  {guide.deliveryPaymentNote}
+                </div>
+              ) : null}
+              <details className="mt-4">
+                <summary className="cursor-pointer text-[11px] font-semibold text-[#64748B]">
+                  고객 발송 텍스트(참고)
+                </summary>
+                <pre className="mt-2 whitespace-pre-wrap rounded-lg border border-[#E5E7EB] bg-[#FFFFFF] p-3 text-[11px] text-[#4B5563]">
+                  {formatDeliveryAccountShareText(customer.name, guide)}
+                </pre>
+              </details>
+            </div>
+          ) : (
+            <div className="mt-4 rounded-xl border border-dashed border-[#E5E7EB] bg-[#FAFBFC] p-4 text-[12px] text-[#6B7280]">
+              계좌 정보가 아직 입력되지 않았습니다. 입력 화면에서 은행명·계좌번호·예금주를 등록하면 이 영역에 표시됩니다.
+            </div>
+          )}
         </div>
       </section>
     </div>

@@ -16,6 +16,10 @@ import {
   removeImage,
   upsertGuide,
 } from "@/app/crm/deliveryGuide/deliveryGuideUtils";
+import {
+  deliveryAccountEntered,
+  formatDeliveryAccountShareText,
+} from "@/app/crm/deliveryGuide/formatDeliveryAccount";
 
 type Props = {
   customer: Customer;
@@ -312,6 +316,76 @@ export function DeliveryGuideEditor({ customer, guide, onChange, showHeader = tr
             placeholder="예: 5,000,000"
             onChange={(v) => updatePricing({ upfrontPayment: v })}
           />
+        </div>
+      </Section>
+
+      <Section title="5) 입금 계좌 안내">
+        <p className="text-[12px] leading-relaxed text-[#6B7280]">
+          입금 요청 시 활용할 정보입니다. 필요할 때만 입력하세요.
+        </p>
+        <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <TextField
+            label="은행명"
+            value={current.deliveryBankName ?? ""}
+            placeholder="예: 국민은행"
+            onChange={(v) => onChange(upsertGuide(guide, { deliveryBankName: v }))}
+          />
+          <TextField
+            label="계좌번호"
+            value={current.deliveryAccountNumber ?? ""}
+            placeholder="숫자 및 하이픈"
+            onChange={(v) => onChange(upsertGuide(guide, { deliveryAccountNumber: v }))}
+          />
+          <TextField
+            label="예금주"
+            value={current.deliveryAccountHolder ?? ""}
+            placeholder="예: 주식회사 ○○모터스"
+            onChange={(v) => onChange(upsertGuide(guide, { deliveryAccountHolder: v }))}
+          />
+        </div>
+        <div className="mt-3">
+          <TextArea
+            label="입금 메모(선택)"
+            value={current.deliveryPaymentNote ?? ""}
+            placeholder="예: 입금 시 고객명 또는 계약자명으로 입금 부탁드립니다."
+            onChange={(v) => onChange(upsertGuide(guide, { deliveryPaymentNote: v }))}
+          />
+        </div>
+        <div className="mt-3 flex flex-wrap gap-2">
+          <button
+            type="button"
+            className="min-h-[36px] rounded-lg border border-[#E5E7EB] bg-[#F9FAFB] px-3 py-2 text-[12px] font-semibold text-[#374151] hover:bg-[#F3F4F6]"
+            onClick={() => {
+              const num = (current.deliveryAccountNumber ?? "").trim();
+              if (!num) {
+                alert("계좌번호를 먼저 입력해 주세요.");
+                return;
+              }
+              void navigator.clipboard?.writeText(num).then(
+                () => alert("계좌번호를 복사했습니다."),
+                () => alert(num),
+              );
+            }}
+          >
+            계좌번호 복사
+          </button>
+          <button
+            type="button"
+            className="min-h-[36px] rounded-lg border border-[#E5E7EB] bg-[#F9FAFB] px-3 py-2 text-[12px] font-semibold text-[#374151] hover:bg-[#F3F4F6]"
+            onClick={() => {
+              if (!deliveryAccountEntered(current)) {
+                alert("은행·계좌·예금주 중 하나 이상 입력 후 복사할 수 있습니다.");
+                return;
+              }
+              const t = formatDeliveryAccountShareText(customer.name, current);
+              void navigator.clipboard?.writeText(t).then(
+                () => alert("전체 안내 문구를 복사했습니다."),
+                () => alert(t),
+              );
+            }}
+          >
+            전체 안내 복사
+          </button>
         </div>
       </Section>
     </div>
