@@ -76,14 +76,7 @@ function sortCareCategories(cats: CareNeedCategory[]): CareNeedCategory[] {
   return [...new Set(cats)].sort((a, b) => CARE_CATEGORY_PRIORITY[a] - CARE_CATEGORY_PRIORITY[b]);
 }
 
-/**
- * 규칙 기반 배려 포인트 감지 · 의료/단정 표현은 생성하지 않고 차량 활용 포인트로만 변환합니다.
- * (외부 AI API 없음, 저장 없음.)
- */
-export function detectCareNeedsKo(input: string): CareNeeds {
-  const raw = input.replace(/\s+/g, " ").trim();
-  if (!/[가-힣]/.test(raw)) return CARE_NEED_EMPTY;
-
+function scanCareNeedCategoriesStrictKo(raw: string): CareNeedCategory[] {
   const hit: CareNeedCategory[] = [];
 
   const back =
@@ -93,11 +86,11 @@ export function detectCareNeedsKo(input: string): CareNeeds {
     (/통증/.test(raw) && !back && /목|어깨|무릎|관절|다리/i.test(raw));
   const mobility = /장애(?:인)?|거동\s*불편|휠체어|보행\s*보조|보호자\s*동승/i.test(raw);
   const elderly =
-    /부모님|어머니|어머님|아버지|아버님|고령|어르신|병원에|병원\s*(?:이동|다니)|가족\s*케어|가족\s*돌봄|돌봄|모시고/i.test(raw);
+    /부모님|어머니|어머님|아버지|아버님|고령|어르신|병원에|병원\s*(?:이동|다니)|가족\s*케어|가족\s*돌봄|돌봄|모시고|모시(?:거나|실)|자주\s*모시/i.test(raw);
   const pregnancyChild = /임산부|임신|아기|아이들?|자녀|카시트|유모차|등하원/i.test(raw);
   const motion = /(?:차)?멀미|소음|예민|정숙|조용함?|조용한|부드러운\s*주행/i.test(raw);
   const longDrive =
-    /장거리|출장|고속도로|오래\s*운전|운전\s*피로|피로가\s*적|장시간\s*운전/i.test(raw);
+    /장거리|출장|고속도로|오래\s*운전|운전\s*피로|피로가\s*적|장시간\s*운전|주행\s*보조/i.test(raw);
 
   if (back) hit.push("back_spine");
   if (neckJoint) hit.push("neck_shoulder_joint");
@@ -107,9 +100,45 @@ export function detectCareNeedsKo(input: string): CareNeeds {
   if (motion) hit.push("motion_sensitivity");
   if (longDrive) hit.push("long_distance_fatigue");
 
-  const categories = sortCareCategories(hit);
-  if (categories.length === 0) return CARE_NEED_EMPTY;
+  return sortCareCategories(hit);
+}
 
+/** 키보드·붙여넣기 차이로 패턴이 비는 경우까지 덮는 보조 분류(의료 단정 없음). */
+function inferCareNeedCategoriesLooseKo(raw: string): CareNeedCategory[] {
+  const hit: CareNeedCategory[] = [];
+  const n = stripNoise(raw);
+
+  const pregnancySignals =
+    /임산부|임신|카시트|유모차|등하원|아이\s*가|아이\s*두|아기|자녀|아이(?:가|를|은|도|두)/i.test(n);
+  const parentalFamilySignals =
+    /어머니|어머님|부모님|부모|아버지|아버님|어머니?를|병원(?:에|으로|에서)?|어르신|고령|모시(?:고|거나|실)|자주\s*모시/i.test(
+      n,
+    );
+  const elderlyRideContext =
+    parentalFamilySignals ||
+    (/(?:승하차|2열|후석)/.test(n) && /(?:가족|동승|함께|모시)/.test(n));
+
+  if (parentalFamilySignals || elderlyRideContext) hit.push("elderly_family");
+  if (pregnancySignals) hit.push("pregnancy_child");
+
+  if (
+    /무릎|목|어깨|관절염|관절이?\s*불편|오르(?:내리)?내릴|내릴\s*때|도어\s*개방감|차에\s*오르/i.test(n) ||
+    (/통증/.test(n) && !/허리|등|허리통증|요통|디스크/i.test(n))
+  )
+    hit.push("neck_shoulder_joint");
+
+  if (/(?:차)?멀미|조용|정숙|소음\s*예민|부드러운\s*주행/i.test(n)) hit.push("motion_sensitivity");
+  if (/출장|장거리|고속도로|오래\s*운전|운전\s*피로|피로가\s*적|주행\s*보조|장시간\s*운전/i.test(n))
+    hit.push("long_distance_fatigue");
+
+  if (/허리|척추|디스크|요통|허리통증|오래\s*앉기/i.test(n)) hit.push("back_spine");
+
+  if (/장애(?:인)?|휠체어|거동\s*불편|보행\s*보조/i.test(n)) hit.push("mobility_accessibility");
+
+  return sortCareCategories(hit);
+}
+
+function rebuildCareNeedsFromCategories(categories: CareNeedCategory[]): CareNeeds {
   const customerFacingPhrases = uniqKeepOrder(
     categories.flatMap((c) => CARE_CUSTOMER_PHRASES[c] ?? []),
   );
@@ -118,7 +147,6 @@ export function detectCareNeedsKo(input: string): CareNeeds {
     ...categories.flatMap((c) => CARE_ADVISOR_BY_CAT[c] ?? []),
   ]);
   const vehicleCheckpoints = uniqKeepOrder(categories.flatMap((c) => CARE_VEHICLE_CHECKS[c] ?? []));
-
   return {
     categories,
     customerFacingPhrases,
@@ -126,6 +154,21 @@ export function detectCareNeedsKo(input: string): CareNeeds {
     vehicleCheckpoints,
   };
 }
+
+/** 엄격 스캔 + 느슨한 추론을 합친 최종 결과(UI·문자·요약 동일 규칙). */
+export function detectCareNeedsKo(input: string): CareNeeds {
+  const raw = input.replace(/\s+/g, " ").trim();
+  if (!/[가-힣]/.test(raw)) return CARE_NEED_EMPTY;
+
+  const merged = sortCareCategories(
+    Array.from(new Set([...scanCareNeedCategoriesStrictKo(raw), ...inferCareNeedCategoriesLooseKo(raw)])),
+  );
+
+  if (merged.length === 0) return CARE_NEED_EMPTY;
+  return rebuildCareNeedsFromCategories(merged);
+}
+
+const CARE_SMS_SCHEDULE_PREPARE_CLOSE_KO = "편하신 일정에 맞춰 차량 설명과 시승 안내를 준비해두겠습니다.";
 
 /** SensoraGuide 등 UI용 짧은 감지 문구(ko·en 라벨 호출부에서 선택). */
 export function formatCareNeedsGuideTopicsKo(input: string): string {
@@ -174,7 +217,8 @@ const CARE_ADVISOR_BY_CAT: Record<CareNeedCategory, string[]> = {
     "특정 고객군에게 ‘적합’ 같은 단정은 피하고, 동선·좌석·트렁크 적재 순서처럼 체험 순서형으로 적습니다.",
   ],
   elderly_family: [
-    "병원·이동 맥락은 과시하지 않고 동승하시는 분의 편안한 승차·내리기와 후석 공간을 중심으로 짚습니다.",
+    "다음 연락에서는 병원 이동 같은 개별 상황을 반복해 말하기보다, 승하차 편의성·2열 공간·시트 착좌감·실내 동선처럼 차량 사용 기준 위주로 안내하는 편이 좋습니다.",
+    "시승 때 동승하시는 가족분의 탑승·내리기 동선과 높이감까지 함께 보실 수 있게 짧은 순서로 유도하면 좋습니다.",
   ],
   pregnancy_child: ["카시트·유모차는 실제 차량별 넉넉함이 달라 시승·매장 재확인을 권하면 좋습니다."],
   motion_sensitivity: [
@@ -189,7 +233,10 @@ const CARE_CUSTOMER_PHRASES: Record<CareNeedCategory, string[]> = {
   back_spine: ["장시간 이동 시 편안한 시트 착좌감과 승차감"],
   neck_shoulder_joint: ["승하차 높이와 도어 개방감, 시트 포지션"],
   mobility_accessibility: ["동승하시는 분의 편안한 승차·내리기와 실내 동선"],
-  elderly_family: ["동승하시는 가족분을 위한 승하차 편의와 넉넉한 후석 공간"],
+  elderly_family: [
+    "가족분과 함께 이동하시는 상황에서의 승하차 편의성",
+    "동승하시는 분을 위해 넓게 보시는 2열 공간과 실내 동선",
+  ],
   pregnancy_child: ["카시트·유모차를 고려한 후석 활용과 트렁크 공간"],
   motion_sensitivity: ["정숙한 실내 분위기와 차분한 가감속 시 승차감"],
   long_distance_fatigue: ["장거리 주행 부담을 줄일 수 있는 시트 편안함과 안정적인 주행 체감·주행 보조"],
@@ -222,12 +269,97 @@ function buildCareRecallClauseKo(care: CareNeeds): string {
   return `${parts[0]} 및 ${parts[1]}`;
 }
 
-function buildCareSummaryLeadSentenceKo(label: string, care: CareNeeds): string {
+function buildCareSummaryLeadSentenceKoLegacy(label: string, care: CareNeeds): string {
   const frags = care.categories.map((c) => CARE_SUMMARY_FRAG_KO[c]).filter(Boolean) as string[];
   const uniq = uniqKeepOrder(frags);
   const head = uniq.slice(0, 2).join(" 및 ");
   if (!head.trim()) return `${label} 고객님은 말씀 주신 활용 목적 안에서 차량 조건을 함께 검토하고 있습니다.`;
   return `${label} 고객님은 ${head} 차량 활용 관점에서 함께 고려하고 계십니다.`;
+}
+
+function buildCareSummarySubjectPrefixKo(customerLabel: string | null): string | null {
+  const c = customerLabel?.trim();
+  if (!c || c === "해당") return null;
+  return `${c} 고객님`;
+}
+
+function buildCareSummaryParagraphKo(
+  customerLabelFromFacts: string | null,
+  care: CareNeeds,
+  rawMemo: string,
+): string {
+  const subject = buildCareSummarySubjectPrefixKo(
+    customerLabelFromFacts ?? extractCustomerLabelKo(rawMemo),
+  );
+
+  const headPhrase = subject ? `${subject}은` : "고객님은";
+
+  if (care.categories.includes("elderly_family")) {
+    return `${headPhrase} 동승하시는 가족분의 승하차 편의성과 2열 공간을 중요하게 보고 계십니다. 가족분과 함께 이동하는 일이 많아 실내 동선과 탑승 편안함을 함께 고려하고 계십니다.`;
+  }
+  if (care.categories.includes("pregnancy_child") && !care.categories.includes("elderly_family")) {
+    return `${headPhrase} 카시트·유모차를 함께 쓰시는 단계라 2열 공간과 트렁크 적재를 차량 활용 기준으로 중요하게 보고 계십니다. 자녀·유아 동승 조건에 맞는 실내 동선까지 함께 고려하면 좋습니다.`;
+  }
+  if (
+    care.categories.includes("neck_shoulder_joint") &&
+    !care.categories.some((x) => x === "back_spine" || x === "mobility_accessibility")
+  ) {
+    return `${headPhrase} 차에 오르내리실 때의 높이감과 도어 개방감을 차량 활용 포인트로 두고 검토 중입니다. 시트 포지션과 실내 동선은 차량별로 크게 다를 수 있습니다.`;
+  }
+  if (care.categories.includes("motion_sensitivity")) {
+    return `${headPhrase} 정숙하고 부드러운 주행 체감을 중요하게 보고 계십니다. 가감속과 실내 분위기는 시승에서 직접 비교 확인하도록 안내하는 편이 좋습니다.`;
+  }
+  if (care.categories.includes("long_distance_fatigue")) {
+    return `${headPhrase} 장거리 운행이 잦아 시트 편안함과 주행 보조 기능, 실내 안정감을 함께 보시는 단계입니다. 연비 과시보다 운행 피로 줄이는 구성 순서 안내가 자연스럽습니다.`;
+  }
+
+  const labelFallback = customerLabelFromFacts ?? "해당";
+  return buildCareSummaryLeadSentenceKoLegacy(labelFallback, care);
+}
+
+function pickPrimaryCareCategoryKo(care: CareNeeds): CareNeedCategory | null {
+  return care.categories[0] ?? null;
+}
+
+function buildSmsCareBodiesForPrimaryKo(
+  primary: CareNeedCategory | null,
+  modelLabel: string,
+  tp: "은" | "는",
+): string[] | null {
+  switch (primary) {
+    case "elderly_family":
+      return [
+        `지난 상담 때 말씀주신 가족분과 함께 이동하시는 상황과 승하차 편의성을 기준으로, 고객님께서 관심 가져 주신 ${modelLabel}의 주요 포인트를 정리해보았습니다.`,
+        `${modelLabel}${tp} 2열 공간, 승하차 동선, 시트 착좌감, 탑승 시 안정감 등을 함께 확인해보시면 좋습니다.`,
+        `특히 동승하시는 가족분께서 타고 내리실 때의 높이감과 실내 공간은 실제로 탑승해보셨을 때 체감이 가장 정확하기 때문에, 시승 때 함께 확인해보시면 좋겠습니다.`,
+      ];
+    case "pregnancy_child":
+      return [
+        `지난 상담 때 말씀주신 자녀·유아 동승과 카시트·유모차 활용을 기준으로, 고객님께서 관심 가져 주신 ${modelLabel}의 주요 포인트를 정리해보았습니다.`,
+        `${modelLabel}${tp} 2열 간격과 트렁크 활용성, 안전·편의 사양, 승하차 동선까지 함께 확인해 보실 수 있습니다.`,
+        `카시트·유모차는 차량별로 실제 넉넉함이 크게 다를 수 있어, 매장 또는 시승에서 직접 맞춰보시길 추천드립니다.`,
+      ];
+    case "neck_shoulder_joint":
+      return [
+        `지난 상담 때 말씀주신 승하차 높이와 도어 개방감 위주 기준으로, 고객님께서 관심 가져 주신 ${modelLabel}의 주요 포인트를 정리해보았습니다.`,
+        `${modelLabel}${tp} 시트 포지션, 문턱·스텝 느낌, 후석 접근까지 함께 보시면 선택에 도움이 됩니다.`,
+        `주차 환경에 따라 도어 개방 폭이 달라질 수 있어, 실제로 오르내리실 때의 동선을 시승에서 한 번씩 비교해보시면 좋습니다.`,
+      ];
+    case "motion_sensitivity":
+      return [
+        `지난 상담 때 말씀주신 정숙성과 부드러운 주행 체감을 기준으로, 고객님께서 관심 가져 주신 ${modelLabel}의 주요 포인트를 정리해보았습니다.`,
+        `${modelLabel}${tp} 저속·고속 구간에서의 가감속 느낌과 실내 소음을 함께 확인해보시면 좋습니다.`,
+        `민감도는 사람마다 다르니, 시승 때 직접 체감해 보시는 것이 가장 정확합니다.`,
+      ];
+    case "long_distance_fatigue":
+      return [
+        `지난 상담 때 말씀주신 장거리 운행과 주행 보조 기능을 함께 보시려는 기준으로, 고객님께서 관심 가져 주신 ${modelLabel}의 주요 포인트를 정리해보았습니다.`,
+        `${modelLabel}${tp} 시트 장시간 편안함과 크루즈·보조 기능 구성은 실주행 패턴과 맞는지 차분히 확인해보시면 좋습니다.`,
+        `고속 크루즈 중 실내 안정감은 차량별로 크게 다를 수 있어 시승에서 한 번 확인하시길 추천드립니다.`,
+      ];
+    default:
+      return null;
+  }
 }
 
 const CARE_SUMMARY_FRAG_KO: Record<CareNeedCategory, string> = {
@@ -571,7 +703,8 @@ export function generateDemoConsultingResponse(
   const memoFactsKo: DemoMemoFactsKo | null = ko ? extractDemoMemoFactsKo(input) : null;
   const careNeedsKo = ko ? detectCareNeedsKo(input) : CARE_NEED_EMPTY;
   const memoConcreteFactsKo = !!(memoFactsKo && memoHasConcreteKo(memoFactsKo, input.length));
-  const memoCareRichKo = careNeedsKo.categories.length > 0 && input.length >= 15;
+  const memoCareRichKo =
+    careNeedsKo.categories.length > 0 && stripNoise(input).replace(/\s+/g, "").length >= 8;
   const memoRichKo = memoConcreteFactsKo || memoCareRichKo;
 
   if (ko && memoFactsKo) {
@@ -800,7 +933,7 @@ ${emptyCloseKo}`)
     const parts: string[] = [];
 
     if (careNeedsKo.categories.length > 0) {
-      parts.push(buildCareSummaryLeadSentenceKo(label, careNeedsKo).trim());
+      parts.push(buildCareSummaryParagraphKo(f.customerLabel, careNeedsKo, input).trim());
     } else {
       parts.push(`${label} 고객님`);
 
@@ -892,8 +1025,9 @@ ${emptyCloseKo}`)
 
   const summaryLines: string[] = [];
 
-  if (ko && memoRichKo && memoFactsKo) summaryLines.push(koSummaryConcreteParagraph());
-  else {
+  if (ko && memoFactsKo && (memoRichKo || careNeedsKo.categories.length > 0)) {
+    summaryLines.push(koSummaryConcreteParagraph());
+  } else {
     summaryLines.push(
       ko ? `이 고객은 ${focusText}를 중심으로 검토하고 있습니다.` : `This customer is prioritizing ${focusText}.`,
     );
@@ -930,8 +1064,9 @@ ${emptyCloseKo}`)
   }
 
   const nextActionParts: string[] = [];
-  if (ko && memoRichKo && memoFactsKo) nextActionParts.push(...koNextActionConcrete());
-  else {
+  if (ko && memoFactsKo && (memoRichKo || careNeedsKo.categories.length > 0)) {
+    nextActionParts.push(...koNextActionConcrete());
+  } else {
     nextActionParts.push(
       ko
         ? "고객이 말씀하신 숫자·조건 단위 그대로 기록과 맞춰 문자에 반영했는지 확인한 뒤, 과장 표현 없이 현재 확인 가능한 조건 기준으로 적어 두었음을 간단히 전달합니다."
@@ -1009,7 +1144,24 @@ ${emptyCloseKo}`)
 
     const hasCareAudience = careNeedsKo.categories.length > 0;
 
-    if (hasCareAudience) {
+    const primaryCare = pickPrimaryCareCategoryKo(careNeedsKo);
+    const tpMod = topicParticleSms(modelLabel);
+
+    const careSceneBodies =
+      hasCareAudience && primaryCare ?
+        buildSmsCareBodiesForPrimaryKo(primaryCare, modelLabel, tpMod)
+      : null;
+
+    if (hasCareAudience && careSceneBodies?.length) {
+      for (const para of careSceneBodies) {
+        lines.push("");
+        lines.push(smsTrimLines(para));
+      }
+      if (dealMidApplicable && (interestModelKo || compare || f.budgetPhrase || vehicleType || f.discountIntent)) {
+        lines.push("");
+        lines.push(smsTrimLines(buildDealMidKo()));
+      }
+    } else if (hasCareAudience) {
       const clause = buildCareRecallClauseKo(careNeedsKo);
       lines.push(
         smsTrimLines(
@@ -1017,7 +1169,6 @@ ${emptyCloseKo}`)
         ),
       );
       lines.push("");
-      const tpMod = topicParticleSms(modelLabel);
       lines.push(
         smsTrimLines(
           `${modelLabel}${tpMod} 시트 착좌감, 실내 공간, 승하차 동선, 주행 시 안정감 등을 함께 확인해보시면 좋을 차량입니다.`,
@@ -1100,7 +1251,8 @@ ${emptyCloseKo}`)
     }
 
     lines.push("");
-    lines.push(tone.confirmClose);
+    if (hasCareAudience) lines.push(CARE_SMS_SCHEDULE_PREPARE_CLOSE_KO);
+    else lines.push(tone.confirmClose);
     if (tone.inviteQ && salesStyle !== "simple") lines.push(tone.inviteQ);
     lines.push("감사합니다.");
 
@@ -1108,7 +1260,7 @@ ${emptyCloseKo}`)
   }
 
   function buildOutboundSmsKo(): string {
-    if (memoRichKo && memoFactsKo) return buildStructuredKoSms();
+    if (memoFactsKo && memoRichKo) return buildStructuredKoSms();
 
     function topicParticle(phrase: string): "은" | "는" {
       const t = phrase.trim();
@@ -1339,3 +1491,28 @@ You mentioned next Monday—if you share timing and locations, ${toneEn.td}`));
     message,
   };
 }
+
+/** 랜딩 규칙형 데모 회귀·스모크 확인용 예시 메모(저장 없음). */
+export const CARE_DEMO_SCENARIO_MEMOS: ReadonlyArray<{ id: string; memo: string }> = [
+  {
+    id: "elder_second_row_gate",
+    memo:
+      "고객님은 어머님을 자주 모시고 병원에 다니셔서 승하차가 편하고 2열 공간이 넉넉한 차량을 원하심.",
+  },
+  {
+    id: "knee_ingress_doors",
+    memo: "고객님은 무릎이 불편해서 차에 오르내릴 때 높이와 도어 개방감이 중요하다고 하심.",
+  },
+  {
+    id: "twin_car_seats_cargo",
+    memo: "아이가 둘이고 카시트와 유모차를 자주 사용해서 2열 공간과 트렁크 적재를 중요하게 보심.",
+  },
+  {
+    id: "motion_sickness_quiet_ride",
+    memo: "차멀미가 심해서 조용하고 부드러운 주행감을 중요하게 보심.",
+  },
+  {
+    id: "highway_trips_driver_assists",
+    memo: "출장이 많아 장거리 운전 피로가 적고 주행 보조 기능이 있는 차량을 원하심.",
+  },
+];
