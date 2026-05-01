@@ -1078,11 +1078,6 @@ html[lang="ko"] body {
   animation-delay: 1.7s;
 }
 
-.sensora-mark-star--c {
-  animation: sensora-star-shimmer 8.2s ease-in-out infinite;
-  animation-delay: 3.25s;
-}
-
 @media (prefers-reduced-motion: reduce) {
   .sensora-animated-mark *,
   .sensora-animated-mark *::before,
