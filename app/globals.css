@@ -1018,17 +1018,17 @@ html[lang="ko"] body {
   }
 }
 
-/* Sensora in-app mark — Quiet Nebula S mood (subtle aura / drift / stars; no blur filter). */
+/* Sensora in-app mark — official raster + subtle aura / drift. */
 @keyframes sensora-aura-breathe {
   0%,
   100% {
-    opacity: 0.86;
-    transform: translate(256px, 256px) scale(1) translate(-256px, -256px);
+    opacity: 0.93;
+    transform: scale(1);
   }
 
   50% {
     opacity: 1;
-    transform: translate(256px, 256px) scale(1.018) translate(-256px, -256px);
+    transform: scale(1.012);
   }
 }
 
@@ -1047,35 +1047,14 @@ html[lang="ko"] body {
   }
 }
 
-@keyframes sensora-star-shimmer {
-  0%,
-  100% {
-    opacity: 0.28;
-  }
-
-  50% {
-    opacity: 0.48;
-  }
-}
-
 .sensora-mark-drift-layer {
-  transform-box: fill-box;
+  transform-origin: 50% 50%;
   animation: sensora-nebula-drift 14s ease-in-out infinite;
 }
 
 .sensora-mark-aura-layer {
-  transform-origin: 256px 256px;
-  transform-box: fill-box;
+  transform-origin: 50% 50%;
   animation: sensora-aura-breathe 8s ease-in-out infinite;
-}
-
-.sensora-mark-star--a {
-  animation: sensora-star-shimmer 7s ease-in-out infinite;
-}
-
-.sensora-mark-star--b {
-  animation: sensora-star-shimmer 7.6s ease-in-out infinite;
-  animation-delay: 1.7s;
 }
 
 @media (prefers-reduced-motion: reduce) {
