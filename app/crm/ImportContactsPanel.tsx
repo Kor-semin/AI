@@ -28,6 +28,8 @@ export type ImportContactsPanelProps = {
   makeId: (prefix: string) => string;
   buildCustomer: (draft: NormalizedImportedContact) => Customer;
   showToast: (msg: string) => void;
+  /** CSV/VCF 연락처 파일 준비 방법 안내(모달 등) — 오버레이 클릭 전파 방지는 호출부·클릭 핸들러에서 처리 */
+  onOpenFileGuide?: () => void;
 };
 
 type HubTab = "device" | "paste" | "file" | "google" | "iphone";
@@ -100,6 +102,7 @@ export function ImportContactsPanel({
   makeId,
   buildCustomer,
   showToast,
+  onOpenFileGuide,
 }: ImportContactsPanelProps) {
   const [tab, setTab] = useState<HubTab>("device");
   const [pasteText, setPasteText] = useState("");
@@ -329,6 +332,21 @@ export function ImportContactsPanel({
           </p>
         </div>
 
+        {onOpenFileGuide ? (
+          <div className="mt-3">
+            <button
+              type="button"
+              className="min-h-[44px] w-full touch-manipulation rounded-xl border border-[#CBD5E1] bg-[#FFFFFF] px-4 py-2.5 text-[13px] font-semibold text-[#1E40AF] hover:bg-[#F8FAFC]"
+              onClick={(ev) => {
+                ev.stopPropagation();
+                onOpenFileGuide();
+              }}
+            >
+              연락처 파일 만드는 방법 보기
+            </button>
+          </div>
+        ) : null}
+
         <div className="mt-4 flex flex-wrap gap-2">
           {tabBtn("device", "휴대폰 선택")}
           {tabBtn("paste", "붙여넣기")}
@@ -371,6 +389,18 @@ export function ImportContactsPanel({
                 CSV(구글 내보내기 등), 줄 단위(이름+전화), 또는 vCard 전체 블록을 붙여넣을 수 있습니다. 원문 메모는
                 그대로 보존됩니다.
               </p>
+              {onOpenFileGuide ? (
+                <button
+                  type="button"
+                  className="min-h-[40px] w-full max-w-[100%] touch-manipulation text-left text-[13px] font-semibold text-[#2563EB] underline decoration-[#BFDBFE] underline-offset-2 hover:text-[#1D4ED8]"
+                  onClick={(ev) => {
+                    ev.stopPropagation();
+                    onOpenFileGuide();
+                  }}
+                >
+                  연락처 파일 만드는 방법 보기
+                </button>
+              ) : null}
               <textarea
                 value={pasteText}
                 onChange={(ev) => setPasteText(ev.target.value)}
@@ -395,6 +425,18 @@ export function ImportContactsPanel({
               <p className="text-[12px] text-[#64748B]">
                 `.csv`, `.txt`, `.vcf` 업로드. 아이폰에서 공유한 vCard 또는 Google 내보내기 CSV를 사용할 수 있습니다.
               </p>
+              {onOpenFileGuide ? (
+                <button
+                  type="button"
+                  className="min-h-[40px] w-full max-w-[100%] touch-manipulation text-left text-[13px] font-semibold text-[#2563EB] underline decoration-[#BFDBFE] underline-offset-2 hover:text-[#1D4ED8]"
+                  onClick={(ev) => {
+                    ev.stopPropagation();
+                    onOpenFileGuide();
+                  }}
+                >
+                  연락처 파일 만드는 방법 보기
+                </button>
+              ) : null}
               <button
                 type="button"
                 className="min-h-[44px] rounded-xl bg-[#111827] px-5 py-2.5 text-[14px] font-semibold text-white touch-manipulation"

@@ -56,6 +56,7 @@ import {
   type DemoSalesStyle,
 } from "@/app/components/concierge/aiDemoResponse";
 import { makeId, seedState } from "./seed";
+import { ContactImportFileGuideModal } from "./ContactImportFileGuideModal";
 import { ImportContactsPanel, type ImportContactsCommitPayload } from "./ImportContactsPanel";
 import type { NormalizedImportedContact } from "./contactImport/normalizeImportedContact";
 import type { CrmSection } from "./crmSectionTypes";
@@ -390,6 +391,7 @@ export function CRMApp({
   /** 문자 템플릿 `{내이름}` : 로컬 입력이 있으면 우선 */
   const [sellerNickname, setSellerNickname] = useState("");
   const [importContactsOpen, setImportContactsOpen] = useState(false);
+  const [contactFileGuideOpen, setContactFileGuideOpen] = useState(false);
   const [leadExplainForId, setLeadExplainForId] = useState<string | null>(null);
   const [toast, setToast] = useState<string | null>(null);
   const [deliveryGuideOpen, setDeliveryGuideOpen] = useState(false);
@@ -3441,6 +3443,11 @@ export function CRMApp({
         </div>
       ) : null}
 
+      <ContactImportFileGuideModal
+        open={contactFileGuideOpen}
+        onClose={() => setContactFileGuideOpen(false)}
+      />
+
       <ImportContactsPanel
         open={importContactsOpen}
         onClose={() => setImportContactsOpen(false)}
@@ -3449,6 +3456,7 @@ export function CRMApp({
         makeId={makeId}
         buildCustomer={buildCustomerFromImportedDraft}
         showToast={showToast}
+        onOpenFileGuide={() => setContactFileGuideOpen(true)}
       />
 
       {deliveryGuideOpen && selectedCustomer ? (
