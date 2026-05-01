@@ -17,6 +17,18 @@ import { isFirebaseConfigured } from "@/app/firebase/client";
 
 const STORAGE_KEY = "crm.notebookCoverDismissed";
 
+/** 브라우저 탭(일반 웹)에서는 표지를 자동으로 띄우지 않고, PWA/홈 화면 추가 등 standalone 에서만 노출합니다. */
+function isPwaStandaloneWindow(): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    if (window.matchMedia("(display-mode: standalone)").matches) return true;
+  } catch {
+    /* ignore */
+  }
+  const nav = navigator as Navigator & { standalone?: boolean };
+  return Boolean(nav.standalone);
+}
+
 const WORKSPACE_PATH = "/?view=app" as const;
 const WORKSPACE_AI_HASH = "/?view=app#crm-ai-assistant" as const;
 
@@ -70,7 +82,9 @@ export function NotebookCover() {
   const { t } = useLanguage();
   const { auth } = useAuth();
   const firebaseReady = isFirebaseConfigured();
-  const [dismissed, setDismissed] = useState(false);
+  const [coverHydrated, setCoverHydrated] = useState(false);
+  /** 웹 브라우저 탭에서는 닫은 상태 유지 · PWA는 session 또는 표지 버튼에 따름 */
+  const [dismissed, setDismissed] = useState(true);
   const [forceShow, setForceShow] = useState(false);
   const [pageIdx, setPageIdx] = useState(0);
   const [coverTheme, setCoverTheme] = useState<NotebookCoverTheme>("natural");
@@ -97,13 +111,14 @@ export function NotebookCover() {
         const q = params.toString();
         const next = `${window.location.pathname}${q ? `?${q}` : ""}${window.location.hash}`;
         window.history.replaceState(null, "", next);
+        setCoverHydrated(true);
         return;
       }
     } catch {
       /* ignore */
     }
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- sessionStorage 초기값
-    setDismissed(readDismissed());
+    setDismissed(isPwaStandaloneWindow() ? readDismissed() : true);
+    setCoverHydrated(true);
   }, []);
 
   useEffect(() => {
@@ -118,6 +133,7 @@ export function NotebookCover() {
 
   useEffect(() => {
     const onShow = () => {
+      setDismissed(false);
       setForceShow(true);
       setPageIdx(0);
     };
@@ -125,7 +141,7 @@ export function NotebookCover() {
     return () => window.removeEventListener("crm-show-notebook-cover", onShow);
   }, []);
 
-  const visible = forceShow || !dismissed;
+  const visible = coverHydrated && (forceShow || !dismissed);
 
   const dismissQuiet = useCallback(() => {
     try {

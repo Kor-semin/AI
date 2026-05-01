@@ -51,6 +51,7 @@ export type TranslationKey =
   | "header.cover"
   | "header.landing"
   | "header.workspace"
+  | "header.zoomHint"
   | "auth.checkingLogin"
   | "auth.signOut"
   | "auth.salesRegistration"
@@ -331,6 +332,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "header.cover": "표지",
     "header.landing": "랜딩",
     "header.workspace": "영업 업무",
+    "header.zoomHint": "화면 배율 · Ctrl/Cmd + 플러스·마이너스, 원래 크기 · Ctrl/Cmd + 0",
     "auth.checkingLogin": "로그인 확인 중…",
     "auth.signOut": "로그아웃",
     "auth.salesRegistration": "영업 계정 등록",
@@ -635,6 +637,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "header.cover": "Cover",
     "header.landing": "Landing",
     "header.workspace": "Workspace",
+    "header.zoomHint": "Zoom · Ctrl/Cmd + +/-, reset · Ctrl/Cmd + 0",
     "auth.checkingLogin": "Checking sign-in…",
     "auth.signOut": "Sign out",
     "auth.salesRegistration": "Sales registration",

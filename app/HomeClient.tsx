@@ -155,9 +155,19 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
         >
           {view === "landing" ? (
             <>
-              <div className="min-w-0 shrink-0 sm:max-w-[min(100%,24rem)] sm:pr-4">
-                <div className="text-[15px] font-semibold leading-tight tracking-tight text-[#111827] sm:text-base">{t("product.name")}</div>
-                <p className="mt-1 text-[11px] leading-snug text-[#4B5563] sm:text-xs">{t("brand.slogan")}</p>
+              <div className="min-w-0 shrink-0 sm:max-w-[min(100%,28rem)] sm:pr-4">
+                <div className="flex min-w-0 flex-col gap-1.5 sm:flex-row sm:items-start sm:justify-between sm:gap-x-4">
+                  <div className="min-w-0">
+                    <div className="text-[15px] font-semibold leading-tight tracking-tight text-[#111827] sm:text-base">{t("product.name")}</div>
+                    <p className="mt-1 text-[11px] leading-snug text-[#4B5563] sm:text-xs">{t("brand.slogan")}</p>
+                  </div>
+                  <p
+                    className="max-w-full shrink-0 text-[10px] leading-snug text-[#94A3B8] sm:max-w-[13.5rem] sm:pt-0.5 sm:text-right sm:text-[11px]"
+                    role="note"
+                  >
+                    {t("header.zoomHint")}
+                  </p>
+                </div>
               </div>
               <div className="relative z-[1] flex w-full min-w-0 flex-col gap-3 sm:w-auto sm:max-w-[min(100%,28rem)] sm:items-end">
                 <div className="flex min-w-0 flex-wrap items-center gap-2 sm:justify-end">
@@ -201,11 +211,16 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
             </>
           ) : (
             <>
-              <div className="flex min-w-0 flex-1 items-center gap-2.5 sm:gap-3">
+              <div className="flex min-w-0 flex-1 items-start gap-2.5 sm:items-center sm:gap-3">
                 <SensoraAnimatedMark size={40} animated={false} className="shrink-0" />
-                <div className="min-w-0">
-                  <div className="truncate text-sm font-semibold tracking-tight">{t("product.name")}</div>
-                  <div className="truncate text-[11px] text-[color:var(--ink-2)] sm:text-xs">{t("brand.subline")}</div>
+                <div className="flex min-w-0 flex-1 flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
+                  <div className="min-w-0">
+                    <div className="truncate text-sm font-semibold tracking-tight">{t("product.name")}</div>
+                    <div className="truncate text-[11px] text-[color:var(--ink-2)] sm:text-xs">{t("brand.subline")}</div>
+                  </div>
+                  <p className="shrink-0 text-[10px] leading-snug text-[color:var(--ink-2)] sm:max-w-[14rem] sm:text-right sm:text-[11px]" role="note">
+                    {t("header.zoomHint")}
+                  </p>
                 </div>
               </div>
               <div className="relative z-[1] flex w-full min-w-0 flex-wrap items-center justify-end gap-2 sm:w-auto sm:justify-end">
