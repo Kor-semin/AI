@@ -1727,7 +1727,7 @@ export function CRMApp({
               <div className="flex flex-wrap gap-2">
                 <button
                   type="button"
-                  className="min-h-[44px] rounded-[20px] border border-white/[0.11] bg-slate-950/45 px-5 py-2.5 text-[14px] font-semibold text-slate-50 ring-1 ring-inset ring-white/[0.12] transition hover:bg-white/[0.08] touch-manipulation"
+                  className="sensora-dark-ghost-btn min-h-[44px] rounded-[20px] px-5 py-2.5 text-[14px] font-semibold touch-manipulation"
                   onClick={() => openCustomersImportHub()}
                 >
                   주소록 가져오기
@@ -1735,7 +1735,7 @@ export function CRMApp({
                 {selectedCustomer ? (
                   <button
                     type="button"
-                    className="min-h-[44px] rounded-[20px] border border-white/[0.11] bg-slate-950/55 px-5 py-2.5 text-[14px] font-semibold text-slate-300 transition hover:bg-slate-950/45 touch-manipulation"
+                    className="sensora-dark-ghost-btn min-h-[44px] rounded-[20px] px-5 py-2.5 text-[14px] font-semibold text-slate-200 touch-manipulation"
                     onClick={() => setDeliveryGuideOpen(true)}
                   >
                     출고 안내
@@ -1746,26 +1746,25 @@ export function CRMApp({
           ) : null}
 
           {showWorkspaceTabs ? (
-            <nav
-              className="flex flex-wrap gap-1 border-b border-white/[0.11]"
-              aria-label="업무 영역"
-            >
-              {(["고객", "다음할일", "일정", "템플릿"] as const).map((tabKey) => (
-                <button
-                  key={tabKey}
-                  type="button"
-                  onClick={() => setTab(tabKey)}
-                  className={[
-                    "min-h-[44px] -mb-px touch-manipulation px-5 py-3 text-[14px] font-semibold outline-none transition focus-visible:rounded-t-lg focus-visible:ring-2 focus-visible:ring-sky-400/35",
-                    tab === tabKey
-                      ? "border-b-2 border-sky-400/75 text-slate-50 shadow-[0_12px_24px_-16px_rgba(56,189,248,0.12)]"
-                      : "border-b-2 border-transparent text-slate-400 hover:text-slate-200",
-                  ].join(" ")}
-                >
-                  {TAB_LABELS[tabKey]}
-                </button>
-              ))}
-            </nav>
+            <div className="sensora-premium-panel rounded-[20px] p-1.5 shadow-[0_22px_48px_-28px_rgba(0,0,0,0.48)] backdrop-blur-xl">
+              <nav className="flex flex-wrap gap-0.5" aria-label="업무 영역">
+                {(["고객", "다음할일", "일정", "템플릿"] as const).map((tabKey) => (
+                  <button
+                    key={tabKey}
+                    type="button"
+                    onClick={() => setTab(tabKey)}
+                    className={[
+                      "min-h-[42px] flex-1 touch-manipulation rounded-[14px] px-4 py-2.5 text-[14px] font-semibold outline-none transition-[color,background,box-shadow,transform] duration-200 motion-reduce:transform-none focus-visible:ring-2 focus-visible:ring-sky-400/35 sm:flex-none sm:px-5",
+                      tab === tabKey
+                        ? "bg-white/[0.1] text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.07),0_12px_28px_-14px_rgba(56,189,248,0.14)] ring-1 ring-sky-400/28"
+                        : "text-slate-400 hover:bg-white/[0.06] hover:text-slate-200 active:scale-[0.99]",
+                    ].join(" ")}
+                  >
+                    {TAB_LABELS[tabKey]}
+                  </button>
+                ))}
+              </nav>
+            </div>
           ) : null}
 
           {activeSection === "customers" && tab === "고객" ? (

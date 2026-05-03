@@ -210,7 +210,7 @@ export function NotebookCover() {
 
       <button
         type="button"
-        className="absolute inset-0 z-[5] cursor-default border-0 bg-[rgba(15,23,42,0.42)] p-0 motion-safe:transition-colors motion-safe:duration-200"
+        className="absolute inset-0 z-[5] cursor-default border-0 bg-[rgba(2,8,23,0.58)] p-0 motion-safe:transition-colors motion-safe:duration-200 hover:bg-[rgba(2,8,23,0.64)]"
         aria-label={t("cover.onboarding.close")}
         onClick={dismissQuiet}
       />
