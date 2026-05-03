@@ -99,7 +99,7 @@ export function useBetaSheetAccess(
       setLoading(false);
       setResolved(true);
       setApproved(false);
-      setStatus("error");
+      setStatus("not_found");
       return;
     }
 
@@ -114,7 +114,7 @@ export function useBetaSheetAccess(
           setLoading(false);
           setResolved(true);
           setApproved(false);
-          setStatus("error");
+          setStatus("not_found");
         }
         return;
       }

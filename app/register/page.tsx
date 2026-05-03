@@ -96,6 +96,7 @@ export default function RegisterPage() {
 
     const emailNorm = normalizeEmailForBetaAccess(userEmail ?? "");
     if (!emailNorm) {
+      setBetaGate("not_found");
       return;
     }
 

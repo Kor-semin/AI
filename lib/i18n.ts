@@ -488,12 +488,12 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "register.firebaseDevHint":
       "개발 전용: Firebase 클라이언트 설정값이 비어 있습니다. 로컬 .env.local 또는 문서를 확인하세요.",
     "register.access.checking": "베타 신청 승인 여부를 확인하는 중입니다…",
-    "register.access.pendingTitle": "아직 베타 승인이 완료되지 않았습니다.",
+    "register.access.pendingTitle": "베타 승인 대기 중입니다.",
     "register.access.pendingBody":
       "신청 내용을 확인한 뒤 순차적으로 안내드리겠습니다.",
     "register.access.notFoundTitle": "베타 신청 내역을 찾을 수 없습니다.",
-    "register.access.notFoundBody": "먼저 베타 신청을 남겨 주세요.",
-    "register.access.rejectedTitle": "베타 사용 대상이 아닙니다.",
+    "register.access.notFoundBody": "먼저 베타 신청을 남겨주세요.",
+    "register.access.rejectedTitle": "베타 사용 승인이 완료되지 않았습니다.",
     "register.access.rejectedBody": "현재 계정은 베타 사용 대상에 포함되지 않았습니다.",
     "register.access.errorTitle": "베타 승인 여부를 확인하지 못했습니다.",
     "register.access.errorBody":
@@ -902,13 +902,13 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "register.firebaseDevHint":
       "Dev only: Firebase client config is missing. Check .env.local or internal docs.",
     "register.access.checking": "Checking your beta approval status…",
-    "register.access.pendingTitle": "Beta approval isn’t complete yet.",
+    "register.access.pendingTitle": "Your beta signup is awaiting approval.",
     "register.access.pendingBody":
-      "We’ll review signup details and reach out in turn.",
-    "register.access.notFoundTitle": "We couldn’t find a beta signup under this email.",
+      "We’ll review your request and reach out in turn.",
+    "register.access.notFoundTitle": "We couldn’t find a beta signup for this email.",
     "register.access.notFoundBody": "Please submit a beta request first.",
-    "register.access.rejectedTitle": "This account isn’t in the beta program.",
-    "register.access.rejectedBody": "This account isn’t eligible for Sensora beta access right now.",
+    "register.access.rejectedTitle": "Beta approval wasn’t granted for this account.",
+    "register.access.rejectedBody": "This account isn’t included in the current Sensora beta.",
     "register.access.errorTitle": "We couldn’t verify beta approval.",
     "register.access.errorBody":
       "This may be a network or setup issue. Try again shortly, or contact us via the beta signup flow if it keeps happening.",

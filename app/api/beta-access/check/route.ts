@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 
+import { mapUpstreamBetaStatusToCanonical } from "@/lib/betaAccessStatusMap";
+
 const UPSTREAM_MS = 12_000;
-const ALLOWED_STATUS = new Set(["approved", "pending", "rejected", "not_found"]);
 
 export async function POST(req: Request): Promise<NextResponse> {
   let emailNorm = "";
@@ -58,18 +59,18 @@ export async function POST(req: Request): Promise<NextResponse> {
 
     const rec = parsed as Record<string, unknown>;
     const okRaw = rec.ok === true;
-    let statusRaw = typeof rec.status === "string" ? rec.status.trim().toLowerCase() : "";
+    const canonical = mapUpstreamBetaStatusToCanonical(rec.status);
 
-    if (!okRaw || !ALLOWED_STATUS.has(statusRaw)) {
+    if (!okRaw || canonical === "error_parse") {
       return NextResponse.json({ ok: false, approved: false, status: "error" });
     }
 
-    const approved = statusRaw === "approved";
+    const approved = canonical === "approved";
 
     return NextResponse.json({
       ok: true,
       approved,
-      status: statusRaw,
+      status: canonical,
     });
   } catch {
     return NextResponse.json({ ok: false, approved: false, status: "error" });

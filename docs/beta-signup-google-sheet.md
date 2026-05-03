@@ -19,8 +19,8 @@ Sensora 웹 앱의 `/join` 폼 제출은 `NEXT_PUBLIC_BETA_SIGNUP_ENDPOINT`가 �
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | `submittedAt` | `source` | `fullName` | `contact` | `email` | `dealership` | `currentCrmApproach` | `motivation` | `status` | `approvedAt` | `approvedBy` | `reviewNote` |
 
-- 신규 접수 시 **`status` 기본값은 `pending`** 입니다(스크립트 `doPost`에서 설정).
-- **`approved`**: 앱·클라우드 경로 허용 · **`pending`**: 대표 검토 대기 · **`rejected`**: 해당 이메일 사용 불가 안내
+- 신규 접수 시 **`status` 기본값은 `승인 대기`** 입니다(스크립트 `doPost`에서 설정).
+- **`승인 완료`**: 앱·클라우드 경로 허용 · **`승인 대기`**: 대표 검토 대기 · **`승인 거절`**: 해당 이메일 사용 불가 안내 · **`status` 빈 칸**: 조회 시 “신청 없음”과 동일하게 처리(아래 스크립트 예시 참고).
 - `approvedAt`, `approvedBy`, `reviewNote`는 운영자가 수동으로 채울 수 있습니다.
 
 3. 스프레드시트 메뉴 **확장 프로그램 → Apps Script**로 이동합니다.
@@ -61,7 +61,7 @@ function doPost(e) {
       data.dealership || "",
       data.currentCrmApproach || "",
       data.motivation || "",
-      "pending",
+      "승인 대기",
       "",
       "",
       "",
@@ -96,7 +96,9 @@ Vercel 서버는 **GET**으로 다음 쿼리를 붙여 호출합니다.
 
 **응답 JSON**에는 **`ok`**, **`status`**, **`approved`** 만 포함합니다. 이름·연락처·신청 사유 등 **개인정보 필드는 절대 반환하지 않습니다.**
 
-이메일이 시트에 없으면: `{ "ok": true, "approved": false, "status": "not_found" }`  
+시트 **`status`** 는 운영에서 한국어로 관리합니다. 조회 결과의 `status` 필드에는 아래처럼 **시트 값 그대로(또는 `not_found`)** 를 담습니다. Next.js **`/api/beta-access/check`** 가 이를 받아 클라이언트에는 표준 코드(`approved` / `pending` / `rejected` / `not_found`)로만 넘깁니다.
+
+이메일이 시트에 없거나, 해당 행의 `status`가 **비어 있으면**: `{ "ok": true, "approved": false, "status": "not_found" }`  
 같은 이메일이 여러 행이면 **가장 아래 행(최근 append 기준)** 을 사용합니다.
 
 ```javascript
@@ -142,33 +144,54 @@ function doGet(e) {
     ).setMimeType(ContentService.MimeType.JSON);
   }
 
-  var found = null;
+  var rawStatus = null;
   for (var r = values.length - 1; r >= 1; r--) {
     var cell = String(values[r][emailCol] || "")
       .trim()
       .toLowerCase();
     if (cell === email) {
-      found = String(values[r][statusCol] || "pending")
-        .trim()
-        .toLowerCase();
+      rawStatus = String(values[r][statusCol] || "").trim();
       break;
     }
   }
 
-  if (found === null) {
+  if (rawStatus === null) {
     return ContentService.createTextOutput(
       JSON.stringify({ ok: true, approved: false, status: "not_found" }),
     ).setMimeType(ContentService.MimeType.JSON);
   }
 
-  var allowed = { approved: true, pending: true, rejected: true };
-  if (!allowed[found]) {
-    found = "pending";
+  /** 빈 칸·알 수 없는 값은 신청 없음(not_found)으로 통일해 앱에서는 동일 안내를 씁니다. */
+  if (!rawStatus) {
+    return ContentService.createTextOutput(
+      JSON.stringify({ ok: true, approved: false, status: "not_found" }),
+    ).setMimeType(ContentService.MimeType.JSON);
   }
 
-  var approved = found === "approved";
+  var approved = false;
+  var outStatus = rawStatus;
+
+  /** 기존 시트에 영문이 남아 있으면 매핑(선택). */
+  var lowerLegacy = rawStatus.toLowerCase();
+  if (lowerLegacy === "approved") {
+    approved = true;
+    outStatus = "승인 완료";
+  } else if (lowerLegacy === "pending") {
+    outStatus = "승인 대기";
+  } else if (lowerLegacy === "rejected") {
+    outStatus = "승인 거절";
+  } else if (rawStatus === "승인 완료") {
+    approved = true;
+  } else if (rawStatus === "승인 대기" || rawStatus === "승인 거절") {
+    approved = false;
+  } else {
+    return ContentService.createTextOutput(
+      JSON.stringify({ ok: true, approved: false, status: "not_found" }),
+    ).setMimeType(ContentService.MimeType.JSON);
+  }
+
   return ContentService.createTextOutput(
-    JSON.stringify({ ok: true, approved: approved, status: found }),
+    JSON.stringify({ ok: true, approved: approved, status: outStatus }),
   ).setMimeType(ContentService.MimeType.JSON);
 }
 ```
@@ -216,7 +239,8 @@ BETA_ACCESS_ENDPOINT=https://script.google.com/macros/s/.../exec
 BETA_ACCESS_SECRET=
 ```
 
-앱 쪽 API: **`POST /api/beta-access/check`** — Body `{ "email": "user@example.com" }` — 응답은 `ok`, `approved`, `status`만 클라이언트로 전달합니다.
+앱 쪽 API: **`POST /api/beta-access/check`** — Body `{ "email": "user@example.com" }` — 응답은 `ok`, `approved`, `status`만 클라이언트로 전달합니다.  
+`status`는 항상 **`approved` \| `pending` \| `rejected` \| `not_found` \| `error`**(Apps Script 및 시트 표기와 무관하게 서버에서 정규화)입니다.
 
 ---
 
@@ -239,8 +263,8 @@ BETA_ACCESS_SECRET=
 
 1. **엔드포인트 미설정:** `/join`에서 제출 시 **테스트 제출** 안내(저장 미연결)가 나오는지 확인합니다.
 2. **엔드포인트 설정 후:** 클라이언트는 **`no-cors`** 로 요청하므로 **응답 상태·본문은 페이지 스크립트에서 확인 불가**합니다. Network 에 전송 행만 보일 수 있습니다. 최종 검증은 **시트 새 행 추가** 여부입니다. **Console 에 입력값을 찍지 않습니다.**
-3. 성공 후 **Spreadsheet 새 행**의 `status`가 `pending`인지 확인합니다.
-4. **`BETA_ACCESS_ENDPOINT` 설정 후:** 시트에서 해당 이메일을 `approved`로 바꾼 뒤 `/register` 또는 로그인 상태의 앱에서 정상 진입하는지 확인합니다.
+3. 성공 후 **Spreadsheet 새 행**의 `status`가 **`승인 대기`**인지 확인합니다.
+4. **`BETA_ACCESS_ENDPOINT` 설정 후:** 시트에서 해당 이메일을 **`승인 완료`**로 바꾼 뒤 `/register` 또는 로그인 상태의 앱에서 정상 진입하는지 확인합니다.
 
 ---
 
