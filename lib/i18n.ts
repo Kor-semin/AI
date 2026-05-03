@@ -194,9 +194,8 @@ export type TranslationKey =
   | "landing.showroom.hero.quietFuture"
   | "landing.showroom.hero.senseAuraTag"
   | "landing.showroom.hero.kickerBadge"
-  | "landing.showroom.hero.leadLine1"
-  | "landing.showroom.hero.leadLine2"
-  | "landing.showroom.hero.desc"
+  | "landing.showroom.hero.headline"
+  | "landing.showroom.hero.sub"
   | "landing.showroom.bridge.line1"
   | "landing.showroom.bridge.line2"
   | "landing.showroom.heroPreview.needsSnippet"
@@ -331,7 +330,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "hero.description":
       "고객 상담과 일정까지 한 화면에 모읍니다. AI는 검토용 요약과 문자 초안을 정리하고, 저장·판단은 항상 영업사원이 합니다.",
     "cta.joinBeta": "베타 신청하기",
-    "cta.tryAppExperience": "앱 체험하기",
+    "cta.tryAppExperience": "앱 화면 살펴보기",
     "cta.openAppWorkspace": "앱 워크스페이스 열기",
     "cta.viewDemo": "데모 보기",
     "cta.tryAIDemo": "AI 비서 체험하기",
@@ -492,11 +491,10 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.crmDemo.startCta": "고객관리 시작하기",
     "landing.showroom.hero.quietFuture": "실무 현장 안내형",
     "landing.showroom.hero.senseAuraTag": "Sense · Aura",
-    "landing.showroom.hero.kickerBadge": "차량 영업 현장을 위한 정리형 CRM",
-    "landing.showroom.hero.leadLine1": "상담 내용을 바탕으로",
-    "landing.showroom.hero.leadLine2": "다음 행동과 발송 문구를 정리합니다.",
-    "landing.showroom.hero.desc":
-      "상담 기록, 금융 조건, 출고 안내까지 한 흐름으로 묶습니다. AI 비서가 니즈와 안내 문장 초안을 정리·제안하고, 저장과 수정은 항상 영업사원이 결정합니다.",
+    "landing.showroom.hero.kickerBadge": "자동차 영업사원 업무용",
+    "landing.showroom.hero.headline": "자동차 영업사원을 위한 AI 고객관리 워크스페이스",
+    "landing.showroom.hero.sub":
+      "상담 메모, 관심 차량, 다음 연락, 사후관리까지 흩어진 고객 정보를 한 흐름으로 정리합니다. AI는 초안을 돕고, 최종 판단은 영업사원이 합니다.",
     "landing.showroom.bridge.line1": "상담은 기록으로,",
     "landing.showroom.bridge.line2": "기록은 다음 행동으로.",
     "landing.showroom.heroPreview.needsSnippet": "패밀리 이동·승차감·승하차 동선 중심. 예산 검토 다음 단계: 금융 조건 초안 안내.",
@@ -642,7 +640,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "hero.description":
       "Sensora organizes customer conversations, vehicle interests, follow-ups, message drafts, and sales pipelines with AI.",
     "cta.joinBeta": "Join the Beta",
-    "cta.tryAppExperience": "Explore the App",
+    "cta.tryAppExperience": "Browse app screens",
     "cta.openAppWorkspace": "Open the Workspace",
     "cta.viewDemo": "View Demo",
     "cta.tryAIDemo": "Try the AI Assistant",
@@ -804,11 +802,10 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.crmDemo.startCta": "Start in CRM",
     "landing.showroom.hero.quietFuture": "Quiet futurism",
     "landing.showroom.hero.senseAuraTag": "Sense · Aura",
-    "landing.showroom.hero.kickerBadge": "Structured CRM for automotive sales",
-    "landing.showroom.hero.leadLine1": "Reads what customers hint at—and",
-    "landing.showroom.hero.leadLine2": "lays out the quiet next beats of the deal.",
-    "landing.showroom.hero.desc":
-      "Notes, follow-ups, finance terms, delivery readiness. SensoraGuide proposes the next salesperson move—lightly, beside you—not out in front.",
+    "landing.showroom.hero.kickerBadge": "Built for automotive sales reps",
+    "landing.showroom.hero.headline": "AI customer workspace for automotive sales reps",
+    "landing.showroom.hero.sub":
+      "Bring notes, interested vehicles, next contacts, and aftercare into one steady flow. AI helps with drafts—you stay in charge of decisions.",
     "landing.showroom.bridge.line1": "Consultation settles into notes,",
     "landing.showroom.bridge.line2": "notes guide the disciplined next touch.",
     "landing.showroom.heroPreview.needsSnippet":

@@ -171,23 +171,19 @@ function ShowroomHero({ onOpenAppWorkspace }: { onOpenAppWorkspace: () => void }
               {t("landing.showroom.hero.kickerBadge")}
             </span>
           </div>
-          <h1 className="mt-6 text-[clamp(2.25rem,6.2vw,5.25rem)] font-semibold leading-[1.04] tracking-[-0.036em] text-[#111827] sm:mt-8">
-            {t("product.name")}
+          <h1 className="mt-6 text-balance text-[clamp(1.4375rem,5.1vw+0.75rem,2.875rem)] font-semibold leading-[1.13] tracking-[-0.032em] text-[#111827] sm:mt-8 sm:text-[clamp(1.875rem,3.8vw,2.875rem)] sm:leading-[1.1] lg:leading-[1.06]">
+            {t("landing.showroom.hero.headline")}
           </h1>
-          <p className="mt-7 max-w-[43ch] text-[clamp(1.35rem,3.05vw,2.75rem)] font-semibold leading-[1.22] tracking-[-0.028em] text-[#374151] sm:mt-8 sm:max-w-[40ch] sm:leading-[1.18] lg:mt-9 lg:leading-[1.13] xl:leading-[1.1]">
-            <span className="block md:inline">{t("landing.showroom.hero.leadLine1")}</span>{" "}
-            <span className="block text-[#111827] sm:inline">{t("landing.showroom.hero.leadLine2")}</span>
-          </p>
-          <p className="mt-8 max-w-[50ch] text-[15px] leading-[1.68] text-[#4B5563] sm:mt-10 sm:text-[17px] sm:leading-[1.64] lg:mt-11 lg:max-w-[48ch]">
-            {t("landing.showroom.hero.desc")}
+          <p className="mt-6 max-w-[42rem] text-[14px] leading-[1.65] text-[#4B5563] sm:mt-8 sm:text-[17px] sm:leading-[1.62] lg:mt-9">
+            {t("landing.showroom.hero.sub")}
           </p>
           <div className="mt-10 flex max-w-full flex-col gap-3.5 sm:mt-12 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-5 sm:gap-y-3 lg:gap-x-6">
-            <button type="button" onClick={onOpenAppWorkspace} className={`relative z-20 cursor-pointer touch-manipulation pointer-events-auto ${heroPrimaryBtn}`}>
-              {t("cta.tryAppExperience")}
-            </button>
-            <Link href={JOIN_PATH} prefetch={false} className={`relative z-20 touch-manipulation pointer-events-auto ${heroGhostBtn}`}>
+            <Link href={JOIN_PATH} prefetch={false} className={`relative z-20 inline-flex touch-manipulation pointer-events-auto ${heroPrimaryBtn}`}>
               {t("cta.joinBeta")}
             </Link>
+            <button type="button" onClick={onOpenAppWorkspace} className={`relative z-20 cursor-pointer touch-manipulation pointer-events-auto ${heroGhostBtn}`}>
+              {t("cta.tryAppExperience")}
+            </button>
           </div>
         </div>
         <div className="relative z-[2] min-w-0 lg:flex lg:items-center lg:justify-end">
@@ -352,13 +348,13 @@ function FinalShowroomCTAInner({ onOpenAppWorkspace }: { onOpenAppWorkspace: () 
     <div className={`${cardChrome} mx-auto flex max-w-[720px] flex-col items-center px-8 py-14 text-center sm:px-12`}>
       <p className="text-[clamp(1.25rem,3vw,1.625rem)] font-semibold tracking-[-0.02em] text-[#111827]">{t("brand.slogan")}</p>
       <p className="mt-5 max-w-[48ch] text-[15px] leading-relaxed text-[#4B5563] sm:text-[16px]">{t("landing.showroom.closing.desc")}</p>
-      <div className="mt-10 flex flex-wrap justify-center gap-3">
-        <button type="button" onClick={onOpenAppWorkspace} className={`relative z-20 cursor-pointer touch-manipulation pointer-events-auto ${primaryBtn}`}>
-          {t("cta.openAppWorkspace")}
-        </button>
-        <Link href={JOIN_PATH} prefetch={false} className={`relative z-20 touch-manipulation pointer-events-auto ${ghostBtn}`}>
+      <div className="mt-10 flex flex-col flex-wrap justify-center gap-3 sm:flex-row">
+        <Link href={JOIN_PATH} prefetch={false} className={`relative z-20 inline-flex justify-center touch-manipulation pointer-events-auto ${primaryBtn}`}>
           {t("cta.joinBeta")}
         </Link>
+        <button type="button" onClick={onOpenAppWorkspace} className={`relative z-20 cursor-pointer touch-manipulation pointer-events-auto ${ghostBtn}`}>
+          {t("cta.tryAppExperience")}
+        </button>
       </div>
     </div>
   );
