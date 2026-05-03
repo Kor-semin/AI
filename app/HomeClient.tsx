@@ -15,6 +15,7 @@ import {
   hashToCrmSection,
   type CrmSection,
 } from "@/app/crm/crmSectionTypes";
+import { AppPreviewToc } from "@/app/components/concierge/AppPreviewToc";
 import { LandingShowroom } from "@/app/components/concierge/LandingSections";
 import { CRMApp } from "@/app/crm/CRMApp";
 import { useAuth } from "@/app/crm/useAuth";
@@ -34,6 +35,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
   );
   const [view, setView] = useState<"landing" | "app">(initialView);
   const [crmSection, setCrmSection] = useState<CrmSection>("dashboard");
+  const [appPreviewTocOpen, setAppPreviewTocOpen] = useState(false);
   const router = useRouter();
 
   const navigateCrmSection = useCallback(
@@ -86,11 +88,20 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
     return () => window.removeEventListener("popstate", onPop);
   }, []);
 
-  const openAppWorkspace = useCallback(() => {
-    setView("app");
-    setCrmSection("ai");
-    void router.push("/?view=app#crm-ai-assistant");
-  }, [router]);
+  const openAppPreviewToc = useCallback(() => {
+    setAppPreviewTocOpen(true);
+  }, []);
+
+  const enterAppFromPreviewToc = useCallback(
+    (section: CrmSection) => {
+      setAppPreviewTocOpen(false);
+      setView("app");
+      setCrmSection(section);
+      const h = crmSectionToHash(section);
+      void router.push(`/?view=app#${h}`);
+    },
+    [router],
+  );
 
   useEffect(() => {
     if (view !== "app") return undefined;
@@ -216,7 +227,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                 <div className="flex w-full min-w-0 flex-col gap-2.5 min-[420px]:flex-row min-[420px]:flex-wrap min-[420px]:justify-end sm:gap-3">
                   <button
                     type="button"
-                    onClick={openAppWorkspace}
+                    onClick={openAppPreviewToc}
                     className={[
                       "landing-nav-cta-preview relative z-[20] inline-flex min-h-[56px] w-full shrink-0 cursor-pointer items-center justify-center gap-2 rounded-2xl",
                       "border border-white/30 bg-white/[0.092] px-5 py-3.5 text-center text-[14px] font-semibold text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_0_0_1px_rgba(56,189,248,0.06)_inset,0_0_40px_-10px_rgba(56,189,248,0.16)] ring-1 ring-inset ring-sky-400/14",
@@ -310,8 +321,14 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
         </div>
       </header>
 
+      <AppPreviewToc
+        open={appPreviewTocOpen}
+        onClose={() => setAppPreviewTocOpen(false)}
+        onSelectSection={enterAppFromPreviewToc}
+      />
+
       <main className={`relative z-10 flex-1 ${view === "landing" ? "bg-transparent" : ""}`}>
-        {view === "landing" ? <LandingShowroom onOpenAppWorkspace={openAppWorkspace} /> : null}
+        {view === "landing" ? <LandingShowroom onOpenAppWorkspace={openAppPreviewToc} /> : null}
 
         {view === "app" ? (
           <div

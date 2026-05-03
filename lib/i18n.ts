@@ -348,6 +348,26 @@ export type TranslationKey =
   | "landing.showroom.tip.openOriginal"
   | "landing.showroom.tip.openOriginalAria"
   | "landing.showroom.tip.openOriginalHint"
+  | "preview.toc.title"
+  | "preview.toc.subtitle"
+  | "preview.toc.disclaimer1"
+  | "preview.toc.disclaimer2"
+  | "preview.toc.disclaimer3"
+  | "preview.toc.disclaimer4"
+  | "preview.toc.close"
+  | "preview.toc.openDashboard"
+  | "preview.toc.summaryTitle"
+  | "preview.toc.summaryDesc"
+  | "preview.toc.customersTitle"
+  | "preview.toc.customersDesc"
+  | "preview.toc.notesTitle"
+  | "preview.toc.notesDesc"
+  | "preview.toc.aiTitle"
+  | "preview.toc.aiDesc"
+  | "preview.toc.followupTitle"
+  | "preview.toc.followupDesc"
+  | "preview.toc.betaTitle"
+  | "preview.toc.betaDesc"
   | "cover.aiGuide.title"
   | "cover.aiGuide.subtitle"
   | "cover.aiGuide.step1.title"
@@ -806,6 +826,27 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.showroom.tip.openOriginal": "원본 크게 보기",
     "landing.showroom.tip.openOriginalAria": "현재 가이드를 원본 크기로 새 탭에서 엽니다.",
     "landing.showroom.tip.openOriginalHint": "이미지를 누르면 원본 크기로 볼 수 있습니다. 핀치로 확대해 글자를 확인해 보세요.",
+    "preview.toc.title": "앱 화면을 미리 살펴보세요.",
+    "preview.toc.subtitle": "아래 항목을 선택하면 예시 화면으로 이동합니다.",
+    "preview.toc.disclaimer1": "표시되는 내용은 예시 화면입니다.",
+    "preview.toc.disclaimer2": "미리보기에서는 실제 고객 정보가 서버에 저장되지 않습니다. (로컬 데모)",
+    "preview.toc.disclaimer3": "실제 고객 저장과 계정 기능은 베타 승인 후 사용할 수 있습니다.",
+    "preview.toc.disclaimer4":
+      "AI는 검토용 초안을 제안합니다. 최종 표현과 판단은 항상 영업사원이 합니다.",
+    "preview.toc.close": "닫기",
+    "preview.toc.openDashboard": "전체 요약부터 보기",
+    "preview.toc.summaryTitle": "전체 요약 보기",
+    "preview.toc.summaryDesc": "오늘의 연락·일정·최근 상담 흐름을 한눈에 봅니다.",
+    "preview.toc.customersTitle": "고객관리 보기",
+    "preview.toc.customersDesc": "고객 목록과 관심 차량, 상태를 확인합니다.",
+    "preview.toc.notesTitle": "상담 메모 보기",
+    "preview.toc.notesDesc": "상담 내용을 정리하고 다시 확인합니다.",
+    "preview.toc.aiTitle": "AI 비서 보기",
+    "preview.toc.aiDesc": "상담 메모를 바탕으로 요약과 검토용 초안을 확인합니다.",
+    "preview.toc.followupTitle": "사후관리 보기",
+    "preview.toc.followupDesc": "다음 연락과 출고 안내를 놓치지 않게 정리합니다.",
+    "preview.toc.betaTitle": "베타 신청하기",
+    "preview.toc.betaDesc": "실제 저장 기능과 영업 계정은 베타 승인 후 사용할 수 있습니다.",
     "cover.aiGuide.title": "AI 사용법",
     "cover.aiGuide.subtitle":
       "상담 내용을 입력하면 SensoraGuide가 요약과 다음 진행 초안·연락 문구를 검토용으로 정리합니다.",
@@ -1280,6 +1321,27 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.showroom.tip.openOriginalAria": "Opens the current guide image at full size in a new tab.",
     "landing.showroom.tip.openOriginalHint":
       "Tap the image to view the original PNG. Pinch-zoom on your phone to read small text comfortably.",
+    "preview.toc.title": "Browse the workspace screens.",
+    "preview.toc.subtitle": "Choose a topic to jump to its sample workspace view.",
+    "preview.toc.disclaimer1": "These are illustrative screens—not live customer accounts.",
+    "preview.toc.disclaimer2":
+      "In this preview your data stays on your device for the demo—it is not saved to our servers.",
+    "preview.toc.disclaimer3": "Real customer storage and account features unlock after beta approval.",
+    "preview.toc.disclaimer4": "AI suggests review drafts—you stay in charge of wording and decisions.",
+    "preview.toc.close": "Close",
+    "preview.toc.openDashboard": "Start from overview",
+    "preview.toc.summaryTitle": "Overview",
+    "preview.toc.summaryDesc": "See today’s follow-ups, schedule cues, and recent consultation flow at a glance.",
+    "preview.toc.customersTitle": "Customers",
+    "preview.toc.customersDesc": "Explore the sample list with vehicles and deal status.",
+    "preview.toc.notesTitle": "Consultation notes",
+    "preview.toc.notesDesc": "Capture and revisit memo-style consultation details.",
+    "preview.toc.aiTitle": "AI assistant",
+    "preview.toc.aiDesc": "Review summaries and drafts grounded in memo context.",
+    "preview.toc.followupTitle": "Aftercare",
+    "preview.toc.followupDesc": "Keep outreach and delivery cues organized without skipping steps.",
+    "preview.toc.betaTitle": "Join the beta",
+    "preview.toc.betaDesc": "Apply for beta access before enabling full storage with your seller account.",
     "cover.aiGuide.title": "How to Use AI",
     "cover.aiGuide.subtitle":
       "Enter consultation notes and SensoraGuide will suggest customer summaries, next actions, and follow-up messages.",
