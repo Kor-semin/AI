@@ -74,7 +74,7 @@ export default function BetaJoinPage() {
           <h1 className="mt-4 text-2xl font-semibold tracking-tight text-[color:var(--foreground)] sm:text-3xl">
             {t("join.title")}
           </h1>
-          <p className="mt-3 max-w-[42ch] text-sm leading-relaxed text-[color:var(--ink-2)]">
+          <p className="mt-3 max-w-[min(100%,40rem)] text-pretty text-sm leading-relaxed text-[color:var(--ink-2)] whitespace-pre-line max-sm:max-w-none">
             {t("join.intro")}
           </p>
         </div>
@@ -141,9 +141,9 @@ export default function BetaJoinPage() {
               <textarea
                 id="currentCrmApproach"
                 name="currentCrmApproach"
-                rows={4}
+                rows={3}
                 required
-                className={`${fieldClass} min-h-[5.5rem] resize-y leading-relaxed`}
+                className={`${fieldClass} resize-y leading-relaxed min-h-[96px] sm:min-h-[7.125rem]`}
                 placeholder="엑셀, 메모, 타사 CRM, 단체 프로그램 등 현재 어떻게 관리하고 있는지 적어 주세요."
               />
             </div>
@@ -155,22 +155,22 @@ export default function BetaJoinPage() {
               <textarea
                 id="motivation"
                 name="motivation"
-                rows={4}
+                rows={3}
                 required
-                className={`${fieldClass} min-h-[5.5rem] resize-y leading-relaxed`}
+                className={`${fieldClass} resize-y leading-relaxed min-h-[96px] sm:min-h-[7.125rem]`}
                 placeholder="기대 기능, 업무 상 불편, 도입 타이밍 등을 적어 주세요."
               />
             </div>
           </fieldset>
 
-          <div className="mt-8 flex flex-col gap-4 border-t border-[#d7dce2] pt-8">
+          <div className="mt-8 flex flex-col gap-5 border-t border-[#d7dce2] pt-8">
             <div
-              className="rounded-xl border border-[#e2e8f0] bg-[#f8fafc] px-4 py-3 text-left text-[12px] leading-[1.65] text-[#475569]"
+              className="space-y-2 rounded-xl border border-[#e2e8f0] bg-[#f8fafc] px-4 py-3.5 text-left text-[12px] leading-[1.65] text-[#475569] max-sm:py-3"
               role="note"
             >
               <p className="font-medium text-[#334155]">{t("join.trustNoticeLine1")}</p>
-              <p className="mt-2">{t("join.trustNoticeLine2")}</p>
-              <p className="mt-1">{t("join.trustNoticeLine3")}</p>
+              <p>{t("join.trustNoticeLine2")}</p>
+              <p>{t("join.trustNoticeLine3")}</p>
             </div>
             <button
               type="submit"
@@ -179,7 +179,7 @@ export default function BetaJoinPage() {
             >
               {pending ? t("join.submitting") : t("join.submit")}
             </button>
-            <p className="text-center text-[12px] leading-relaxed text-[color:var(--ink-2)]">
+            <p className="text-center text-[12px] leading-relaxed text-[color:var(--ink-2)] max-sm:px-0.5 max-sm:leading-[1.55]">
               이미 명함 접수 후 승인을 기다리는 경우{" "}
               <Link href="/register" className="font-semibold text-[#5c6370] underline-offset-4 hover:text-[#1e2329] hover:underline">
                 영업 계정 등록
