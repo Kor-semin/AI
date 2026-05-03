@@ -307,6 +307,22 @@ export type TranslationKey =
   | "landing.showroom.guide.guideQuote"
   | "landing.showroom.features.title"
   | "landing.showroom.closing.desc"
+  | "landing.showroom.tip.title"
+  | "landing.showroom.tip.subtitle"
+  | "landing.showroom.tip.card1.title"
+  | "landing.showroom.tip.card1.desc"
+  | "landing.showroom.tip.card2.title"
+  | "landing.showroom.tip.card2.desc"
+  | "landing.showroom.tip.card3.title"
+  | "landing.showroom.tip.card3.desc"
+  | "landing.showroom.tip.card4.title"
+  | "landing.showroom.tip.card4.desc"
+  | "landing.showroom.tip.close"
+  | "landing.showroom.tip.closeOverlay"
+  | "landing.showroom.tip.guideWord"
+  | "landing.showroom.tip.imageMissing"
+  | "landing.showroom.tip.prev"
+  | "landing.showroom.tip.next"
   | "cover.aiGuide.title"
   | "cover.aiGuide.subtitle"
   | "cover.aiGuide.step1.title"
@@ -685,7 +701,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.showroom.hero.kickerBadge": "자동차 영업사원 업무용",
     "landing.showroom.hero.headline": "자동차 영업사원을 위한 AI 고객관리 워크스페이스",
     "landing.showroom.hero.sub":
-      "상담 이력, 관심 차량, 다음 연락, 사후관리까지 흩어진 고객 정보를 한 흐름으로 정리합니다. AI는 상담 내용을 정리하고 검토용 초안을 제안하며, 최종 판단은 영업사원이 합니다.",
+      "상담부터 사후관리까지 한 흐름으로 관리합니다.\n\nAI는 초안을 돕고, 최종 판단은 영업사원이 합니다.",
     "landing.showroom.bridge.line1": "상담은 기록으로,",
     "landing.showroom.bridge.line2": "기록은 다음 행동으로.",
     "landing.showroom.heroDash.todayTitle": "오늘 연락할 고객",
@@ -720,6 +736,25 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.showroom.features.title": "영업 현장 업무가 덜 헤매도록 돕습니다",
     "landing.showroom.closing.desc":
       "상담·고객 응대·사후관리까지 한 흐름으로 묶어, 오늘 해야 할 일을 분명하게 보여 줍니다.",
+    "landing.showroom.tip.title": "Sensora 알아가면 좋은 TIP",
+    "landing.showroom.tip.subtitle":
+      "처음 보는 분도 쉽게 이해할 수 있도록, 핵심 내용을 이미지로 정리했습니다.",
+    "landing.showroom.tip.card1.title": "이용 시작 방법",
+    "landing.showroom.tip.card1.desc":
+      "베타 신청부터 승인, 계정 등록 후 사용까지의 흐름을 확인하세요.",
+    "landing.showroom.tip.card2.title": "기능 설명",
+    "landing.showroom.tip.card2.desc": "Sensora Auto CRM의 핵심 기능을 한눈에 확인할 수 있습니다.",
+    "landing.showroom.tip.card3.title": "실제 사용 흐름",
+    "landing.showroom.tip.card3.desc": "상담부터 사후관리까지 실제 사용 흐름을 단계별로 살펴보세요.",
+    "landing.showroom.tip.card4.title": "베타 사용 안내",
+    "landing.showroom.tip.card4.desc": "베타 사용 시 유의사항과 활용 팁을 안내합니다.",
+    "landing.showroom.tip.close": "닫기",
+    "landing.showroom.tip.closeOverlay": "가이드 닫기",
+    "landing.showroom.tip.guideWord": "가이드",
+    "landing.showroom.tip.imageMissing":
+      "가이드 이미지를 불러오지 못했습니다. 곧 이미지를 추가하면 이 자리에 표시됩니다.",
+    "landing.showroom.tip.prev": "이전 가이드",
+    "landing.showroom.tip.next": "다음 가이드",
     "cover.aiGuide.title": "AI 사용법",
     "cover.aiGuide.subtitle":
       "상담 내용을 입력하면 SensoraGuide가 요약과 다음 진행 초안·연락 문구를 검토용으로 정리합니다.",
@@ -1111,7 +1146,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.showroom.hero.kickerBadge": "Built for automotive sales reps",
     "landing.showroom.hero.headline": "AI customer-relationship workspace for automotive sales reps",
     "landing.showroom.hero.sub":
-      "Consultation notes, interests, upcoming contacts, and aftercare cues stay on one disciplined flow. AI tidies memo lines and drafts messages for review—salespeople make the calls.",
+      "We keep consultation through after-sales care on one disciplined flow.\n\nAI helps with draft ideas; salespeople make the final calls.",
     "landing.showroom.bridge.line1": "Consultation settles into notes,",
     "landing.showroom.bridge.line2": "notes guide the disciplined next touch.",
     "landing.showroom.heroDash.todayTitle": "Today's follow-ups",
@@ -1147,6 +1182,25 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.showroom.features.title": "Quiet automation—for sales desks",
     "landing.showroom.closing.desc":
       "Sensora aligns consultation work and disciplined follow-through into a single understated flow.",
+    "landing.showroom.tip.title": "Sensora tips worth knowing",
+    "landing.showroom.tip.subtitle":
+      "We distilled the essentials into a short image guide you can skim in a minute.",
+    "landing.showroom.tip.card1.title": "Getting started",
+    "landing.showroom.tip.card1.desc":
+      "Beta signup, approval, and how to resume in the workspace after onboarding.",
+    "landing.showroom.tip.card2.title": "Feature overview",
+    "landing.showroom.tip.card2.desc": "A quick visual tour of Sensora Auto CRM essentials.",
+    "landing.showroom.tip.card3.title": "Typical workspace flow",
+    "landing.showroom.tip.card3.desc": "Consultation cues through aftercare follow-up, step by step.",
+    "landing.showroom.tip.card4.title": "Beta etiquette",
+    "landing.showroom.tip.card4.desc": "Things to note while the beta windows are open—and how to get the most value.",
+    "landing.showroom.tip.close": "Close",
+    "landing.showroom.tip.closeOverlay": "Close guide",
+    "landing.showroom.tip.guideWord": "Guide",
+    "landing.showroom.tip.imageMissing":
+      "We couldn't load this guide image yet. Adding the asset will display it automatically here.",
+    "landing.showroom.tip.prev": "Previous slide",
+    "landing.showroom.tip.next": "Next slide",
     "cover.aiGuide.title": "How to Use AI",
     "cover.aiGuide.subtitle":
       "Enter consultation notes and SensoraGuide will suggest customer summaries, next actions, and follow-up messages.",

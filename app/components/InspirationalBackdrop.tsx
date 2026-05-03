@@ -32,22 +32,26 @@ export function InspirationalBackdrop() {
         <div className="absolute inset-0">
           <div
             aria-hidden
-            className="absolute inset-0 bg-gradient-to-br from-[#eef1f4] via-[#e8ecf2] to-[#f8fafc]"
+            className="absolute inset-0 bg-gradient-to-b from-[#020817] via-[#07111f] to-[#020817]"
           />
           <div
             aria-hidden
-            className="absolute inset-0 bg-[radial-gradient(ellipse_120%_70%_at_20%_-12%,rgba(148,163,184,0.2),transparent_55%)]"
+            className="absolute inset-0 bg-[radial-gradient(ellipse_90%_55%_at_18%_-8%,rgba(56,189,248,0.09),transparent_58%)]"
           />
           <div
             aria-hidden
-            className="absolute inset-0 bg-[radial-gradient(900px_560px_at_100%_18%,rgba(255,255,255,0.75),transparent_58%),linear-gradient(180deg,rgba(241,245,249,0.5),transparent)]"
+            className="absolute inset-0 bg-[radial-gradient(70%_50%_at_96%_10%,rgba(139,92,246,0.07),transparent_55%)]"
+          />
+          <div
+            aria-hidden
+            className="absolute inset-0 bg-[linear-gradient(180deg,rgba(15,23,42,0.35),transparent_42%)]"
           />
         </div>
       </div>
       <div
         role="status"
         aria-live="polite"
-        className="pointer-events-none fixed bottom-14 left-4 z-[5] max-w-[min(92vw,22rem)] text-left text-[11px] font-medium tracking-tight text-[#64748b]"
+        className="pointer-events-none fixed bottom-14 left-4 z-[5] max-w-[min(92vw,22rem)] text-left text-[11px] font-medium tracking-tight text-slate-500"
       >
         「{QUOTES[quoteIdx]}」
       </div>
