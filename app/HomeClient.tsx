@@ -20,7 +20,7 @@ import { CRMApp } from "@/app/crm/CRMApp";
 import { useAuth } from "@/app/crm/useAuth";
 import { sellerCanUseApp, useSellerProfile } from "@/app/crm/useSellerProfile";
 import { isFirebaseConfigured, isGoogleAuthEnabled } from "@/app/firebase/client";
-import { useBetaSheetAccess } from "@/lib/betaAccess";
+import { maskEmailForBetaDisplay, useBetaSheetAccess } from "@/lib/betaAccess";
 
 export function HomeClient({ initialView }: { initialView: "landing" | "app" }) {
   const { auth, authError, signOut } = useAuth();
@@ -337,6 +337,16 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                             : betaAccess.status === "rejected"
                               ? t("register.access.rejectedBody")
                               : t("register.access.errorBody")}
+                      </p>
+                      <p className="mx-auto mt-4 max-w-md text-[11px] leading-relaxed text-slate-500">
+                        <span className="font-medium text-slate-400">{t("register.access.betaCheckEmailLabel")}</span>
+                        {": "}
+                        <span className="font-mono tabular-nums text-slate-300">
+                          {maskEmailForBetaDisplay(auth.status === "signed-in" ? auth.email : null)}
+                        </span>
+                      </p>
+                      <p className="mx-auto mt-1.5 max-w-md text-[10px] leading-snug text-slate-500">
+                        {t("register.access.betaCheckEmailGoogleNote")}
                       </p>
                     </div>
                     <div className="flex flex-wrap items-center justify-center gap-3">

@@ -19,7 +19,11 @@ import {
 import { sellerCanUseApp, useSellerProfile } from "@/app/crm/useSellerProfile";
 import { getFirebaseAuth, getFirebaseStorageBucket, isFirebaseConfigured, isGoogleAuthEnabled } from "@/app/firebase/client";
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
-import { normalizeEmailForBetaAccess, postBetaAccessCheck } from "@/lib/betaAccess";
+import {
+  maskEmailForBetaDisplay,
+  normalizeEmailForBetaAccess,
+  postBetaAccessCheck,
+} from "@/lib/betaAccess";
 
 type BetaGate = "idle" | "checking" | "approved" | "pending" | "rejected" | "not_found" | "error";
 
@@ -361,6 +365,12 @@ export default function RegisterPage() {
             <div className="space-y-4 text-left text-[#39322c]">
               <p className="font-semibold">{betaDenyTitle}</p>
               <p className="text-sm leading-relaxed text-[#4a433b] whitespace-pre-line">{betaDenyBody}</p>
+              <p className="text-[11px] leading-relaxed text-[#5c544c]">
+                <span className="font-semibold text-[#433c36]">{t("register.access.betaCheckEmailLabel")}</span>
+                {": "}
+                <span className="font-mono tabular-nums text-[#312a24]">{maskEmailForBetaDisplay(userEmail)}</span>
+              </p>
+              <p className="text-[10px] leading-snug text-[#6b6158]">{t("register.access.betaCheckEmailGoogleNote")}</p>
               <Link
                 href="/join"
                 className="inline-flex min-h-[48px] w-full touch-manipulation items-center justify-center rounded-xl bg-[#2f2720] px-4 py-3 text-sm font-semibold text-[#fcf9f3] hover:opacity-95"

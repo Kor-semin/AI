@@ -21,6 +21,37 @@ export function normalizeEmailForBetaAccess(email: string): string {
   return email.trim().toLowerCase();
 }
 
+/**
+ * 베타 승인 확인 UI용 이메일 마스킹(예: `se***@example.com`).
+ * 콘솔 로그 등에는 사용하지 마세요.
+ */
+export function maskEmailForBetaDisplay(raw: string | null | undefined): string {
+  const normalized = normalizeEmailForBetaAccess(typeof raw === "string" ? raw : "");
+  if (!normalized) return "—";
+
+  const at = normalized.lastIndexOf("@");
+  if (at <= 0 || at === normalized.length - 1) {
+    return "***";
+  }
+
+  const local = normalized.slice(0, at);
+  const domain = normalized.slice(at + 1);
+  if (!local.length) {
+    return `***@${domain}`;
+  }
+
+  let maskedLocal: string;
+  if (local.length === 1) {
+    maskedLocal = `${local}***`;
+  } else if (local.length === 2) {
+    maskedLocal = `${local}***`;
+  } else {
+    maskedLocal = `${local.slice(0, 2)}***`;
+  }
+
+  return `${maskedLocal}@${domain}`;
+}
+
 export async function postBetaAccessCheck(rawEmail: string): Promise<BetaAccessCheckResponse> {
   const email = normalizeEmailForBetaAccess(rawEmail);
   if (!email) {

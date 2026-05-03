@@ -120,6 +120,8 @@ export type TranslationKey =
   | "register.access.errorBody"
   | "register.access.goJoin"
   | "register.access.goHome"
+  | "register.access.betaCheckEmailLabel"
+  | "register.access.betaCheckEmailGoogleNote"
   | "crm.stat.todayFollowups"
   | "crm.stat.dealProbability"
   | "crm.stat.followupNeeded"
@@ -525,6 +527,9 @@ export const translations: Record<LanguageCode, TranslationDict> = {
       "네트워크 또는 설정 문제일 수 있습니다. 잠시 후 다시 시도해 주세요. 문제가 이어지면 베타 신청 경로를 통해 문의해 주세요.",
     "register.access.goJoin": "베타 신청하러 가기",
     "register.access.goHome": "홈으로 돌아가기",
+    "register.access.betaCheckEmailLabel": "현재 확인 중인 이메일",
+    "register.access.betaCheckEmailGoogleNote":
+      "위 주소는 지금 브라우저에 로그인된 Google 계정 이메일입니다. 베타 신청 시 남긴 이메일과 같아야 승인 완료로 표시됩니다.",
     "crm.stat.todayFollowups": "오늘 연락",
     "crm.stat.dealProbability": "계약 가능성",
     "crm.stat.followupNeeded": "예정된 할 일",
@@ -969,6 +974,9 @@ export const translations: Record<LanguageCode, TranslationDict> = {
       "This may be a network or setup issue. Try again shortly, or contact us via the beta signup flow if it keeps happening.",
     "register.access.goJoin": "Go to beta signup",
     "register.access.goHome": "Back to home",
+    "register.access.betaCheckEmailLabel": "Email being checked",
+    "register.access.betaCheckEmailGoogleNote":
+      "This is the Google account email signed into this browser. It must match the email on your beta signup to show as approved.",
     "crm.stat.todayFollowups": "Today’s Follow-ups",
     "crm.stat.dealProbability": "Deal Probability",
     "crm.stat.followupNeeded": "Follow-up Needed",
