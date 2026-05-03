@@ -179,13 +179,13 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
           className={[
             "mx-auto flex w-full min-w-0 px-4 sm:px-6 lg:px-10",
             view === "landing"
-              ? "max-w-[1440px] flex-col gap-2.5 sm:gap-3 xl:flex-row xl:items-center xl:justify-between xl:gap-4"
+              ? "max-w-[1440px] flex-col gap-2 sm:gap-3 xl:flex-row xl:items-center xl:justify-between xl:gap-4"
               : "max-w-[1280px] flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4",
           ].join(" ")}
         >
           {view === "landing" ? (
             <>
-              <div className="flex min-w-0 flex-1 flex-col gap-2.5 sm:flex-row sm:items-center sm:gap-6 xl:gap-7">
+              <div className="flex min-w-0 max-xl:flex-none flex-col gap-2.5 sm:flex-row sm:items-center sm:gap-6 xl:flex-1 xl:gap-7">
                 <div className="flex min-w-0 items-start gap-3 sm:items-center">
                   <SensoraAnimatedMark size={44} animated={false} className="pointer-events-none hidden shrink-0 sm:block drop-shadow-[0_0_24px_-4px_rgba(56,189,248,0.35)]" aria-hidden />
                   <div className="min-w-0">
@@ -201,7 +201,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                   {t("header.zoomHint")}
                 </p>
               </div>
-              <div className="relative z-[1] flex w-full min-w-0 flex-col gap-4 sm:flex-1 xl:w-auto xl:max-w-none xl:flex-none xl:flex-row xl:flex-wrap xl:items-center xl:justify-end xl:gap-5">
+              <div className="relative z-[1] flex w-full min-w-0 max-xl:flex-none flex-col gap-2.5 sm:gap-3 xl:flex-1 xl:w-auto xl:max-w-none xl:flex-row xl:flex-wrap xl:items-center xl:justify-end xl:gap-5">
                 <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-2 sm:justify-between xl:flex-nowrap xl:justify-end">
                   <LanguageSelect dense />
                   {auth.status === "loading" ? (
@@ -330,7 +330,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
       />
 
       <main
-        className={`relative z-10 ${view === "landing" ? "max-lg:flex-none lg:flex-1" : "flex-1"} ${view === "landing" ? "sensora-landing-main-depth bg-transparent" : ""}`}
+        className={`relative z-10 ${view === "landing" ? "max-lg:flex-none max-lg:min-h-0 lg:flex-1" : "flex-1"} ${view === "landing" ? "sensora-landing-main-depth bg-transparent" : ""}`}
       >
         {view === "landing" ? <LandingShowroom onOpenAppWorkspace={openAppPreviewToc} /> : null}
 

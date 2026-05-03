@@ -274,6 +274,15 @@ html[lang="ko"] body {
   z-index: 1;
 }
 
+/* 랜딩: 모바일에서 main·히어로가 뷰포트 flex로 불필요하게 늘어나며 헤더~목업 사이 빈 공간이 생기지 않도록 */
+@media (max-width: 1023px) {
+  main.sensora-landing-main-depth {
+    align-self: flex-start;
+    width: 100%;
+    min-height: 0;
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .sensora-nebula-shell--drift::before {
     animation: sensora-nebula-drift 48s ease-in-out infinite alternate;
