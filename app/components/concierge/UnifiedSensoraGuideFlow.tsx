@@ -84,7 +84,7 @@ export function UnifiedSensoraGuideFlow({
         [
           { titleKey: "preview.flow.step2.card.customersTitle" as const, descKey: "preview.flow.step2.card.customersDesc" as const, src: "/images/guides/sensora-guide-01.png" },
           { titleKey: "preview.flow.step2.card.aiTitle" as const, descKey: "preview.flow.step2.card.aiDesc" as const, src: "/images/guides/sensora-guide-02.png" },
-          { titleKey: "preview.flow.step2.card.followTitle" as const, descKey: "preview.flow.step2.card.followDesc" as const, src: "/images/guides/sensora-guide-03.png" },
+          { titleKey: "preview.flow.step2.card.followTitle" as const, descKey: "preview.flow.step2.card.followDesc" as const, src: "/images/guides/sensora-guide-04.png" },
         ] as const
       ).map((row) => ({
         title: t(row.titleKey),
@@ -138,7 +138,7 @@ export function UnifiedSensoraGuideFlow({
       />
 
       <div className={`flex min-h-0 flex-1 flex-col ${className}`.trim()}>
-        <div className="sensora-guide-preview-hide-scroll sensora-guide-toc-scroll min-h-0 flex-1 overflow-y-auto overscroll-y-contain [-webkit-overflow-scrolling:touch] pb-2">
+        <div className="sensora-guide-preview-hide-scroll sensora-guide-toc-scroll min-h-0 flex-1 overflow-y-auto overscroll-y-contain [-webkit-overflow-scrolling:touch] pb-24 max-sm:pb-[7.25rem] sm:pb-8">
           <div className="mx-auto flex w-full max-w-[min(640px,100%)] flex-col px-1 sm:max-w-[min(720px,100%)]">
             {wizardStep === 0 ? (
               <div className={`flex flex-col ${variant === "notebook" ? "items-center text-center pt-1" : "items-center text-center pt-1 sm:pt-2"}`}>
@@ -154,6 +154,14 @@ export function UnifiedSensoraGuideFlow({
                     <p key={line}>{line}</p>
                   ))}
                 </div>
+                <Link
+                  href={REGISTER_PATH}
+                  prefetch={false}
+                  onClick={() => onClose()}
+                  className="mx-auto mt-5 block max-w-[min(28rem,94vw)] text-center text-[0.8125rem] font-semibold tracking-tight text-sky-300/95 underline decoration-sky-400/25 underline-offset-[0.22em] transition hover:text-sky-100 sm:text-[0.875rem]"
+                >
+                  {t("preview.flow.step1.registerCta")}
+                </Link>
               </div>
             ) : null}
 
@@ -172,7 +180,7 @@ export function UnifiedSensoraGuideFlow({
                     >
                       <div className="flex items-start gap-3">
                         <div className="relative size-14 shrink-0 overflow-hidden rounded-lg border border-white/[0.1] bg-[#030712]/90 sm:size-16">
-                          <Image src={row.src} alt="" fill className="object-cover object-center opacity-[0.95]" sizes="64px" />
+                          <Image src={row.src} alt="" fill className="object-cover object-center opacity-[0.95]" sizes="80px" quality={100} />
                           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#020617]/45 to-transparent" aria-hidden />
                         </div>
                         <div className="min-w-0 flex-1">
@@ -187,7 +195,7 @@ export function UnifiedSensoraGuideFlow({
             ) : null}
 
             {wizardStep === 2 ? (
-              <div className="flex flex-col gap-3 pt-1 sm:pt-2">
+              <div className="flex flex-col gap-2 pt-1 sm:gap-3 sm:pt-2">
                 <div className="text-center">
                   <p className={`${kickerClass} ${variant === "dialog" ? "text-sky-400/85" : ""}`}>{t("guide.unified.flow.kicker")}</p>
                   <h2 className={`${titleClass} mx-auto mt-1 max-w-[30ch] text-[clamp(1.12rem,min(4vw+0.5rem,1.55rem),1.55rem)]`}>{t("guide.unified.flow.title")}</h2>
@@ -225,7 +233,10 @@ export function UnifiedSensoraGuideFlow({
                 <SensoraGuideGallery
                   guides={SENSORA_GUIDES}
                   activeId={activeGuideId}
-                  onSelectGuide={(id) => setActiveGuideId(id as SensoraGuideId)}
+                  onSelectGuide={(id) => {
+                    setActiveGuideId(id as SensoraGuideId);
+                    setGuideViewerOpen(true);
+                  }}
                   onExpandImage={() => setGuideViewerOpen(true)}
                   tapToExpandLabel={t("preview.guide.tapMainToExpand")}
                   getTitle={(g) => t(g.titleKey)}

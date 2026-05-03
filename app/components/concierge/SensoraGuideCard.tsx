@@ -44,6 +44,7 @@ export function SensoraGuideCard({ title, description, image, selected, onSelect
           className="object-cover object-center opacity-[0.94] transition duration-300 group-hover:opacity-[0.99] data-[selected=1]:opacity-[0.99]"
           data-selected={selected ? 1 : 0}
           sizes="(max-width:640px) 92vw, (max-width:1024px) 44vw, 360px"
+          quality={100}
         />
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#020617]/92 via-[#020617]/25 to-transparent" aria-hidden />
         <div
