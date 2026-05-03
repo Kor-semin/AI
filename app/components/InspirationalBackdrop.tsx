@@ -54,6 +54,10 @@ export function InspirationalBackdrop() {
             aria-hidden
             className="absolute inset-0 opacity-[0.85] mix-blend-soft-light bg-[radial-gradient(ellipse_85%_52%_at_48%_100%,rgba(30,58,138,0.105),transparent_58%),radial-gradient(ellipse_58%_42%_at_82%_58%,rgba(79,70,229,0.07),transparent_55%)]"
           />
+          <div
+            aria-hidden
+            className="sensora-preview-galaxy-stars sensora-inspirational-stars absolute inset-0"
+          />
         </div>
       </div>
       <div

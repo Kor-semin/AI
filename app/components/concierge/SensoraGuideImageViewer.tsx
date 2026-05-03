@@ -107,12 +107,13 @@ export function SensoraGuideImageViewer({
     <>
       {immersiveOpen && !broken[safeIndex] ? (
         <div
-          className="fixed inset-0 z-[490] flex flex-col bg-[#030712]/98 backdrop-blur-md"
+          className="sensora-guide-immersive-galaxy fixed inset-0 z-[490] flex flex-col backdrop-blur-md"
           role="dialog"
           aria-modal="true"
           aria-label={slideAlt || title}
         >
-          <div className="flex items-center justify-end gap-2 border-b border-white/[0.1] px-4 py-3 pt-[max(12px,calc(env(safe-area-inset-top,0px)+8px))] sm:px-5">
+          <div className="sensora-preview-galaxy-stars pointer-events-none absolute inset-0 opacity-[0.28]" aria-hidden />
+          <div className="relative z-[1] flex items-center justify-end gap-2 border-b border-white/[0.1] bg-[#030712]/55 px-4 py-3 pt-[max(12px,calc(env(safe-area-inset-top,0px)+8px))] backdrop-blur-md sm:px-5">
             <button
               type="button"
               onClick={openOriginalInNewTab}
@@ -130,7 +131,7 @@ export function SensoraGuideImageViewer({
           </div>
           <button
             type="button"
-            className="flex min-h-0 flex-1 items-center justify-center p-4 pb-[max(1rem,calc(env(safe-area-inset-bottom,0px)+12px))] outline-none cursor-default"
+            className="relative z-[1] flex min-h-0 flex-1 items-center justify-center p-4 pb-[max(1rem,calc(env(safe-area-inset-bottom,0px)+12px))] outline-none cursor-default"
             aria-label={t("landing.showroom.tip.openOriginalAria")}
             onClick={() => setImmersiveOpen(false)}
           >
@@ -165,7 +166,7 @@ export function SensoraGuideImageViewer({
         onClick={onClose}
       />
       <div
-        className="landing-guide-dialog-animate relative z-[1] flex max-h-[min(94dvh,94vh)] w-full max-w-[min(100%,920px)] flex-col overflow-hidden rounded-t-[22px] border border-white/[0.14] bg-gradient-to-b from-[#0a1628]/98 to-[#07111f]/97 pb-[max(4px,env(safe-area-inset-bottom,0px))] shadow-[0_40px_100px_-28px_rgba(0,0,0,0.72),0_0_0_1px_rgba(255,255,255,0.045)_inset,0_0_60px_-24px_rgba(56,189,248,0.065)] backdrop-blur-2xl sm:max-h-[min(90dvh,90vh)] sm:rounded-2xl sm:pb-0"
+        className="landing-guide-dialog-animate sensora-guide-modal-cosmos relative z-[1] flex max-h-[min(94dvh,94vh)] w-full max-w-[min(100%,920px)] flex-col overflow-hidden rounded-t-[22px] border border-white/[0.14] bg-gradient-to-b from-[#0a1628]/98 to-[#07111f]/97 pb-[max(4px,env(safe-area-inset-bottom,0px))] shadow-[0_40px_100px_-28px_rgba(0,0,0,0.72),0_0_0_1px_rgba(255,255,255,0.045)_inset,0_0_60px_-24px_rgba(56,189,248,0.065)] backdrop-blur-2xl sm:max-h-[min(90dvh,90vh)] sm:rounded-2xl sm:pb-0"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-start justify-between gap-3 border-b border-white/[0.08] px-4 py-3.5 pt-[max(12px,calc(env(safe-area-inset-top,0px)+8px))] sm:px-5 sm:py-4 sm:pt-4">

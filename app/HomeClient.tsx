@@ -327,7 +327,9 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
         onSelectSection={enterAppFromPreviewToc}
       />
 
-      <main className={`relative z-10 flex-1 ${view === "landing" ? "bg-transparent" : ""}`}>
+      <main
+        className={`relative z-10 flex-1 ${view === "landing" ? "sensora-landing-main-depth bg-transparent" : ""}`}
+      >
         {view === "landing" ? <LandingShowroom onOpenAppWorkspace={openAppPreviewToc} /> : null}
 
         {view === "app" ? (
