@@ -58,6 +58,7 @@ export type TranslationKey =
   | "join.title"
   | "join.intro"
   | "join.backHome"
+  | "join.loading"
   | "join.formLegend"
   | "join.fillAllFields"
   | "join.invalidEmail"
@@ -127,6 +128,11 @@ export type TranslationKey =
   | "crm.demoContextNotice.secondary"
   | "crm.demoContextNotice.accessAfterBeta"
   | "crm.previewMode.headerSubtitle"
+  | "crm.previewGate.title"
+  | "crm.previewGate.body"
+  | "crm.previewGate.join"
+  | "crm.previewGate.register"
+  | "crm.previewGate.continuePreview"
   | "crm.import.heroTitle"
   | "crm.import.heroSub"
   | "crm.import.trustNoSync"
@@ -428,6 +434,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "join.intro":
       "Sensora Auto CRM 베타 신청을 받고 있습니다.\n신청 내용을 검토한 뒤 순차적으로 연락드리겠습니다.",
     "join.backHome": "홈으로 돌아가기",
+    "join.loading": "불러오는 중…",
     "join.formLegend": "Sensora Auto CRM 베타 신청 폼",
     "join.fillAllFields": "모든 항목을 입력해 주세요.",
     "join.invalidEmail": "이메일 형식을 확인해 주세요.",
@@ -514,6 +521,12 @@ export const translations: Record<LanguageCode, TranslationDict> = {
       "실제 고객 저장과 영업 계정 기능은 베타 승인 후 사용할 수 있습니다.",
     "crm.previewMode.headerSubtitle":
       "예시 미리보기 · 화면을 닫기 전까지는 이 브라우저에만 예시 데이터가 남을 수 있습니다(클라우드·영업 계정 저장 아님).",
+    "crm.previewGate.title": "베타 승인 후 사용할 수 있는 기능입니다.",
+    "crm.previewGate.body":
+      "고객 추가, AI 비서, 실제 저장 기능은 베타 신청 후 승인된 사용자에게 제공됩니다. 먼저 베타 신청을 남겨주시면 검토 후 순차적으로 안내드리겠습니다.",
+    "crm.previewGate.join": "베타 신청하기",
+    "crm.previewGate.register": "영업 계정 등록",
+    "crm.previewGate.continuePreview": "미리보기 계속 보기",
     "crm.import.heroTitle": "주소록 가져오기",
     "crm.import.heroSub": "연락처 파일을 올리고, 필요한 고객만 확인해 저장합니다.",
     "crm.import.trustNoSync": "전체 주소록을 자동 동기화하지 않습니다.",
@@ -841,6 +854,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "join.intro":
       "We’re inviting applications for Sensora Auto CRM beta access.\nWe’ll review what you submit and follow up with you in order.",
     "join.backHome": "Back to home",
+    "join.loading": "Loading…",
     "join.formLegend": "Sensora Auto CRM beta request form",
     "join.fillAllFields": "Please fill in all fields.",
     "join.invalidEmail": "Please check your email format.",
@@ -932,6 +946,12 @@ export const translations: Record<LanguageCode, TranslationDict> = {
       "Saving real customer data and sales-account features are available after beta approval.",
     "crm.previewMode.headerSubtitle":
       "Sample preview · example data may stay in this browser only until you leave (not cloud or sales-account storage).",
+    "crm.previewGate.title": "This feature is available after beta approval.",
+    "crm.previewGate.body":
+      "Adding customers, the AI assistant, and real save features are available to approved beta users. Submit a beta request first—we’ll review and follow up in order.",
+    "crm.previewGate.join": "Join the beta",
+    "crm.previewGate.register": "Sales account registration",
+    "crm.previewGate.continuePreview": "Continue preview",
     "crm.import.heroTitle": "Import address book",
     "crm.import.heroSub": "Upload a contacts file, review, then save only who you need.",
     "crm.import.trustNoSync": "We never auto-sync your entire address book.",

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type {
   CalendarEvent,
@@ -393,11 +394,17 @@ export function CRMApp({
   const [sellerNickname, setSellerNickname] = useState("");
   const [importContactsOpen, setImportContactsOpen] = useState(false);
   const [contactFileGuideOpen, setContactFileGuideOpen] = useState(false);
+  const [previewGateOpen, setPreviewGateOpen] = useState(false);
+  const openPreviewGate = useCallback(() => setPreviewGateOpen(true), []);
   const openCustomersImportHub = useCallback(() => {
+    if (!uid) {
+      openPreviewGate();
+      return;
+    }
     onActiveSectionChange("customers");
     setTab("고객");
     setImportContactsOpen(true);
-  }, [onActiveSectionChange]);
+  }, [uid, openPreviewGate, onActiveSectionChange]);
   const [leadExplainForId, setLeadExplainForId] = useState<string | null>(null);
   const [toast, setToast] = useState<string | null>(null);
   const [deliveryGuideOpen, setDeliveryGuideOpen] = useState(false);
@@ -456,6 +463,10 @@ export function CRMApp({
 
   /** Sensora Flow: 명시적 분석 클릭 시에만 flowDraft 업데이트 (입력 중 자동 재분석 없음) */
   function runSensoraFlowAnalyzeOrRefresh() {
+    if (!uid) {
+      openPreviewGate();
+      return;
+    }
     if (!selectedCustomerId) return;
     const snap = workspaceAiMemoDraft.trim();
     if (!snap) {
@@ -477,6 +488,10 @@ export function CRMApp({
 
   /** 같은 메모로도 제안 카드 전체를 새로 뽑아 볼 때(내부 변동 — 저장·자동 반영 없음). */
   function runSensoraFlowNewProposal() {
+    if (!uid) {
+      openPreviewGate();
+      return;
+    }
     if (!selectedCustomerId) return;
     const snap = workspaceAiMemoDraft.trim();
     if (!snap) {
@@ -499,6 +514,10 @@ export function CRMApp({
 
   /** 문자 초안만 다시 채우기(de·규칙 엔진: snapshot에 nonce를 붙여 재계산 후 message만 교체). */
   function runSensoraFlowRewriteSmsDraft() {
+    if (!uid) {
+      openPreviewGate();
+      return;
+    }
     if (!selectedCustomerId) return;
     const snapshot = flowDraftMemo.trim();
     if (!snapshot) {
@@ -538,6 +557,10 @@ export function CRMApp({
   }
 
   function runSeasonCareGenerate() {
+    if (!uid) {
+      openPreviewGate();
+      return;
+    }
     const msg = generateSeasonCareMessage(
       {
         brandPreset: seasonCareBrand,
@@ -763,6 +786,16 @@ export function CRMApp({
   }, [searchQuery]);
 
   useEffect(() => {
+    if (!previewGateOpen) return;
+    function onEsc(e: KeyboardEvent) {
+      if (e.key !== "Escape") return;
+      setPreviewGateOpen(false);
+    }
+    window.addEventListener("keydown", onEsc);
+    return () => window.removeEventListener("keydown", onEsc);
+  }, [previewGateOpen]);
+
+  useEffect(() => {
     function onMouseDown(ev: MouseEvent) {
       const wrap = crmSearchWrapRef.current;
       if (!wrap || !searchOpen) return;
@@ -986,6 +1019,10 @@ export function CRMApp({
   }, [activeSection]);
 
   function upsertCustomer(patch: Partial<Customer> & { id: string }) {
+    if (!uid) {
+      openPreviewGate();
+      return;
+    }
     if ("name" in patch && typeof patch.name === "string" && !patch.name.trim()) {
       showToast("고객명을 입력해 주세요.");
       return;
@@ -1019,6 +1056,10 @@ export function CRMApp({
   }
 
   function openCreateCustomerModal() {
+    if (!uid) {
+      openPreviewGate();
+      return;
+    }
     setCreateCustomerDraft({ ...CREATE_CUSTOMER_INITIAL });
     setCreateCustomerOpen(true);
   }
@@ -1126,6 +1167,10 @@ export function CRMApp({
   }
 
   async function submitCreateCustomer() {
+    if (!uid) {
+      openPreviewGate();
+      return;
+    }
     const d = createCustomerDraftRef.current;
     const nameTrim = d.name.trim();
     if (!nameTrim) {
@@ -1200,6 +1245,10 @@ export function CRMApp({
   }
 
   function handleCommitImportContactsHub(payload: ImportContactsCommitPayload) {
+    if (!uid) {
+      openPreviewGate();
+      return;
+    }
     const t = nowIso();
     const mergeIds = [...new Set(payload.merges.map((m) => m.customerId))];
 
@@ -1243,6 +1292,10 @@ export function CRMApp({
   }
 
   function deleteCustomer(id: string) {
+    if (!uid) {
+      openPreviewGate();
+      return;
+    }
     pendingCustomerCreatesRef.current.delete(id);
     setState((prev) => ({
       ...prev,
@@ -1265,6 +1318,10 @@ export function CRMApp({
     titleOverride?: string,
     opts?: { skipTabSwitch?: boolean },
   ) {
+    if (!uid) {
+      openPreviewGate();
+      return;
+    }
     const raw = titleOverride?.trim();
     const title =
       raw && raw.length > 0
@@ -1292,6 +1349,10 @@ export function CRMApp({
   }
 
   function toggleNextActionDone(id: string) {
+    if (!uid) {
+      openPreviewGate();
+      return;
+    }
     const doneAt = state.nextActions.find((a) => a.id === id)?.doneAt ? undefined : nowIso();
     setState((prev) => ({
       ...prev,
@@ -1309,6 +1370,10 @@ export function CRMApp({
   }
 
   function updateNextAction(id: string, patch: Partial<NextAction>) {
+    if (!uid) {
+      openPreviewGate();
+      return;
+    }
     setState((prev) => ({
       ...prev,
       nextActions: prev.nextActions.map((a) => (a.id === id ? { ...a, ...patch } : a)),
@@ -1323,6 +1388,10 @@ export function CRMApp({
   }
 
   function addEvent(customerId?: string) {
+    if (!uid) {
+      openPreviewGate();
+      return;
+    }
     const start = new Date();
     start.setMinutes(start.getMinutes() + 30);
     const ev: CalendarEvent = {
@@ -1343,6 +1412,10 @@ export function CRMApp({
   }
 
   function updateEvent(id: string, patch: Partial<CalendarEvent>) {
+    if (!uid) {
+      openPreviewGate();
+      return;
+    }
     setState((prev) => ({
       ...prev,
       events: prev.events.map((e) => (e.id === id ? { ...e, ...patch } : e)),
@@ -1357,6 +1430,10 @@ export function CRMApp({
   }
 
   function addTemplate() {
+    if (!uid) {
+      openPreviewGate();
+      return;
+    }
     const t = nowIso();
     const tpl: MessageTemplate = {
       id: makeId("tpl"),
@@ -1376,6 +1453,10 @@ export function CRMApp({
   }
 
   function updateTemplate(id: string, patch: Partial<MessageTemplate>) {
+    if (!uid) {
+      openPreviewGate();
+      return;
+    }
     setState((prev) => ({
       ...prev,
       templates: prev.templates.map((t) =>
@@ -1392,6 +1473,10 @@ export function CRMApp({
   }
 
   function exportCustomerSummary(customer: Customer) {
+    if (!uid) {
+      openPreviewGate();
+      return;
+    }
     const actions = state.nextActions.filter((a) => a.customerId === customer.id);
     const events = state.events.filter((e) => e.customerId === customer.id);
     const text = [
@@ -1626,7 +1711,7 @@ export function CRMApp({
                 <button
                   type="button"
                   className="min-h-[44px] rounded-[20px] border border-[#E5E7EB] bg-[#F9FAFB] px-5 py-2.5 text-[14px] font-semibold text-[#111827] ring-1 ring-inset ring-[#E5E7EB] transition hover:bg-[#F3F4F6] touch-manipulation"
-                  onClick={() => setImportContactsOpen(true)}
+                  onClick={() => openCustomersImportHub()}
                 >
                   주소록 가져오기
                 </button>
@@ -2868,7 +2953,13 @@ export function CRMApp({
                   <div className="flex flex-wrap gap-2">
                     <button
                       type="button"
-                      onClick={() => downloadText("crm_backup.json", JSON.stringify(state, null, 2))}
+                      onClick={() => {
+                        if (!uid) {
+                          openPreviewGate();
+                          return;
+                        }
+                        downloadText("crm_backup.json", JSON.stringify(state, null, 2));
+                      }}
                       className="rounded-xl border border-[#E5E7EB] bg-[#F3F4F6] px-4 py-2.5 text-[13px] font-semibold text-[#111827] hover:bg-[#E5E7EB]"
                     >
                       {t("common.backup")}(.json)
@@ -2876,6 +2967,10 @@ export function CRMApp({
                     <button
                       type="button"
                       onClick={() => {
+                        if (!uid) {
+                          openPreviewGate();
+                          return;
+                        }
                         if (!confirm("로컬 데이터를 초기화할까요? (되돌리기 어렵습니다)")) return;
                         const next = seedState();
                         setState(next);
@@ -3518,6 +3613,48 @@ export function CRMApp({
                 }
                 onNotify={showToast}
               />
+            </div>
+          </div>
+        </div>
+      ) : null}
+
+      {previewGateOpen ? (
+        <div
+          className="fixed inset-0 z-[460] flex items-end justify-center bg-black/45 px-3 pb-[max(16px,calc(12px+env(safe-area-inset-bottom,0px)))] pt-10 backdrop-blur-sm sm:items-center sm:px-4 sm:pb-6"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="crm-preview-gate-title"
+        >
+          <div className="w-full max-w-md rounded-2xl border border-[#E5E7EB] bg-[#FFFFFF] p-6 shadow-[0_24px_64px_-24px_rgba(15,23,42,0.35)] max-[390px]:p-5">
+            <h2
+              id="crm-preview-gate-title"
+              className="text-[17px] font-semibold tracking-tight text-[#111827] sm:text-lg"
+            >
+              {t("crm.previewGate.title")}
+            </h2>
+            <p className="mt-3 text-[14px] leading-relaxed text-[#475569]">{t("crm.previewGate.body")}</p>
+            <div className="mt-6 flex flex-col gap-2.5">
+              <Link
+                href="/join?returnTo=preview"
+                className="inline-flex min-h-[48px] w-full touch-manipulation items-center justify-center rounded-xl bg-[#111827] px-4 py-3 text-center text-[14px] font-semibold text-[#FFFFFF] transition hover:bg-[#1f2937]"
+                onClick={() => setPreviewGateOpen(false)}
+              >
+                {t("crm.previewGate.join")}
+              </Link>
+              <Link
+                href="/register"
+                className="inline-flex min-h-[48px] w-full touch-manipulation items-center justify-center rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] px-4 py-3 text-center text-[14px] font-semibold text-[#374151] transition hover:bg-[#F3F4F6]"
+                onClick={() => setPreviewGateOpen(false)}
+              >
+                {t("crm.previewGate.register")}
+              </Link>
+              <button
+                type="button"
+                className="min-h-[48px] w-full touch-manipulation rounded-xl border border-transparent px-4 py-3 text-[14px] font-semibold text-[#64748B] underline underline-offset-4 hover:text-[#111827]"
+                onClick={() => setPreviewGateOpen(false)}
+              >
+                {t("crm.previewGate.continuePreview")}
+              </button>
             </div>
           </div>
         </div>

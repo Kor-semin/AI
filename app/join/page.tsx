@@ -1,16 +1,19 @@
 "use client";
 
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { Suspense, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 import type { BetaSignupPayload } from "@/lib/betaSignupSubmit";
 import { submitBetaSignup } from "@/lib/betaSignupSubmit";
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
 
-export default function BetaJoinPage() {
+function BetaJoinForm() {
   const [pending, setPending] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
   const { t } = useLanguage();
+  const searchParams = useSearchParams();
+  const returnToPreview = searchParams.get("returnTo") === "preview";
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -50,6 +53,11 @@ export default function BetaJoinPage() {
       const res = await submitBetaSignup(payload);
       if (!res.ok) {
         window.alert(t("join.alert.betaSaveFailed"));
+        return;
+      }
+      if (returnToPreview && res.savedToBackend) {
+        window.alert(t("join.alert.betaReceivedRemote"));
+        window.location.assign("/?view=app");
         return;
       }
       window.alert(res.savedToBackend ? t("join.alert.betaReceivedRemote") : t("join.alert.betaNotPersisted"));
@@ -211,5 +219,20 @@ export default function BetaJoinPage() {
         ) : null}
       </div>
     </main>
+  );
+}
+
+export default function BetaJoinPage() {
+  const { t } = useLanguage();
+  return (
+    <Suspense
+      fallback={
+        <main className="crm-bg relative min-h-[100dvh] px-4 pb-12 pt-8">
+          <p className="text-center text-sm text-[#64748b]">{t("join.loading")}</p>
+        </main>
+      }
+    >
+      <BetaJoinForm />
+    </Suspense>
   );
 }
