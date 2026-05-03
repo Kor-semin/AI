@@ -3,6 +3,10 @@ import { Geist, Geist_Mono, Noto_Sans_KR, Noto_Serif_KR } from "next/font/google
 import "./globals.css";
 import { LanguageProvider } from "@/app/components/i18n/LanguageProvider";
 import { PwaInstallHint } from "@/app/components/PwaInstallHint";
+import { TextSizeProvider } from "@/app/components/TextSizeProvider";
+import { TEXT_SIZE_STORAGE_KEY } from "@/lib/textSizePreference";
+
+const TEXT_SIZE_BOOT_SCRIPT = `(function(){try{var k=${JSON.stringify(TEXT_SIZE_STORAGE_KEY)};var r=localStorage.getItem(k);var x=r==="small"||r==="large"?r:"medium";document.documentElement.setAttribute("data-text-size",x);}catch(e){}})();`;
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -68,12 +72,19 @@ export default function RootLayout({
   return (
     <html
       lang="ko"
+      data-text-size="medium"
+      suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} ${coverSerif.variable} ${coverSans.variable} h-full antialiased`}
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: TEXT_SIZE_BOOT_SCRIPT }} suppressHydrationWarning />
+      </head>
       <body className="flex min-h-full flex-col">
         <LanguageProvider>
-          {children}
-          <PwaInstallHint />
+          <TextSizeProvider>
+            {children}
+            <PwaInstallHint />
+          </TextSizeProvider>
         </LanguageProvider>
       </body>
     </html>

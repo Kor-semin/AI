@@ -368,6 +368,16 @@ export type TranslationKey =
   | "preview.toc.followupDesc"
   | "preview.toc.betaTitle"
   | "preview.toc.betaDesc"
+  | "settings.display.title"
+  | "settings.textSize.title"
+  | "settings.textSize.description"
+  | "settings.textSize.small.label"
+  | "settings.textSize.small.description"
+  | "settings.textSize.medium.label"
+  | "settings.textSize.medium.description"
+  | "settings.textSize.large.label"
+  | "settings.textSize.large.description"
+  | "settings.textSize.storageNotice"
   | "cover.aiGuide.title"
   | "cover.aiGuide.subtitle"
   | "cover.aiGuide.step1.title"
@@ -847,6 +857,16 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "preview.toc.followupDesc": "다음 연락과 출고 안내를 놓치지 않게 정리합니다.",
     "preview.toc.betaTitle": "베타 신청하기",
     "preview.toc.betaDesc": "실제 저장 기능과 영업 계정은 베타 승인 후 사용할 수 있습니다.",
+    "settings.display.title": "화면 설정",
+    "settings.textSize.title": "글씨 크기",
+    "settings.textSize.description": "앱에서 보이는 글자의 크기를 조정합니다.",
+    "settings.textSize.small.label": "작게",
+    "settings.textSize.small.description": "한 화면에 더 많이 보기",
+    "settings.textSize.medium.label": "기본",
+    "settings.textSize.medium.description": "균형 있게 보기",
+    "settings.textSize.large.label": "크게",
+    "settings.textSize.large.description": "편하게 크게 보기",
+    "settings.textSize.storageNotice": "글씨 크기는 이 브라우저에 저장됩니다.",
     "cover.aiGuide.title": "AI 사용법",
     "cover.aiGuide.subtitle":
       "상담 내용을 입력하면 SensoraGuide가 요약과 다음 진행 초안·연락 문구를 검토용으로 정리합니다.",
@@ -1342,6 +1362,16 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "preview.toc.followupDesc": "Keep outreach and delivery cues organized without skipping steps.",
     "preview.toc.betaTitle": "Join the beta",
     "preview.toc.betaDesc": "Apply for beta access before enabling full storage with your seller account.",
+    "settings.display.title": "Display",
+    "settings.textSize.title": "Text size",
+    "settings.textSize.description": "Adjust the text size used across the app.",
+    "settings.textSize.small.label": "Small",
+    "settings.textSize.small.description": "See more at once",
+    "settings.textSize.medium.label": "Default",
+    "settings.textSize.medium.description": "Balanced view",
+    "settings.textSize.large.label": "Large",
+    "settings.textSize.large.description": "Easier to read",
+    "settings.textSize.storageNotice": "Text size is saved in this browser.",
     "cover.aiGuide.title": "How to Use AI",
     "cover.aiGuide.subtitle":
       "Enter consultation notes and SensoraGuide will suggest customer summaries, next actions, and follow-up messages.",

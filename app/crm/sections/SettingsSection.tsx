@@ -2,6 +2,7 @@
 
 import { LanguageSelect } from "@/app/components/i18n/LanguageSelect";
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
+import { TextSizeControl } from "@/app/components/settings/TextSizeControl";
 
 export type SettingsSectionProps = {
   sellerNickname: string;
@@ -66,6 +67,13 @@ export function SettingsSection({
         <div className="mt-4">
           <LanguageSelect />
         </div>
+      </section>
+
+      <section className={SECTION_CARD}>
+        <h3 className="text-[16px] font-bold tracking-tight text-slate-50">{t("settings.display.title")}</h3>
+        <p className="mt-3 text-[14px] leading-[1.65] text-slate-400">{t("settings.textSize.description")}</p>
+        <p className="mt-4 text-[13px] font-semibold text-slate-200">{t("settings.textSize.title")}</p>
+        <TextSizeControl />
       </section>
 
       <section className={SECTION_CARD}>
