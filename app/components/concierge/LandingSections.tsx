@@ -31,22 +31,22 @@ const cardChrome =
   "rounded-[26px] border border-white/[0.1] bg-slate-900/45 shadow-[0_20px_56px_-28px_rgba(0,0,0,0.55),0_2px_12px_rgba(15,23,42,0.35)] backdrop-blur-md";
 
 const primaryBtn =
-  "inline-flex min-h-[44px] items-center justify-center rounded-xl border border-sky-400/25 bg-gradient-to-b from-[#1e293b] to-[#0f172a] px-6 py-2.5 text-sm font-semibold text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] transition-colors hover:border-sky-400/40 hover:from-[#243047] hover:to-[#111827]";
+  "inline-flex min-h-[44px] items-center justify-center rounded-xl border border-sky-400/35 bg-gradient-to-b from-[#243047] to-[#0f172a] px-6 py-2.5 text-sm font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_8px_28px_-8px_rgba(56,189,248,0.12)] transition hover:border-sky-400/50 hover:from-[#2a3a52] hover:to-[#111827] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/45 focus-visible:ring-offset-2 focus-visible:ring-offset-[#020817]";
 
 const ghostBtn =
-  "inline-flex min-h-[44px] items-center justify-center rounded-xl border border-white/[0.14] bg-white/[0.06] px-6 py-2.5 text-sm font-semibold text-slate-100 backdrop-blur-sm transition-colors hover:border-white/25 hover:bg-white/[0.09]";
+  "inline-flex min-h-[44px] items-center justify-center rounded-xl border border-white/[0.18] bg-white/[0.05] px-6 py-2.5 text-sm font-semibold text-slate-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-sm transition hover:border-white/28 hover:bg-white/[0.1] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 focus-visible:ring-offset-2 focus-visible:ring-offset-[#020817]";
 
 const heroPrimaryDark =
-  "inline-flex min-h-[48px] min-w-[12rem] w-full shrink-0 items-center justify-center rounded-2xl bg-gradient-to-b from-white to-slate-100 px-7 py-3.5 text-[15px] font-semibold tracking-tight text-[#0f172a] shadow-[0_8px_28px_-12px_rgba(0,0,0,0.45)] transition-colors hover:from-slate-50 hover:to-slate-200 sm:w-auto sm:min-h-[50px] sm:min-w-[12.5rem] sm:py-4 sm:text-[16px] lg:min-h-[52px] lg:px-10 lg:text-[17px]";
+  "inline-flex min-h-[48px] min-w-[12rem] w-full shrink-0 items-center justify-center rounded-2xl bg-gradient-to-b from-white to-slate-100 px-7 py-3.5 text-[15px] font-semibold tracking-tight text-[#0c1222] shadow-[0_2px_0_rgba(255,255,255,0.35)_inset,0_8px_32px_-8px_rgba(56,189,248,0.12),0_16px_48px_-16px_rgba(0,0,0,0.5)] ring-1 ring-white/30 transition hover:from-white hover:to-slate-50 hover:shadow-[0_2px_0_rgba(255,255,255,0.45)_inset,0_12px_40px_-8px_rgba(56,189,248,0.16)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/55 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0d1628] sm:w-auto sm:min-h-[50px] sm:min-w-[12.5rem] sm:py-4 sm:text-[16px] lg:min-h-[52px] lg:px-10 lg:text-[17px]";
 
 const heroGhostDark =
-  "inline-flex min-h-[48px] min-w-[12rem] w-full shrink-0 items-center justify-center rounded-2xl border border-white/[0.22] bg-white/[0.06] px-7 py-3.5 text-[15px] font-semibold tracking-tight text-white backdrop-blur-sm transition-colors hover:border-sky-300/35 hover:bg-white/[0.11] sm:w-auto sm:min-h-[50px] sm:min-w-[12.5rem] sm:py-4 sm:text-[16px] lg:min-h-[52px] lg:px-10 lg:text-[17px]";
+  "inline-flex min-h-[48px] min-w-[12rem] w-full shrink-0 items-center justify-center rounded-2xl border border-white/20 bg-white/[0.06] px-7 py-3.5 text-[15px] font-semibold tracking-tight text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] ring-1 ring-inset ring-white/[0.08] backdrop-blur-md transition hover:border-sky-300/35 hover:bg-white/[0.1] hover:shadow-[0_0_28px_-8px_rgba(56,189,248,0.12)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0d1628] sm:w-auto sm:min-h-[50px] sm:min-w-[12.5rem] sm:py-4 sm:text-[16px] lg:min-h-[52px] lg:px-10 lg:text-[17px]";
 
 const heroPreviewShell =
-  "overflow-hidden rounded-[30px] border border-white/[0.12] bg-slate-900/55 shadow-[0_28px_70px_-24px_rgba(0,0,0,0.65)] ring-1 ring-inset ring-white/[0.04] backdrop-blur-md sm:rounded-[34px] lg:rounded-[36px]";
+  "overflow-hidden rounded-[30px] border border-white/[0.14] bg-slate-900/60 shadow-[0_28px_70px_-24px_rgba(0,0,0,0.65),0_0_0_1px_rgba(255,255,255,0.04)_inset] ring-1 ring-white/[0.06] backdrop-blur-md sm:rounded-[34px] lg:rounded-[36px]";
 
 const tipCardBase =
-  "group relative flex w-full cursor-pointer touch-manipulation flex-col rounded-2xl border border-white/[0.09] bg-slate-900/40 p-5 text-left shadow-[0_16px_48px_-28px_rgba(0,0,0,0.55)] backdrop-blur-md transition-[border-color,box-shadow,transform] duration-300 hover:-translate-y-0.5 hover:border-sky-400/35 hover:shadow-[0_0_0_1px_rgba(56,189,248,0.08),0_24px_56px_-24px_rgba(15,23,42,0.65)] sm:p-6";
+  "group relative flex min-h-[240px] w-full cursor-pointer touch-manipulation flex-col rounded-[22px] border border-white/[0.16] bg-gradient-to-b from-slate-900/58 to-[#07111f]/78 p-5 text-left shadow-[0_4px_28px_-8px_rgba(0,0,0,0.48)] ring-1 ring-inset ring-white/[0.05] backdrop-blur-md transition-[border-color,box-shadow,transform] duration-300 hover:-translate-y-0.5 hover:border-sky-400/38 hover:shadow-[0_0_0_1px_rgba(56,189,248,0.06),0_0_42px_-12px_rgba(56,189,248,0.1),0_0_52px_-16px_rgba(139,92,246,0.07),0_20px_52px_-20px_rgba(0,0,0,0.55)] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 focus-visible:ring-offset-2 focus-visible:ring-offset-[#020817] sm:min-h-[288px] sm:p-6";
 
 /** 스크롤 진입 리빌 — reduced-motion에서는 즉시 표시 · 모바일은 짧은 이동량 */
 function useShowroomReveal() {
@@ -126,21 +126,21 @@ function HeroDashboardPreview() {
 
   return (
     <div className={`${heroPreviewShell} relative z-[3] w-full max-w-[640px] lg:mx-0 lg:max-w-none`}>
-      <div className="flex items-center gap-3 border-b border-white/[0.08] bg-gradient-to-b from-slate-900/80 to-[#07111f]/90 px-5 py-3.5 sm:px-8 sm:py-4 lg:py-5">
+      <div className="flex items-center gap-3 border-b border-white/[0.12] bg-gradient-to-b from-slate-900/85 to-[#07111f]/92 px-5 py-3.5 sm:px-8 sm:py-4 lg:py-5">
         <div className="flex gap-2" aria-hidden>
           <span className="size-2.5 rounded-full bg-white/25" />
           <span className="size-2.5 rounded-full bg-white/20" />
           <span className="size-2.5 rounded-full bg-white/15" />
         </div>
-        <p className="min-w-0 flex-1 truncate text-left text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-400">
+        <p className="min-w-0 flex-1 truncate text-left text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-300">
           {t("product.name")}
         </p>
       </div>
-      <div className="divide-y divide-white/[0.06] bg-[#020817]/65 px-4 py-1 sm:px-6 sm:py-2">
+      <div className="divide-y divide-white/[0.1] bg-[#020817]/72 px-4 py-1 sm:px-6 sm:py-2">
         {rows.map(({ titleKey, bodyKey }) => (
           <div key={titleKey} className="space-y-1 py-3 sm:py-3.5">
             <p className="text-[10px] font-bold uppercase tracking-[0.07em] text-slate-400 sm:text-[11px]">{t(titleKey)}</p>
-            <p className="text-[13px] leading-[1.45] text-slate-200 sm:text-[14px] sm:leading-[1.5]">{t(bodyKey)}</p>
+            <p className="text-[13px] leading-[1.45] text-slate-100 sm:text-[14px] sm:leading-[1.54]">{t(bodyKey)}</p>
           </div>
         ))}
       </div>
@@ -251,8 +251,9 @@ function SensoraTipSectionInner() {
         overlayZClass="z-[200]"
         onClose={() => setViewer({ open: false, title: "", initialSlideIndex: 0 })}
       />
-      <div className="relative mx-auto max-w-[980px] px-5 pb-4 pt-2 sm:px-6 sm:pb-10 sm:pt-6">
-        <div className="pointer-events-none absolute inset-x-[-20%] top-[-40%] h-[70%] bg-[radial-gradient(ellipse_70%_50%_at_50%_0%,rgba(99,102,241,0.12),transparent_70%)] opacity-90" />
+      <div className="landing-showroom-premium-rule mx-auto mb-8 max-sm:mb-6 sm:mb-10 pointer-events-none" aria-hidden />
+      <div className="relative mx-auto max-w-[1040px] px-5 pb-4 pt-2 sm:px-6 sm:pb-12 sm:pt-6">
+        <div className="pointer-events-none absolute inset-x-[-18%] top-[-38%] h-[72%] bg-[radial-gradient(ellipse_68%_48%_at_50%_0%,rgba(99,102,241,0.1),transparent_72%)] opacity-95" />
 
         <div className="relative mx-auto max-w-[720px] text-center lg:max-w-[800px]">
           <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-sky-300/85 sm:text-[12px]">TIP</p>
@@ -264,7 +265,7 @@ function SensoraTipSectionInner() {
           </p>
         </div>
 
-        <div className="relative mx-auto mt-10 grid max-w-[980px] gap-4 sm:grid-cols-2 sm:gap-5 lg:gap-6">
+        <div className="relative mx-auto mt-10 grid max-w-[1040px] grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-x-8 sm:gap-y-7 lg:gap-x-9 lg:gap-y-8">
           {cards.map(({ n, titleKey, descKey, Icon }) => (
             <button
               key={titleKey}
@@ -278,24 +279,30 @@ function SensoraTipSectionInner() {
                 })
               }
             >
-              <div className="flex items-start justify-between gap-3">
+              <div className="flex items-center justify-between gap-4">
                 <span
-                  className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-white/[0.1] bg-sky-500/10 text-sky-200/95"
+                  className="flex size-12 shrink-0 items-center justify-center rounded-2xl border border-white/[0.14] bg-gradient-to-br from-sky-400/16 via-white/[0.05] to-violet-500/10 text-sky-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] ring-1 ring-inset ring-white/[0.06]"
                   aria-hidden
                 >
-                  <Icon className="size-[22px]" />
+                  <Icon className="size-[22px] opacity-[0.95]" />
                 </span>
-                <span className="text-[13px] font-semibold tabular-nums text-slate-500">{n}</span>
+                <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-full border border-white/[0.12] bg-slate-950/40 text-[12px] font-semibold tabular-nums tracking-tight text-slate-400">
+                  {n}
+                </span>
               </div>
-              <h3 className="mt-4 text-[17px] font-semibold tracking-tight text-slate-100">{t(titleKey)}</h3>
-              <p className="mt-2 flex-1 text-[14px] leading-relaxed text-slate-400 sm:text-[15px]">{t(descKey)}</p>
-              <span
-                className="mt-5 inline-flex items-center gap-1 text-[13px] font-semibold text-sky-300/95 transition group-hover:text-sky-200"
-                aria-hidden
-              >
-                {t("landing.showroom.tip.guideWord")}
-                <span className="translate-x-0 transition group-hover:translate-x-1">→</span>
-              </span>
+              <h3 className="mt-5 text-[17px] font-semibold leading-snug tracking-tight text-slate-50 sm:text-[17.5px]">{t(titleKey)}</h3>
+              <p className="mt-3 flex-1 text-[14px] leading-relaxed text-slate-400/95 sm:text-[15px] sm:leading-[1.55]">{t(descKey)}</p>
+              <div className="mt-auto flex justify-end pt-5 sm:pt-6">
+                <span
+                  className="inline-flex items-center gap-1.5 rounded-full border border-sky-400/25 bg-sky-500/[0.08] px-3.5 py-2 text-[13px] font-semibold text-sky-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] ring-1 ring-inset ring-white/[0.04] transition group-hover:border-sky-400/40 group-hover:bg-sky-400/[0.12] group-hover:text-sky-100"
+                  aria-hidden
+                >
+                  {t("landing.showroom.tip.guideWord")}
+                  <span className="translate-x-0 transition group-hover:translate-x-1" aria-hidden>
+                    →
+                  </span>
+                </span>
+              </div>
             </button>
           ))}
         </div>
@@ -344,7 +351,7 @@ function ShowroomHero({ onOpenAppWorkspace }: { onOpenAppWorkspace: () => void }
       <div className="relative isolate overflow-hidden rounded-[26px] border border-white/[0.12] bg-gradient-to-br from-[#050814] via-[#0d1628] to-[#101b33] px-6 py-10 shadow-[0_36px_100px_-32px_rgba(0,0,0,0.75)] sm:rounded-[32px] sm:px-9 sm:py-12 lg:min-h-[min(620px,calc(100svh-6rem))] lg:rounded-[36px] lg:px-12 lg:py-14">
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_55%_at_14%-8%,rgba(255,255,255,0.07),transparent_55%),radial-gradient(ellipse_72%_50%_at_96%_8%,rgba(56,189,248,0.09),transparent_58%),radial-gradient(ellipse_55%_40%_at_70%_100%,rgba(139,92,246,0.06),transparent_60%)]"
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_55%_at_14%-8%,rgba(255,255,255,0.07),transparent_55%),radial-gradient(ellipse_72%_50%_at_96%_8%,rgba(56,189,248,0.1),transparent_58%),radial-gradient(ellipse_55%_40%_at_70%_100%,rgba(139,92,246,0.07),transparent_60%),radial-gradient(ellipse_58%_48%_at_78%_88%,rgba(56,189,248,0.05),transparent_62%)]"
         />
 
         <div aria-hidden className="pointer-events-none absolute -right-[12%] top-1/2 z-0 hidden h-[72%] w-[52%] max-w-xl -translate-y-1/2 lg:block">
@@ -396,7 +403,13 @@ function ShowroomHero({ onOpenAppWorkspace }: { onOpenAppWorkspace: () => void }
           </div>
 
           <div className="relative z-[4] mx-auto min-w-0 w-full max-w-[min(100%,560px)] lg:mx-0 lg:max-w-none">
-            <HeroDashboardPreview />
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -inset-3 rounded-[36px] bg-[radial-gradient(ellipse_85%_70%_at_55%_45%,rgba(56,189,248,0.09),transparent_68%),radial-gradient(ellipse_70%_60%_at_72%_38%,rgba(139,92,246,0.06),transparent_65%)] opacity-95 blur-xl sm:-inset-4 lg:-inset-5"
+            />
+            <div className="relative">
+              <HeroDashboardPreview />
+            </div>
           </div>
         </div>
       </div>
@@ -439,10 +452,7 @@ function ProductFlowSectionInner() {
 
   return (
     <div className="px-5 pb-14 pt-6 sm:px-6 sm:pb-20 sm:pt-6 lg:pb-24 lg:pt-10">
-      <div
-        className="pointer-events-none mx-auto mb-8 h-px w-[min(92%,1100px)] max-w-full bg-gradient-to-r from-transparent via-sky-400/20 to-transparent sm:mb-10 lg:mb-11"
-        aria-hidden
-      />
+      <div className="landing-showroom-premium-rule mx-auto mb-8 sm:mb-10 lg:mb-11 pointer-events-none" aria-hidden />
 
       <div className="mx-auto max-w-[800px] text-center lg:max-w-[860px]">
         <h2 className="text-[clamp(1.6rem,3.4vw,2.375rem)] font-semibold leading-[1.2] tracking-[-0.028em] text-slate-50">
@@ -496,6 +506,7 @@ function SensoraGuideSectionInner() {
   const { t } = useLanguage();
   return (
     <>
+      <div className="landing-showroom-premium-rule mx-auto mb-10 sm:mb-12 lg:mb-14 pointer-events-none" aria-hidden />
       <div className="mx-auto max-w-[720px] text-center lg:max-w-[800px]">
         <h2 className="text-[clamp(1.5rem,3.2vw,2.125rem)] font-semibold tracking-[-0.025em] text-slate-50">
           {t("landing.showroom.guide.title")}
@@ -534,6 +545,7 @@ function SalesFeatureGridInner() {
 
   return (
     <>
+      <div className="landing-showroom-premium-rule mx-auto mb-10 sm:mb-12 pointer-events-none" aria-hidden />
       <h2 className="mx-auto max-w-[680px] text-center text-[clamp(1.5rem,3.2vw,2rem)] font-semibold tracking-[-0.025em] text-slate-50">
         {t("landing.showroom.features.title")}
       </h2>

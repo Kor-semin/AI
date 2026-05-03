@@ -995,8 +995,26 @@ html[lang="ko"] body {
   inset-inline: 0;
   bottom: 0;
   height: clamp(64px, 11vw, 112px);
-  background: linear-gradient(to bottom, rgba(244, 246, 248, 0), rgba(244, 246, 248, 0.97));
+  /* 다크 랜딩 — 페이지 배경(#020817)으로 자연스럽게 이어지는 하단 페이드 */
+  background: linear-gradient(to bottom, transparent, rgba(2, 8, 23, 0.88));
   z-index: 1;
+}
+
+/* 프리미엄 랜딩 구분선 — 투명 → slate/sky 은은한 코어 → 투명 */
+.landing-showroom-premium-rule {
+  height: 1px;
+  width: min(92%, 1100px);
+  margin-inline: auto;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(148, 163, 184, 0.12),
+    rgba(56, 189, 248, 0.1),
+    rgba(148, 163, 184, 0.12),
+    transparent
+  );
+  box-shadow: 0 0 24px rgba(56, 189, 248, 0.04);
 }
 
 @media (prefers-reduced-motion: reduce) {

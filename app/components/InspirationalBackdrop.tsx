@@ -46,6 +46,14 @@ export function InspirationalBackdrop() {
             aria-hidden
             className="absolute inset-0 bg-[linear-gradient(180deg,rgba(15,23,42,0.35),transparent_42%)]"
           />
+          <div
+            aria-hidden
+            className="absolute inset-0 bg-[radial-gradient(ellipse_100%_80%_at_50%_55%,rgba(15,23,42,0.65),transparent_62%)]"
+          />
+          <div
+            aria-hidden
+            className="absolute inset-0 opacity-70 mix-blend-soft-light bg-[radial-gradient(ellipse_85%_50%_at_50%_100%,rgba(30,58,138,0.06),transparent_58%)]"
+          />
         </div>
       </div>
       <div
