@@ -12,6 +12,9 @@
 
 # testing
 /coverage
+/qa/screenshots/*.png
+/qa/screenshots/*.json
+/qa/screenshots/REPORT.md
 
 # next.js
 /.next/
