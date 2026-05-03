@@ -31,7 +31,9 @@ export function AppPreviewToc({ open, onClose, onSelectSection }: Props) {
   useEffect(() => {
     if (!open) return undefined;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      if (e.key !== "Escape") return;
+      if (typeof document !== "undefined" && document.querySelector("[data-sensora-guide-detail-modal]")) return;
+      onClose();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);

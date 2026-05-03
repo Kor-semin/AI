@@ -393,16 +393,40 @@ export type TranslationKey =
   | "preview.guide.headerSub"
   | "preview.guide.tapMainToExpand"
   | "preview.guide.viewerTitle"
+  | "preview.guide.tapDetail"
+  | "preview.guide.detailModal.pointsHeading"
+  | "preview.guide.detailModal.relatedCta"
   | "guide.sensora-guide-01.title"
   | "guide.sensora-guide-01.desc"
+  | "guide.sensora-guide-01.detailBody"
+  | "guide.sensora-guide-01.bullet1"
+  | "guide.sensora-guide-01.bullet2"
+  | "guide.sensora-guide-01.bullet3"
   | "guide.sensora-guide-02.title"
   | "guide.sensora-guide-02.desc"
+  | "guide.sensora-guide-02.detailBody"
+  | "guide.sensora-guide-02.bullet1"
+  | "guide.sensora-guide-02.bullet2"
+  | "guide.sensora-guide-02.bullet3"
   | "guide.sensora-guide-03.title"
   | "guide.sensora-guide-03.desc"
+  | "guide.sensora-guide-03.detailBody"
+  | "guide.sensora-guide-03.bullet1"
+  | "guide.sensora-guide-03.bullet2"
+  | "guide.sensora-guide-03.bullet3"
+  | "guide.sensora-guide-03.bullet4"
   | "guide.sensora-guide-04.title"
   | "guide.sensora-guide-04.desc"
+  | "guide.sensora-guide-04.detailBody"
+  | "guide.sensora-guide-04.bullet1"
+  | "guide.sensora-guide-04.bullet2"
+  | "guide.sensora-guide-04.bullet3"
   | "guide.sensora-guide-05.title"
   | "guide.sensora-guide-05.desc"
+  | "guide.sensora-guide-05.detailBody"
+  | "guide.sensora-guide-05.bullet1"
+  | "guide.sensora-guide-05.bullet2"
+  | "guide.sensora-guide-05.bullet3"
   | "guide.unified.pageTitle"
   | "guide.unified.header.kicker"
   | "guide.unified.header.sub"
@@ -945,7 +969,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "preview.flow.step1.startCta": "앱 시작하기",
     "preview.flow.step1.registerCta": "영업 계정 등록",
     "preview.flow.step2.headline": "무엇을 도와드릴까요?",
-    "preview.flow.step2.sub": "실제 기능은 업무 화면에서 순서대로 열립니다.",
+    "preview.flow.step2.sub": "아래 카드 전체를 눌러 해당 업무 미리보기 영역으로 바로 이동합니다.",
     "preview.flow.step2.card.customersTitle": "고객관리",
     "preview.flow.step2.card.customersDesc": "상담 메모와 관심 차량을 한 흐름으로 정리합니다.",
     "preview.flow.step2.card.aiTitle": "AI 비서",
@@ -965,17 +989,46 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "preview.guide.headerSub": "아래 카드로 안내 이미지를 바꿀 수 있습니다. 큰 이미지를 누르면 자세히 볼 수 있습니다.",
     "preview.guide.tapMainToExpand": "탭하여 크게 보기",
     "preview.guide.viewerTitle": "가이드 이미지",
+    "preview.guide.tapDetail": "탭하여 자세히 보기",
+    "preview.guide.detailModal.pointsHeading": "이 안내에서 잡아둘 점",
+    "preview.guide.detailModal.relatedCta": "관련 업무 화면으로 이동",
     "guide.sensora-guide-01.title": "실제 사용 흐름",
     "guide.sensora-guide-01.desc": "상담 기록부터 고객 요약, 메시지, 일정까지 한 흐름으로 이어집니다.",
+    "guide.sensora-guide-01.detailBody":
+      "상담·메모 내용은 고객 목록과 다음 행동 정리까지 이어져 보입니다. 어디서 잠깐 들었는지만 남기지 않도록, 업무 속에서 다시 확인할 근거를 한곳에 둘 수 있습니다.\n예시 안내입니다. 영업 현장에서는 최종 확인·저장 책임이 사용자에게 있으며, 베타 승인과 계정 경로 준비 이후 저장 경로가 열립니다.",
+    "guide.sensora-guide-01.bullet1": "목록과 관심 차량·연락 상태를 같은 표면에서 빠르게 훑어볼 수 있습니다.",
+    "guide.sensora-guide-01.bullet2": "다음 연락 안내가 지나치게 자동이라는 인상 없이 사용자가 선택·검토한 흐름을 따릅니다.",
+    "guide.sensora-guide-01.bullet3": "초안·제안 위에 조용히 덧씌우지 않고, 사용자 확인 후 반영 가능한 형태를 지향합니다.",
     "guide.sensora-guide-02.title": "저장과 검토 원칙",
     "guide.sensora-guide-02.desc":
       "고객 정보는 사용자가 확인한 뒤 저장합니다. 초안만 덧씌우지 않으며, 바로 저장되지 않는 흐름을 지향합니다.",
+    "guide.sensora-guide-02.detailBody":
+      "영업 현장에서는 한 줄 요약이라도 무게가 큽니다. 그래서 AI 비서 기능은 문자·메시지처럼 민감한 결과를 초안 형태로 제안하고, 언제나 사용자가 검토하고 결정합니다.\n고객 본연의 기록 위에 새 내용을 슬쩍 대입하지 않는 방향을 유지합니다. 예시 화면이며 실데이터 저장은 제공 경로가 열린 뒤에 이루어집니다.",
+    "guide.sensora-guide-02.bullet1": "메모 상황과 니즈에 맞는 검토용 초안 형태만 제안합니다.",
+    "guide.sensora-guide-02.bullet2": "자동 적용처럼 읽히는 단어 선택을 피하고, 결정에는 사용자 이름이 남습니다.",
+    "guide.sensora-guide-02.bullet3": "변경 가능한 상태를 보여 줄 수 있도록 화면 흐름을 정리했습니다.",
     "guide.sensora-guide-03.title": "이용 시작 방법",
     "guide.sensora-guide-03.desc": "베타 신청부터 승인·계정 등록 후 업무 화면까지 진행되는 단계 안내입니다.",
+    "guide.sensora-guide-03.detailBody":
+      "Sensora 업무 표면까지는 신청 공개 페이지·검증·등록 과정으로 이어집니다.\n아래 순서와 같이 사용자가 선택한 경로 안에서 초대·설정 정보를 확인하는 구조예요.\n예시 안내입니다. 실제 제공 일정과 문구는 베타 운영에 맞춰 조정될 수 있습니다.",
+    "guide.sensora-guide-03.bullet1": "베타 공개 신청 페이지에서 간단히 서류 또는 연락처를 받습니다.",
+    "guide.sensora-guide-03.bullet2": "내부 검토 후 승인 상태가 사용자에게 확인되면 영업 계정 등록까지 이어집니다.",
+    "guide.sensora-guide-03.bullet3": "등록까지 마치면 같은 계정으로 업무 표면까지 연결됩니다.",
+    "guide.sensora-guide-03.bullet4": "변경 가능한 기능과 문구는 베타 기간 안내에 따릅니다.",
     "guide.sensora-guide-04.title": "Sensora 전체 구조",
     "guide.sensora-guide-04.desc": "고객관리, AI 비서, 일정, 사후관리를 한 업무 표면에서 묶어둔 구조 소개입니다.",
+    "guide.sensora-guide-04.detailBody":
+      "실제 업무 속에서는 다음 연락·메시지·일정 브리핑처럼 흔들리면 손실이 큽니다.\nSensora 표면에서는 요약 카드와 일정·사후관리 한 묶음이 한 화면에 있어 빠져나가야 할 줄을 줄입니다.\n예시 레이아웃 안내입니다. 메뉴 배치와 명칭은 베타에서 조정될 수 있습니다.",
+    "guide.sensora-guide-04.bullet1": "고객·상담·일정 신호들이 한 표면 근처에 있어 재탭을 줄입니다.",
+    "guide.sensora-guide-04.bullet2": "다음 행동이 있는 경우와 없는 경우를 구분해 표시합니다.",
+    "guide.sensora-guide-04.bullet3": "무거운 카드 채색 대신 상태를 읽는 데 초점을 둔 톤을 유지합니다.",
     "guide.sensora-guide-05.title": "Sensora 비주얼 레퍼런스",
     "guide.sensora-guide-05.desc": "Sensora의 미래형 UI 분위기를 보여주는 보조 이미지입니다.",
+    "guide.sensora-guide-05.detailBody":
+      "이미지 레퍼런스는 실제 기능보다 무드 정리 목적입니다. 조용하고 단단한 패널, 은은한 하이라이트로 긴 상담 끝에도 눈이 덜 피로하게 설계했습니다.\n예시 에셋이며 기능 화면은 베타에서 달라질 수 있습니다.",
+    "guide.sensora-guide-05.bullet1": "네온·게임 같은 과장 대신 깊은 네이비와 제한적인 하이라이트를 사용합니다.",
+    "guide.sensora-guide-05.bullet2": "텍스트가 중심이 되도록 카드 속도위반을 줄입니다.",
+    "guide.sensora-guide-05.bullet3": "고해상 원본 에셋을 그대로 써 디테일이 흐리지 않게 합니다.",
     "guide.unified.pageTitle": "Sensora 안내·온보딩",
     "guide.unified.header.kicker": "Sensora 안내",
     "guide.unified.header.sub": "4단계로 소개 예시 안내 이미지를 이어 확인할 수 있습니다. 마지막에서 업무 화면 또는 계정 안내를 선택합니다.",
@@ -985,7 +1038,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "guide.unified.flow.kicker": "예시 화면 · 4단계 중 3",
     "guide.unified.flow.title": "실제 사용 흐름",
     "guide.unified.flow.lead":
-      "큰 미리보기와 카드에서 예시를 고릅니다. 이미지를 누르면 이 화면 안에서 크고 선명하게 봅니다.",
+      "큰 미리보기와 카드에서 예시를 고릅니다. 이미지를 누르면 이 화면 안에서 안내글과 함께 고화질로 확인할 수 있습니다.",
     "guide.unified.flow.rail": "상담 정리 · 고객 니즈 요약 · 발송 문자 · 다음 연락",
     "guide.unified.guideNav.prev": "이전 안내",
     "guide.unified.guideNav.next": "다음 안내",
@@ -1537,7 +1590,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "preview.flow.step1.startCta": "Start the app preview",
     "preview.flow.step1.registerCta": "Seller account signup",
     "preview.flow.step2.headline": "What would you like to explore?",
-    "preview.flow.step2.sub": "You’ll open features in sequence from the workspace.",
+    "preview.flow.step2.sub": "Tap any card to jump straight to that workspace area in preview.",
     "preview.flow.step2.card.customersTitle": "Customers",
     "preview.flow.step2.card.customersDesc": "Keep consultation notes and interested vehicles in one calm flow.",
     "preview.flow.step2.card.aiTitle": "AI assistant",
@@ -1557,16 +1610,45 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "preview.guide.headerSub": "Use the cards to switch guide images. Tap the large image to zoom in.",
     "preview.guide.tapMainToExpand": "Tap to view full screen",
     "preview.guide.viewerTitle": "Guide images",
+    "preview.guide.tapDetail": "Tap to view details",
+    "preview.guide.detailModal.pointsHeading": "Takeaways",
+    "preview.guide.detailModal.relatedCta": "Open related workspace screen",
     "guide.sensora-guide-01.title": "End-to-end workspace flow",
     "guide.sensora-guide-01.desc": "Consultation notes carry into customer summaries, messages, and schedule cues.",
+    "guide.sensora-guide-01.detailBody":
+      "Notes and summaries stay tethered across the workspace so you rarely land on \"where did we leave this?\". The goal is contextual recall without flashy automation language.\nThese are illustrative screens. Saving to cloud storage follows beta approval and your seller path readiness.",
+    "guide.sensora-guide-01.bullet1": "Scan list context, vehicles, and follow-up cues on one steady surface.",
+    "guide.sensora-guide-01.bullet2": "Next-step suggestions stay review-first instead of implying auto-send.",
+    "guide.sensora-guide-01.bullet3": "Drafts never silently overwrite deliberate customer notes.",
     "guide.sensora-guide-02.title": "Save and review discipline",
     "guide.sensora-guide-02.desc": "Customer records are saved after deliberate review—no silent overwrites.",
+    "guide.sensora-guide-02.detailBody":
+      "For field sales, wording matters. Assistant features surface summaries and drafts for you to adjust before anything sensitive goes out.\nWe avoid patterns that imply the system finalized text on its own—the decision stays visibly yours.",
+    "guide.sensora-guide-02.bullet1": "Drafts cite memo context rather than inventing unrelated copy.",
+    "guide.sensora-guide-02.bullet2": "Flows highlight review moments instead of implying instant commits.",
+    "guide.sensora-guide-02.bullet3": "Controls stay legible enough for cramped showroom pockets of time.",
     "guide.sensora-guide-03.title": "How to get started",
     "guide.sensora-guide-03.desc": "From beta request and approval to account setup and your workspace.",
+    "guide.sensora-guide-03.detailBody":
+      "The path lands on invitations, verification cues, then account setup—all within the onboarding story you approve.\nThis walkthrough summarizes the sequence; timelines and wording can shift during beta operations.",
+    "guide.sensora-guide-03.bullet1": "Request access from the beta surface you share publicly.",
+    "guide.sensora-guide-03.bullet2": "After internal review clears, approvals surface back to applicants.",
+    "guide.sensora-guide-03.bullet3": "Seller registration keeps the door open for CRM entry with one account spine.",
+    "guide.sensora-guide-03.bullet4": "Feature availability evolves with Sensora Operations guidance.",
     "guide.sensora-guide-04.title": "Sensora map",
     "guide.sensora-guide-04.desc": "Customers, assistant, schedule, and follow-up on one calm surface.",
+    "guide.sensora-guide-04.detailBody":
+      "When follow-ups drift, showroom momentum drops. Mapping customers, drafts, reminders, and aftercare cues together reduces tab-hopping fatigue.\nThis reference layout may shift between beta milestones.",
+    "guide.sensora-guide-04.bullet1": "Operational tiles stay clustered so cues do not bury each other.",
+    "guide.sensora-guide-04.bullet2": "Signals distinguish \"needs attention\" versus stable states calmly.",
+    "guide.sensora-guide-04.bullet3": "Visual noise stays low compared with neon-heavy dashboards.",
     "guide.sensora-guide-05.title": "Visual reference",
     "guide.sensora-guide-05.desc": "A supporting render of the futuristic, quiet UI direction.",
+    "guide.sensora-guide-05.detailBody":
+      "Use this pane for mood—not final feature promises. Quiet navy glass, restrained highlights, and generous spacing keep readability after long consult days.\nAsset fidelity follows the originals so zoomed previews stay crisp.",
+    "guide.sensora-guide-05.bullet1": "Avoids gimmicky gamer chrome in favor of premium calm surfaces.",
+    "guide.sensora-guide-05.bullet2": "Typography-leading clarity outweighs flashy card motion.",
+    "guide.sensora-guide-05.bullet3": "High-resolution PNGs remain the canonical source.",
     "guide.unified.pageTitle": "Sensora onboarding",
     "guide.unified.header.kicker": "Sensora guide",
     "guide.unified.header.sub":
@@ -1577,7 +1659,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "guide.unified.flow.kicker": "Sample screens · Step 3 of 4",
     "guide.unified.flow.title": "How it connects in practice",
     "guide.unified.flow.lead":
-      "Choose a sample with the large preview or cards—tap any image to view it large and sharp inside the app.",
+      "Choose a sample with the large preview or cards—tap any image for an in-app detail sheet with narration and crisp artwork.",
     "guide.unified.flow.rail": "Consult notes · Customer needs recap · Outreach draft · Next follow-up",
     "guide.unified.guideNav.prev": "Previous sample",
     "guide.unified.guideNav.next": "Next sample",

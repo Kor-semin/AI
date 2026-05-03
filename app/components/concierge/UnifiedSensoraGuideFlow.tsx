@@ -6,12 +6,11 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { SensoraAnimatedMark } from "@/app/components/SensoraAnimatedMark";
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
-import { SensoraGuideImageViewer } from "@/app/components/concierge/SensoraGuideImageViewer";
+import { SensoraGuideDetailModal } from "@/app/components/concierge/SensoraGuideDetailModal";
 import { SensoraGuideGallery } from "@/app/components/concierge/SensoraGuideGallery";
 import {
   DEFAULT_GUIDE_ID,
   SENSORA_GUIDES,
-  sensoraGuideIndex,
   type SensoraGuideId,
 } from "@/lib/sensoraGuide";
 import type { CrmSection } from "@/app/crm/crmSectionTypes";
@@ -43,6 +42,14 @@ function splitLines(text: string): string[] {
     .filter(Boolean);
 }
 
+function IconChevronNavigate({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 20 20" fill="none" aria-hidden>
+      <path d="M7 4l7 6-7 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.88" />
+    </svg>
+  );
+}
+
 export function UnifiedSensoraGuideFlow({
   active,
   variant,
@@ -54,17 +61,14 @@ export function UnifiedSensoraGuideFlow({
   const { t } = useLanguage();
   const [wizardStep, setWizardStep] = useState(0);
   const [activeGuideId, setActiveGuideId] = useState<SensoraGuideId>(DEFAULT_GUIDE_ID);
-  const [guideViewerOpen, setGuideViewerOpen] = useState(false);
+  const [guideDetailOpen, setGuideDetailOpen] = useState(false);
 
   useEffect(() => {
     if (!active) return;
     setWizardStep(0);
     setActiveGuideId(DEFAULT_GUIDE_ID);
-    setGuideViewerOpen(false);
+    setGuideDetailOpen(false);
   }, [active]);
-
-  const guideImages = useMemo(() => SENSORA_GUIDES.map((g) => ({ src: g.image })), []);
-  const slideTitleKeys = useMemo(() => SENSORA_GUIDES.map((g) => g.titleKey), []);
 
   const goPrevGuide = useCallback(() => {
     const idx = SENSORA_GUIDES.findIndex((g) => g.id === activeGuideId);
@@ -78,20 +82,29 @@ export function UnifiedSensoraGuideFlow({
     setActiveGuideId(SENSORA_GUIDES[next]?.id ?? DEFAULT_GUIDE_ID);
   }, [activeGuideId]);
 
-  const pillarTiles = useMemo(
+  const pillarEntries = useMemo(
     () =>
-      (
-        [
-          { titleKey: "preview.flow.step2.card.customersTitle" as const, descKey: "preview.flow.step2.card.customersDesc" as const, src: "/images/guides/sensora-guide-01.png" },
-          { titleKey: "preview.flow.step2.card.aiTitle" as const, descKey: "preview.flow.step2.card.aiDesc" as const, src: "/images/guides/sensora-guide-02.png" },
-          { titleKey: "preview.flow.step2.card.followTitle" as const, descKey: "preview.flow.step2.card.followDesc" as const, src: "/images/guides/sensora-guide-04.png" },
-        ] as const
-      ).map((row) => ({
-        title: t(row.titleKey),
-        desc: t(row.descKey),
-        src: row.src,
-      })),
-    [t],
+      [
+        {
+          titleKey: "preview.flow.step2.card.customersTitle" as const,
+          descKey: "preview.flow.step2.card.customersDesc" as const,
+          src: "/images/guides/sensora-guide-01.png",
+          section: "customers" as CrmSection,
+        },
+        {
+          titleKey: "preview.flow.step2.card.aiTitle" as const,
+          descKey: "preview.flow.step2.card.aiDesc" as const,
+          src: "/images/guides/sensora-guide-02.png",
+          section: "ai" as CrmSection,
+        },
+        {
+          titleKey: "preview.flow.step2.card.followTitle" as const,
+          descKey: "preview.flow.step2.card.followDesc" as const,
+          src: "/images/guides/sensora-guide-04.png",
+          section: "followup" as CrmSection,
+        },
+      ] as const,
+    [],
   );
 
   const kickerClass =
@@ -127,41 +140,77 @@ export function UnifiedSensoraGuideFlow({
 
   return (
     <>
-      <SensoraGuideImageViewer
-        open={guideViewerOpen}
-        onClose={() => setGuideViewerOpen(false)}
-        images={guideImages}
-        initialSlideIndex={sensoraGuideIndex(activeGuideId)}
-        title={t("preview.guide.viewerTitle")}
-        slideTitleKeys={slideTitleKeys}
+      <SensoraGuideDetailModal
+        open={guideDetailOpen}
+        onClose={() => setGuideDetailOpen(false)}
+        activeGuideId={activeGuideId}
+        onActiveGuideChange={setActiveGuideId}
         overlayZClass="z-[470]"
+        onGoToRelated={(section) => onSelectSection(section)}
       />
 
       <div className={`flex min-h-0 flex-1 flex-col ${className}`.trim()}>
         <div className="sensora-guide-preview-hide-scroll sensora-guide-toc-scroll min-h-0 flex-1 overflow-y-auto overscroll-y-contain [-webkit-overflow-scrolling:touch] pb-24 max-sm:pb-[7.25rem] sm:pb-8">
           <div className="mx-auto flex w-full max-w-[min(640px,100%)] flex-col px-1 sm:max-w-[min(720px,100%)]">
             {wizardStep === 0 ? (
-              <div className={`flex flex-col ${variant === "notebook" ? "items-center text-center pt-1" : "items-center text-center pt-1 sm:pt-2"}`}>
-                <div className="mb-4 flex shrink-0 justify-center sm:mb-5">
-                  <SensoraAnimatedMark size={variant === "notebook" ? 104 : 92} animated label={t("product.name")} className="motion-reduce:opacity-[0.96]" />
-                </div>
-                <p className={kickerClass}>SENSORA</p>
-                <h2 className={`${titleClass} mt-2 max-w-[26ch] text-[clamp(1.35rem,min(5vw+0.5rem,1.95rem),1.95rem)]`}>
-                  {t("guide.unified.intro.title")}
-                </h2>
-                <div className={`mx-auto mt-5 w-full max-w-[min(28rem,94vw)] space-y-2.5 ${bodyClass}`}>
-                  {splitLines(t("guide.unified.intro.body")).map((line) => (
-                    <p key={line}>{line}</p>
-                  ))}
-                </div>
-                <Link
-                  href={REGISTER_PATH}
-                  prefetch={false}
-                  onClick={() => onClose()}
-                  className="mx-auto mt-5 block max-w-[min(28rem,94vw)] text-center text-[0.8125rem] font-semibold tracking-tight text-sky-300/95 underline decoration-sky-400/25 underline-offset-[0.22em] transition hover:text-sky-100 sm:text-[0.875rem]"
+              <div className={`flex flex-col ${variant === "notebook" ? "items-stretch px-1 pt-1 max-[420px]:px-1" : "items-center px-1 pt-1 text-center max-sm:px-0.5 sm:pt-3"}`}>
+                <div
+                  className={[
+                    "relative mx-auto flex w-full max-w-[28rem] flex-col overflow-hidden rounded-[22px] border border-white/[0.13] px-[clamp(1.1rem,3.8vw,1.75rem)] py-[clamp(1.85rem,5.2vw,2.85rem)] text-center shadow-[0_42px_100px_-40px_rgba(0,0,0,0.65),inset_0_1px_0_rgba(255,255,255,0.08),0_0_0_1px_rgba(56,189,248,0.045)_inset] backdrop-blur-xl",
+                    variant === "notebook" ?
+                      "bg-gradient-to-br from-[#0c1829]/94 via-[#070f18]/92 to-[#040a13]/93 ring-1 ring-inset ring-white/[0.05]"
+                    : "bg-gradient-to-b from-white/[0.07] via-[#070f18]/88 to-[#020817]/93 ring-1 ring-inset ring-sky-400/[0.08]",
+                  ].join(" ")}
                 >
-                  {t("preview.flow.step1.registerCta")}
-                </Link>
+                  <div className="pointer-events-none absolute inset-x-[-20%] top-[-30%] h-[72%] bg-[radial-gradient(ellipse_70%_60%_at_50%_0%,rgba(56,189,248,0.11),transparent_62%)]" aria-hidden />
+
+                  <div className="relative flex flex-col items-center">
+                    <div className="flex justify-center [--mark-glow:rgba(56,189,248,0.42)] motion-reduce:[--mark-glow:transparent]">
+                      <div className="rounded-full p-[2px] shadow-[0_0_48px_-12px_var(--mark-glow)] ring-2 ring-white/[0.08]">
+                        <div className="rounded-full bg-[#020817]/92 p-[3px]">
+                          <SensoraAnimatedMark
+                            size={variant === "notebook" ? 104 : 96}
+                            animated
+                            label={t("product.name")}
+                            className="motion-reduce:opacity-[0.96]"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="mx-auto mb-6 mt-[1.375rem] h-px max-w-[5.5rem] bg-gradient-to-r from-transparent via-sky-400/35 to-transparent sm:mt-7 sm:max-w-[6.75rem]" aria-hidden />
+
+                    <p className={kickerClass}>SENSORA</p>
+
+                    <h2 className={`${titleClass} mt-3 max-w-[22ch] text-[clamp(1.35rem,min(5vw+0.45rem,1.9rem),1.92rem)]`}>{t("guide.unified.intro.title")}</h2>
+
+                    <div className={`mx-auto mt-5 w-full max-w-[34ch] space-y-[0.75em] ${bodyClass} ${variant === "dialog" ? "text-[0.84375rem] sm:text-[0.9375rem]" : ""}`}>
+                      {splitLines(t("guide.unified.intro.body")).map((line) => (
+                        <p key={line}>{line}</p>
+                      ))}
+                    </div>
+
+                    <div className="mx-auto mt-[1.875rem] h-px w-full max-w-[13rem] bg-gradient-to-r from-transparent via-white/[0.08] to-transparent sm:max-w-[16rem]" aria-hidden />
+
+                    <div className="relative z-[1] mx-auto mt-7 flex w-full max-w-[20.5rem] flex-col gap-3 sm:mt-9">
+                      <button
+                        type="button"
+                        onClick={() => wizardNext()}
+                        className={`sensora-premium-primary-workspace min-h-[3.25rem] w-full shrink-0 rounded-2xl py-3.5 text-[0.94rem] font-semibold tracking-tight shadow-[0_0_40px_-10px_rgba(56,189,248,0.22)] touch-manipulation sm:min-h-[3.375rem]`}
+                      >
+                        {t("preview.flow.step1.startCta")}
+                      </button>
+                      <Link
+                        href={REGISTER_PATH}
+                        prefetch={false}
+                        onClick={() => onClose()}
+                        className={`${glassInteractive} flex min-h-[3.0625rem] w-full shrink-0 items-center justify-center rounded-2xl border border-white/[0.15] px-5 py-[0.7rem] text-center text-[0.875rem] font-semibold text-slate-100 transition hover:bg-white/[0.05] hover:text-white touch-manipulation sm:min-h-[3.1875rem] sm:text-[0.9rem]`}
+                      >
+                        {t("preview.flow.step1.registerCta")}
+                      </Link>
+                    </div>
+                  </div>
+                </div>
               </div>
             ) : null}
 
@@ -172,22 +221,37 @@ export function UnifiedSensoraGuideFlow({
                 <p className={`mx-auto mt-2 max-w-[40ch] text-xs leading-snug text-slate-400 sm:text-sm ${variant === "notebook" ? "text-slate-400" : ""}`}>
                   {t("preview.flow.step2.sub")}
                 </p>
-                <ul className="mx-auto mt-5 grid w-full max-w-[28rem] gap-2 text-left sm:mt-7 sm:gap-2.5">
-                  {pillarTiles.map((row, idx) => (
-                    <li
-                      key={`${row.title}-${idx}`}
-                      className="notebook-cover-toc-pane sensora-notebook-toc-pane--visual rounded-[14px] border border-white/[0.12] bg-white/[0.03] px-3 py-2.5 backdrop-blur-sm sm:rounded-[17px] sm:px-4 sm:py-3.5"
-                    >
-                      <div className="flex items-start gap-3">
-                        <div className="relative size-14 shrink-0 overflow-hidden rounded-lg border border-white/[0.1] bg-[#030712]/90 sm:size-16">
-                          <Image src={row.src} alt="" fill className="object-cover object-center opacity-[0.95]" sizes="80px" quality={100} />
-                          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#020617]/45 to-transparent" aria-hidden />
+                <ul className="mx-auto mt-5 grid w-full max-w-[28rem] list-none gap-[0.7rem] p-0 text-left sm:mt-7 sm:gap-[0.85rem]" role="list">
+                  {pillarEntries.map((row) => (
+                    <li key={`${row.section}-${row.titleKey}`}>
+                      <button
+                        type="button"
+                        onClick={() => onSelectSection(row.section)}
+                        aria-label={`${t(row.titleKey)} · ${t("cta.openAppWorkspace")}`}
+                        className={[
+                          "notebook-cover-toc-pane sensora-notebook-toc-pane--visual sensora-guide-pillar-card group relative flex w-full touch-manipulation flex-col rounded-[15px] border border-white/[0.13] px-3 py-[0.7rem] text-left backdrop-blur-sm transition-[transform,border-color,box-shadow] duration-[220ms] ease-out hover:border-sky-400/[0.38] hover:shadow-[0_0_40px_-12px_rgba(56,189,248,0.16)] motion-reduce:transition-none motion-reduce:hover:shadow-none active:translate-y-[0.5px] active:brightness-[1.03] active:transition-none max-sm:rounded-[14px] sm:rounded-[17px] sm:px-[1.05rem] sm:py-3",
+                          variant === "notebook" ?
+                            "bg-gradient-to-br from-white/[0.06] via-[#0a1624]/80 to-transparent"
+                          : "bg-gradient-to-br from-white/[0.06] via-[#030d18]/75 to-transparent",
+                          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/42",
+                        ].join(" ")}
+                      >
+                        <div className="flex items-start gap-3">
+                          <div className="relative size-[3.625rem] shrink-0 overflow-hidden rounded-[11px] border border-white/[0.13] bg-[#030712]/95 ring-2 ring-transparent transition-[ring-color] duration-[220ms] group-hover:ring-sky-400/[0.2] group-active:scale-[0.99] motion-reduce:group-active:scale-100 sm:size-16">
+                            <Image src={row.src} alt="" fill className="object-cover object-center opacity-[0.96]" sizes="76px" quality={100} />
+                            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#020617]/55 to-transparent" aria-hidden />
+                          </div>
+                          <div className="min-h-[3.5rem] flex-1 pr-10 sm:min-h-[4rem] sm:pr-11">
+                            <p className={`text-[clamp(0.8925rem,2.65vw,0.98rem)] font-semibold leading-snug tracking-[-0.018em] ${variant === "notebook" ? "text-[#F8FAFC]" : "text-slate-50"} sm:text-[0.9575rem]`}>
+                              {t(row.titleKey)}
+                            </p>
+                            <p className={`mt-1 max-w-[34ch] text-[10.75px] leading-[1.45] text-slate-400 max-sm:text-[11px] sm:mt-[0.325rem] sm:text-[0.8175rem] sm:leading-relaxed ${variant === "notebook" ? "text-[#94A3B8]" : ""}`}>
+                              {t(row.descKey)}
+                            </p>
+                          </div>
+                          <IconChevronNavigate className="pointer-events-none absolute right-3.5 top-1/2 size-[1.1rem] -translate-y-1/2 shrink-0 text-sky-300/82 transition-[transform,color] duration-[220ms] group-hover:translate-x-0.5 group-hover:text-sky-200 motion-reduce:group-hover:translate-x-0 sm:right-[1.175rem]" />
                         </div>
-                        <div className="min-w-0 flex-1">
-                          <p className={`text-[0.9375rem] font-semibold leading-snug ${variant === "notebook" ? "text-[#F8FAFC]" : "text-slate-50"}`}>{row.title}</p>
-                          <p className={`mt-0.5 text-[11px] leading-snug ${variant === "notebook" ? "text-slate-400" : "text-slate-400"} sm:mt-1 sm:text-[0.8125rem]`}>{row.desc}</p>
-                        </div>
-                      </div>
+                      </button>
                     </li>
                   ))}
                 </ul>
@@ -235,10 +299,10 @@ export function UnifiedSensoraGuideFlow({
                   activeId={activeGuideId}
                   onSelectGuide={(id) => {
                     setActiveGuideId(id as SensoraGuideId);
-                    setGuideViewerOpen(true);
+                    setGuideDetailOpen(true);
                   }}
-                  onExpandImage={() => setGuideViewerOpen(true)}
-                  tapToExpandLabel={t("preview.guide.tapMainToExpand")}
+                  onExpandImage={() => setGuideDetailOpen(true)}
+                  tapToExpandLabel={t("preview.guide.tapDetail")}
                   getTitle={(g) => t(g.titleKey)}
                   getDescription={(g) => t(g.descKey)}
                   hideThumbnailHeading

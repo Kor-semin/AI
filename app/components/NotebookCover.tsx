@@ -13,7 +13,7 @@ import { useLanguage } from "@/app/components/i18n/LanguageProvider";
 import { useAuth } from "@/app/crm/useAuth";
 import { useSellerProfile } from "@/app/crm/useSellerProfile";
 import { isFirebaseConfigured } from "@/app/firebase/client";
-import type { CrmSection } from "@/app/crm/crmSectionTypes";
+import { crmSectionToHash, type CrmSection } from "@/app/crm/crmSectionTypes";
 
 const STORAGE_KEY = "crm.notebookCoverDismissed";
 
@@ -29,8 +29,7 @@ function isPwaStandaloneWindow(): boolean {
   return Boolean(nav.standalone);
 }
 
-const WORKSPACE_PATH = "/?view=app" as const;
-const WORKSPACE_AI_HASH = "/?view=app#crm-ai-assistant" as const;
+const WORKSPACE_VIEW = "/?view=app" as const;
 
 function readDismissed(): boolean {
   try {
@@ -134,7 +133,7 @@ export function NotebookCover() {
 
   const enterFromGuide = useCallback(
     (section: CrmSection) => {
-      dismissAndNavigate(section === "ai" ? WORKSPACE_AI_HASH : WORKSPACE_PATH);
+      dismissAndNavigate(`${WORKSPACE_VIEW}#${crmSectionToHash(section)}`);
     },
     [dismissAndNavigate],
   );
