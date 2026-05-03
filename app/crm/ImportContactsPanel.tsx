@@ -525,6 +525,9 @@ export function ImportContactsPanel({
               >
                 휴대폰 연락처에서 선택
               </button>
+              <p className="text-[11px] leading-snug text-[#64748B]">
+                선택한 연락처만 가져옵니다. 전체 주소록을 자동으로 열람하지 않습니다.
+              </p>
             </div>
           ) : null}
 
