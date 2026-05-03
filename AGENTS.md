@@ -288,6 +288,72 @@ Avoid:
 
 취합 요청서는 **Audit / Security 관점**을 먼저 반영한 뒤 전달되는 경우가 많습니다.
 
+### Sensora Common Messaging Standard
+
+Sensora Auto CRM의 외부 커뮤니케이션 방향은 “멋있는 AI 앱”이 아니라, **“자동차 영업사원의 상담과 사후관리를 정확하게 정리해주는 실무형 AI 고객관리 워크스페이스”**로 정리한다.
+
+All Sensora roles must follow this standard when writing product copy, landing copy, beta-user messages, PR copy, marketing content, QA feedback, development requests, legal/privacy explanations, and internal strategy documents.
+
+Core messaging principles:
+
+- Do not imply that AI replaces automotive salespeople.  
+- Express AI as a support tool that organizes consultation content and proposes review drafts.  
+- Make it clear that the salesperson makes the final judgment, edits, and decisions.  
+- Do not imply automatic customer data collection, automatic saving, or arbitrary modification of customer information.  
+- Prioritize language that Korean automotive salespeople can immediately understand.  
+- Prioritize trust, practicality, calmness, and organized premium quality over exaggerated AI claims.  
+- Keep the product positioned as a practical customer-management workspace, not a flashy AI automation tool.  
+
+Recommended main message:
+
+「**자동차 영업사원을 위한 AI 고객관리 워크스페이스**」
+
+Recommended supporting message:
+
+「상담 메모, 관심 차량, 다음 연락, 사후관리까지 흩어진 고객 정보를 한 흐름으로 정리합니다. AI는 초안을 돕고, 최종 판단은 영업사원이 합니다.」
+
+Preferred expressions:
+
+- 상담 내용을 정리합니다  
+- 다음 행동을 안내합니다  
+- 검토용 초안을 제안합니다  
+- 상담부터 사후관리까지 한 흐름으로 관리합니다  
+- 고객관리, 상담 메모, 사후관리, 출고 안내를 한 곳에서 정리합니다  
+- AI는 초안을 돕고, 최종 판단은 영업사원이 합니다  
+- 차량 영업 업무를 더 정확하게 정리합니다  
+
+Expressions to avoid:
+
+- AI가 영업을 대신합니다  
+- 고객을 자동으로 관리합니다  
+- 계약률을 폭발적으로 올립니다  
+- 완벽한 영업 자동화  
+- AI가 다 해줍니다  
+- 고객 정보를 자동으로 수집합니다  
+- 자동으로 고객을 저장합니다  
+- 무조건 계약으로 연결합니다  
+- B2B AI SaaS 중심 표현  
+- 세일즈 컨시어지 스타일 영업 보조  
+
+Shared direction:
+
+- 기능은 실무적으로  
+- 문구는 신뢰감 있게  
+- AI는 조용히 보조하는 역할로  
+- 브랜드는 차분하고 프리미엄하게  
+- 개인정보와 고객 신뢰는 베타 단계부터 명확하게 보호하는 방향으로  
+
+Role-specific application:
+
+- **Product** must use this standard when defining user flows and feature priorities.  
+- **Copy, PR, Marketing, and Brand** must use this standard when writing external-facing messages.  
+- **DevGuide** must include this standard in Cursor-ready development requests when copy or UI messaging is involved.  
+- **QA** must check whether screens create misunderstanding around AI automation or customer data handling.  
+- **Audit and Security** must flag any phrase or feature that suggests automatic collection, automatic saving, AI replacement, or exaggerated sales outcomes.  
+- **Strategy** must use this standard when explaining Sensora’s positioning, roadmap, and B2B expansion direction.  
+
+**관련:** 본 문서 §2 「Sensora.PR」·「Sensora.Strategy」 원칙, §7 Audit / Security, §10 Copy / Brand 톤 요약과 함께 적용한다.
+
 ---
 
 ## 4. 공통 개발 원칙
@@ -364,6 +430,7 @@ Avoid:
 
 ## 10. 참고 (Copy / Brand 톤)
 
+- 공통 원칙·권장 문구·금지 표현의 전체 기준은 §3 「**Sensora Common Messaging Standard**」를 따른다.  
 - 선호: 상담 내용 정리, **검토용 초안** 제안, 다음 행동 안내, **사용자·영업사원의 최종 판단**  
 - 지양: 「조용히 제안」, 「AI가 다 해줌」, 「완벽 자동화」, 「영업을 대신」, **Sales Concierge AI**, **B2B AI SaaS**, **후속관리** 등  
 - 「동기화」보다 상황에 따라 **「가져오기」**가 안전한 경우가 많음  
