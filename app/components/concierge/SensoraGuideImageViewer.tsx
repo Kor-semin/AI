@@ -37,6 +37,7 @@ export function SensoraGuideImageViewer({
   const { t } = useLanguage();
   const [index, setIndex] = useState(0);
   const [broken, setBroken] = useState<Record<number, boolean>>({});
+  const [immersiveOpen, setImmersiveOpen] = useState(false);
 
   const total = images.length;
   const safeIndex = total > 0 ? ((index % total) + total) % total : 0;
@@ -46,6 +47,7 @@ export function SensoraGuideImageViewer({
     const next = Math.min(Math.max(0, initialSlideIndex), total - 1);
     setIndex(next);
     setBroken({});
+    setImmersiveOpen(false);
   }, [open, initialSlideIndex, total]);
 
   useEffect(() => {
@@ -85,19 +87,67 @@ export function SensoraGuideImageViewer({
   useEffect(() => {
     if (!open) return undefined;
     const onKey = (e: KeyboardEvent) => {
+      if (immersiveOpen) {
+        if (e.key === "Escape") setImmersiveOpen(false);
+        return;
+      }
       if (e.key === "Escape") onClose();
       if (e.key === "ArrowLeft") goPrev();
       if (e.key === "ArrowRight") goNext();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [open, onClose, goPrev, goNext]);
+  }, [open, onClose, goPrev, goNext, immersiveOpen]);
 
   if (!open || total === 0) return null;
 
   const slideAlt = slideTitleKeys?.[safeIndex] ? t(slideTitleKeys[safeIndex]) : "";
 
   return (
+    <>
+      {immersiveOpen && !broken[safeIndex] ? (
+        <div
+          className="fixed inset-0 z-[490] flex flex-col bg-[#030712]/98 backdrop-blur-md"
+          role="dialog"
+          aria-modal="true"
+          aria-label={slideAlt || title}
+        >
+          <div className="flex items-center justify-end gap-2 border-b border-white/[0.1] px-4 py-3 pt-[max(12px,calc(env(safe-area-inset-top,0px)+8px))] sm:px-5">
+            <button
+              type="button"
+              onClick={openOriginalInNewTab}
+              className="mr-auto min-h-11 shrink-0 rounded-xl border border-sky-400/35 bg-white/[0.06] px-4 py-2 text-sm font-semibold text-sky-50 hover:bg-white/[0.1] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/40 touch-manipulation"
+            >
+              {t("landing.showroom.tip.openOriginal")}
+            </button>
+            <button
+              type="button"
+              onClick={() => setImmersiveOpen(false)}
+              className="min-h-11 rounded-xl border border-white/[0.14] bg-white/[0.06] px-4 py-2 text-sm font-semibold text-slate-100 hover:bg-white/[0.11] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 touch-manipulation"
+            >
+              {t("landing.showroom.tip.close")}
+            </button>
+          </div>
+          <button
+            type="button"
+            className="flex min-h-0 flex-1 items-center justify-center p-4 pb-[max(1rem,calc(env(safe-area-inset-bottom,0px)+12px))] outline-none cursor-default"
+            aria-label={t("landing.showroom.tip.openOriginalAria")}
+            onClick={() => setImmersiveOpen(false)}
+          >
+            <Image
+              src={images[safeIndex].src}
+              alt={slideAlt}
+              width={2000}
+              height={1400}
+              className="max-h-[min(86dvh,86vh)] w-auto max-w-full object-contain"
+              sizes="100vw"
+              priority
+              onClick={(ev) => ev.stopPropagation()}
+            />
+          </button>
+        </div>
+      ) : null}
+
     <div
       data-sensora-guide-viewer
       className={[
@@ -151,9 +201,9 @@ export function SensoraGuideImageViewer({
               ) : (
                 <button
                   type="button"
-                  onClick={openOriginalInNewTab}
+                  onClick={() => setImmersiveOpen(true)}
                   className="group relative flex h-full w-full max-h-[min(58dvh,560px)] min-h-[min(220px,45dvh)] cursor-zoom-in flex-col items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-sky-400/45 focus-visible:ring-offset-2 focus-visible:ring-offset-[#020817] sm:max-h-[min(62dvh,520px)] sm:min-h-[min(280px,48dvh)]"
-                  aria-label={t("landing.showroom.tip.openOriginalAria")}
+                  aria-label={t("landing.showroom.concept.tapToExpand")}
                 >
                   <Image
                     src={images[safeIndex].src}
@@ -199,7 +249,7 @@ export function SensoraGuideImageViewer({
             {!broken[safeIndex] ? (
               <>
                 <p className="px-0.5 text-xs font-medium leading-relaxed text-slate-500">
-                  {t("landing.showroom.tip.openOriginalHint")}
+                  {t("landing.showroom.concept.tapToExpand")} · {t("landing.showroom.tip.openOriginalHint")}
                 </p>
                 <button
                   type="button"
@@ -258,5 +308,6 @@ export function SensoraGuideImageViewer({
         </div>
       </div>
     </div>
+    </>
   );
 }

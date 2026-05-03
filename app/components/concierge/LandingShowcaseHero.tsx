@@ -1,11 +1,14 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { Fragment, useEffect, useMemo, useState } from "react";
 
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
 import { SensoraGuideImageViewer } from "@/app/components/concierge/SensoraGuideImageViewer";
-import { SENSORA_GUIDE_IMAGES, SENSORA_TIP_CARD_INITIAL_INDEX } from "@/app/components/concierge/sensoraGuideImages";
+import { SensoraFullscreenImageOverlay } from "@/app/components/concierge/SensoraFullscreenImageOverlay";
+import { SENSORA_GUIDE_IMAGES } from "@/app/components/concierge/sensoraGuideImages";
+import { SENSORA_CONCEPT_STORY_SLIDES } from "@/app/components/concierge/sensoraConceptStory";
 
 const JOIN_PATH = "/join" as const;
 
@@ -51,49 +54,6 @@ function IconAppWindowPlay({ className }: { className?: string }) {
         fill="currentColor"
         opacity="0.9"
       />
-    </svg>
-  );
-}
-
-function IconTipStart({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
-      <path d="M12 3L4 8v6c0 5 3.5 8.5 8 9.5 4.5-1 8-4.5 8-9.5V8l-8-5z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
-      <path d="M9 12l2 2 4-4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function IconTipGrid({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
-      <path
-        d="M4 7h7V4H4v3zm0 6h7v-3H4v3zm0 6h7v-3H4v3zm9-12h7V4h-7v3zm0 6h7v-3h-7v3zm0 6h7v-3h-7v3z"
-        fill="currentColor"
-        opacity=".9"
-      />
-    </svg>
-  );
-}
-
-function IconTipFlow({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
-      <path
-        d="M5 17h7M5 17l2.5 2M5 17l2.5-2M17 12h5M22 12l-2 2m2-2l-2-2M12 6h11M23 6l-2-2m2 2l-2 2"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
-function IconTipBeta({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
-      <path d="M7 18h10M9 14h6M7 6h10v6H7V6z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
-      <circle cx="8" cy="9" r=".9" fill="currentColor" />
     </svg>
   );
 }
@@ -282,17 +242,7 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
     title: string;
     initialSlideIndex: number;
   }>(() => ({ open: false, title: "", initialSlideIndex: 0 }));
-
-  const tipCards = useMemo(
-    () =>
-      [
-        { n: 1 as const, titleKey: "landing.showroom.tip.card1.title" as const, descKey: "landing.showroom.tip.card1.desc" as const, Icon: IconTipStart },
-        { n: 2 as const, titleKey: "landing.showroom.tip.card2.title" as const, descKey: "landing.showroom.tip.card2.desc" as const, Icon: IconTipGrid },
-        { n: 3 as const, titleKey: "landing.showroom.tip.card3.title" as const, descKey: "landing.showroom.tip.card3.desc" as const, Icon: IconTipFlow },
-        { n: 4 as const, titleKey: "landing.showroom.tip.card4.title" as const, descKey: "landing.showroom.tip.card4.desc" as const, Icon: IconTipBeta },
-      ] as const,
-    [],
-  );
+  const [conceptExpand, setConceptExpand] = useState<{ src: string; alt: string } | null>(null);
 
   const flowSteps = useMemo(
     () =>
@@ -323,6 +273,16 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
 
   return (
     <>
+      <SensoraFullscreenImageOverlay
+        open={conceptExpand !== null}
+        src={conceptExpand?.src ?? ""}
+        alt={conceptExpand?.alt ?? ""}
+        onClose={() => setConceptExpand(null)}
+        closeLabel={t("preview.toc.close")}
+        openOriginalAria={t("landing.showroom.tip.openOriginalAria")}
+        openOriginalHint={t("landing.showroom.tip.openOriginal")}
+      />
+
       <SensoraGuideImageViewer
         open={viewer.open}
         title={viewer.title}
@@ -334,7 +294,7 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
       />
 
       <section className="landing-showcase-hero relative mx-auto w-full max-w-[1480px] px-[max(1rem,calc(env(safe-area-inset-left,0px)+12px))] pb-8 pr-[max(1rem,calc(env(safe-area-inset-right,0px)+12px))] pt-1 sm:px-5 sm:pb-10 sm:pt-2 md:px-7 lg:px-9 lg:pb-11 lg:pt-5 xl:px-11 xl:pt-6">
-        <div className="landing-hero-canvas relative overflow-hidden rounded-[26px] border border-white/[0.15] px-5 py-6 shadow-[0_42px_108px_-44px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.084),0_0_80px_-40px_rgba(56,189,248,0.06)] ring-1 ring-inset ring-white/[0.065] sm:rounded-[28px] sm:px-6 sm:py-8 lg:rounded-[30px] lg:px-8 lg:py-9 xl:px-11 xl:py-11">
+        <div className="sensora-nebula-shell landing-hero-canvas relative overflow-hidden rounded-[26px] border border-white/[0.15] px-5 py-6 shadow-[0_42px_108px_-44px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.084),0_0_80px_-40px_rgba(56,189,248,0.06)] ring-1 ring-inset ring-white/[0.065] sm:rounded-[28px] sm:px-6 sm:py-8 lg:rounded-[30px] lg:px-8 lg:py-9 xl:px-11 xl:py-11">
           <div
             aria-hidden
             className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_78%_62%_at_58%_-4%,rgba(139,92,246,0.185),transparent_53%),radial-gradient(ellipse_88%_64%_at_8%_96%,rgba(56,189,248,0.14),transparent_57%),radial-gradient(ellipse_62%_50%_at_92%_42%,rgba(99,102,241,0.105),transparent_55%),linear-gradient(165deg,rgba(5,14,26,0.96) 0%,rgba(8,24,46,0.55) 48%,rgba(4,11,22,0.94) 100%)]"
@@ -398,41 +358,45 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
           </div>
         </div>
 
-        <div className="landing-showcase-lower landing-showcase-lower-canvas relative z-[1] mt-8 flex flex-col gap-7 rounded-[26px] border border-white/[0.13] bg-gradient-to-b from-white/[0.062] via-[#040a14]/65 to-[#020810]/92 px-4 py-7 shadow-[0_34px_92px_-38px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.065),0_0_72px_-34px_rgba(56,189,248,0.078)] ring-1 ring-inset ring-white/[0.06] backdrop-blur-md sm:mt-10 sm:gap-8 sm:px-6 sm:py-9 lg:mt-11 lg:gap-9 lg:px-8 xl:px-10">
-          <div className="min-w-0">
-            <div className="flex items-end justify-between gap-3 border-b border-white/[0.09] pb-3">
-              <h2 className="text-[clamp(1.18rem,2.4vw,1.58rem)] font-semibold tracking-[-0.028em] text-slate-50">{t("landing.showroom.tip.title")}</h2>
-              <span className="hidden shrink-0 text-[0.625rem] font-bold uppercase tracking-[0.14em] text-slate-500 sm:inline">TIP</span>
-            </div>
-            <div className="landing-tip-grid mt-5 grid grid-cols-2 gap-3 max-[479px]:gap-2.5 sm:gap-4 lg:grid-cols-4 lg:gap-4">
-              {tipCards.map(({ n, titleKey, descKey, Icon }) => (
+        <div className="sensora-nebula-shell landing-showcase-lower landing-showcase-lower-canvas relative z-[1] mt-8 flex flex-col gap-7 rounded-[26px] border border-white/[0.13] bg-gradient-to-b from-white/[0.062] via-[#040a14]/65 to-[#020810]/92 px-4 py-7 shadow-[0_34px_92px_-38px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.065),0_0_72px_-34px_rgba(56,189,248,0.078)] ring-1 ring-inset ring-white/[0.06] backdrop-blur-md sm:mt-10 sm:gap-8 sm:px-6 sm:py-9 lg:mt-11 lg:gap-9 lg:px-8 xl:px-10">
+          <div className="relative min-w-0 overflow-hidden rounded-[22px]">
+            <div className="sensora-preview-galaxy-stars pointer-events-none absolute inset-0 opacity-[0.5]" aria-hidden />
+            <div className="relative z-[1]">
+              <div className="flex flex-col gap-2 border-b border-white/[0.09] pb-3 sm:flex-row sm:items-end sm:justify-between">
+                <h2 className="text-[clamp(1.18rem,2.4vw,1.58rem)] font-semibold tracking-[-0.028em] text-slate-50">{t("landing.showroom.concept.sectionTitle")}</h2>
+                <span className="text-xs font-medium text-sky-400/85">{t("landing.showroom.concept.sectionSub")}</span>
+              </div>
+              <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
+                {SENSORA_CONCEPT_STORY_SLIDES.map((slide) => (
+                  <button
+                    key={slide.id}
+                    type="button"
+                    onClick={() => setConceptExpand({ src: slide.src, alt: t(slide.titleKey) })}
+                    className="landing-tip-feature-card group flex min-h-[12.5rem] flex-col overflow-hidden rounded-[17px] border border-white/[0.2] bg-gradient-to-b from-slate-900/82 to-[#050d14]/92 text-left shadow-[0_16px_48px_-20px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(255,255,255,0.08),0_0_40px_-12px_rgba(56,189,248,0.14)] ring-1 ring-inset ring-sky-400/15 backdrop-blur-md transition-[transform,border-color,box-shadow] duration-[220ms] hover:-translate-y-1 hover:border-sky-400/45 hover:shadow-[0_24px_56px_-16px_rgba(0,0,0,0.5),0_0_48px_-10px_rgba(56,189,248,0.22)] motion-reduce:transition-none motion-reduce:hover:translate-y-0 touch-manipulation sm:min-h-[13.25rem]"
+                  >
+                    <div className="relative aspect-[5/4] w-full shrink-0 overflow-hidden bg-[#030712]">
+                      <Image src={slide.src} alt="" fill className="object-cover opacity-92 transition-opacity duration-300 group-hover:opacity-100" sizes="(max-width: 640px) 50vw, 25vw" />
+                      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#020617]/92 via-transparent to-transparent" />
+                      <span className="absolute bottom-2 left-2.5 right-2 text-[10px] font-semibold uppercase tracking-[0.1em] text-sky-200/90">{t("landing.showroom.concept.tapToExpand")}</span>
+                    </div>
+                    <div className="flex flex-1 flex-col px-3.5 pb-3.5 pt-3">
+                      <span className="line-clamp-2 text-[0.9375rem] font-semibold leading-snug text-slate-50">{t(slide.titleKey)}</span>
+                      <span className="mt-1.5 line-clamp-3 text-[11px] leading-relaxed text-slate-400 sm:text-xs">{t(slide.descKey)}</span>
+                    </div>
+                  </button>
+                ))}
+              </div>
+              <p className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-2 text-[11px] text-slate-500">
                 <button
-                  key={titleKey}
                   type="button"
-                  className="landing-tip-card-shell landing-tip-feature-card group relative flex min-h-[14rem] cursor-pointer flex-col rounded-[18px] border border-white/[0.24] bg-gradient-to-b from-slate-900/82 to-[#061018]/92 p-4 text-left shadow-[0_18px_56px_-22px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.085),0_0_44px_-16px_rgba(56,189,248,0.12)] ring-1 ring-inset ring-sky-400/18 backdrop-blur-md motion-safe:transition-[transform,box-shadow,border-color] motion-safe:duration-[220ms] motion-safe:ease-[cubic-bezier(0.22,1,0.32,1)] hover:-translate-y-1.5 hover:border-sky-400/55 hover:shadow-[0_28px_72px_-20px_rgba(0,0,0,0.64),0_0_64px_-10px_rgba(56,189,248,0.28),inset_0_1px_0_rgba(255,255,255,0.11)] motion-reduce:transition-none motion-reduce:hover:translate-y-0 sm:min-h-[14.25rem] sm:rounded-[19px] sm:p-[1.12rem]"
-                  onClick={() =>
-                    setViewer({ open: true, title: t(titleKey), initialSlideIndex: SENSORA_TIP_CARD_INITIAL_INDEX[n] })
-                  }
+                  className="rounded-lg border border-white/[0.12] bg-white/[0.04] px-3 py-1.5 font-semibold text-slate-300 transition hover:border-sky-400/35 hover:text-slate-50"
+                  onClick={() => setViewer({ open: true, title: t("landing.showroom.tip.title"), initialSlideIndex: 0 })}
                 >
-                  <div className="flex items-start justify-between gap-2">
-                    <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-xl border border-sky-400/52 bg-gradient-to-br from-sky-500/[0.34] to-violet-600/[0.21] text-sm font-bold tabular-nums text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.2),0_0_24px_-6px_rgba(56,189,248,0.25)]">
-                      {n}
-                    </span>
-                    <span className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-sky-400/28 bg-white/[0.1] text-sky-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_0_32px_-6px_rgba(56,189,248,0.2)] ring-1 ring-inset ring-white/[0.1] transition-[transform,box-shadow,border-color] duration-[220ms] group-hover:-translate-y-0.5 group-hover:border-sky-400/42 group-hover:text-white">
-                      <Icon className="size-[22px] opacity-[0.98] sm:size-6" />
-                    </span>
-                  </div>
-                  <span className="mt-4 line-clamp-2 text-[0.9375rem] font-semibold leading-snug tracking-tight text-slate-50 sm:text-base">{t(titleKey)}</span>
-                  <span className="mt-2 flex-1 line-clamp-3 text-sm leading-relaxed text-slate-400 sm:text-[0.8125rem] sm:leading-[1.52]">
-                    {t(descKey)}
-                  </span>
-                  <span className="mt-auto flex justify-end pt-4 sm:pt-5">
-                    <span className="inline-flex size-10 items-center justify-center rounded-full border border-sky-400/42 bg-gradient-to-br from-white/[0.17] to-white/[0.05] text-[0.9375rem] font-bold text-sky-50 shadow-[0_12px_32px_-8px_rgba(56,189,248,0.38)] transition-[transform,border-color,box-shadow] duration-[220ms] group-hover:translate-x-1 group-hover:border-sky-400/65 group-hover:shadow-[0_16px_40px_-6px_rgba(56,189,248,0.48)] group-hover:text-white motion-reduce:group-hover:translate-x-0">
-                      →
-                    </span>
-                  </span>
+                  {t("crm.guideTip.openViewer")}
                 </button>
-              ))}
+                <span className="text-slate-600">·</span>
+                <span>{t("preview.toc.disclaimer1")}</span>
+              </p>
             </div>
           </div>
 
