@@ -1,3 +1,5 @@
+import type { TranslationKey } from "@/lib/i18n";
+
 export type CrmSection =
   | "dashboard"
   | "customers"
@@ -29,6 +31,18 @@ export const CRM_SECTION_ORDER: CrmSection[] = [
   "followup",
   "settings",
 ];
+
+/** 좁은 화면(모바일) 섹션 탭 부제 · 요약 카드 한 줄 표시용 */
+export const CRM_SECTION_MOBILE_SUBTITLE_KEYS: Record<CrmSection, TranslationKey> = {
+  dashboard: "crm.nav.mobileSubtitle.dashboard",
+  customers: "crm.nav.mobileSubtitle.customers",
+  consulting: "crm.nav.mobileSubtitle.consulting",
+  ai: "crm.nav.mobileSubtitle.ai",
+  pipeline: "crm.nav.mobileSubtitle.pipeline",
+  vehicle: "crm.nav.mobileSubtitle.vehicle",
+  followup: "crm.nav.mobileSubtitle.followup",
+  settings: "crm.nav.mobileSubtitle.settings",
+};
 
 /** URL hash → 섹션 (기존 #crm-ai-assistant 유지) */
 export function hashToCrmSection(hashRaw: string): CrmSection | null {

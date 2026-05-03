@@ -114,6 +114,14 @@ export type TranslationKey =
   | "crm.section.allNextActions"
   | "crm.section.eventsPreview"
   | "crm.section.templates"
+  | "crm.nav.mobileSubtitle.dashboard"
+  | "crm.nav.mobileSubtitle.customers"
+  | "crm.nav.mobileSubtitle.consulting"
+  | "crm.nav.mobileSubtitle.ai"
+  | "crm.nav.mobileSubtitle.pipeline"
+  | "crm.nav.mobileSubtitle.vehicle"
+  | "crm.nav.mobileSubtitle.followup"
+  | "crm.nav.mobileSubtitle.settings"
   | "crm.workspaceAi.title"
   | "crm.workspaceAi.subtitle"
   | "crm.workspaceAi.customerPickLabel"
@@ -426,6 +434,14 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.section.allNextActions": "전체 다음 할 일",
     "crm.section.eventsPreview": "일정 미리보기",
     "crm.section.templates": "문자 템플릿",
+    "crm.nav.mobileSubtitle.dashboard": "오늘의 흐름",
+    "crm.nav.mobileSubtitle.customers": "목록·상태",
+    "crm.nav.mobileSubtitle.consulting": "직접 수정",
+    "crm.nav.mobileSubtitle.ai": "초안·정리",
+    "crm.nav.mobileSubtitle.pipeline": "단계별",
+    "crm.nav.mobileSubtitle.vehicle": "조건·예산",
+    "crm.nav.mobileSubtitle.followup": "할 일·일정",
+    "crm.nav.mobileSubtitle.settings": "계정·언어",
     "crm.workspaceAi.title": "AI 비서 (작업)",
     "crm.workspaceAi.subtitle":
       "「다시 분석」 등 버튼을 눌렀을 때만 새 제안이 만들어집니다. 저장·복사·다음 연락 등은 확인 후 원하는 항목만 적용하세요.",
@@ -762,6 +778,14 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.section.allNextActions": "All Next Actions",
     "crm.section.eventsPreview": "Schedule Preview",
     "crm.section.templates": "Message Templates",
+    "crm.nav.mobileSubtitle.dashboard": "Today's flow",
+    "crm.nav.mobileSubtitle.customers": "List · status",
+    "crm.nav.mobileSubtitle.consulting": "Edit your notes",
+    "crm.nav.mobileSubtitle.ai": "Drafts · tidy-ups",
+    "crm.nav.mobileSubtitle.pipeline": "By stage",
+    "crm.nav.mobileSubtitle.vehicle": "Match & budget",
+    "crm.nav.mobileSubtitle.followup": "Tasks · schedule",
+    "crm.nav.mobileSubtitle.settings": "Account · language",
     "crm.workspaceAi.title": "AI assistant (workspace)",
     "crm.workspaceAi.subtitle":
       "Sensora Flow: proposals refresh only via explicit buttons. CRM rows stay untouched until you copy, save, or add follow-ups deliberately.",

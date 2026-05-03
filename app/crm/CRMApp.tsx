@@ -61,7 +61,7 @@ import { ContactImportFileGuideModal } from "./ContactImportFileGuideModal";
 import { ImportContactsPanel, type ImportContactsCommitPayload } from "./ImportContactsPanel";
 import type { NormalizedImportedContact } from "./contactImport/normalizeImportedContact";
 import type { CrmSection } from "./crmSectionTypes";
-import { CRM_SECTION_LABELS } from "./crmSectionTypes";
+import { CRM_SECTION_LABELS, CRM_SECTION_MOBILE_SUBTITLE_KEYS } from "./crmSectionTypes";
 import { DashboardSection } from "./sections/DashboardSection";
 import { ConsultingNotesSection } from "./sections/ConsultingNotesSection";
 import { PipelineSection } from "./sections/PipelineSection";
@@ -1592,11 +1592,11 @@ export function CRMApp({
 
           <div
             id="crm-section-title"
-            className="scroll-mt-24 rounded-2xl border-2 border-[#CBD5E1] bg-[#F8FAFC] px-4 py-4 shadow-[0_2px_10px_rgba(15,23,42,0.06)] lg:hidden"
+            className="scroll-mt-24 rounded-2xl border border-[#E2E8F0] bg-[#FAFBFC] px-4 py-3.5 shadow-[0_1px_8px_rgba(15,23,42,0.05)] max-[390px]:px-3.5 max-[390px]:py-3 lg:hidden"
           >
             <p className="text-[18px] font-bold tracking-tight text-[#0F172A]">{CRM_SECTION_LABELS[activeSection].title}</p>
             <p className="mt-1 text-[13px] font-semibold leading-snug text-[#475569]">
-              {CRM_SECTION_LABELS[activeSection].subtitle}
+              {t(CRM_SECTION_MOBILE_SUBTITLE_KEYS[activeSection])}
             </p>
           </div>
 

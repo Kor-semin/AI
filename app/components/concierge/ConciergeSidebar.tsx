@@ -2,7 +2,11 @@
 
 import { SensoraAnimatedMark } from "@/app/components/SensoraAnimatedMark";
 import type { CrmSection } from "@/app/crm/crmSectionTypes";
-import { CRM_SECTION_LABELS, CRM_SECTION_ORDER } from "@/app/crm/crmSectionTypes";
+import {
+  CRM_SECTION_LABELS,
+  CRM_SECTION_MOBILE_SUBTITLE_KEYS,
+  CRM_SECTION_ORDER,
+} from "@/app/crm/crmSectionTypes";
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
 
 function navButtonClass(active: boolean): string {
@@ -56,38 +60,44 @@ export function ConciergeSidebar({
     <>
       {/* 모바일 · 태블릿: 가로 스크롤 메뉴 */}
       <nav
-        className="landing-mobile-nav-shell relative lg:hidden -mx-1 mb-4"
+        className="landing-mobile-nav-shell relative lg:hidden -mx-1 mb-4 max-[1023px]:mb-5"
         aria-label="업무 영역 메뉴"
       >
-        <div className="rounded-2xl border-2 border-[#94A3B8] bg-[#E2E8F0] px-2 py-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.45)]">
+        <div className="rounded-2xl border border-[#CBD5E1] bg-[#F1F5F9] px-1.5 py-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.65)]">
           <p className="sr-only">가로로 스크롤하여 메뉴를 선택합니다.</p>
           <div
-            className="crm-mobile-section-rail flex snap-x snap-mandatory gap-2 overflow-x-auto overflow-y-hidden px-0.5 pb-1 pt-0.5 [scrollbar-width:thin]"
+            className="crm-mobile-section-rail flex snap-x snap-mandatory gap-2 overflow-x-auto overflow-y-hidden overscroll-x-contain px-1 py-1 pr-10 [scrollbar-width:thin] max-[390px]:gap-2.5"
             role="presentation"
             style={{
-              scrollbarColor: "#64748B transparent",
+              scrollbarColor: "#94A3B8 transparent",
             }}
           >
             {CRM_SECTION_ORDER.map((section) => {
               const active = activeSection === section;
               const { title, subtitle } = CRM_SECTION_LABELS[section];
+              const caption = t(CRM_SECTION_MOBILE_SUBTITLE_KEYS[section]);
               return (
                 <button
                   key={`m-${section}`}
                   type="button"
                   onClick={() => onNavigate(section)}
                   className={[
-                    "min-w-[8.25rem] max-w-[48vw] shrink-0 snap-start touch-manipulation rounded-xl border-2 px-3.5 py-3 text-left shadow-md transition",
+                    "flex min-h-[72px] w-[clamp(9.75rem,calc((100vw-4.25rem)/2.12),11.25rem)] max-[390px]:min-h-[70px] shrink-0 snap-start touch-manipulation flex-col justify-center gap-1 rounded-xl border px-3 py-2.5 text-left shadow-sm outline-none ring-offset-2 ring-offset-[#F1F5F9] transition focus-visible:ring-2 focus-visible:ring-[#64748B]",
                     active
-                      ? "border-[#0F172A] bg-[#0F172A] text-[#F8FAFC] ring-2 ring-[#CBD5E1]/90"
-                      : "border-[#64748B] bg-[#FFFFFF] text-[#0F172A] hover:border-[#0F172A] hover:bg-[#F8FAFC]",
+                      ? "border-[#0F172A] bg-[#0F172A] text-[#F8FAFC] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)] ring-2 ring-[#0F172A]/25"
+                      : "border-[#CBD5E1] bg-[#FFFFFF] text-[#0F172A] hover:border-[#94A3B8] hover:bg-[#FAFAFB]",
                   ].join(" ")}
                   aria-current={active ? "page" : undefined}
                   aria-label={`${title}, ${subtitle}`}
                 >
-                  <span className="block text-[15px] font-bold leading-snug">{title}</span>
-                  <span className={`mt-1 block text-[12px] font-semibold leading-snug ${active ? "text-[#94A3B8]" : "text-[#475569]"}`}>
-                    {subtitle}
+                  <span className="block text-[15px] font-bold leading-tight">{title}</span>
+                  <span
+                    className={[
+                      "block hyphens-none text-balance text-[11px] font-semibold leading-[1.3]",
+                      active ? "text-[#B8C0CC]" : "text-[#64748B]",
+                    ].join(" ")}
+                  >
+                    {caption}
                   </span>
                 </button>
               );

@@ -1071,18 +1071,18 @@ html[lang="ko"] body {
   }
 }
 
-/* 워크스페이스: 모바일 섹션 가로 탭 스크롤 힌트 */
+/* 워크스페이스: 모바일 섹션 가로 스크롤 안내 — 카드 글자를 덮지 않도록 얇게 */
 @media (max-width: 1023px) {
   .landing-mobile-nav-shell::after {
     content: "";
     pointer-events: none;
     position: absolute;
-    right: 4px;
-    top: 12px;
-    bottom: 24px;
-    width: 2rem;
-    border-radius: 0 12px 12px 0;
-    background: linear-gradient(90deg, transparent, rgb(226 232 240));
+    right: 1px;
+    top: 10px;
+    bottom: 20px;
+    width: 1.25rem;
+    border-radius: 0 10px 10px 0;
+    background: linear-gradient(90deg, transparent 0%, rgb(241 245 249) 92%);
     z-index: 2;
   }
 }
