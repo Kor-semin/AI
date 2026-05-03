@@ -1,6 +1,8 @@
 # 베타 신청(/join) → Google Sheets 연결 가이드
 
-Sensora 웹 앱의 `/join` 폼 제출은 `NEXT_PUBLIC_BETA_SIGNUP_ENDPOINT`가 설정되어 있으면 **Google Apps Script 웹 앱 URL**로 **JSON POST** 됩니다.
+Sensora 웹 앱의 `/join` 폼 제출은 `NEXT_PUBLIC_BETA_SIGNUP_ENDPOINT`가 설정되어 있으면 **Google Apps Script 웹 앱 URL**로 요청합니다.
+
+브라우저에서는 **CORS·응답 본문을 읽을 수 없는 `fetch` 모드(no-cors)** 를 쓰고, **`Content-Type: text/plain`** 으로 **JSON 문자열**을 붙입니다. Apps Script 의 `e.postData.contents` 는 그대로 문자열을 받으며 `JSON.parse` 하면 됩니다.
 
 **실제 웹앱 실행 URL은 Git에 넣지 마세요.** Vercel(또는 로컬 `.env.local`)에만 저장합니다.
 
@@ -24,8 +26,11 @@ Sensora 웹 앱의 `/join` 폼 제출은 `NEXT_PUBLIC_BETA_SIGNUP_ENDPOINT`가 �
 스크립트 편집기에 아래와 같이 저장합니다. (시트 이름이 다르면 `getSheetByName`을 수정하세요.)
 
 ```javascript
+/** 시트 이름(한국어 기본 탭 이름 예: 시트1) */
+var SHEET_NAME = "시트1";
+
 /**
- * /join 에서 오는 POST JSON 저장
+ * /join 에서 오는 POST — 본문은 JSON 문자열(text/plain 또는 application/json).
  */
 function doPost(e) {
   const lock = LockService.getDocumentLock();
@@ -39,9 +44,7 @@ function doPost(e) {
     var data = JSON.parse(e.postData.contents);
 
     var ss = SpreadsheetApp.getActiveSpreadsheet();
-    var sheet =
-      ss.getSheetByName("Responses") ||
-      ss.getActiveSheet();
+    var sheet = ss.getSheetByName(SHEET_NAME) || ss.getActiveSheet();
 
     sheet.appendRow([
       data.submittedAt || "",
@@ -66,11 +69,7 @@ function doPost(e) {
   }
 }
 
-/** 브라우저에서 OPTIONS 프리플라이트가 올 경우(환경에 따라) */
-function doOptions() {
-  return ContentService.createTextOutput("")
-    .setMimeType(ContentService.MimeType.JSON);
-}
+/** no-cors + text/plain 은 브라우저에서 간단 요청으로 보내는 경우가 많아 프리플라이트가 생기지 않을 수 있습니다. */
 ```
 
 > **참고:** 시트 헤더와 `appendRow` 열 순서를 맞추세요.
@@ -126,7 +125,7 @@ NEXT_PUBLIC_BETA_SIGNUP_ENDPOINT=https://script.google.com/macros/s/.../exec
 ## 6. 테스트 및 확인
 
 1. **엔드포인트 미설정:** `/join`에서 제출 시 **테스트 제출** 안내(저장 미연결)가 나오는지 확인합니다.
-2. **엔드포인트 설정 후:** 브라우저 개발자 도구 **Network**에서 POST가 웹 앱으로 가는지, 응답이 200 근처인지 확인합니다. **Console에 입력 내용 로그가 남으면 안 됩니다**(앱 코드는 개인정보를 찍지 않도록 유지합니다).
+2. **엔드포인트 설정 후:** 클라이언트는 **`no-cors`** 로 요청하므로 **응답 상태·본문은 페이지 스크립트에서 확인 불가**합니다. Network 에 전송 행만 보일 수 있습니다. 최종 검증은 **시트 새 행 추가** 여부입니다. **Console 에 입력값을 찍지 않습니다.**
 3. 성공 후 **Spreadsheet 새 행**이 추가되었는지 확인합니다.
 
 ---

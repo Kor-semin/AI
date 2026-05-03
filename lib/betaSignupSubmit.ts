@@ -41,10 +41,10 @@ function buildWireBody(payload: BetaSignupPayload): BetaSignupWireBody {
  * 베타 신청 제출 (클라이언트 전용).
  *
  * - 엔드포인트 비어 있음: 원격 저장 없음 — `{ ok: true, savedToBackend: false }`
- * - 엔드포인트 있음: JSON POST — 성공 시 `savedToBackend: true`
+ * - 엔드포인트 있음: `no-cors` + `text/plain` 로 JSON 문자열 POST (Google Apps Script 웹 앱 호환).
+ *   `no-cors`에서는 응답 상태를 읽을 수 없으므로 **fetch 가 reject 되지 않으면** 접수 성공으로 봅니다.
  *
- * POST body에는 `submittedAt`(ISO)·`source`가 포함됩니다.
- * 이름·연락처 등은 콘솔에 출력하지 않으며, 실패 시 응답 본문도 로그하지 않습니다.
+ * body에는 폼 필드 + `submittedAt`(ISO) + `source` 포함. 개인정보는 로그하지 않습니다.
  */
 export async function submitBetaSignup(payload: BetaSignupPayload): Promise<BetaSignupResult> {
   const endpoint = betaSignupEndpoint();
@@ -58,23 +58,18 @@ export async function submitBetaSignup(payload: BetaSignupPayload): Promise<Beta
       return { ok: true, savedToBackend: false };
     }
 
-    const body = buildWireBody(payload);
+    const payloadWithMeta = buildWireBody(payload);
 
-    const res = await fetch(endpoint, {
+    await fetch(endpoint, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
+      mode: "no-cors",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(payloadWithMeta),
     });
-
-    if (!res.ok) {
-      await res.text().catch(() => "");
-      console.warn("[beta signup] POST failed", res.status);
-      return { ok: false, error: `HTTP ${res.status}` };
-    }
 
     return { ok: true, savedToBackend: true };
   } catch {
-    console.warn("[beta signup] fetch error");
+    console.warn("[beta signup] webhook request failed");
     return { ok: false, error: "network" };
   }
 }
