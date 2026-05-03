@@ -62,19 +62,19 @@ function tocCard(raw: string): { title: string; line: string } {
 const onboardCloseBtn =
   "inline-flex touch-manipulation items-center justify-center rounded-lg border border-transparent px-2.5 py-1.5 text-[11px] font-medium tracking-[-0.01em] text-[#94A3B8] transition motion-reduce:transition-none hover:bg-white/[0.06] hover:text-[#E2E8F0] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#94A3B8]/65";
 
-/** 주 버튼: 밝은 면으로 대비 강화 */
+/** 주 CTA — 워크스페이스 primary와 같은 프리미엄 그라데이션 */
 const onboardPrimaryBtn =
-  "inline-flex min-h-[48px] w-full max-w-[280px] touch-manipulation items-center justify-center self-center rounded-full bg-white px-6 text-[14px] font-semibold leading-none text-[#0f172a] shadow-[0_14px_36px_-14px_rgba(0,0,0,0.55)] transition motion-reduce:transition-none hover:bg-[#F8FAFC] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/85 disabled:cursor-not-allowed disabled:opacity-40 motion-reduce:shadow-md";
+  "sensora-premium-primary-workspace inline-flex min-h-[50px] w-full max-w-[min(300px,90vw)] touch-manipulation items-center justify-center self-center rounded-2xl px-7 text-[14px] font-semibold leading-none motion-reduce:transition-none disabled:cursor-not-allowed disabled:opacity-40";
 
-/** 보조 버튼 */
+/** 보조 — 글래스 고스트 */
 const onboardGhostBtn =
-  "inline-flex min-h-[44px] w-full max-w-[280px] touch-manipulation items-center justify-center self-center rounded-full border border-white/32 bg-transparent px-6 text-[13px] font-semibold leading-none text-[#E8EDF6] transition motion-reduce:transition-none hover:bg-white/[0.08] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#94A3B8]/50 disabled:cursor-not-allowed disabled:opacity-35";
+  "inline-flex min-h-[46px] w-full max-w-[min(300px,90vw)] touch-manipulation items-center justify-center self-center rounded-2xl border border-white/[0.22] bg-white/[0.07] px-7 text-[13px] font-semibold leading-none text-[#EEF2FF] shadow-[inset_0_1px_0_rgba(255,255,255,0.07)] backdrop-blur-sm transition-[background,border-color,transform,box-shadow] duration-[220ms] motion-reduce:transition-none hover:border-sky-300/38 hover:bg-white/[0.12] hover:shadow-[0_0_32px_-10px_rgba(56,189,248,0.12)] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/40 disabled:cursor-not-allowed disabled:opacity-35";
 
 const onboardNavMutedBtn =
-  "inline-flex min-h-[44px] min-w-[5.25rem] flex-1 touch-manipulation items-center justify-center rounded-full border border-white/22 px-4 text-[13px] font-semibold leading-none text-[#CBD5E1] transition motion-reduce:transition-none hover:bg-white/[0.07] hover:text-[#F1F5F9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#94A3B8]/65 disabled:cursor-not-allowed disabled:opacity-[0.38] motion-reduce:hover:bg-transparent";
+  "inline-flex min-h-[46px] min-w-[5.25rem] flex-1 touch-manipulation items-center justify-center rounded-2xl border border-white/[0.2] px-4 text-[13px] font-semibold leading-none text-[#CBD5E1] transition-[background,color,border-color,transform] duration-[220ms] motion-reduce:transition-none hover:border-white/[0.28] hover:bg-white/[0.08] hover:text-[#F1F5F9] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 disabled:cursor-not-allowed disabled:opacity-[0.38] motion-reduce:hover:bg-transparent";
 
 const onboardNavPrimaryBtn =
-  "inline-flex min-h-[44px] min-w-[5.25rem] flex-1 touch-manipulation items-center justify-center rounded-full border border-white/14 bg-white/[0.14] px-4 text-[13px] font-semibold leading-none text-[#F8FAFC] transition motion-reduce:transition-none hover:bg-white/[0.2] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CBD5E1]/80 motion-reduce:hover:bg-white/[0.14]";
+  "inline-flex min-h-[46px] min-w-[5.25rem] flex-1 touch-manipulation items-center justify-center rounded-2xl border border-sky-400/35 bg-white/[0.14] px-4 text-[13px] font-semibold leading-none text-[#F8FAFC] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition-[background,border-color,transform,box-shadow] duration-[220ms] motion-reduce:transition-none hover:border-sky-400/48 hover:bg-white/[0.22] hover:shadow-[0_0_28px_-8px_rgba(56,189,248,0.15)] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/45 motion-reduce:hover:bg-white/[0.14]";
 
 /** 전체 화면 표지 — 3페이지 온보딩 (Sense + Aura, 실버·그레이 톤) */
 export function NotebookCover() {
@@ -246,7 +246,7 @@ export function NotebookCover() {
           key={pageIdx}
           data-notebook-cover-tone={coverTheme}
         >
-          <div className="notebook-cover-inner-stack mx-auto flex w-full max-w-[min(420px,92vw)] flex-col items-center gap-0">
+          <div className="notebook-cover-inner-stack mx-auto flex w-full max-w-[min(460px,94vw)] flex-col items-center gap-0">
             <div
               className={[
                 "notebook-cover-logo-wrap pointer-events-none flex shrink-0 justify-center",
