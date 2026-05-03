@@ -177,8 +177,10 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
               <div className="min-w-0 shrink-0 sm:max-w-[min(100%,28rem)] sm:pr-4">
                 <div className="flex min-w-0 flex-col gap-1.5 sm:flex-row sm:items-start sm:justify-between sm:gap-x-4">
                   <div className="min-w-0">
-                    <div className="text-[15px] font-semibold leading-tight tracking-tight text-slate-100 sm:text-base">{t("product.name")}</div>
-                    <p className="mt-1 text-[11px] leading-snug text-slate-400 sm:text-xs">{t("brand.slogan")}</p>
+                    <div className="text-balance text-[15px] font-semibold leading-[1.2] tracking-[-0.02em] text-slate-50 sm:text-[1.05rem]">
+                      {t("product.name")}
+                    </div>
+                    <p className="mt-1.5 text-[11px] font-medium leading-snug text-slate-400 sm:text-xs sm:leading-relaxed">{t("brand.slogan")}</p>
                   </div>
                   <p
                     className="max-w-full shrink-0 text-[10px] leading-snug text-slate-500 sm:max-w-[13.5rem] sm:pt-0.5 sm:text-right sm:text-[11px]"
@@ -215,26 +217,33 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                     type="button"
                     onClick={openAppWorkspace}
                     className={[
-                      "relative z-[20] inline-flex min-h-[48px] w-full shrink-0 cursor-pointer items-center justify-center rounded-xl",
-                      "border border-white/20 bg-white/[0.06] px-3 py-2.5 text-center text-[13px] font-semibold text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] ring-1 ring-inset ring-white/[0.06]",
-                      "backdrop-blur-md transition duration-200",
-                      "hover:border-sky-300/35 hover:bg-white/[0.1] hover:shadow-[0_0_24px_-8px_rgba(56,189,248,0.14)]",
+                      "landing-nav-cta-preview relative z-[20] inline-flex min-h-[48px] w-full shrink-0 cursor-pointer items-center justify-center gap-2 rounded-xl",
+                      "border border-white/22 bg-white/[0.07] px-3 py-2.5 text-center text-[13px] font-semibold text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] ring-1 ring-inset ring-white/[0.08]",
+                      "backdrop-blur-md transition duration-[220ms] ease-out",
+                      "hover:border-sky-300/38 hover:bg-white/[0.11]",
                       "active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/45 focus-visible:ring-offset-2 focus-visible:ring-offset-[#07111f]",
-                      "touch-manipulation sm:min-h-[46px] sm:w-auto sm:px-6",
+                      "touch-manipulation sm:min-h-[48px] sm:w-auto sm:px-7",
                     ].join(" ")}
                   >
+                    <svg className="size-[1.05rem] shrink-0 opacity-90" viewBox="0 0 20 20" fill="none" aria-hidden>
+                      <path
+                        d="M6.75 11.08V9.92c0-.6.323-1.15.839-1.424l5.62-3.068a1.583 1.583 0 012.541 1.424v8.088a1.584 1.584 0 01-2.541 1.424l-5.62-3.069a1.583 1.583 0 01-.839-1.423z"
+                        fill="currentColor"
+                        opacity="0.9"
+                      />
+                    </svg>
                     {t("cta.tryAppExperience")}
                   </button>
                   <Link
                     href="/join"
                     prefetch={false}
                     className={[
-                      "relative z-[20] inline-flex min-h-[48px] w-full items-center justify-center rounded-xl px-3 py-2.5 text-center text-[13px] font-semibold tracking-tight",
-                      "touch-manipulation sm:min-h-[46px] sm:w-auto sm:px-6",
+                      "landing-nav-cta-join relative z-[20] inline-flex min-h-[48px] w-full items-center justify-center rounded-xl px-3 py-2.5 text-center text-[13px] font-semibold tracking-tight",
+                      "touch-manipulation sm:min-h-[48px] sm:w-auto sm:px-8",
                       "bg-gradient-to-b from-white to-slate-100 text-[#0c1222]",
-                      "shadow-[0_2px_0_rgba(255,255,255,0.38)_inset,0_8px_28px_-8px_rgba(56,189,248,0.14)] ring-1 ring-white/35",
-                      "transition duration-200 hover:from-white hover:to-slate-50 hover:shadow-[0_2px_0_rgba(255,255,255,0.45)_inset,0_12px_32px_-6px_rgba(56,189,248,0.18)]",
-                      "active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/55 focus-visible:ring-offset-2 focus-visible:ring-offset-[#07111f]",
+                      "shadow-[0_2px_0_rgba(255,255,255,0.38)_inset,0_8px_28px_-8px_rgba(56,189,248,0.16)] ring-1 ring-white/38",
+                      "transition duration-[220ms] ease-out hover:from-white hover:to-slate-50",
+                      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/55 focus-visible:ring-offset-2 focus-visible:ring-offset-[#07111f]",
                     ].join(" ")}
                   >
                     {t("cta.joinBeta")}
