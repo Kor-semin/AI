@@ -910,11 +910,11 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
 
 @media (prefers-reduced-motion: no-preference) {
   .landing-nav-cta-join:is(a, button):hover {
-    transform: translateY(-3px);
+    transform: translateY(-2px);
     box-shadow:
-      0 2px 0 rgba(255, 255, 255, 0.48) inset,
-      0 18px 48px -6px rgba(56, 189, 248, 0.3),
-      0 14px 40px -8px rgba(139, 92, 246, 0.14);
+      0 1px 0 rgba(255, 255, 255, 0.32) inset,
+      0 14px 40px -8px rgba(56, 189, 248, 0.24),
+      0 10px 32px -10px rgba(139, 92, 246, 0.1);
     transition-duration: 0.23s;
   }
 
@@ -923,13 +923,23 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   }
 
   .landing-nav-cta-preview:is(button):hover {
-    transform: translateY(-3px);
-    border-color: rgba(125, 211, 252, 0.5);
+    transform: translateY(-1px);
+    border-color: rgba(125, 211, 252, 0.32);
     box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.1),
-      0 0 42px -8px rgba(56, 189, 248, 0.26),
-      0 0 52px -12px rgba(129, 140, 248, 0.11);
+      inset 0 1px 0 rgba(255, 255, 255, 0.06),
+      0 0 28px -14px rgba(56, 189, 248, 0.12);
     transition-duration: 0.23s;
+  }
+
+  /* PC 헤더: 미리보기 CTA 기본/호버에서 흰색 번짐 과다 완화 */
+  @media (min-width: 1024px) {
+    .landing-service-nav .landing-nav-cta-preview:is(button):hover {
+      transform: translateY(-1px);
+      border-color: rgba(125, 211, 252, 0.26);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.042),
+        0 0 20px -12px rgba(56, 189, 248, 0.09);
+    }
   }
 
   .landing-nav-cta-preview:is(button):active {

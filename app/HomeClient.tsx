@@ -233,9 +233,9 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                     onClick={openAppPreviewToc}
                     className={[
                       "landing-nav-cta-preview landing-nav-cta-preview--compact relative z-[20] inline-flex min-h-14 w-full shrink-0 cursor-pointer items-center justify-center gap-1.5 rounded-2xl whitespace-nowrap max-sm:min-h-12 max-sm:rounded-xl max-sm:border-white/22 max-sm:bg-white/[0.055] max-sm:px-4 max-sm:py-2.5 max-sm:text-xs max-sm:font-medium max-sm:shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]",
-                      "border border-white/30 bg-white/[0.092] px-5 py-3.5 text-center text-sm font-semibold text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_0_0_1px_rgba(56,189,248,0.06)_inset,0_0_40px_-10px_rgba(56,189,248,0.16)] ring-1 ring-inset ring-sky-400/14",
-                      "backdrop-blur-md transition duration-[220ms] ease-out",
-                      "hover:border-sky-300/42 hover:bg-white/[0.12]",
+                      "border border-white/[0.17] bg-white/[0.055] px-5 py-3.5 text-center text-sm font-semibold text-slate-100/95 shadow-[inset_0_1px_0_rgba(255,255,255,0.055),0_0_0_1px_rgba(56,189,248,0.035)_inset] ring-1 ring-inset ring-white/[0.07] backdrop-blur-md lg:border-white/[0.11] lg:bg-white/[0.042] lg:text-slate-100 lg:shadow-[inset_0_1px_0_rgba(255,255,255,0.03)] lg:ring-0",
+                      "transition duration-[220ms] ease-out",
+                      "hover:border-sky-400/28 hover:bg-white/[0.08] hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_0_24px_-14px_rgba(56,189,248,0.12)] lg:hover:border-sky-400/26 lg:hover:bg-white/[0.055] lg:hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_0_18px_-12px_rgba(56,189,248,0.09)]",
                       "active:scale-[0.99] focus-visible:outline-none",
                       "touch-manipulation min-[420px]:min-w-0 min-[420px]:flex-1 lg:min-w-[9.5rem] lg:flex-1 xl:min-w-[10.5rem] xl:flex-none",
                     ].join(" ")}
@@ -253,7 +253,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                     href="/join"
                     prefetch={false}
                     className={[
-                      "landing-nav-cta-join sensora-premium-primary-workspace relative z-[20] inline-flex min-h-14 w-full items-center justify-center whitespace-nowrap rounded-2xl px-7 py-3.5 text-center text-sm font-semibold tracking-tight text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.13),0_0_44px_-8px_rgba(56,189,248,0.22),0_12px_32px_-8px_rgba(139,92,246,0.12)] max-sm:px-6 max-sm:py-3.5 max-sm:text-[0.8125rem]",
+                      "landing-nav-cta-join sensora-premium-primary-workspace relative z-[20] inline-flex min-h-14 w-full items-center justify-center whitespace-nowrap rounded-2xl px-7 py-3.5 text-center text-sm font-semibold tracking-tight text-slate-50 max-sm:px-6 max-sm:py-3.5 max-sm:text-[0.8125rem]",
                       "touch-manipulation min-[420px]:min-w-0 min-[420px]:flex-1 lg:min-w-[9.5rem] lg:flex-1 xl:min-w-[10.5rem] xl:flex-none",
                       "transition duration-[220ms] ease-out active:scale-[0.99]",
                       "focus-visible:outline-none",
