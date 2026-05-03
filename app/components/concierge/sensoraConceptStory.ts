@@ -17,7 +17,7 @@ export const SENSORA_CONCEPT_STORY_SLIDES: readonly ConceptStorySlide[] = [
   },
   {
     id: "onboarding",
-    src: "/images/profile-workspace.png",
+    src: "/images/guides/sensora-guide-04.png",
     titleKey: "concept.story.path.title",
     descKey: "concept.story.path.desc",
   },

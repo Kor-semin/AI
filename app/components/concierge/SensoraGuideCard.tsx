@@ -26,16 +26,23 @@ export function SensoraGuideCard({ title, description, image, selected, onSelect
         "motion-reduce:transition-none motion-reduce:hover:translate-y-0",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/45",
         selected ?
-          "sensora-guide-pick-card--active border-sky-400/38 ring-2 ring-sky-400/28 shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_0_48px_-16px_rgba(56,189,248,0.2),0_0_64px_-28px_rgba(139,92,246,0.1)]"
+          "sensora-guide-pick-card--active border-sky-400/62 z-[1] -translate-y-0.5 ring-[3px] ring-sky-400/45 ring-offset-2 ring-offset-[#020617] shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_0_52px_-12px_rgba(56,189,248,0.32),0_0_80px_-24px_rgba(139,92,246,0.14)] motion-reduce:translate-y-0 motion-reduce:ring-2 motion-reduce:shadow-none"
         : "active:scale-[0.992]",
       ].join(" ")}
     >
       <div className="relative aspect-[16/10] w-full overflow-hidden border-b border-white/[0.07] bg-[#030712]/95 sm:aspect-[16/11]">
+        {selected ? (
+          <span
+            className="pointer-events-none absolute right-3 top-3 z-[2] flex size-2.5 items-center justify-center rounded-full bg-sky-400 shadow-[0_0_16px_-1px_rgba(56,189,248,0.85)] ring-2 ring-sky-300/45"
+            aria-hidden
+          />
+        ) : null}
         <Image
           src={image}
           alt=""
           fill
-          className="object-cover object-center opacity-[0.94] transition duration-300 group-hover:opacity-[0.99]"
+          className="object-cover object-center opacity-[0.94] transition duration-300 group-hover:opacity-[0.99] data-[selected=1]:opacity-[0.99]"
+          data-selected={selected ? 1 : 0}
           sizes="(max-width:640px) 92vw, (max-width:1024px) 44vw, 360px"
         />
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#020617]/92 via-[#020617]/25 to-transparent" aria-hidden />

@@ -2201,3 +2201,57 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   z-index: 1;
 }
 
+/* 랜딩 히어로 본문 줄바꿈 — 한 줄이 한 덩어리로 읽히도록 */
+.landing-showcase-hero-headline > span {
+  text-wrap: balance;
+}
+
+/* 가이드 모달: 카드 전환 시 메인 이미지 짧게 강조 */
+@media (prefers-reduced-motion: no-preference) {
+  .sensora-guide-hero-panel .sensora-guide-hero-img {
+    animation: sensora-guide-hero-snap 0.3s cubic-bezier(0.22, 1, 0.32, 1) both;
+  }
+}
+
+@keyframes sensora-guide-hero-snap {
+  from {
+    opacity: 0.82;
+    transform: scale(1.012);
+    filter: saturate(1.05) brightness(1.04);
+  }
+  to {
+    opacity: 0.98;
+    transform: scale(1);
+    filter: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sensora-guide-hero-panel .sensora-guide-hero-img {
+    animation: none;
+  }
+}
+
+/* 워크스페이스 빈 상태/안내 카드 — 은은한 nebula 포인트(구조는 그대로) */
+.sensora-crm-empty-nexus {
+  isolation: isolate;
+}
+
+.sensora-crm-empty-nexus::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  opacity: 0.55;
+  background:
+    radial-gradient(ellipse 92% 70% at 50% -20%, rgba(56, 189, 248, 0.1), transparent 58%),
+    radial-gradient(ellipse 55% 48% at 96% 88%, rgba(139, 92, 246, 0.08), transparent 52%);
+}
+
+.sensora-crm-empty-nexus > * {
+  position: relative;
+  z-index: 1;
+}
+

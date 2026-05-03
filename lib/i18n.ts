@@ -282,6 +282,8 @@ export type TranslationKey =
   | "landing.showroom.hero.senseAuraTag"
   | "landing.showroom.hero.kickerBadge"
   | "landing.showroom.hero.headline"
+  | "landing.showroom.hero.headlineLine1"
+  | "landing.showroom.hero.headlineLine2"
   | "landing.showroom.hero.sub"
   | "landing.showroom.bridge.line1"
   | "landing.showroom.bridge.line2"
@@ -827,6 +829,8 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.showroom.hero.senseAuraTag": "Sense · Aura",
     "landing.showroom.hero.kickerBadge": "자동차 영업사원 업무용",
     "landing.showroom.hero.headline": "자동차 영업사원을 위한\nAI 고객관리 워크스페이스",
+    "landing.showroom.hero.headlineLine1": "자동차 영업사원을 위한",
+    "landing.showroom.hero.headlineLine2": "AI 고객관리 워크스페이스",
     "landing.showroom.hero.sub":
       "상담부터 사후관리까지 한 흐름으로 관리합니다.\n\nAI는 초안을 돕고, 최종 판단은 영업사원이 합니다.",
     "landing.showroom.bridge.line1": "상담은 기록으로,",
@@ -1397,6 +1401,8 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.showroom.hero.senseAuraTag": "Sense · Aura",
     "landing.showroom.hero.kickerBadge": "Built for automotive sales reps",
     "landing.showroom.hero.headline": "AI customer-relationship workspace\nfor automotive sales reps",
+    "landing.showroom.hero.headlineLine1": "AI customer-relationship workspace",
+    "landing.showroom.hero.headlineLine2": "for automotive sales reps",
     "landing.showroom.hero.sub":
       "We keep consultation through after-sales care on one disciplined flow.\n\nAI helps with draft ideas; salespeople make the final calls.",
     "landing.showroom.bridge.line1": "Consultation settles into notes,",

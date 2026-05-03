@@ -2000,7 +2000,7 @@ export function CRMApp({
                   </table>
                 </div>
                 {customersFiltered.length === 0 ? (
-                  <div className="border-t border-white/[0.11] px-8 py-14 text-center">
+                  <div className="sensora-crm-empty-nexus relative border-t border-white/[0.11] px-8 py-14 text-center">
                     <p className="text-[18px] font-semibold text-slate-50">등록된 고객이 없습니다</p>
                     <p className="mx-auto mt-3 max-w-md text-[15px] leading-relaxed text-slate-400">
                       첫 고객을 추가하거나 「주소록 가져오기」로 불러와 상담과 일정을 이어 가 보세요.
@@ -2923,7 +2923,7 @@ export function CRMApp({
             <div
               id="crm-block-empty-placeholder"
               tabIndex={-1}
-              className="scroll-mt-24 rounded-2xl border border-dashed border-slate-500/35 bg-slate-950/40 p-8 text-sm text-slate-400 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] outline-none backdrop-blur-sm"
+              className="sensora-crm-empty-nexus scroll-mt-24 rounded-2xl border border-dashed border-slate-500/32 bg-slate-950/40 p-8 text-sm text-slate-400 shadow-[inset_0_1px_0_rgba(255,255,255,0.045),0_0_48px_-28px_rgba(56,189,248,0.075),0_0_42px_-34px_rgba(139,92,246,0.055)] outline-none backdrop-blur-sm"
             >
               목록에서 고객을 선택하거나 <span className="font-semibold">위의 “+ 고객 추가”</span>로 상담을
               등록하세요. 고객을 열면 <span className="font-semibold text-slate-50">상담 메모</span>,
