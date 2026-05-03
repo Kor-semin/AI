@@ -44,7 +44,12 @@ export default function BetaJoinPage() {
     setPending(true);
     try {
       const res = await submitBetaSignup(payload);
-      if (res.ok) e.currentTarget.reset();
+      if (!res.ok) {
+        window.alert(t("join.alert.betaSaveFailed"));
+        return;
+      }
+      window.alert(res.savedToBackend ? t("join.alert.betaReceivedRemote") : t("join.alert.betaNotPersisted"));
+      e.currentTarget.reset();
     } finally {
       setPending(false);
     }
@@ -189,10 +194,14 @@ export default function BetaJoinPage() {
           </div>
         </form>
 
-        <p className="mt-10 text-center text-[12px] leading-relaxed text-[color:var(--ink-2)]">
-          운영 환경에서 <code className="rounded bg-white/70 px-1.5 py-0.5 font-mono text-[10px]">NEXT_PUBLIC_BETA_SIGNUP_ENDPOINT</code>{" "}
-          를 설정하면 제출 내용이 Google Sheet(웹훅)로 저장됩니다. 미설정 시에는 데모 안내만 표시됩니다.
-        </p>
+        {process.env.NODE_ENV !== "production" ? (
+          <p
+            className="mt-10 rounded-xl border border-dashed border-[#cbd5e1] bg-[#f8fafc] px-4 py-3 text-left text-[11px] leading-relaxed text-[#64748b]"
+            role="status"
+          >
+            {t("join.devBetaEndpointHint")}
+          </p>
+        ) : null}
       </div>
     </main>
   );

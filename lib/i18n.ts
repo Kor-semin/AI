@@ -72,6 +72,10 @@ export type TranslationKey =
   | "join.trustNoticeLine1"
   | "join.trustNoticeLine2"
   | "join.trustNoticeLine3"
+  | "join.alert.betaReceivedRemote"
+  | "join.alert.betaNotPersisted"
+  | "join.alert.betaSaveFailed"
+  | "join.devBetaEndpointHint"
   | "register.title"
   | "register.continueWithGoogle"
   | "register.intro"
@@ -418,6 +422,12 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "join.trustNoticeLine1": "입력하신 정보는 베타 안내와 사용자 확인을 위해서만 사용됩니다.",
     "join.trustNoticeLine2": "Sensora는 고객 연락처나 고객 정보를 자동으로 수집하지 않습니다.",
     "join.trustNoticeLine3": "고객 정보는 사용자가 직접 확인하고 저장하는 구조를 기준으로 합니다.",
+    "join.alert.betaReceivedRemote": "베타 신청이 접수되었습니다.",
+    "join.alert.betaNotPersisted":
+      "테스트 제출이 완료되었습니다.\n현재는 저장 기능이 연결되지 않은 상태입니다.",
+    "join.alert.betaSaveFailed": "신청 저장에 실패했습니다. 잠시 후 다시 시도해주세요.",
+    "join.devBetaEndpointHint":
+      "개발 전용: 베타 폼을 시트·웹훅으로 보내려면 NEXT_PUBLIC_BETA_SIGNUP_ENDPOINT(예: Google Apps Script URL)를 설정하세요. 비어 있으면 원격 저장 없이 제출만 확인할 수 있습니다.",
     "register.title": "영업 계정 등록",
     "register.continueWithGoogle": "Google로 시작하기",
     "register.intro":
@@ -801,6 +811,12 @@ export const translations: Record<LanguageCode, TranslationDict> = {
       "The information you enter is used only for beta communications and to confirm your details.",
     "join.trustNoticeLine2": "Sensora does not automatically collect your customers’ contacts or CRM data.",
     "join.trustNoticeLine3": "Customer records stay under your review: you confirm and save anything that’s stored.",
+    "join.alert.betaReceivedRemote": "Thanks — your beta signup was received.",
+    "join.alert.betaNotPersisted":
+      "Your test submission is complete.\nSaving to our systems isn’t connected yet.",
+    "join.alert.betaSaveFailed": "We couldn’t save your signup. Please try again shortly.",
+    "join.devBetaEndpointHint":
+      "Dev only: set NEXT_PUBLIC_BETA_SIGNUP_ENDPOINT (e.g. a Google Apps Script web app URL) to POST submissions to a sheet/webhook. If unset, submit actions are not sent remotely.",
     "register.title": "Sales Account Registration",
     "register.continueWithGoogle": "Continue with Google",
     "register.intro":

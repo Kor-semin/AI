@@ -11,7 +11,10 @@ export type BetaSignupPayload = {
   motivation: string;
 };
 
-export type BetaSignupResult = { ok: true } | { ok: false; error: string };
+/** 제출 성공 시 `savedToBackend`: 엔드포인트로 POST 됐는지 여부. 알림 문구는 호출 측(i18n)에서 처리합니다. */
+export type BetaSignupResult =
+  | { ok: true; savedToBackend: boolean }
+  | { ok: false; error: string };
 
 function betaSignupEndpoint(): string {
   const raw = process.env.NEXT_PUBLIC_BETA_SIGNUP_ENDPOINT;
@@ -19,12 +22,12 @@ function betaSignupEndpoint(): string {
 }
 
 /**
- * 베타 신청 제출.
+ * 베타 신청 제출 (클라이언트 전용).
  *
- * - `NEXT_PUBLIC_BETA_SIGNUP_ENDPOINT`가 비어 있으면: 데모용 `alert`만 (서버 전송 없음).
- * - 값이 있으면: 해당 URL로 JSON `POST` (Google Sheet용 Apps Script 웹 앱 URL 등).
+ * - 엔드포인트 비어 있음: 원격 저장 없음 — `{ ok: true, savedToBackend: false }`
+ * - 엔드포인트 있음: JSON POST — 성공 시 `savedToBackend: true`
  *
- * 이름·연락처·이메일 등은 콘솔에 출력하지 않습니다.
+ * `window.alert`는 호출하지 않습니다. 이름·연락처 등은 로그하지 않습니다.
  */
 export async function submitBetaSignup(payload: BetaSignupPayload): Promise<BetaSignupResult> {
   const endpoint = betaSignupEndpoint();
@@ -35,8 +38,7 @@ export async function submitBetaSignup(payload: BetaSignupPayload): Promise<Beta
     }
 
     if (!endpoint) {
-      window.alert("베타 신청 폼을 제출했습니다.\n\n(데모 단계 — 아직 서버에 저장되지 않습니다.)");
-      return { ok: true };
+      return { ok: true, savedToBackend: false };
     }
 
     const res = await fetch(endpoint, {
@@ -48,17 +50,12 @@ export async function submitBetaSignup(payload: BetaSignupPayload): Promise<Beta
     if (!res.ok) {
       await res.text().catch(() => "");
       console.warn("[beta signup] POST failed", res.status);
-      window.alert("신청 저장에 실패했습니다. 잠시 후 다시 시도해주세요.");
       return { ok: false, error: `HTTP ${res.status}` };
     }
 
-    window.alert("베타 신청이 접수되었습니다.");
-    return { ok: true };
+    return { ok: true, savedToBackend: true };
   } catch (e) {
     console.warn("[beta signup] fetch error");
-    if (typeof window !== "undefined") {
-      window.alert("신청 저장에 실패했습니다. 잠시 후 다시 시도해주세요.");
-    }
     return { ok: false, error: e instanceof Error ? e.message : String(e) };
   }
 }
