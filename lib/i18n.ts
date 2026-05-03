@@ -74,6 +74,33 @@ export type TranslationKey =
   | "join.trustNoticeLine3"
   | "register.title"
   | "register.continueWithGoogle"
+  | "register.intro"
+  | "register.flowLeadGoogleOn"
+  | "register.flowLeadGoogleOff"
+  | "register.trustNoticeLine1"
+  | "register.trustNoticeLine2"
+  | "register.stepIdentify"
+  | "register.stepCard"
+  | "register.stepInfrastructure"
+  | "register.errorGoogleDisabled"
+  | "register.errorFirebaseEnv"
+  | "register.errorPickCard"
+  | "register.errorLoginFirst"
+  | "register.errorUploadFailed"
+  | "register.loadingProfile"
+  | "register.pendingTitle"
+  | "register.pendingBody"
+  | "register.linkMain"
+  | "register.doneTitle"
+  | "register.doneBody"
+  | "register.linkWorkspace"
+  | "register.uploadLead"
+  | "register.uploadLeadRetry"
+  | "register.buttonSubmitCard"
+  | "register.busyRedirecting"
+  | "register.busyUploading"
+  | "register.footerNote"
+  | "register.firebaseSetupHint"
   | "crm.stat.todayFollowups"
   | "crm.stat.dealProbability"
   | "crm.stat.followupNeeded"
@@ -390,6 +417,41 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "join.trustNoticeLine3": "고객 정보는 사용자가 직접 확인하고 저장하는 구조를 기준으로 합니다.",
     "register.title": "영업 계정 등록",
     "register.continueWithGoogle": "Google로 시작하기",
+    "register.intro":
+      "Sensora Auto CRM 사용을 위한 영업 계정 정보를 등록합니다.\n입력한 정보는 계정 확인과 베타 승인 상태 안내에 사용됩니다.",
+    "register.flowLeadGoogleOn":
+      "Google 계정으로 로그인한 뒤, 직접 촬영·선택한 명함 이미지를 올리면 운영 검토가 시작됩니다.",
+    "register.flowLeadGoogleOff":
+      "현재 Google 로그인은 준비 중입니다. 메인 화면에서 로컬 저장(MVP) 모드로 먼저 이용해 주세요.",
+    "register.trustNoticeLine1":
+      "입력하신 정보는 영업 계정 확인과 베타 승인 안내를 위해서만 사용됩니다.",
+    "register.trustNoticeLine2": "Sensora는 고객 연락처나 고객 정보를 자동으로 수집하지 않습니다.",
+    "register.stepIdentify": "Google 로그인으로 계정을 확인합니다(SMS 없음).",
+    "register.stepCard": "명함 이미지는 사용자가 직접 촬영·파일 선택해 업로드합니다.",
+    "register.stepInfrastructure":
+      "Firestore·Storage는 무료 한도(Spark) 안에서 쓰시는 것을 권장합니다.",
+    "register.errorGoogleDisabled": "현재 Google 로그인은 잠시 꺼져 있습니다(준비중).",
+    "register.errorFirebaseEnv": "Firebase 미설정: .env.local 확인.",
+    "register.errorPickCard": "명함 이미지를 선택해 주세요.",
+    "register.errorLoginFirst": "먼저 Google 계정으로 로그인해 주세요.",
+    "register.errorUploadFailed": "업로드 실패.",
+    "register.loadingProfile": "계정 상태를 불러오는 중…",
+    "register.pendingTitle": "명함 접수 후 검토 중입니다.",
+    "register.pendingBody": "승인이 완료되면 같은 계정으로 메인에서 바로 이용할 수 있습니다.",
+    "register.linkMain": "메인으로",
+    "register.doneTitle": "명함을 접수했습니다.",
+    "register.doneBody":
+      "승인 전까지 같은 Google 계정으로 로그인해 두시면, 승인 직후 워크스페이스가 열립니다.",
+    "register.linkWorkspace": "시작 화면으로",
+    "register.uploadLead": "명함 한 장이 또렷하게 보이도록 촬영한 이미지를 직접 선택해 올려 주세요.",
+    "register.uploadLeadRetry": "다시 접수합니다. 업로드를 완료해 주세요.",
+    "register.buttonSubmitCard": "명함 제출 후 검토 요청",
+    "register.busyRedirecting": "이동 중…",
+    "register.busyUploading": "업로드 중…",
+    "register.footerNote":
+      "Sensora Auto CRM · SMS 발신 요금 없음 · Firebase Spark(무료) 한도는 사용량에 따라 달라질 수 있습니다.",
+    "register.firebaseSetupHint":
+      "로컬에 NEXT_PUBLIC_FIREBASE_* 환경 변수를 설정해 주세요.",
     "crm.stat.todayFollowups": "오늘 연락",
     "crm.stat.dealProbability": "계약 가능성",
     "crm.stat.followupNeeded": "예정된 할 일",
@@ -734,6 +796,45 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "join.trustNoticeLine3": "Customer records stay under your review: you confirm and save anything that’s stored.",
     "register.title": "Sales Account Registration",
     "register.continueWithGoogle": "Continue with Google",
+    "register.intro":
+      "Register the sales account details we need for Sensora Auto CRM.\nWhat you enter is used only to verify your account and communicate beta approval status.",
+    "register.flowLeadGoogleOn":
+      "After you sign in with Google, upload a business-card photo you chose or took—then our team can review it.",
+    "register.flowLeadGoogleOff":
+      "Google sign-in for registration is temporarily unavailable. From the home screen you can still try local-save (MVP) mode.",
+    "register.trustNoticeLine1":
+      "Information you submit is used only to verify your sales account and send beta approval updates.",
+    "register.trustNoticeLine2":
+      "Sensora does not automatically collect your customers’ contacts or CRM data.",
+    "register.stepIdentify": "Confirm your account with Google sign-in (no SMS codes).",
+    "register.stepCard":
+      "You photograph or pick the card image file yourself, then upload it—we don’t pull contacts automatically.",
+    "register.stepInfrastructure":
+      "Firestore and Storage are easiest to stay within the free Spark quotas.",
+    "register.errorGoogleDisabled": "Google sign-in is temporarily disabled.",
+    "register.errorFirebaseEnv": "Firebase isn’t configured—check .env.local.",
+    "register.errorPickCard": "Please choose a business-card image.",
+    "register.errorLoginFirst": "Please sign in with Google first.",
+    "register.errorUploadFailed": "Upload failed.",
+    "register.loadingProfile": "Loading account status…",
+    "register.pendingTitle": "Your card is submitted and under review.",
+    "register.pendingBody":
+      "Once approved, you can open the workspace from the home screen with the same account.",
+    "register.linkMain": "Go to home",
+    "register.doneTitle": "We received your card.",
+    "register.doneBody":
+      "Stay signed in with the same Google account until approval—the workspace unlocks right after.",
+    "register.linkWorkspace": "Back to start",
+    "register.uploadLead":
+      "Choose a clear photo of one card—something you captured or selected yourself.",
+    "register.uploadLeadRetry": "Submitting again—please finish the upload.",
+    "register.buttonSubmitCard": "Submit card for review",
+    "register.busyRedirecting": "Redirecting…",
+    "register.busyUploading": "Uploading…",
+    "register.footerNote":
+      "Sensora Auto CRM · no SMS sending charges · Firebase Spark free-tier limits depend on usage.",
+    "register.firebaseSetupHint":
+      "Add NEXT_PUBLIC_FIREBASE_* variables locally (see .env.local).",
     "crm.stat.todayFollowups": "Today’s Follow-ups",
     "crm.stat.dealProbability": "Deal Probability",
     "crm.stat.followupNeeded": "Follow-up Needed",
