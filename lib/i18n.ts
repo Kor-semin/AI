@@ -108,6 +108,17 @@ export type TranslationKey =
   | "register.fallbackUnavailableBody"
   | "register.linkBetaSignup"
   | "register.firebaseDevHint"
+  | "register.access.checking"
+  | "register.access.pendingTitle"
+  | "register.access.pendingBody"
+  | "register.access.notFoundTitle"
+  | "register.access.notFoundBody"
+  | "register.access.rejectedTitle"
+  | "register.access.rejectedBody"
+  | "register.access.errorTitle"
+  | "register.access.errorBody"
+  | "register.access.goJoin"
+  | "register.access.goHome"
   | "crm.stat.todayFollowups"
   | "crm.stat.dealProbability"
   | "crm.stat.followupNeeded"
@@ -476,6 +487,19 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "register.linkBetaSignup": "베타 신청으로 이동하기",
     "register.firebaseDevHint":
       "개발 전용: Firebase 클라이언트 설정값이 비어 있습니다. 로컬 .env.local 또는 문서를 확인하세요.",
+    "register.access.checking": "베타 신청 승인 여부를 확인하는 중입니다…",
+    "register.access.pendingTitle": "아직 베타 승인이 완료되지 않았습니다.",
+    "register.access.pendingBody":
+      "신청 내용을 확인한 뒤 순차적으로 안내드리겠습니다.",
+    "register.access.notFoundTitle": "베타 신청 내역을 찾을 수 없습니다.",
+    "register.access.notFoundBody": "먼저 베타 신청을 남겨 주세요.",
+    "register.access.rejectedTitle": "베타 사용 대상이 아닙니다.",
+    "register.access.rejectedBody": "현재 계정은 베타 사용 대상에 포함되지 않았습니다.",
+    "register.access.errorTitle": "베타 승인 여부를 확인하지 못했습니다.",
+    "register.access.errorBody":
+      "네트워크 또는 설정 문제일 수 있습니다. 잠시 후 다시 시도해 주세요. 문제가 이어지면 베타 신청 경로를 통해 문의해 주세요.",
+    "register.access.goJoin": "베타 신청하러 가기",
+    "register.access.goHome": "홈으로 돌아가기",
     "crm.stat.todayFollowups": "오늘 연락",
     "crm.stat.dealProbability": "계약 가능성",
     "crm.stat.followupNeeded": "예정된 할 일",
@@ -877,6 +901,19 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "register.linkBetaSignup": "Go to beta signup",
     "register.firebaseDevHint":
       "Dev only: Firebase client config is missing. Check .env.local or internal docs.",
+    "register.access.checking": "Checking your beta approval status…",
+    "register.access.pendingTitle": "Beta approval isn’t complete yet.",
+    "register.access.pendingBody":
+      "We’ll review signup details and reach out in turn.",
+    "register.access.notFoundTitle": "We couldn’t find a beta signup under this email.",
+    "register.access.notFoundBody": "Please submit a beta request first.",
+    "register.access.rejectedTitle": "This account isn’t in the beta program.",
+    "register.access.rejectedBody": "This account isn’t eligible for Sensora beta access right now.",
+    "register.access.errorTitle": "We couldn’t verify beta approval.",
+    "register.access.errorBody":
+      "This may be a network or setup issue. Try again shortly, or contact us via the beta signup flow if it keeps happening.",
+    "register.access.goJoin": "Go to beta signup",
+    "register.access.goHome": "Back to home",
     "crm.stat.todayFollowups": "Today’s Follow-ups",
     "crm.stat.dealProbability": "Deal Probability",
     "crm.stat.followupNeeded": "Follow-up Needed",

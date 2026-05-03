@@ -20,16 +20,21 @@ import { CRMApp } from "@/app/crm/CRMApp";
 import { useAuth } from "@/app/crm/useAuth";
 import { sellerCanUseApp, useSellerProfile } from "@/app/crm/useSellerProfile";
 import { isFirebaseConfigured, isGoogleAuthEnabled } from "@/app/firebase/client";
+import { useBetaSheetAccess } from "@/lib/betaAccess";
 
 export function HomeClient({ initialView }: { initialView: "landing" | "app" }) {
   const { auth, authError, signOut } = useAuth();
+  const { t } = useLanguage();
   const firebaseReady = isFirebaseConfigured();
   const googleAuthEnabled = isGoogleAuthEnabled();
   const seller = useSellerProfile(auth.status === "signed-in" ? auth.uid : null);
+  const betaAccess = useBetaSheetAccess(
+    auth.status === "signed-in" ? auth.email : undefined,
+    { skip: auth.status !== "signed-in" },
+  );
   const [view, setView] = useState<"landing" | "app">(initialView);
   const [crmSection, setCrmSection] = useState<CrmSection>("dashboard");
   const router = useRouter();
-  const { t } = useLanguage();
 
   const navigateCrmSection = useCallback(
     (s: CrmSection) => {
@@ -123,12 +128,21 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
 
   const sellerSignedIn = firebaseReady && auth.status === "signed-in";
 
-  /** Google 등 로그인 후 명함 검토까지 본 문서(CRM 동기화) 접근 제한(SMS 과금 회피 경로 포함) */
+  /** Google 등 로그인 후 베타 시트 승인 + 명함 검토까지 CRM(클라우드 경로) 접근 제한 */
   const sellerApproved = sellerCanUseApp(seller.profile);
-  const sellerLoading = sellerSignedIn && seller.loading;
-  const sellerGateBlock = sellerSignedIn && !seller.loading && !seller.error && !sellerApproved;
+  const sellerLoading = sellerSignedIn && (seller.loading || betaAccess.loading);
+  const betaBlocksCrm = sellerSignedIn && betaAccess.resolved && !betaAccess.approved;
+  const sellerCardGateBlock =
+    sellerSignedIn && betaAccess.resolved && betaAccess.approved && !seller.loading && !seller.error && !sellerApproved;
 
-  const crmUid = auth.status === "signed-in" && !(sellerLoading || sellerGateBlock) ? auth.uid : null;
+  const showCrmApp =
+    !sellerSignedIn ||
+    (!sellerLoading && !seller.error && betaAccess.approved && sellerApproved);
+
+  const crmUid =
+    sellerSignedIn && !sellerLoading && !seller.error && betaAccess.approved && sellerApproved
+      ? auth.uid
+      : null;
 
   const showNotebookCover = view === "app";
 
@@ -298,7 +312,52 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                   </div>
                 ) : null}
 
-                {!sellerLoading && sellerGateBlock ? (
+                {!sellerLoading && betaBlocksCrm ? (
+                  <div className="flex flex-col gap-8 rounded-2xl border border-[#E5E7EB] bg-white px-8 py-16 text-center sm:px-12">
+                    <div>
+                      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#6B7280]">
+                        {t("register.title")}
+                      </p>
+                      <h2 className="mt-3 text-2xl font-semibold tracking-tight text-[#111827]">
+                        {betaAccess.status === "pending"
+                          ? t("register.access.pendingTitle")
+                          : betaAccess.status === "not_found"
+                            ? t("register.access.notFoundTitle")
+                            : betaAccess.status === "rejected"
+                              ? t("register.access.rejectedTitle")
+                              : t("register.access.errorTitle")}
+                      </h2>
+                      <p className="mx-auto mt-4 max-w-md text-base whitespace-pre-line leading-relaxed text-[#6B7280]">
+                        {betaAccess.status === "pending"
+                          ? t("register.access.pendingBody")
+                          : betaAccess.status === "not_found"
+                            ? t("register.access.notFoundBody")
+                            : betaAccess.status === "rejected"
+                              ? t("register.access.rejectedBody")
+                              : t("register.access.errorBody")}
+                      </p>
+                    </div>
+                    <div className="flex flex-wrap items-center justify-center gap-3">
+                      <Link
+                        href="/join"
+                        className="inline-flex items-center rounded-xl bg-[#111827] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#1F2937]"
+                      >
+                        {t("register.access.goJoin")}
+                      </Link>
+                      <Link
+                        href="/"
+                        className="inline-flex items-center rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] px-5 py-3 text-sm font-semibold text-[#374151] transition hover:bg-[#F3F4F6]"
+                      >
+                        {t("register.access.goHome")}
+                      </Link>
+                    </div>
+                    <Link href="/toc" className="text-sm font-medium text-[#6B7280] underline underline-offset-4 hover:text-[#111827]">
+                      기능 소개(목차)만 보기
+                    </Link>
+                  </div>
+                ) : null}
+
+                {!sellerLoading && sellerCardGateBlock ? (
                   <div className="flex flex-col gap-8 rounded-2xl border border-[#E5E7EB] bg-white px-8 py-16 text-center sm:px-12">
                     <div>
                       <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#6B7280]">영업 전용</p>
@@ -334,7 +393,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                   </div>
                 ) : null}
 
-                {!sellerLoading && !sellerGateBlock ? (
+                {showCrmApp ? (
                   <CRMApp
                     uid={crmUid}
                     sellerDisplayName={

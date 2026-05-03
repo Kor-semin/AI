@@ -19,6 +19,9 @@ import {
 import { sellerCanUseApp, useSellerProfile } from "@/app/crm/useSellerProfile";
 import { getFirebaseAuth, getFirebaseStorageBucket, isFirebaseConfigured, isGoogleAuthEnabled } from "@/app/firebase/client";
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
+import { normalizeEmailForBetaAccess, postBetaAccessCheck } from "@/lib/betaAccess";
+
+type BetaGate = "idle" | "checking" | "approved" | "pending" | "rejected" | "not_found" | "error";
 
 const JOIN_REDIRECT_PENDING = "customer-manager.join.redirectPending";
 
@@ -27,6 +30,8 @@ type JoinStep = "intro" | "card" | "done";
 export default function RegisterPage() {
   const router = useRouter();
   const [uid, setUid] = useState<string | null>(null);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [betaGate, setBetaGate] = useState<BetaGate>("idle");
   const [step, setStep] = useState<JoinStep>("intro");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -40,7 +45,10 @@ export default function RegisterPage() {
   useEffect(() => {
     if (!firebaseConfigured) return;
     const auth = getFirebaseAuth();
-    const unsub = onAuthStateChanged(auth, (u) => setUid(u?.uid ?? null));
+    const unsub = onAuthStateChanged(auth, (u) => {
+      setUid(u?.uid ?? null);
+      setUserEmail(u?.email ?? null);
+    });
     return () => unsub();
   }, [firebaseConfigured]);
 
@@ -58,15 +66,14 @@ export default function RegisterPage() {
 
         if (cancelled) return;
         if (res?.user) {
-          await ensureSellerNeedsCard(res.user.uid, res.user.email);
-          setStep("card");
           setError(null);
         } else if (pending) {
           await new Promise((r) => window.setTimeout(r, 800));
           const u = auth.currentUser;
-          if (!cancelled && u) {
-            await ensureSellerNeedsCard(u.uid, u.email);
-            setStep("card");
+          if (!cancelled && !u) {
+            setError(
+              "로그인 후 계정 확인에 실패했습니다. 브라우저 저장소 차단 여부를 확인한 뒤 다시 시도해 주세요.",
+            );
           }
         }
       } catch (e) {
@@ -79,19 +86,63 @@ export default function RegisterPage() {
   }, [firebaseConfigured]);
 
   useEffect(() => {
-    if (!uid) return;
-    void ensureSellerNeedsCard(uid).then(() => {
+    if (!firebaseConfigured) {
+      return;
+    }
+    if (!uid) {
+      setBetaGate("idle");
+      return;
+    }
+
+    const emailNorm = normalizeEmailForBetaAccess(userEmail ?? "");
+    if (!emailNorm) {
+      return;
+    }
+
+    let cancelled = false;
+    setBetaGate("checking");
+
+    void (async () => {
+      const access = await postBetaAccessCheck(emailNorm);
+      if (cancelled) return;
+
+      if (!access.ok) {
+        if (!cancelled) setBetaGate("error");
+        return;
+      }
+
+      if (access.status !== "approved") {
+        if (!cancelled) setBetaGate(access.status);
+        return;
+      }
+
+      try {
+        await ensureSellerNeedsCard(uid, userEmail);
+      } catch (e) {
+        if (!cancelled) {
+          setError(e instanceof Error ? e.message : String(e));
+          setBetaGate("error");
+        }
+        return;
+      }
+
+      if (cancelled) return;
+      setBetaGate("approved");
       setStep((s) => {
         if (s === "done") return "done";
         return s === "intro" ? "card" : s;
       });
-    });
-  }, [uid]);
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [firebaseConfigured, uid, userEmail]);
 
   useEffect(() => {
-    if (!uid || seller.loading) return;
+    if (!uid || seller.loading || betaGate !== "approved") return;
     if (seller.profile && sellerCanUseApp(seller.profile)) router.replace("/");
-  }, [uid, seller.loading, seller.profile, router]);
+  }, [uid, seller.loading, seller.profile, router, betaGate]);
 
   const signInWithGoogle = async () => {
     setError(null);
@@ -119,6 +170,10 @@ export default function RegisterPage() {
 
   const uploadCard = async () => {
     setError(null);
+    if (betaGate !== "approved") {
+      setError(t("register.access.errorTitle"));
+      return;
+    }
     if (!file) {
       setError(t("register.errorPickCard"));
       return;
@@ -157,7 +212,7 @@ export default function RegisterPage() {
           console.warn("[register] business-card-notify failed", res.status);
         }
       } catch {
-        console.warn("[register] business-card-notify error");
+        console.warn("[register] business-card-notify request failed");
       }
       setStep("done");
     } catch (e) {
@@ -168,18 +223,41 @@ export default function RegisterPage() {
   };
 
   const profile = seller.profile;
-  const awaitingReview = profile?.approvalStatus === "pending";
-  const wasRejected = profile?.approvalStatus === "rejected";
+  const awaitingReview = betaGate === "approved" && profile?.approvalStatus === "pending";
+  const wasRejected = betaGate === "approved" && profile?.approvalStatus === "rejected";
 
-  const showGoogleIntro = step === "intro" && !uid && !awaitingReview;
+  const showGoogleIntro =
+    step === "intro" && !uid && !awaitingReview && betaGate !== "checking";
 
   const showUpload =
+    betaGate === "approved" &&
     !!uid &&
     !seller.loading &&
     !seller.error &&
     !awaitingReview &&
     step !== "done" &&
     (profile == null || profile.approvalStatus === "needs_card" || wasRejected);
+
+  const betaDenyTitle =
+    betaGate === "pending"
+      ? t("register.access.pendingTitle")
+      : betaGate === "not_found"
+        ? t("register.access.notFoundTitle")
+        : betaGate === "rejected"
+          ? t("register.access.rejectedTitle")
+          : betaGate === "error"
+            ? t("register.access.errorTitle")
+            : "";
+  const betaDenyBody =
+    betaGate === "pending"
+      ? t("register.access.pendingBody")
+      : betaGate === "not_found"
+        ? t("register.access.notFoundBody")
+        : betaGate === "rejected"
+          ? t("register.access.rejectedBody")
+          : betaGate === "error"
+            ? t("register.access.errorBody")
+            : "";
 
   const trustBlock = (
     <div
@@ -267,8 +345,34 @@ export default function RegisterPage() {
         <div className="mb-5 max-sm:mb-4">{trustBlock}</div>
 
         <div className="rounded-[1.35rem] border border-black/10 bg-white/92 p-6 shadow-[0_20px_50px_-18px_rgba(60,50,42,0.28)] backdrop-blur-sm sm:p-8">
-          {seller.loading && uid ? (
+          {seller.loading && uid && betaGate === "approved" ? (
             <p className="py-10 text-center text-sm text-[#584d42]">{t("register.loadingProfile")}</p>
+          ) : null}
+
+          {betaGate === "checking" && uid ? (
+            <p className="py-10 text-center text-sm text-[#584d42]" role="status">
+              {t("register.access.checking")}
+            </p>
+          ) : null}
+
+          {uid &&
+          (betaGate === "pending" || betaGate === "not_found" || betaGate === "rejected" || betaGate === "error") ? (
+            <div className="space-y-4 text-left text-[#39322c]">
+              <p className="font-semibold">{betaDenyTitle}</p>
+              <p className="text-sm leading-relaxed text-[#4a433b] whitespace-pre-line">{betaDenyBody}</p>
+              <Link
+                href="/join"
+                className="inline-flex min-h-[48px] w-full touch-manipulation items-center justify-center rounded-xl bg-[#2f2720] px-4 py-3 text-sm font-semibold text-[#fcf9f3] hover:opacity-95"
+              >
+                {t("register.access.goJoin")}
+              </Link>
+              <Link
+                href="/"
+                className="inline-flex min-h-[48px] w-full touch-manipulation items-center justify-center rounded-xl border border-black/14 bg-transparent px-4 py-3 text-sm font-semibold hover:bg-black/5"
+              >
+                {t("register.access.goHome")}
+              </Link>
+            </div>
           ) : null}
 
           {seller.error ? (

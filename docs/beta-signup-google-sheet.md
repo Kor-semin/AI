@@ -6,6 +6,8 @@ Sensora 웹 앱의 `/join` 폼 제출은 `NEXT_PUBLIC_BETA_SIGNUP_ENDPOINT`가 �
 
 **실제 웹앱 실행 URL은 Git에 넣지 마세요.** Vercel(또는 로컬 `.env.local`)에만 저장합니다.
 
+**베타 승인 조회**(이메일별 `status`)는 브라우저가 아니라 **Next.js API Route**(`/api/beta-access/check`)가 **서버 환경변수** `BETA_ACCESS_ENDPOINT`(및 선택 `BETA_ACCESS_SECRET`)로 Apps Script에 요청합니다.
+
 ---
 
 ## 1. Google Sheet 만들기
@@ -13,9 +15,13 @@ Sensora 웹 앱의 `/join` 폼 제출은 `NEXT_PUBLIC_BETA_SIGNUP_ENDPOINT`가 �
 1. [Google Sheets](https://sheets.google.com)에서 새 스프레드시트를 만듭니다.
 2. 첫 행에 헤더를 권장 순서대로 적습니다.
 
-| A | B | C | D | E | F | G | H |
-|---|---|---|---|---|---|---|---|
-| `submittedAt` | `source` | `fullName` | `contact` | `email` | `dealership` | `currentCrmApproach` | `motivation` |
+| A | B | C | D | E | F | G | H | I | J | K | L |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| `submittedAt` | `source` | `fullName` | `contact` | `email` | `dealership` | `currentCrmApproach` | `motivation` | `status` | `approvedAt` | `approvedBy` | `reviewNote` |
+
+- 신규 접수 시 **`status` 기본값은 `pending`** 입니다(스크립트 `doPost`에서 설정).
+- **`approved`**: 앱·클라우드 경로 허용 · **`pending`**: 대표 검토 대기 · **`rejected`**: 해당 이메일 사용 불가 안내
+- `approvedAt`, `approvedBy`, `reviewNote`는 운영자가 수동으로 채울 수 있습니다.
 
 3. 스프레드시트 메뉴 **확장 프로그램 → Apps Script**로 이동합니다.
 
@@ -55,6 +61,10 @@ function doPost(e) {
       data.dealership || "",
       data.currentCrmApproach || "",
       data.motivation || "",
+      "pending",
+      "",
+      "",
+      "",
     ]);
 
     return ContentService.createTextOutput(
@@ -76,38 +86,141 @@ function doPost(e) {
 
 ---
 
-## 3. 배포 방법 (웹 앱 URL 발급)
+## 3. Apps Script `doGet` — 베타 승인 조회 (`action=checkAccess`)
+
+Vercel 서버는 **GET**으로 다음 쿼리를 붙여 호출합니다.
+
+- `action=checkAccess`
+- `email=` (소문자·trim은 서버에서도 처리하지만, 스크립트에서도 동일 규칙 권장)
+- 선택: `key=` — `BETA_ACCESS_SECRET`과 일치할 때만 조회 허용(아래 예시는 스크립트 속성 `BETA_ACCESS_SECRET`과 비교)
+
+**응답 JSON**에는 **`ok`**, **`status`**, **`approved`** 만 포함합니다. 이름·연락처·신청 사유 등 **개인정보 필드는 절대 반환하지 않습니다.**
+
+이메일이 시트에 없으면: `{ "ok": true, "approved": false, "status": "not_found" }`  
+같은 이메일이 여러 행이면 **가장 아래 행(최근 append 기준)** 을 사용합니다.
+
+```javascript
+function doGet(e) {
+  var p = e && e.parameter ? e.parameter : {};
+  if (p.action !== "checkAccess") {
+    return ContentService.createTextOutput(
+      JSON.stringify({ ok: false, approved: false, status: "error" }),
+    ).setMimeType(ContentService.MimeType.JSON);
+  }
+
+  var expected = PropertiesService.getScriptProperties().getProperty("BETA_ACCESS_SECRET") || "";
+  if (expected && String(p.key || "") !== expected) {
+    return ContentService.createTextOutput(
+      JSON.stringify({ ok: false, approved: false, status: "error" }),
+    ).setMimeType(ContentService.MimeType.JSON);
+  }
+
+  var email = String(p.email || "")
+    .trim()
+    .toLowerCase();
+  if (!email) {
+    return ContentService.createTextOutput(
+      JSON.stringify({ ok: false, approved: false, status: "error" }),
+    ).setMimeType(ContentService.MimeType.JSON);
+  }
+
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName(SHEET_NAME) || ss.getActiveSheet();
+  var values = sheet.getDataRange().getValues();
+  if (values.length < 2) {
+    return ContentService.createTextOutput(
+      JSON.stringify({ ok: true, approved: false, status: "not_found" }),
+    ).setMimeType(ContentService.MimeType.JSON);
+  }
+
+  var header = values[0];
+  var emailCol = header.indexOf("email");
+  var statusCol = header.indexOf("status");
+  if (emailCol < 0 || statusCol < 0) {
+    return ContentService.createTextOutput(
+      JSON.stringify({ ok: false, approved: false, status: "error" }),
+    ).setMimeType(ContentService.MimeType.JSON);
+  }
+
+  var found = null;
+  for (var r = values.length - 1; r >= 1; r--) {
+    var cell = String(values[r][emailCol] || "")
+      .trim()
+      .toLowerCase();
+    if (cell === email) {
+      found = String(values[r][statusCol] || "pending")
+        .trim()
+        .toLowerCase();
+      break;
+    }
+  }
+
+  if (found === null) {
+    return ContentService.createTextOutput(
+      JSON.stringify({ ok: true, approved: false, status: "not_found" }),
+    ).setMimeType(ContentService.MimeType.JSON);
+  }
+
+  var allowed = { approved: true, pending: true, rejected: true };
+  if (!allowed[found]) {
+    found = "pending";
+  }
+
+  var approved = found === "approved";
+  return ContentService.createTextOutput(
+    JSON.stringify({ ok: true, approved: approved, status: found }),
+  ).setMimeType(ContentService.MimeType.JSON);
+}
+```
+
+> `BETA_ACCESS_SECRET`을 쓰지 않으면 스크립트 속성을 비워 두고, Vercel의 `BETA_ACCESS_SECRET`도 비웁니다.  
+> URL만 알면 조회가 가능해지므로, 운영 환경에서는 **시크릿 일치**를 권장합니다.
+
+---
+
+## 4. 배포 방법 (웹 앱 URL 발급)
 
 1. Apps Script 편집기에서 **배포 → 새 배포**.
 2. 유형 선택: **웹 앱**.
 3. 설명은 자유 입력.
 4. **실행 사용자:** 나.
 5. **액세스 권한:**  
-   - 팀 외 일반 접수까지 받을 경우 보통 **「모든 사용자」** 또는 조직 정책에 맞는 항목.  
-   - Sensora처럼 공개 폼이라면 브라우저 `fetch`가 동작하려면 게스트 접근 가능한 설정이 필요할 수 있습니다(조직에서는 관리자 정책 확인).
-6. **배포** 후 표시되는 **웹 앱 URL**을 복사합니다. 이 URL이 `NEXT_PUBLIC_BETA_SIGNUP_ENDPOINT` 값입니다.
+   - `/join` 공개 POST: 팀 정책에 맞게 **「모든 사용자」** 등.  
+   - **GET `checkAccess`는 서버에서만 호출**하지만, 웹 앱 배포 정책상 외부에서 URL을 직접 호출할 수 있으면 **3절의 `key` 검증**으로 제한하는 것이 안전합니다.
+6. **배포** 후 표시되는 **웹 앱 URL**을 복사합니다.
+
+- **제출용:** `NEXT_PUBLIC_BETA_SIGNUP_ENDPOINT` (기존과 동일, 동일 스크립트의 `doPost`에 연결 가능)
+- **승인 조회용(서버 전용):** `BETA_ACCESS_ENDPOINT` — **클라이언트·`NEXT_PUBLIC_`에 넣지 않습니다.**  
+  동일 웹앱 URL을 써도 되고, 별도 배포 URL을 써도 됩니다(같은 스프레드시트를 바라보는 스크립트여야 함).
 
 이후 코드를 수정했다면 **새 버전으로 배포**해야 변경 사항이 반영됩니다.
 
 ---
 
-## 4. Vercel 환경 변수
+## 5. Vercel / 로컬 환경 변수
 
-1. Vercel 프로젝트 → **Settings → Environment Variables**.
-2. 이름: `NEXT_PUBLIC_BETA_SIGNUP_ENDPOINT`
-3. 값: 위에서 복사한 **웹 앱 실행 URL**(끝에 `/exec` 등이 포함된 형태 유지).
-4. Production(및 필요 시 Preview)에 적용 후 **재배포**.
+### `/join` 시트 저장
 
-로컬에서는 프로젝트 루트의 `.env.local`에 같은 키로 넣고 `npm run dev` 후 `/join`에서 테스트합니다.
+1. 이름: `NEXT_PUBLIC_BETA_SIGNUP_ENDPOINT`
+2. 값: 제출용 웹 앱 실행 URL
+
+### 베타 승인 조회(서버)
+
+1. 이름: `BETA_ACCESS_ENDPOINT` — `doGet`이 응답하는 웹 앱 URL(일반적으로 `.../exec`)
+2. 선택: `BETA_ACCESS_SECRET` — Apps Script가 `key`로 검증하는 값과 동일하게 설정
 
 ```bash
-# .env.local (이 파일은 Git에 포함하지 마세요.)
+# .env.local (Git에 포함하지 마세요.)
 NEXT_PUBLIC_BETA_SIGNUP_ENDPOINT=https://script.google.com/macros/s/.../exec
+BETA_ACCESS_ENDPOINT=https://script.google.com/macros/s/.../exec
+BETA_ACCESS_SECRET=
 ```
+
+앱 쪽 API: **`POST /api/beta-access/check`** — Body `{ "email": "user@example.com" }` — 응답은 `ok`, `approved`, `status`만 클라이언트로 전달합니다.
 
 ---
 
-## 5. POST 로 전송되는 JSON 필드
+## 6. POST 로 전송되는 JSON 필드 (/join)
 
 | 필드 | 설명 |
 |------|------|
@@ -122,15 +235,18 @@ NEXT_PUBLIC_BETA_SIGNUP_ENDPOINT=https://script.google.com/macros/s/.../exec
 
 ---
 
-## 6. 테스트 및 확인
+## 7. 테스트 및 확인
 
 1. **엔드포인트 미설정:** `/join`에서 제출 시 **테스트 제출** 안내(저장 미연결)가 나오는지 확인합니다.
 2. **엔드포인트 설정 후:** 클라이언트는 **`no-cors`** 로 요청하므로 **응답 상태·본문은 페이지 스크립트에서 확인 불가**합니다. Network 에 전송 행만 보일 수 있습니다. 최종 검증은 **시트 새 행 추가** 여부입니다. **Console 에 입력값을 찍지 않습니다.**
-3. 성공 후 **Spreadsheet 새 행**이 추가되었는지 확인합니다.
+3. 성공 후 **Spreadsheet 새 행**의 `status`가 `pending`인지 확인합니다.
+4. **`BETA_ACCESS_ENDPOINT` 설정 후:** 시트에서 해당 이메일을 `approved`로 바꾼 뒤 `/register` 또는 로그인 상태의 앱에서 정상 진입하는지 확인합니다.
 
 ---
 
-## 7. 보안 주의
+## 8. 보안 주의
 
 - 웹 앱 URL이 유출되면 누구나 POST를 보낼 수 있습니다. 필요하면 Apps Script 또는 별도 백엔드에서 간단한 토큰 검증을 추가하는 것을 검토하세요.
+- **승인 조회 URL**은 `NEXT_PUBLIC_`로 노출하지 말고, **`BETA_ACCESS_ENDPOINT` + 선택적 시크릿**으로 서버에서만 호출하세요.
 - 시트에는 개인정보가 쌓이므로 접근 권한·공유 범위를 최소화하세요.
+- 서버·클라이언트 **Console에 이메일·이름·연락처 등을 로그로 남기지 않습니다.**
