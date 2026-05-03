@@ -147,7 +147,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
   const showNotebookCover = view === "app";
 
   return (
-    <div className="relative flex min-h-screen flex-col overflow-x-hidden text-[color:var(--foreground)]">
+    <div className="relative flex min-h-screen flex-col overflow-x-hidden text-slate-100">
       <InspirationalBackdrop />
       {showNotebookCover ? <NotebookCover /> : null}
 
@@ -156,7 +156,9 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
           "sticky top-0 z-30 isolate border-b backdrop-blur-md",
           /** iPhone 상태바/notch 안전영역을 반영해 헤더 콘텐츠가 겹치지 않도록 */
           "px-4 pb-3 pt-[max(14px,calc(env(safe-area-inset-top,0px)+12px))] sm:px-6",
-          view === "landing" ? "border-[#E5E7EB] bg-[#F4F6F8]/88" : "border-[color:var(--edge)] bg-[color:var(--background)]/72",
+          view === "landing"
+            ? "border-white/[0.08] bg-[#07111f]/88"
+            : "border-white/[0.08] bg-[#07111f]/86",
         ].join(" ")}
       >
         <div
@@ -172,11 +174,11 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
               <div className="min-w-0 shrink-0 sm:max-w-[min(100%,28rem)] sm:pr-4">
                 <div className="flex min-w-0 flex-col gap-1.5 sm:flex-row sm:items-start sm:justify-between sm:gap-x-4">
                   <div className="min-w-0">
-                    <div className="text-[15px] font-semibold leading-tight tracking-tight text-[#111827] sm:text-base">{t("product.name")}</div>
-                    <p className="mt-1 text-[11px] leading-snug text-[#4B5563] sm:text-xs">{t("brand.slogan")}</p>
+                    <div className="text-[15px] font-semibold leading-tight tracking-tight text-slate-100 sm:text-base">{t("product.name")}</div>
+                    <p className="mt-1 text-[11px] leading-snug text-slate-400 sm:text-xs">{t("brand.slogan")}</p>
                   </div>
                   <p
-                    className="max-w-full shrink-0 text-[10px] leading-snug text-[#94A3B8] sm:max-w-[13.5rem] sm:pt-0.5 sm:text-right sm:text-[11px]"
+                    className="max-w-full shrink-0 text-[10px] leading-snug text-slate-500 sm:max-w-[13.5rem] sm:pt-0.5 sm:text-right sm:text-[11px]"
                     role="note"
                   >
                     {t("header.zoomHint")}
@@ -187,13 +189,13 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                 <div className="flex min-w-0 flex-wrap items-center gap-2 sm:justify-end">
                   <LanguageSelect dense />
                   {auth.status === "loading" ? (
-                    <span className="text-[11px] text-[#6B7280]">{t("auth.checkingLogin")}</span>
+                    <span className="text-[11px] text-slate-400">{t("auth.checkingLogin")}</span>
                   ) : auth.status === "signed-in" ? (
                     <>
-                      <span className="hidden max-w-[10rem] truncate text-[11px] text-[#4B5563] lg:inline">{auth.name ?? auth.email ?? auth.uid}</span>
+                      <span className="hidden max-w-[10rem] truncate text-[11px] text-slate-400 lg:inline">{auth.name ?? auth.email ?? auth.uid}</span>
                       <button
                         type="button"
-                        className="crm-ghost-btn inline-flex min-h-[44px] shrink-0 items-center rounded-xl border border-[#E5E7EB] bg-white px-3 py-2 text-xs font-semibold text-[#111827] touch-manipulation"
+                        className="sensora-dark-ghost-btn inline-flex min-h-[44px] shrink-0 items-center rounded-xl px-3 py-2 text-xs font-semibold touch-manipulation"
                         onClick={signOut}
                       >
                         {t("auth.signOut")}
@@ -209,14 +211,14 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                   <button
                     type="button"
                     onClick={openAppWorkspace}
-                    className="relative z-[20] inline-flex min-h-[48px] w-full cursor-pointer items-center justify-center rounded-xl bg-[#111827] px-3 py-2.5 text-[13px] font-semibold text-white transition-colors hover:bg-[#1f2937] touch-manipulation sm:min-h-[44px] sm:w-auto sm:px-5"
+                    className="relative z-[20] inline-flex min-h-[48px] w-full cursor-pointer items-center justify-center rounded-xl border border-sky-400/25 bg-gradient-to-b from-[#1e293b] to-[#0f172a] px-3 py-2.5 text-[13px] font-semibold text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition-colors hover:border-sky-400/40 hover:from-[#243047] hover:to-[#111827] touch-manipulation sm:min-h-[44px] sm:w-auto sm:px-5"
                   >
                     {t("cta.tryAppExperience")}
                   </button>
                   <Link
                     href="/join"
                     prefetch={false}
-                    className="relative z-[20] inline-flex min-h-[48px] w-full items-center justify-center rounded-xl border border-[#E5E7EB] bg-white px-3 py-2.5 text-center text-[13px] font-semibold text-[#111827] transition-colors hover:bg-[#F9FAFB] touch-manipulation sm:min-h-[44px] sm:w-auto sm:px-5"
+                    className="relative z-[20] inline-flex min-h-[48px] w-full items-center justify-center rounded-xl border border-white/[0.14] bg-white/[0.06] px-3 py-2.5 text-center text-[13px] font-semibold text-slate-100 backdrop-blur-sm transition-colors hover:border-white/25 hover:bg-white/[0.1] touch-manipulation sm:min-h-[44px] sm:w-auto sm:px-5"
                   >
                     {t("cta.joinBeta")}
                   </Link>
@@ -271,7 +273,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                     <Link
                       href="/register"
                       prefetch={false}
-                      className="inline-flex min-h-[44px] shrink-0 items-center rounded-lg border border-[#CBD5E1] bg-white px-3 py-2 text-xs font-semibold text-[#334155] touch-manipulation transition hover:bg-[#F8FAFC] sm:shadow-none"
+                      className="sensora-dark-ghost-btn inline-flex min-h-[44px] shrink-0 items-center rounded-lg px-3 py-2 text-xs font-semibold touch-manipulation sm:shadow-none"
                     >
                       {t("auth.salesRegistration")}
                     </Link>
@@ -283,19 +285,19 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
         </div>
       </header>
 
-      <main className={`relative z-10 flex-1 ${view === "landing" ? "bg-[#F4F6F8]" : ""}`}>
+      <main className={`relative z-10 flex-1 ${view === "landing" ? "bg-transparent" : ""}`}>
         {view === "landing" ? <LandingShowroom onOpenAppWorkspace={openAppWorkspace} /> : null}
 
         {view === "app" ? (
           <div
             id="app"
-            className="min-h-[calc(100dvh-3.25rem)] scroll-mt-24 bg-[#F4F6F8] px-4 pb-12 pt-6 max-sm:pb-[max(7rem,calc(4.5rem+env(safe-area-inset-bottom,0px)))] sm:px-6 lg:min-h-[calc(100dvh-3.5rem)]"
+            className="crm-bg min-h-[calc(100dvh-3.25rem)] scroll-mt-24 px-4 pb-12 pt-6 text-slate-100 max-sm:pb-[max(7rem,calc(4.5rem+env(safe-area-inset-bottom,0px)))] sm:px-6 lg:min-h-[calc(100dvh-3.5rem)]"
           >
             <div className="mx-auto flex w-full max-w-[1520px] flex-col gap-2 lg:flex-row lg:gap-8">
               <ConciergeSidebar activeSection={crmSection} onNavigate={navigateCrmSection} />
               <div className="relative min-h-[60vh] min-w-0 flex-1 rounded-2xl">
                 {sellerLoading ? (
-                  <div className="flex min-h-[40vh] items-center justify-center rounded-2xl border border-[#E5E7EB] bg-white px-6 py-16 text-base text-[#6B7280]">
+                  <div className="flex min-h-[40vh] items-center justify-center rounded-2xl border border-white/[0.1] bg-slate-900/45 px-6 py-16 text-base text-slate-400 backdrop-blur-md">
                     영업 계정 상태를 확인하는 중…
                   </div>
                 ) : null}
@@ -313,12 +315,12 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                 ) : null}
 
                 {!sellerLoading && betaBlocksCrm ? (
-                  <div className="flex flex-col gap-8 rounded-2xl border border-[#E5E7EB] bg-white px-8 py-16 text-center sm:px-12">
+                  <div className="flex flex-col gap-8 rounded-2xl border border-white/[0.1] bg-slate-900/50 px-8 py-16 text-center shadow-[0_24px_64px_-32px_rgba(0,0,0,0.55)] backdrop-blur-md sm:px-12">
                     <div>
-                      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#6B7280]">
+                      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">
                         {t("register.title")}
                       </p>
-                      <h2 className="mt-3 text-2xl font-semibold tracking-tight text-[#111827]">
+                      <h2 className="mt-3 text-2xl font-semibold tracking-tight text-slate-50">
                         {betaAccess.status === "pending"
                           ? t("register.access.pendingTitle")
                           : betaAccess.status === "not_found"
@@ -327,7 +329,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                               ? t("register.access.rejectedTitle")
                               : t("register.access.errorTitle")}
                       </h2>
-                      <p className="mx-auto mt-4 max-w-md text-base whitespace-pre-line leading-relaxed text-[#6B7280]">
+                      <p className="mx-auto mt-4 max-w-md whitespace-pre-line text-base leading-relaxed text-slate-400">
                         {betaAccess.status === "pending"
                           ? t("register.access.pendingBody")
                           : betaAccess.status === "not_found"
@@ -340,29 +342,29 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                     <div className="flex flex-wrap items-center justify-center gap-3">
                       <Link
                         href="/join"
-                        className="inline-flex items-center rounded-xl bg-[#111827] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#1F2937]"
+                        className="inline-flex items-center rounded-xl border border-sky-400/25 bg-gradient-to-b from-[#1e293b] to-[#0f172a] px-6 py-3 text-sm font-semibold text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition hover:border-sky-400/40"
                       >
                         {t("register.access.goJoin")}
                       </Link>
                       <Link
                         href="/"
-                        className="inline-flex items-center rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] px-5 py-3 text-sm font-semibold text-[#374151] transition hover:bg-[#F3F4F6]"
+                        className="sensora-dark-ghost-btn inline-flex items-center rounded-xl px-5 py-3 text-sm font-semibold transition"
                       >
                         {t("register.access.goHome")}
                       </Link>
                     </div>
-                    <Link href="/toc" className="text-sm font-medium text-[#6B7280] underline underline-offset-4 hover:text-[#111827]">
+                    <Link href="/toc" className="text-sm font-medium text-slate-400 underline underline-offset-4 hover:text-slate-200">
                       기능 소개(목차)만 보기
                     </Link>
                   </div>
                 ) : null}
 
                 {!sellerLoading && sellerCardGateBlock ? (
-                  <div className="flex flex-col gap-8 rounded-2xl border border-[#E5E7EB] bg-white px-8 py-16 text-center sm:px-12">
+                  <div className="flex flex-col gap-8 rounded-2xl border border-white/[0.1] bg-slate-900/50 px-8 py-16 text-center shadow-[0_24px_64px_-32px_rgba(0,0,0,0.55)] backdrop-blur-md sm:px-12">
                     <div>
-                      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#6B7280]">영업 전용</p>
-                      <h2 className="mt-3 text-2xl font-semibold tracking-tight text-[#111827]">아직 확인(승인) 전입니다</h2>
-                      <p className="mx-auto mt-4 max-w-md text-base leading-relaxed text-[#6B7280]">
+                      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">영업 전용</p>
+                      <h2 className="mt-3 text-2xl font-semibold tracking-tight text-slate-50">아직 확인(승인) 전입니다</h2>
+                      <p className="mx-auto mt-4 max-w-md text-base leading-relaxed text-slate-400">
                         {seller.profile?.approvalStatus === "rejected"
                           ? seller.profile.rejectReason?.trim()
                             ? `사유: ${seller.profile.rejectReason}`
@@ -375,19 +377,19 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                     <div className="flex flex-wrap items-center justify-center gap-3">
                       <Link
                         href="/register"
-                        className="inline-flex items-center rounded-xl bg-[#111827] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#1F2937]"
+                        className="inline-flex items-center rounded-xl border border-sky-400/25 bg-gradient-to-b from-[#1e293b] to-[#0f172a] px-6 py-3 text-sm font-semibold text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition hover:border-sky-400/40"
                       >
                         등록 계속하기
                       </Link>
                       <button
                         type="button"
-                        className="inline-flex items-center rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] px-5 py-3 text-sm font-semibold text-[#374151] transition hover:bg-[#F3F4F6]"
+                        className="sensora-dark-ghost-btn inline-flex items-center rounded-xl px-5 py-3 text-sm font-semibold transition"
                         onClick={() => signOut()}
                       >
                         다른 Google 계정으로
                       </button>
                     </div>
-                    <Link href="/toc" className="text-sm font-medium text-[#6B7280] underline underline-offset-4 hover:text-[#111827]">
+                    <Link href="/toc" className="text-sm font-medium text-slate-400 underline underline-offset-4 hover:text-slate-200">
                       기능 소개(목차)만 보기
                     </Link>
                   </div>
@@ -406,7 +408,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                 ) : null}
 
                 {!firebaseReady || !googleAuthEnabled ? (
-                  <div className="mt-6 rounded-xl border border-[#E5E7EB] bg-[#FAFAFB] px-5 py-4 text-xs leading-relaxed text-[#6B7280]">
+                  <div className="mt-6 rounded-xl border border-white/[0.08] bg-slate-900/40 px-5 py-4 text-xs leading-relaxed text-slate-400">
                     현재 로그인/연동 기능이 완전히 활성화되지 않아도, 로컬 저장 기반으로 고객 정리를 먼저 시작할 수 있습니다.
                   </div>
                 ) : null}

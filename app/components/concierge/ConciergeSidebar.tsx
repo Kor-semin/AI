@@ -11,10 +11,10 @@ import { useLanguage } from "@/app/components/i18n/LanguageProvider";
 
 function navButtonClass(active: boolean): string {
   return [
-    "group relative flex min-h-[50px] shrink-0 touch-manipulation items-center justify-between gap-3 rounded-xl py-2.5 text-[16px] font-bold outline-none ring-offset-2 ring-offset-[#111827] focus-visible:ring-2 focus-visible:ring-[#64748B]",
+    "group relative flex min-h-[50px] shrink-0 touch-manipulation items-center justify-between gap-3 rounded-xl py-2.5 text-[16px] font-bold outline-none ring-offset-2 ring-offset-[#020817] focus-visible:ring-2 focus-visible:ring-sky-500/40",
     active
-      ? "bg-[#0F172A] pl-[calc(12px+0.375rem)] pr-3 text-[#F8FAFC] ring-2 ring-inset ring-[#334155]/90 before:absolute before:left-[3px] before:top-2 before:bottom-2 before:w-[3px] before:rounded-full before:bg-[#E2E8F0]"
-      : "px-3.5 text-[#E5E7EB] hover:bg-[#1e293b] hover:text-white",
+      ? "bg-sky-500/12 pl-[calc(12px+0.375rem)] pr-3 text-[#F8FAFC] ring-2 ring-inset ring-sky-400/25 before:absolute before:left-[3px] before:top-2 before:bottom-2 before:w-[3px] before:rounded-full before:bg-sky-400/80"
+      : "px-3.5 text-[#E5E7EB] hover:bg-white/[0.06] hover:text-white",
   ].join(" ");
 }
 
@@ -63,7 +63,7 @@ export function ConciergeSidebar({
         className="landing-mobile-nav-shell relative lg:hidden -mx-1 mb-4 max-[1023px]:mb-5"
         aria-label="업무 영역 메뉴"
       >
-        <div className="rounded-2xl border border-[#CBD5E1] bg-[#F1F5F9] px-1.5 py-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.65)]">
+        <div className="rounded-2xl border border-white/[0.1] bg-slate-900/55 px-1.5 py-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-md">
           <p className="sr-only">가로로 스크롤하여 메뉴를 선택합니다.</p>
           <div
             className="crm-mobile-section-rail flex snap-x snap-mandatory gap-2 overflow-x-auto overflow-y-hidden overscroll-x-contain px-1 py-1 pr-10 [scrollbar-width:thin] max-[390px]:gap-2.5"
@@ -82,10 +82,10 @@ export function ConciergeSidebar({
                   type="button"
                   onClick={() => onNavigate(section)}
                   className={[
-                    "flex min-h-[72px] w-[clamp(9.75rem,calc((100vw-4.25rem)/2.12),11.25rem)] max-[390px]:min-h-[70px] shrink-0 snap-start touch-manipulation flex-col justify-center gap-1 rounded-xl border px-3 py-2.5 text-left shadow-sm outline-none ring-offset-2 ring-offset-[#F1F5F9] transition focus-visible:ring-2 focus-visible:ring-[#64748B]",
+                    "flex min-h-[72px] w-[clamp(9.75rem,calc((100vw-4.25rem)/2.12),11.25rem)] max-[390px]:min-h-[70px] shrink-0 snap-start touch-manipulation flex-col justify-center gap-1 rounded-xl border px-3 py-2.5 text-left shadow-sm outline-none ring-offset-2 ring-offset-[#020817] transition focus-visible:ring-2 focus-visible:ring-sky-500/40",
                     active
-                      ? "border-[#0F172A] bg-[#0F172A] text-[#F8FAFC] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)] ring-2 ring-[#0F172A]/25"
-                      : "border-[#CBD5E1] bg-[#FFFFFF] text-[#0F172A] hover:border-[#94A3B8] hover:bg-[#FAFAFB]",
+                      ? "border-sky-400/40 bg-sky-500/15 text-[#F8FAFC] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)] ring-2 ring-sky-400/25"
+                      : "border-white/[0.1] bg-slate-950/35 text-slate-100 hover:border-white/20 hover:bg-slate-900/65",
                   ].join(" ")}
                   aria-current={active ? "page" : undefined}
                   aria-label={`${title}, ${subtitle}`}
@@ -94,7 +94,7 @@ export function ConciergeSidebar({
                   <span
                     className={[
                       "block hyphens-none text-balance text-[11px] font-semibold leading-[1.3]",
-                      active ? "text-[#B8C0CC]" : "text-[#64748B]",
+                      active ? "text-sky-100/85" : "text-slate-400",
                     ].join(" ")}
                   >
                     {caption}
@@ -108,7 +108,7 @@ export function ConciergeSidebar({
 
       {/* 데스크톱 사이드바 */}
       <aside className="hidden w-[274px] shrink-0 lg:block">
-        <div className="sticky top-24 flex min-h-[calc(100vh-8rem)] flex-col rounded-[18px] border border-[#334155] bg-[#0f172a] pb-6 pt-5 shadow-[0_12px_40px_rgba(0,0,0,0.12)]">
+        <div className="sticky top-24 flex min-h-[calc(100vh-8rem)] flex-col rounded-[18px] border border-white/[0.1] bg-[#07111f]/95 pb-6 pt-5 shadow-[0_28px_64px_-24px_rgba(0,0,0,0.55)] backdrop-blur-md">
           <button
             type="button"
             className="w-full border-b border-[#1E293B] px-5 pb-5 text-left transition hover:bg-[#1e293b]/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#475569]"

@@ -108,13 +108,13 @@ html[lang="ko"] body {
   }
 }
 
-/* App frame / join — 밝은 그레이 베이스 */
+/* 워크스페이스 — 다크 네이비 베이스(랜딩·미리보기와 톤 정렬) */
 .crm-bg {
-  background-color: var(--background);
+  background-color: #020817;
   background-image:
-    radial-gradient(960px 600px at 12% -4%, rgba(168, 176, 186, 0.2), transparent 62%),
-    radial-gradient(720px 420px at 98% 0%, rgba(255, 255, 255, 0.95), transparent 58%),
-    linear-gradient(180deg, #f3f5f7 0%, var(--background) 48%, #e8ecf1 100%);
+    radial-gradient(960px 600px at 12% -4%, rgba(56, 189, 248, 0.07), transparent 62%),
+    radial-gradient(720px 480px at 98% 0%, rgba(139, 92, 246, 0.055), transparent 58%),
+    linear-gradient(180deg, #07111f 0%, #020817 52%, #0a1624 100%);
 }
 
 .crm-card {
@@ -146,6 +146,17 @@ html[lang="ko"] body {
 .crm-ghost-btn:hover {
   background: rgba(30, 35, 41, 0.04);
   border-color: rgba(125, 134, 148, 0.45);
+}
+
+/* 다크 워크스페이스용 고스트 버튼 */
+.sensora-dark-ghost-btn {
+  border-color: rgba(148, 163, 184, 0.22);
+  color: #e2e8f0;
+  background: rgba(255, 255, 255, 0.04);
+}
+.sensora-dark-ghost-btn:hover {
+  border-color: rgba(56, 189, 248, 0.35);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 /* 다크 히어로/차쿨 블록 위 보조 버튼 */
