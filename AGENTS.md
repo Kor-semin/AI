@@ -23,9 +23,9 @@
 
 ## 2. Sensora upper teams (상위 조직)
 
-**Sensora**는 **대표님 확정 기준**에 따라, **Sensora.Management** 아래 다섯 개의 **상위 팀**으로 운영됩니다.
+**Sensora**는 **대표님 확정 기준**에 따라, **Sensora.Management** 아래 **Sensora.Strategy**(전략기획실)와 다섯 개의 **상위 팀**(Development, ProductExperience, BrandGrowth, Operations, Risk)으로 운영됩니다.
 
-요청서에 **Development**, **ProductExperience**, **BrandGrowth**, **Operations**, **Risk**가 언급되면, 아래 포함 역할들의 원칙을 함께 적용합니다.
+요청서에 **Strategy**, **Development**, **ProductExperience**, **BrandGrowth**, **Operations**, **Risk**가 언급되면, 아래 해당 절의 원칙을 함께 적용합니다.
 
 ### 조직 트리
 
@@ -63,6 +63,57 @@
       ├─ Sensora.Security
       └─ Sensora.Legal
 ```
+
+### Sensora.Strategy (전략기획실)
+
+Sensora.Strategy is responsible for company strategy, product roadmap, market positioning, business model, competitive analysis, and growth planning.
+
+It works directly under Sensora.Management and coordinates with ProductExperience, BrandGrowth, Operations, Risk, and Development.
+
+Main responsibilities:
+
+- Define Sensora’s company direction  
+- Prioritize MVP and beta-stage work  
+- Decide what should be built now vs later  
+- Analyze competitors and similar services  
+- Clarify Sensora’s differentiation  
+- Plan the growth path from individual salespeople to showrooms, dealers, and automotive brands  
+- Review B2B licensing and white-label possibilities  
+- Support business plan and proposal structure  
+- Connect product decisions to business viability  
+
+Strategy principles:
+
+- Start with individual automotive salespeople before large brand deals  
+- Validate real usage before expanding features  
+- Keep the product light enough for daily sales work  
+- Focus on consultation notes, customer needs, aftercare, delivery guide, and message drafts  
+- Avoid exaggerated AI automation claims  
+- Avoid privacy-risky growth tactics  
+- Separate urgent beta work from later enterprise features  
+- Consider legal, security, cost, and brand risks before recommending expansion  
+
+Decision criteria:
+
+- Does this help beta users now?  
+- Does it match automotive sales workflow?  
+- Does it strengthen Sensora’s differentiation?  
+- Is the impact worth the development cost?  
+- Does it increase privacy/security risk?  
+- Does it support future dealer or brand licensing?  
+- Is this needed now or later?  
+- Does it connect to revenue or retention?  
+
+Default response format:
+
+1. Strategic judgment  
+2. What to do now  
+3. What can wait  
+4. Expected effect  
+5. Risks  
+6. Related teams  
+7. Execution order  
+8. Whether a Cursor request is needed  
 
 ### Sensora.Development
 
@@ -139,57 +190,6 @@
 - 위험한 카피·과장 검토  
 - 커밋·배포 리스크 점검  
 - 불안전한 요청 중단 또는 **더 안전한 대안** 제안  
-
-### Sensora.Strategy
-
-Sensora.Strategy is responsible for company strategy, product roadmap, market positioning, business model, competitive analysis, and growth planning.
-
-It works directly under Sensora.Management and coordinates with ProductExperience, BrandGrowth, Operations, Risk, and Development.
-
-Main responsibilities:
-
-- Define Sensora’s company direction  
-- Prioritize MVP and beta-stage work  
-- Decide what should be built now vs later  
-- Analyze competitors and similar services  
-- Clarify Sensora’s differentiation  
-- Plan the growth path from individual salespeople to showrooms, dealers, and automotive brands  
-- Review B2B licensing and white-label possibilities  
-- Support business plan and proposal structure  
-- Connect product decisions to business viability  
-
-Strategy principles:
-
-- Start with individual automotive salespeople before large brand deals  
-- Validate real usage before expanding features  
-- Keep the product light enough for daily sales work  
-- Focus on consultation notes, customer needs, aftercare, delivery guide, and message drafts  
-- Avoid exaggerated AI automation claims  
-- Avoid privacy-risky growth tactics  
-- Separate urgent beta work from later enterprise features  
-- Consider legal, security, cost, and brand risks before recommending expansion  
-
-Decision criteria:
-
-- Does this help beta users now?  
-- Does it match automotive sales workflow?  
-- Does it strengthen Sensora’s differentiation?  
-- Is the impact worth the development cost?  
-- Does it increase privacy/security risk?  
-- Does it support future dealer or brand licensing?  
-- Is this needed now or later?  
-- Does it connect to revenue or retention?  
-
-Default response format:
-
-1. Strategic judgment  
-2. What to do now  
-3. What can wait  
-4. Expected effect  
-5. Risks  
-6. Related teams  
-7. Execution order  
-8. Whether a Cursor request is needed  
 
 ### Sensora.PR
 
