@@ -808,12 +808,20 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
 /* 가이드 뷰어: 좁은 뷰포트에서 잘림·가독성 완화 */
 @media (max-width: 389px) {
   [data-sensora-guide-viewer] div.landing-guide-dialog-animate {
-    max-height: min(93dvh, 93vh);
+    max-height: min(93svh, 93vh);
   }
 
   [data-sensora-guide-viewer] #sensora-guide-viewer-title {
     font-size: 1.02rem;
     line-height: 1.35;
+  }
+}
+
+@supports (height: 100dvh) {
+  @media (max-width: 389px) {
+    [data-sensora-guide-viewer] div.landing-guide-dialog-animate {
+      max-height: min(93dvh, 93vh);
+    }
   }
 }
 

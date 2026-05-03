@@ -44,7 +44,7 @@ export function AppPreviewToc({ open, onClose, onSelectSection }: Props) {
   return (
     <div
       data-app-preview-toc
-      className="fixed inset-0 z-[460] flex flex-col overflow-hidden bg-[#020617] text-slate-100"
+      className="fixed inset-0 z-[460] flex max-h-screen min-h-[100svh] flex-col overflow-hidden bg-[#020617] text-slate-100 supports-[height:100dvh]:min-h-[100dvh]"
       role="dialog"
       aria-modal="true"
       aria-labelledby="unified-guide-sr-page-title"
@@ -81,7 +81,7 @@ export function AppPreviewToc({ open, onClose, onSelectSection }: Props) {
         </div>
       </header>
 
-      <div className="relative z-[2] flex min-h-0 flex-1 flex-col px-3 sm:px-5 lg:px-8">
+      <div className="relative z-[2] flex min-h-0 flex-1 flex-col px-[max(0.75rem,calc(env(safe-area-inset-left,0px)+0.625rem))] sm:px-5 lg:px-8">
         <UnifiedSensoraGuideFlow active={open} variant="dialog" onClose={onClose} onSelectSection={onSelectSection} className="min-h-0" />
       </div>
     </div>

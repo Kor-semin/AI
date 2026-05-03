@@ -20,10 +20,10 @@ const mockShell =
   "landing-showcase-mock-frame relative overflow-hidden rounded-[18px] border border-white/[0.17] bg-gradient-to-b from-[#081222]/98 to-[#030b14]/99 shadow-[0_38px_96px_-32px_rgba(0,0,0,0.82),inset_0_1px_0_rgba(255,255,255,0.095),0_0_0_1px_rgba(56,189,248,0.07)_inset,0_0_80px_-24px_rgba(56,189,248,0.14),0_0_96px_-36px_rgba(139,92,246,0.1)] ring-1 ring-inset ring-white/[0.07] backdrop-blur-xl before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-white/22 before:to-transparent sm:rounded-[22px] lg:rounded-[24px]";
 
 const ctaPrimaryShowcase =
-  "landing-showcase-cta-primary landing-showroom-cta-join sensora-premium-primary-workspace inline-flex min-h-14 w-full min-w-0 shrink-0 items-center justify-center rounded-2xl px-9 py-4 text-base font-semibold tracking-tight shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_16px_48px_-12px_rgba(56,189,248,0.3),0_0_48px_-10px_rgba(139,92,246,0.08)] sm:min-h-[3.625rem] sm:px-10 sm:text-lg touch-manipulation";
+  "landing-showcase-cta-primary landing-showroom-cta-join sensora-premium-primary-workspace inline-flex min-h-14 w-full min-w-0 shrink-0 items-center justify-center rounded-2xl px-9 py-4 text-center text-base font-semibold leading-snug tracking-tight shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_16px_48px_-12px_rgba(56,189,248,0.3),0_0_48px_-10px_rgba(139,92,246,0.08)] sm:min-h-[3.625rem] sm:px-10 sm:text-lg touch-manipulation";
 
 const ctaGhostShowcase =
-  "landing-showcase-cta-ghost landing-showroom-cta-preview inline-flex min-h-14 w-full min-w-0 shrink-0 items-center justify-center gap-2 rounded-2xl border border-white/[0.34] bg-white/[0.1] px-8 py-4 text-[0.9375rem] font-semibold tracking-tight text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_0_0_1px_rgba(56,189,248,0.06)_inset,0_0_40px_-10px_rgba(56,189,248,0.14)] ring-1 ring-inset ring-sky-400/22 backdrop-blur-md sm:min-h-[3.625rem] sm:px-9 sm:text-base touch-manipulation";
+  "landing-showcase-cta-ghost landing-showroom-cta-preview inline-flex min-h-14 w-full min-w-0 shrink-0 items-center justify-center gap-2 rounded-2xl border border-white/[0.34] bg-white/[0.1] px-8 py-4 text-center text-[0.9375rem] font-semibold leading-snug tracking-tight text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_0_0_1px_rgba(56,189,248,0.06)_inset,0_0_40px_-10px_rgba(56,189,248,0.14)] ring-1 ring-inset ring-sky-400/22 backdrop-blur-md sm:min-h-[3.625rem] sm:px-9 sm:text-base touch-manipulation";
 
 const HERO_MOCK_NAV_KEYS = [
   "landing.showroom.heroMock.nav.home",
@@ -326,10 +326,10 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
                 {t("landing.showroom.hero.sub")}
               </p>
               <div className="mt-6 grid w-full max-w-xl grid-cols-1 gap-3 max-lg:mt-5 sm:mt-7 md:max-w-none md:grid-cols-2 md:gap-4 lg:mt-8">
-                <Link href={JOIN_PATH} prefetch={false} className={`${ctaPrimaryShowcase} justify-center whitespace-nowrap`}>
+                <Link href={JOIN_PATH} prefetch={false} className={`${ctaPrimaryShowcase} justify-center whitespace-normal`}>
                   {t("cta.joinBeta")}
                 </Link>
-                <button type="button" onClick={onOpenAppWorkspace} className={`${ctaGhostShowcase} justify-center whitespace-nowrap`}>
+                <button type="button" onClick={onOpenAppWorkspace} className={`${ctaGhostShowcase} justify-center whitespace-normal`}>
                   <IconAppWindowPlay className="size-[1.2rem] shrink-0 opacity-95" />
                   {t("cta.tryAppExperience")}
                 </button>

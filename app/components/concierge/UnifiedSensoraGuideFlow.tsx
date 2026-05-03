@@ -379,7 +379,7 @@ export function UnifiedSensoraGuideFlow({
                 wizardPrev();
               }}
               disabled={wizardStep === 0}
-              className="app-preview-guide-nav-btn min-h-11 min-w-0 flex-1 rounded-xl border border-white/[0.12] bg-white/[0.052] px-2 py-2.5 text-sm font-semibold text-slate-200 transition hover:border-sky-400/32 hover:bg-white/[0.065] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 disabled:pointer-events-none disabled:opacity-[0.38] touch-manipulation sm:px-3"
+              className="app-preview-guide-nav-btn min-h-11 min-w-0 flex-1 rounded-xl border border-white/[0.12] bg-white/[0.052] px-2 py-2.5 text-sm font-semibold leading-snug text-slate-200 transition hover:border-sky-400/32 hover:bg-white/[0.065] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 disabled:pointer-events-none disabled:opacity-[0.38] touch-manipulation sm:px-3"
             >
               {t("preview.flow.footer.prev")}
             </button>
@@ -396,7 +396,7 @@ export function UnifiedSensoraGuideFlow({
             <button
               type="button"
               onClick={onFooterPrimaryClick}
-              className={`app-preview-guide-nav-btn min-h-11 min-w-0 flex-1 rounded-xl border px-2 py-2.5 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 touch-manipulation sm:px-3 ${wizardStep === WIZARD_LAST ? "border-white/[0.14] bg-white/[0.06] text-slate-100 hover:bg-white/[0.09]" : "border-sky-400/42 bg-white/[0.065] text-sky-50 hover:border-sky-400/55 hover:bg-white/[0.085]"}`}
+              className={`app-preview-guide-nav-btn min-h-11 min-w-0 flex-1 rounded-xl border px-2 py-2.5 text-sm font-semibold leading-snug transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 touch-manipulation sm:px-3 ${wizardStep === WIZARD_LAST ? "border-white/[0.14] bg-white/[0.06] text-slate-100 hover:bg-white/[0.09]" : "border-sky-400/42 bg-white/[0.065] text-sky-50 hover:border-sky-400/55 hover:bg-white/[0.085]"}`}
               aria-label={footerSecondaryLabel}
             >
               {footerSecondaryLabel}
