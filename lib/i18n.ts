@@ -368,6 +368,35 @@ export type TranslationKey =
   | "preview.toc.followupDesc"
   | "preview.toc.betaTitle"
   | "preview.toc.betaDesc"
+  | "preview.flow.step1.intro"
+  | "preview.flow.step1.startCta"
+  | "preview.flow.step1.registerCta"
+  | "preview.flow.step2.headline"
+  | "preview.flow.step2.sub"
+  | "preview.flow.step2.card.customersTitle"
+  | "preview.flow.step2.card.customersDesc"
+  | "preview.flow.step2.card.aiTitle"
+  | "preview.flow.step2.card.aiDesc"
+  | "preview.flow.step2.card.followTitle"
+  | "preview.flow.step2.card.followDesc"
+  | "preview.flow.step3.headline"
+  | "preview.flow.step3.sub"
+  | "preview.flow.step3.enterWorkspace"
+  | "preview.flow.step3.enterAi"
+  | "preview.flow.footer.prev"
+  | "preview.flow.footer.next"
+  | "preview.flow.storyRailTitle"
+  | "concept.story.security.title"
+  | "concept.story.security.desc"
+  | "concept.story.path.title"
+  | "concept.story.path.desc"
+  | "concept.story.hub.title"
+  | "concept.story.hub.desc"
+  | "concept.story.memo.title"
+  | "concept.story.memo.desc"
+  | "landing.showroom.concept.sectionTitle"
+  | "landing.showroom.concept.sectionSub"
+  | "landing.showroom.concept.tapToExpand"
   | "settings.display.title"
   | "settings.textSize.title"
   | "settings.textSize.description"
@@ -857,6 +886,37 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "preview.toc.followupDesc": "다음 연락과 출고 안내를 놓치지 않게 정리합니다.",
     "preview.toc.betaTitle": "베타 신청하기",
     "preview.toc.betaDesc": "실제 저장 기능과 영업 계정은 베타 승인 후 사용할 수 있습니다.",
+    "preview.flow.step1.intro":
+      "자동차 영업 현장의 상담·고객 기록·다음 연락을 한 흐름에서 정리합니다. 아래는 예시 화면으로, 실제 저장은 베타 승인 후에 가능합니다.",
+    "preview.flow.step1.startCta": "앱 시작하기",
+    "preview.flow.step1.registerCta": "영업 계정 등록",
+    "preview.flow.step2.headline": "무엇을 도와드릴까요?",
+    "preview.flow.step2.sub": "실제 기능은 업무 화면에서 순서대로 열립니다.",
+    "preview.flow.step2.card.customersTitle": "고객관리",
+    "preview.flow.step2.card.customersDesc": "목록과 관심 차량·상태를 한곳에서 봅니다.",
+    "preview.flow.step2.card.aiTitle": "AI 비서",
+    "preview.flow.step2.card.aiDesc": "메모 맥락을 바탕으로 요약과 검토용 초안을 봅니다.",
+    "preview.flow.step2.card.followTitle": "사후관리",
+    "preview.flow.step2.card.followDesc": "다음 연락·출고 안내 같은 일정을 놓치지 않게 돕습니다.",
+    "preview.flow.step3.headline": "한 번 기록하면, 다음 행동까지 이어집니다.",
+    "preview.flow.step3.sub":
+      "예시 미리보기입니다. 선택한 화면에서 흐름을 둘러본 뒤, 저장이 필요하면 베타 신청을 검토해 주세요.",
+    "preview.flow.step3.enterWorkspace": "업무 화면으로 들어가기",
+    "preview.flow.step3.enterAi": "AI 비서 화면으로",
+    "preview.flow.footer.prev": "이전",
+    "preview.flow.footer.next": "다음",
+    "preview.flow.storyRailTitle": "예시 속 흐름",
+    "concept.story.security.title": "확인하고 저장하기",
+    "concept.story.security.desc": "연락처는 직접 선택·파일 업로드로만 불러오고, 저장 전에 미리보기로 확인합니다.",
+    "concept.story.path.title": "가입 → 승인 → 업무 화면",
+    "concept.story.path.desc": "베타 신청과 영업 계정 등록 흐름을 거친 뒤, 동일 계정으로 워크스페이스를 엽니다.",
+    "concept.story.hub.title": "고객·일정·문자 한 허브",
+    "concept.story.hub.desc": "고객 목록, 상담 메모, 일정·다음 연락을 탭으로 오갈 수 있는 구조입니다.",
+    "concept.story.memo.title": "메모에서 다음 행동까지",
+    "concept.story.memo.desc": "상담 메모를 바탕으로 니즈 정리·보낼 문구 초안·다음 연락 제안을 이어서 봅니다.",
+    "landing.showroom.concept.sectionTitle": "Sensora로 이어지는 흐름",
+    "landing.showroom.concept.sectionSub": "이미지를 누르면 크게 볼 수 있습니다. 예시 화면이며 실제 고객 데이터는 저장되지 않습니다.",
+    "landing.showroom.concept.tapToExpand": "탭하여 확대",
     "settings.display.title": "화면 설정",
     "settings.textSize.title": "글씨 크기",
     "settings.textSize.description": "앱에서 보이는 글자의 크기를 조정합니다.",
@@ -1362,6 +1422,37 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "preview.toc.followupDesc": "Keep outreach and delivery cues organized without skipping steps.",
     "preview.toc.betaTitle": "Join the beta",
     "preview.toc.betaDesc": "Apply for beta access before enabling full storage with your seller account.",
+    "preview.flow.step1.intro":
+      "Bring consultations, customer notes, and next steps into one calm workspace. This is a sample preview—cloud saving unlocks after beta approval.",
+    "preview.flow.step1.startCta": "Start the app preview",
+    "preview.flow.step1.registerCta": "Seller account signup",
+    "preview.flow.step2.headline": "What would you like to explore?",
+    "preview.flow.step2.sub": "You’ll open features in sequence from the workspace.",
+    "preview.flow.step2.card.customersTitle": "Customers",
+    "preview.flow.step2.card.customersDesc": "Scan the list, vehicles, and deal status in one place.",
+    "preview.flow.step2.card.aiTitle": "AI assistant",
+    "preview.flow.step2.card.aiDesc": "See summaries and review-ready drafts grounded in memo context.",
+    "preview.flow.step2.card.followTitle": "Aftercare",
+    "preview.flow.step2.card.followDesc": "Keep outreach and delivery cues from slipping through the cracks.",
+    "preview.flow.step3.headline": "Capture once, carry the next action forward.",
+    "preview.flow.step3.sub":
+      "Sample screens only. Explore the flow, then join the beta if you need real storage with your seller account.",
+    "preview.flow.step3.enterWorkspace": "Open the workspace",
+    "preview.flow.step3.enterAi": "Open the AI assistant",
+    "preview.flow.footer.prev": "Back",
+    "preview.flow.footer.next": "Next",
+    "preview.flow.storyRailTitle": "How it connects",
+    "concept.story.security.title": "Choose, preview, then save",
+    "concept.story.security.desc": "Contacts come from files or paste-ins you provide—review before anything is stored.",
+    "concept.story.path.title": "Signup → approval → workspace",
+    "concept.story.path.desc": "Beta signup and seller registration keep the same account when you return to work.",
+    "concept.story.hub.title": "Customers, schedule, messages",
+    "concept.story.hub.desc": "Move between the list, memos, and follow-up cues without losing context.",
+    "concept.story.memo.title": "From memo to next step",
+    "concept.story.memo.desc": "Trace needs, message drafts, and suggested follow-ups from the consultation note.",
+    "landing.showroom.concept.sectionTitle": "How Sensora connects the day",
+    "landing.showroom.concept.sectionSub": "Tap an image to view it full screen. Sample visuals—no live customer data is stored here.",
+    "landing.showroom.concept.tapToExpand": "Tap to expand",
     "settings.display.title": "Display",
     "settings.textSize.title": "Text size",
     "settings.textSize.description": "Adjust the text size used across the app.",
