@@ -67,6 +67,21 @@ export function SensoraGuideImageViewer({
     setIndex((i) => (i + 1) % total);
   }, [total]);
 
+  const openOriginalInNewTab = useCallback(() => {
+    if (broken[safeIndex] || total === 0) return;
+    const src = images[safeIndex]?.src;
+    if (!src || typeof window === "undefined") return;
+    try {
+      const abs =
+        src.startsWith("http://") || src.startsWith("https://")
+          ? src
+          : `${window.location.origin}${src.startsWith("/") ? src : `/${src}`}`;
+      window.open(abs, "_blank", "noopener,noreferrer");
+    } catch {
+      /* ignore */
+    }
+  }, [broken, images, safeIndex, total]);
+
   useEffect(() => {
     if (!open) return undefined;
     const onKey = (e: KeyboardEvent) => {
@@ -79,6 +94,8 @@ export function SensoraGuideImageViewer({
   }, [open, onClose, goPrev, goNext]);
 
   if (!open || total === 0) return null;
+
+  const slideAlt = slideTitleKeys?.[safeIndex] ? t(slideTitleKeys[safeIndex]) : "";
 
   return (
     <div
@@ -98,10 +115,10 @@ export function SensoraGuideImageViewer({
         onClick={onClose}
       />
       <div
-        className="landing-guide-dialog-animate relative z-[1] flex max-h-[min(92dvh,92vh)] w-full max-w-[min(100%,920px)] flex-col overflow-hidden rounded-t-[22px] border border-white/[0.14] bg-gradient-to-b from-[#0a1628]/98 to-[#07111f]/97 shadow-[0_40px_100px_-28px_rgba(0,0,0,0.72),0_0_0_1px_rgba(255,255,255,0.045)_inset,0_0_60px_-24px_rgba(56,189,248,0.065)] backdrop-blur-2xl sm:max-h-[min(88dvh,88vh)] sm:rounded-2xl"
+        className="landing-guide-dialog-animate relative z-[1] flex max-h-[min(94dvh,94vh)] w-full max-w-[min(100%,920px)] flex-col overflow-hidden rounded-t-[22px] border border-white/[0.14] bg-gradient-to-b from-[#0a1628]/98 to-[#07111f]/97 pb-[max(4px,env(safe-area-inset-bottom,0px))] shadow-[0_40px_100px_-28px_rgba(0,0,0,0.72),0_0_0_1px_rgba(255,255,255,0.045)_inset,0_0_60px_-24px_rgba(56,189,248,0.065)] backdrop-blur-2xl sm:max-h-[min(90dvh,90vh)] sm:rounded-2xl sm:pb-0"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-start justify-between gap-3 border-b border-white/[0.08] px-4 py-3.5 sm:px-5 sm:py-4">
+        <div className="flex items-start justify-between gap-3 border-b border-white/[0.08] px-4 py-3.5 pt-[max(12px,calc(env(safe-area-inset-top,0px)+8px))] sm:px-5 sm:py-4 sm:pt-4">
           <div className="min-w-0">
             <p
               id="sensora-guide-viewer-title"
@@ -115,7 +132,7 @@ export function SensoraGuideImageViewer({
           </div>
           <button
             type="button"
-            className="shrink-0 rounded-xl border border-white/[0.14] bg-white/[0.06] px-3 py-2 text-[12px] font-semibold text-slate-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] transition duration-200 hover:border-sky-400/30 hover:bg-white/[0.11] active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35"
+            className="shrink-0 rounded-xl border border-white/[0.14] bg-white/[0.06] px-3 py-2 text-[12px] font-semibold text-slate-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] transition duration-200 hover:border-sky-400/30 hover:bg-white/[0.11] active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 touch-manipulation"
             onClick={onClose}
           >
             {t("landing.showroom.tip.close")}
@@ -123,55 +140,80 @@ export function SensoraGuideImageViewer({
         </div>
 
         <div className="flex min-h-0 min-w-0 flex-1 flex-col gap-3 overflow-hidden p-3 sm:flex-row sm:gap-4 sm:p-5">
-          <div className="relative flex min-h-[min(200px,40dvh)] min-w-0 flex-1 items-center justify-center overflow-hidden rounded-xl border border-white/[0.08] bg-[#020817]/90 sm:min-h-[min(52dvh,420px)]">
-            {broken[safeIndex] ? (
-              <div className="max-w-sm px-6 text-center">
-                <p className="text-[14px] font-medium leading-relaxed text-slate-300">
-                  {t("landing.showroom.tip.imageMissing")}
-                </p>
+          <div className="flex min-h-0 min-w-0 flex-1 flex-col gap-2.5 sm:gap-3">
+            <div className="relative flex min-h-[min(240px,50dvh)] flex-1 items-center justify-center overflow-hidden rounded-xl border border-white/[0.1] bg-[#020817]/90 sm:min-h-[min(300px,56dvh)] sm:flex-none">
+              {broken[safeIndex] ? (
+                <div className="max-w-sm px-6 text-center">
+                  <p className="text-[14px] font-medium leading-relaxed text-slate-300">
+                    {t("landing.showroom.tip.imageMissing")}
+                  </p>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={openOriginalInNewTab}
+                  className="group relative flex h-full w-full max-h-[min(58dvh,560px)] min-h-[min(220px,45dvh)] cursor-zoom-in flex-col items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-sky-400/45 focus-visible:ring-offset-2 focus-visible:ring-offset-[#020817] sm:max-h-[min(62dvh,520px)] sm:min-h-[min(280px,48dvh)]"
+                  aria-label={t("landing.showroom.tip.openOriginalAria")}
+                >
+                  <Image
+                    src={images[safeIndex].src}
+                    alt={slideAlt}
+                    width={1600}
+                    height={1200}
+                    className="h-auto max-h-[min(58dvh,560px)] w-full max-w-full object-contain transition-[filter] duration-200 group-hover:brightness-[1.03] sm:max-h-[min(62dvh,520px)]"
+                    sizes="(max-width: 640px) 100vw, 880px"
+                    priority={safeIndex === 0}
+                    onError={() => setBroken((m) => ({ ...m, [safeIndex]: true }))}
+                  />
+                </button>
+              )}
+
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#020817]/75 to-transparent" />
+
+              <div className="absolute inset-y-0 left-1 flex items-center sm:left-2">
+                <button
+                  type="button"
+                  onClick={goPrev}
+                  className="pointer-events-auto flex size-11 items-center justify-center rounded-full border border-white/[0.18] bg-[#0f172a]/92 text-slate-100 shadow-[0_8px_24px_-6px_rgba(0,0,0,0.45)] backdrop-blur-md transition duration-[220ms] ease-out hover:-translate-y-px hover:border-sky-400/42 hover:bg-[#141f33] hover:shadow-[0_12px_28px_-8px_rgba(56,189,248,0.12)] active:translate-y-0 active:scale-[0.96] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 motion-reduce:transition-none motion-reduce:hover:translate-y-0 touch-manipulation"
+                  aria-label={t("landing.showroom.tip.prev")}
+                >
+                  <span className="text-xl leading-none" aria-hidden>
+                    ‹
+                  </span>
+                </button>
               </div>
-            ) : (
-              <Image
-                src={images[safeIndex].src}
-                alt={slideTitleKeys?.[safeIndex] ? t(slideTitleKeys[safeIndex]) : ""}
-                width={1600}
-                height={1200}
-                className="h-auto max-h-[min(52dvh,420px)] w-full max-w-full object-contain sm:max-h-[min(56dvh,480px)]"
-                sizes="(max-width: 640px) 100vw, 880px"
-                priority={safeIndex === 0}
-                onError={() => setBroken((m) => ({ ...m, [safeIndex]: true }))}
-              />
-            )}
-
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#020817]/80 to-transparent" />
-
-            <div className="absolute inset-y-0 left-1 flex items-center sm:left-2">
-              <button
-                type="button"
-                onClick={goPrev}
-                className="pointer-events-auto flex size-10 items-center justify-center rounded-full border border-white/[0.18] bg-[#0f172a]/92 text-slate-100 shadow-[0_8px_24px_-6px_rgba(0,0,0,0.45)] backdrop-blur-md transition duration-[220ms] ease-out hover:-translate-y-px hover:border-sky-400/42 hover:bg-[#141f33] hover:shadow-[0_12px_28px_-8px_rgba(56,189,248,0.12)] active:translate-y-0 active:scale-[0.96] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
-                aria-label={t("landing.showroom.tip.prev")}
-              >
-                <span className="text-lg leading-none" aria-hidden>
-                  ‹
-                </span>
-              </button>
+              <div className="absolute inset-y-0 right-1 flex items-center sm:right-2">
+                <button
+                  type="button"
+                  onClick={goNext}
+                  className="pointer-events-auto flex size-11 items-center justify-center rounded-full border border-white/[0.18] bg-[#0f172a]/92 text-slate-100 shadow-[0_8px_24px_-6px_rgba(0,0,0,0.45)] backdrop-blur-md transition duration-[220ms] ease-out hover:-translate-y-px hover:border-sky-400/42 hover:bg-[#141f33] hover:shadow-[0_12px_28px_-8px_rgba(56,189,248,0.12)] active:translate-y-0 active:scale-[0.96] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 motion-reduce:transition-none motion-reduce:hover:translate-y-0 touch-manipulation"
+                  aria-label={t("landing.showroom.tip.next")}
+                >
+                  <span className="text-xl leading-none" aria-hidden>
+                    ›
+                  </span>
+                </button>
+              </div>
             </div>
-            <div className="absolute inset-y-0 right-1 flex items-center sm:right-2">
-              <button
-                type="button"
-                onClick={goNext}
-                className="pointer-events-auto flex size-10 items-center justify-center rounded-full border border-white/[0.18] bg-[#0f172a]/92 text-slate-100 shadow-[0_8px_24px_-6px_rgba(0,0,0,0.45)] backdrop-blur-md transition duration-[220ms] ease-out hover:-translate-y-px hover:border-sky-400/42 hover:bg-[#141f33] hover:shadow-[0_12px_28px_-8px_rgba(56,189,248,0.12)] active:translate-y-0 active:scale-[0.96] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
-                aria-label={t("landing.showroom.tip.next")}
-              >
-                <span className="text-lg leading-none" aria-hidden>
-                  ›
-                </span>
-              </button>
-            </div>
+
+            {!broken[safeIndex] ? (
+              <>
+                <p className="px-0.5 text-[11px] font-medium leading-relaxed text-slate-500 sm:text-[12px]">
+                  {t("landing.showroom.tip.openOriginalHint")}
+                </p>
+                <button
+                  type="button"
+                  onClick={openOriginalInNewTab}
+                  className="inline-flex min-h-[48px] w-full shrink-0 items-center justify-center rounded-xl border border-sky-400/32 bg-sky-500/[0.12] px-4 py-3 text-[14px] font-semibold text-sky-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_0_32px_-10px_rgba(56,189,248,0.2)] transition hover:border-sky-400/45 hover:bg-sky-500/[0.16] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/42 active:scale-[0.99] touch-manipulation sm:min-h-[46px]"
+                  aria-label={t("landing.showroom.tip.openOriginalAria")}
+                >
+                  {t("landing.showroom.tip.openOriginal")}
+                </button>
+              </>
+            ) : null}
           </div>
 
-          <div className="flex max-w-full shrink-0 flex-row gap-2 overflow-x-auto overflow-y-hidden pb-1 sm:w-[5.5rem] sm:max-w-none sm:flex-col sm:overflow-y-auto sm:overflow-x-hidden sm:pb-0">
+          <div className="flex max-w-full shrink-0 flex-row gap-2 overflow-x-auto overflow-y-hidden pb-[max(6px,env(safe-area-inset-bottom,0px))] [scrollbar-width:thin] sm:w-[5.5rem] sm:max-w-none sm:flex-col sm:overflow-y-auto sm:overflow-x-hidden sm:pb-0 [&::-webkit-scrollbar]:h-1.5 sm:[&::-webkit-scrollbar]:h-auto">
             {images.map((item, i) => {
               const active = i === safeIndex;
               const thumbLabel = slideTitleKeys?.[i]
@@ -183,7 +225,7 @@ export function SensoraGuideImageViewer({
                   type="button"
                   onClick={() => setIndex(i)}
                   className={[
-                    "relative h-14 w-[4.5rem] shrink-0 overflow-hidden rounded-lg border shadow-[0_10px_28px_-16px_rgba(0,0,0,0.45)] transition-[border-color,opacity,transform,box-shadow] duration-[220ms] ease-[cubic-bezier(0.22,1,0.32,1)] sm:h-16 sm:w-full motion-reduce:transition-none",
+                    "relative h-16 w-[4.85rem] shrink-0 overflow-hidden rounded-lg border shadow-[0_10px_28px_-16px_rgba(0,0,0,0.45)] transition-[border-color,opacity,transform,box-shadow] duration-[220ms] ease-[cubic-bezier(0.22,1,0.32,1)] sm:h-[4.35rem] sm:w-full motion-reduce:transition-none touch-manipulation",
                     active
                       ? "border-sky-400/52 ring-2 ring-sky-500/28 opacity-100 shadow-[0_0_28px_-8px_rgba(56,189,248,0.22)]"
                       : [

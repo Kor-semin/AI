@@ -345,6 +345,9 @@ export type TranslationKey =
   | "landing.showroom.tip.imageMissing"
   | "landing.showroom.tip.prev"
   | "landing.showroom.tip.next"
+  | "landing.showroom.tip.openOriginal"
+  | "landing.showroom.tip.openOriginalAria"
+  | "landing.showroom.tip.openOriginalHint"
   | "cover.aiGuide.title"
   | "cover.aiGuide.subtitle"
   | "cover.aiGuide.step1.title"
@@ -800,6 +803,9 @@ export const translations: Record<LanguageCode, TranslationDict> = {
       "가이드 이미지를 불러오지 못했습니다. 곧 이미지를 추가하면 이 자리에 표시됩니다.",
     "landing.showroom.tip.prev": "이전 가이드",
     "landing.showroom.tip.next": "다음 가이드",
+    "landing.showroom.tip.openOriginal": "원본 크게 보기",
+    "landing.showroom.tip.openOriginalAria": "현재 가이드를 원본 크기로 새 탭에서 엽니다.",
+    "landing.showroom.tip.openOriginalHint": "이미지를 누르면 원본 크기로 볼 수 있습니다. 핀치로 확대해 글자를 확인해 보세요.",
     "cover.aiGuide.title": "AI 사용법",
     "cover.aiGuide.subtitle":
       "상담 내용을 입력하면 SensoraGuide가 요약과 다음 진행 초안·연락 문구를 검토용으로 정리합니다.",
@@ -1270,6 +1276,10 @@ export const translations: Record<LanguageCode, TranslationDict> = {
       "We couldn't load this guide image yet. Adding the asset will display it automatically here.",
     "landing.showroom.tip.prev": "Previous slide",
     "landing.showroom.tip.next": "Next slide",
+    "landing.showroom.tip.openOriginal": "Open full-size original",
+    "landing.showroom.tip.openOriginalAria": "Opens the current guide image at full size in a new tab.",
+    "landing.showroom.tip.openOriginalHint":
+      "Tap the image to view the original PNG. Pinch-zoom on your phone to read small text comfortably.",
     "cover.aiGuide.title": "How to Use AI",
     "cover.aiGuide.subtitle":
       "Enter consultation notes and SensoraGuide will suggest customer summaries, next actions, and follow-up messages.",
