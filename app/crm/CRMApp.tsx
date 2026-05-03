@@ -1544,7 +1544,7 @@ export function CRMApp({
         <div className="mx-auto flex w-full max-w-[1580px] flex-col gap-6 px-2 sm:px-4 xl:px-0">
           {!uid ? (
             <div
-              className="rounded-xl border border-white/[0.1] bg-slate-900/45 px-4 py-3 text-left text-[13px] leading-[1.6] text-slate-400 backdrop-blur-md max-[390px]:px-3.5"
+              className="sensora-premium-panel rounded-[18px] px-4 py-3.5 text-left text-[13px] leading-[1.6] text-slate-400 backdrop-blur-xl max-[390px]:px-3.5"
               role="status"
               aria-live="polite"
             >
@@ -1576,17 +1576,15 @@ export function CRMApp({
                 )}
               </p>
             </div>
-            <div className="flex w-full min-w-0 flex-col gap-3 lg:max-w-[600px]">
-              <div className="flex shrink-0 justify-end sm:justify-start">
+            <div className="flex w-full min-w-0 flex-col gap-3 lg:max-w-[640px]">
+              <div className="flex flex-col gap-3 rounded-[22px] border border-white/[0.12] bg-gradient-to-br from-slate-950/40 to-[#07111f]/45 p-3 shadow-[0_22px_52px_-28px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-xl sm:flex-row sm:items-stretch sm:gap-3 sm:p-4">
                 <button
                   type="button"
-                  className="sensora-dark-ghost-btn inline-flex min-h-[40px] touch-manipulation items-center justify-center rounded-xl px-4 py-2 text-[13px] font-semibold"
+                  className="sensora-dark-ghost-btn inline-flex min-h-[44px] shrink-0 touch-manipulation items-center justify-center self-stretch rounded-xl px-4 py-2 text-[13px] font-semibold sm:min-w-[9.5rem]"
                   onClick={() => setSensoraTipIntroOpen(true)}
                 >
                   {t("crm.sensoraTip.openButton")}
                 </button>
-              </div>
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-stretch">
               <div ref={crmSearchWrapRef} className="relative min-w-0 flex-1">
                 <label className="block min-w-0">
                   <span className="sr-only">고객·기능 통합 검색</span>
@@ -1613,7 +1611,7 @@ export function CRMApp({
                     }
                     aria-controls="crm-unified-search-results"
                     aria-autocomplete="list"
-                    className="min-h-[44px] w-full rounded-[20px] border border-white/[0.12] bg-slate-900/55 px-4 py-3 text-[15px] text-slate-100 outline-none backdrop-blur-sm transition placeholder:text-slate-500 focus:border-sky-400/35 focus:ring-2 focus:ring-sky-500/20"
+                    className="min-h-[44px] w-full rounded-[20px] border border-white/[0.14] bg-[#020817]/55 px-4 py-3 text-[15px] text-slate-100 outline-none shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-md transition placeholder:text-slate-500 focus:border-sky-400/38 focus:ring-2 focus:ring-sky-500/25"
                   />
                 </label>
                 {searchOpen && normalizeSearchFold(searchQuery).length >= 1 ? (
@@ -1694,7 +1692,7 @@ export function CRMApp({
               </div>
               <button
                 type="button"
-                className="min-h-[44px] shrink-0 rounded-[20px] border border-sky-400/25 bg-gradient-to-b from-[#1e293b] to-[#0f172a] px-5 py-3 text-[15px] font-semibold text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition hover:border-sky-400/40 focus:outline-none focus:ring-2 focus:ring-sky-500/30 sm:w-auto sm:whitespace-nowrap touch-manipulation"
+                className="sensora-premium-primary-workspace min-h-[44px] shrink-0 rounded-[20px] px-5 py-3 text-[15px] font-semibold sm:w-auto sm:whitespace-nowrap touch-manipulation focus:outline-none"
                 onClick={openCreateCustomerModal}
               >
                 + {t("crm.addCustomer")}
@@ -1705,7 +1703,7 @@ export function CRMApp({
 
           <div
             id="crm-section-title"
-            className="scroll-mt-24 rounded-2xl border border-white/[0.1] bg-slate-900/45 px-4 py-3.5 shadow-[0_18px_40px_-24px_rgba(0,0,0,0.45)] backdrop-blur-md max-[390px]:px-3.5 max-[390px]:py-3 lg:hidden"
+            className="sensora-premium-panel scroll-mt-24 rounded-[22px] px-4 py-3.5 shadow-[0_22px_48px_-26px_rgba(0,0,0,0.48)] backdrop-blur-xl max-[390px]:px-3.5 max-[390px]:py-3 lg:hidden"
           >
             <p className="text-[18px] font-bold tracking-tight text-slate-50">{CRM_SECTION_LABELS[activeSection].title}</p>
             <p className="mt-1 text-[13px] font-semibold leading-snug text-slate-400">
