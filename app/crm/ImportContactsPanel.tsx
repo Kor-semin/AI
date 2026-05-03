@@ -1,7 +1,6 @@
 "use client";
 
 import type { Customer } from "@/app/crm/types";
-import { CONTACT_SYNC_SOURCES } from "@/app/crm/contactSyncSources";
 import { detectDuplicateForImport, type DuplicateInfo } from "@/app/crm/contactImport/detectDuplicateContacts";
 import {
   dedupeImportBatch,
@@ -48,6 +47,18 @@ const importGuideButtonClass =
 /** 모바일: 탭을 한 줄 스크롤 칩 형태로, 데스크톱: 기존 감각 유지 */
 const importTabRailClass =
   "-mx-0.5 mt-3 flex flex-nowrap gap-1.5 overflow-x-auto overscroll-x-contain px-0.5 pb-1 pt-0.5 [scrollbar-width:none] [-ms-overflow-style:none] sm:mx-0 sm:mt-4 sm:flex-wrap sm:gap-2 sm:overflow-visible sm:px-0 sm:pb-0 sm:pt-0 [&::-webkit-scrollbar]:hidden";
+
+const GOOGLE_CONTACTS_URL = "https://contacts.google.com/";
+const GOOGLE_CONTACTS_EXPORT_HELP_URL = "https://support.google.com/contacts/answer/7199294";
+const ICLOUD_CONTACTS_URL = "https://www.icloud.com/contacts";
+const ICLOUD_CONTACTS_EXPORT_HELP_URL =
+  "https://support.apple.com/guide/icloud/import-export-and-print-contacts-mmfba748b2/icloud";
+
+/** 외부 연락처 웹(새 탭) — 동기화·자동 반영 오인 방지 카피만 사용 */
+const extOpenLinkClass =
+  "inline-flex min-h-[44px] items-center justify-center rounded-xl border border-[#E5E7EB] bg-white px-4 py-2 text-[13px] font-semibold text-[#1D4ED8] hover:bg-[#F8FAFC]";
+const extHelpLinkClass =
+  "inline-flex min-h-[40px] items-center text-[12px] font-semibold text-[#475569] underline decoration-[#CBD5E1] underline-offset-2 hover:text-[#111827]";
 
 function tryParseImportRawText(text: string): NormalizedImportedContact[] {
   const t = text.trim();
@@ -578,9 +589,27 @@ export function ImportContactsPanel({
           {tab === "google" ? (
             <div className="space-y-3">
               <p className="text-[12px] leading-relaxed text-[#475569]">
-                Google 연락처에서 CSV 또는 vCard로 내보낸 뒤, 이 화면에 파일로 올리거나 내용만 붙여 넣으세요. 이름·전화 등
-                흔한 열 이름은 자동으로 읽히는 편입니다.
+                Google 연락처에서 선택한 뒤 CSV 또는 vCard로 내보내 주세요. 내보낸 파일을 이 화면에서 파일로 올리거나 내용만
+                붙여 넣으면 됩니다. 이름·전화 등 흔한 열 이름은 읽히는 편입니다.
               </p>
+              <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
+                <a
+                  href={GOOGLE_CONTACTS_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`${extOpenLinkClass} w-full sm:w-auto`}
+                >
+                  Google 연락처 열기
+                </a>
+                <a
+                  href={GOOGLE_CONTACTS_EXPORT_HELP_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`${extHelpLinkClass} justify-center px-1 sm:px-2`}
+                >
+                  내보내기 도움말 보기
+                </a>
+              </div>
               {onOpenFileGuide ? (
                 <button
                   type="button"
@@ -598,31 +627,36 @@ export function ImportContactsPanel({
                   2차 확장 예정 · Google People API (OAuth)
                 </summary>
                 <p className="mt-2">
-                  로그인·동기화 기반 연동은 별도 OAuth와 스코프 설계 후 추가합니다. 자동 주소록 수집은 하지 않습니다.
+                  로그인 후 연결하는 형태의 연동은 별도 OAuth와 스코프 설계 후 검토합니다. 자동 주소록 수집은 하지 않습니다.
                 </p>
               </details>
-              <div className="flex flex-wrap gap-2">
-                {CONTACT_SYNC_SOURCES.filter((s) => s.id === "google").map((s) => (
-                  <a
-                    key={s.id}
-                    href={s.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex min-h-[44px] items-center rounded-xl border border-[#E5E7EB] bg-white px-4 py-2 text-[13px] font-semibold text-[#1D4ED8] hover:bg-[#F8FAFC]"
-                  >
-                    Google 연락처 열기 →
-                  </a>
-                ))}
-              </div>
             </div>
           ) : null}
 
           {tab === "iphone" ? (
             <div className="space-y-3 text-[13px] leading-relaxed">
               <p>
-                아이폰 연락처에서 공유하거나 내보낸 <strong>.vcf</strong> 파일을 올려 주세요. 이름·전화·이메일·메모 노트를
-                가능한 범위에서 반영합니다(원문 유지).
+                iCloud 연락처에서 vCard 파일로 내보낸 뒤 업로드해 주세요. 기기에서 공유·내보낸 <strong>.vcf</strong> 파일도
+                올릴 수 있습니다. 이름·전화·이메일·메모 노트는 가능한 범위에서 반영합니다(원문 유지).
               </p>
+              <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
+                <a
+                  href={ICLOUD_CONTACTS_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`${extOpenLinkClass} w-full sm:w-auto`}
+                >
+                  iCloud 연락처 열기
+                </a>
+                <a
+                  href={ICLOUD_CONTACTS_EXPORT_HELP_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`${extHelpLinkClass} justify-center px-1 sm:px-2`}
+                >
+                  iCloud 내보내기 도움말 보기
+                </a>
+              </div>
               {onOpenFileGuide ? (
                 <button
                   type="button"

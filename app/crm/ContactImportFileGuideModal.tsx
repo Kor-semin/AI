@@ -16,6 +16,17 @@ const summaryClass =
 
 const sectionMuted = "mt-2 text-[12px] leading-relaxed text-[#64748B]";
 
+const GOOGLE_CONTACTS_URL = "https://contacts.google.com/";
+const GOOGLE_CONTACTS_EXPORT_HELP_URL = "https://support.google.com/contacts/answer/7199294";
+const ICLOUD_CONTACTS_URL = "https://www.icloud.com/contacts";
+const ICLOUD_CONTACTS_EXPORT_HELP_URL =
+  "https://support.apple.com/guide/icloud/import-export-and-print-contacts-mmfba748b2/icloud";
+
+const guideExtLinkPrimary =
+  "inline-flex min-h-[40px] items-center rounded-lg border border-[#E2E8F0] bg-white px-3 py-2 text-[12px] font-semibold text-[#1D4ED8] hover:bg-[#F8FAFC]";
+const guideExtLinkSub =
+  "inline-flex min-h-[36px] items-center text-[12px] font-semibold text-[#475569] underline decoration-[#CBD5E1] underline-offset-2 hover:text-[#0F172A]";
+
 /** 아이폰·갤럭시·구글 연락처 파일 준비 안내(Audit: 자동 수집·전체 동기화 오인 표현 미사용) */
 export function ContactImportFileGuideModal({
   open,
@@ -96,12 +107,30 @@ export function ContactImportFileGuideModal({
             <details className={accordionClass}>
               <summary className={summaryClass}>아이폰(iCloud)에서 vCard 만들기</summary>
               <div className="mt-3 border-t border-[#F1F5F9] pt-3">
-                <p>iCloud.com에 접속해 연락처를 선택한 뒤 vCard 파일로 내보낼 수 있습니다.</p>
+                <p>iCloud 연락처에서 vCard 파일로 내보낸 뒤 업로드해 주세요.</p>
                 <p className={sectionMuted}>
-                  아이폰 연락처는 iCloud 연락처와 연결되어 있는 경우가 많습니다. PC 또는 모바일 브라우저에서 iCloud.com에
-                  접속한 뒤 연락처를 선택하고 vCard(.vcf)로 내보낸 파일을 업로드해 주세요. Mac을 쓰신다면 Mac의 연락처
-                  앱에서도 vCard로 내보낼 수 있습니다.
+                  아이폰 연락처는 iCloud 연락처와 연결되어 있는 경우가 많습니다. PC 또는 모바일 브라우저에서 접속해 연락처를
+                  선택하고 vCard(.vcf)로 내보낸 파일을 업로드해 주세요. Mac을 쓰신다면 Mac의 연락처 앱에서도 vCard로
+                  내보낼 수 있습니다.
                 </p>
+                <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:flex-wrap">
+                  <a
+                    href={ICLOUD_CONTACTS_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={guideExtLinkPrimary}
+                  >
+                    iCloud 연락처 열기
+                  </a>
+                  <a
+                    href={ICLOUD_CONTACTS_EXPORT_HELP_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={guideExtLinkSub}
+                  >
+                    iCloud 내보내기 도움말 보기
+                  </a>
+                </div>
               </div>
             </details>
 
@@ -121,13 +150,23 @@ export function ContactImportFileGuideModal({
             <details className={accordionClass}>
               <summary className={summaryClass}>Google 연락처 내보내기</summary>
               <div className="mt-3 border-t border-[#F1F5F9] pt-3">
-                <p>
-                  Google Contacts에서 연락처를 선택한 뒤 CSV 또는 vCard 형식으로 내보낼 수 있습니다.
-                </p>
+                <p>Google 연락처에서 선택한 뒤 CSV 또는 vCard로 내보내 주세요.</p>
                 <p className={sectionMuted}>
-                  contacts.google.com에서 연락처를 선택하고 내보내기를 누른 뒤 CSV 또는 vCard 형식으로 저장한 파일을
-                  업로드해 주세요.
+                  내보낸 파일을 업로드하거나 내용만 복사해 붙여 넣을 수 있습니다.
                 </p>
+                <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:flex-wrap">
+                  <a href={GOOGLE_CONTACTS_URL} target="_blank" rel="noopener noreferrer" className={guideExtLinkPrimary}>
+                    Google 연락처 열기
+                  </a>
+                  <a
+                    href={GOOGLE_CONTACTS_EXPORT_HELP_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={guideExtLinkSub}
+                  >
+                    내보내기 도움말 보기
+                  </a>
+                </div>
               </div>
             </details>
           </div>
