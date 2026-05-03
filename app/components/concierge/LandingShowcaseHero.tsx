@@ -130,7 +130,7 @@ function HeroDashboardPreview() {
   );
 
   return (
-    <div className={`${mockShell} mx-auto w-full max-w-[calc(100vw-28px)] sm:max-w-[min(100%,36rem)] lg:mx-0 lg:max-w-none`}>
+    <div className={`${mockShell} flex flex-col mx-auto w-full max-w-[calc(100vw-28px)] sm:max-w-[min(100%,36rem)] lg:mx-0 lg:max-w-none`}>
       <div className="relative border-b border-white/[0.11] bg-gradient-to-b from-[#0a1524]/98 to-[#060d18]/96 px-3 py-2.5 sm:px-4 sm:py-3">
         <div className="flex items-center gap-2.5 sm:gap-3">
           <div className="flex gap-1.5" aria-hidden>
@@ -148,7 +148,7 @@ function HeroDashboardPreview() {
         </div>
       </div>
 
-      <div className="flex min-h-0 flex-col sm:min-h-[312px] sm:flex-row md:min-h-[328px] lg:min-h-[352px]">
+      <div className="flex min-h-0 flex-1 flex-col max-lg:min-h-[296px] sm:min-h-[312px] sm:flex-row md:min-h-[328px] lg:min-h-[352px]">
         <nav
           className="flex shrink-0 flex-row gap-0 overflow-x-auto overflow-y-hidden border-b border-white/[0.12] bg-[#030d18]/99 [scrollbar-width:none] sm:w-[9.5rem] sm:flex-col sm:overflow-visible sm:border-b-0 sm:border-r sm:border-white/[0.12] sm:py-1.5 [&::-webkit-scrollbar]:hidden"
           aria-hidden
@@ -302,8 +302,8 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
         onClose={() => setViewer({ open: false, title: "", initialSlideIndex: 0 })}
       />
 
-      <section className="landing-showcase-hero landing-showcase-hero--dock relative mx-auto w-full max-w-[min(100%,1580px)] max-lg:min-h-0 px-[max(1rem,calc(env(safe-area-inset-left,0px)+12px))] pb-8 pr-[max(1rem,calc(env(safe-area-inset-right,0px)+12px))] pt-6 max-lg:pt-6 sm:px-5 sm:pb-10 sm:pt-2.5 md:px-7 md:pt-2 lg:px-10 lg:pb-11 lg:pt-1.5 xl:px-12 xl:pt-2">
-        <div className="sensora-nebula-shell landing-hero-canvas relative max-lg:min-h-0 overflow-hidden rounded-[26px] border border-white/[0.15] px-5 py-3 shadow-[0_42px_108px_-44px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.084),0_0_80px_-40px_rgba(56,189,248,0.06)] ring-1 ring-inset ring-white/[0.065] sm:rounded-[28px] sm:px-6 sm:py-5 lg:rounded-[30px] lg:px-9 lg:py-7 xl:px-11 xl:py-8">
+      <section className="landing-showcase-hero landing-showcase-hero--dock relative mx-auto w-full max-w-[min(100%,1580px)] max-lg:min-h-0 px-[max(1rem,calc(env(safe-area-inset-left,0px)+12px))] pb-8 pr-[max(1rem,calc(env(safe-area-inset-right,0px)+12px))] pt-6 max-lg:pt-7 sm:px-5 sm:pb-10 sm:pt-2.5 md:px-7 md:pt-2 lg:px-10 lg:pb-11 lg:pt-1.5 xl:px-12 xl:pt-2">
+        <div className="sensora-nebula-shell landing-hero-canvas relative max-lg:min-h-0 max-lg:!overflow-visible lg:overflow-hidden rounded-[26px] border border-white/[0.15] px-5 py-3 max-lg:py-4 shadow-[0_42px_108px_-44px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.084),0_0_80px_-40px_rgba(56,189,248,0.06)] ring-1 ring-inset ring-white/[0.065] sm:rounded-[28px] sm:px-6 sm:py-5 lg:rounded-[30px] lg:px-9 lg:py-7 xl:px-11 xl:py-8">
           <div
             aria-hidden
             className="sensora-nebula-layer-absolute pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_78%_62%_at_58%_-4%,rgba(139,92,246,0.185),transparent_53%),radial-gradient(ellipse_88%_64%_at_8%_96%,rgba(56,189,248,0.14),transparent_57%),radial-gradient(ellipse_62%_50%_at_92%_42%,rgba(99,102,241,0.105),transparent_55%),linear-gradient(165deg,rgba(5,14,26,0.96) 0%,rgba(8,24,46,0.55) 48%,rgba(4,11,22,0.94) 100%)]"
@@ -318,7 +318,7 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
           />
 
           <div className="relative z-[1] grid max-lg:min-h-0 items-start gap-4 max-lg:gap-3 sm:gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.22fr)] lg:gap-x-10 lg:gap-y-6 lg:pb-0 lg:pr-0 xl:grid-cols-[minmax(0,0.96fr)_minmax(0,1.26fr)] xl:gap-x-12 xl:gap-y-7 2xl:gap-x-14">
-            <div className="landing-showcase-copy-col max-lg:order-2 order-1 min-w-0 lg:max-w-[34rem] xl:max-w-[36rem] 2xl:max-w-[38rem]">
+            <div className="landing-showcase-copy-col order-1 min-w-0 lg:max-w-[34rem] xl:max-w-[36rem] 2xl:max-w-[38rem]">
               <span className="inline-flex rounded-full border border-white/[0.18] bg-white/[0.082] px-3.5 py-1.5 text-xs font-semibold tracking-[0.08em] text-slate-100 backdrop-blur-sm">
                 {t("landing.showroom.hero.kickerBadge")}
               </span>
@@ -340,10 +340,10 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
               </div>
             </div>
 
-            <div className="landing-showcase-mock-col motion-safe:transition-transform max-lg:order-1 order-2 relative mx-auto w-full max-w-[min(100%,26rem)] min-h-0 min-[410px]:max-w-[min(100%,38rem)] lg:mx-0 lg:max-w-none lg:justify-self-stretch lg:origin-top lg:self-start lg:[transform:scale(1.038)] xl:max-w-[min(100%,52rem)] xl:[transform:scale(1.055)] motion-reduce:lg:transform-none">
+            <div className="landing-showcase-mock-col motion-safe:transition-transform order-2 relative mx-auto w-full max-w-[min(100%,26rem)] min-h-0 min-[410px]:max-w-[min(100%,38rem)] lg:mx-0 lg:max-w-none lg:justify-self-stretch lg:origin-top lg:self-start lg:[transform:scale(1.038)] xl:max-w-[min(100%,52rem)] xl:[transform:scale(1.055)] motion-reduce:lg:transform-none">
               <div
                 aria-hidden
-                className="pointer-events-none absolute -inset-4 rounded-[40px] bg-[radial-gradient(ellipse_90%_75%_at_52%_50%,rgba(56,189,248,0.26),transparent_60%),radial-gradient(ellipse_70%_60%_at_85%_25%,rgba(139,92,246,0.18),transparent_56%)] opacity-100 blur-2xl sm:-inset-6"
+                className="pointer-events-none absolute inset-0 rounded-[28px] bg-[radial-gradient(ellipse_90%_75%_at_52%_50%,rgba(56,189,248,0.26),transparent_60%),radial-gradient(ellipse_70%_60%_at_85%_25%,rgba(139,92,246,0.18),transparent_56%)] opacity-90 blur-2xl lg:-inset-4 lg:rounded-[40px] lg:opacity-100 xl:-inset-6"
               />
               <div data-sensora-landing-showcase-preview>
                 <HeroDashboardPreview />
