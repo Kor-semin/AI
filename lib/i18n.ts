@@ -386,6 +386,27 @@ export type TranslationKey =
   | "preview.flow.footer.prev"
   | "preview.flow.footer.next"
   | "preview.flow.storyRailTitle"
+  | "preview.diagram.caption.security"
+  | "preview.diagram.caption.workspace"
+  | "preview.diagram.caption.hub"
+  | "preview.diagram.security.view"
+  | "preview.diagram.security.review"
+  | "preview.diagram.security.confirm"
+  | "preview.diagram.security.save"
+  | "preview.diagram.path.register"
+  | "preview.diagram.path.approve"
+  | "preview.diagram.path.setup"
+  | "preview.diagram.path.workspace"
+  | "preview.diagram.hub.core"
+  | "preview.diagram.hub.customers"
+  | "preview.diagram.hub.ai"
+  | "preview.diagram.hub.messages"
+  | "preview.diagram.hub.schedule"
+  | "preview.diagram.hub.aftercare"
+  | "preview.diagram.consult.memo"
+  | "preview.diagram.consult.needs"
+  | "preview.diagram.consult.draft"
+  | "preview.diagram.consult.next"
   | "concept.story.security.title"
   | "concept.story.security.desc"
   | "concept.story.path.title"
@@ -906,6 +927,27 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "preview.flow.footer.prev": "이전",
     "preview.flow.footer.next": "다음",
     "preview.flow.storyRailTitle": "예시 속 흐름",
+    "preview.diagram.caption.security": "불러온 연락처는 미리보기·검토 후 저장됩니다.",
+    "preview.diagram.caption.workspace": "베타·영업 계정 흐름을 거친 뒤 동일 계정으로 업무 화면이 열립니다.",
+    "preview.diagram.caption.hub": "고객·상담·일정·문자를 한 화면 구조로 오갑니다.",
+    "preview.diagram.security.view": "보기",
+    "preview.diagram.security.review": "검토",
+    "preview.diagram.security.confirm": "확인",
+    "preview.diagram.security.save": "저장·승인",
+    "preview.diagram.path.register": "등록",
+    "preview.diagram.path.approve": "승인",
+    "preview.diagram.path.setup": "초기 설정",
+    "preview.diagram.path.workspace": "업무 화면",
+    "preview.diagram.hub.core": "워크스페이스 허브",
+    "preview.diagram.hub.customers": "고객관리",
+    "preview.diagram.hub.ai": "AI 비서",
+    "preview.diagram.hub.messages": "메시지",
+    "preview.diagram.hub.schedule": "일정",
+    "preview.diagram.hub.aftercare": "사후관리",
+    "preview.diagram.consult.memo": "상담 메모",
+    "preview.diagram.consult.needs": "니즈 정리",
+    "preview.diagram.consult.draft": "보낼 문구 초안",
+    "preview.diagram.consult.next": "다음 연락 제안",
     "concept.story.security.title": "확인하고 저장하기",
     "concept.story.security.desc": "연락처는 직접 선택·파일 업로드로만 불러오고, 저장 전에 미리보기로 확인합니다.",
     "concept.story.path.title": "가입 → 승인 → 업무 화면",
@@ -1442,6 +1484,27 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "preview.flow.footer.prev": "Back",
     "preview.flow.footer.next": "Next",
     "preview.flow.storyRailTitle": "How it connects",
+    "preview.diagram.caption.security": "Imports stay preview-first: review before anything is committed.",
+    "preview.diagram.caption.workspace": "After signup paths clear, you return with the same account.",
+    "preview.diagram.caption.hub": "Customers, consultation, schedules, and messages share one calm spine.",
+    "preview.diagram.security.view": "View",
+    "preview.diagram.security.review": "Review",
+    "preview.diagram.security.confirm": "Confirm",
+    "preview.diagram.security.save": "Commit",
+    "preview.diagram.path.register": "Signup",
+    "preview.diagram.path.approve": "Approval",
+    "preview.diagram.path.setup": "Setup",
+    "preview.diagram.path.workspace": "Workspace",
+    "preview.diagram.hub.core": "Central hub",
+    "preview.diagram.hub.customers": "Customers",
+    "preview.diagram.hub.ai": "Assistant",
+    "preview.diagram.hub.messages": "Messages",
+    "preview.diagram.hub.schedule": "Schedule",
+    "preview.diagram.hub.aftercare": "Aftercare",
+    "preview.diagram.consult.memo": "Consultation note",
+    "preview.diagram.consult.needs": "Needs distilled",
+    "preview.diagram.consult.draft": "Message draft",
+    "preview.diagram.consult.next": "Next outreach",
     "concept.story.security.title": "Choose, preview, then save",
     "concept.story.security.desc": "Contacts come from files or paste-ins you provide—review before anything is stored.",
     "concept.story.path.title": "Signup → approval → workspace",

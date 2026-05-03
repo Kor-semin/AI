@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -191,6 +192,12 @@ export function NotebookCover() {
     "cover.onboarding.page2.followup",
   ] as const;
 
+  const tocVisuals = [
+    "/images/guides/sensora-guide-02.png",
+    "/images/guides/sensora-guide-01.png",
+    "/images/guides/sensora-guide-03.png",
+  ] as const;
+
   const heading =
     pageIdx === 0
       ? t("cover.onboarding.page1.title")
@@ -200,7 +207,7 @@ export function NotebookCover() {
 
   return (
     <div
-      className={`notebook-cover-sheet notebook-cover-sheet-consultant notebook-cover-sheet--tone-${coverTheme} outline-none [-webkit-tap-highlight-color:transparent]`}
+      className={`notebook-cover-sheet sensora-notebook-sheet-galaxy notebook-cover-sheet-consultant notebook-cover-sheet--tone-${coverTheme} outline-none [-webkit-tap-highlight-color:transparent]`}
     >
         <div className="notebook-cover-consultant-hero sensora-notebook-nebula-accent" aria-hidden>
         <div className="notebook-cover-hero-abstract" />
@@ -315,19 +322,28 @@ export function NotebookCover() {
               {pageIdx === 1 ? (
                 <div className="mx-auto w-full max-w-[min(32rem,min(96vw,calc(100vw-28px)))]">
                   <ul className="grid gap-2.5 max-[480px]:gap-2 sm:gap-3.5">
-                    {tocKeys.map((key) => {
+                    {tocKeys.map((key, idx) => {
                       const { title, line } = tocCard(t(key));
+                      const src = tocVisuals[idx] ?? tocVisuals[0];
                       return (
                         <li
                           key={key}
-                          className="notebook-cover-toc-pane min-h-[4.85rem] cursor-default rounded-2xl border px-4 py-3.5 backdrop-blur-sm max-[480px]:min-h-[4.45rem] max-[480px]:rounded-[16px] max-[480px]:px-3.5 max-[480px]:py-3.5 motion-reduce:active:scale-100 sm:rounded-[18px] sm:px-5 sm:py-4"
+                          className="notebook-cover-toc-pane sensora-notebook-toc-pane--visual min-h-[4.85rem] cursor-default rounded-2xl border px-4 py-3.5 backdrop-blur-sm max-[480px]:min-h-[4.45rem] max-[480px]:rounded-[16px] max-[480px]:px-3.5 max-[480px]:py-3.5 motion-reduce:active:scale-100 sm:rounded-[18px] sm:px-5 sm:py-4"
                         >
-                          <p className="text-[0.9375rem] font-semibold leading-snug text-[#F8FAFC] sm:text-base">{title}</p>
-                          {line ?
-                            <p className="mt-1 text-[0.8125rem] leading-snug text-slate-400 max-[480px]:text-[0.78rem] sm:mt-1.5 sm:text-sm">
-                              {line}
-                            </p>
-                          : null}
+                          <div className="flex items-start gap-3.5 sm:gap-4">
+                            <div className="relative size-[4.25rem] shrink-0 overflow-hidden rounded-xl border border-white/[0.12] bg-[#030712]/80 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_0_24px_-10px_rgba(56,189,248,0.12)] sm:size-[4.5rem]">
+                              <Image src={src} alt="" fill className="object-cover object-center opacity-92" sizes="72px" />
+                              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#020617]/55 to-transparent" aria-hidden />
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <p className="text-[0.9375rem] font-semibold leading-snug text-[#F8FAFC] sm:text-base">{title}</p>
+                              {line ?
+                                <p className="mt-1 text-[0.8125rem] leading-snug text-slate-400 max-[480px]:text-[0.78rem] sm:mt-1.5 sm:text-sm">
+                                  {line}
+                                </p>
+                              : null}
+                            </div>
+                          </div>
                         </li>
                       );
                     })}

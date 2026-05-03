@@ -1,10 +1,13 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
 import { LandingShowcaseHero } from "@/app/components/concierge/LandingShowcaseHero";
+import { PreviewDiagramSecurityStrip } from "@/app/components/concierge/SensoraFuturisticFlows";
+import { SENSORA_GUIDE_IMAGES } from "@/app/components/concierge/sensoraGuideImages";
 
 /** 랜딩 보조 이미지 에셋 경로(@/public 기준). Hero 쇼케이스에서는 미사용이나 교체 참고용으로 유지합니다. */
 export const LANDING_SHOWROOM_IMAGE_PATHS = {
@@ -109,7 +112,7 @@ function RevealSection({
 
 export function LandingShowroom({ onOpenAppWorkspace }: { onOpenAppWorkspace: () => void }) {
   return (
-    <div className="sensora-nebula-shell relative overflow-x-hidden bg-[#020817]">
+    <div className="sensora-nebula-shell sensora-nebula-shell--drift relative overflow-x-hidden bg-[#020817]">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-0 h-[min(66vh,620px)] bg-[radial-gradient(ellipse_82%_52%_at_52%_6%,rgba(56,189,248,0.092),transparent_55%),radial-gradient(ellipse_58%_42%_at_96%_16%,rgba(139,92,246,0.078),transparent_52%),radial-gradient(ellipse_44%_38%_at_8%_40%,rgba(30,58,138,0.065),transparent_50%)]"
@@ -135,6 +138,13 @@ export function LandingShowroom({ onOpenAppWorkspace }: { onOpenAppWorkspace: ()
 
 function SensoraGuideSectionInner() {
   const { t } = useLanguage();
+
+  const securityLabels = useMemo(
+    () =>
+      [t("preview.diagram.security.view"), t("preview.diagram.security.review"), t("preview.diagram.security.confirm"), t("preview.diagram.security.save")] as const,
+    [t],
+  );
+
   return (
     <>
       <div className="landing-showroom-premium-rule mx-auto mb-6 sm:mb-8 pointer-events-none opacity-95" aria-hidden />
@@ -147,13 +157,46 @@ function SensoraGuideSectionInner() {
         </p>
       </div>
       <div className="mx-auto mt-11 grid max-w-[880px] gap-5 sm:grid-cols-2 sm:items-stretch sm:gap-6">
-        <article className={`${cardChrome} flex min-h-[220px] flex-col px-8 py-8 sm:min-h-[240px] sm:px-10 sm:py-10`}>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">{t("landing.showroom.guide.memoLabel")}</p>
-          <p className="mt-5 flex-1 text-[1.03rem] font-medium leading-[1.68] text-slate-50 sm:text-[1.09rem]">&ldquo;{t("landing.showroom.guide.memoQuote")}&rdquo;</p>
+        <article
+          className={`${cardChrome} flex min-h-[240px] flex-col overflow-hidden !p-0 sm:min-h-[260px]`}
+        >
+          <div className="relative aspect-[21/11] w-full shrink-0 border-b border-white/[0.1] bg-[#030712]/90 sm:aspect-[21/10]">
+            <Image
+              src={SENSORA_GUIDE_IMAGES[2]?.src ?? "/images/guides/sensora-guide-01.png"}
+              alt=""
+              fill
+              className="object-cover object-top opacity-95 transition duration-[240ms] group-hover:opacity-100"
+              sizes="(max-width: 640px) 100vw, 420px"
+            />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#050d14]/95 via-transparent to-transparent" aria-hidden />
+            <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(120deg,rgba(56,189,248,0.08),transparent_55%)]" aria-hidden />
+          </div>
+          <div className="relative flex flex-1 flex-col px-8 pb-8 pt-6 sm:px-10 sm:pb-10 sm:pt-7">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">{t("landing.showroom.guide.memoLabel")}</p>
+            <p className="mt-4 flex-1 text-[1.03rem] font-medium leading-[1.68] text-slate-50 sm:mt-5 sm:text-[1.09rem]">&ldquo;{t("landing.showroom.guide.memoQuote")}&rdquo;</p>
+          </div>
         </article>
-        <article className={`${cardChrome} flex min-h-[220px] flex-col border-violet-400/18 bg-gradient-to-b from-violet-950/25 via-slate-900/55 to-[#050d14]/92 px-8 py-8 shadow-[0_28px_72px_-26px_rgba(0,0,0,0.6),0_0_56px_-28px_rgba(139,92,246,0.1),inset_0_1px_0_rgba(255,255,255,0.06)] ring-violet-400/12 sm:min-h-[240px] sm:px-10 sm:py-10`}>
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-violet-200/88">SensoraGuide</p>
-          <p className="mt-5 flex-1 text-[1.03rem] font-medium leading-[1.68] text-slate-50 sm:text-[1.09rem]">{t("landing.showroom.guide.guideQuote")}</p>
+        <article
+          className={`${cardChrome} flex min-h-[240px] flex-col overflow-hidden !p-0 border-violet-400/22 bg-gradient-to-b from-violet-950/[0.18] via-slate-900/55 to-[#050d14]/92 shadow-[0_28px_72px_-26px_rgba(0,0,0,0.6),0_0_56px_-28px_rgba(139,92,246,0.09),inset_0_1px_0_rgba(255,255,255,0.06)] ring-violet-400/12 sm:min-h-[260px]`}
+        >
+          <div className="relative aspect-[21/11] w-full shrink-0 border-b border-white/[0.09] bg-[#030712]/90 sm:aspect-[21/10]">
+            <Image
+              src={SENSORA_GUIDE_IMAGES[0]?.src ?? "/images/guides/sensora-guide-03.png"}
+              alt=""
+              fill
+              className="object-cover object-[center_20%] opacity-95"
+              sizes="(max-width: 640px) 100vw, 420px"
+            />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#050d14]/95 via-transparent to-transparent" aria-hidden />
+          </div>
+          <div className="relative flex flex-1 flex-col px-8 pb-8 pt-6 sm:px-10 sm:pb-10 sm:pt-7">
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-violet-200/88">SensoraGuide</p>
+            <div className="relative mt-5">
+              <PreviewDiagramSecurityStrip labels={securityLabels} />
+            </div>
+            <p className="mt-3 text-[11px] leading-snug text-slate-500">{t("preview.diagram.caption.security")}</p>
+            <p className="mt-4 flex-1 text-[1.03rem] font-medium leading-[1.68] text-slate-50 sm:mt-5 sm:text-[1.09rem]">{t("landing.showroom.guide.guideQuote")}</p>
+          </div>
         </article>
       </div>
     </>

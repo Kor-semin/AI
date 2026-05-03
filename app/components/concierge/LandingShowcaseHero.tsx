@@ -244,6 +244,14 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
   }>(() => ({ open: false, title: "", initialSlideIndex: 0 }));
   const [conceptExpand, setConceptExpand] = useState<{ src: string; alt: string } | null>(null);
 
+  /** 상담 흐름 섹션 — 컨셉 가이드·워크스페이스 캡처 */
+  const FLOW_STEP_ART = [
+    "/images/guides/sensora-guide-03.png",
+    "/images/guides/sensora-guide-02.png",
+    "/images/profile-workspace.png",
+    "/images/guides/sensora-guide-01.png",
+  ] as const;
+
   const flowSteps = useMemo(
     () =>
       [
@@ -425,21 +433,25 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
                       </>
                     ) : null}
                     <li className="relative z-[1] min-w-0 flex-1">
-                      <div
-                        className={[
-                          "landing-flow-strip-card landing-showcase-flow-step group relative flex h-full min-h-[10.5rem] min-w-[calc(48%-6px)] flex-col rounded-[16px] border border-white/[0.19] bg-gradient-to-br from-white/[0.1] via-[#050d18]/95 to-transparent px-4 py-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.086),0_16px_44px_-18px_rgba(0,0,0,0.52),0_0_48px_-22px_rgba(56,189,248,0.1)] ring-1 ring-inset ring-sky-400/12 backdrop-blur-sm motion-safe:transition-[transform,box-shadow,border-color] motion-safe:duration-[220ms] hover:-translate-y-1 hover:border-sky-400/42 hover:shadow-[0_24px_56px_-18px_rgba(0,0,0,0.56),0_0_54px_-12px_rgba(56,189,248,0.18)] sm:min-h-[10.75rem] sm:min-w-0 sm:rounded-2xl sm:px-[1.18rem] sm:py-[1.25rem]",
-                        ].join(" ")}
-                      >
-                        <div className="flex items-start gap-3">
-                          <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-white/[0.18] bg-slate-950/92 text-[12.5px] font-bold tabular-nums text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] ring-2 ring-sky-400/28">
-                            {String(idx + 1).padStart(2, "0")}
-                          </span>
-                          <span className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-sky-400/32 bg-sky-500/[0.14] text-sky-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_0_28px_-8px_rgba(56,189,248,0.15)] ring-1 ring-inset ring-white/[0.08]">
+                      <div className="landing-flow-strip-card landing-showcase-flow-step group relative flex h-full min-h-[11.5rem] min-w-[calc(48%-6px)] flex-col overflow-hidden rounded-[16px] border border-white/[0.19] bg-gradient-to-br from-white/[0.08] via-[#050d18]/96 to-[#020617]/94 shadow-[inset_0_1px_0_rgba(255,255,255,0.07),0_16px_44px_-18px_rgba(0,0,0,0.52),0_0_48px_-22px_rgba(56,189,248,0.1)] ring-1 ring-inset ring-sky-400/12 backdrop-blur-sm motion-safe:transition-[transform,box-shadow,border-color] motion-safe:duration-[220ms] hover:-translate-y-1 hover:border-sky-400/42 hover:shadow-[0_24px_56px_-18px_rgba(0,0,0,0.56),0_0_54px_-12px_rgba(56,189,248,0.18)] sm:min-h-[12rem] sm:min-w-0 sm:rounded-2xl motion-reduce:transition-none motion-reduce:hover:translate-y-0">
+                        <div className="relative h-[6.85rem] w-full shrink-0 overflow-hidden border-b border-white/[0.08] sm:h-[7.75rem]">
+                          <Image
+                            src={FLOW_STEP_ART[idx]}
+                            alt=""
+                            fill
+                            className="object-cover object-center opacity-[0.92] transition duration-300 group-hover:opacity-100"
+                            sizes="(max-width:1024px) 46vw, 200px"
+                          />
+                          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#020617]/94 via-transparent to-transparent" aria-hidden />
+                          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_65%_at_82%_0%,rgba(56,189,248,0.12),transparent_60%)]" aria-hidden />
+                          <span className="absolute left-3.5 top-3.5 flex size-11 items-center justify-center rounded-xl border border-sky-400/38 bg-[#07111f]/78 text-sky-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_0_26px_-6px_rgba(56,189,248,0.25)] backdrop-blur-md ring-1 ring-white/[0.1]">
                             <step.Icon className="size-[22px]" />
                           </span>
                         </div>
-                        <p className="mt-3.5 text-[14.5px] font-semibold leading-snug text-slate-50 sm:text-[15.25px] sm:leading-[1.2]">{t(step.titleKey)}</p>
-                        <p className="mt-2.5 line-clamp-3 text-[11.75px] leading-relaxed text-slate-300 sm:text-[12.75px] sm:leading-[1.54]">{t(step.bodyKey)}</p>
+                        <div className="flex min-h-0 flex-1 flex-col px-[1rem] pb-4 pt-3 sm:px-[1.18rem] sm:pb-[1.15rem] sm:pt-3.5">
+                          <p className="text-[14.25px] font-semibold leading-snug text-slate-50 sm:text-[15px]">{t(step.titleKey)}</p>
+                          <p className="mt-2 line-clamp-4 text-[11.65px] leading-relaxed text-slate-400 sm:text-[12.65px] sm:leading-[1.52]">{t(step.bodyKey)}</p>
+                        </div>
                       </div>
                     </li>
                   </Fragment>
