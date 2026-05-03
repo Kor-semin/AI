@@ -26,10 +26,10 @@ const cardChrome =
   "landing-showcase-surface-card rounded-[22px] border border-white/[0.16] bg-gradient-to-b from-white/[0.09] via-slate-900/58 to-[#050d14]/94 shadow-[0_30px_76px_-24px_rgba(0,0,0,0.62),inset_0_1px_0_rgba(255,255,255,0.072),0_0_56px_-24px_rgba(56,189,248,0.084)] backdrop-blur-md ring-1 ring-inset ring-white/[0.065] transition-[border-color,box-shadow,transform] duration-[240ms] ease-[cubic-bezier(0.22,1,0.32,1)] hover:-translate-y-1 hover:border-sky-400/36 hover:shadow-[0_36px_84px_-20px_rgba(0,0,0,0.64),0_0_60px_-16px_rgba(56,189,248,0.13)] motion-reduce:transform-none motion-reduce:transition-none active:translate-y-0 active:scale-[0.996]";
 
 const primaryBtn =
-  "landing-showroom-cta-join sensora-premium-primary-workspace inline-flex min-h-[56px] min-w-[min(100%,13rem)] items-center justify-center rounded-2xl px-9 py-4 text-[15px] font-semibold shadow-[inset_0_1px_0_rgba(255,255,255,0.13),0_16px_48px_-10px_rgba(56,189,248,0.26),0_0_40px_-8px_rgba(139,92,246,0.06)] touch-manipulation";
+  "landing-showroom-cta-join sensora-premium-primary-workspace inline-flex min-h-14 min-w-[min(100%,13rem)] items-center justify-center rounded-2xl px-9 py-4 text-[0.9375rem] font-semibold shadow-[inset_0_1px_0_rgba(255,255,255,0.13),0_16px_48px_-10px_rgba(56,189,248,0.26),0_0_40px_-8px_rgba(139,92,246,0.06)] touch-manipulation sm:text-base";
 
 const ghostBtn =
-  "landing-showroom-cta-preview inline-flex min-h-[56px] min-w-[min(100%,13rem)] items-center justify-center gap-2 rounded-2xl border border-white/[0.32] bg-white/[0.1] px-8 py-4 text-[15px] font-semibold text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.11),0_0_0_1px_rgba(56,189,248,0.055)_inset,0_0_36px_-8px_rgba(56,189,248,0.12)] ring-1 ring-inset ring-sky-400/22 backdrop-blur-md transition-[border-color,background-color,box-shadow,transform] duration-[240ms] hover:border-sky-300/52 hover:bg-white/[0.14] active:scale-[0.987] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/42 focus-visible:ring-offset-2 focus-visible:ring-offset-[#020817] touch-manipulation motion-reduce:transition-none";
+  "landing-showroom-cta-preview inline-flex min-h-14 min-w-[min(100%,13rem)] items-center justify-center gap-2 rounded-2xl border border-white/[0.32] bg-white/[0.1] px-8 py-4 text-[0.9375rem] font-semibold text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.11),0_0_0_1px_rgba(56,189,248,0.055)_inset,0_0_36px_-8px_rgba(56,189,248,0.12)] ring-1 ring-inset ring-sky-400/22 backdrop-blur-md transition-[border-color,background-color,box-shadow,transform] duration-[240ms] hover:border-sky-300/52 hover:bg-white/[0.14] active:scale-[0.987] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/42 focus-visible:ring-offset-2 focus-visible:ring-offset-[#020817] touch-manipulation motion-reduce:transition-none sm:text-base";
 
 function IconAppWindowPlay({ className }: { className?: string }) {
   return (
@@ -142,18 +142,18 @@ function SensoraGuideSectionInner() {
         <h2 className="text-[clamp(1.5rem,3.1vw,2.1rem)] font-semibold tracking-[-0.03em] text-slate-50">
           {t("landing.showroom.guide.title")}
         </h2>
-        <p className="mx-auto mt-4 max-w-[56ch] text-[15px] leading-[1.62] text-slate-400 sm:mt-5 sm:text-[16.5px] sm:leading-[1.6]">
+        <p className="mx-auto mt-4 max-w-[56ch] text-[0.9375rem] leading-[1.62] text-slate-400 sm:mt-5 sm:text-[1.03rem] sm:leading-[1.6]">
           {t("landing.showroom.guide.desc")}
         </p>
       </div>
       <div className="mx-auto mt-11 grid max-w-[880px] gap-5 sm:grid-cols-2 sm:items-stretch sm:gap-6">
         <article className={`${cardChrome} flex min-h-[220px] flex-col px-8 py-8 sm:min-h-[240px] sm:px-10 sm:py-10`}>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">{t("landing.showroom.guide.memoLabel")}</p>
-          <p className="mt-5 flex-1 text-[16.5px] font-medium leading-[1.68] text-slate-50 sm:text-[17.5px]">&ldquo;{t("landing.showroom.guide.memoQuote")}&rdquo;</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">{t("landing.showroom.guide.memoLabel")}</p>
+          <p className="mt-5 flex-1 text-[1.03rem] font-medium leading-[1.68] text-slate-50 sm:text-[1.09rem]">&ldquo;{t("landing.showroom.guide.memoQuote")}&rdquo;</p>
         </article>
         <article className={`${cardChrome} flex min-h-[220px] flex-col border-violet-400/18 bg-gradient-to-b from-violet-950/25 via-slate-900/55 to-[#050d14]/92 px-8 py-8 shadow-[0_28px_72px_-26px_rgba(0,0,0,0.6),0_0_56px_-28px_rgba(139,92,246,0.1),inset_0_1px_0_rgba(255,255,255,0.06)] ring-violet-400/12 sm:min-h-[240px] sm:px-10 sm:py-10`}>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-violet-200/88">SensoraGuide</p>
-          <p className="mt-5 flex-1 text-[16.5px] font-medium leading-[1.68] text-slate-50 sm:text-[17.5px]">{t("landing.showroom.guide.guideQuote")}</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-violet-200/88">SensoraGuide</p>
+          <p className="mt-5 flex-1 text-[1.03rem] font-medium leading-[1.68] text-slate-50 sm:text-[1.09rem]">{t("landing.showroom.guide.guideQuote")}</p>
         </article>
       </div>
     </>
@@ -180,8 +180,8 @@ function SalesFeatureGridInner() {
       <div className="mx-auto mt-10 grid max-w-[920px] gap-5 sm:grid-cols-2 sm:items-stretch lg:gap-6">
         {tiles.map(({ titleKey, descKey }) => (
           <article key={titleKey} className={`${cardChrome} flex min-h-[188px] flex-col px-8 py-8 sm:min-h-[196px] sm:px-10 sm:py-9`}>
-            <h3 className="text-[17.5px] font-semibold tracking-[-0.02em] text-slate-50 sm:text-[18.5px]">{t(titleKey)}</h3>
-            <p className="mt-3.5 flex-1 text-[15px] leading-[1.58] text-slate-400 sm:text-[15.5px] sm:leading-[1.6]">{t(descKey)}</p>
+            <h3 className="text-[1.09rem] font-semibold tracking-[-0.02em] text-slate-50 sm:text-[1.16rem]">{t(titleKey)}</h3>
+            <p className="mt-3.5 flex-1 text-[0.9375rem] leading-[1.58] text-slate-400 sm:text-[0.97rem] sm:leading-[1.6]">{t(descKey)}</p>
           </article>
         ))}
       </div>
@@ -197,7 +197,7 @@ function FinalShowroomCTAInner({ onOpenAppWorkspace }: { onOpenAppWorkspace: () 
       className={`${cardChrome} landing-footer-cta-shell mx-auto flex max-w-[720px] flex-col items-center border-white/[0.17] px-8 py-12 text-center shadow-[0_38px_92px_-26px_rgba(0,0,0,0.64),inset_0_1px_0_rgba(255,255,255,0.075),0_0_80px_-28px_rgba(56,189,248,0.14),0_0_64px_-36px_rgba(139,92,246,0.06)] sm:px-12 sm:py-[4.25rem]`}
     >
       <p className="text-[clamp(1.28rem,2.95vw,1.68rem)] font-semibold tracking-[-0.024em] text-slate-50">{t("brand.slogan")}</p>
-      <p className="mx-auto mt-5 max-w-[48ch] text-[15px] leading-relaxed text-slate-400 sm:mt-6 sm:text-[16.5px] sm:leading-[1.58]">{t("landing.showroom.closing.desc")}</p>
+      <p className="mx-auto mt-5 max-w-[48ch] text-[0.9375rem] leading-relaxed text-slate-400 sm:mt-6 sm:text-[1.03rem] sm:leading-[1.58]">{t("landing.showroom.closing.desc")}</p>
       <div className="mt-10 flex w-full max-w-lg flex-col flex-wrap justify-center gap-4 sm:flex-row sm:justify-center">
         <Link href={JOIN_PATH} prefetch={false} className={`relative z-20 inline-flex w-full justify-center touch-manipulation pointer-events-auto sm:w-auto sm:flex-initial ${primaryBtn}`}>
           {t("cta.joinBeta")}

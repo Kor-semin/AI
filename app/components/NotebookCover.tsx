@@ -60,21 +60,21 @@ function tocCard(raw: string): { title: string; line: string } {
 
 /** 상단 닫기·보조 선택 — 과하지 않게 */
 const onboardCloseBtn =
-  "inline-flex touch-manipulation items-center justify-center rounded-lg border border-transparent px-2.5 py-1.5 text-[11px] font-medium tracking-[-0.01em] text-[#94A3B8] transition motion-reduce:transition-none hover:bg-white/[0.06] hover:text-[#E2E8F0] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#94A3B8]/65";
+  "inline-flex touch-manipulation items-center justify-center rounded-lg border border-transparent px-2.5 py-1.5 text-xs font-medium tracking-[-0.01em] text-[#94A3B8] transition motion-reduce:transition-none hover:bg-white/[0.06] hover:text-[#E2E8F0] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#94A3B8]/65";
 
 /** 주 CTA — 워크스페이스 primary와 같은 프리미엄 그라데이션 */
 const onboardPrimaryBtn =
-  "sensora-premium-primary-workspace inline-flex min-h-[52px] w-full max-w-[min(360px,min(94vw,calc(100vw-32px)))] touch-manipulation items-center justify-center self-center rounded-2xl px-6 py-3.5 text-[15px] font-semibold leading-tight shadow-[inset_0_1px_0_rgba(255,255,255,0.09)] motion-reduce:transition-none disabled:cursor-not-allowed disabled:opacity-40 sm:max-w-[min(320px,90vw)] sm:px-7";
+  "sensora-premium-primary-workspace inline-flex min-h-[3.25rem] w-full max-w-[min(360px,min(94vw,calc(100vw-32px)))] touch-manipulation items-center justify-center self-center rounded-2xl px-6 py-3.5 text-[0.9375rem] font-semibold leading-tight shadow-[inset_0_1px_0_rgba(255,255,255,0.09)] motion-reduce:transition-none disabled:cursor-not-allowed disabled:opacity-40 sm:max-w-[min(320px,90vw)] sm:px-7 sm:text-base";
 
 /** 보조 — 글래스 고스트 */
 const onboardGhostBtn =
-  "inline-flex min-h-[50px] w-full max-w-[min(360px,min(94vw,calc(100vw-32px)))] touch-manipulation items-center justify-center self-center rounded-2xl border border-white/[0.24] bg-white/[0.08] px-6 py-3.5 text-[14px] font-semibold leading-tight text-slate-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.07)] backdrop-blur-sm transition-[background,border-color,transform,box-shadow] duration-[220ms] motion-reduce:transition-none hover:border-sky-300/42 hover:bg-white/[0.13] hover:shadow-[0_0_36px_-10px_rgba(56,189,248,0.12)] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/40 disabled:cursor-not-allowed disabled:opacity-35 sm:max-w-[min(320px,90vw)]";
+  "inline-flex min-h-[3.125rem] w-full max-w-[min(360px,min(94vw,calc(100vw-32px)))] touch-manipulation items-center justify-center self-center rounded-2xl border border-white/[0.24] bg-white/[0.08] px-6 py-3.5 text-sm font-semibold leading-tight text-slate-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.07)] backdrop-blur-sm transition-[background,border-color,transform,box-shadow] duration-[220ms] motion-reduce:transition-none hover:border-sky-300/42 hover:bg-white/[0.13] hover:shadow-[0_0_36px_-10px_rgba(56,189,248,0.12)] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/40 disabled:cursor-not-allowed disabled:opacity-35 sm:max-w-[min(320px,90vw)]";
 
 const onboardNavMutedBtn =
-  "sensora-dark-ghost-btn inline-flex min-h-[52px] min-w-0 flex-1 touch-manipulation items-center justify-center rounded-2xl px-5 py-3.5 text-[14px] font-semibold leading-tight text-slate-200 transition-[border-color,background,color,transform] duration-[220ms] motion-reduce:transition-none active:scale-[0.99] focus-visible:ring-2 focus-visible:ring-sky-400/35 disabled:cursor-not-allowed disabled:opacity-[0.38] sm:min-w-[6rem]";
+  "sensora-dark-ghost-btn inline-flex min-h-[3.25rem] min-w-0 flex-1 touch-manipulation items-center justify-center rounded-2xl px-5 py-3.5 text-sm font-semibold leading-tight text-slate-200 transition-[border-color,background,color,transform] duration-[220ms] motion-reduce:transition-none active:scale-[0.99] focus-visible:ring-2 focus-visible:ring-sky-400/35 disabled:cursor-not-allowed disabled:opacity-[0.38] sm:min-w-[6rem]";
 
 const onboardNavPrimaryBtn =
-  "inline-flex min-h-[52px] min-w-0 flex-1 touch-manipulation items-center justify-center rounded-2xl border border-sky-400/42 bg-white/[0.12] px-5 py-3.5 text-[14px] font-semibold leading-tight text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] transition-[background,border-color,transform,box-shadow] duration-[220ms] motion-reduce:transition-none hover:border-sky-400/52 hover:bg-white/[0.18] hover:shadow-[0_0_34px_-8px_rgba(56,189,248,0.18)] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/45 motion-reduce:hover:bg-white/[0.12] sm:min-w-[6rem]";
+  "inline-flex min-h-[3.25rem] min-w-0 flex-1 touch-manipulation items-center justify-center rounded-2xl border border-sky-400/42 bg-white/[0.12] px-5 py-3.5 text-sm font-semibold leading-tight text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] transition-[background,border-color,transform,box-shadow] duration-[220ms] motion-reduce:transition-none hover:border-sky-400/52 hover:bg-white/[0.18] hover:shadow-[0_0_34px_-8px_rgba(56,189,248,0.18)] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/45 motion-reduce:hover:bg-white/[0.12] sm:min-w-[6rem]";
 
 /** 전체 화면 표지 — 3페이지 온보딩 (Sense + Aura, 실버·그레이 톤) */
 export function NotebookCover() {
@@ -289,7 +289,7 @@ export function NotebookCover() {
             >
               {pageIdx === 0 ? (
                 <div className="mx-auto flex w-full max-w-[min(360px,92vw)] flex-col items-center max-[389px]:max-w-[calc(100vw-32px)]">
-                  <div className="w-full space-y-2.5 text-center text-[15px] leading-relaxed text-slate-200 max-[480px]:space-y-2 max-[480px]:text-[14.5px] sm:text-[16px] sm:leading-[1.62]">
+                  <div className="w-full space-y-2.5 text-center text-[0.9375rem] leading-relaxed text-slate-200 max-[480px]:space-y-2 max-[480px]:text-[0.90625rem] sm:text-base sm:leading-[1.62]">
                     {splitLines(t("cover.onboarding.page1.description")).map((line) => (
                       <p key={line}>{line}</p>
                     ))}
@@ -306,7 +306,7 @@ export function NotebookCover() {
                       {t("auth.salesRegistration")}
                     </button>
                     {sellerLoading ? (
-                      <p className="text-center text-[12px] text-[#94A3B8]">{t("auth.checkingLogin")}</p>
+                      <p className="text-center text-xs text-[#94A3B8]">{t("auth.checkingLogin")}</p>
                     ) : null}
                   </div>
                 </div>
@@ -322,9 +322,9 @@ export function NotebookCover() {
                           key={key}
                           className="notebook-cover-toc-pane min-h-[4.85rem] cursor-default rounded-2xl border px-4 py-3.5 backdrop-blur-sm max-[480px]:min-h-[4.45rem] max-[480px]:rounded-[16px] max-[480px]:px-3.5 max-[480px]:py-3.5 motion-reduce:active:scale-100 sm:rounded-[18px] sm:px-5 sm:py-4"
                         >
-                          <p className="text-[15px] font-semibold leading-snug text-[#F8FAFC] sm:text-[15.5px]">{title}</p>
+                          <p className="text-[0.9375rem] font-semibold leading-snug text-[#F8FAFC] sm:text-base">{title}</p>
                           {line ?
-                            <p className="mt-1 text-[13px] leading-snug text-slate-400 max-[480px]:text-[12.5px] sm:mt-1.5 sm:text-[13.5px]">
+                            <p className="mt-1 text-[0.8125rem] leading-snug text-slate-400 max-[480px]:text-[0.78rem] sm:mt-1.5 sm:text-sm">
                               {line}
                             </p>
                           : null}
@@ -337,16 +337,16 @@ export function NotebookCover() {
 
               {pageIdx === 2 ? (
                 <div className="mx-auto flex w-full max-w-[min(32rem,min(96vw,calc(100vw-28px)))] flex-col items-center gap-4 max-[480px]:gap-3 sm:gap-6">
-                  <div className="w-full space-y-2.5 text-center text-[15px] leading-relaxed text-slate-200 max-[480px]:space-y-2 max-[480px]:text-[14.5px] sm:text-[16px] sm:leading-[1.62]">
+                  <div className="w-full space-y-2.5 text-center text-[0.9375rem] leading-relaxed text-slate-200 max-[480px]:space-y-2 max-[480px]:text-[0.90625rem] sm:text-base sm:leading-[1.62]">
                     {splitLines(t("cover.onboarding.page3.description")).map((line) => (
                       <p key={line}>{line}</p>
                     ))}
                   </div>
                   <details className="notebook-cover-theme-panel w-full rounded-[17px] border border-white/[0.14] bg-black/[0.12] px-4 py-4 text-left shadow-[0_12px_32px_-8px_rgba(0,0,0,0.38)] backdrop-blur-sm max-[480px]:px-3.5 max-[480px]:py-3 [&_summary::-webkit-details-marker]:hidden">
-                    <summary className="cursor-pointer list-none py-0.5 text-center text-[12.5px] font-semibold tracking-[0.08em] text-slate-200 hover:text-[#F8FAFC] motion-reduce:transition-none sm:text-[13px]">
+                    <summary className="cursor-pointer list-none py-0.5 text-center text-[0.78rem] font-semibold tracking-[0.08em] text-slate-200 hover:text-[#F8FAFC] motion-reduce:transition-none sm:text-sm">
                       {t("cover.onboarding.themeLabel")}
                     </summary>
-                    <p className="mt-2 text-center text-[12px] leading-relaxed text-slate-400 max-[480px]:text-[11.5px]">
+                    <p className="mt-2 text-center text-xs leading-relaxed text-slate-400 max-[480px]:text-[0.72rem]">
                       {t("cover.onboarding.themeHint")}
                     </p>
                     <div

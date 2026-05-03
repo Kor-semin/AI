@@ -98,10 +98,10 @@ export function ConciergeSidebar({
                   aria-current={active ? "page" : undefined}
                   aria-label={`${title}, ${subtitle}`}
                 >
-                  <span className="block text-[15px] font-bold leading-tight">{title}</span>
+                  <span className="block text-[0.9375rem] font-bold leading-tight">{title}</span>
                   <span
                     className={[
-                      "block hyphens-none text-balance text-[11px] font-semibold leading-[1.3]",
+                      "block hyphens-none text-balance text-[0.6875rem] font-semibold leading-[1.3]",
                       active ? "text-sky-100/85" : "text-slate-400",
                     ].join(" ")}
                   >
@@ -126,11 +126,11 @@ export function ConciergeSidebar({
             <div className="flex justify-start pb-3.5 cursor-default pointer-events-none" aria-hidden>
               <SensoraAnimatedMark size={52} animated={false} />
             </div>
-            <div className="text-[11px] font-bold uppercase tracking-[0.12em] text-sky-200/75">{t("header.workspace")}</div>
-            <div className="mt-2.5 text-[16px] font-bold leading-snug tracking-tight text-[#F9FAFB]">
+            <div className="text-xs font-bold uppercase tracking-[0.12em] text-sky-200/75">{t("header.workspace")}</div>
+            <div className="mt-2.5 text-base font-bold leading-snug tracking-tight text-[#F9FAFB]">
               {t("product.name")}
             </div>
-            <div className="mt-1.5 text-[13px] font-semibold leading-snug text-[#94A3B8]">{t("brand.subline")}</div>
+            <div className="mt-1.5 text-sm font-semibold leading-snug text-[#94A3B8]">{t("brand.subline")}</div>
           </button>
 
           <nav className="mt-4 flex flex-1 flex-col gap-1.5 px-3" aria-label="업무 영역 메뉴 (데스크톱)">

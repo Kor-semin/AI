@@ -187,15 +187,15 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                 <div className="flex min-w-0 items-start gap-3 sm:items-center">
                   <SensoraAnimatedMark size={44} animated={false} className="pointer-events-none hidden shrink-0 sm:block drop-shadow-[0_0_24px_-4px_rgba(56,189,248,0.35)]" aria-hidden />
                   <div className="min-w-0">
-                    <div className="text-balance text-[17px] font-semibold leading-tight tracking-[-0.024em] text-white sm:text-[1.15rem] lg:text-[1.25rem]">
+                    <div className="text-balance text-lg font-semibold leading-tight tracking-[-0.024em] text-white sm:text-[1.15rem] lg:text-[1.25rem]">
                       {t("product.name")}
                     </div>
-                    <p className="mt-1 text-[12px] font-medium leading-snug text-slate-300 sm:text-[13px]">
+                    <p className="mt-1 text-xs font-medium leading-snug text-slate-300 sm:text-sm">
                       {t("landing.showroom.header.subline")}
                     </p>
                   </div>
                 </div>
-                <p className="max-w-full shrink-0 text-[10px] leading-snug text-slate-500 sm:max-w-[14rem] sm:text-[11px] xl:hidden" role="note">
+                <p className="max-w-full shrink-0 text-[0.625rem] leading-snug text-slate-500 sm:max-w-[14rem] sm:text-xs xl:hidden" role="note">
                   {t("header.zoomHint")}
                 </p>
               </div>
@@ -203,10 +203,10 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                 <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-2 sm:justify-between xl:flex-nowrap xl:justify-end">
                   <LanguageSelect dense />
                   {auth.status === "loading" ? (
-                    <span className="text-[11px] text-slate-400">{t("auth.checkingLogin")}</span>
+                    <span className="text-xs text-slate-400">{t("auth.checkingLogin")}</span>
                   ) : auth.status === "signed-in" ? (
                     <>
-                      <span className="hidden max-w-[10rem] truncate text-[11px] text-slate-400 xl:inline">{auth.name ?? auth.email ?? auth.uid}</span>
+                      <span className="hidden max-w-[10rem] truncate text-xs text-slate-400 xl:inline">{auth.name ?? auth.email ?? auth.uid}</span>
                       <button
                         type="button"
                         className="sensora-dark-ghost-btn inline-flex min-h-[44px] shrink-0 items-center rounded-xl px-3 py-2 text-xs font-semibold touch-manipulation"
@@ -216,11 +216,11 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                       </button>
                     </>
                   ) : authError ? (
-                    <span className="max-w-full truncate text-[10px] font-medium text-[#B91C1C] sm:max-w-[14rem] sm:text-xs" title={authError}>
+                    <span className="max-w-full truncate text-[0.625rem] font-medium text-[#B91C1C] sm:max-w-[14rem] sm:text-xs" title={authError}>
                       {authError}
                     </span>
                   ) : null}
-                  <p className="ml-auto hidden max-w-[15rem] text-right text-[10px] leading-snug text-slate-500 xl:block" role="note">
+                  <p className="ml-auto hidden max-w-[15rem] text-right text-[0.625rem] leading-snug text-slate-500 xl:block" role="note">
                     {t("header.zoomHint")}
                   </p>
                 </div>
@@ -229,8 +229,8 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                     type="button"
                     onClick={openAppPreviewToc}
                     className={[
-                      "landing-nav-cta-preview relative z-[20] inline-flex min-h-[56px] w-full shrink-0 cursor-pointer items-center justify-center gap-2 rounded-2xl",
-                      "border border-white/30 bg-white/[0.092] px-5 py-3.5 text-center text-[14px] font-semibold text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_0_0_1px_rgba(56,189,248,0.06)_inset,0_0_40px_-10px_rgba(56,189,248,0.16)] ring-1 ring-inset ring-sky-400/14",
+                      "landing-nav-cta-preview relative z-[20] inline-flex min-h-14 w-full shrink-0 cursor-pointer items-center justify-center gap-2 rounded-2xl",
+                      "border border-white/30 bg-white/[0.092] px-5 py-3.5 text-center text-sm font-semibold text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_0_0_1px_rgba(56,189,248,0.06)_inset,0_0_40px_-10px_rgba(56,189,248,0.16)] ring-1 ring-inset ring-sky-400/14",
                       "backdrop-blur-md transition duration-[220ms] ease-out",
                       "hover:border-sky-300/42 hover:bg-white/[0.12]",
                       "active:scale-[0.99] focus-visible:outline-none",
@@ -250,7 +250,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                     href="/join"
                     prefetch={false}
                     className={[
-                      "landing-nav-cta-join sensora-premium-primary-workspace relative z-[20] inline-flex min-h-[56px] w-full items-center justify-center rounded-2xl px-7 py-3.5 text-center text-[14px] font-semibold tracking-tight text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.13),0_0_44px_-8px_rgba(56,189,248,0.22),0_12px_32px_-8px_rgba(139,92,246,0.12)]",
+                      "landing-nav-cta-join sensora-premium-primary-workspace relative z-[20] inline-flex min-h-14 w-full items-center justify-center rounded-2xl px-7 py-3.5 text-center text-sm font-semibold tracking-tight text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.13),0_0_44px_-8px_rgba(56,189,248,0.22),0_12px_32px_-8px_rgba(139,92,246,0.12)]",
                       "touch-manipulation min-[420px]:min-w-[12.5rem] min-[420px]:flex-1 min-[420px]:w-auto xl:min-w-[11.75rem] xl:flex-none",
                       "transition duration-[220ms] ease-out active:scale-[0.99]",
                       "focus-visible:outline-none",
@@ -273,9 +273,9 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                 <div className="flex min-w-0 flex-1 flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
                   <div className="min-w-0">
                     <div className="truncate text-sm font-semibold tracking-tight text-slate-50">{t("product.name")}</div>
-                    <div className="truncate text-[11px] text-slate-400 sm:text-xs">{t("brand.subline")}</div>
+                    <div className="truncate text-xs text-slate-400 sm:text-sm">{t("brand.subline")}</div>
                   </div>
-                  <p className="pointer-events-none shrink-0 text-[10px] leading-snug text-slate-500 sm:max-w-[14rem] sm:text-right sm:text-[11px]" role="note">
+                  <p className="pointer-events-none shrink-0 text-[0.625rem] leading-snug text-slate-500 sm:max-w-[14rem] sm:text-right sm:text-xs" role="note">
                     {t("header.zoomHint")}
                   </p>
                 </div>

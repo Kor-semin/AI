@@ -13,10 +13,10 @@ const mockShell =
   "landing-showcase-mock-frame relative overflow-hidden rounded-[18px] border border-white/[0.17] bg-gradient-to-b from-[#081222]/98 to-[#030b14]/99 shadow-[0_38px_96px_-32px_rgba(0,0,0,0.82),inset_0_1px_0_rgba(255,255,255,0.095),0_0_0_1px_rgba(56,189,248,0.07)_inset,0_0_80px_-24px_rgba(56,189,248,0.14),0_0_96px_-36px_rgba(139,92,246,0.1)] ring-1 ring-inset ring-white/[0.07] backdrop-blur-xl before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-white/22 before:to-transparent sm:rounded-[22px] lg:rounded-[24px]";
 
 const ctaPrimaryShowcase =
-  "landing-showcase-cta-primary landing-showroom-cta-join sensora-premium-primary-workspace inline-flex min-h-[56px] w-full min-w-0 shrink-0 items-center justify-center rounded-2xl px-9 py-4 text-[16px] font-semibold tracking-tight shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_16px_48px_-12px_rgba(56,189,248,0.3),0_0_48px_-10px_rgba(139,92,246,0.08)] sm:w-auto sm:min-h-[58px] sm:px-11 sm:text-[17px] touch-manipulation";
+  "landing-showcase-cta-primary landing-showroom-cta-join sensora-premium-primary-workspace inline-flex min-h-14 w-full min-w-0 shrink-0 items-center justify-center rounded-2xl px-9 py-4 text-base font-semibold tracking-tight shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_16px_48px_-12px_rgba(56,189,248,0.3),0_0_48px_-10px_rgba(139,92,246,0.08)] sm:w-auto sm:min-h-[3.625rem] sm:px-11 sm:text-lg touch-manipulation";
 
 const ctaGhostShowcase =
-  "landing-showcase-cta-ghost landing-showroom-cta-preview inline-flex min-h-[56px] w-full min-w-0 shrink-0 items-center justify-center gap-2 rounded-2xl border border-white/[0.34] bg-white/[0.1] px-8 py-4 text-[15px] font-semibold tracking-tight text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_0_0_1px_rgba(56,189,248,0.06)_inset,0_0_40px_-10px_rgba(56,189,248,0.14)] ring-1 ring-inset ring-sky-400/22 backdrop-blur-md sm:w-auto sm:min-h-[58px] sm:px-10 sm:text-[16px] touch-manipulation";
+  "landing-showcase-cta-ghost landing-showroom-cta-preview inline-flex min-h-14 w-full min-w-0 shrink-0 items-center justify-center gap-2 rounded-2xl border border-white/[0.34] bg-white/[0.1] px-8 py-4 text-[0.9375rem] font-semibold tracking-tight text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_0_0_1px_rgba(56,189,248,0.06)_inset,0_0_40px_-10px_rgba(56,189,248,0.14)] ring-1 ring-inset ring-sky-400/22 backdrop-blur-md sm:w-auto sm:min-h-[3.625rem] sm:px-10 sm:text-base touch-manipulation";
 
 const HERO_MOCK_NAV_KEYS = [
   "landing.showroom.heroMock.nav.home",
@@ -350,13 +350,13 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
 
           <div className="relative z-[1] grid items-start gap-8 sm:gap-9 lg:grid-cols-[minmax(0,0.86fr)_minmax(0,1.3fr)] lg:gap-x-12 lg:pb-3 lg:pr-2 xl:gap-x-[3.5rem] xl:pr-5">
             <div className="landing-showcase-copy-col order-1 min-w-0">
-              <span className="inline-flex rounded-full border border-white/[0.18] bg-white/[0.082] px-3.5 py-1.5 text-[11px] font-semibold tracking-[0.08em] text-slate-100 backdrop-blur-sm sm:text-[12px]">
+              <span className="inline-flex rounded-full border border-white/[0.18] bg-white/[0.082] px-3.5 py-1.5 text-xs font-semibold tracking-[0.08em] text-slate-100 backdrop-blur-sm">
                 {t("landing.showroom.hero.kickerBadge")}
               </span>
               <h1 className="mt-5 max-w-[min(100%,48rem)] whitespace-pre-line text-balance text-[clamp(1.92rem,5.15vw,3.62rem)] font-semibold leading-[1.065] tracking-[-0.041em] text-white sm:mt-6 lg:max-w-[min(100%,52rem)]">
                 {t("landing.showroom.hero.headline")}
               </h1>
-              <p className="mt-6 max-w-[min(100%,42rem)] whitespace-pre-line text-[16px] leading-[1.72] text-slate-200/96 sm:text-[17.5px] sm:leading-[1.66] lg:max-w-[min(100%,44rem)]">
+              <p className="mt-6 max-w-[min(100%,42rem)] whitespace-pre-line text-base leading-[1.72] text-slate-200/96 sm:text-lg sm:leading-[1.66] lg:max-w-[min(100%,44rem)]">
                 {t("landing.showroom.hero.sub")}
               </p>
               <div className="mt-9 flex w-full flex-col gap-3.5 sm:mt-10 sm:flex-row sm:flex-wrap sm:gap-4">
@@ -391,7 +391,7 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
               <p className="text-center text-[clamp(1.05rem,2.35vw,1.48rem)] font-semibold leading-snug tracking-[-0.022em] text-slate-100">
                 {t("landing.showroom.bridge.line1")}
               </p>
-              <p className="max-w-[38rem] text-center text-[14px] font-medium leading-relaxed text-slate-400 sm:text-[15px] sm:leading-[1.58]">
+              <p className="max-w-[38rem] text-center text-sm font-medium leading-relaxed text-slate-400 sm:text-[0.9375rem] sm:leading-[1.58]">
                 {t("landing.showroom.bridge.line2")}
               </p>
             </div>
@@ -402,7 +402,7 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
           <div className="min-w-0">
             <div className="flex items-end justify-between gap-3 border-b border-white/[0.09] pb-3">
               <h2 className="text-[clamp(1.18rem,2.4vw,1.58rem)] font-semibold tracking-[-0.028em] text-slate-50">{t("landing.showroom.tip.title")}</h2>
-              <span className="hidden shrink-0 text-[10px] font-bold uppercase tracking-[0.14em] text-slate-500 sm:inline">TIP</span>
+              <span className="hidden shrink-0 text-[0.625rem] font-bold uppercase tracking-[0.14em] text-slate-500 sm:inline">TIP</span>
             </div>
             <div className="landing-tip-grid mt-5 grid grid-cols-2 gap-3 max-[479px]:gap-2.5 sm:gap-4 lg:grid-cols-4 lg:gap-4">
               {tipCards.map(({ n, titleKey, descKey, Icon }) => (
@@ -415,19 +415,19 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
                   }
                 >
                   <div className="flex items-start justify-between gap-2">
-                    <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-xl border border-sky-400/52 bg-gradient-to-br from-sky-500/[0.34] to-violet-600/[0.21] text-[13px] font-bold tabular-nums text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.2),0_0_24px_-6px_rgba(56,189,248,0.25)]">
+                    <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-xl border border-sky-400/52 bg-gradient-to-br from-sky-500/[0.34] to-violet-600/[0.21] text-sm font-bold tabular-nums text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.2),0_0_24px_-6px_rgba(56,189,248,0.25)]">
                       {n}
                     </span>
                     <span className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-sky-400/28 bg-white/[0.1] text-sky-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_0_32px_-6px_rgba(56,189,248,0.2)] ring-1 ring-inset ring-white/[0.1] transition-[transform,box-shadow,border-color] duration-[220ms] group-hover:-translate-y-0.5 group-hover:border-sky-400/42 group-hover:text-white">
                       <Icon className="size-[22px] opacity-[0.98] sm:size-6" />
                     </span>
                   </div>
-                  <span className="mt-4 line-clamp-2 text-[15px] font-semibold leading-snug tracking-tight text-slate-50 sm:text-[15.5px]">{t(titleKey)}</span>
-                  <span className="mt-2 flex-1 line-clamp-3 text-[12.5px] leading-relaxed text-slate-400 sm:text-[13px] sm:leading-[1.52]">
+                  <span className="mt-4 line-clamp-2 text-[0.9375rem] font-semibold leading-snug tracking-tight text-slate-50 sm:text-base">{t(titleKey)}</span>
+                  <span className="mt-2 flex-1 line-clamp-3 text-sm leading-relaxed text-slate-400 sm:text-[0.8125rem] sm:leading-[1.52]">
                     {t(descKey)}
                   </span>
                   <span className="mt-auto flex justify-end pt-4 sm:pt-5">
-                    <span className="inline-flex size-10 items-center justify-center rounded-full border border-sky-400/42 bg-gradient-to-br from-white/[0.17] to-white/[0.05] text-[15px] font-bold text-sky-50 shadow-[0_12px_32px_-8px_rgba(56,189,248,0.38)] transition-[transform,border-color,box-shadow] duration-[220ms] group-hover:translate-x-1 group-hover:border-sky-400/65 group-hover:shadow-[0_16px_40px_-6px_rgba(56,189,248,0.48)] group-hover:text-white motion-reduce:group-hover:translate-x-0">
+                    <span className="inline-flex size-10 items-center justify-center rounded-full border border-sky-400/42 bg-gradient-to-br from-white/[0.17] to-white/[0.05] text-[0.9375rem] font-bold text-sky-50 shadow-[0_12px_32px_-8px_rgba(56,189,248,0.38)] transition-[transform,border-color,box-shadow] duration-[220ms] group-hover:translate-x-1 group-hover:border-sky-400/65 group-hover:shadow-[0_16px_40px_-6px_rgba(56,189,248,0.48)] group-hover:text-white motion-reduce:group-hover:translate-x-0">
                       →
                     </span>
                   </span>
@@ -440,7 +440,7 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
             <div className="flex items-end justify-between gap-3 border-b border-white/[0.09] pb-3">
               <div>
                 <h2 className="text-[clamp(1.18rem,2.4vw,1.58rem)] font-semibold tracking-[-0.028em] text-slate-50">{t("landing.showroom.flow.title")}</h2>
-                <p className="mt-1.5 max-w-[52ch] text-[13px] leading-relaxed text-slate-500 sm:text-[14px]">{t("landing.showroom.flow.desc")}</p>
+                <p className="mt-1.5 max-w-[52ch] text-sm leading-relaxed text-slate-500 sm:text-[0.875rem]">{t("landing.showroom.flow.desc")}</p>
               </div>
             </div>
             <div className="landing-flow-process relative mt-6">

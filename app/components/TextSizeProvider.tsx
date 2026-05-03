@@ -48,8 +48,3 @@ export function useTextSize(): TextSizeContextValue {
   if (!ctx) throw new Error("useTextSize must be used within TextSizeProvider");
   return ctx;
 }
-
-/** 설정 컨트롤처럼 옵션만 필요할 때(프로바이더 밖에서는 medium 가정 불가피 시 사용) */
-export function useOptionalTextSize(): TextSizeContextValue | null {
-  return useContext(TextSizeContext);
-}

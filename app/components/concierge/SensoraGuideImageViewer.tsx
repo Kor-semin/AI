@@ -122,17 +122,17 @@ export function SensoraGuideImageViewer({
           <div className="min-w-0">
             <p
               id="sensora-guide-viewer-title"
-              className="truncate text-[15px] font-semibold tracking-tight text-slate-100 sm:text-base"
+              className="truncate text-[0.9375rem] font-semibold tracking-tight text-slate-100 sm:text-base"
             >
               {title}
             </p>
-            <p className="mt-1 text-[12px] font-medium text-slate-400">
+            <p className="mt-1 text-xs font-medium text-slate-400">
               {t("landing.showroom.tip.guideWord")} {safeIndex + 1} / {total}
             </p>
           </div>
           <button
             type="button"
-            className="shrink-0 rounded-xl border border-white/[0.14] bg-white/[0.06] px-3 py-2 text-[12px] font-semibold text-slate-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] transition duration-200 hover:border-sky-400/30 hover:bg-white/[0.11] active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 touch-manipulation"
+            className="shrink-0 rounded-xl border border-white/[0.14] bg-white/[0.06] px-3 py-2 text-xs font-semibold text-slate-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] transition duration-200 hover:border-sky-400/30 hover:bg-white/[0.11] active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 touch-manipulation"
             onClick={onClose}
           >
             {t("landing.showroom.tip.close")}
@@ -144,7 +144,7 @@ export function SensoraGuideImageViewer({
             <div className="relative flex min-h-[min(240px,50dvh)] flex-1 items-center justify-center overflow-hidden rounded-xl border border-white/[0.1] bg-[#020817]/90 sm:min-h-[min(300px,56dvh)] sm:flex-none">
               {broken[safeIndex] ? (
                 <div className="max-w-sm px-6 text-center">
-                  <p className="text-[14px] font-medium leading-relaxed text-slate-300">
+                  <p className="text-sm font-medium leading-relaxed text-slate-300">
                     {t("landing.showroom.tip.imageMissing")}
                   </p>
                 </div>
@@ -198,13 +198,13 @@ export function SensoraGuideImageViewer({
 
             {!broken[safeIndex] ? (
               <>
-                <p className="px-0.5 text-[11px] font-medium leading-relaxed text-slate-500 sm:text-[12px]">
+                <p className="px-0.5 text-xs font-medium leading-relaxed text-slate-500">
                   {t("landing.showroom.tip.openOriginalHint")}
                 </p>
                 <button
                   type="button"
                   onClick={openOriginalInNewTab}
-                  className="inline-flex min-h-[48px] w-full shrink-0 items-center justify-center rounded-xl border border-sky-400/32 bg-sky-500/[0.12] px-4 py-3 text-[14px] font-semibold text-sky-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_0_32px_-10px_rgba(56,189,248,0.2)] transition hover:border-sky-400/45 hover:bg-sky-500/[0.16] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/42 active:scale-[0.99] touch-manipulation sm:min-h-[46px]"
+                  className="inline-flex min-h-12 w-full shrink-0 items-center justify-center rounded-xl border border-sky-400/32 bg-sky-500/[0.12] px-4 py-3 text-sm font-semibold text-sky-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_0_32px_-10px_rgba(56,189,248,0.2)] transition hover:border-sky-400/45 hover:bg-sky-500/[0.16] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/42 active:scale-[0.99] touch-manipulation sm:min-h-11"
                   aria-label={t("landing.showroom.tip.openOriginalAria")}
                 >
                   {t("landing.showroom.tip.openOriginal")}
@@ -238,7 +238,7 @@ export function SensoraGuideImageViewer({
                   aria-label={thumbLabel}
                 >
                   {broken[i] ? (
-                    <span className="flex h-full w-full items-center justify-center bg-slate-900/80 text-[10px] font-semibold text-slate-500">
+                    <span className="flex h-full w-full items-center justify-center bg-slate-900/80 text-[0.625rem] font-semibold text-slate-500">
                       —
                     </span>
                   ) : (
