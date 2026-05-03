@@ -11,6 +11,7 @@ import {
 import { parseCsvContactsText } from "@/app/crm/contactImport/parseCsvContacts";
 import { parseVcfContactsText } from "@/app/crm/contactImport/parseVcfContacts";
 import { ContactExportLinksModal, type ContactExportLinksVariant } from "@/app/crm/ContactExportLinksModal";
+import { useLanguage } from "@/app/components/i18n/LanguageProvider";
 import { useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent } from "react";
 
 /** 2차 확장: Google People API OAuth 동기화 — 이번 배포 범위에서는 CSV/vCard 내보내기만 지원 */
@@ -41,9 +42,6 @@ type PreviewRow = {
   include: boolean;
   resolution: "add_new" | "skip" | "merge_memo";
 };
-
-const importGuideButtonClass =
-  "inline-flex min-h-[40px] w-full max-w-full touch-manipulation items-center justify-center rounded-xl border border-[#E2E8F0] bg-[#FFFFFF] px-3 py-2 text-[12px] font-semibold text-[#334155] shadow-[0_1px_2px_rgba(15,23,42,0.04)] hover:bg-[#F8FAFC] sm:w-auto sm:min-w-[12rem]";
 
 /** 모바일: 탭을 한 줄 스크롤 칩 형태로, 데스크톱: 기존 감각 유지 */
 const importTabRailClass =
@@ -149,6 +147,7 @@ export function ImportContactsPanel({
   showToast,
   onOpenFileGuide,
 }: ImportContactsPanelProps) {
+  const { t } = useLanguage();
   const [tab, setTab] = useState<HubTab>("paste");
   const [pasteText, setPasteText] = useState("");
   const [staging, setStaging] = useState<NormalizedImportedContact[]>([]);
@@ -156,6 +155,11 @@ export function ImportContactsPanel({
   const [exportLinksVariant, setExportLinksVariant] = useState<ContactExportLinksVariant | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const autoNativePickerTriggeredRef = useRef(false);
+
+  const openContactFilePicker = useCallback(() => {
+    setTab("file");
+    window.setTimeout(() => fileInputRef.current?.click(), 0);
+  }, []);
 
   const pickerOk = useMemo(() => contactPickerSupported(), [open]);
   const onIos = useMemo(() => iosLike(), [open]);
@@ -411,9 +415,12 @@ export function ImportContactsPanel({
         onClick={(ev) => ev.stopPropagation()}
       >
         <div className="flex items-start justify-between gap-3">
-          <h2 id="import-contacts-title" className="min-w-0 flex-1 text-lg font-bold leading-snug text-[#111827]">
-            주소록 가져오기
-          </h2>
+          <div className="min-w-0 flex-1 pr-1">
+            <h2 id="import-contacts-title" className="text-lg font-bold leading-snug text-[#111827] sm:text-xl">
+              {t("crm.import.heroTitle")}
+            </h2>
+            <p className="mt-2 text-[13px] leading-relaxed text-[#64748B] sm:text-[14px] sm:leading-snug">{t("crm.import.heroSub")}</p>
+          </div>
           <button
             type="button"
             className="flex h-10 w-10 shrink-0 touch-manipulation items-center justify-center rounded-full text-[#64748B] transition hover:bg-[#F1F5F9] focus-visible:ring-2 focus-visible:ring-[#CBD5E1] max-sm:-mr-1 sm:hidden"
@@ -428,73 +435,80 @@ export function ImportContactsPanel({
             </span>
           </button>
         </div>
-        <div className="mt-2 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-2 text-[12px] leading-relaxed text-[#475569] sm:py-3">
-          <p className="font-semibold text-[#334155]">개인정보·연락처 처리 안내</p>
-          <ul className="mt-2 list-disc space-y-1 pl-4 text-[12px] leading-snug text-[#475569] sm:hidden">
-            <li>iPhone·Google·Galaxy(Samsung) 연락처에서 준비한 파일을 올 수 있습니다.</li>
-            <li>
-              저장 전 미리보기에서 확인합니다. 선택한 항목만 저장되며 기존 고객 정보는 자동으로 덮어쓰지 않습니다.
-            </li>
-            <li>Sensora는 고객 정보를 임의로 수집하거나 자동 저장하지 않습니다.</li>
-          </ul>
-          <div className="mt-1.5 hidden space-y-1.5 text-[13px] leading-snug sm:mt-2 sm:block sm:leading-relaxed">
-            <p className="text-[#475569]">
-              iPhone, Google 연락처, Galaxy/Samsung 연락처에서 연락처 파일을 준비한 뒤 업로드할 수 있습니다.
-            </p>
-            <p className="text-[#334155]">
-              저장 전 미리보기에서 확인한 뒤, 선택한 항목만 저장됩니다.
-            </p>
-            <p className="text-[#334155]">
-              Sensora는 고객 정보를 임의로 수집하거나 자동 저장하지 않습니다.
-            </p>
-            <p className="text-[#334155]">기존 고객 정보는 자동으로 덮어쓰지 않습니다.</p>
-          </div>
-          <p className="mt-2 border-t border-[#E2E8F0] pt-2 text-[11px] leading-snug text-[#64748B] sm:mt-2">
-            붙여넣기·파일·휴대폰에서 고른 연락처도 본인이 넣은 내용만 목록에 반영됩니다.
-          </p>
+
+        <div
+          className="mt-4 rounded-xl border border-[#FDE68A] bg-[#FFFBEB] px-3.5 py-3 text-[13px] leading-relaxed text-[#78350F] sm:px-4"
+          role="status"
+        >
+          <p className="font-semibold text-[#92400E]">{t("crm.import.trustNoSync")}</p>
+          <p className="mt-1.5 text-[12px] leading-relaxed sm:text-[13px]">{t("crm.import.trustUserChoice")}</p>
         </div>
 
-        {onIos ? (
-          <div className="mt-3 rounded-lg border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-2 text-[12px] leading-snug text-[#475569]">
-            iPhone에서는 연락처 파일을 준비한 뒤 업로드하는 방식을 권장합니다.
-          </div>
-        ) : null}
+        <ol className="mt-4 grid list-none grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-3">
+          {(
+            [
+              ["crm.import.step1Title", "crm.import.step1Desc"],
+              ["crm.import.step2Title", "crm.import.step2Desc"],
+              ["crm.import.step3Title", "crm.import.step3Desc"],
+            ] as const
+          ).map(([titleKey, descKey], idx) => (
+            <li
+              key={titleKey}
+              className="rounded-xl border border-[#E5E7EB] bg-[#FAFBFC] px-3.5 py-3 shadow-[0_1px_2px_rgba(15,23,42,0.04)]"
+            >
+              <div className="flex items-baseline gap-2">
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#E2E8F0] text-[12px] font-bold text-[#475569]" aria-hidden>
+                  {idx + 1}
+                </span>
+                <p className="text-[13px] font-semibold leading-snug text-[#111827]">{t(titleKey)}</p>
+              </div>
+              <p className="mt-2 pl-9 text-[11px] leading-relaxed text-[#64748B] sm:text-[12px]">{t(descKey)}</p>
+            </li>
+          ))}
+        </ol>
 
-        {onOpenFileGuide ? (
-          <div
-            className={[
-              "mt-3 flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-4",
-              onIos ? "max-sm:mt-2" : "",
-            ].join(" ")}
+        <div className="mt-4 flex w-full flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-stretch">
+          <button
+            type="button"
+            className="inline-flex min-h-[48px] w-full flex-1 touch-manipulation items-center justify-center rounded-xl bg-[#111827] px-5 py-3 text-[14px] font-semibold text-white shadow-sm hover:bg-[#1E293B] sm:min-h-[44px] sm:flex-[1_1_12rem]"
+            onClick={(ev) => {
+              ev.stopPropagation();
+              openContactFilePicker();
+            }}
           >
+            {t("crm.import.ctaUpload")}
+          </button>
+          {onOpenFileGuide ? (
             <button
               type="button"
-              className={
-                onIos ?
-                  "inline-flex min-h-[44px] w-full max-w-full touch-manipulation items-center justify-center rounded-xl border border-[#111827] bg-[#111827] px-3 py-2.5 text-[13px] font-semibold text-white shadow-sm hover:bg-[#1E293B] sm:w-auto sm:min-w-[12rem]"
-                : importGuideButtonClass
-              }
+              className="inline-flex min-h-[48px] w-full flex-1 touch-manipulation items-center justify-center rounded-xl border-2 border-[#CBD5E1] bg-white px-5 py-3 text-[14px] font-semibold text-[#334155] hover:bg-[#F8FAFC] sm:min-h-[44px] sm:flex-[1_1_10rem]"
               onClick={(ev) => {
                 ev.stopPropagation();
                 onOpenFileGuide();
               }}
             >
-              연락처 파일 준비 방법 보기
+              {t("crm.import.ctaGuide")}
             </button>
-            {onIos ? (
-              <button
-                type="button"
-                className="inline-flex min-h-[40px] w-full touch-manipulation items-center justify-center rounded-xl border border-[#CBD5E1] bg-white px-3 py-2 text-[12px] font-semibold text-[#374151] hover:bg-[#F8FAFC] sm:w-auto sm:min-w-[10rem]"
-                onClick={(ev) => {
-                  ev.stopPropagation();
-                  setTab("iphone");
-                }}
-              >
-                iPhone 안내 보기
-              </button>
-            ) : null}
+          ) : null}
+        </div>
+
+        {onIos ? (
+          <div className="mt-3 flex flex-wrap items-center gap-2">
+            <p className="text-[12px] leading-snug text-[#64748B]">{t("crm.import.iosFileHint")}</p>
+            <button
+              type="button"
+              className="min-h-[44px] touch-manipulation rounded-lg px-2 py-1.5 text-[12px] font-semibold text-[#334155] underline decoration-[#CBD5E1] underline-offset-2 hover:text-[#0F172A]"
+              onClick={(ev) => {
+                ev.stopPropagation();
+                setTab("iphone");
+              }}
+            >
+              {t("crm.import.iosTabShortcut")}
+            </button>
           </div>
         ) : null}
+
+        <p className="mt-3 text-[11px] leading-relaxed text-[#94A3B8] sm:text-[12px]">{t("crm.import.footerPrinciples")}</p>
 
         <div className={importTabRailClass} role="tablist" aria-label="가져오기 방법">
           {hubTabsOrdered.map((id) => renderHubTabBtn(id))}
@@ -533,20 +547,17 @@ export function ImportContactsPanel({
 
           {tab === "paste" ? (
             <div className="space-y-2">
-              <p className="text-[12px] text-[#64748B]">
-                CSV(구글 내보내기 등), 줄 단위(이름+전화), 또는 vCard 전체 블록을 붙여넣을 수 있습니다. 원문 메모는
-                그대로 보존됩니다.
-              </p>
+              <p className="text-[12px] leading-relaxed text-[#64748B]">{t("crm.import.pasteShort")}</p>
               {onOpenFileGuide ? (
                 <button
                   type="button"
-                  className="min-h-[40px] max-w-full touch-manipulation text-left text-[12px] font-semibold text-[#334155] underline decoration-[#CBD5E1] underline-offset-2 hover:text-[#0F172A]"
+                  className="min-h-[44px] max-w-full touch-manipulation text-left text-[12px] font-semibold text-[#334155] underline decoration-[#CBD5E1] underline-offset-2 hover:text-[#0F172A]"
                   onClick={(ev) => {
                     ev.stopPropagation();
                     onOpenFileGuide();
                   }}
                 >
-                  연락처 파일 준비 방법 보기
+                  {t("crm.import.ctaGuide")}
                 </button>
               ) : null}
               <textarea
@@ -577,21 +588,21 @@ export function ImportContactsPanel({
               {onOpenFileGuide ? (
                 <button
                   type="button"
-                  className="min-h-[40px] max-w-full touch-manipulation text-left text-[12px] font-semibold text-[#334155] underline decoration-[#CBD5E1] underline-offset-2 hover:text-[#0F172A]"
+                  className="min-h-[44px] max-w-full touch-manipulation text-left text-[12px] font-semibold text-[#334155] underline decoration-[#CBD5E1] underline-offset-2 hover:text-[#0F172A]"
                   onClick={(ev) => {
                     ev.stopPropagation();
                     onOpenFileGuide();
                   }}
                 >
-                  파일 준비 방법
+                  {t("crm.import.ctaGuide")}
                 </button>
               ) : null}
               <button
                 type="button"
-                className="min-h-[44px] rounded-xl bg-[#111827] px-5 py-2.5 text-[14px] font-semibold text-white touch-manipulation"
+                className="min-h-[48px] rounded-xl bg-[#111827] px-5 py-2.5 text-[14px] font-semibold text-white touch-manipulation sm:min-h-[44px]"
                 onClick={() => fileInputRef.current?.click()}
               >
-                파일 선택
+                {t("crm.import.ctaUpload")}
               </button>
               <input
                 ref={fileInputRef}
@@ -619,13 +630,13 @@ export function ImportContactsPanel({
               {onOpenFileGuide ? (
                 <button
                   type="button"
-                  className="min-h-[40px] max-w-full touch-manipulation text-left text-[12px] font-semibold text-[#334155] underline decoration-[#CBD5E1] underline-offset-2 hover:text-[#0F172A]"
+                  className="min-h-[44px] max-w-full touch-manipulation text-left text-[12px] font-semibold text-[#334155] underline decoration-[#CBD5E1] underline-offset-2 hover:text-[#0F172A]"
                   onClick={(ev) => {
                     ev.stopPropagation();
                     onOpenFileGuide();
                   }}
                 >
-                  연락처 파일 준비 방법 보기
+                  {t("crm.import.ctaGuide")}
                 </button>
               ) : null}
               <details className="rounded-lg border border-dashed border-[#CBD5E1] bg-white px-3 py-2 text-[12px] text-[#64748B]">
@@ -655,24 +666,23 @@ export function ImportContactsPanel({
               {onOpenFileGuide ? (
                 <button
                   type="button"
-                  className="min-h-[40px] max-w-full touch-manipulation text-left text-[12px] font-semibold text-[#334155] underline decoration-[#CBD5E1] underline-offset-2 hover:text-[#0F172A]"
+                  className="min-h-[44px] max-w-full touch-manipulation text-left text-[12px] font-semibold text-[#334155] underline decoration-[#CBD5E1] underline-offset-2 hover:text-[#0F172A]"
                   onClick={(ev) => {
                     ev.stopPropagation();
                     onOpenFileGuide();
                   }}
                 >
-                  연락처 파일 준비 방법 보기
+                  {t("crm.import.ctaGuide")}
                 </button>
               ) : null}
               <button
                 type="button"
-                className="min-h-[44px] rounded-xl bg-[#111827] px-5 py-2.5 text-[14px] font-semibold text-white touch-manipulation"
+                className="min-h-[48px] rounded-xl bg-[#111827] px-5 py-2.5 text-[14px] font-semibold text-white touch-manipulation sm:min-h-[44px]"
                 onClick={() => {
-                  setTab("file");
-                  window.setTimeout(() => fileInputRef.current?.click(), 0);
+                  openContactFilePicker();
                 }}
               >
-                .vcf 파일 선택
+                {t("crm.import.ctaUpload")}
               </button>
             </div>
           ) : null}

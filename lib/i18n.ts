@@ -80,6 +80,22 @@ export type TranslationKey =
   | "crm.stat.recentConsultations"
   | "crm.demoContextNotice.primary"
   | "crm.demoContextNotice.secondary"
+  | "crm.import.heroTitle"
+  | "crm.import.heroSub"
+  | "crm.import.trustNoSync"
+  | "crm.import.trustUserChoice"
+  | "crm.import.step1Title"
+  | "crm.import.step1Desc"
+  | "crm.import.step2Title"
+  | "crm.import.step2Desc"
+  | "crm.import.step3Title"
+  | "crm.import.step3Desc"
+  | "crm.import.ctaUpload"
+  | "crm.import.ctaGuide"
+  | "crm.import.footerPrinciples"
+  | "crm.import.iosFileHint"
+  | "crm.import.iosTabShortcut"
+  | "crm.import.pasteShort"
   | "crm.addCustomer"
   | "crm.nextAction"
   | "crm.aiRecommendation"
@@ -374,6 +390,24 @@ export const translations: Record<LanguageCode, TranslationDict> = {
       "이 화면은 자동차 영업사원이 상담 메모, 관심 차량, 다음 연락, 사후관리를 한 곳에서 정리하는 예시 화면입니다.",
     "crm.demoContextNotice.secondary":
       "AI는 상담 내용을 정리하고 검토용 초안을 제안하지만, 최종 확인과 저장은 사용자가 직접 합니다.",
+    "crm.import.heroTitle": "주소록 가져오기",
+    "crm.import.heroSub": "연락처 파일을 올리고, 필요한 고객만 확인해 저장합니다.",
+    "crm.import.trustNoSync": "전체 주소록을 자동 동기화하지 않습니다.",
+    "crm.import.trustUserChoice":
+      "사용자가 선택한 파일만 확인하고, 저장할 고객도 직접 선택합니다.",
+    "crm.import.step1Title": "연락처 파일 준비",
+    "crm.import.step1Desc": "iPhone, Galaxy, Google 연락처에서 CSV 또는 vCard 파일을 준비합니다.",
+    "crm.import.step2Title": "파일 올리기",
+    "crm.import.step2Desc": "선택한 연락처 파일만 업로드합니다.",
+    "crm.import.step3Title": "확인 후 저장",
+    "crm.import.step3Desc": "미리보기에서 필요한 고객만 확인하고 저장합니다.",
+    "crm.import.ctaUpload": "연락처 파일 올리기",
+    "crm.import.ctaGuide": "준비 방법 보기",
+    "crm.import.footerPrinciples":
+      "가져오기·선택·저장은 사용자가 직접 하며, Sensora는 고객 정보를 임의로 저장하지 않습니다.",
+    "crm.import.iosFileHint": "iPhone에서는 연락처 파일을 준비한 뒤 올리는 방식을 권장합니다.",
+    "crm.import.iosTabShortcut": "iPhone·iCloud 안내",
+    "crm.import.pasteShort": "파일 대신 CSV·vCard 글자를 붙여넣을 수도 있습니다.",
     "crm.addCustomer": "고객 추가",
     "crm.nextAction": "다음 액션",
     "crm.aiRecommendation": "AI 추천 메시지",
@@ -692,6 +726,24 @@ export const translations: Record<LanguageCode, TranslationDict> = {
       "This is a sample CRM layout for automotive sales reps—consultation notes, interested vehicles, follow-ups, and aftercare in one place.",
     "crm.demoContextNotice.secondary":
       "AI summarizes memos and suggests drafts for review; you decide what to confirm and save.",
+    "crm.import.heroTitle": "Import address book",
+    "crm.import.heroSub": "Upload a contacts file, review, then save only who you need.",
+    "crm.import.trustNoSync": "We never auto-sync your entire address book.",
+    "crm.import.trustUserChoice":
+      "You upload the file you chose, and you choose which customers to save.",
+    "crm.import.step1Title": "Prepare a file",
+    "crm.import.step1Desc": "Export CSV or vCard from iPhone, Galaxy, or Google Contacts.",
+    "crm.import.step2Title": "Upload",
+    "crm.import.step2Desc": "Only the file you select is read for this import.",
+    "crm.import.step3Title": "Review & save",
+    "crm.import.step3Desc": "In the preview, check rows and save only what you want.",
+    "crm.import.ctaUpload": "Upload contacts file",
+    "crm.import.ctaGuide": "How to prepare",
+    "crm.import.footerPrinciples":
+      "You choose what to import and save; Sensora does not store customer data on its own.",
+    "crm.import.iosFileHint": "On iPhone, exporting a contacts file first is usually easiest.",
+    "crm.import.iosTabShortcut": "iPhone · iCloud tips",
+    "crm.import.pasteShort": "Or paste CSV / vCard text instead of uploading a file.",
     "crm.addCustomer": "Add Customer",
     "crm.nextAction": "Next Action",
     "crm.aiRecommendation": "AI Recommendation",
