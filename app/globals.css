@@ -180,7 +180,9 @@ html[lang="ko"] body {
     radial-gradient(ellipse 55% 45% at 102% 88%, rgba(30, 27, 75, 0.15), transparent 55%);
 }
 
-.sensora-nebula-shell > * {
+/* ::before 성운 레이어(z-0) 위로 콘텐츠를 올리되, 장식 레이어(absolute)는 relative로 바꾸면 안 됨 —
+ * 그렇게 되면 특히 LandingShowroom 상단 radial(h-[min(66vh,620px)]) 이 흐름 높이를 먹어 CTA·히어로 사이에 거대 빈 칸 발생 */
+.sensora-nebula-shell > *:not(.sensora-nebula-layer-absolute) {
   position: relative;
   z-index: 1;
 }

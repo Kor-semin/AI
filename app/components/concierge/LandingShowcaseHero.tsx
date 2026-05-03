@@ -306,15 +306,15 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
         <div className="sensora-nebula-shell landing-hero-canvas relative max-lg:min-h-0 overflow-hidden rounded-[26px] border border-white/[0.15] px-5 py-3 shadow-[0_42px_108px_-44px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.084),0_0_80px_-40px_rgba(56,189,248,0.06)] ring-1 ring-inset ring-white/[0.065] sm:rounded-[28px] sm:px-6 sm:py-5 lg:rounded-[30px] lg:px-9 lg:py-7 xl:px-11 xl:py-8">
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_78%_62%_at_58%_-4%,rgba(139,92,246,0.185),transparent_53%),radial-gradient(ellipse_88%_64%_at_8%_96%,rgba(56,189,248,0.14),transparent_57%),radial-gradient(ellipse_62%_50%_at_92%_42%,rgba(99,102,241,0.105),transparent_55%),linear-gradient(165deg,rgba(5,14,26,0.96) 0%,rgba(8,24,46,0.55) 48%,rgba(4,11,22,0.94) 100%)]"
+            className="sensora-nebula-layer-absolute pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_78%_62%_at_58%_-4%,rgba(139,92,246,0.185),transparent_53%),radial-gradient(ellipse_88%_64%_at_8%_96%,rgba(56,189,248,0.14),transparent_57%),radial-gradient(ellipse_62%_50%_at_92%_42%,rgba(99,102,241,0.105),transparent_55%),linear-gradient(165deg,rgba(5,14,26,0.96) 0%,rgba(8,24,46,0.55) 48%,rgba(4,11,22,0.94) 100%)]"
           />
           <div
             aria-hidden
-            className="pointer-events-none absolute -left-[28%] top-[22%] h-[72%] w-[72%] max-w-[560px] rounded-full bg-[radial-gradient(circle_at_62%_44%,rgba(56,189,248,0.14),transparent_58%),radial-gradient(circle_at_28%_58%,rgba(139,92,246,0.09),transparent_56%)] opacity-[0.95] blur-3xl sm:-left-[20%]"
+            className="sensora-nebula-layer-absolute pointer-events-none absolute -left-[28%] top-[22%] h-[72%] w-[72%] max-w-[560px] rounded-full bg-[radial-gradient(circle_at_62%_44%,rgba(56,189,248,0.14),transparent_58%),radial-gradient(circle_at_28%_58%,rgba(139,92,246,0.09),transparent_56%)] opacity-[0.95] blur-3xl sm:-left-[20%]"
           />
           <div
             aria-hidden
-            className="pointer-events-none absolute -right-[14%] top-[14%] h-[78%] w-[78%] max-w-[720px] rounded-full bg-[radial-gradient(circle_at_40%_36%,rgba(56,189,248,0.2),transparent_57%),radial-gradient(circle_at_70%_56%,rgba(139,92,246,0.14),transparent_55%)] opacity-[0.98] blur-3xl lg:-right-[4%]"
+            className="sensora-nebula-layer-absolute pointer-events-none absolute -right-[14%] top-[14%] h-[78%] w-[78%] max-w-[720px] rounded-full bg-[radial-gradient(circle_at_40%_36%,rgba(56,189,248,0.2),transparent_57%),radial-gradient(circle_at_70%_56%,rgba(139,92,246,0.14),transparent_55%)] opacity-[0.98] blur-3xl lg:-right-[4%]"
           />
 
           <div className="relative z-[1] grid max-lg:min-h-0 items-start gap-4 max-lg:gap-3 sm:gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.22fr)] lg:gap-x-10 lg:gap-y-6 lg:pb-0 lg:pr-0 xl:grid-cols-[minmax(0,0.96fr)_minmax(0,1.26fr)] xl:gap-x-12 xl:gap-y-7 2xl:gap-x-14">
