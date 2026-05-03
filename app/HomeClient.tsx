@@ -153,12 +153,15 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
 
       <header
         className={[
-          "sticky top-0 z-30 isolate border-b backdrop-blur-md",
+          "sticky top-0 z-30 isolate backdrop-blur-xl",
           /** iPhone 상태바/notch 안전영역을 반영해 헤더 콘텐츠가 겹치지 않도록 */
-          "px-4 pb-3 pt-[max(14px,calc(env(safe-area-inset-top,0px)+12px))] sm:px-6",
           view === "landing"
-            ? "border-white/[0.08] bg-[#07111f]/88"
-            : "border-white/[0.08] bg-[#07111f]/86",
+            ? "landing-app-nav-shell mx-3 mt-3 max-sm:mx-2 max-sm:mt-2 rounded-2xl border border-white/[0.12] bg-[#07111f]/78 px-4 pb-3 pt-[max(14px,calc(env(safe-area-inset-top,0px)+10px))] sm:mx-6 sm:px-6 lg:mx-auto lg:max-w-[1240px]"
+            : [
+                "border-b border-white/[0.08]",
+                "px-4 pb-3 pt-[max(14px,calc(env(safe-area-inset-top,0px)+12px))] sm:px-6",
+                "bg-[#07111f]/86",
+              ].join(" "),
         ].join(" ")}
       >
         <div
@@ -207,18 +210,32 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                     </span>
                   ) : null}
                 </div>
-                <div className="grid w-full min-w-0 grid-cols-2 gap-2 sm:flex sm:w-auto sm:flex-shrink-0 sm:flex-nowrap sm:justify-end sm:gap-2">
+                <div className="grid w-full min-w-0 grid-cols-2 gap-2 sm:flex sm:w-auto sm:flex-shrink-0 sm:flex-nowrap sm:justify-end sm:gap-2.5">
                   <button
                     type="button"
                     onClick={openAppWorkspace}
-                    className="relative z-[20] inline-flex min-h-[48px] w-full cursor-pointer items-center justify-center rounded-xl border border-sky-400/25 bg-gradient-to-b from-[#1e293b] to-[#0f172a] px-3 py-2.5 text-[13px] font-semibold text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition-colors hover:border-sky-400/40 hover:from-[#243047] hover:to-[#111827] touch-manipulation sm:min-h-[44px] sm:w-auto sm:px-5"
+                    className={[
+                      "relative z-[20] inline-flex min-h-[48px] w-full shrink-0 cursor-pointer items-center justify-center rounded-xl",
+                      "border border-white/20 bg-white/[0.06] px-3 py-2.5 text-center text-[13px] font-semibold text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] ring-1 ring-inset ring-white/[0.06]",
+                      "backdrop-blur-md transition duration-200",
+                      "hover:border-sky-300/35 hover:bg-white/[0.1] hover:shadow-[0_0_24px_-8px_rgba(56,189,248,0.14)]",
+                      "active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/45 focus-visible:ring-offset-2 focus-visible:ring-offset-[#07111f]",
+                      "touch-manipulation sm:min-h-[46px] sm:w-auto sm:px-6",
+                    ].join(" ")}
                   >
                     {t("cta.tryAppExperience")}
                   </button>
                   <Link
                     href="/join"
                     prefetch={false}
-                    className="relative z-[20] inline-flex min-h-[48px] w-full items-center justify-center rounded-xl border border-white/[0.14] bg-white/[0.06] px-3 py-2.5 text-center text-[13px] font-semibold text-slate-100 backdrop-blur-sm transition-colors hover:border-white/25 hover:bg-white/[0.1] touch-manipulation sm:min-h-[44px] sm:w-auto sm:px-5"
+                    className={[
+                      "relative z-[20] inline-flex min-h-[48px] w-full items-center justify-center rounded-xl px-3 py-2.5 text-center text-[13px] font-semibold tracking-tight",
+                      "touch-manipulation sm:min-h-[46px] sm:w-auto sm:px-6",
+                      "bg-gradient-to-b from-white to-slate-100 text-[#0c1222]",
+                      "shadow-[0_2px_0_rgba(255,255,255,0.38)_inset,0_8px_28px_-8px_rgba(56,189,248,0.14)] ring-1 ring-white/35",
+                      "transition duration-200 hover:from-white hover:to-slate-50 hover:shadow-[0_2px_0_rgba(255,255,255,0.45)_inset,0_12px_32px_-6px_rgba(56,189,248,0.18)]",
+                      "active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/55 focus-visible:ring-offset-2 focus-visible:ring-offset-[#07111f]",
+                    ].join(" ")}
                   >
                     {t("cta.joinBeta")}
                   </Link>
@@ -315,7 +332,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                 ) : null}
 
                 {!sellerLoading && betaBlocksCrm ? (
-                  <div className="flex flex-col gap-8 rounded-2xl border border-white/[0.1] bg-slate-900/50 px-8 py-16 text-center shadow-[0_24px_64px_-32px_rgba(0,0,0,0.55)] backdrop-blur-md sm:px-12">
+                  <div className="sensora-premium-panel flex flex-col gap-8 px-8 py-16 text-center sm:px-12">
                     <div>
                       <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">
                         {t("register.title")}
@@ -352,13 +369,13 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                     <div className="flex flex-wrap items-center justify-center gap-3">
                       <Link
                         href="/join"
-                        className="inline-flex items-center rounded-xl border border-sky-400/25 bg-gradient-to-b from-[#1e293b] to-[#0f172a] px-6 py-3 text-sm font-semibold text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition hover:border-sky-400/40"
+                        className="sensora-premium-primary-workspace inline-flex min-h-[48px] items-center rounded-xl px-7 py-3 text-sm font-semibold transition touch-manipulation"
                       >
                         {t("register.access.goJoin")}
                       </Link>
                       <Link
                         href="/"
-                        className="sensora-dark-ghost-btn inline-flex items-center rounded-xl px-5 py-3 text-sm font-semibold transition"
+                        className="sensora-dark-ghost-btn inline-flex min-h-[48px] items-center rounded-xl px-6 py-3 text-sm font-semibold transition touch-manipulation"
                       >
                         {t("register.access.goHome")}
                       </Link>
@@ -370,7 +387,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                 ) : null}
 
                 {!sellerLoading && sellerCardGateBlock ? (
-                  <div className="flex flex-col gap-8 rounded-2xl border border-white/[0.1] bg-slate-900/50 px-8 py-16 text-center shadow-[0_24px_64px_-32px_rgba(0,0,0,0.55)] backdrop-blur-md sm:px-12">
+                  <div className="sensora-premium-panel flex flex-col gap-8 px-8 py-16 text-center sm:px-12">
                     <div>
                       <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">영업 전용</p>
                       <h2 className="mt-3 text-2xl font-semibold tracking-tight text-slate-50">아직 확인(승인) 전입니다</h2>
@@ -387,13 +404,13 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                     <div className="flex flex-wrap items-center justify-center gap-3">
                       <Link
                         href="/register"
-                        className="inline-flex items-center rounded-xl border border-sky-400/25 bg-gradient-to-b from-[#1e293b] to-[#0f172a] px-6 py-3 text-sm font-semibold text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition hover:border-sky-400/40"
+                        className="sensora-premium-primary-workspace inline-flex min-h-[48px] items-center rounded-xl px-7 py-3 text-sm font-semibold transition touch-manipulation"
                       >
                         등록 계속하기
                       </Link>
                       <button
                         type="button"
-                        className="sensora-dark-ghost-btn inline-flex items-center rounded-xl px-5 py-3 text-sm font-semibold transition"
+                        className="sensora-dark-ghost-btn inline-flex min-h-[48px] items-center rounded-xl px-6 py-3 text-sm font-semibold transition touch-manipulation"
                         onClick={() => signOut()}
                       >
                         다른 Google 계정으로

@@ -52,7 +52,7 @@ export function InspirationalBackdrop() {
           />
           <div
             aria-hidden
-            className="absolute inset-0 opacity-70 mix-blend-soft-light bg-[radial-gradient(ellipse_85%_50%_at_50%_100%,rgba(30,58,138,0.06),transparent_58%)]"
+            className="absolute inset-0 opacity-75 mix-blend-soft-light bg-[radial-gradient(ellipse_85%_50%_at_50%_100%,rgba(30,58,138,0.07),transparent_58%),radial-gradient(ellipse_60%_40%_at_80%_60%,rgba(79,70,229,0.04),transparent_55%)]"
           />
         </div>
       </div>

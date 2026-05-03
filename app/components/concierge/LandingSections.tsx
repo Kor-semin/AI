@@ -28,19 +28,19 @@ export const LANDING_SHOWROOM_IMAGE_PATHS = {
 } as const;
 
 const cardChrome =
-  "rounded-[26px] border border-white/[0.1] bg-slate-900/45 shadow-[0_20px_56px_-28px_rgba(0,0,0,0.55),0_2px_12px_rgba(15,23,42,0.35)] backdrop-blur-md";
+  "rounded-[26px] border border-white/[0.11] bg-slate-900/47 shadow-[0_22px_58px_-28px_rgba(0,0,0,0.58),0_2px_12px_rgba(15,23,42,0.38)] backdrop-blur-md ring-1 ring-inset ring-white/[0.04] transition-[border-color,box-shadow,transform] duration-[240ms] ease-[cubic-bezier(0.22,1,0.32,1)] hover:-translate-y-[1px] hover:border-white/[0.16] hover:shadow-[0_28px_64px_-26px_rgba(0,0,0,0.6),0_0_48px_-14px_rgba(56,189,248,0.075)] motion-reduce:transform-none motion-reduce:transition-none active:translate-y-0 active:scale-[0.997]";
 
 const primaryBtn =
-  "inline-flex min-h-[44px] items-center justify-center rounded-xl border border-sky-400/35 bg-gradient-to-b from-[#243047] to-[#0f172a] px-6 py-2.5 text-sm font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_8px_28px_-8px_rgba(56,189,248,0.12)] transition hover:border-sky-400/50 hover:from-[#2a3a52] hover:to-[#111827] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/45 focus-visible:ring-offset-2 focus-visible:ring-offset-[#020817]";
+  "sensora-premium-primary-workspace inline-flex min-h-[44px] items-center justify-center rounded-xl px-7 py-2.5 text-sm font-semibold touch-manipulation";
 
 const ghostBtn =
-  "inline-flex min-h-[44px] items-center justify-center rounded-xl border border-white/[0.18] bg-white/[0.05] px-6 py-2.5 text-sm font-semibold text-slate-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-sm transition hover:border-white/28 hover:bg-white/[0.1] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 focus-visible:ring-offset-2 focus-visible:ring-offset-[#020817]";
+  "inline-flex min-h-[44px] items-center justify-center rounded-xl border border-white/[0.18] bg-white/[0.05] px-6 py-2.5 text-sm font-semibold text-slate-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-sm transition duration-200 hover:border-white/28 hover:bg-white/[0.1] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 focus-visible:ring-offset-2 focus-visible:ring-offset-[#020817] touch-manipulation";
 
 const heroPrimaryDark =
-  "inline-flex min-h-[48px] min-w-[12rem] w-full shrink-0 items-center justify-center rounded-2xl bg-gradient-to-b from-white to-slate-100 px-7 py-3.5 text-[15px] font-semibold tracking-tight text-[#0c1222] shadow-[0_2px_0_rgba(255,255,255,0.35)_inset,0_8px_32px_-8px_rgba(56,189,248,0.12),0_16px_48px_-16px_rgba(0,0,0,0.5)] ring-1 ring-white/30 transition hover:from-white hover:to-slate-50 hover:shadow-[0_2px_0_rgba(255,255,255,0.45)_inset,0_12px_40px_-8px_rgba(56,189,248,0.16)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/55 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0d1628] sm:w-auto sm:min-h-[50px] sm:min-w-[12.5rem] sm:py-4 sm:text-[16px] lg:min-h-[52px] lg:px-10 lg:text-[17px]";
+  "inline-flex min-h-[48px] min-w-[12rem] w-full shrink-0 items-center justify-center rounded-2xl bg-gradient-to-b from-white to-slate-100 px-7 py-3.5 text-[15px] font-semibold tracking-tight text-[#0c1222] shadow-[0_2px_0_rgba(255,255,255,0.35)_inset,0_8px_32px_-8px_rgba(56,189,248,0.12),0_16px_48px_-16px_rgba(0,0,0,0.5)] ring-1 ring-white/30 transition duration-200 hover:from-white hover:to-slate-50 hover:shadow-[0_2px_0_rgba(255,255,255,0.45)_inset,0_12px_40px_-8px_rgba(56,189,248,0.16)] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/55 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0d1628] sm:w-auto sm:min-h-[50px] sm:min-w-[12.5rem] sm:py-4 sm:text-[16px] lg:min-h-[52px] lg:px-10 lg:text-[17px]";
 
 const heroGhostDark =
-  "inline-flex min-h-[48px] min-w-[12rem] w-full shrink-0 items-center justify-center rounded-2xl border border-white/20 bg-white/[0.06] px-7 py-3.5 text-[15px] font-semibold tracking-tight text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] ring-1 ring-inset ring-white/[0.08] backdrop-blur-md transition hover:border-sky-300/35 hover:bg-white/[0.1] hover:shadow-[0_0_28px_-8px_rgba(56,189,248,0.12)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0d1628] sm:w-auto sm:min-h-[50px] sm:min-w-[12.5rem] sm:py-4 sm:text-[16px] lg:min-h-[52px] lg:px-10 lg:text-[17px]";
+  "inline-flex min-h-[48px] min-w-[12rem] w-full shrink-0 items-center justify-center rounded-2xl border border-white/20 bg-white/[0.06] px-7 py-3.5 text-[15px] font-semibold tracking-tight text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] ring-1 ring-inset ring-white/[0.08] backdrop-blur-md transition duration-200 hover:border-sky-300/35 hover:bg-white/[0.1] hover:shadow-[0_0_28px_-8px_rgba(56,189,248,0.12)] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0d1628] sm:w-auto sm:min-h-[50px] sm:min-w-[12.5rem] sm:py-4 sm:text-[16px] lg:min-h-[52px] lg:px-10 lg:text-[17px]";
 
 const heroPreviewShell =
   "overflow-hidden rounded-[30px] border border-white/[0.14] bg-slate-900/60 shadow-[0_28px_70px_-24px_rgba(0,0,0,0.65),0_0_0_1px_rgba(255,255,255,0.04)_inset] ring-1 ring-white/[0.06] backdrop-blur-md sm:rounded-[34px] lg:rounded-[36px]";
@@ -95,8 +95,8 @@ function RevealSection({
   const { ref, revealed } = useShowroomReveal();
   const interact = revealed ? "pointer-events-auto" : "pointer-events-none";
   const innerStyles = revealed
-    ? "translate-y-0 opacity-100 duration-[480ms] sm:duration-[780ms]"
-    : "opacity-0 max-sm:translate-y-2 sm:translate-y-0";
+    ? "translate-y-0 opacity-100 transition-[opacity,transform] duration-[520ms] sm:duration-[800ms]"
+    : "opacity-0 max-sm:translate-y-3 sm:translate-y-[10px] transition-[opacity,transform] duration-[520ms] sm:duration-[800ms]";
 
   return (
     <section id={id} ref={ref} className={className}>
@@ -316,7 +316,7 @@ export function LandingShowroom({ onOpenAppWorkspace }: { onOpenAppWorkspace: ()
     <div className="relative overflow-x-hidden bg-[#020817]">
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-[min(70vh,640px)] bg-[radial-gradient(ellipse_90%_60%_at_50%-10%,rgba(56,189,248,0.09),transparent_58%),radial-gradient(ellipse_65%_45%_at_100%_20%,rgba(139,92,246,0.07),transparent_55%)]"
+        className="pointer-events-none absolute inset-x-0 top-0 h-[min(74vh,680px)] bg-[radial-gradient(ellipse_92%_62%_at_48%-8%,rgba(56,189,248,0.1),transparent_58%),radial-gradient(ellipse_68%_48%_at_100%_18%,rgba(139,92,246,0.078),transparent_54%),radial-gradient(ellipse_55%_40%_at_0%_30%,rgba(30,58,138,0.06),transparent_52%)]"
       />
       <div className="relative z-[1]">
         <ShowroomHero onOpenAppWorkspace={onOpenAppWorkspace} />
@@ -348,7 +348,7 @@ function ShowroomHero({ onOpenAppWorkspace }: { onOpenAppWorkspace: () => void }
 
   return (
     <section className="relative mx-auto w-full max-w-[1280px] px-5 pb-10 pt-8 sm:px-6 sm:pb-14 sm:pt-10 lg:pb-16 lg:pt-12 landing-showroom-hero-scene">
-      <div className="relative isolate overflow-hidden rounded-[26px] border border-white/[0.12] bg-gradient-to-br from-[#050814] via-[#0d1628] to-[#101b33] px-6 py-10 shadow-[0_36px_100px_-32px_rgba(0,0,0,0.75)] sm:rounded-[32px] sm:px-9 sm:py-12 lg:min-h-[min(620px,calc(100svh-6rem))] lg:rounded-[36px] lg:px-12 lg:py-14">
+      <div className="relative isolate overflow-hidden rounded-[26px] border border-white/[0.13] bg-gradient-to-br from-[#050814] via-[#0d1628] to-[#101b33] px-6 py-10 shadow-[0_44px_120px_-36px_rgba(0,0,0,0.78),0_0_0_1px_rgba(255,255,255,0.045)_inset,0_0_100px_-40px_rgba(56,189,248,0.065)] ring-1 ring-white/[0.05] motion-reduce:shadow-[0_36px_90px_-32px_rgba(0,0,0,0.72)] sm:rounded-[32px] sm:px-9 sm:py-12 lg:min-h-[min(620px,calc(100svh-6rem))] lg:rounded-[36px] lg:px-12 lg:py-14">
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_55%_at_14%-8%,rgba(255,255,255,0.07),transparent_55%),radial-gradient(ellipse_72%_50%_at_96%_8%,rgba(56,189,248,0.1),transparent_58%),radial-gradient(ellipse_55%_40%_at_70%_100%,rgba(139,92,246,0.07),transparent_60%),radial-gradient(ellipse_58%_48%_at_78%_88%,rgba(56,189,248,0.05),transparent_62%)]"
@@ -439,7 +439,7 @@ function ShowroomBridge() {
 }
 
 const flowCardWrap =
-  "mx-auto rounded-[28px] border border-white/[0.1] bg-slate-900/42 shadow-[0_28px_70px_-36px_rgba(0,0,0,0.72)] ring-1 ring-inset ring-white/[0.04] backdrop-blur-md landing-showroom-flow-card-shadow";
+  "group mx-auto rounded-[28px] border border-white/[0.13] bg-gradient-to-b from-slate-950/45 to-[#07111f]/55 shadow-[0_32px_80px_-38px_rgba(0,0,0,0.75)] ring-1 ring-inset ring-white/[0.045] backdrop-blur-xl landing-showroom-flow-card-shadow transition-[border-color,box-shadow,transform] duration-[260ms] ease-[cubic-bezier(0.22,1,0.32,1)] hover:-translate-y-[1px] hover:border-sky-400/22 hover:shadow-[0_36px_88px_-36px_rgba(0,0,0,0.76),0_0_52px_-20px_rgba(56,189,248,0.065)] motion-reduce:transform-none motion-reduce:transition-none";
 
 function ProductFlowSectionInner() {
   const { t } = useLanguage();
@@ -474,14 +474,14 @@ function ProductFlowSectionInner() {
             >
               <div className="relative mt-1 flex shrink-0 flex-col items-center sm:w-14">
                 <span
-                  className="relative z-[2] flex h-9 w-9 items-center justify-center rounded-full border border-white/[0.12] bg-gradient-to-br from-slate-800 to-slate-900 text-[12px] font-semibold tracking-tight text-slate-200 shadow-[0_8px_20px_-8px_rgba(0,0,0,0.5)]"
+                  className="relative z-[2] flex h-10 w-10 items-center justify-center rounded-full border border-white/[0.14] bg-gradient-to-br from-slate-800/98 to-[#0b1424] text-[12px] font-semibold tracking-tight text-slate-100 shadow-[0_10px_24px_-8px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(255,255,255,0.08)] ring-1 ring-white/[0.05] transition duration-200 ease-out group-hover:border-sky-400/35 group-hover:shadow-[0_12px_32px_-8px_rgba(56,189,248,0.12)]"
                   aria-hidden
                 >
                   {idx + 1}
                 </span>
                 {idx < rows.length - 1 ? (
                   <span
-                    className="mt-5 h-[4rem] w-px shrink-0 bg-gradient-to-b from-sky-400/35 via-slate-600/40 to-transparent motion-reduce:opacity-60 sm:h-[4.5rem]"
+                    className="relative mt-5 h-[4rem] w-[2px] shrink-0 rounded-full bg-gradient-to-b from-sky-400/42 via-indigo-400/28 to-transparent shadow-[0_0_16px_-1px_rgba(56,189,248,0.22)] motion-reduce:shadow-none motion-reduce:opacity-70 sm:h-[4.75rem]"
                     aria-hidden
                   />
                 ) : null}

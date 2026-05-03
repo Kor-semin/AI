@@ -83,7 +83,7 @@ export function SensoraGuideImageViewer({
   return (
     <div
       className={[
-        "fixed inset-0 flex items-end justify-center bg-black/55 px-0 pb-0 pt-8 backdrop-blur-md sm:items-center sm:px-4 sm:pb-6 sm:pt-6",
+        "fixed inset-0 flex items-end justify-center bg-black/[0.58] px-0 pb-0 pt-8 backdrop-blur-xl motion-safe:transition-[background-color] motion-safe:duration-300 sm:items-center sm:px-4 sm:pb-6 sm:pt-6",
         overlayZClass,
       ].join(" ")}
       role="dialog"
@@ -97,7 +97,7 @@ export function SensoraGuideImageViewer({
         onClick={onClose}
       />
       <div
-        className="relative z-[1] flex max-h-[min(92dvh,92vh)] w-full max-w-[min(100%,920px)] flex-col overflow-hidden rounded-t-[22px] border border-white/[0.12] bg-[#07111f]/95 shadow-[0_32px_80px_-24px_rgba(0,0,0,0.65)] sm:max-h-[min(88dvh,88vh)] sm:rounded-2xl"
+        className="relative z-[1] flex max-h-[min(92dvh,92vh)] w-full max-w-[min(100%,920px)] flex-col overflow-hidden rounded-t-[22px] border border-white/[0.14] bg-gradient-to-b from-[#0a1628]/98 to-[#07111f]/97 shadow-[0_40px_100px_-28px_rgba(0,0,0,0.72),0_0_0_1px_rgba(255,255,255,0.045)_inset,0_0_60px_-24px_rgba(56,189,248,0.065)] backdrop-blur-2xl sm:max-h-[min(88dvh,88vh)] sm:rounded-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-start justify-between gap-3 border-b border-white/[0.08] px-4 py-3.5 sm:px-5 sm:py-4">
@@ -114,7 +114,7 @@ export function SensoraGuideImageViewer({
           </div>
           <button
             type="button"
-            className="shrink-0 rounded-xl border border-white/[0.12] bg-white/[0.06] px-3 py-2 text-[12px] font-semibold text-slate-200 transition hover:border-white/20 hover:bg-white/10"
+            className="shrink-0 rounded-xl border border-white/[0.14] bg-white/[0.06] px-3 py-2 text-[12px] font-semibold text-slate-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] transition duration-200 hover:border-sky-400/30 hover:bg-white/[0.11] active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35"
             onClick={onClose}
           >
             {t("landing.showroom.tip.close")}
@@ -148,7 +148,7 @@ export function SensoraGuideImageViewer({
               <button
                 type="button"
                 onClick={goPrev}
-                className="pointer-events-auto flex size-10 items-center justify-center rounded-full border border-white/15 bg-[#0f172a]/90 text-slate-100 shadow-lg backdrop-blur-sm transition hover:border-sky-400/35 hover:bg-[#0f172a]"
+                className="pointer-events-auto flex size-10 items-center justify-center rounded-full border border-white/18 bg-[#0f172a]/92 text-slate-100 shadow-[0_8px_24px_-6px_rgba(0,0,0,0.45)] backdrop-blur-md transition duration-200 hover:-translate-y-px hover:border-sky-400/42 hover:bg-[#141f33] hover:shadow-[0_12px_28px_-8px_rgba(56,189,248,0.12)] active:translate-y-0 active:scale-[0.96] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35"
                 aria-label={t("landing.showroom.tip.prev")}
               >
                 <span className="text-lg leading-none" aria-hidden>
@@ -160,7 +160,7 @@ export function SensoraGuideImageViewer({
               <button
                 type="button"
                 onClick={goNext}
-                className="pointer-events-auto flex size-10 items-center justify-center rounded-full border border-white/15 bg-[#0f172a]/90 text-slate-100 shadow-lg backdrop-blur-sm transition hover:border-sky-400/35 hover:bg-[#0f172a]"
+                className="pointer-events-auto flex size-10 items-center justify-center rounded-full border border-white/18 bg-[#0f172a]/92 text-slate-100 shadow-[0_8px_24px_-6px_rgba(0,0,0,0.45)] backdrop-blur-md transition duration-200 hover:-translate-y-px hover:border-sky-400/42 hover:bg-[#141f33] hover:shadow-[0_12px_28px_-8px_rgba(56,189,248,0.12)] active:translate-y-0 active:scale-[0.96] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35"
                 aria-label={t("landing.showroom.tip.next")}
               >
                 <span className="text-lg leading-none" aria-hidden>
