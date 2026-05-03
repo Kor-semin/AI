@@ -120,7 +120,7 @@ export function LandingShowroom({ onOpenAppWorkspace }: { onOpenAppWorkspace: ()
       <div className="relative z-[1]">
         <LandingShowcaseHero onOpenAppWorkspace={onOpenAppWorkspace} />
 
-        <RevealSection className="relative mx-auto w-full max-w-[1200px] overflow-x-hidden px-5 pb-9 pt-3 sm:px-6 sm:pb-11 sm:pt-6">
+        <RevealSection className="relative mx-auto w-full max-w-[1200px] overflow-x-hidden px-5 pb-9 pt-2 sm:px-6 sm:pb-11 sm:pt-5">
           <SensoraGuideSectionInner />
         </RevealSection>
 

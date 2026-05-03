@@ -2201,9 +2201,49 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   z-index: 1;
 }
 
-/* 랜딩 히어로 본문 줄바꿈 — 한 줄이 한 덩어리로 읽히도록 */
-.landing-showcase-hero-headline > span {
+/* 랜딩 히어로 타이틀: 모바일은 balance · xl+ 데스크톱은 의도된 2줄(각 줄 미세 줄바꿈 방지) */
+.landing-showcase-hero-headline .landing-showcase-hero-headline-line {
   text-wrap: balance;
+}
+
+@media (min-width: 1280px) {
+  .landing-showcase-hero-headline .landing-showcase-hero-headline-line {
+    white-space: nowrap;
+  }
+}
+
+/* 가이드 모달 스크롤 영역 내 푸터는 PC에서 콘텐츠 흐름에 붙도록 (무거운 뷰포트 하단 분리 완화) */
+@media (min-width: 1024px) {
+  .sensora-guide-toc-scroll {
+    scrollbar-gutter: stable;
+  }
+
+  .sensora-guide-toc-footer {
+    margin-bottom: env(safe-area-inset-bottom, 0px);
+  }
+}
+
+/* 선택된 가이드 카드: 카드 전체 은은한 cyan/violet 피드백 레이어 */
+.sensora-guide-pick-card.sensora-guide-pick-card--active::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  opacity: 0.34;
+  background: linear-gradient(
+    152deg,
+    rgba(56, 189, 248, 0.12) 0%,
+    transparent 46%,
+    rgba(139, 92, 246, 0.08) 100%
+  );
+  box-shadow: inset 0 0 36px -12px rgba(34, 211, 238, 0.12);
+}
+
+.sensora-guide-pick-card.sensora-guide-pick-card--active > div {
+  position: relative;
+  z-index: 2;
 }
 
 /* 가이드 모달: 카드 전환 시 메인 이미지 짧게 강조 */

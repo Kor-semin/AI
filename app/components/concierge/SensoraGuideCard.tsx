@@ -17,7 +17,7 @@ export function SensoraGuideCard({ title, description, image, selected, onSelect
       onClick={onSelect}
       aria-pressed={selected}
       className={[
-        "sensora-guide-pick-card group flex w-full touch-manipulation flex-col overflow-hidden rounded-[18px] text-left",
+        "sensora-guide-pick-card group relative flex w-full touch-manipulation flex-col overflow-hidden rounded-[18px] text-left",
         "border border-white/[0.1] bg-gradient-to-br from-slate-950/88 via-[#070f1c]/76 to-slate-950/45",
         "shadow-[inset_0_1px_0_rgba(255,255,255,0.065),0_12px_36px_-22px_rgba(0,0,0,0.55)] backdrop-blur-xl",
         "ring-1 ring-inset ring-white/[0.05]",
@@ -26,7 +26,7 @@ export function SensoraGuideCard({ title, description, image, selected, onSelect
         "motion-reduce:transition-none motion-reduce:hover:translate-y-0",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/45",
         selected ?
-          "sensora-guide-pick-card--active border-sky-400/62 z-[1] -translate-y-0.5 ring-[3px] ring-sky-400/45 ring-offset-2 ring-offset-[#020617] shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_0_52px_-12px_rgba(56,189,248,0.32),0_0_80px_-24px_rgba(139,92,246,0.14)] motion-reduce:translate-y-0 motion-reduce:ring-2 motion-reduce:shadow-none"
+          "sensora-guide-pick-card--active border-cyan-400/75 z-[1] -translate-y-0.5 ring-[3px] ring-cyan-400/55 ring-offset-2 ring-offset-[#020617] shadow-[inset_0_1px_0_rgba(255,255,255,0.11),0_0_0_1px_rgba(34,211,238,0.22),0_0_56px_-10px_rgba(34,211,238,0.28),0_0_88px_-28px_rgba(56,189,248,0.2)] motion-reduce:translate-y-0 motion-reduce:ring-2 motion-reduce:shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_0_0_1px_rgba(34,211,238,0.18)]"
         : "active:scale-[0.992]",
       ].join(" ")}
     >
@@ -54,7 +54,7 @@ export function SensoraGuideCard({ title, description, image, selected, onSelect
           aria-hidden
           style={{
             background:
-              "linear-gradient(135deg, rgba(56,189,248,0.12) 0%, transparent 42%, rgba(139,92,246,0.07) 100%)",
+              "linear-gradient(135deg, rgba(34,211,238,0.16) 0%, transparent 44%, rgba(56,189,248,0.09) 58%, rgba(139,92,246,0.09) 100%)",
           }}
         />
       </div>
