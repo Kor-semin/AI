@@ -1714,20 +1714,20 @@ export function CRMApp({
           {showSellerToolsRow ? (
             <div className="flex flex-wrap items-center gap-2 sm:justify-between">
               <label className="flex flex-1 flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
-                <span className="whitespace-nowrap text-[13px] font-semibold text-[#374151]">
+                <span className="whitespace-nowrap text-[13px] font-semibold text-slate-300">
                   내 이름 · 템플릿 치환
                 </span>
                 <input
                   value={sellerNickname}
                   onChange={(e) => persistSellerNickname(e.target.value)}
                   placeholder="예: 김실장"
-                  className="max-w-xs flex-1 rounded-xl border border-[#E5E7EB] bg-[#FFFFFF] px-4 py-2.5 text-[15px] text-[#111827] outline-none focus:border-[#94A3B8]"
+                  className="max-w-xs flex-1 rounded-xl border border-white/[0.11] bg-slate-950/55 px-4 py-2.5 text-[15px] text-slate-50 outline-none placeholder:text-slate-500 focus:border-sky-400/45"
                 />
               </label>
               <div className="flex flex-wrap gap-2">
                 <button
                   type="button"
-                  className="min-h-[44px] rounded-[20px] border border-[#E5E7EB] bg-[#F9FAFB] px-5 py-2.5 text-[14px] font-semibold text-[#111827] ring-1 ring-inset ring-[#E5E7EB] transition hover:bg-[#F3F4F6] touch-manipulation"
+                  className="min-h-[44px] rounded-[20px] border border-white/[0.11] bg-slate-950/45 px-5 py-2.5 text-[14px] font-semibold text-slate-50 ring-1 ring-inset ring-white/[0.12] transition hover:bg-white/[0.08] touch-manipulation"
                   onClick={() => openCustomersImportHub()}
                 >
                   주소록 가져오기
@@ -1735,7 +1735,7 @@ export function CRMApp({
                 {selectedCustomer ? (
                   <button
                     type="button"
-                    className="min-h-[44px] rounded-[20px] border border-[#E5E7EB] bg-[#FFFFFF] px-5 py-2.5 text-[14px] font-semibold text-[#374151] transition hover:bg-[#F9FAFB] touch-manipulation"
+                    className="min-h-[44px] rounded-[20px] border border-white/[0.11] bg-slate-950/55 px-5 py-2.5 text-[14px] font-semibold text-slate-300 transition hover:bg-slate-950/45 touch-manipulation"
                     onClick={() => setDeliveryGuideOpen(true)}
                   >
                     출고 안내
@@ -1747,7 +1747,7 @@ export function CRMApp({
 
           {showWorkspaceTabs ? (
             <nav
-              className="flex flex-wrap gap-1 border-b border-[#E5E7EB]"
+              className="flex flex-wrap gap-1 border-b border-white/[0.11]"
               aria-label="업무 영역"
             >
               {(["고객", "다음할일", "일정", "템플릿"] as const).map((tabKey) => (
@@ -1756,10 +1756,10 @@ export function CRMApp({
                   type="button"
                   onClick={() => setTab(tabKey)}
                   className={[
-                    "min-h-[44px] -mb-px touch-manipulation px-5 py-3 text-[14px] font-semibold outline-none transition focus-visible:rounded-t-lg focus-visible:ring-2 focus-visible:ring-[#CBD5E1]",
+                    "min-h-[44px] -mb-px touch-manipulation px-5 py-3 text-[14px] font-semibold outline-none transition focus-visible:rounded-t-lg focus-visible:ring-2 focus-visible:ring-sky-400/35",
                     tab === tabKey
-                      ? "border-b-2 border-[#111827] text-[#111827]"
-                      : "border-b-2 border-transparent text-[#6B7280] hover:text-[#111827]",
+                      ? "border-b-2 border-sky-400/75 text-slate-50 shadow-[0_12px_24px_-16px_rgba(56,189,248,0.12)]"
+                      : "border-b-2 border-transparent text-slate-400 hover:text-slate-200",
                   ].join(" ")}
                 >
                   {TAB_LABELS[tabKey]}
@@ -1911,36 +1911,36 @@ export function CRMApp({
             <div className="flex min-w-0 flex-col gap-6 xl:grid xl:grid-cols-[minmax(0,1.06fr)_minmax(336px,0.94fr)] xl:items-start xl:gap-8">
               <div
                 id="crm-customer-table"
-                className="min-w-0 overflow-hidden rounded-2xl border border-[#E5E7EB] bg-[#FFFFFF] shadow-[0_1px_4px_rgba(15,23,42,0.04)] xl:sticky xl:top-4 xl:self-start xl:max-h-[calc(100vh-13rem)] xl:overflow-auto"
+                className="min-w-0 overflow-hidden rounded-2xl border border-white/[0.11] bg-slate-950/55 shadow-[0_1px_4px_rgba(15,23,42,0.04)] xl:sticky xl:top-4 xl:self-start xl:max-h-[calc(100vh-13rem)] xl:overflow-auto"
               >
-                <div className="border-b border-[#E5E7EB] px-5 py-5 sm:px-6">
-                  <h2 className="text-[18px] font-semibold text-[#111827]">{t("crm.section.customerList")}</h2>
-                  <p className="mt-2 text-[15px] leading-relaxed text-[#6B7280]">
+                <div className="border-b border-white/[0.11] px-5 py-5 sm:px-6">
+                  <h2 className="text-[18px] font-semibold text-slate-50">{t("crm.section.customerList")}</h2>
+                  <p className="mt-2 text-[15px] leading-relaxed text-slate-400">
                     고객 행을 눌러 선택합니다. 선택 시 오른쪽에서 상세·상담·다음 연락까지 이어서 다룹니다.
                   </p>
                 </div>
                 <div className="overflow-x-auto xl:overflow-y-auto xl:[max-height:calc(100vh-20rem)]">
                   <table className="min-w-[880px] w-full border-collapse text-left">
                     <thead className="sticky top-0 z-[2] backdrop-blur-sm">
-                      <tr className="border-b border-[#E5E7EB] bg-[#F9FAFB]/95 shadow-[inset_0_-1px_0_0_#E5E7EB]">
-                        <th className="px-5 py-4 text-[12px] font-semibold tracking-[-0.01em] text-[#4B5563] sm:px-6">
+                      <tr className="border-b border-white/[0.11] bg-slate-900/92 shadow-[inset_0_-1px_0_0_rgba(255,255,255,0.08)]">
+                        <th className="px-5 py-4 text-[12px] font-semibold tracking-[-0.01em] text-slate-400 sm:px-6">
                           고객명
                         </th>
-                        <th className="px-5 py-4 text-[12px] font-semibold tracking-[-0.01em] text-[#4B5563] sm:px-6">
+                        <th className="px-5 py-4 text-[12px] font-semibold tracking-[-0.01em] text-slate-400 sm:px-6">
                           {t("common.interestedVehicle")}
                         </th>
-                        <th className="px-5 py-4 text-[12px] font-semibold tracking-[-0.01em] text-[#4B5563] sm:px-6">
+                        <th className="px-5 py-4 text-[12px] font-semibold tracking-[-0.01em] text-slate-400 sm:px-6">
                           {t("common.status")}
                         </th>
-                        <th className="px-5 py-4 text-[12px] font-semibold tracking-[-0.01em] text-[#4B5563] sm:px-6">
+                        <th className="px-5 py-4 text-[12px] font-semibold tracking-[-0.01em] text-slate-400 sm:px-6">
                           {t("crm.section.nextAction")}
                         </th>
-                        <th className="px-5 py-4 text-[12px] font-semibold tracking-[-0.01em] text-[#4B5563] sm:px-6">
+                        <th className="px-5 py-4 text-[12px] font-semibold tracking-[-0.01em] text-slate-400 sm:px-6">
                           {t("common.potential")}
                         </th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-[#E5E7EB]">
+                    <tbody className="divide-y divide-white/[0.09]">
                       {customersFiltered.map((c) => {
                         const na = state.nextActions.find((a) => a.customerId === c.id && !a.doneAt);
                         const nextLbl = na?.title?.trim()
@@ -1955,29 +1955,29 @@ export function CRMApp({
                             key={c.id}
                             className={
                               selectedCustomerId === c.id
-                                ? "bg-[#F1F5F9]"
-                                : "bg-[#FFFFFF] hover:bg-[#FAFBFC]"
+                                ? "bg-sky-950/20"
+                                : "bg-slate-950/55 hover:bg-white/[0.04]"
                             }
                           >
                             <td className="px-5 py-4 align-top sm:px-6">
                               <button
                                 type="button"
-                                className="text-left font-semibold text-[#111827] text-[16px] leading-snug hover:underline"
+                                className="text-left font-semibold text-slate-50 text-[16px] leading-snug hover:underline"
                                 onClick={() => setSelectedCustomerId(c.id)}
                               >
                                 {c.name}
                               </button>
-                              <div className="mt-1 text-[14px] font-medium text-[#6B7280]">
+                              <div className="mt-1 text-[14px] font-medium text-slate-400">
                                 {c.phone?.trim() || "연락처 없음"}
                               </div>
                             </td>
-                            <td className="max-w-[220px] px-5 py-4 align-top text-[15px] text-[#374151] sm:px-6">
+                            <td className="max-w-[220px] px-5 py-4 align-top text-[15px] text-slate-300 sm:px-6">
                               {[c.vehicleBrand, c.interestedModel].filter(Boolean).join(" ") || "—"}
                             </td>
-                            <td className="px-5 py-4 align-top text-[15px] font-semibold text-[#111827] sm:px-6">
+                            <td className="px-5 py-4 align-top text-[15px] font-semibold text-slate-50 sm:px-6">
                               {c.stage}
                             </td>
-                            <td className="max-w-[260px] px-5 py-4 align-top text-[14px] leading-snug text-[#6B7280] sm:px-6">
+                            <td className="max-w-[260px] px-5 py-4 align-top text-[14px] leading-snug text-slate-400 sm:px-6">
                               {clampText(nextLbl, 90)}
                             </td>
                             <td className="px-5 py-4 align-top sm:px-6">
@@ -1985,13 +1985,13 @@ export function CRMApp({
                                 <button
                                   type="button"
                                   title="산정 기준"
-                                  className="text-[15px] font-semibold text-[#475569] underline decoration-[#CBD5E1] underline-offset-[5px] hover:text-[#111827]"
+                                  className="text-[15px] font-semibold text-slate-300 underline decoration-white/25 underline-offset-[5px] hover:text-slate-50"
                                   onClick={() => setLeadExplainForId(c.id)}
                                 >
                                   {sx.percent}% · {sx.grade}
                                 </button>
                               ) : (
-                                <span className="text-[15px] font-medium text-[#64748B]">분석 전 · —</span>
+                                <span className="text-[15px] font-medium text-slate-400">분석 전 · —</span>
                               )}
                             </td>
                           </tr>
@@ -2001,14 +2001,14 @@ export function CRMApp({
                   </table>
                 </div>
                 {customersFiltered.length === 0 ? (
-                  <div className="border-t border-[#E5E7EB] px-8 py-14 text-center">
-                    <p className="text-[18px] font-semibold text-[#111827]">등록된 고객이 없습니다</p>
-                    <p className="mx-auto mt-3 max-w-md text-[15px] leading-relaxed text-[#6B7280]">
+                  <div className="border-t border-white/[0.11] px-8 py-14 text-center">
+                    <p className="text-[18px] font-semibold text-slate-50">등록된 고객이 없습니다</p>
+                    <p className="mx-auto mt-3 max-w-md text-[15px] leading-relaxed text-slate-400">
                       첫 고객을 추가하거나 「주소록 가져오기」로 불러와 상담과 일정을 이어 가 보세요.
                     </p>
                     <button
                       type="button"
-                      className="mt-8 rounded-xl bg-[#111827] px-6 py-3 text-[15px] font-semibold text-white hover:bg-[#1F2937]"
+                      className="sensora-premium-primary-workspace mt-8 rounded-xl px-6 py-3 text-[15px] font-semibold touch-manipulation"
                       onClick={openCreateCustomerModal}
                     >
                       고객 추가하기
@@ -2022,13 +2022,13 @@ export function CRMApp({
                 tabIndex={-1}
                 className="flex min-h-[48vh] min-w-0 flex-col gap-4 xl:max-h-[calc(100vh-13rem)] xl:overflow-y-auto"
               >
-                <header id="crm-detail-header" className="scroll-mt-28 rounded-[22px] border border-[#E5E7EB] bg-[#FFFFFF] px-5 py-4 shadow-[0_2px_8px_-4px_rgba(15,23,42,0.06)] sm:px-6">
+                <header id="crm-detail-header" className="scroll-mt-28 rounded-[22px] border border-white/[0.11] bg-slate-950/55 px-5 py-4 shadow-[0_2px_8px_-4px_rgba(15,23,42,0.06)] sm:px-6">
                   <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                     <div className="min-w-0 flex-1">
-                      <div className="truncate text-[22px] font-semibold tracking-tight text-[#111827]">
+                      <div className="truncate text-[22px] font-semibold tracking-tight text-slate-50">
                         {selectedCustomer ? selectedCustomer.name : t("crm.section.customerDetails")}
                       </div>
-                      <div className="mt-2 text-[15px] text-[#6B7280]">
+                      <div className="mt-2 text-[15px] text-slate-400">
                         {selectedCustomer
                           ? `${selectedCustomer.phone?.trim() || "연락처 미입력"} · 마지막 기록 ${formatDateTime(selectedCustomer.updatedAt)}`
                           : "목록에서 고객을 선택하거나 새로 추가합니다."}
@@ -2036,7 +2036,7 @@ export function CRMApp({
                       {selectedCustomer?.phone?.trim() ? (
                         <button
                           type="button"
-                          className="mt-3 rounded-lg bg-[#F3F4F6] px-4 py-2 text-[13px] font-semibold text-[#374151] ring-1 ring-inset ring-[#E5E7EB] hover:bg-[#E5E7EB]"
+                          className="mt-3 rounded-lg bg-white/[0.07] px-4 py-2 text-[13px] font-semibold text-slate-300 ring-1 ring-inset ring-white/[0.12] hover:bg-white/[0.1]"
                           onClick={() =>
                             void copyToClipboard(selectedCustomer.phone!.trim()).then((ok) =>
                               ok ? showToast("전화번호를 복사했습니다.") : alert(selectedCustomer.phone),
@@ -2052,28 +2052,28 @@ export function CRMApp({
                         <button
                           type="button"
                           onClick={() => setDeliveryGuideOpen(true)}
-                          className="rounded-xl border border-[#E5E7EB] bg-[#FFFFFF] px-4 py-2.5 text-[13px] font-semibold text-[#111827] hover:bg-[#F9FAFB]"
+                          className="rounded-xl border border-white/[0.11] bg-slate-950/55 px-4 py-2.5 text-[13px] font-semibold text-slate-50 hover:bg-slate-950/45"
                         >
                           출고 안내
                         </button>
                         <button
                           type="button"
                           onClick={() => addNextAction(selectedCustomer.id)}
-                          className="min-h-[44px] rounded-xl border border-[#E5E7EB] bg-[#FFFFFF] px-4 py-2.5 text-[13px] font-semibold hover:bg-[#F3F4F6] touch-manipulation"
+                          className="min-h-[44px] rounded-xl border border-white/[0.11] bg-slate-950/55 px-4 py-2.5 text-[13px] font-semibold hover:bg-white/[0.08] touch-manipulation"
                         >
                           + 연락
                         </button>
                         <button
                           type="button"
                           onClick={() => addEvent(selectedCustomer.id)}
-                          className="min-h-[44px] rounded-xl border border-[#E5E7EB] bg-[#FFFFFF] px-4 py-2.5 text-[13px] font-semibold hover:bg-[#F3F4F6] touch-manipulation"
+                          className="min-h-[44px] rounded-xl border border-white/[0.11] bg-slate-950/55 px-4 py-2.5 text-[13px] font-semibold hover:bg-white/[0.08] touch-manipulation"
                         >
                           + 일정
                         </button>
                         <button
                           type="button"
                           onClick={() => exportCustomerSummary(selectedCustomer)}
-                          className="min-h-[44px] rounded-xl bg-[#111827] px-4 py-2.5 text-[13px] font-semibold text-white hover:bg-[#1F2937] touch-manipulation"
+                          className="sensora-premium-primary-workspace min-h-[44px] rounded-xl px-4 py-2.5 text-[13px] font-semibold touch-manipulation"
                         >
                           요약
                         </button>
@@ -2082,14 +2082,14 @@ export function CRMApp({
                   </div>
                 </header>
 
-                <div className="rounded-[18px] border border-[#E5E7EB] bg-[#FAFBFC] px-4 py-3 shadow-[inset_0_0_0_1px_rgba(241,245,249,0.85)]">
-                  <p className="text-[12px] font-medium leading-relaxed text-[#64748B]">
-                    상담 메모 분석과 발송 문자 초안은 <span className="font-semibold text-[#475569]">Sensora AI 비서</span> 화면에서
+                <div className="rounded-[18px] border border-white/[0.11] bg-slate-950/38 px-4 py-3 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)]">
+                  <p className="text-[12px] font-medium leading-relaxed text-slate-400">
+                    상담 메모 분석과 발송 문자 초안은 <span className="font-semibold text-slate-300">Sensora AI 비서</span> 화면에서
                     진행합니다. 메모는 고객 카드 또는 상담 메뉴에서 직접 수정합니다.
                   </p>
                   <button
                     type="button"
-                    className="mt-3 min-h-[44px] rounded-xl bg-[#111827] px-4 py-2 text-[13px] font-semibold text-white touch-manipulation hover:bg-[#1F2937]"
+                    className="sensora-premium-primary-workspace mt-3 min-h-[44px] rounded-xl px-4 py-2 text-[13px] font-semibold touch-manipulation"
                     onClick={() => onActiveSectionChange("ai")}
                   >
                     AI 비서 열기
@@ -2100,34 +2100,34 @@ export function CRMApp({
           {selectedCustomer ? (
             <>
               {memoFeedback ? (
-                <div className="rounded-[22px] border border-[#E5E7EB] bg-gradient-to-b from-[#FFFFFF] to-[#F4F6F8] px-5 py-4 shadow-[0_4px_20px_-12px_rgba(15,23,42,0.06)] sm:p-5">
+                <div className="rounded-[22px] border border-white/[0.11] bg-gradient-to-b from-slate-950/70 to-[#07111f]/72 px-5 py-4 shadow-[0_22px_48px_-26px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-sm sm:p-5">
                   <div className="flex flex-wrap items-start justify-between gap-3">
-                    <div className="text-[12px] font-semibold tracking-[-0.01em] text-[#475569]">
+                    <div className="text-[12px] font-semibold tracking-[-0.01em] text-slate-300">
                       {t("crm.section.aiRecommendation")}
                     </div>
                     <button
                       type="button"
                       onClick={() => setDeliveryGuideOpen(true)}
-                      className="rounded-lg bg-[#111827] px-3 py-1.5 text-[12px] font-semibold text-white hover:bg-[#1F2937]"
+                      className="sensora-premium-primary-workspace rounded-lg px-3 py-1.5 text-[12px] font-semibold touch-manipulation"
                     >
                       출고 안내
                     </button>
                   </div>
-                  <ul className="mt-4 space-y-3 text-[16px] leading-relaxed text-[#111827]">
+                  <ul className="mt-4 space-y-3 text-[16px] leading-relaxed text-slate-50">
                     {memoFeedback.bullets.slice(0, 5).map((b) => (
                       <li key={b}>· {b}</li>
                     ))}
                   </ul>
                   {memoFeedback.risks.length ? (
-                    <div className="mt-4 rounded-xl bg-[#F1F5F9] px-4 py-3 text-[13px] text-[#64748B]">
-                      <span className="font-semibold text-[#475569]">점검: </span>
+                    <div className="mt-4 rounded-xl bg-sky-950/20 px-4 py-3 text-[13px] text-slate-400">
+                      <span className="font-semibold text-slate-300">점검: </span>
                       {memoFeedback.risks.slice(0, 3).join(" · ")}
                     </div>
                   ) : null}
                   {memoFeedback.nextQuestions[0] ? (
                     <>
-                      <p className="mt-5 text-[13px] font-semibold text-[#374151]">다음 연락 때 질문</p>
-                      <p className="mt-2 text-[15px] leading-relaxed text-[#6B7280]">
+                      <p className="mt-5 text-[13px] font-semibold text-slate-300">다음 연락 때 질문</p>
+                      <p className="mt-2 text-[15px] leading-relaxed text-slate-400">
                         {memoFeedback.nextQuestions[0]}
                       </p>
                     </>
@@ -2137,20 +2137,20 @@ export function CRMApp({
 
               <details
                 open
-                className="scroll-mt-24 rounded-[22px] border border-[#E5E7EB] bg-[#FFFFFF] px-5 py-4 shadow-[0_2px_8px_-4px_rgba(15,23,42,0.06)] sm:p-5"
+                className="scroll-mt-24 rounded-[22px] border border-white/[0.11] bg-slate-950/55 px-5 py-4 shadow-[0_2px_8px_-4px_rgba(15,23,42,0.06)] sm:p-5"
               >
-                <summary className="list-none rounded-xl px-1 py-2 outline-none transition hover:bg-[#FAFBFC] focus-visible:ring-2 focus-visible:ring-[#CBD5E1] [&::-webkit-details-marker]:hidden">
+                <summary className="list-none rounded-xl px-1 py-2 outline-none transition hover:bg-slate-950/38 focus-visible:ring-2 focus-visible:ring-sky-400/35 [&::-webkit-details-marker]:hidden">
                   <div className="min-w-0">
-                    <div className="text-[13px] font-semibold tracking-[-0.01em] text-[#475569]">
+                    <div className="text-[13px] font-semibold tracking-[-0.01em] text-slate-300">
                       {t("crm.section.consultationSummary")} · 고객 메시지
                     </div>
-                    <div className="mt-2 text-[14px] leading-relaxed text-[#6B7280]">
+                    <div className="mt-2 text-[14px] leading-relaxed text-slate-400">
                       상담/예산/차량 메모를 바탕으로 자동으로 정리됩니다. 필요하면 문장을 수정해도 됩니다.
                     </div>
                   </div>
                   <span className="sr-only">드래프트 문자 영역 접기 또는 펼치기</span>
                 </summary>
-                <div className="border-t border-[#F4F6F8] pt-4">
+                <div className="border-t border-white/[0.08] pt-4">
                   {(() => {
                   const q = buildUsedCarSearchQuery(selectedCustomer);
                   const lines: string[] = [];
@@ -2189,7 +2189,7 @@ export function CRMApp({
                     <>
                       <textarea
                         rows={7}
-                        className="mt-4 w-full min-h-[144px] resize-y rounded-xl border border-[#E5E7EB] bg-white px-4 py-3 text-[14px] text-[#374151] outline-none focus:border-[#94A3B8]"
+                        className="mt-4 w-full min-h-[144px] resize-y rounded-xl border border-white/[0.11] bg-slate-950/55 px-4 py-3 text-[14px] text-slate-300 outline-none focus:border-sky-400/45"
                         value={text}
                         readOnly
                         autoComplete="off"
@@ -2200,7 +2200,7 @@ export function CRMApp({
                       <div className="mt-3 flex flex-wrap gap-2">
                         <button
                           type="button"
-                          className="min-h-[44px] rounded-xl bg-[#111827] px-4 py-2.5 text-[13px] font-semibold text-white hover:bg-[#1F2937] touch-manipulation"
+                          className="sensora-premium-primary-workspace min-h-[44px] rounded-xl px-4 py-2.5 text-[13px] font-semibold touch-manipulation"
                           onClick={() => {
                             void copyToClipboard(text).then((ok) => {
                               if (ok) showToast("문자 내용 복사 완료");
@@ -2220,20 +2220,20 @@ export function CRMApp({
               <div className="flex flex-col gap-4">
                 <details
                   id="crm-block-budget"
-                  className="scroll-mt-24 rounded-2xl border border-[#E5E7EB] bg-[#FFFFFF] p-5"
+                  className="scroll-mt-24 rounded-2xl border border-white/[0.11] bg-slate-950/55 p-5"
                 >
-                  <summary className="flex cursor-pointer list-none items-center justify-between gap-3 rounded-xl px-1 py-1.5 outline-none transition hover:bg-[#F9FAFB]">
+                  <summary className="flex cursor-pointer list-none items-center justify-between gap-3 rounded-xl px-1 py-1.5 outline-none transition hover:bg-slate-950/45">
                     <div>
-                      <div className="text-[16px] font-semibold text-[#111827]">{t("crm.financeMarketInfo")}</div>
-                      <div className="mt-1 text-[13px] text-[#6B7280]">필요할 때 펼쳐서 입력·확인</div>
+                      <div className="text-[16px] font-semibold text-slate-50">{t("crm.financeMarketInfo")}</div>
+                      <div className="mt-1 text-[13px] text-slate-400">필요할 때 펼쳐서 입력·확인</div>
                     </div>
-                    <span className="rounded-full border border-[#E5E7EB] bg-[#F3F4F6] px-3 py-1 text-[12px] font-semibold text-[#475569]">
+                    <span className="rounded-full border border-white/[0.11] bg-white/[0.07] px-3 py-1 text-[12px] font-semibold text-slate-300">
                       펼치기
                     </span>
                   </summary>
                   <div className="mt-4 grid grid-cols-1 gap-4">
                     <div className="grid gap-2">
-                      <div className="text-xs font-semibold text-[#374151]">금융 유형</div>
+                      <div className="text-xs font-semibold text-slate-300">금융 유형</div>
                       <div className="flex flex-wrap gap-2">
                         {PAYMENT_TYPE_OPTIONS.map((pt) => (
                           <button
@@ -2242,8 +2242,8 @@ export function CRMApp({
                             className={[
                               "rounded-full border px-3 py-1.5 text-[12px] font-semibold",
                               selectedCustomer.paymentType === pt
-                                ? "border-[#111827] bg-[#F3F4F6] text-[#111827] shadow-[inset_0_0_0_1px_rgba(17,24,39,0.06)]"
-                                : "border-[#E5E7EB] bg-white text-[#374151] hover:bg-[#F3F4F6]",
+                                ? "border-sky-400/45 bg-sky-500/12 text-slate-50 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08),0_0_28px_-14px_rgba(56,189,248,0.12)]"
+                                : "border-white/[0.11] bg-slate-950/55 text-slate-300 hover:bg-white/[0.08]",
                             ].join(" ")}
                             onClick={() =>
                               upsertCustomer({ id: selectedCustomer.id, paymentType: pt })
@@ -2254,7 +2254,7 @@ export function CRMApp({
                         ))}
                         <button
                           type="button"
-                          className="rounded-full border border-dashed border-[#D1D5DB] px-3 py-1.5 text-[12px] font-semibold text-[#4B5563] hover:bg-[#F3F4F6]"
+                          className="rounded-full border border-dashed border-slate-500/35 px-3 py-1.5 text-[12px] font-semibold text-slate-400 hover:bg-white/[0.08]"
                           onClick={() =>
                             upsertCustomer({ id: selectedCustomer.id, paymentType: undefined })
                           }
@@ -2271,9 +2271,9 @@ export function CRMApp({
                       onChange={(v) => upsertCustomer({ id: selectedCustomer.id, budget: v })}
                     />
                     {budgetWonSelected ? (
-                      <div className="text-[12px] text-[#4B5563]">
+                      <div className="text-[12px] text-slate-400">
                         해석: 약{" "}
-                        <span className="font-semibold text-[#111827]">
+                        <span className="font-semibold text-slate-50">
                           {formatKrwShort(budgetWonSelected)}원
                         </span>{" "}
                         전후로 읽었습니다.
@@ -2283,22 +2283,22 @@ export function CRMApp({
                     <div
                       id="crm-block-compare"
                       tabIndex={-1}
-                      className="scroll-mt-24 rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] p-4"
+                      className="scroll-mt-24 rounded-xl border border-white/[0.11] bg-slate-950/45 p-4"
                     >
-                      <div className="text-xs font-semibold text-[#111827]">
+                      <div className="text-xs font-semibold text-slate-50">
                         예산 기준 비교 차종(참고)
                       </div>
                       {budgetRecs.length ? (
-                        <ul className="mt-2 space-y-2 text-xs text-[#374151]">
+                        <ul className="mt-2 space-y-2 text-xs text-slate-300">
                           {budgetRecs.map((pick) => (
                             <li
                               key={pick.label}
-                              className="flex flex-col gap-2 rounded-lg border border-[#E5E7EB] bg-white p-3 sm:flex-row sm:items-center sm:justify-between"
+                              className="flex flex-col gap-2 rounded-lg border border-white/[0.11] bg-slate-950/55 p-3 sm:flex-row sm:items-center sm:justify-between"
                             >
                               <div>
                                 <div className="font-semibold">{pick.label}</div>
                                 {pick.note ? (
-                                  <div className="mt-0.5 text-[12px] text-[#4B5563]">
+                                  <div className="mt-0.5 text-[12px] text-slate-400">
                                     {pick.note}
                                   </div>
                                 ) : null}
@@ -2306,7 +2306,7 @@ export function CRMApp({
                               <div className="flex flex-wrap gap-2">
                                 <button
                                   type="button"
-                                  className="rounded-lg border border-[#E5E7EB] bg-white px-2.5 py-1 text-[12px] font-semibold hover:bg-[#F3F4F6]"
+                                  className="rounded-lg border border-white/[0.11] bg-slate-950/55 px-2.5 py-1 text-[12px] font-semibold hover:bg-white/[0.08]"
                                   onClick={() =>
                                     upsertCustomer({
                                       id: selectedCustomer.id,
@@ -2318,7 +2318,7 @@ export function CRMApp({
                                 </button>
                                 <button
                                   type="button"
-                                  className="rounded-lg border border-[#E5E7EB] bg-white px-2.5 py-1 text-[12px] font-semibold hover:bg-[#F3F4F6]"
+                                  className="rounded-lg border border-white/[0.11] bg-slate-950/55 px-2.5 py-1 text-[12px] font-semibold hover:bg-white/[0.08]"
                                   onClick={() => {
                                     const line = `- ${pick.label}${pick.note ? ` (${pick.note})` : ""}\n`;
                                     upsertCustomer({
@@ -2334,14 +2334,14 @@ export function CRMApp({
                           ))}
                         </ul>
                       ) : (
-                        <div className="mt-2 text-xs text-[#6B7280]">
+                        <div className="mt-2 text-xs text-slate-400">
                           예산을 숫자로 적으면 이 구간에 비교 후보가 나옵니다.
                         </div>
                       )}
                     </div>
 
-                    <div className="rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] p-4">
-                      <div className="text-xs font-semibold text-[#111827]">
+                    <div className="rounded-xl border border-white/[0.11] bg-slate-950/45 p-4">
+                      <div className="text-xs font-semibold text-slate-50">
                         시세 메모(직접 확인 값)
                       </div>
                       <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -2386,7 +2386,7 @@ export function CRMApp({
                         />
                       </div>
                       {marketSummaryLines.length ? (
-                        <ul className="mt-3 list-disc space-y-1 pl-4 text-[12px] text-[#374151]">
+                        <ul className="mt-3 list-disc space-y-1 pl-4 text-[12px] text-slate-300">
                           {marketSummaryLines.map((line, i) => (
                             <li key={`${i}-${line.slice(0, 24)}`}>{line}</li>
                           ))}
@@ -2414,7 +2414,7 @@ export function CRMApp({
 
                     <button
                       onClick={() => deleteCustomer(selectedCustomer.id)}
-                      className="mt-2 rounded-lg border border-[#E5E7EB] bg-[#F9FAFB] px-3 py-2 text-xs font-semibold text-[#64748B] hover:bg-[#F3F4F6]"
+                      className="mt-2 rounded-lg border border-white/[0.11] bg-slate-950/45 px-3 py-2 text-xs font-semibold text-slate-400 hover:bg-white/[0.08]"
                     >
                       고객 삭제
                     </button>
@@ -2423,19 +2423,19 @@ export function CRMApp({
 
                 <details
                   id="crm-block-used-car"
-                  className="scroll-mt-24 rounded-2xl border border-[#E5E7EB] bg-[#FFFFFF] p-5"
+                  className="scroll-mt-24 rounded-2xl border border-white/[0.11] bg-slate-950/55 p-5"
                 >
-                  <summary className="flex cursor-pointer list-none items-center justify-between gap-3 rounded-xl px-1 py-1.5 outline-none transition hover:bg-[#F9FAFB]">
+                  <summary className="flex cursor-pointer list-none items-center justify-between gap-3 rounded-xl px-1 py-1.5 outline-none transition hover:bg-slate-950/45">
                     <div>
-                      <div className="text-[16px] font-semibold text-[#111827]">{t("crm.tradeInSummary")}</div>
-                      <div className="mt-1 text-[13px] text-[#6B7280]">검색어 생성 · 연식/주행/사고 기록</div>
+                      <div className="text-[16px] font-semibold text-slate-50">{t("crm.tradeInSummary")}</div>
+                      <div className="mt-1 text-[13px] text-slate-400">검색어 생성 · 연식/주행/사고 기록</div>
                     </div>
-                    <span className="rounded-full border border-[#E5E7EB] bg-[#F3F4F6] px-3 py-1 text-[12px] font-semibold text-[#475569]">
+                    <span className="rounded-full border border-white/[0.11] bg-white/[0.07] px-3 py-1 text-[12px] font-semibold text-slate-300">
                       펼치기
                     </span>
                   </summary>
-                  <div className="mt-4 rounded-xl border border-[#E5E7EB] bg-white p-4">
-                    <div className="text-xs font-semibold text-[#111827]">중고차 정리(검색어 생성)</div>
+                  <div className="mt-4 rounded-xl border border-white/[0.11] bg-slate-950/55 p-4">
+                    <div className="text-xs font-semibold text-slate-50">중고차 정리(검색어 생성)</div>
                     <datalist id="usedcar-brand-options">
                       {[
                         "현대",
@@ -2602,7 +2602,7 @@ export function CRMApp({
                     <div className="mt-3 flex flex-wrap gap-2">
                       <button
                         type="button"
-                        className="rounded-lg bg-[#111827] px-3 py-2 text-xs font-semibold text-white hover:bg-[#1F2937]"
+                        className="sensora-premium-primary-workspace rounded-lg px-3 py-2 text-xs font-semibold touch-manipulation"
                         onClick={() => {
                           const q = buildUsedCarSearchQuery(selectedCustomer);
                           void copyToClipboard(q).then((ok) => {
@@ -2615,7 +2615,7 @@ export function CRMApp({
                       </button>
                       <button
                         type="button"
-                        className="rounded-lg border border-[#E5E7EB] bg-white px-3 py-2 text-xs font-semibold hover:bg-[#F3F4F6]"
+                        className="rounded-lg border border-white/[0.11] bg-slate-950/55 px-3 py-2 text-xs font-semibold hover:bg-white/[0.08]"
                         onClick={() => {
                           const q = buildUsedCarSearchQuery(selectedCustomer);
                           const line = `${q}\n- 연식/주행거리/사고/등급을 추가로 입력하면 더 정확합니다.`;
@@ -2628,9 +2628,9 @@ export function CRMApp({
                         {t("common.copy")}
                       </button>
                     </div>
-                    <p className="mt-2 text-[12px] text-[#4B5563]">
+                    <p className="mt-2 text-[12px] text-slate-400">
                       검색어:{" "}
-                      <span className="font-medium text-[#374151]">
+                      <span className="font-medium text-slate-300">
                         {buildUsedCarSearchQuery(selectedCustomer)}
                       </span>
                     </p>
@@ -2640,11 +2640,11 @@ export function CRMApp({
                 <details
                   id="crm-block-profile"
                   tabIndex={-1}
-                  className="scroll-mt-24 rounded-[22px] border border-[#E5E7EB] bg-white p-5 outline-none"
+                  className="scroll-mt-24 rounded-[22px] border border-white/[0.11] bg-slate-950/55 p-5 outline-none"
                 >
-                  <summary className="flex cursor-pointer list-none items-center justify-between gap-2 rounded-xl px-1 py-2 outline-none transition hover:bg-[#F9FAFB] focus-visible:ring-2 focus-visible:ring-[#CBD5E1] [&::-webkit-details-marker]:hidden">
-                    <span className="text-[15px] font-semibold text-[#111827]">고객·상담 정보</span>
-                    <span className="rounded-full border border-[#E5E7EB] bg-[#F3F4F6] px-2.5 py-1 text-[11px] font-semibold text-[#64748B]">
+                  <summary className="flex cursor-pointer list-none items-center justify-between gap-2 rounded-xl px-1 py-2 outline-none transition hover:bg-slate-950/45 focus-visible:ring-2 focus-visible:ring-sky-400/35 [&::-webkit-details-marker]:hidden">
+                    <span className="text-[15px] font-semibold text-slate-50">고객·상담 정보</span>
+                    <span className="rounded-full border border-white/[0.11] bg-white/[0.07] px-2.5 py-1 text-[11px] font-semibold text-slate-400">
                       펼치기
                     </span>
                   </summary>
@@ -2729,7 +2729,7 @@ export function CRMApp({
                         />
                       )
                     ) : (
-                      <div className="rounded-xl border border-dashed border-[#E5E7EB] px-3 py-2 text-xs text-[#6B7280]">
+                      <div className="rounded-xl border border-dashed border-white/[0.11] px-3 py-2 text-xs text-slate-400">
                         위에서 브랜드를 고르면 대표 차종 목록이 나옵니다.
                       </div>
                     )}
@@ -2755,13 +2755,13 @@ export function CRMApp({
                 <div
                   id="crm-block-quick-tpl"
                   tabIndex={-1}
-                  className="scroll-mt-24 rounded-2xl border border-[#E5E7EB] bg-white p-5 outline-none"
+                  className="scroll-mt-24 rounded-2xl border border-white/[0.11] bg-slate-950/55 p-5 outline-none"
                 >
                   <div className="flex items-center justify-between gap-3">
                     <div className="text-sm font-semibold">{t("crm.section.templates")}</div>
                     <button
                       onClick={addTemplate}
-                      className="rounded-lg border border-[#E5E7EB] bg-white px-3 py-2 text-xs font-semibold hover:bg-[#F3F4F6]"
+                      className="rounded-lg border border-white/[0.11] bg-slate-950/55 px-3 py-2 text-xs font-semibold hover:bg-white/[0.08]"
                     >
                       + 템플릿
                     </button>
@@ -2770,7 +2770,7 @@ export function CRMApp({
                     {quickTemplates.map((tpl) => (
                       <button
                         key={tpl.id}
-                        className="w-full rounded-xl border border-[#E5E7EB] bg-white p-3 text-left hover:bg-[#F3F4F6]"
+                        className="w-full rounded-xl border border-white/[0.11] bg-slate-950/55 p-3 text-left hover:bg-white/[0.08]"
                         onClick={async () => {
                           const text = renderTemplate(tpl, selectedCustomer);
                           const ok = await copyToClipboard(text);
@@ -2782,13 +2782,13 @@ export function CRMApp({
                         }}
                       >
                         <div className="text-xs font-semibold">{tpl.title}</div>
-                        <div className="mt-1 text-xs text-[#6B7280]">
+                        <div className="mt-1 text-xs text-slate-400">
                           클릭하면 고객명 치환 후 복사
                         </div>
                       </button>
                     ))}
                     {state.templates.length === 0 ? (
-                      <div className="rounded-xl border border-dashed border-[#D1D5DB] p-4 text-xs text-[#6B7280]">
+                      <div className="rounded-xl border border-dashed border-slate-500/35 p-4 text-xs text-slate-400">
                         템플릿이 없습니다. “+ 템플릿”으로 자주 쓰는 문장을 먼저 만들어 두세요.
                       </div>
                     ) : null}
@@ -2800,13 +2800,13 @@ export function CRMApp({
                 <div
                   id="crm-block-next"
                   tabIndex={-1}
-                  className="scroll-mt-24 rounded-2xl border border-[#E5E7EB] bg-white p-5 outline-none"
+                  className="scroll-mt-24 rounded-2xl border border-white/[0.11] bg-slate-950/55 p-5 outline-none"
                 >
                   <div className="flex items-center justify-between gap-3">
                     <div className="text-sm font-semibold">다음 연락 · 할 일</div>
                     <button
                       onClick={() => addNextAction(selectedCustomer.id)}
-                      className="rounded-lg border border-[#E5E7EB] bg-white px-3 py-2 text-xs font-semibold hover:bg-[#F3F4F6]"
+                      className="rounded-lg border border-white/[0.11] bg-slate-950/55 px-3 py-2 text-xs font-semibold hover:bg-white/[0.08]"
                     >
                       + 추가
                     </button>
@@ -2815,7 +2815,7 @@ export function CRMApp({
                     {selectedNextActions.map((a) => (
                       <div
                         key={a.id}
-                        className="rounded-xl border border-[#E5E7EB] bg-white p-3"
+                        className="rounded-xl border border-white/[0.11] bg-slate-950/55 p-3"
                       >
                         <div className="flex items-start justify-between gap-3">
                           <label className="flex min-w-0 items-start gap-2">
@@ -2831,25 +2831,25 @@ export function CRMApp({
                               className="w-full min-w-0 border-0 bg-transparent text-sm font-semibold outline-none"
                             />
                           </label>
-                          <div className="text-[12px] font-medium text-[#4B5563]">
+                          <div className="text-[12px] font-medium text-slate-400">
                             {a.doneAt ? "완료" : "미완료"}
                           </div>
                         </div>
                         <div className="mt-2 flex items-center gap-2">
-                          <div className="text-xs text-[#6B7280]">기한</div>
+                          <div className="text-xs text-slate-400">기한</div>
                           <input
                             type="datetime-local"
                             value={isoToLocalInput(a.dueAt)}
                             onChange={(e) =>
                               updateNextAction(a.id, { dueAt: localInputToIso(e.target.value) })
                             }
-                            className="rounded-lg border border-[#E5E7EB] bg-white px-2 py-1 text-xs outline-none focus:border-[#94A3B8]"
+                            className="rounded-lg border border-white/[0.11] bg-slate-950/55 px-2 py-1 text-xs outline-none focus:border-sky-400/45"
                           />
                         </div>
                       </div>
                     ))}
                     {selectedNextActions.length === 0 ? (
-                      <div className="rounded-xl border border-dashed border-[#D1D5DB] p-4 text-xs text-[#6B7280]">
+                      <div className="rounded-xl border border-dashed border-slate-500/35 p-4 text-xs text-slate-400">
                         아직 없습니다. “+ 추가”로 만들어보세요.
                       </div>
                     ) : null}
@@ -2859,13 +2859,13 @@ export function CRMApp({
                 <div
                   id="crm-block-events"
                   tabIndex={-1}
-                  className="scroll-mt-24 rounded-2xl border border-[#E5E7EB] bg-white p-5 outline-none"
+                  className="scroll-mt-24 rounded-2xl border border-white/[0.11] bg-slate-950/55 p-5 outline-none"
                 >
                   <div className="flex items-center justify-between gap-3">
                     <div className="text-sm font-semibold">{t("crm.tab.events")}</div>
                     <button
                       onClick={() => addEvent(selectedCustomer.id)}
-                      className="rounded-lg border border-[#E5E7EB] bg-white px-3 py-2 text-xs font-semibold hover:bg-[#F3F4F6]"
+                      className="rounded-lg border border-white/[0.11] bg-slate-950/55 px-3 py-2 text-xs font-semibold hover:bg-white/[0.08]"
                     >
                       + 추가
                     </button>
@@ -2874,7 +2874,7 @@ export function CRMApp({
                     {selectedEvents.map((e) => (
                       <div
                         key={e.id}
-                        className="rounded-xl border border-[#E5E7EB] bg-white p-3"
+                        className="rounded-xl border border-white/[0.11] bg-slate-950/55 p-3"
                       >
                         <div className="flex items-start justify-between gap-3">
                           <input
@@ -2882,19 +2882,19 @@ export function CRMApp({
                             onChange={(ev) => updateEvent(e.id, { title: ev.target.value })}
                             className="w-full min-w-0 border-0 bg-transparent text-sm font-semibold outline-none"
                           />
-                          <div className="text-[12px] font-medium text-[#4B5563]">
+                          <div className="text-[12px] font-medium text-slate-400">
                             {formatDateTime(e.startAt)}
                           </div>
                         </div>
                         <div className="mt-2 flex flex-wrap items-center gap-2">
-                          <div className="text-xs text-[#6B7280]">시작</div>
+                          <div className="text-xs text-slate-400">시작</div>
                           <input
                             type="datetime-local"
                             value={isoToLocalInput(e.startAt)}
                             onChange={(ev) =>
                               updateEvent(e.id, { startAt: localInputToIso(ev.target.value) })
                             }
-                            className="rounded-lg border border-[#E5E7EB] bg-white px-2 py-1 text-xs outline-none focus:border-[#94A3B8]"
+                            className="rounded-lg border border-white/[0.11] bg-slate-950/55 px-2 py-1 text-xs outline-none focus:border-sky-400/45"
                           />
                         </div>
                         <div className="mt-2">
@@ -2906,13 +2906,13 @@ export function CRMApp({
                             autoCorrect="off"
                             autoCapitalize="off"
                             spellCheck={false}
-                            className="min-h-[70px] w-full resize-y rounded-xl border border-[#E5E7EB] bg-white px-3 py-2 text-xs outline-none focus:border-[#94A3B8]"
+                            className="min-h-[70px] w-full resize-y rounded-xl border border-white/[0.11] bg-slate-950/55 px-3 py-2 text-xs outline-none focus:border-sky-400/45"
                           />
                         </div>
                       </div>
                     ))}
                     {selectedEvents.length === 0 ? (
-                      <div className="rounded-xl border border-dashed border-[#D1D5DB] p-4 text-xs text-[#6B7280]">
+                      <div className="rounded-xl border border-dashed border-slate-500/35 p-4 text-xs text-slate-400">
                         아직 없습니다. “+ 추가”로 만들어보세요.
                       </div>
                     ) : null}
@@ -2924,12 +2924,12 @@ export function CRMApp({
             <div
               id="crm-block-empty-placeholder"
               tabIndex={-1}
-              className="scroll-mt-24 rounded-2xl border border-dashed border-[#D1D5DB] bg-white p-8 text-sm text-[#6B7280] outline-none"
+              className="scroll-mt-24 rounded-2xl border border-dashed border-slate-500/35 bg-slate-950/40 p-8 text-sm text-slate-400 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] outline-none backdrop-blur-sm"
             >
               목록에서 고객을 선택하거나 <span className="font-semibold">위의 “+ 고객 추가”</span>로 상담을
-              등록하세요. 고객을 열면 <span className="font-semibold text-[#111827]">상담 메모</span>,
-              <span className="font-semibold text-[#111827]"> 다음 연락</span>,
-              <span className="font-semibold text-[#111827]"> 일정</span>을 한 화면에서 이어서 관리할 수 있습니다.
+              등록하세요. 고객을 열면 <span className="font-semibold text-slate-50">상담 메모</span>,
+              <span className="font-semibold text-slate-50"> 다음 연락</span>,
+              <span className="font-semibold text-slate-50"> 일정</span>을 한 화면에서 이어서 관리할 수 있습니다.
             </div>
           )}
 
@@ -2956,17 +2956,17 @@ export function CRMApp({
                 }}
               />
             <div id="crm-workspace-next" className="space-y-6">
-              <p className="text-[15px] leading-relaxed text-[#6B7280]">
-                선택한 고객과 무관하게 <span className="font-semibold text-[#374151]">모든 다음 연락</span>을 한눈에
+              <p className="text-[15px] leading-relaxed text-slate-400">
+                선택한 고객과 무관하게 <span className="font-semibold text-slate-300">모든 다음 연락</span>을 한눈에
                 봅니다. 행을 눌러 해당 고객으로 이동합니다.
               </p>
               <div
                 id="crm-block-global"
                 tabIndex={-1}
-                className="scroll-mt-24 rounded-2xl border border-[#E5E7EB] bg-[#FFFFFF] p-6 shadow-[0_1px_4px_rgba(15,23,42,0.04)] outline-none"
+                className="scroll-mt-24 rounded-2xl border border-white/[0.11] bg-slate-950/55 p-6 shadow-[0_1px_4px_rgba(15,23,42,0.04)] outline-none"
               >
                 <div className="flex flex-wrap items-center justify-between gap-3">
-                  <div className="text-[16px] font-semibold text-[#111827]">{t("common.backup")}</div>
+                  <div className="text-[16px] font-semibold text-slate-50">{t("common.backup")}</div>
                   <div className="flex flex-wrap gap-2">
                     <button
                       type="button"
@@ -2977,7 +2977,7 @@ export function CRMApp({
                         }
                         downloadText("crm_backup.json", JSON.stringify(state, null, 2));
                       }}
-                      className="rounded-xl border border-[#E5E7EB] bg-[#F3F4F6] px-4 py-2.5 text-[13px] font-semibold text-[#111827] hover:bg-[#E5E7EB]"
+                      className="rounded-xl border border-white/[0.11] bg-white/[0.07] px-4 py-2.5 text-[13px] font-semibold text-slate-50 hover:bg-white/[0.1]"
                     >
                       {t("common.backup")}(.json)
                     </button>
@@ -2993,7 +2993,7 @@ export function CRMApp({
                         setState(next);
                         setSelectedCustomerId(next.customers[0]?.id ?? null);
                       }}
-                      className="rounded-xl border border-[#E5E7EB] bg-[#FFFFFF] px-4 py-2.5 text-[13px] font-semibold text-[#64748B] hover:bg-[#F9FAFB]"
+                      className="rounded-xl border border-white/[0.11] bg-slate-950/55 px-4 py-2.5 text-[13px] font-semibold text-slate-400 hover:bg-slate-950/45"
                     >
                       {t("common.reset")}(샘플)
                     </button>
@@ -3001,8 +3001,8 @@ export function CRMApp({
                 </div>
 
                 <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
-                  <div className="rounded-2xl border border-[#E5E7EB] bg-[#F9FAFB] p-5">
-                    <div className="text-[13px] font-semibold text-[#111827]">{t("crm.section.allNextActions")}</div>
+                  <div className="rounded-2xl border border-white/[0.11] bg-slate-950/45 p-5">
+                    <div className="text-[13px] font-semibold text-slate-50">{t("crm.section.allNextActions")}</div>
                     <div className="mt-4 max-h-[min(420px,50vh)] space-y-2 overflow-y-auto pr-1">
                       {allNextActions.map((a) => {
                         const c = state.customers.find((x) => x.id === a.customerId);
@@ -3015,43 +3015,43 @@ export function CRMApp({
                               onActiveSectionChange("customers");
                               setTab("고객");
                             }}
-                            className="w-full rounded-xl border border-[#E5E7EB] bg-[#FFFFFF] p-4 text-left text-[14px] transition hover:bg-[#F9FAFB]"
+                            className="w-full rounded-xl border border-white/[0.11] bg-slate-950/55 p-4 text-left text-[14px] transition hover:bg-slate-950/45"
                           >
                             <div className="flex items-center justify-between gap-3">
-                              <div className="truncate font-semibold text-[#111827]">
+                              <div className="truncate font-semibold text-slate-50">
                                 {a.doneAt ? "완료 · " : ""}
                                 {a.title}
                               </div>
-                              <div className="shrink-0 text-[13px] font-medium text-[#6B7280]">
+                              <div className="shrink-0 text-[13px] font-medium text-slate-400">
                                 {formatDateTime(a.dueAt)}
                               </div>
                             </div>
-                            <div className="mt-1 text-[13px] text-[#6B7280]">{c?.name ?? "알 수 없음"}</div>
+                            <div className="mt-1 text-[13px] text-slate-400">{c?.name ?? "알 수 없음"}</div>
                           </button>
                         );
                       })}
                       {allNextActions.length === 0 ? (
-                        <div className="text-[14px] text-[#6B7280]">등록된 다음 연락이 없습니다.</div>
+                        <div className="text-[14px] text-slate-400">등록된 다음 연락이 없습니다.</div>
                       ) : null}
                     </div>
                   </div>
 
-                  <div className="rounded-2xl border border-[#E5E7EB] bg-[#F9FAFB] p-5">
-                    <div className="text-[13px] font-semibold text-[#111827]">{t("crm.section.eventsPreview")}</div>
+                  <div className="rounded-2xl border border-white/[0.11] bg-slate-950/45 p-5">
+                    <div className="text-[13px] font-semibold text-slate-50">{t("crm.section.eventsPreview")}</div>
                     <div className="mt-4 max-h-[min(420px,50vh)] space-y-2 overflow-y-auto pr-1">
                       {allEvents.slice(0, 24).map((e) => (
                         <div
                           key={e.id}
-                          className="rounded-xl border border-[#E5E7EB] bg-[#FFFFFF] p-4 text-[14px]"
+                          className="rounded-xl border border-white/[0.11] bg-slate-950/55 p-4 text-[14px]"
                         >
                           <div className="flex flex-wrap items-center justify-between gap-3">
-                            <div className="font-semibold text-[#111827]">{e.title}</div>
-                            <div className="text-[13px] font-medium text-[#6B7280]">{formatDateTime(e.startAt)}</div>
+                            <div className="font-semibold text-slate-50">{e.title}</div>
+                            <div className="text-[13px] font-medium text-slate-400">{formatDateTime(e.startAt)}</div>
                           </div>
                           {e.customerId ? (
                             <button
                               type="button"
-                              className="mt-2 text-[13px] font-semibold text-[#475569] underline underline-offset-4 hover:text-[#111827]"
+                              className="mt-2 text-[13px] font-semibold text-slate-300 underline underline-offset-4 hover:text-slate-50"
                               onClick={() => {
                                 setSelectedCustomerId(e.customerId!);
                                 onActiveSectionChange("customers");
@@ -3061,12 +3061,12 @@ export function CRMApp({
                               고객: {state.customers.find((x) => x.id === e.customerId)?.name ?? "?"}
                             </button>
                           ) : (
-                            <div className="mt-2 text-[13px] font-medium text-[#6B7280]">고객 연결 없음</div>
+                            <div className="mt-2 text-[13px] font-medium text-slate-400">고객 연결 없음</div>
                           )}
                         </div>
                       ))}
                       {allEvents.length === 0 ? (
-                        <div className="text-[14px] text-[#6B7280]">등록된 일정이 없습니다.</div>
+                        <div className="text-[14px] text-slate-400">등록된 일정이 없습니다.</div>
                       ) : null}
                     </div>
                   </div>
@@ -3076,7 +3076,7 @@ export function CRMApp({
             </FollowUpSection>
           ) : showWorkspaceTabs && tab === "일정" ? (
             <div id="crm-workspace-events" className="space-y-4">
-              <p className="text-[15px] leading-relaxed text-[#6B7280]">
+              <p className="text-[15px] leading-relaxed text-slate-400">
                 모든 상담·출고 일정입니다. 카드를 누르면 해당 고객 화면으로 이동합니다.
               </p>
               <div className="max-h-[min(640px,calc(100vh-16rem))] space-y-3 overflow-y-auto">
@@ -3091,21 +3091,21 @@ export function CRMApp({
                       onActiveSectionChange("customers");
                       setTab("고객");
                     }}
-                    className="flex w-full flex-col rounded-2xl border border-[#E5E7EB] bg-[#FFFFFF] px-5 py-4 text-left transition hover:bg-[#F9FAFB] disabled:cursor-not-allowed disabled:opacity-60"
+                    className="flex w-full flex-col rounded-2xl border border-white/[0.11] bg-slate-950/55 px-5 py-4 text-left transition hover:bg-slate-950/45 disabled:cursor-not-allowed disabled:opacity-60"
                   >
-                    <span className="text-[17px] font-semibold text-[#111827]">{e.title}</span>
-                    <span className="mt-2 text-[15px] font-medium text-[#6B7280]">{formatDateTime(e.startAt)}</span>
+                    <span className="text-[17px] font-semibold text-slate-50">{e.title}</span>
+                    <span className="mt-2 text-[15px] font-medium text-slate-400">{formatDateTime(e.startAt)}</span>
                     {e.customerId ? (
-                      <span className="mt-2 text-[14px] font-semibold text-[#475569]">
+                      <span className="mt-2 text-[14px] font-semibold text-slate-300">
                         고객: {state.customers.find((x) => x.id === e.customerId)?.name ?? "?"}
                       </span>
                     ) : (
-                      <span className="mt-2 text-[14px] font-medium text-[#6B7280]">고객 미연결</span>
+                      <span className="mt-2 text-[14px] font-medium text-slate-400">고객 미연결</span>
                     )}
                   </button>
                 ))}
                 {allEvents.length === 0 ? (
-                  <div className="rounded-2xl border border-dashed border-[#D1D5DB] bg-[#FFFFFF] px-6 py-12 text-center text-[15px] text-[#6B7280]">
+                  <div className="rounded-2xl border border-dashed border-slate-500/35 bg-slate-950/55 px-6 py-12 text-center text-[15px] text-slate-400">
                     일정이 없습니다.
                   </div>
                 ) : null}
@@ -3115,14 +3115,14 @@ export function CRMApp({
             <div
               id="crm-block-templates"
               tabIndex={-1}
-              className="rounded-2xl border border-[#E5E7EB] bg-[#FFFFFF] p-6 shadow-[0_1px_4px_rgba(15,23,42,0.04)] outline-none"
+              className="rounded-2xl border border-white/[0.11] bg-slate-950/55 p-6 shadow-[0_1px_4px_rgba(15,23,42,0.04)] outline-none"
             >
               <div className="flex flex-wrap items-center justify-between gap-3">
-                <div className="text-[18px] font-semibold text-[#111827]">{t("crm.section.templates")}</div>
+                <div className="text-[18px] font-semibold text-slate-50">{t("crm.section.templates")}</div>
                 <button
                   type="button"
                   onClick={addTemplate}
-                  className="rounded-xl bg-[#111827] px-5 py-2.5 text-[14px] font-semibold text-white hover:bg-[#1F2937]"
+                  className="sensora-premium-primary-workspace rounded-xl px-5 py-2.5 text-[14px] font-semibold touch-manipulation"
                 >
                   + 템플릿
                 </button>
@@ -3131,29 +3131,29 @@ export function CRMApp({
               <section
                 id="season-care"
                 aria-labelledby="season-care-title"
-                className="mt-8 scroll-mt-28 rounded-[22px] border border-[#E5E7EB] bg-[#FAFBFC] p-5 sm:p-6"
+                className="mt-8 scroll-mt-28 rounded-[22px] border border-white/[0.11] bg-slate-950/38 p-5 sm:p-6"
               >
-                <header className="border-b border-[#E5E7EB] pb-4">
-                  <h3 id="season-care-title" className="text-[17px] font-semibold tracking-[-0.01em] text-[#111827]">
+                <header className="border-b border-white/[0.11] pb-4">
+                  <h3 id="season-care-title" className="text-[17px] font-semibold tracking-[-0.01em] text-slate-50">
                     {t("crm.seasonCare.title")}
                   </h3>
-                  <p className="mt-2 text-[13px] font-medium leading-relaxed text-[#6B7280]">
+                  <p className="mt-2 text-[13px] font-medium leading-relaxed text-slate-400">
                     {t("crm.seasonCare.intro")}
                   </p>
                 </header>
 
                 <div className="mt-6 space-y-8">
                   <div>
-                    <p className="text-[13px] font-semibold text-[#111827]">{t("crm.seasonCare.stepConditions")}</p>
+                    <p className="text-[13px] font-semibold text-slate-50">{t("crm.seasonCare.stepConditions")}</p>
                     <div className="mt-3 grid grid-cols-1 gap-3 md:grid-cols-2">
                       <label className="grid gap-1">
-                        <span className="text-[13px] font-semibold text-[#374151]">{t("crm.seasonCare.brandLabel")}</span>
+                        <span className="text-[13px] font-semibold text-slate-300">{t("crm.seasonCare.brandLabel")}</span>
                         <select
                           value={seasonCareBrand}
                           onChange={(e) =>
                             setSeasonCareBrand(e.target.value as SeasonCareBrandPreset | "other")
                           }
-                          className="min-h-[44px] w-full rounded-[14px] border border-[#E5E7EB] bg-white px-3 py-3 text-[15px] outline-none focus:border-[#94A3B8] focus:ring-2 focus:ring-[#CBD5E1]/65"
+                          className="min-h-[44px] w-full rounded-[14px] border border-white/[0.11] bg-slate-950/55 px-3 py-3 text-[15px] outline-none focus:border-sky-400/45 focus:ring-2 focus:ring-sky-500/25"
                         >
                           {SC_BRAND_OPTIONS.map((id) => (
                             <option key={id} value={id}>
@@ -3163,11 +3163,11 @@ export function CRMApp({
                         </select>
                       </label>
                       <label className="grid gap-1">
-                        <span className="text-[13px] font-semibold text-[#374151]">{t("crm.seasonCare.seasonLabel")}</span>
+                        <span className="text-[13px] font-semibold text-slate-300">{t("crm.seasonCare.seasonLabel")}</span>
                         <select
                           value={seasonCareSeason}
                           onChange={(e) => setSeasonCareSeason(e.target.value as SeasonCareSeason)}
-                          className="min-h-[44px] w-full rounded-[14px] border border-[#E5E7EB] bg-white px-3 py-3 text-[15px] outline-none focus:border-[#94A3B8] focus:ring-2 focus:ring-[#CBD5E1]/65"
+                          className="min-h-[44px] w-full rounded-[14px] border border-white/[0.11] bg-slate-950/55 px-3 py-3 text-[15px] outline-none focus:border-sky-400/45 focus:ring-2 focus:ring-sky-500/25"
                         >
                           {SEASON_CARE_SEASONS.map((id) => (
                             <option key={id} value={id}>
@@ -3177,11 +3177,11 @@ export function CRMApp({
                         </select>
                       </label>
                       <label className="grid gap-1">
-                        <span className="text-[13px] font-semibold text-[#374151]">{t("crm.seasonCare.purposeLabel")}</span>
+                        <span className="text-[13px] font-semibold text-slate-300">{t("crm.seasonCare.purposeLabel")}</span>
                         <select
                           value={seasonCarePurpose}
                           onChange={(e) => setSeasonCarePurpose(e.target.value as SeasonCarePurpose)}
-                          className="min-h-[44px] w-full rounded-[14px] border border-[#E5E7EB] bg-white px-3 py-3 text-[15px] outline-none focus:border-[#94A3B8] focus:ring-2 focus:ring-[#CBD5E1]/65"
+                          className="min-h-[44px] w-full rounded-[14px] border border-white/[0.11] bg-slate-950/55 px-3 py-3 text-[15px] outline-none focus:border-sky-400/45 focus:ring-2 focus:ring-sky-500/25"
                         >
                           {SEASON_CARE_PURPOSES.map((id) => (
                             <option key={id} value={id}>
@@ -3191,11 +3191,11 @@ export function CRMApp({
                         </select>
                       </label>
                       <label className="grid gap-1">
-                        <span className="text-[13px] font-semibold text-[#374151]">{t("crm.seasonCare.toneLabel")}</span>
+                        <span className="text-[13px] font-semibold text-slate-300">{t("crm.seasonCare.toneLabel")}</span>
                         <select
                           value={seasonCareTone}
                           onChange={(e) => setSeasonCareTone(e.target.value as SeasonCareTone)}
-                          className="min-h-[44px] w-full rounded-[14px] border border-[#E5E7EB] bg-white px-3 py-3 text-[15px] outline-none focus:border-[#94A3B8] focus:ring-2 focus:ring-[#CBD5E1]/65"
+                          className="min-h-[44px] w-full rounded-[14px] border border-white/[0.11] bg-slate-950/55 px-3 py-3 text-[15px] outline-none focus:border-sky-400/45 focus:ring-2 focus:ring-sky-500/25"
                         >
                           {SEASON_CARE_TONES.map((id) => (
                             <option key={id} value={id}>
@@ -3208,48 +3208,48 @@ export function CRMApp({
 
                     {seasonCareBrand === "other" ? (
                       <label className="mt-4 grid gap-1">
-                        <span className="text-[13px] font-semibold text-[#374151]">{t("crm.seasonCare.brandOtherHint")}</span>
+                        <span className="text-[13px] font-semibold text-slate-300">{t("crm.seasonCare.brandOtherHint")}</span>
                         <input
                           value={seasonCareBrandCustom}
                           onChange={(e) => setSeasonCareBrandCustom(e.target.value)}
                           placeholder={t("crm.seasonCare.customBrandPlaceholder")}
                           autoComplete="off"
                           spellCheck={false}
-                          className="min-h-[44px] w-full rounded-[14px] border border-[#E5E7EB] bg-white px-3 py-3 text-[15px] outline-none focus:border-[#94A3B8]"
+                          className="min-h-[44px] w-full rounded-[14px] border border-white/[0.11] bg-slate-950/55 px-3 py-3 text-[15px] outline-none focus:border-sky-400/45"
                         />
                       </label>
                     ) : null}
                   </div>
 
-                  <div className="rounded-[18px] border border-[#E5E7EB] bg-white p-4 shadow-[inset_0_1px_0_rgba(255,255,255,1)] sm:p-5">
-                    <p className="text-[13px] font-semibold text-[#111827]">{t("crm.seasonCare.stepSender")}</p>
-                    <p className="mt-1 text-[13px] text-[#6B7280]">
+                  <div className="rounded-[18px] border border-white/[0.11] bg-slate-950/55 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,1)] sm:p-5">
+                    <p className="text-[13px] font-semibold text-slate-50">{t("crm.seasonCare.stepSender")}</p>
+                    <p className="mt-1 text-[13px] text-slate-400">
                       {t("crm.seasonCare.sellerHeading")}{" "}
                       <span className="font-medium">({t("crm.seasonCare.optionalHint")})</span>
                     </p>
                     <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
                       <label className="grid gap-1">
-                        <span className="text-[13px] font-semibold text-[#374151]">{t("crm.seasonCare.sellerName")}</span>
+                        <span className="text-[13px] font-semibold text-slate-300">{t("crm.seasonCare.sellerName")}</span>
                         <input
                           value={seasonCareSellerName}
                           onChange={(e) => setSeasonCareSellerName(e.target.value)}
                           autoComplete="off"
                           spellCheck={false}
-                          className="min-h-[44px] rounded-[14px] border border-[#E5E7EB] bg-[#FFFFFF] px-3 py-2.5 text-[15px] outline-none focus:border-[#94A3B8]"
+                          className="min-h-[44px] rounded-[14px] border border-white/[0.11] bg-slate-950/55 px-3 py-2.5 text-[15px] outline-none focus:border-sky-400/45"
                         />
                       </label>
                       <label className="grid gap-1">
-                        <span className="text-[13px] font-semibold text-[#374151]">{t("crm.seasonCare.showroom")}</span>
+                        <span className="text-[13px] font-semibold text-slate-300">{t("crm.seasonCare.showroom")}</span>
                         <input
                           value={seasonCareShowroom}
                           onChange={(e) => setSeasonCareShowroom(e.target.value)}
                           autoComplete="off"
                           spellCheck={false}
-                          className="min-h-[44px] rounded-[14px] border border-[#E5E7EB] bg-[#FFFFFF] px-3 py-2.5 text-[15px] outline-none focus:border-[#94A3B8]"
+                          className="min-h-[44px] rounded-[14px] border border-white/[0.11] bg-slate-950/55 px-3 py-2.5 text-[15px] outline-none focus:border-sky-400/45"
                         />
                       </label>
                       <label className="grid gap-1">
-                        <span className="text-[13px] font-semibold text-[#374151]">
+                        <span className="text-[13px] font-semibold text-slate-300">
                           {t("crm.seasonCare.sellerContactField")}
                         </span>
                         <input
@@ -3258,28 +3258,28 @@ export function CRMApp({
                           autoComplete="off"
                           spellCheck={false}
                           inputMode="tel"
-                          className="min-h-[44px] rounded-[14px] border border-[#E5E7EB] bg-[#FFFFFF] px-3 py-2.5 text-[15px] outline-none focus:border-[#94A3B8]"
+                          className="min-h-[44px] rounded-[14px] border border-white/[0.11] bg-slate-950/55 px-3 py-2.5 text-[15px] outline-none focus:border-sky-400/45"
                         />
                       </label>
                       <label className="grid gap-1">
-                        <span className="text-[13px] font-semibold text-[#374151]">{t("crm.seasonCare.jobTitle")}</span>
+                        <span className="text-[13px] font-semibold text-slate-300">{t("crm.seasonCare.jobTitle")}</span>
                         <input
                           value={seasonCareJobTitle}
                           onChange={(e) => setSeasonCareJobTitle(e.target.value)}
                           autoComplete="off"
                           spellCheck={false}
-                          className="min-h-[44px] rounded-[14px] border border-[#E5E7EB] bg-[#FFFFFF] px-3 py-2.5 text-[15px] outline-none focus:border-[#94A3B8]"
+                          className="min-h-[44px] rounded-[14px] border border-white/[0.11] bg-slate-950/55 px-3 py-2.5 text-[15px] outline-none focus:border-sky-400/45"
                         />
                       </label>
                     </div>
                   </div>
                 </div>
 
-                <div className="sticky bottom-4 z-[5] mt-8 flex flex-wrap gap-3 rounded-[16px] border border-[#E5E7EB] bg-[#FFFFFF]/94 px-3 py-3 shadow-[0_8px_28px_-12px_rgba(15,23,42,0.12)] backdrop-blur-md">
+                <div className="sticky bottom-4 z-[5] mt-8 flex flex-wrap gap-3 rounded-[16px] border border-white/[0.11] bg-slate-950/55/94 px-3 py-3 shadow-[0_8px_28px_-12px_rgba(15,23,42,0.12)] backdrop-blur-md">
                   <button
                     type="button"
                     onClick={() => runSeasonCareGenerate()}
-                    className="min-h-[44px] rounded-[14px] bg-[#111827] px-5 py-2.5 text-[14px] font-semibold text-white hover:bg-[#1F2937] touch-manipulation"
+                    className="sensora-premium-primary-workspace min-h-[44px] rounded-[14px] px-5 py-2.5 text-[14px] font-semibold touch-manipulation"
                   >
                     {t("crm.seasonCare.generate")}
                   </button>
@@ -3293,36 +3293,36 @@ export function CRMApp({
                       const ok = await copyToClipboard(seasonCareOutput);
                       showToast(ok ? t("crm.seasonCare.copyToast") : t("crm.seasonCare.copyFail"));
                     }}
-                    className="min-h-[44px] rounded-[14px] bg-[#F3F4F6] px-5 py-2.5 text-[14px] font-semibold text-[#111827] ring-1 ring-inset ring-[#E5E7EB] hover:bg-[#E5E7EB] touch-manipulation"
+                    className="min-h-[44px] rounded-[14px] bg-white/[0.07] px-5 py-2.5 text-[14px] font-semibold text-slate-50 ring-1 ring-inset ring-white/[0.12] hover:bg-white/[0.1] touch-manipulation"
                   >
                     {t("crm.seasonCare.copy")}
                   </button>
                   <button
                     type="button"
                     onClick={() => resetSeasonCareForm()}
-                    className="min-h-[44px] rounded-[14px] bg-[#FFFFFF] px-5 py-2.5 text-[14px] font-semibold text-[#374151] ring-1 ring-inset ring-[#E5E7EB] hover:bg-[#F9FAFB] touch-manipulation"
+                    className="min-h-[44px] rounded-[14px] bg-slate-950/55 px-5 py-2.5 text-[14px] font-semibold text-slate-300 ring-1 ring-inset ring-white/[0.12] hover:bg-slate-950/45 touch-manipulation"
                   >
                     {t("common.reset")}
                   </button>
                 </div>
 
                 <label htmlFor="season-care-output" className="mt-6 grid gap-3">
-                  <span className="text-[13px] font-semibold text-[#374151]">{t("crm.seasonCare.previewLabel")}</span>
+                  <span className="text-[13px] font-semibold text-slate-300">{t("crm.seasonCare.previewLabel")}</span>
                   <textarea
                     id="season-care-output"
                     value={seasonCareOutput}
                     onChange={(e) => setSeasonCareOutput(e.target.value)}
                     rows={16}
-                    className="min-h-[min(440px,calc(100vh-16rem))] w-full resize-y rounded-[14px] border border-[#E5E7EB] bg-white px-4 py-3 text-[15px] leading-relaxed text-[#111827] outline-none focus:border-[#94A3B8]"
+                    className="min-h-[min(440px,calc(100vh-16rem))] w-full resize-y rounded-[14px] border border-white/[0.11] bg-slate-950/55 px-4 py-3 text-[15px] leading-relaxed text-slate-50 outline-none focus:border-sky-400/45"
                     spellCheck={false}
                   />
                 </label>
 
-                <details className="mt-6 rounded-[16px] border border-[#E5E7EB] bg-[#FFFFFF] px-4 py-3">
-                  <summary className="cursor-pointer list-none text-[12px] font-semibold leading-snug text-[#475569] outline-none focus-visible:ring-2 focus-visible:ring-[#CBD5E1] [&::-webkit-details-marker]:hidden">
+                <details className="mt-6 rounded-[16px] border border-white/[0.11] bg-slate-950/55 px-4 py-3">
+                  <summary className="cursor-pointer list-none text-[12px] font-semibold leading-snug text-slate-300 outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 [&::-webkit-details-marker]:hidden">
                     {t("crm.seasonCare.adNoticeHeading")}
                   </summary>
-                  <p className="mt-2 text-[12px] font-medium leading-relaxed text-[#6B7280]">{t("crm.seasonCare.disclaimer")}</p>
+                  <p className="mt-2 text-[12px] font-medium leading-relaxed text-slate-400">{t("crm.seasonCare.disclaimer")}</p>
                 </details>
               </section>
 
@@ -3330,15 +3330,15 @@ export function CRMApp({
                 {state.templates.map((tpl) => (
                   <div
                     key={tpl.id}
-                    className="rounded-2xl border border-[#E5E7EB] bg-[#F9FAFB] p-5"
+                    className="rounded-2xl border border-white/[0.11] bg-slate-950/45 p-5"
                   >
                     <input
-                      className="w-full border-0 bg-transparent text-[17px] font-semibold text-[#111827] outline-none"
+                      className="w-full border-0 bg-transparent text-[17px] font-semibold text-slate-50 outline-none"
                       value={tpl.title}
                       onChange={(e) => updateTemplate(tpl.id, { title: e.target.value })}
                     />
                     <textarea
-                      className="mt-3 min-h-[130px] w-full resize-y rounded-xl border border-[#E5E7EB] bg-[#FFFFFF] px-4 py-3 text-[14px] text-[#374151] outline-none focus:border-[#94A3B8]"
+                      className="mt-3 min-h-[130px] w-full resize-y rounded-xl border border-white/[0.11] bg-slate-950/55 px-4 py-3 text-[14px] text-slate-300 outline-none focus:border-sky-400/45"
                       value={tpl.body}
                       onChange={(e) => updateTemplate(tpl.id, { body: e.target.value })}
                       autoComplete="off"
@@ -3358,16 +3358,16 @@ export function CRMApp({
                               : "자동 복사가 불가했습니다. 본문을 길게 눌러 복사해 주세요.",
                           );
                         }}
-                        className="rounded-xl bg-[#F3F4F6] px-4 py-2.5 text-[13px] font-semibold text-[#111827] ring-1 ring-inset ring-[#E5E7EB] hover:bg-[#E5E7EB]"
+                        className="rounded-xl bg-white/[0.07] px-4 py-2.5 text-[13px] font-semibold text-slate-50 ring-1 ring-inset ring-white/[0.12] hover:bg-white/[0.1]"
                       >
                         {selectedCustomer ? `${t("common.select")} · ${t("common.copy")}` : t("common.copy")}
                       </button>
-                      <div className="text-[12px] font-medium text-[#6B7280]">업데이트: {formatDateTime(tpl.updatedAt)}</div>
+                      <div className="text-[12px] font-medium text-slate-400">업데이트: {formatDateTime(tpl.updatedAt)}</div>
                     </div>
                   </div>
                 ))}
                 {state.templates.length === 0 ? (
-                  <div className="rounded-2xl border border-dashed border-[#D1D5DB] px-8 py-12 text-center text-[15px] text-[#6B7280]">
+                  <div className="rounded-2xl border border-dashed border-slate-500/35 px-8 py-12 text-center text-[15px] text-slate-400">
                     템플릿이 없습니다.
                   </div>
                 ) : null}
@@ -3387,16 +3387,16 @@ export function CRMApp({
             role="dialog"
             aria-modal="true"
             aria-labelledby="lead-explain-title"
-            className="w-full max-w-lg rounded-2xl border border-[#E5E7EB] bg-white p-5 shadow-xl"
+            className="w-full max-w-lg rounded-2xl border border-white/[0.11] bg-slate-950/55 p-5 shadow-xl"
             onClick={(e) => e.stopPropagation()}
           >
             <div
               id="lead-explain-title"
-              className="text-sm font-semibold text-[#111827]"
+              className="text-sm font-semibold text-slate-50"
             >
               가망 % 산정 기준
             </div>
-            <p className="mt-2 text-xs text-[#6B7280]">
+            <p className="mt-2 text-xs text-slate-400">
               실제 계약 가능성이 아니라, 입력된 메모·예산·관심차종·연락처 정보만으로 빠르게 정렬하기 위한
               참고 점수입니다.
             </p>
@@ -3404,28 +3404,28 @@ export function CRMApp({
               const c = state.customers.find((x) => x.id === leadExplainForId);
               if (!c) {
                 return (
-                  <p className="mt-3 text-xs text-[#6B7280]">
+                  <p className="mt-3 text-xs text-slate-400">
                     고객 정보를 찾지 못했습니다.
                   </p>
                 );
               }
               const ex = explainPurchaseIntent(c);
               return (
-                <div className="mt-3 space-y-3 text-xs text-[#111827]">
-                  <div className="rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] px-3 py-2">
-                    <span className="font-semibold text-[#334155]">
+                <div className="mt-3 space-y-3 text-xs text-slate-50">
+                  <div className="rounded-xl border border-white/[0.11] bg-slate-950/45 px-3 py-2">
+                    <span className="font-semibold text-slate-100">
                       결과: {ex.percent}% · 등급 {ex.grade}
                     </span>
-                    <div className="mt-1 text-[12px] text-[#4B5563]">
+                    <div className="mt-1 text-[12px] text-slate-400">
                       힌트: {ex.hints.join(" · ")}
                     </div>
                   </div>
-                  <ul className="list-decimal space-y-1.5 pl-4 text-[12px] leading-relaxed text-[#374151]">
+                  <ul className="list-decimal space-y-1.5 pl-4 text-[12px] leading-relaxed text-slate-300">
                     {ex.breakdown.map((line) => (
                       <li key={line}>{line}</li>
                     ))}
                   </ul>
-                  <div className="text-[12px] text-[#4B5563]">
+                  <div className="text-[12px] text-slate-400">
                     키워드 예시: {LEAD_SCORE_HOTWORDS.join(", ")}
                   </div>
                 </div>
@@ -3434,7 +3434,7 @@ export function CRMApp({
             <div className="mt-4 flex justify-end">
               <button
                 type="button"
-                className="rounded-lg bg-[#111827] px-4 py-2 text-xs font-semibold text-white hover:bg-[#1F2937]"
+                className="sensora-premium-primary-workspace rounded-lg px-4 py-2 text-xs font-semibold touch-manipulation"
                 onClick={() => setLeadExplainForId(null)}
               >
                 닫기
@@ -3454,17 +3454,17 @@ export function CRMApp({
             role="dialog"
             aria-modal="true"
             aria-labelledby="crm-create-customer-title"
-            className="flex max-h-[92dvh] w-full max-w-[520px] flex-col rounded-t-[22px] border border-[#E5E7EB] bg-[#FFFFFF] shadow-2xl sm:rounded-[22px]"
+            className="flex max-h-[92dvh] w-full max-w-[520px] flex-col rounded-t-[22px] border border-white/[0.11] bg-slate-950/55 shadow-2xl sm:rounded-[22px]"
             onMouseDown={(e) => e.stopPropagation()}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex shrink-0 items-center justify-between gap-2 border-b border-[#E5E7EB] bg-[#F9FAFB] px-4 py-3 sm:px-5">
-              <h2 id="crm-create-customer-title" className="text-[16px] font-extrabold text-[#111827]">
+            <div className="flex shrink-0 items-center justify-between gap-2 border-b border-white/[0.11] bg-slate-950/45 px-4 py-3 sm:px-5">
+              <h2 id="crm-create-customer-title" className="text-[16px] font-extrabold text-slate-50">
                 새 고객 추가
               </h2>
               <button
                 type="button"
-                className="crm-ghost-btn min-h-[44px] shrink-0 rounded-xl px-3 py-2 text-[13px] font-semibold text-[#374151]"
+                className="crm-ghost-btn min-h-[44px] shrink-0 rounded-xl px-3 py-2 text-[13px] font-semibold text-slate-300"
                 aria-label="닫기"
                 onClick={closeCreateCustomerModal}
               >
@@ -3569,10 +3569,10 @@ export function CRMApp({
                 }
               />
             </form>
-            <div className="flex shrink-0 flex-col-reverse gap-2 border-t border-[#E5E7EB] bg-[#FFFFFF] px-4 py-4 sm:flex-row sm:justify-end sm:gap-3 sm:px-6">
+            <div className="flex shrink-0 flex-col-reverse gap-2 border-t border-white/[0.11] bg-slate-950/55 px-4 py-4 sm:flex-row sm:justify-end sm:gap-3 sm:px-6">
               <button
                 type="button"
-                className="min-h-[44px] shrink-0 rounded-xl border border-[#E5E7EB] bg-[#FFFFFF] px-5 py-2.5 text-[14px] font-semibold text-[#374151] hover:bg-[#F9FAFB] touch-manipulation"
+                className="min-h-[44px] shrink-0 rounded-xl border border-white/[0.11] bg-slate-950/55 px-5 py-2.5 text-[14px] font-semibold text-slate-300 hover:bg-slate-950/45 touch-manipulation"
                 onClick={closeCreateCustomerModal}
               >
                 취소
@@ -3580,7 +3580,7 @@ export function CRMApp({
               <button
                 type="submit"
                 form="crm-create-customer-form"
-                className="min-h-[44px] shrink-0 rounded-xl bg-[#111827] px-6 py-2.5 text-[14px] font-semibold text-white shadow-sm hover:bg-[#1F2937] touch-manipulation"
+                className="sensora-premium-primary-workspace min-h-[44px] shrink-0 rounded-xl px-6 py-2.5 text-[14px] font-semibold touch-manipulation"
               >
                 저장
               </button>
@@ -3608,9 +3608,9 @@ export function CRMApp({
 
       {deliveryGuideOpen && selectedCustomer ? (
         <div className="fixed inset-0 z-[320] flex items-end justify-center bg-black/40 px-3 pb-3 pt-[max(12px,calc(env(safe-area-inset-top,0px)+8px))] backdrop-blur-sm sm:items-center sm:px-4 sm:pb-5 sm:pt-5">
-          <div className="max-h-[min(92dvh,92vh)] w-full max-w-[920px] overflow-hidden rounded-2xl border border-[#E5E7EB] bg-[#FFFFFF] shadow-2xl">
-            <div className="flex items-center justify-between gap-2 border-b border-[#E5E7EB] bg-[#F9FAFB] px-4 py-3">
-              <div className="text-sm font-extrabold text-[#111827]">AI 출고 안내서</div>
+          <div className="max-h-[min(92dvh,92vh)] w-full max-w-[920px] overflow-hidden rounded-2xl border border-white/[0.11] bg-slate-950/55 shadow-2xl">
+            <div className="flex items-center justify-between gap-2 border-b border-white/[0.11] bg-slate-950/45 px-4 py-3">
+              <div className="text-sm font-extrabold text-slate-50">AI 출고 안내서</div>
               <button
                 type="button"
                 className="crm-ink-btn rounded-lg px-3 py-2 text-xs font-semibold"
@@ -3649,7 +3649,7 @@ export function CRMApp({
             onClick={() => setSensoraTipIntroOpen(false)}
           />
           <div
-            className="relative z-[1] w-full max-w-md rounded-2xl border border-white/[0.12] bg-[#07111f]/96 p-6 shadow-[0_32px_80px_-28px_rgba(0,0,0,0.65)] backdrop-blur-md max-[390px]:p-5"
+            className="sensora-modal-panel-reveal relative z-[1] w-full max-w-md rounded-2xl border border-white/[0.14] bg-gradient-to-b from-slate-950/95 to-[#07111f]/98 p-6 shadow-[0_32px_80px_-28px_rgba(0,0,0,0.72),inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-md max-[390px]:p-5"
             onClick={(e) => e.stopPropagation()}
           >
             <h2
@@ -3700,7 +3700,16 @@ export function CRMApp({
           aria-modal="true"
           aria-labelledby="crm-preview-gate-title"
         >
-          <div className="w-full max-w-md rounded-2xl border border-white/[0.12] bg-[#07111f]/96 p-6 shadow-[0_32px_80px_-28px_rgba(0,0,0,0.65)] backdrop-blur-md max-[390px]:p-5">
+          <button
+            type="button"
+            className="absolute inset-0 cursor-default"
+            aria-label={t("landing.showroom.tip.closeOverlay")}
+            onClick={() => setPreviewGateOpen(false)}
+          />
+          <div
+            className="sensora-modal-panel-reveal relative z-[1] w-full max-w-md rounded-2xl border border-white/[0.14] bg-gradient-to-b from-slate-950/95 to-[#07111f]/98 p-6 shadow-[0_32px_80px_-28px_rgba(0,0,0,0.72),inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-md max-[390px]:p-5"
+            onClick={(e) => e.stopPropagation()}
+          >
             <h2
               id="crm-preview-gate-title"
               className="text-[17px] font-semibold tracking-tight text-slate-50 sm:text-lg"
@@ -3759,12 +3768,12 @@ function Field({
 }) {
   return (
     <label className="grid gap-1">
-      <div className="text-[13px] font-semibold text-[#374151]">{label}</div>
+      <div className="text-[13px] font-semibold text-slate-300">{label}</div>
       <input
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full rounded-xl border border-[#E5E7EB] bg-white px-3 py-3 text-[15px] outline-none focus:border-[#94A3B8]"
+        className="w-full rounded-xl border border-white/[0.11] bg-slate-950/55 px-3 py-3 text-[15px] text-slate-100 outline-none placeholder:text-slate-500 focus:border-sky-400/45"
       />
     </label>
   );
@@ -3783,13 +3792,13 @@ function DateTimeField({
 }) {
   return (
     <label className="grid gap-1">
-      <div className="text-xs font-semibold text-[#374151]">{label}</div>
+      <div className="text-xs font-semibold text-slate-300">{label}</div>
       <input
         type="datetime-local"
         value={isoToLocalInput(valueIso)}
         onChange={(e) => onChangeIso(localInputToIso(e.target.value))}
         placeholder={placeholder}
-        className="w-full rounded-xl border border-[#E5E7EB] bg-white px-3 py-2 text-sm outline-none focus:border-[#94A3B8]"
+        className="w-full rounded-xl border border-white/[0.11] bg-slate-950/55 px-3 py-2 text-sm text-slate-100 outline-none placeholder:text-slate-500 focus:border-sky-400/45"
       />
     </label>
   );
@@ -3810,13 +3819,13 @@ function FieldList({
 }) {
   return (
     <label className="grid gap-1">
-      <div className="text-xs font-semibold text-[#374151]">{label}</div>
+      <div className="text-xs font-semibold text-slate-300">{label}</div>
       <input
         value={value}
         list={listId}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full rounded-xl border border-[#E5E7EB] bg-white px-3 py-2 text-sm outline-none focus:border-[#94A3B8]"
+        className="w-full rounded-xl border border-white/[0.11] bg-slate-950/55 px-3 py-2 text-sm text-slate-100 outline-none placeholder:text-slate-500 focus:border-sky-400/45"
       />
     </label>
   );
@@ -3851,11 +3860,11 @@ function SelectField({
 
   return (
     <label className="grid gap-1">
-      <div className="text-[13px] font-semibold text-[#374151]">{label}</div>
+      <div className="text-[13px] font-semibold text-slate-300">{label}</div>
       <select
         value={selectVal}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full rounded-xl border border-[#E5E7EB] bg-white px-3 py-3 text-[15px] outline-none focus:border-[#94A3B8]"
+        className="w-full rounded-xl border border-white/[0.11] bg-slate-950/55 px-3 py-3 text-[15px] text-slate-100 outline-none placeholder:text-slate-500 focus:border-sky-400/45"
       >
         {placeholderOption != null ? (
           <option value="">{placeholderOption}</option>
@@ -3883,7 +3892,7 @@ function TextArea({
 }) {
   return (
     <label className="grid gap-1">
-      <div className="text-[13px] font-semibold text-[#374151]">{label}</div>
+      <div className="text-[13px] font-semibold text-slate-300">{label}</div>
       <textarea
         value={value}
         onChange={(e) => onChange(e.target.value)}
@@ -3892,7 +3901,7 @@ function TextArea({
         autoCorrect="off"
         autoCapitalize="off"
         spellCheck={false}
-        className="min-h-[120px] w-full resize-y rounded-xl border border-[#E5E7EB] bg-white px-3 py-3 text-[15px] outline-none focus:border-[#94A3B8]"
+        className="min-h-[120px] w-full resize-y rounded-xl border border-white/[0.11] bg-slate-950/55 px-3 py-3 text-[15px] text-slate-100 outline-none placeholder:text-slate-500 focus:border-sky-400/45"
       />
     </label>
   );

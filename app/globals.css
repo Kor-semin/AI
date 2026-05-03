@@ -235,6 +235,27 @@ html[lang="ko"] body {
     0 0 0 4px rgba(56, 189, 248, 0.4);
 }
 
+@keyframes sensora-modal-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 12px, 0) scale(0.988);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+.sensora-modal-panel-reveal {
+  animation: sensora-modal-in 0.26s cubic-bezier(0.22, 1, 0.32, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sensora-modal-panel-reveal {
+    animation: none;
+  }
+}
+
 /* 랜딩 상단 — 앱 서비스형 플로팅 바 */
 .landing-app-nav-shell {
   box-shadow:

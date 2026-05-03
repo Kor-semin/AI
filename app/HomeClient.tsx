@@ -246,17 +246,17 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
             <>
               <button
                 type="button"
-                className="flex min-w-0 flex-1 cursor-pointer items-start gap-2.5 rounded-xl border border-transparent p-1 text-left outline-none transition hover:border-[color:var(--edge)] hover:bg-[color:var(--paper-2)] focus-visible:ring-2 focus-visible:ring-[#94A3B8] sm:items-center sm:gap-3 sm:p-1.5"
+                className="flex min-w-0 flex-1 cursor-pointer items-start gap-2.5 rounded-xl border border-transparent p-1 text-left outline-none transition duration-[220ms] hover:border-white/[0.12] hover:bg-white/[0.06] focus-visible:ring-2 focus-visible:ring-sky-400/40 sm:items-center sm:gap-3 sm:p-1.5"
                 onClick={() => navigateCrmSection("dashboard")}
                 aria-label={`${t("product.name")} — 요약 화면으로 이동`}
               >
                 <SensoraAnimatedMark size={40} animated={false} className="pointer-events-none shrink-0" />
                 <div className="flex min-w-0 flex-1 flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
                   <div className="min-w-0">
-                    <div className="truncate text-sm font-semibold tracking-tight">{t("product.name")}</div>
-                    <div className="truncate text-[11px] text-[color:var(--ink-2)] sm:text-xs">{t("brand.subline")}</div>
+                    <div className="truncate text-sm font-semibold tracking-tight text-slate-50">{t("product.name")}</div>
+                    <div className="truncate text-[11px] text-slate-400 sm:text-xs">{t("brand.subline")}</div>
                   </div>
-                  <p className="pointer-events-none shrink-0 text-[10px] leading-snug text-[color:var(--ink-2)] sm:max-w-[14rem] sm:text-right sm:text-[11px]" role="note">
+                  <p className="pointer-events-none shrink-0 text-[10px] leading-snug text-slate-500 sm:max-w-[14rem] sm:text-right sm:text-[11px]" role="note">
                     {t("header.zoomHint")}
                   </p>
                 </div>
@@ -266,15 +266,15 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                   <LanguageSelect dense />
                 </span>
                 {auth.status === "loading" ? (
-                  <div className="text-xs text-[color:var(--ink-2)]">{t("auth.checkingLogin")}</div>
+                  <div className="text-xs text-slate-400">{t("auth.checkingLogin")}</div>
                 ) : auth.status === "signed-in" ? (
                   <>
-                    <div className="hidden max-w-[10rem] truncate text-xs text-[color:var(--ink-2)] sm:block">
+                    <div className="hidden max-w-[10rem] truncate text-xs text-slate-400 sm:block">
                       {auth.name ?? auth.email ?? auth.uid}
                     </div>
                     <button
                       type="button"
-                      className="crm-ghost-btn inline-flex min-h-[44px] shrink-0 items-center rounded-lg px-3 py-2 text-xs font-semibold touch-manipulation"
+                      className="sensora-dark-ghost-btn inline-flex min-h-[44px] shrink-0 items-center rounded-lg px-3 py-2 text-xs font-semibold touch-manipulation"
                       onClick={signOut}
                     >
                       {t("auth.signOut")}
