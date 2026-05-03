@@ -13,7 +13,8 @@ export default function BetaJoinPage() {
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const fd = new FormData(e.currentTarget);
+    const form = e.currentTarget;
+    const fd = new FormData(form);
 
     const payload: BetaSignupPayload = {
       fullName: String(fd.get("fullName") ?? "").trim(),
@@ -49,7 +50,7 @@ export default function BetaJoinPage() {
         return;
       }
       window.alert(res.savedToBackend ? t("join.alert.betaReceivedRemote") : t("join.alert.betaNotPersisted"));
-      e.currentTarget.reset();
+      form.reset();
     } finally {
       setPending(false);
     }
