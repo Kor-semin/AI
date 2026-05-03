@@ -76,14 +76,15 @@ export function AppPreviewToc({ open, onClose, onSelectSection }: Props) {
 
       <button
         type="button"
-        className={`pointer-events-auto fixed right-[max(0.75rem,calc(env(safe-area-inset-right,0px)+0.5rem))] top-[max(0.5rem,calc(env(safe-area-inset-top,0px)+0.35rem))] z-[465] ${glassInteractive} min-h-11 px-3.5 py-2 text-sm font-semibold text-slate-100 shadow-lg backdrop-blur-md touch-manipulation sm:right-4 sm:top-[max(0.75rem,calc(env(safe-area-inset-top,0px)+0.5rem))]`}
+        data-app-preview-toc-close
+        className={`pointer-events-auto fixed right-[max(0.5rem,calc(env(safe-area-inset-right,0px)+0.35rem))] top-[max(0.35rem,calc(env(safe-area-inset-top,0px)+0.25rem))] z-[465] ${glassInteractive} min-h-10 px-2.5 py-1.5 text-[11px] font-semibold leading-tight text-slate-200/95 shadow-md backdrop-blur-md touch-manipulation sm:right-4 sm:top-[max(0.75rem,calc(env(safe-area-inset-top,0px)+0.5rem))] sm:min-h-11 sm:px-3.5 sm:py-2 sm:text-sm sm:font-semibold sm:text-slate-100 sm:shadow-lg`}
         onClick={onClose}
         aria-label={t("preview.toc.close")}
       >
         {t("preview.toc.close")}
       </button>
 
-      <div className="relative z-[2] flex min-h-0 flex-1 flex-col px-3 pt-[max(2.75rem,calc(env(safe-area-inset-top,0px)+2.25rem))] sm:px-5 sm:pt-10 lg:px-8">
+      <div className="relative z-[2] flex min-h-0 flex-1 flex-col px-3 pt-[max(2.35rem,calc(env(safe-area-inset-top,0px)+1.85rem))] sm:px-5 sm:pt-10 lg:px-8">
         <UnifiedSensoraGuideFlow active={open} variant="dialog" onClose={onClose} onSelectSection={onSelectSection} className="min-h-0" />
       </div>
     </div>

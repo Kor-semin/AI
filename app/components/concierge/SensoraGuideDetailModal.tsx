@@ -106,10 +106,10 @@ export function SensoraGuideDetailModal({
         className="landing-guide-dialog-animate sensora-detail-modal-shell relative z-[1] flex max-h-[min(calc(100svh-0.85rem-env(safe-area-inset-bottom,0px)-env(safe-area-inset-top,0px)),96svh)] w-full max-w-[min(96vw,min(960px,100%))] flex-col overflow-hidden rounded-t-[20px] border border-white/[0.14] bg-gradient-to-b from-[#0a1628]/99 to-[#051018]/97 shadow-[0_40px_100px_-28px_rgba(0,0,0,0.72)] backdrop-blur-2xl max-md:rounded-t-[18px] sm:max-h-[min(92dvh,92vh)] sm:rounded-[20px]"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex shrink-0 items-start justify-between gap-3 border-b border-white/[0.08] px-4 py-2.5 pt-[max(8px,calc(env(safe-area-inset-top,0px)+2px))] sm:px-5 sm:py-3 sm:pt-[max(12px,calc(env(safe-area-inset-top,0px)+4px))]">
-          <div className="min-w-0">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-sky-400/75">{t("preview.guide.viewerTitle")}</p>
-            <p id="sensora-guide-detail-title" className="mt-0.5 line-clamp-2 text-[0.953125rem] font-semibold leading-snug tracking-tight text-slate-100 max-sm:text-[clamp(0.89rem,calc(0.76rem+0.45vw),0.98rem)] sm:text-base">
+        <div className="flex shrink-0 items-start justify-between gap-2 border-b border-white/[0.08] px-3 py-2 pt-[max(6px,calc(env(safe-area-inset-top,0px)+2px))] sm:gap-3 sm:px-5 sm:py-3 sm:pt-[max(12px,calc(env(safe-area-inset-top,0px)+4px))]">
+          <div className="min-w-0 pr-1">
+            <p className="text-[9px] font-semibold uppercase tracking-[0.14em] text-sky-400/75 sm:text-[10px]">{t("preview.guide.viewerTitle")}</p>
+            <p id="sensora-guide-detail-title" className="mt-0.5 line-clamp-2 text-[0.9rem] font-semibold leading-snug tracking-tight text-slate-100 max-sm:text-[clamp(0.86rem,calc(0.74rem+0.42vw),0.95rem)] sm:text-base">
               {title}
             </p>
           </div>
@@ -117,14 +117,14 @@ export function SensoraGuideDetailModal({
             type="button"
             onClick={onClose}
             aria-label={closeLabel}
-            className="min-h-11 shrink-0 rounded-xl border border-white/[0.14] bg-white/[0.06] px-3 py-2 text-xs font-semibold text-slate-200 transition hover:bg-white/[0.1] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 touch-manipulation"
+            className="min-h-10 shrink-0 rounded-lg border border-white/[0.12] bg-white/[0.05] px-2.5 py-1.5 text-[11px] font-semibold leading-tight text-slate-200/95 transition hover:bg-white/[0.09] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 touch-manipulation sm:min-h-11 sm:rounded-xl sm:px-3 sm:py-2 sm:text-xs"
           >
             {closeLabel}
           </button>
         </div>
 
         <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
-          <div className="sensora-detail-modal-scroll min-h-0 flex-1 overflow-y-auto overscroll-y-contain [-webkit-overflow-scrolling:touch] pb-[max(0.875rem,calc(env(safe-area-inset-bottom,0px)+4px))] md:pb-4">
+          <div className="sensora-detail-modal-scroll min-h-0 flex-1 overflow-y-auto overscroll-y-contain [-webkit-overflow-scrolling:touch] pb-[max(1rem,calc(env(safe-area-inset-bottom,0px)+14px))] md:pb-4">
             <div className="relative mx-auto px-4 py-3 sm:px-6 sm:pb-5 sm:pt-3">
               <div className="relative mx-auto mb-5 flex min-h-[min(44dvh,300px)] w-full max-w-[min(860px,calc(100vw-24px))] items-center justify-center rounded-[13px] border border-white/[0.12] bg-[#020817]/92 px-[2.125rem] sm:min-h-[min(280px,48dvh)] sm:max-h-[min(52dvh,500px)] sm:rounded-[16px] sm:px-[2.875rem] md:max-h-[min(54vh,520px)]">
                 <button
@@ -191,7 +191,7 @@ export function SensoraGuideDetailModal({
                 </>
               ) : null}
 
-              <div className="mx-auto mt-8 flex max-w-[52ch] flex-col gap-3 pb-1 sm:flex-row sm:flex-wrap sm:justify-center">
+              <div className="mx-auto mt-6 flex max-w-[52ch] flex-col gap-2 pb-[max(0.5rem,calc(env(safe-area-inset-bottom,0px)*0.35))] sm:mt-8 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-3 sm:pb-1">
                 <button
                   type="button"
                   onClick={handleRelated}

@@ -167,7 +167,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
           "sticky top-0 z-30 isolate backdrop-blur-xl",
           /** iPhone 상태바/notch 안전영역을 반영해 헤더 콘텐츠가 겹치지 않도록 */
             view === "landing"
-            ? "landing-service-nav landing-service-nav--compact pt-[max(8px,calc(env(safe-area-inset-top,0px)+4px))] pb-1.5 sm:pb-2"
+            ? "landing-service-nav landing-service-nav--compact pt-[max(6px,calc(env(safe-area-inset-top,0px)+2px))] pb-1 sm:pb-2"
             : [
                 "border-b border-white/[0.1]",
                 "px-4 pb-3 pt-[max(14px,calc(env(safe-area-inset-top,0px)+12px))] sm:px-6",
@@ -177,32 +177,35 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
       >
         <div
           className={[
-            "mx-auto flex w-full min-w-0 px-4 sm:px-6 lg:px-10",
+            "landing-nav-inner mx-auto flex w-full min-w-0 px-3 sm:px-6 lg:px-10",
             view === "landing"
-              ? "max-w-[1440px] flex-col gap-2 sm:gap-3 xl:flex-row xl:items-center xl:justify-between xl:gap-4"
+              ? "max-w-[1440px] flex-col gap-1.5 max-sm:gap-1.5 sm:gap-3 xl:flex-row xl:items-center xl:justify-between xl:gap-4"
               : "max-w-[1280px] flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4",
           ].join(" ")}
         >
           {view === "landing" ? (
             <>
-              <div className="flex min-w-0 max-xl:flex-none flex-col gap-2.5 sm:flex-row sm:items-center sm:gap-6 xl:flex-1 xl:gap-7">
-                <div className="flex min-w-0 items-start gap-3 sm:items-center">
+              <div className="flex min-w-0 max-xl:flex-none flex-col gap-2 max-sm:gap-1.5 sm:flex-row sm:items-center sm:gap-6 xl:flex-1 xl:gap-7">
+                <div className="flex min-w-0 items-start gap-2.5 sm:items-center sm:gap-3">
                   <SensoraAnimatedMark size={44} animated={false} className="pointer-events-none hidden shrink-0 sm:block drop-shadow-[0_0_24px_-4px_rgba(56,189,248,0.35)]" aria-hidden />
                   <div className="min-w-0">
-                    <div className="text-balance text-lg font-semibold leading-tight tracking-[-0.024em] text-white sm:text-[1.15rem] lg:text-[1.25rem]">
+                    <div className="text-balance text-base font-semibold leading-[1.15] tracking-[-0.022em] text-white max-sm:text-[0.97rem] sm:text-[1.15rem] lg:text-[1.25rem]">
                       {t("product.name")}
                     </div>
-                    <p className="mt-1 text-xs font-medium leading-snug text-slate-300 sm:text-sm">
+                    <p className="mt-0.5 line-clamp-2 text-[11px] font-medium leading-snug text-slate-300 max-sm:mt-0.5 sm:mt-1 sm:line-clamp-none sm:text-sm">
                       {t("landing.showroom.header.subline")}
                     </p>
                   </div>
                 </div>
-                <p className="max-w-full shrink-0 text-[0.625rem] leading-snug text-slate-500 sm:max-w-[14rem] sm:text-xs xl:hidden" role="note">
+                <p
+                  className="max-w-full shrink-0 text-[0.6rem] leading-tight text-slate-500 max-sm:line-clamp-2 sm:max-w-[14rem] sm:text-xs sm:leading-snug xl:hidden"
+                  role="note"
+                >
                   {t("header.zoomHint")}
                 </p>
               </div>
-              <div className="relative z-[1] flex w-full min-w-0 max-xl:flex-none flex-col gap-2.5 sm:gap-3 xl:flex-1 xl:w-auto xl:max-w-none xl:flex-row xl:flex-wrap xl:items-center xl:justify-end xl:gap-5">
-                <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-2 sm:justify-between xl:flex-nowrap xl:justify-end">
+              <div className="relative z-[1] flex w-full min-w-0 max-xl:flex-none flex-col gap-2 max-sm:gap-2 sm:gap-3 xl:flex-1 xl:w-auto xl:max-w-none xl:flex-row xl:flex-wrap xl:items-center xl:justify-end xl:gap-5">
+                <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1.5 sm:justify-between sm:gap-x-3 sm:gap-y-2 xl:flex-nowrap xl:justify-end">
                   <LanguageSelect dense />
                   {auth.status === "loading" ? (
                     <span className="text-xs text-slate-400">{t("auth.checkingLogin")}</span>
@@ -226,12 +229,12 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                     {t("header.zoomHint")}
                   </p>
                 </div>
-                <div className="flex w-full min-w-0 flex-col gap-2.5 min-[420px]:flex-row min-[420px]:flex-wrap min-[420px]:justify-end sm:gap-3">
+                <div className="flex w-full min-w-0 flex-col gap-2 min-[420px]:flex-row min-[420px]:flex-wrap min-[420px]:justify-end min-[420px]:gap-2.5 sm:gap-3">
                   <button
                     type="button"
                     onClick={openAppPreviewToc}
                     className={[
-                      "landing-nav-cta-preview relative z-[20] inline-flex min-h-14 w-full shrink-0 cursor-pointer items-center justify-center gap-2 rounded-2xl whitespace-nowrap",
+                      "landing-nav-cta-preview landing-nav-cta-preview--compact relative z-[20] inline-flex min-h-14 w-full shrink-0 cursor-pointer items-center justify-center gap-1.5 rounded-2xl whitespace-nowrap max-sm:min-h-12 max-sm:rounded-xl max-sm:border-white/22 max-sm:bg-white/[0.055] max-sm:px-4 max-sm:py-2.5 max-sm:text-xs max-sm:font-medium max-sm:shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]",
                       "border border-white/30 bg-white/[0.092] px-5 py-3.5 text-center text-sm font-semibold text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_0_0_1px_rgba(56,189,248,0.06)_inset,0_0_40px_-10px_rgba(56,189,248,0.16)] ring-1 ring-inset ring-sky-400/14",
                       "backdrop-blur-md transition duration-[220ms] ease-out",
                       "hover:border-sky-300/42 hover:bg-white/[0.12]",
@@ -239,7 +242,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                       "touch-manipulation min-[420px]:min-w-[12.5rem] min-[420px]:flex-1 min-[420px]:w-auto xl:min-w-[11.75rem] xl:flex-none",
                     ].join(" ")}
                   >
-                    <svg className="size-[1.1rem] shrink-0 opacity-90" viewBox="0 0 20 20" fill="none" aria-hidden>
+                    <svg className="size-[1.1rem] shrink-0 opacity-90 max-sm:size-[1rem]" viewBox="0 0 20 20" fill="none" aria-hidden>
                       <path
                         d="M6.75 11.08V9.92c0-.6.323-1.15.839-1.424l5.62-3.068a1.583 1.583 0 012.541 1.424v8.088a1.584 1.584 0 01-2.541 1.424l-5.62-3.069a1.583 1.583 0 01-.839-1.423z"
                         fill="currentColor"
@@ -252,7 +255,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                     href="/join"
                     prefetch={false}
                     className={[
-                      "landing-nav-cta-join sensora-premium-primary-workspace relative z-[20] inline-flex min-h-14 w-full items-center justify-center whitespace-nowrap rounded-2xl px-7 py-3.5 text-center text-sm font-semibold tracking-tight text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.13),0_0_44px_-8px_rgba(56,189,248,0.22),0_12px_32px_-8px_rgba(139,92,246,0.12)]",
+                      "landing-nav-cta-join sensora-premium-primary-workspace relative z-[20] inline-flex min-h-14 w-full items-center justify-center whitespace-nowrap rounded-2xl px-7 py-3.5 text-center text-sm font-semibold tracking-tight text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.13),0_0_44px_-8px_rgba(56,189,248,0.22),0_12px_32px_-8px_rgba(139,92,246,0.12)] max-sm:px-6 max-sm:py-3.5 max-sm:text-[0.8125rem]",
                       "touch-manipulation min-[420px]:min-w-[12.5rem] min-[420px]:flex-1 min-[420px]:w-auto xl:min-w-[11.75rem] xl:flex-none",
                       "transition duration-[220ms] ease-out active:scale-[0.99]",
                       "focus-visible:outline-none",

@@ -76,8 +76,8 @@ function modalStep0() {
   const vw = window.innerWidth;
   const vh = window.innerHeight;
   const footer = root.querySelector("footer.sensora-guide-toc-footer");
-  const closeBtn = root.querySelector("header button");
-  const kicker = root.querySelector("header p");
+  const closeBtn = root.querySelector("[data-app-preview-toc-close]");
+  const kicker = root.querySelector(".sensora-guide-toc-scroll h2");
   const out = {};
   const step0Pairs = [
     ["closeBtn", closeBtn],
