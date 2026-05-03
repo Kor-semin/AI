@@ -166,6 +166,13 @@ export function SensoraGuideDetailModal({
                 )}
               </div>
 
+              <p
+                className="mx-auto mt-4 max-w-[52ch] rounded-xl border border-sky-400/18 bg-sky-500/[0.06] px-3 py-2.5 text-center text-[11px] font-medium leading-relaxed text-sky-100/92 sm:mt-5 sm:px-4 sm:text-xs"
+                role="note"
+              >
+                {t("preview.guide.detailModal.sampleNotice")}
+              </p>
+
               <p className="text-center text-[0.9275rem] font-semibold text-sky-50/98 sm:text-[0.94375rem]">{subtitle}</p>
               <div className="mx-auto mt-4 max-w-[52ch] text-[0.8375rem] leading-[1.65] text-slate-300 sm:text-[0.875rem] [&>p+p]:mt-3">
                 {splitParagraphs(t(active.detailBodyKey)).map((p) => (

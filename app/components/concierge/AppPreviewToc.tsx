@@ -15,6 +15,10 @@ type Props = {
   onSelectSection: (section: CrmSection) => void;
 };
 
+/**
+ * 앱 미리보기 전체 화면 — 본문은 `UnifiedSensoraGuideFlow` 단일 흐름만 노출합니다.
+ * (예전 목차형 헤더/중복 안내는 제거해 랜딩·헤더·히어로의 「앱 화면 미리보기」와 동일 경험으로 통일)
+ */
 export function AppPreviewToc({ open, onClose, onSelectSection }: Props) {
   const { t } = useLanguage();
 
@@ -27,7 +31,6 @@ export function AppPreviewToc({ open, onClose, onSelectSection }: Props) {
     };
   }, [open]);
 
-  /** 다이얼로그 닫기(이미지 뷰어는 자체 레이어에서 Escape 처리 가능) */
   useEffect(() => {
     if (!open) return undefined;
     const onKey = (e: KeyboardEvent) => {
@@ -71,17 +74,16 @@ export function AppPreviewToc({ open, onClose, onSelectSection }: Props) {
         <div className="sensora-app-preview-galaxy__vignette" aria-hidden />
       </div>
 
-      <header className="relative z-[2] mx-auto flex w-full max-w-[min(1200px,100%-1.5rem)] shrink-0 flex-col gap-0.5 px-2 pb-0 pt-[max(10px,calc(env(safe-area-inset-top,0px)+8px))] text-center sm:px-3 sm:pb-1 sm:pt-[max(12px,calc(env(safe-area-inset-top,0px)+10px))]">
-        <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-sky-400/85 sm:text-[11px]">{t("guide.unified.header.kicker")}</p>
-        <p className="mx-auto max-w-[42ch] text-xs leading-snug text-slate-400 sm:text-sm">{t("guide.unified.header.sub")}</p>
-        <div className="mt-1 flex justify-end pb-1 sm:mt-2 sm:pb-2">
-          <button type="button" className={`${glassInteractive} min-h-11 shrink-0 px-4 py-2 text-sm font-semibold text-slate-100 touch-manipulation`} onClick={onClose}>
-            {t("preview.toc.close")}
-          </button>
-        </div>
-      </header>
+      <button
+        type="button"
+        className={`pointer-events-auto fixed right-[max(0.75rem,calc(env(safe-area-inset-right,0px)+0.5rem))] top-[max(0.5rem,calc(env(safe-area-inset-top,0px)+0.35rem))] z-[465] ${glassInteractive} min-h-11 px-3.5 py-2 text-sm font-semibold text-slate-100 shadow-lg backdrop-blur-md touch-manipulation sm:right-4 sm:top-[max(0.75rem,calc(env(safe-area-inset-top,0px)+0.5rem))]`}
+        onClick={onClose}
+        aria-label={t("preview.toc.close")}
+      >
+        {t("preview.toc.close")}
+      </button>
 
-      <div className="relative z-[2] flex min-h-0 flex-1 flex-col px-3 sm:px-5 lg:px-8">
+      <div className="relative z-[2] flex min-h-0 flex-1 flex-col px-3 pt-[max(2.75rem,calc(env(safe-area-inset-top,0px)+2.25rem))] sm:px-5 sm:pt-10 lg:px-8">
         <UnifiedSensoraGuideFlow active={open} variant="dialog" onClose={onClose} onSelectSection={onSelectSection} className="min-h-0" />
       </div>
     </div>

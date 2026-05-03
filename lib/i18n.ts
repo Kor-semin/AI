@@ -396,6 +396,7 @@ export type TranslationKey =
   | "preview.guide.tapDetail"
   | "preview.guide.detailModal.pointsHeading"
   | "preview.guide.detailModal.relatedCta"
+  | "preview.guide.detailModal.sampleNotice"
   | "guide.sensora-guide-01.title"
   | "guide.sensora-guide-01.desc"
   | "guide.sensora-guide-01.detailBody"
@@ -440,6 +441,7 @@ export type TranslationKey =
   | "guide.unified.guideNav.next"
   | "guide.unified.start.title"
   | "guide.unified.start.lead"
+  | "guide.unified.start.kicker"
   | "guide.unified.disclaimer"
   | "preview.diagram.caption.security"
   | "preview.diagram.caption.workspace"
@@ -580,7 +582,9 @@ export type TranslationKey =
   | "pwa.install.description"
   | "pwa.install.ios"
   | "pwa.install.android"
-  | "pwa.install.dismiss";
+  | "pwa.install.dismiss"
+  | "pwa.install.more"
+  | "pwa.install.less";
 
 type TranslationDict = Partial<Record<TranslationKey, string>>;
 
@@ -992,6 +996,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "preview.guide.tapDetail": "탭하여 자세히 보기",
     "preview.guide.detailModal.pointsHeading": "이 안내에서 잡아둘 점",
     "preview.guide.detailModal.relatedCta": "관련 업무 화면으로 이동",
+    "preview.guide.detailModal.sampleNotice": "이미지는 예시 화면이며, 실제 고객 데이터는 이 미리보기에서 서버에 저장되지 않습니다.",
     "guide.sensora-guide-01.title": "실제 사용 흐름",
     "guide.sensora-guide-01.desc": "상담 기록부터 고객 요약, 메시지, 일정까지 한 흐름으로 이어집니다.",
     "guide.sensora-guide-01.detailBody":
@@ -1045,6 +1050,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "guide.unified.start.title": "시작하기",
     "guide.unified.start.lead":
       "준비되셨으면 업무 화면이나 AI 비서로 들어가거나, 영업 계정 등록과 베타 신청 안내를 이어가실 수 있습니다.",
+    "guide.unified.start.kicker": "4단계 중 마지막",
     "guide.unified.disclaimer": "예시 화면이며 저장은 베타 승인·계정 준비 후 제공 경로에서 가능합니다. 메뉴나 문구는 베타에서 달라질 수 있습니다.",
     "preview.diagram.caption.security": "불러온 연락처는 미리보기·검토 후 저장됩니다.",
     "preview.diagram.caption.workspace": "베타·영업 계정 흐름을 거친 뒤 동일 계정으로 업무 화면이 열립니다.",
@@ -1196,6 +1202,8 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "pwa.install.android":
       "Android에서는 Chrome 메뉴에서 ‘앱 설치’ 또는 ‘홈 화면에 추가’를 선택하세요.",
     "pwa.install.dismiss": "닫기",
+    "pwa.install.more": "자세히",
+    "pwa.install.less": "접기",
   },
   en: {
     "brand.name": "Sensora",
@@ -1613,6 +1621,8 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "preview.guide.tapDetail": "Tap to view details",
     "preview.guide.detailModal.pointsHeading": "Takeaways",
     "preview.guide.detailModal.relatedCta": "Open related workspace screen",
+    "preview.guide.detailModal.sampleNotice":
+      "These images are sample screens. Live customer data is not saved to the server in this preview.",
     "guide.sensora-guide-01.title": "End-to-end workspace flow",
     "guide.sensora-guide-01.desc": "Consultation notes carry into customer summaries, messages, and schedule cues.",
     "guide.sensora-guide-01.detailBody":
@@ -1666,6 +1676,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "guide.unified.start.title": "Start",
     "guide.unified.start.lead":
       "Open your workspace or the AI assistant—or continue with seller registration and the beta signup link.",
+    "guide.unified.start.kicker": "Final step (4 of 4)",
     "guide.unified.disclaimer":
       "Sample screens only; persisted storage arrives after beta approval or your seller path. Placement and wording may evolve during beta.",
     "preview.diagram.caption.security": "Imports stay preview-first: review before anything is committed.",
@@ -1826,6 +1837,8 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "pwa.install.android":
       "On Android Chrome, choose ‘Install app’ or ‘Add to Home screen’ from the ⋮ menu.",
     "pwa.install.dismiss": "Dismiss",
+    "pwa.install.more": "Details",
+    "pwa.install.less": "Less",
   },
   ja: {},
   "zh-CN": {},

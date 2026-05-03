@@ -150,7 +150,7 @@ export function UnifiedSensoraGuideFlow({
       />
 
       <div className={`flex min-h-0 flex-1 flex-col ${className}`.trim()}>
-        <div className="sensora-guide-preview-hide-scroll sensora-guide-toc-scroll min-h-0 flex-1 overflow-y-auto overscroll-y-contain [-webkit-overflow-scrolling:touch] pb-24 max-sm:pb-[7.25rem] sm:pb-8">
+        <div className="sensora-guide-preview-hide-scroll sensora-guide-toc-scroll min-h-0 flex-1 overflow-y-auto overscroll-y-contain [-webkit-overflow-scrolling:touch] pb-[max(6rem,calc(env(safe-area-inset-bottom,0px)+5.5rem))] max-sm:pb-[max(7.5rem,calc(env(safe-area-inset-bottom,0px)+6.25rem))] sm:pb-10">
           <div className="mx-auto flex w-full max-w-[min(640px,100%)] flex-col px-1 sm:max-w-[min(720px,100%)]">
             {wizardStep === 0 ? (
               <div className={`flex flex-col ${variant === "notebook" ? "items-stretch px-1 pt-1 max-[420px]:px-1" : "items-center px-1 pt-1 text-center max-sm:px-0.5 sm:pt-3"}`}>
@@ -180,7 +180,7 @@ export function UnifiedSensoraGuideFlow({
 
                     <div className="mx-auto mb-6 mt-[1.375rem] h-px max-w-[5.5rem] bg-gradient-to-r from-transparent via-sky-400/35 to-transparent sm:mt-7 sm:max-w-[6.75rem]" aria-hidden />
 
-                    <p className={kickerClass}>SENSORA</p>
+                    <p className={kickerClass}>{t("guide.unified.header.kicker")}</p>
 
                     <h2 className={`${titleClass} mt-3 max-w-[22ch] text-[clamp(1.35rem,min(5vw+0.45rem,1.9rem),1.92rem)]`}>{t("guide.unified.intro.title")}</h2>
 
@@ -216,7 +216,7 @@ export function UnifiedSensoraGuideFlow({
 
             {wizardStep === 1 ? (
               <div className="pt-2 text-center sm:pt-3">
-                <p className={`${kickerClass} ${variant === "dialog" ? "text-sky-400/85" : ""}`}>SENSORA</p>
+                <p className={`${kickerClass} ${variant === "dialog" ? "text-sky-400/85" : ""}`}>{t("guide.unified.header.kicker")}</p>
                 <h2 className={`${titleClass} mx-auto mt-2 max-w-[22ch] text-[clamp(1.25rem,min(4.5vw+0.55rem,1.85rem),1.85rem)]`}>{t("preview.flow.step2.headline")}</h2>
                 <p className={`mx-auto mt-2 max-w-[40ch] text-xs leading-snug text-slate-400 sm:text-sm ${variant === "notebook" ? "text-slate-400" : ""}`}>
                   {t("preview.flow.step2.sub")}
@@ -313,7 +313,7 @@ export function UnifiedSensoraGuideFlow({
             {wizardStep === 3 ? (
               <div className="flex flex-col gap-4 pt-1 sm:pt-2">
                 <div className="text-center">
-                  <p className={`${kickerClass} ${variant === "dialog" ? "text-sky-400/85" : ""}`}>{t("guide.unified.flow.kicker")}</p>
+                  <p className={`${kickerClass} ${variant === "dialog" ? "text-sky-400/85" : ""}`}>{t("guide.unified.start.kicker")}</p>
                   <h2 className={`${titleClass} mx-auto mt-2 max-w-[24ch] text-[clamp(1.2rem,min(4.2vw+0.55rem),1.75rem)]`}>{t("guide.unified.start.title")}</h2>
                   <p className={`mx-auto mt-2 max-w-[42ch] text-xs leading-relaxed ${variant === "notebook" ? "text-slate-400" : "text-slate-400"} sm:text-sm`}>
                     {t("guide.unified.start.lead")}
@@ -337,14 +337,14 @@ export function UnifiedSensoraGuideFlow({
                   </button>
                 </div>
 
-                <div className="flex flex-col items-center gap-2 border-t border-white/[0.08] pt-4 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-x-8">
+                <div className="grid w-full grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-3">
                   <Link
                     href={REGISTER_PATH}
                     prefetch={false}
                     onClick={() => {
                       onClose();
                     }}
-                    className="text-center text-[0.8125rem] font-semibold tracking-tight text-slate-400 underline decoration-white/15 underline-offset-4 transition hover:text-slate-100"
+                    className={`${glassInteractive} flex min-h-[3rem] w-full items-center justify-center rounded-2xl border border-white/[0.15] px-4 py-3 text-center text-[0.875rem] font-semibold text-slate-100 transition hover:bg-white/[0.05] hover:text-white touch-manipulation sm:min-h-[3.125rem] sm:text-[0.9rem]`}
                   >
                     {t("preview.flow.step1.registerCta")}
                   </Link>
@@ -354,7 +354,7 @@ export function UnifiedSensoraGuideFlow({
                     onClick={() => {
                       onClose();
                     }}
-                    className="text-center text-[0.8125rem] font-semibold tracking-tight text-slate-400 underline decoration-white/15 underline-offset-4 transition hover:text-slate-100"
+                    className={`${glassInteractive} flex min-h-[3rem] w-full items-center justify-center rounded-2xl border border-sky-400/28 bg-white/[0.04] px-4 py-3 text-center text-[0.875rem] font-semibold text-sky-50/95 transition hover:border-sky-400/42 hover:bg-white/[0.07] touch-manipulation sm:min-h-[3.125rem] sm:text-[0.9rem]`}
                   >
                     {t("cta.joinBeta")}
                   </Link>
@@ -370,7 +370,7 @@ export function UnifiedSensoraGuideFlow({
           </div>
         </div>
 
-        <footer className="sensora-guide-toc-footer shrink-0 border-t border-white/[0.1] bg-[#020817]/94 px-2 py-[max(10px,calc(env(safe-area-inset-bottom,0px)+12px))] shadow-[0_-10px_32px_-18px_rgba(0,0,0,0.55)] backdrop-blur-md sm:px-4 lg:rounded-2xl lg:border lg:border-white/[0.1] lg:bg-[linear-gradient(180deg,rgba(56,189,248,0.035)_0%,rgba(15,26,43,0.42)_52%,rgba(8,17,31,0.62)_100%)] lg:px-5 lg:py-3 lg:shadow-[inset_0_1px_0_rgba(255,255,255,0.07)]">
+        <footer className="sensora-guide-toc-footer shrink-0 border-t border-white/[0.1] bg-[#020817]/94 px-2 pt-3 pb-[max(0.75rem,calc(env(safe-area-inset-bottom,0px)+2rem))] shadow-[0_-10px_32px_-18px_rgba(0,0,0,0.55)] backdrop-blur-md sm:px-4 sm:pb-[max(0.875rem,calc(env(safe-area-inset-bottom,0px)+2rem))] lg:rounded-2xl lg:border lg:border-white/[0.1] lg:bg-[linear-gradient(180deg,rgba(56,189,248,0.035)_0%,rgba(15,26,43,0.42)_52%,rgba(8,17,31,0.62)_100%)] lg:px-5 lg:pt-3 lg:pb-[max(0.75rem,calc(env(safe-area-inset-bottom,0px)+1.25rem))] lg:shadow-[inset_0_1px_0_rgba(255,255,255,0.07)]">
           <div className="mx-auto flex w-full max-w-[min(720px,calc(100%-4px))] items-center gap-2 sm:gap-3">
             <button
               type="button"
