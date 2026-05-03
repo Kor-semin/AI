@@ -71,27 +71,19 @@ function BetaJoinForm() {
   }
 
   const fieldClass =
-    "mt-2 w-full min-h-[48px] rounded-xl border border-white/[0.12] bg-[#020817]/82 px-4 py-3 text-[15px] leading-snug text-slate-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] placeholder:text-slate-500 outline-none transition-[border-color,box-shadow] focus:border-sky-400/45 focus:ring-[3px] focus:ring-sky-500/15";
+    "sensora-premium-input mt-2 w-full min-h-[48px] rounded-xl px-4 py-3 text-[15px] leading-snug";
 
-  const textareaFieldClass =
-    `${fieldClass} resize-y py-3.5 leading-relaxed min-h-[100px] sm:min-h-[7.125rem]`;
+  const textareaFieldClass = `${fieldClass} resize-y py-3.5 leading-relaxed min-h-[100px] sm:min-h-[7.125rem]`;
 
   return (
-    <main className="crm-bg crm-app-stage relative min-h-[100dvh] min-h-[100svh] overflow-x-hidden px-[max(1rem,calc(env(safe-area-inset-left,1rem)))] pb-[max(2rem,calc(8rem+env(safe-area-inset-bottom,0px)))] max-sm:pb-[max(2rem,calc(8.5rem+env(safe-area-inset-bottom,0px)))] pr-[max(1rem,calc(env(safe-area-inset-right,1rem)))] pt-[max(1.25rem,env(safe-area-inset-top))]">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-95"
-        style={{
-          background:
-            "radial-gradient(720px 420px at 12% -2%, rgba(56,189,248,0.09), transparent 56%), radial-gradient(640px 400px at 102% 0%, rgba(139,92,246,0.07), transparent 52%)",
-        }}
-      />
+    <main className="crm-bg crm-app-stage join-premium-surface relative min-h-[100dvh] min-h-[100svh] overflow-x-hidden px-[max(1rem,calc(env(safe-area-inset-left,1rem)))] pb-[max(2rem,calc(7.5rem+env(safe-area-inset-bottom,0px)))] max-sm:pb-[max(2rem,calc(8rem+env(safe-area-inset-bottom,0px)))] pr-[max(1rem,calc(env(safe-area-inset-right,1rem)))] pt-[max(1.25rem,env(safe-area-inset-top))]">
+      <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(780px_440px_at_10%_-4%,rgba(56,189,248,0.095),transparent_56%),radial-gradient(680px_420px_at_100%_4%,rgba(139,92,246,0.078),transparent_54%),radial-gradient(520px_360px_at_50%_96%,rgba(30,27,75,0.06),transparent_58%)] opacity-[0.97]" />
 
       <div className="relative z-[1] mx-auto w-full max-w-xl min-[390px]:max-w-[min(36rem,calc(100vw-28px))]">
         <div className="mb-6 max-[389px]:mb-5">
           <Link
             href="/"
-            className="sensora-dark-ghost-btn inline-flex touch-manipulation items-center gap-2 rounded-xl border-transparent px-0 py-1.5 text-[13px] font-semibold text-slate-400 transition hover:bg-white/[0.06] hover:text-slate-100"
+            className="inline-flex touch-manipulation items-center gap-2 rounded-xl border border-white/[0.12] bg-white/[0.04] px-3.5 py-2 text-[13px] font-semibold text-slate-300 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] transition hover:border-sky-400/28 hover:bg-white/[0.08] hover:text-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35"
           >
             <span aria-hidden>←</span> {t("join.backHome")}
           </Link>
@@ -106,7 +98,7 @@ function BetaJoinForm() {
           </p>
         </div>
 
-        <div className="relative rounded-[22px] border border-white/[0.12] bg-slate-950/72 p-6 shadow-[0_28px_64px_-28px_rgba(0,0,0,0.65),inset_0_1px_0_rgba(255,255,255,0.06),0_0_72px_-36px_rgba(56,189,248,0.075)] backdrop-blur-xl max-[389px]:p-5 sm:p-9">
+        <div className="sensora-premium-card relative rounded-[24px] p-6 max-[389px]:p-5 sm:p-9">
           <form ref={formRef} className="relative" onSubmit={(ev) => void handleSubmit(ev)} noValidate>
             <fieldset className="space-y-5 border-0 p-0 [&_legend]:sr-only">
               <legend>{t("join.formLegend")}</legend>
@@ -193,7 +185,7 @@ function BetaJoinForm() {
 
             <div className="mt-8 flex flex-col gap-5 border-t border-white/[0.1] pt-8">
               <div
-                className="space-y-2.5 rounded-xl border border-white/[0.1] bg-[#020817]/55 px-4 py-4 text-left text-[13px] leading-[1.65] text-slate-400 backdrop-blur-sm max-[389px]:px-3.5 max-[389px]:py-3.5 max-[389px]:text-[12px]"
+                className="space-y-2.5 rounded-xl border border-white/[0.12] bg-[#020817]/62 px-4 py-4 text-left text-[13px] leading-[1.65] text-slate-400 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-md max-[389px]:px-3.5 max-[389px]:py-3.5 max-[389px]:text-[12px]"
                 role="note"
               >
                 <p className="font-semibold text-slate-100">{t("join.trustNoticeLine1")}</p>
@@ -207,7 +199,7 @@ function BetaJoinForm() {
               >
                 {pending ? t("join.submitting") : t("join.submit")}
               </button>
-              <p className="text-center text-[13px] leading-relaxed text-slate-500 max-[389px]:px-1 max-[389px]:text-[12px] max-[389px]:leading-[1.55]">
+              <p className="text-center text-[13px] leading-relaxed text-slate-500 max-[389px]:px-1 max-[389px]:text-[12.5px] max-[389px]:leading-[1.55]">
                 이미 명함 접수 후 승인을 기다리는 경우{" "}
                 <Link href="/register" className="font-semibold text-sky-400/95 underline-offset-4 hover:text-sky-300 hover:underline">
                   영업 계정 등록

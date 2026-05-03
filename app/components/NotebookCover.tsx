@@ -289,12 +289,12 @@ export function NotebookCover() {
             >
               {pageIdx === 0 ? (
                 <div className="mx-auto flex w-full max-w-[min(360px,92vw)] flex-col items-center max-[389px]:max-w-[calc(100vw-32px)]">
-                  <div className="w-full space-y-2.5 text-center text-[14px] leading-relaxed text-slate-300 max-[480px]:space-y-2 max-[480px]:text-[13.5px] sm:text-[15px] sm:leading-[1.6]">
+                  <div className="w-full space-y-2.5 text-center text-[15px] leading-relaxed text-slate-200 max-[480px]:space-y-2 max-[480px]:text-[14.5px] sm:text-[16px] sm:leading-[1.62]">
                     {splitLines(t("cover.onboarding.page1.description")).map((line) => (
                       <p key={line}>{line}</p>
                     ))}
                   </div>
-                  <div className="mt-6 flex w-full max-[480px]:mt-5 flex-col items-center gap-2.5 max-[480px]:gap-2">
+                  <div className="mt-7 flex w-full max-[480px]:mt-6 flex-col items-center gap-3 max-[480px]:gap-2.5">
                     <button
                       type="button"
                       className={onboardPrimaryBtn}
@@ -320,11 +320,11 @@ export function NotebookCover() {
                       return (
                         <li
                           key={key}
-                          className="notebook-cover-toc-pane min-h-[4.75rem] rounded-2xl border border-white/14 bg-black/[0.12] px-4 py-3.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-sm max-[480px]:min-h-[4.35rem] max-[480px]:rounded-[15px] max-[480px]:px-3.5 max-[480px]:py-3 active:scale-[0.997] motion-reduce:active:scale-100 sm:rounded-[18px] sm:px-5 sm:py-4"
+                          className="notebook-cover-toc-pane min-h-[4.85rem] cursor-default rounded-2xl border px-4 py-3.5 backdrop-blur-sm max-[480px]:min-h-[4.45rem] max-[480px]:rounded-[16px] max-[480px]:px-3.5 max-[480px]:py-3.5 motion-reduce:active:scale-100 sm:rounded-[18px] sm:px-5 sm:py-4"
                         >
-                          <p className="text-[14px] font-semibold leading-snug text-[#F8FAFC] sm:text-[15px]">{title}</p>
+                          <p className="text-[15px] font-semibold leading-snug text-[#F8FAFC] sm:text-[15.5px]">{title}</p>
                           {line ?
-                            <p className="mt-1 text-[12.5px] leading-snug text-slate-400 max-[480px]:text-[12px] sm:mt-1.5 sm:text-[13px]">
+                            <p className="mt-1 text-[13px] leading-snug text-slate-400 max-[480px]:text-[12.5px] sm:mt-1.5 sm:text-[13.5px]">
                               {line}
                             </p>
                           : null}
@@ -337,7 +337,7 @@ export function NotebookCover() {
 
               {pageIdx === 2 ? (
                 <div className="mx-auto flex w-full max-w-[min(32rem,min(96vw,calc(100vw-28px)))] flex-col items-center gap-4 max-[480px]:gap-3 sm:gap-6">
-                  <div className="w-full space-y-2.5 text-center text-[14px] leading-relaxed text-slate-300 max-[480px]:space-y-2 max-[480px]:text-[13.5px] sm:text-[15px] sm:leading-[1.6]">
+                  <div className="w-full space-y-2.5 text-center text-[15px] leading-relaxed text-slate-200 max-[480px]:space-y-2 max-[480px]:text-[14.5px] sm:text-[16px] sm:leading-[1.62]">
                     {splitLines(t("cover.onboarding.page3.description")).map((line) => (
                       <p key={line}>{line}</p>
                     ))}
@@ -395,9 +395,9 @@ export function NotebookCover() {
 
         <footer
           className={[
-            "mx-auto flex w-full max-w-[min(440px,min(94vw,calc(100vw-28px)))] shrink-0 flex-col px-0.5 pb-[max(0.5rem,env(safe-area-inset-bottom,0px))] pt-3",
+            "mx-auto flex w-full max-w-[min(440px,min(94vw,calc(100vw-28px)))] shrink-0 flex-col px-0.5 pb-[max(0.85rem,calc(env(safe-area-inset-bottom,0px)+10px))] pt-3",
             "mt-5 gap-4 sm:mt-8 sm:gap-6",
-            "max-[480px]:mt-4 max-[480px]:gap-3 max-[480px]:pt-2 max-[480px]:pb-[max(0.35rem,env(safe-area-inset-bottom,0px))]",
+            "max-[480px]:mt-5 max-[480px]:gap-3.5 max-[480px]:pt-2.5 max-[480px]:pb-[max(0.65rem,calc(env(safe-area-inset-bottom,0px)+12px))]",
           ].join(" ")}
         >
           <nav className="flex justify-center gap-2.5 px-1 motion-reduce:gap-2" aria-label="온보딩 단계">
