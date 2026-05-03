@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
@@ -34,11 +35,18 @@ function isLikelyMobile(): boolean {
   return "ontouchstart" in window;
 }
 
+const HIDE_PWA_HINT_ROUTES = ["/join", "/register", "/delivery"] as const;
+
 export function PwaInstallHint() {
   const { t } = useLanguage();
+  const pathname = usePathname();
   const [show, setShow] = useState(false);
 
   useEffect(() => {
+    if (pathname && HIDE_PWA_HINT_ROUTES.some((r) => pathname === r || pathname.startsWith(`${r}/`))) {
+      setShow(false);
+      return;
+    }
     if (!isLikelyMobile()) return;
     if (runsStandalone()) return;
 
@@ -49,7 +57,9 @@ export function PwaInstallHint() {
     }
 
     setShow(true);
-  }, []);
+  }, [pathname]);
+
+  if (!pathname || HIDE_PWA_HINT_ROUTES.some((r) => pathname === r || pathname.startsWith(`${r}/`))) return null;
 
   if (!show) return null;
 
@@ -67,7 +77,7 @@ export function PwaInstallHint() {
 
   return (
     <div
-      className={`pointer-events-auto fixed inset-x-0 bottom-0 z-[92] pb-[calc(0.5rem+env(safe-area-inset-bottom))] pl-[calc(1rem+env(safe-area-inset-left))] pr-[calc(1rem+env(safe-area-inset-right))] pt-1 ${preferReducedMotion() ? "" : "motion-safe:transition-[opacity,transform] motion-safe:duration-200"}`}
+      className={`pwa-install-hint-root pointer-events-auto fixed inset-x-0 bottom-0 z-[92] pb-[calc(0.5rem+env(safe-area-inset-bottom))] pl-[calc(1rem+env(safe-area-inset-left))] pr-[calc(1rem+env(safe-area-inset-right))] pt-1 ${preferReducedMotion() ? "" : "motion-safe:transition-[opacity,transform] motion-safe:duration-200"}`}
     >
       <div className="mx-auto flex max-w-lg flex-col gap-2 rounded-[20px] border border-[#E5E7EB]/90 bg-[#111827]/95 px-3 py-3 text-[13px] leading-snug text-[#F9FAFB] shadow-[0_-8px_32px_rgba(15,23,42,0.22)] backdrop-blur-md">
         <div className="flex items-start justify-between gap-3">

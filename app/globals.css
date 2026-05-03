@@ -457,6 +457,14 @@ html[lang="ko"] body {
     rgba(3, 7, 18, 0.98);
 }
 
+/** 앱 미리보기·가이드 뷰어가 열릴 때 하단 PWA 안내가 겹치지 않도록 */
+body:has([data-app-preview-toc]) .pwa-install-hint-root,
+body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
+  visibility: hidden !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+}
+
 /* 워크스페이스 — 다크 네이비 베이스(랜딩·미리보기와 톤 정렬) */
 .crm-bg {
   background-color: #020817;
