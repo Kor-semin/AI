@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "qa:screenshots": "node scripts/capture-responsive-landing.mjs",
+    "qa:responsive-screenshots": "npx tsx scripts/qa-responsive-screenshots.ts",
     "pwa-icons": "node scripts/generate-pwa-icons.mjs",
     "pwa-icons-v3": "node scripts/generate-pwa-icons-v3-from-source.mjs"
   },
@@ -28,6 +28,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.4",
     "playwright": "^1.49.1",
+    "tsx": "^4.19.2",
     "sharp": "^0.34.5",
     "tailwindcss": "^4",
     "typescript": "^5"
