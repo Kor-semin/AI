@@ -125,6 +125,8 @@ export type TranslationKey =
   | "crm.stat.recentConsultations"
   | "crm.demoContextNotice.primary"
   | "crm.demoContextNotice.secondary"
+  | "crm.demoContextNotice.accessAfterBeta"
+  | "crm.previewMode.headerSubtitle"
   | "crm.import.heroTitle"
   | "crm.import.heroSub"
   | "crm.import.trustNoSync"
@@ -411,7 +413,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "hero.description":
       "고객 상담과 일정까지 한 화면에 모읍니다. AI는 검토용 요약과 문자 초안을 정리하고, 저장·판단은 항상 영업사원이 합니다.",
     "cta.joinBeta": "베타 신청하기",
-    "cta.tryAppExperience": "앱 화면 살펴보기",
+    "cta.tryAppExperience": "앱 화면 미리보기",
     "cta.openAppWorkspace": "앱 워크스페이스 열기",
     "cta.viewDemo": "데모 보기",
     "cta.tryAIDemo": "AI 비서 체험하기",
@@ -508,6 +510,10 @@ export const translations: Record<LanguageCode, TranslationDict> = {
       "이 화면은 자동차 영업사원이 상담 메모, 관심 차량, 다음 연락, 사후관리를 한 곳에서 정리하는 예시 화면입니다.",
     "crm.demoContextNotice.secondary":
       "AI는 상담 내용을 정리하고 검토용 초안을 제안하지만, 최종 확인과 저장은 사용자가 직접 합니다.",
+    "crm.demoContextNotice.accessAfterBeta":
+      "실제 고객 저장과 영업 계정 기능은 베타 승인 후 사용할 수 있습니다.",
+    "crm.previewMode.headerSubtitle":
+      "예시 미리보기 · 화면을 닫기 전까지는 이 브라우저에만 예시 데이터가 남을 수 있습니다(클라우드·영업 계정 저장 아님).",
     "crm.import.heroTitle": "주소록 가져오기",
     "crm.import.heroSub": "연락처 파일을 올리고, 필요한 고객만 확인해 저장합니다.",
     "crm.import.trustNoSync": "전체 주소록을 자동 동기화하지 않습니다.",
@@ -820,7 +826,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "hero.description":
       "Sensora organizes customer conversations, vehicle interests, follow-ups, message drafts, and sales pipelines with AI.",
     "cta.joinBeta": "Join the Beta",
-    "cta.tryAppExperience": "Browse app screens",
+    "cta.tryAppExperience": "Preview app screens",
     "cta.openAppWorkspace": "Open the Workspace",
     "cta.viewDemo": "View Demo",
     "cta.tryAIDemo": "Try the AI Assistant",
@@ -922,6 +928,10 @@ export const translations: Record<LanguageCode, TranslationDict> = {
       "This is a sample CRM layout for automotive sales reps—consultation notes, interested vehicles, follow-ups, and aftercare in one place.",
     "crm.demoContextNotice.secondary":
       "AI summarizes memos and suggests drafts for review; you decide what to confirm and save.",
+    "crm.demoContextNotice.accessAfterBeta":
+      "Saving real customer data and sales-account features are available after beta approval.",
+    "crm.previewMode.headerSubtitle":
+      "Sample preview · example data may stay in this browser only until you leave (not cloud or sales-account storage).",
     "crm.import.heroTitle": "Import address book",
     "crm.import.heroSub": "Upload a contacts file, review, then save only who you need.",
     "crm.import.trustNoSync": "We never auto-sync your entire address book.",

@@ -1457,6 +1457,9 @@ export function CRMApp({
             >
               <p className="font-medium text-[#334155]">{t("crm.demoContextNotice.primary")}</p>
               <p className="mt-2 text-[13px] leading-relaxed">{t("crm.demoContextNotice.secondary")}</p>
+              <p className="mt-2 text-[13px] leading-relaxed font-medium text-[#475569]">
+                {t("crm.demoContextNotice.accessAfterBeta")}
+              </p>
             </div>
           ) : null}
           <header className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between lg:gap-6">
@@ -1465,13 +1468,19 @@ export function CRMApp({
                 {t("product.name")}
               </h1>
               <p className="mt-2 max-w-xl text-[15px] leading-relaxed text-[#6B7280]">
-                {sync.mode === "cloud" ? "클라우드 동기화" : "로컬 저장"} ·{" "}
-                {sync.status === "syncing"
-                  ? "동기화 중…"
-                  : sync.status === "error"
-                    ? "동기화 오류"
-                    : "정상"}{" "}
-                · v0.3
+                {!uid ? (
+                  t("crm.previewMode.headerSubtitle")
+                ) : (
+                  <>
+                    {sync.mode === "cloud" ? "클라우드 동기화" : "로컬 저장"} ·{" "}
+                    {sync.status === "syncing"
+                      ? "동기화 중…"
+                      : sync.status === "error"
+                        ? "동기화 오류"
+                        : "정상"}{" "}
+                    · v0.3
+                  </>
+                )}
               </p>
             </div>
             <div className="flex w-full min-w-0 flex-col gap-3 sm:flex-row sm:items-stretch lg:max-w-[540px]">
