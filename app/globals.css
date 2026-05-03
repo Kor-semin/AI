@@ -2201,6 +2201,21 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   scroll-margin-top: 0.5rem;
 }
 
+/* 첫 화면: 모바일에서 카피 스택·목업이 한 덩어리의 글래스 패널로 읽히도록 보조 */
+@media (max-width: 1023px) {
+  .landing-showcase-hero--unified .landing-hero-copy-stack {
+    box-shadow:
+      0 20px 56px -32px rgba(0, 0, 0, 0.55),
+      inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  }
+}
+
+@media (min-width: 1024px) {
+  .landing-showcase-hero--unified .landing-hero-copy-stack {
+    box-shadow: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .landing-showcase-tip-card,
   .landing-showcase-flow-step,

@@ -474,6 +474,10 @@ export type TranslationKey =
   | "concept.story.memo.desc"
   | "landing.showroom.concept.sectionTitle"
   | "landing.showroom.concept.sectionSub"
+  | "landing.showroom.concept.tipStep1Short"
+  | "landing.showroom.concept.tipStep2Short"
+  | "landing.showroom.concept.tipStep3Short"
+  | "landing.showroom.concept.tipStep4Short"
   | "landing.showroom.concept.tapToExpand"
   | "settings.display.title"
   | "settings.textSize.title"
@@ -1081,8 +1085,13 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "concept.story.hub.desc": "고객 목록, 상담 메모, 일정·다음 연락을 탭으로 오갈 수 있는 구조입니다.",
     "concept.story.memo.title": "메모에서 다음 행동까지",
     "concept.story.memo.desc": "상담 메모를 바탕으로 니즈 정리·보낼 문구 초안·다음 연락 제안을 이어서 봅니다.",
-    "landing.showroom.concept.sectionTitle": "Sensora로 이어지는 흐름",
-    "landing.showroom.concept.sectionSub": "카드를 누르면 앱 안에서 상세 안내와 큰 이미지를 확인할 수 있습니다. 예시 화면이며 실제 고객 데이터는 저장되지 않습니다.",
+    "landing.showroom.concept.sectionTitle": "Sensora 알아가면 좋은 TIP",
+    "landing.showroom.concept.sectionSub":
+      "카드를 누르면 앱 안에서 상세 안내와 큰 이미지를 확인할 수 있습니다. 예시 화면이며 실제 고객 데이터는 저장되지 않습니다.",
+    "landing.showroom.concept.tipStep1Short": "이용 시작 방법",
+    "landing.showroom.concept.tipStep2Short": "기능 설명",
+    "landing.showroom.concept.tipStep3Short": "실제 사용 흐름",
+    "landing.showroom.concept.tipStep4Short": "베타 사용 안내",
     "landing.showroom.concept.tapToExpand": "탭하여 자세히 보기",
     "settings.display.title": "화면 설정",
     "settings.textSize.title": "글씨 크기",
@@ -1708,8 +1717,13 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "concept.story.hub.desc": "Move between the list, memos, and follow-up cues without losing context.",
     "concept.story.memo.title": "From memo to next step",
     "concept.story.memo.desc": "Trace needs, message drafts, and suggested follow-ups from the consultation note.",
-    "landing.showroom.concept.sectionTitle": "How Sensora connects the day",
-    "landing.showroom.concept.sectionSub": "Tap a card to view details and a larger image in the app (no external links). Sample visuals—no live customer data is stored here.",
+    "landing.showroom.concept.sectionTitle": "Sensora tips worth knowing",
+    "landing.showroom.concept.sectionSub":
+      "Tap a card for in-app details and a larger image (no external links). Sample visuals—no live customer data is stored here.",
+    "landing.showroom.concept.tipStep1Short": "Getting started",
+    "landing.showroom.concept.tipStep2Short": "What it does",
+    "landing.showroom.concept.tipStep3Short": "Day-to-day flow",
+    "landing.showroom.concept.tipStep4Short": "Beta usage notes",
     "landing.showroom.concept.tapToExpand": "Tap to view details",
     "settings.display.title": "Display",
     "settings.textSize.title": "Text size",

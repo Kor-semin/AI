@@ -179,39 +179,37 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
           className={[
             "landing-nav-inner mx-auto flex w-full min-w-0 px-3 sm:px-6 lg:px-10",
             view === "landing"
-              ? "max-w-[1440px] flex-col gap-1.5 max-sm:gap-1.5 sm:gap-3 xl:flex-row xl:items-center xl:justify-between xl:gap-4"
+              ? "max-w-[1440px] flex-col gap-2 sm:gap-3 lg:flex-row lg:items-center lg:justify-between lg:gap-6"
               : "max-w-[1280px] flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4",
           ].join(" ")}
         >
           {view === "landing" ? (
             <>
-              <div className="flex min-w-0 max-xl:flex-none flex-col gap-2 max-sm:gap-1.5 sm:flex-row sm:items-center sm:gap-6 xl:flex-1 xl:gap-7">
-                <div className="flex min-w-0 items-start gap-2.5 sm:items-center sm:gap-3">
-                  <SensoraAnimatedMark size={44} animated={false} className="pointer-events-none hidden shrink-0 sm:block drop-shadow-[0_0_24px_-4px_rgba(56,189,248,0.35)]" aria-hidden />
-                  <div className="min-w-0">
-                    <div className="text-balance text-base font-semibold leading-[1.15] tracking-[-0.022em] text-white max-sm:text-[0.97rem] sm:text-[1.15rem] lg:text-[1.25rem]">
-                      {t("product.name")}
-                    </div>
-                    <p className="mt-0.5 line-clamp-2 text-[11px] font-medium leading-snug text-slate-300 max-sm:mt-0.5 sm:mt-1 sm:line-clamp-none sm:text-sm">
-                      {t("landing.showroom.header.subline")}
-                    </p>
+              <div className="landing-nav-brand-cluster flex min-w-0 flex-1 items-start gap-2.5 sm:items-center sm:gap-3 lg:min-w-0 lg:max-w-[min(100%,28rem)] xl:max-w-[32rem]">
+                <SensoraAnimatedMark
+                  size={44}
+                  animated={false}
+                  className="pointer-events-none hidden shrink-0 sm:block drop-shadow-[0_0_24px_-4px_rgba(56,189,248,0.35)]"
+                  aria-hidden
+                />
+                <div className="min-w-0">
+                  <div className="text-balance text-base font-semibold leading-[1.15] tracking-[-0.022em] text-white max-sm:text-[0.97rem] sm:text-[1.12rem] lg:text-[1.22rem]">
+                    {t("product.name")}
                   </div>
+                  <p className="mt-0.5 text-[11px] font-medium leading-snug text-slate-300/95 sm:mt-1 sm:text-[0.8125rem] sm:text-slate-300 lg:text-sm">
+                    {t("landing.showroom.header.subline")}
+                  </p>
                 </div>
-                <p
-                  className="max-w-full shrink-0 text-[0.6rem] leading-tight text-slate-500 max-sm:line-clamp-2 sm:max-w-[14rem] sm:text-xs sm:leading-snug xl:hidden"
-                  role="note"
-                >
-                  {t("header.zoomHint")}
-                </p>
               </div>
-              <div className="relative z-[1] flex w-full min-w-0 max-xl:flex-none flex-col gap-2 max-sm:gap-2 sm:gap-3 xl:flex-1 xl:w-auto xl:max-w-none xl:flex-row xl:flex-wrap xl:items-center xl:justify-end xl:gap-5">
-                <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1.5 sm:justify-between sm:gap-x-3 sm:gap-y-2 xl:flex-nowrap xl:justify-end">
+
+              <div className="landing-nav-actions-cluster flex w-full min-w-0 flex-col gap-2 sm:gap-2.5 lg:w-auto lg:max-w-none lg:flex-none lg:flex-row lg:items-center lg:justify-end lg:gap-4 xl:gap-5">
+                <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1.5 sm:gap-x-3 sm:gap-y-2 lg:justify-end">
                   <LanguageSelect dense />
                   {auth.status === "loading" ? (
                     <span className="text-xs text-slate-400">{t("auth.checkingLogin")}</span>
                   ) : auth.status === "signed-in" ? (
                     <>
-                      <span className="hidden max-w-[10rem] truncate text-xs text-slate-400 xl:inline">{auth.name ?? auth.email ?? auth.uid}</span>
+                      <span className="hidden max-w-[10rem] truncate text-xs text-slate-400 lg:inline">{auth.name ?? auth.email ?? auth.uid}</span>
                       <button
                         type="button"
                         className="sensora-dark-ghost-btn inline-flex min-h-[44px] shrink-0 items-center rounded-xl px-3 py-2 text-xs font-semibold touch-manipulation"
@@ -225,11 +223,11 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                       {authError}
                     </span>
                   ) : null}
-                  <p className="ml-auto hidden max-w-[15rem] text-right text-[0.625rem] leading-snug text-slate-500 xl:block" role="note">
+                  <p className="ml-auto hidden max-w-[14rem] text-right text-[0.625rem] leading-snug text-slate-500 lg:block xl:max-w-[15rem]" role="note">
                     {t("header.zoomHint")}
                   </p>
                 </div>
-                <div className="flex w-full min-w-0 flex-col gap-2 min-[420px]:flex-row min-[420px]:flex-wrap min-[420px]:justify-end min-[420px]:gap-2.5 sm:gap-3">
+                <div className="flex w-full min-w-0 flex-col gap-2 min-[420px]:flex-row min-[420px]:flex-wrap min-[420px]:justify-end min-[420px]:gap-2 lg:max-w-[26rem] lg:flex-nowrap xl:max-w-[28rem]">
                   <button
                     type="button"
                     onClick={openAppPreviewToc}
@@ -239,7 +237,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                       "backdrop-blur-md transition duration-[220ms] ease-out",
                       "hover:border-sky-300/42 hover:bg-white/[0.12]",
                       "active:scale-[0.99] focus-visible:outline-none",
-                      "touch-manipulation min-[420px]:min-w-[12.5rem] min-[420px]:flex-1 min-[420px]:w-auto xl:min-w-[11.75rem] xl:flex-none",
+                      "touch-manipulation min-[420px]:min-w-0 min-[420px]:flex-1 lg:min-w-[9.5rem] lg:flex-1 xl:min-w-[10.5rem] xl:flex-none",
                     ].join(" ")}
                   >
                     <svg className="size-[1.1rem] shrink-0 opacity-90 max-sm:size-[1rem]" viewBox="0 0 20 20" fill="none" aria-hidden>
@@ -256,7 +254,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                     prefetch={false}
                     className={[
                       "landing-nav-cta-join sensora-premium-primary-workspace relative z-[20] inline-flex min-h-14 w-full items-center justify-center whitespace-nowrap rounded-2xl px-7 py-3.5 text-center text-sm font-semibold tracking-tight text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.13),0_0_44px_-8px_rgba(56,189,248,0.22),0_12px_32px_-8px_rgba(139,92,246,0.12)] max-sm:px-6 max-sm:py-3.5 max-sm:text-[0.8125rem]",
-                      "touch-manipulation min-[420px]:min-w-[12.5rem] min-[420px]:flex-1 min-[420px]:w-auto xl:min-w-[11.75rem] xl:flex-none",
+                      "touch-manipulation min-[420px]:min-w-0 min-[420px]:flex-1 lg:min-w-[9.5rem] lg:flex-1 xl:min-w-[10.5rem] xl:flex-none",
                       "transition duration-[220ms] ease-out active:scale-[0.99]",
                       "focus-visible:outline-none",
                     ].join(" ")}
@@ -264,6 +262,9 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                     {t("cta.joinBeta")}
                   </Link>
                 </div>
+                <p className="text-[0.6rem] leading-tight text-slate-500 max-sm:line-clamp-2 lg:hidden" role="note">
+                  {t("header.zoomHint")}
+                </p>
               </div>
             </>
           ) : (

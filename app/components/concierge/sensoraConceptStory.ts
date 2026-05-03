@@ -26,13 +26,15 @@ export type ConceptStorySlide = {
   descKey: TranslationKey;
 };
 
+/** TIP 섹션 표시 순서: 01 이용 시작 → 02 기능 → 03 흐름 → 04 베타·저장 안내 */
+export const SENSORA_CONCEPT_TIP_SHORT_KEYS: readonly TranslationKey[] = [
+  "landing.showroom.concept.tipStep1Short",
+  "landing.showroom.concept.tipStep2Short",
+  "landing.showroom.concept.tipStep3Short",
+  "landing.showroom.concept.tipStep4Short",
+] as const;
+
 export const SENSORA_CONCEPT_STORY_SLIDES: readonly ConceptStorySlide[] = [
-  {
-    id: "security",
-    src: "/images/guides/sensora-guide-03.png",
-    titleKey: "concept.story.security.title",
-    descKey: "concept.story.security.desc",
-  },
   {
     id: "onboarding",
     src: "/images/guides/sensora-guide-04.png",
@@ -50,5 +52,11 @@ export const SENSORA_CONCEPT_STORY_SLIDES: readonly ConceptStorySlide[] = [
     src: "/images/guides/sensora-guide-01.png",
     titleKey: "concept.story.memo.title",
     descKey: "concept.story.memo.desc",
+  },
+  {
+    id: "security",
+    src: "/images/guides/sensora-guide-03.png",
+    titleKey: "concept.story.security.title",
+    descKey: "concept.story.security.desc",
   },
 ] as const;

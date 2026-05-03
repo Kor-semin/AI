@@ -115,12 +115,12 @@ export function LandingShowroom({ onOpenAppWorkspace }: { onOpenAppWorkspace: ()
     <div className="sensora-nebula-shell sensora-nebula-shell--drift relative overflow-x-hidden bg-[#020817]">
       <div
         aria-hidden
-        className="sensora-nebula-layer-absolute pointer-events-none absolute inset-x-0 top-0 h-[min(66vh,620px)] bg-[radial-gradient(ellipse_82%_52%_at_52%_6%,rgba(56,189,248,0.092),transparent_55%),radial-gradient(ellipse_58%_42%_at_96%_16%,rgba(139,92,246,0.078),transparent_52%),radial-gradient(ellipse_44%_38%_at_8%_40%,rgba(30,58,138,0.065),transparent_50%)]"
+        className="sensora-nebula-layer-absolute pointer-events-none absolute inset-x-0 top-0 h-[min(58vh,560px)] bg-[radial-gradient(ellipse_82%_52%_at_52%_6%,rgba(56,189,248,0.088),transparent_55%),radial-gradient(ellipse_58%_42%_at_96%_16%,rgba(139,92,246,0.074),transparent_52%),radial-gradient(ellipse_44%_38%_at_8%_40%,rgba(30,58,138,0.062),transparent_50%)]"
       />
       <div className="relative z-[1] max-lg:min-h-0">
         <LandingShowcaseHero onOpenAppWorkspace={onOpenAppWorkspace} />
 
-        <RevealSection className="relative mx-auto w-full max-w-[1200px] overflow-x-hidden px-4 py-10 sm:px-6 sm:py-14 sm:pt-5">
+        <RevealSection className="relative mx-auto w-full max-w-[1200px] overflow-x-hidden px-4 py-8 sm:px-6 sm:py-12 sm:pt-4 lg:py-14">
           <SensoraGuideSectionInner />
         </RevealSection>
 

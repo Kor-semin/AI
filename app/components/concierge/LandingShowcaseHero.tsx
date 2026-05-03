@@ -8,6 +8,7 @@ import { Fragment, useEffect, useMemo, useState } from "react";
 import { SensoraGuideDetailModal } from "@/app/components/concierge/SensoraGuideDetailModal";
 import {
   SENSORA_CONCEPT_STORY_SLIDES,
+  SENSORA_CONCEPT_TIP_SHORT_KEYS,
   sensoraGuideIdFromConceptSlideId,
 } from "@/app/components/concierge/sensoraConceptStory";
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
@@ -148,7 +149,7 @@ function HeroDashboardPreview() {
         </div>
       </div>
 
-      <div className="flex min-h-0 flex-1 flex-col max-lg:min-h-[min(200px,36dvh)] sm:min-h-[300px] sm:flex-row md:min-h-[320px] lg:min-h-[340px]">
+      <div className="flex min-h-0 flex-1 flex-col max-lg:min-h-[min(228px,40dvh)] sm:min-h-[300px] sm:flex-row md:min-h-[320px] lg:min-h-[348px]">
         <nav
           className="flex shrink-0 flex-row gap-0 overflow-x-auto overflow-y-hidden border-b border-white/[0.12] bg-[#030d18]/99 [scrollbar-width:none] sm:w-[9.5rem] sm:flex-col sm:overflow-visible sm:border-b-0 sm:border-r sm:border-white/[0.12] sm:py-1.5 [&::-webkit-scrollbar]:hidden"
           aria-hidden
@@ -298,8 +299,8 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
         overlayZClass="z-[220]"
       />
 
-      <section className="landing-showcase-hero landing-showcase-hero--dock relative mx-auto w-full max-w-[min(100%,1580px)] max-lg:min-h-0 px-[max(0.875rem,calc(env(safe-area-inset-left,0px)+10px))] pb-[max(1.75rem,calc(env(safe-area-inset-bottom,0px)+1rem))] pr-[max(0.875rem,calc(env(safe-area-inset-right,0px)+10px))] pt-4 max-lg:pb-[max(2.25rem,calc(env(safe-area-inset-bottom,0px)+1.25rem))] max-lg:pt-5 sm:px-5 sm:pb-10 sm:pt-2.5 md:px-7 md:pt-2 lg:px-10 lg:pb-11 lg:pt-1.5 xl:px-12 xl:pt-2">
-        <div className="sensora-nebula-shell landing-hero-canvas relative max-lg:min-h-0 max-lg:!overflow-visible lg:overflow-hidden rounded-[22px] border border-white/[0.15] px-3.5 py-2.5 max-sm:rounded-[20px] max-lg:py-3 shadow-[0_42px_108px_-44px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.084),0_0_80px_-40px_rgba(56,189,248,0.06)] ring-1 ring-inset ring-white/[0.065] sm:rounded-[28px] sm:px-6 sm:py-5 lg:rounded-[30px] lg:px-9 lg:py-7 xl:px-11 xl:py-8">
+      <section className="landing-showcase-hero landing-showcase-hero--dock landing-showcase-hero--unified relative mx-auto w-full max-w-[min(100%,1580px)] max-lg:min-h-0 px-[max(0.875rem,calc(env(safe-area-inset-left,0px)+10px))] pb-[max(1.75rem,calc(env(safe-area-inset-bottom,0px)+1rem))] pr-[max(0.875rem,calc(env(safe-area-inset-right,0px)+10px))] pt-4 max-lg:pb-[max(2.25rem,calc(env(safe-area-inset-bottom,0px)+1.25rem))] max-lg:pt-5 sm:px-5 sm:pb-10 sm:pt-2.5 md:px-7 md:pt-2 lg:px-10 lg:pb-11 lg:pt-1.5 xl:px-12 xl:pt-2">
+        <div className="sensora-nebula-shell landing-hero-canvas landing-hero-canvas--first relative max-lg:min-h-0 max-lg:!overflow-visible max-lg:shadow-[0_28px_80px_-36px_rgba(0,0,0,0.65),inset_0_1px_0_rgba(255,255,255,0.07)] lg:overflow-hidden rounded-[22px] border border-white/[0.14] px-3.5 py-3 max-sm:rounded-[20px] max-lg:border-white/[0.12] max-lg:bg-[linear-gradient(165deg,rgba(6,16,28,0.92)_0%,rgba(4,10,20,0.88)_48%,rgba(3,8,16,0.94)_100%)] max-lg:py-4 sm:rounded-[28px] sm:px-6 sm:py-5 lg:rounded-[30px] lg:border-white/[0.15] lg:bg-transparent lg:px-9 lg:py-7 lg:shadow-[0_42px_108px_-44px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.084),0_0_80px_-40px_rgba(56,189,248,0.06)] xl:px-11 xl:py-8">
           <div
             aria-hidden
             className="sensora-nebula-layer-absolute pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_78%_62%_at_58%_-4%,rgba(139,92,246,0.185),transparent_53%),radial-gradient(ellipse_88%_64%_at_8%_96%,rgba(56,189,248,0.14),transparent_57%),radial-gradient(ellipse_62%_50%_at_92%_42%,rgba(99,102,241,0.105),transparent_55%),linear-gradient(165deg,rgba(5,14,26,0.96) 0%,rgba(8,24,46,0.55) 48%,rgba(4,11,22,0.94) 100%)]"
@@ -313,9 +314,9 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
             className="sensora-nebula-layer-absolute pointer-events-none absolute -right-[14%] top-[14%] h-[78%] w-[78%] max-w-[720px] rounded-full bg-[radial-gradient(circle_at_40%_36%,rgba(56,189,248,0.2),transparent_57%),radial-gradient(circle_at_70%_56%,rgba(139,92,246,0.14),transparent_55%)] opacity-[0.98] blur-3xl lg:-right-[4%]"
           />
 
-          <div className="relative z-[1] grid max-lg:min-h-0 items-start gap-3 max-lg:gap-2 sm:gap-6 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,1.14fr)] lg:gap-x-10 lg:gap-y-6 lg:pb-0 lg:pr-0 xl:grid-cols-[minmax(0,1.1fr)_minmax(0,1.12fr)] xl:gap-x-11 xl:gap-y-7 2xl:gap-x-14">
-            <div className="landing-showcase-copy-col order-1 min-w-0 lg:max-w-[min(100%,38rem)] xl:max-w-[min(100%,44rem)] 2xl:max-w-[min(100%,48rem)]">
-              <span className="inline-flex rounded-full border border-white/[0.18] bg-white/[0.082] px-3 py-1 text-[11px] font-semibold tracking-[0.08em] text-slate-100 backdrop-blur-sm max-sm:py-[0.3125rem] sm:px-3.5 sm:py-1.5 sm:text-xs">
+          <div className="relative z-[1] flex max-lg:min-h-0 max-lg:flex-col max-lg:gap-5 items-start gap-3 sm:gap-6 lg:grid lg:grid-cols-[minmax(0,1.08fr)_minmax(0,1.14fr)] lg:gap-x-10 lg:gap-y-6 lg:pb-0 lg:pr-0 xl:grid-cols-[minmax(0,1.1fr)_minmax(0,1.12fr)] xl:gap-x-11 xl:gap-y-7 2xl:gap-x-14">
+            <div className="landing-showcase-copy-col landing-hero-copy-stack order-1 min-w-0 w-full max-lg:rounded-2xl max-lg:border max-lg:border-white/[0.08] max-lg:bg-white/[0.03] max-lg:px-3.5 max-lg:py-4 max-lg:ring-1 max-lg:ring-inset max-lg:ring-white/[0.04] lg:max-w-[min(100%,38rem)] lg:border-0 lg:bg-transparent lg:p-0 xl:max-w-[min(100%,44rem)] 2xl:max-w-[min(100%,48rem)]">
+              <span className="inline-flex w-fit rounded-full border border-white/[0.2] bg-white/[0.07] px-3 py-1 text-[11px] font-semibold tracking-[0.06em] text-slate-100/95 backdrop-blur-sm max-sm:py-[0.3125rem] sm:px-3.5 sm:py-1.5 sm:text-[11px] sm:tracking-[0.08em]">
                 {t("landing.showroom.hero.kickerBadge")}
               </span>
               <h1 className="landing-showcase-hero-headline mt-2.5 max-w-[min(100%,44rem)] text-pretty font-semibold leading-[1.18] tracking-[-0.034em] text-white [word-break:keep-all] text-[clamp(1.45rem,calc(0.32rem+4.2vw),3.28rem)] max-sm:mt-2 max-sm:leading-[1.2] sm:mt-4 sm:max-w-[min(100%,40rem)] lg:leading-[1.2] xl:max-w-[min(100%,46rem)] 2xl:text-[clamp(1.85rem,2.75vw,3.35rem)]">
@@ -336,19 +337,19 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
               </div>
             </div>
 
-            <div className="landing-showcase-mock-col motion-safe:transition-transform order-2 relative mx-auto w-full max-w-[min(100%,24.5rem)] min-h-0 min-[410px]:max-w-[min(100%,36rem)] lg:mx-0 lg:max-w-none lg:justify-self-stretch lg:origin-top lg:self-start lg:[transform:scale(1.028)] xl:max-w-[min(100%,52rem)] xl:[transform:scale(1.045)] motion-reduce:lg:transform-none">
+            <div className="landing-showcase-mock-col landing-hero-mock-stack motion-safe:transition-transform order-2 relative mx-auto w-full max-w-[min(100%,25rem)] min-h-0 min-[410px]:max-w-[min(100%,36rem)] max-lg:mt-1 max-lg:max-w-full lg:mx-0 lg:mt-0 lg:max-w-none lg:justify-self-stretch lg:origin-top lg:self-start lg:[transform:scale(1.028)] xl:max-w-[min(100%,52rem)] xl:[transform:scale(1.045)] motion-reduce:lg:transform-none">
               <div
                 aria-hidden
-                className="pointer-events-none absolute inset-0 rounded-[28px] bg-[radial-gradient(ellipse_90%_75%_at_52%_50%,rgba(56,189,248,0.26),transparent_60%),radial-gradient(ellipse_70%_60%_at_85%_25%,rgba(139,92,246,0.18),transparent_56%)] opacity-90 blur-2xl lg:-inset-4 lg:rounded-[40px] lg:opacity-100 xl:-inset-6"
+                className="pointer-events-none absolute inset-0 rounded-[28px] bg-[radial-gradient(ellipse_90%_75%_at_52%_50%,rgba(56,189,248,0.22),transparent_60%),radial-gradient(ellipse_70%_60%_at_85%_25%,rgba(139,92,246,0.14),transparent_56%)] opacity-90 blur-2xl max-lg:opacity-80 lg:-inset-4 lg:rounded-[40px] lg:opacity-100 xl:-inset-6"
               />
-              <div data-sensora-landing-showcase-preview>
+              <div data-sensora-landing-showcase-preview className="max-lg:mx-auto max-lg:max-w-[min(100%,24rem)] sm:max-lg:max-w-[min(100%,26.5rem)]">
                 <HeroDashboardPreview />
               </div>
             </div>
           </div>
 
-          <div className="landing-hero-bridge relative z-[1] mt-[max(1rem,env(safe-area-inset-bottom,0px)+0.35rem)] px-2 max-lg:mt-5 sm:-mx-1 sm:mt-6 sm:px-3 lg:-mx-2 lg:mt-5 xl:mt-6">
-            <div className="landing-hero-bridge-panel mx-auto max-w-[min(100%,36rem)] rounded-[16px] border border-white/[0.09] bg-gradient-to-b from-white/[0.06] via-white/[0.025] to-white/[0.02] px-4 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] max-sm:px-3.5 max-sm:py-3 sm:max-w-[min(100%,38rem)] sm:rounded-[20px] sm:px-6 sm:py-5">
+          <div className="landing-hero-bridge landing-hero-bridge--slogan relative z-[1] mt-[max(0.75rem,env(safe-area-inset-bottom,0px)+0.25rem)] px-2 max-lg:mt-4 sm:-mx-1 sm:mt-6 sm:px-3 lg:-mx-2 lg:mt-5 xl:mt-6">
+            <div className="landing-hero-bridge-panel mx-auto max-w-[min(100%,36rem)] rounded-[16px] border border-white/[0.1] bg-gradient-to-b from-white/[0.07] via-white/[0.03] to-[#040a12]/88 px-4 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.09),0_12px_40px_-24px_rgba(56,189,248,0.08)] ring-1 ring-inset ring-white/[0.04] max-sm:px-3.5 max-sm:py-3 sm:max-w-[min(100%,38rem)] sm:rounded-[20px] sm:px-6 sm:py-5">
               <div className="flex w-full items-center gap-3 opacity-[0.9] sm:gap-4" aria-hidden>
                 <span className="h-px min-w-[1.5rem] flex-1 bg-gradient-to-r from-transparent via-sky-400/38 to-transparent" />
                 <span className="size-1.5 shrink-0 rounded-full bg-gradient-to-br from-sky-400 to-violet-400 shadow-[0_0_14px_-1px_rgba(56,189,248,0.52)] ring-2 ring-sky-400/22" />
@@ -364,16 +365,20 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
           </div>
         </div>
 
-        <div className="sensora-nebula-shell landing-showcase-lower landing-showcase-lower-canvas relative z-[1] mt-5 flex flex-col gap-5 rounded-[22px] border border-white/[0.13] bg-gradient-to-b from-white/[0.062] via-[#040a14]/65 to-[#020810]/92 px-3.5 py-5 shadow-[0_34px_92px_-38px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.065),0_0_72px_-34px_rgba(56,189,248,0.078)] ring-1 ring-inset ring-white/[0.06] backdrop-blur-md max-lg:rounded-[20px] sm:mt-8 sm:gap-8 sm:rounded-[26px] sm:px-6 sm:py-9 lg:mt-9 lg:gap-9 lg:px-8 xl:px-10">
+        <div className="sensora-nebula-shell landing-showcase-lower landing-showcase-lower-canvas landing-showroom-lower-rhythm relative z-[1] mt-6 flex flex-col gap-5 rounded-[22px] border border-white/[0.12] bg-gradient-to-b from-white/[0.055] via-[#040a14]/72 to-[#020810]/94 px-3.5 py-5 shadow-[0_34px_92px_-38px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.065),0_0_72px_-34px_rgba(56,189,248,0.078)] ring-1 ring-inset ring-white/[0.055] backdrop-blur-md max-lg:rounded-[20px] sm:mt-8 sm:gap-7 sm:rounded-[26px] sm:px-6 sm:py-8 lg:mt-9 lg:gap-8 lg:px-8 xl:px-10">
           <div className="relative min-w-0 overflow-hidden rounded-[22px]">
             <div className="sensora-preview-galaxy-stars pointer-events-none absolute inset-0 opacity-[0.5]" aria-hidden />
             <div className="relative z-[1]">
-              <div className="flex flex-col gap-2 border-b border-white/[0.09] pb-3 sm:flex-row sm:items-end sm:justify-between">
-                <h2 className="text-[clamp(1.18rem,2.4vw,1.58rem)] font-semibold tracking-[-0.028em] text-slate-50">{t("landing.showroom.concept.sectionTitle")}</h2>
-                <span className="text-xs font-medium text-sky-400/85">{t("landing.showroom.concept.sectionSub")}</span>
+              <div className="flex flex-col gap-2 border-b border-white/[0.09] pb-3 sm:flex-row sm:items-end sm:justify-between sm:pb-3.5">
+                <div className="min-w-0">
+                  <h2 className="text-[clamp(1.12rem,2.35vw,1.52rem)] font-semibold tracking-[-0.028em] text-slate-50">{t("landing.showroom.concept.sectionTitle")}</h2>
+                </div>
+                <p className="max-w-[52ch] text-[11px] leading-snug text-slate-400 sm:max-w-[40ch] sm:text-right sm:text-xs sm:leading-relaxed lg:text-[0.8125rem]">
+                  {t("landing.showroom.concept.sectionSub")}
+                </p>
               </div>
-              <div className="mt-4 grid grid-cols-2 gap-2 max-lg:gap-2 sm:mt-6 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
-                {SENSORA_CONCEPT_STORY_SLIDES.map((slide) => (
+              <div className="mt-4 grid grid-cols-2 gap-2 sm:mt-6 sm:gap-3 md:gap-4 lg:grid-cols-4">
+                {SENSORA_CONCEPT_STORY_SLIDES.map((slide, slideIdx) => (
                   <button
                     key={slide.id}
                     type="button"
@@ -381,9 +386,12 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
                       const gid = sensoraGuideIdFromConceptSlideId(slide.id);
                       if (gid) openLandingGuideDetail(gid);
                     }}
-                    className="landing-tip-feature-card sensora-concept-tip-card group flex min-h-0 cursor-pointer flex-col overflow-hidden rounded-[14px] border border-white/[0.2] bg-gradient-to-b from-slate-900/82 to-[#050d14]/92 text-left shadow-[0_16px_48px_-20px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(255,255,255,0.08),0_0_40px_-12px_rgba(56,189,248,0.14)] ring-1 ring-inset ring-sky-400/14 backdrop-blur-md transition-[transform,border-color,box-shadow] duration-[220ms] hover:-translate-y-0.5 hover:border-sky-400/52 hover:ring-sky-400/28 hover:shadow-[0_24px_56px_-16px_rgba(0,0,0,0.5),0_0_52px_-10px_rgba(56,189,248,0.24)] active:translate-y-[0.5px] active:brightness-[1.025] motion-reduce:transition-none motion-reduce:hover:translate-y-0 touch-manipulation sm:min-h-[13.25rem] sm:rounded-[17px]"
+                    className="landing-tip-feature-card sensora-concept-tip-card group relative flex min-h-0 cursor-pointer flex-col overflow-hidden rounded-[14px] border border-white/[0.18] bg-gradient-to-b from-slate-900/85 to-[#050d14]/94 text-left shadow-[0_16px_48px_-20px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(255,255,255,0.08),0_0_40px_-12px_rgba(56,189,248,0.12)] ring-1 ring-inset ring-sky-400/12 backdrop-blur-md transition-[transform,border-color,box-shadow] duration-[220ms] hover:-translate-y-0.5 hover:border-sky-400/48 hover:ring-sky-400/26 hover:shadow-[0_24px_56px_-16px_rgba(0,0,0,0.5),0_0_52px_-10px_rgba(56,189,248,0.22)] active:translate-y-[0.5px] active:brightness-[1.025] motion-reduce:transition-none motion-reduce:hover:translate-y-0 touch-manipulation sm:min-h-[13rem] sm:rounded-[17px]"
                   >
-                    <div className="relative h-36 w-full shrink-0 overflow-hidden bg-[#020617] sm:h-auto sm:aspect-[5/4]">
+                    <div className="relative h-[7.25rem] w-full shrink-0 overflow-hidden bg-[#020617] sm:h-auto sm:aspect-[5/4]">
+                      <span className="absolute left-2 top-2 z-[2] rounded-md border border-white/[0.14] bg-[#030a14]/88 px-1.5 py-0.5 text-[10px] font-bold tabular-nums tracking-tight text-sky-100/95 shadow-sm backdrop-blur-sm sm:left-2.5 sm:top-2.5 sm:px-2 sm:py-0.5 sm:text-[11px]">
+                        {String(slideIdx + 1).padStart(2, "0")}
+                      </span>
                       <Image
                         src={slide.src}
                         alt=""
@@ -394,16 +402,20 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
                       />
                       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#020817]/94 via-[#020617]/42 to-[#0a1624]/55" />
                       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_90%_70%_at_76%_-8%,rgba(56,189,248,0.11),transparent_55%),radial-gradient(ellipse_70%_55%_at_14%_88%,rgba(139,92,246,0.09),transparent_54%)]" />
-                      <span className="absolute bottom-2 left-2.5 right-2 inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-[0.1em] text-sky-200/94">
-                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="shrink-0 opacity-92" aria-hidden>
+                      <span className="absolute bottom-1.5 left-2 right-2 inline-flex items-center gap-1 text-[9px] font-medium tracking-[0.08em] text-sky-200/88 sm:bottom-2 sm:left-2.5 sm:text-[10px]">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" className="shrink-0 opacity-90" aria-hidden>
                           <path d="M9 18l6-6-6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                         {t("preview.guide.tapDetail")}
                       </span>
                     </div>
                     <div className="flex flex-1 flex-col px-2.5 pb-2.5 pt-2 max-lg:min-h-0 sm:px-3.5 sm:pb-3.5 sm:pt-3">
-                      <span className="line-clamp-2 text-[0.78rem] font-semibold leading-snug text-slate-50 sm:text-[0.9375rem]">{t(slide.titleKey)}</span>
-                      <span className="mt-1 line-clamp-2 text-[10px] leading-snug text-slate-400 sm:mt-1.5 sm:line-clamp-3 sm:text-xs sm:leading-relaxed">{t(slide.descKey)}</span>
+                      <span className="line-clamp-2 text-[0.8rem] font-semibold leading-snug text-slate-50 sm:text-[0.92rem]">
+                        {t(SENSORA_CONCEPT_TIP_SHORT_KEYS[slideIdx])}
+                      </span>
+                      <span className="mt-1 line-clamp-2 text-[10px] leading-snug text-slate-400 sm:mt-1.5 sm:line-clamp-3 sm:text-[11px] sm:leading-relaxed sm:text-xs">
+                        {t(slide.descKey)}
+                      </span>
                     </div>
                   </button>
                 ))}
@@ -430,16 +442,46 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
               </div>
             </div>
             <div className="landing-flow-process relative mt-4 sm:mt-6">
+              <div className="relative z-[1] mt-1 grid grid-cols-2 gap-2 sm:gap-2.5 lg:hidden">
+                {flowSteps.map((step, idx) => (
+                  <div
+                    key={`flow-m-${step.titleKey}`}
+                    className="landing-flow-strip-card landing-showcase-flow-step group relative flex min-h-0 flex-col overflow-hidden rounded-[13px] border border-white/[0.17] bg-gradient-to-br from-white/[0.07] via-[#050d18]/96 to-[#020617]/94 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_12px_36px_-14px_rgba(0,0,0,0.5)] ring-1 ring-inset ring-sky-400/10"
+                  >
+                    <div className="relative h-[6.5rem] w-full shrink-0 overflow-hidden border-b border-white/[0.08]">
+                      <Image
+                        src={FLOW_STEP_ART[idx]}
+                        alt=""
+                        fill
+                        className="object-cover object-center opacity-[0.9] saturate-[0.9] brightness-[1.03]"
+                        sizes="(max-width:1024px) 46vw, 200px"
+                        quality={92}
+                      />
+                      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#020617]/92 via-transparent to-transparent" aria-hidden />
+                      <span className="absolute left-2 top-2 flex size-8 items-center justify-center rounded-md border border-sky-400/35 bg-[#07111f]/82 text-sky-50 shadow-sm backdrop-blur-sm">
+                        <step.Icon className="size-[16px]" />
+                      </span>
+                      <span className="absolute right-2 top-2 rounded border border-white/[0.12] bg-[#030a14]/85 px-1 py-0.5 text-[9px] font-bold tabular-nums text-slate-300">
+                        {String(idx + 1).padStart(2, "0")}
+                      </span>
+                    </div>
+                    <div className="flex min-h-0 flex-1 flex-col px-2.5 pb-2.5 pt-2">
+                      <p className="text-[12px] font-semibold leading-snug text-slate-50">{t(step.titleKey)}</p>
+                      <p className="mt-1 line-clamp-3 text-[10px] leading-[1.42] text-slate-400">{t(step.bodyKey)}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
               <div
                 className="pointer-events-none absolute left-[5%] right-[5%] top-[41px] z-0 hidden h-px bg-gradient-to-r from-transparent via-sky-400/52 to-transparent shadow-[0_0_26px_-2px_rgba(56,189,248,0.42),0_0_48px_-4px_rgba(129,140,248,0.14)] lg:block"
                 aria-hidden
               />
-              <ol className="m-0 flex list-none flex-col gap-2 p-0 sm:gap-4 lg:flex-row lg:items-stretch lg:gap-0">
+              <ol className="m-0 hidden list-none flex-col gap-2 p-0 sm:gap-4 lg:flex lg:flex-row lg:items-stretch lg:gap-0">
                 {flowSteps.map((step, idx) => (
                   <Fragment key={step.titleKey}>
                     {idx > 0 ? (
                       <>
-                        <li className="mx-auto flex h-[2px] w-[min(100%,13rem)] shrink-0 rounded-full bg-gradient-to-r from-transparent via-sky-400/48 to-transparent shadow-[0_0_22px_-2px_rgba(56,189,248,0.35)] lg:hidden" aria-hidden />
                         <li className="relative hidden w-6 shrink-0 items-center justify-center lg:flex" aria-hidden>
                           <span className="absolute left-1/2 top-[40px] h-2.5 w-2.5 -translate-x-1/2 rounded-full border border-sky-400/35 bg-[radial-gradient(circle,rgba(56,189,248,0.45),rgba(139,92,246,0.12))] shadow-[0_0_16px_-1px_rgba(56,189,248,0.62)] ring-2 ring-sky-400/15" />
                           <span className="mt-[2.125rem] h-[2px] w-full min-w-[0.5rem] rounded-full bg-gradient-to-r from-sky-400/42 via-indigo-400/32 to-violet-400/38 shadow-[0_0_22px_-2px_rgba(56,189,248,0.28)]" />
@@ -447,8 +489,8 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
                       </>
                     ) : null}
                     <li className="relative z-[1] min-w-0 flex-1">
-                      <div className="landing-flow-strip-card landing-showcase-flow-step group relative flex h-full min-h-0 min-w-[calc(48%-6px)] flex-col overflow-hidden rounded-[14px] border border-white/[0.19] bg-gradient-to-br from-white/[0.08] via-[#050d18]/96 to-[#020617]/94 shadow-[inset_0_1px_0_rgba(255,255,255,0.07),0_16px_44px_-18px_rgba(0,0,0,0.52),0_0_48px_-22px_rgba(56,189,248,0.1)] ring-1 ring-inset ring-sky-400/12 backdrop-blur-sm motion-safe:transition-[transform,box-shadow,border-color] motion-safe:duration-[220ms] hover:-translate-y-1 hover:border-sky-400/42 hover:shadow-[0_24px_56px_-18px_rgba(0,0,0,0.56),0_0_54px_-12px_rgba(56,189,248,0.18)] max-lg:max-w-full sm:min-h-[12rem] sm:min-w-0 sm:rounded-2xl motion-reduce:transition-none motion-reduce:hover:translate-y-0">
-                        <div className="relative h-36 max-h-[9.75rem] w-full shrink-0 overflow-hidden border-b border-white/[0.08] sm:h-[7.75rem] sm:max-h-none">
+                      <div className="landing-flow-strip-card landing-showcase-flow-step group relative flex h-full min-h-0 flex-col overflow-hidden rounded-[14px] border border-white/[0.19] bg-gradient-to-br from-white/[0.08] via-[#050d18]/96 to-[#020617]/94 shadow-[inset_0_1px_0_rgba(255,255,255,0.07),0_16px_44px_-18px_rgba(0,0,0,0.52),0_0_48px_-22px_rgba(56,189,248,0.1)] ring-1 ring-inset ring-sky-400/12 backdrop-blur-sm motion-safe:transition-[transform,box-shadow,border-color] motion-safe:duration-[220ms] hover:-translate-y-1 hover:border-sky-400/42 hover:shadow-[0_24px_56px_-18px_rgba(0,0,0,0.56),0_0_54px_-12px_rgba(56,189,248,0.18)] sm:min-h-[12rem] sm:rounded-2xl motion-reduce:transition-none motion-reduce:hover:translate-y-0">
+                        <div className="relative h-[7.75rem] w-full shrink-0 overflow-hidden border-b border-white/[0.08] sm:h-[7.75rem]">
                           <Image
                             src={FLOW_STEP_ART[idx]}
                             alt=""
