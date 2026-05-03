@@ -261,9 +261,16 @@ export type TranslationKey =
   | "landing.showroom.hero.sub"
   | "landing.showroom.bridge.line1"
   | "landing.showroom.bridge.line2"
-  | "landing.showroom.heroPreview.needsSnippet"
-  | "landing.showroom.heroPreview.smsSnippet"
-  | "landing.showroom.heroPreview.followupSnippet"
+  | "landing.showroom.heroDash.todayTitle"
+  | "landing.showroom.heroDash.todaySnippet"
+  | "landing.showroom.heroDash.priorityTitle"
+  | "landing.showroom.heroDash.prioritySnippet"
+  | "landing.showroom.heroDash.followupTitle"
+  | "landing.showroom.heroDash.followupSnippet"
+  | "landing.showroom.heroDash.aiDraftTitle"
+  | "landing.showroom.heroDash.aiDraftSnippet"
+  | "landing.showroom.heroDash.summaryTitle"
+  | "landing.showroom.heroDash.summarySnippet"
   | "landing.showroom.flow.title"
   | "landing.showroom.flow.desc"
   | "landing.showroom.flow.mock.contactTitle"
@@ -635,12 +642,20 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.showroom.hero.kickerBadge": "자동차 영업사원 업무용",
     "landing.showroom.hero.headline": "자동차 영업사원을 위한 AI 고객관리 워크스페이스",
     "landing.showroom.hero.sub":
-      "상담 메모, 관심 차량, 다음 연락, 사후관리까지 흩어진 고객 정보를 한 흐름으로 정리합니다. AI는 초안을 돕고, 최종 판단은 영업사원이 합니다.",
+      "상담 이력, 관심 차량, 다음 연락, 사후관리까지 흩어진 고객 정보를 한 흐름으로 정리합니다. AI는 상담 내용을 정리하고 검토용 초안을 제안하며, 최종 판단은 영업사원이 합니다.",
     "landing.showroom.bridge.line1": "상담은 기록으로,",
     "landing.showroom.bridge.line2": "기록은 다음 행동으로.",
-    "landing.showroom.heroPreview.needsSnippet": "패밀리 이동·승차감·승하차 동선 중심. 예산 검토 다음 단계: 금융 조건 초안 안내.",
-    "landing.showroom.heroPreview.smsSnippet": "말씀해 주신 기준 위주로 짧게 정리해 두었습니다. 오늘 편하실 때 조건 초안부터 함께 보시죠.",
-    "landing.showroom.heroPreview.followupSnippet": "내일 오전 · 금융 옵션 정리 후 연락",
+    "landing.showroom.heroDash.todayTitle": "오늘 연락할 고객",
+    "landing.showroom.heroDash.todaySnippet": "시승 후 금융 조건 검토 예정",
+    "landing.showroom.heroDash.priorityTitle": "우선 확인할 고객",
+    "landing.showroom.heroDash.prioritySnippet": "관심 차량과 예산 조건이 정리된 고객",
+    "landing.showroom.heroDash.followupTitle": "후속 연락 필요",
+    "landing.showroom.heroDash.followupSnippet": "출고 안내 후 사후관리 예정",
+    "landing.showroom.heroDash.aiDraftTitle": "AI 추천 메시지",
+    "landing.showroom.heroDash.aiDraftSnippet": "상담 내용을 바탕으로 검토용 문자 초안을 제안합니다.",
+    "landing.showroom.heroDash.summaryTitle": "최근 상담 요약",
+    "landing.showroom.heroDash.summarySnippet":
+      "관심 차량, 예산, 희망 출고 시점, 다음 연락 일정을 한눈에 정리합니다.",
     "landing.showroom.flow.title": "상담에서 다음 연락까지, 한 흐름으로",
     "landing.showroom.flow.desc":
       "상담 → 니즈 → 발송 문자 → 다음 연락 순으로 업무 블록을 이어 두어 바쁜 딜플로어에서 빠져나가지 않게 합니다.",
@@ -1027,16 +1042,22 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.showroom.hero.quietFuture": "Quiet futurism",
     "landing.showroom.hero.senseAuraTag": "Sense · Aura",
     "landing.showroom.hero.kickerBadge": "Built for automotive sales reps",
-    "landing.showroom.hero.headline": "AI customer workspace for automotive sales reps",
+    "landing.showroom.hero.headline": "AI customer-relationship workspace for automotive sales reps",
     "landing.showroom.hero.sub":
-      "Bring notes, interested vehicles, next contacts, and aftercare into one steady flow. AI helps with drafts—you stay in charge of decisions.",
+      "Consultation notes, interests, upcoming contacts, and aftercare cues stay on one disciplined flow. AI tidies memo lines and drafts messages for review—salespeople make the calls.",
     "landing.showroom.bridge.line1": "Consultation settles into notes,",
     "landing.showroom.bridge.line2": "notes guide the disciplined next touch.",
-    "landing.showroom.heroPreview.needsSnippet":
-      "Family use, cabin comfort, easy entry/exit. Next: align on financing options calmly.",
-    "landing.showroom.heroPreview.smsSnippet":
-      "Summarized what you prioritized last time—happy to walk through preliminary terms whenever works today.",
-    "landing.showroom.heroPreview.followupSnippet": "Tomorrow AM · Financing outline, then callback",
+    "landing.showroom.heroDash.todayTitle": "Today's follow-ups",
+    "landing.showroom.heroDash.todaySnippet": "Test drive logged—finance options review next.",
+    "landing.showroom.heroDash.priorityTitle": "Needs review soon",
+    "landing.showroom.heroDash.prioritySnippet": "Buyer with vehicle preference and budget already aligned.",
+    "landing.showroom.heroDash.followupTitle": "Aftercare outreach due",
+    "landing.showroom.heroDash.followupSnippet": "Delivery walkthrough logged—planned aftercare cadence.",
+    "landing.showroom.heroDash.aiDraftTitle": "AI-assisted message draft",
+    "landing.showroom.heroDash.aiDraftSnippet": "Offers a respectful SMS outline from your notes—you edit before sending.",
+    "landing.showroom.heroDash.summaryTitle": "Recent consultation recap",
+    "landing.showroom.heroDash.summarySnippet":
+      "Keeps stated vehicle interests, budgets, hopeful timing, and the next outreach date on one line.",
     "landing.showroom.flow.title": "From consultation cues to dependable follow‑through.",
     "landing.showroom.flow.desc":
       "Consultation · needs · outbound SMS · next follow-up stacked in one calm SaaS‑style rail so nothing slips on the showroom floor.",

@@ -4,8 +4,17 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
+import { ImageSlot } from "@/app/components/concierge/ImageSlot";
 
 const JOIN_PATH = "/join" as const;
+
+/** 랜딩 보조 이미지 — 에셋 교체 시 여기만 수정 */
+export const LANDING_SHOWROOM_IMAGE_PATHS = {
+  hero: "/images/hero-classic-car.jpg",
+  interior: "/images/vintage-car-interior.jpg",
+  desk: "/images/concierge-desk.jpg",
+  workspace: "/images/sales-dashboard-workspace.jpg",
+} as const;
 
 const cardChrome =
   "rounded-[26px] border border-[#E5E7EB] bg-white shadow-[0_16px_48px_rgba(17,24,39,0.06),0_2px_8px_rgba(17,24,39,0.04)]";
@@ -16,11 +25,11 @@ const primaryBtn =
 const ghostBtn =
   "inline-flex min-h-[44px] items-center justify-center rounded-xl border border-[#E5E7EB] bg-white px-6 py-2.5 text-sm font-semibold text-[#111827] transition-colors hover:bg-[#F9FAFB]";
 
-const heroPrimaryBtn =
-  "inline-flex min-h-[48px] min-w-[12rem] shrink-0 items-center justify-center rounded-2xl bg-[#111827] px-9 py-4 text-[16px] font-semibold text-white transition-colors hover:bg-[#1f2937] sm:min-h-[50px] sm:min-w-[12.5rem] lg:min-h-[52px] lg:px-10 lg:text-[17px]";
+const heroPrimaryDark =
+  "inline-flex min-h-[48px] min-w-[12rem] w-full shrink-0 items-center justify-center rounded-2xl bg-white px-7 py-3.5 text-[15px] font-semibold tracking-tight text-[#0f172a] shadow-sm transition-colors hover:bg-slate-100 sm:w-auto sm:min-h-[50px] sm:min-w-[12.5rem] sm:py-4 sm:text-[16px] lg:min-h-[52px] lg:px-10 lg:text-[17px]";
 
-const heroGhostBtn =
-  "inline-flex min-h-[48px] min-w-[12rem] shrink-0 items-center justify-center rounded-2xl border border-[#E2E5EA] bg-white px-9 py-4 text-[16px] font-semibold text-[#111827] transition-colors hover:bg-[#FAFBFC] sm:min-h-[50px] sm:min-w-[12.5rem] lg:min-h-[52px] lg:px-10 lg:text-[17px]";
+const heroGhostDark =
+  "inline-flex min-h-[48px] min-w-[12rem] w-full shrink-0 items-center justify-center rounded-2xl border border-white/[0.22] bg-white/[0.06] px-7 py-3.5 text-[15px] font-semibold tracking-tight text-white backdrop-blur-sm transition-colors hover:bg-white/[0.11] sm:w-auto sm:min-h-[50px] sm:min-w-[12.5rem] sm:py-4 sm:text-[16px] lg:min-h-[52px] lg:px-10 lg:text-[17px]";
 
 const heroPreviewShell =
   "overflow-hidden rounded-[30px] border border-[#E4E7EC] bg-white ring-1 ring-black/[0.035] landing-showroom-preview-card-shadow sm:rounded-[34px] lg:rounded-[36px]";
@@ -90,45 +99,36 @@ function RevealSection({
   );
 }
 
-function HeroPreviewTile() {
+function HeroDashboardPreview() {
   const { t } = useLanguage();
+
+  const rows = [
+    { titleKey: "landing.showroom.heroDash.todayTitle" as const, bodyKey: "landing.showroom.heroDash.todaySnippet" as const },
+    { titleKey: "landing.showroom.heroDash.priorityTitle" as const, bodyKey: "landing.showroom.heroDash.prioritySnippet" as const },
+    { titleKey: "landing.showroom.heroDash.followupTitle" as const, bodyKey: "landing.showroom.heroDash.followupSnippet" as const },
+    { titleKey: "landing.showroom.heroDash.aiDraftTitle" as const, bodyKey: "landing.showroom.heroDash.aiDraftSnippet" as const },
+    { titleKey: "landing.showroom.heroDash.summaryTitle" as const, bodyKey: "landing.showroom.heroDash.summarySnippet" as const },
+  ];
+
   return (
-    <div className={`${heroPreviewShell} w-full max-w-[640px] lg:mx-0 lg:max-w-none`}>
-      <div className="flex items-center gap-3 border-b border-[#EDEEF3] bg-gradient-to-b from-[#FAFBFC] to-[#F5F7F9] px-7 py-[1.125rem] sm:px-10 sm:py-5 lg:py-6">
-        <div className="flex gap-2.5" aria-hidden>
-          <span className="size-3 rounded-full bg-[#D2D8E2]" />
-          <span className="size-3 rounded-full bg-[#D2D8E2]" />
-          <span className="size-3 rounded-full bg-[#D2D8E2]" />
+    <div className={`${heroPreviewShell} relative z-[3] w-full max-w-[640px] shadow-[0_24px_64px_-12px_rgba(15,23,42,0.42)] lg:mx-0 lg:max-w-none`}>
+      <div className="flex items-center gap-3 border-b border-[#EDEEF3] bg-gradient-to-b from-[#FAFBFC] to-[#F4F7FA] px-5 py-3.5 sm:px-8 sm:py-4 lg:py-5">
+        <div className="flex gap-2" aria-hidden>
+          <span className="size-2.5 rounded-full bg-[#D2D8E2]" />
+          <span className="size-2.5 rounded-full bg-[#D2D8E2]" />
+          <span className="size-2.5 rounded-full bg-[#D2D8E2]" />
         </div>
-        <div className="h-px min-w-0 flex-1 bg-gradient-to-r from-[#DDE2EA] via-[#E8ECF2] to-transparent" aria-hidden />
+        <p className="min-w-0 flex-1 truncate text-left text-[11px] font-semibold uppercase tracking-[0.08em] text-[#64748B]">
+          {t("product.name")}
+        </p>
       </div>
-      <div className="space-y-6 p-7 sm:space-y-7 sm:p-9 lg:p-10 lg:pb-11">
-        <div className="rounded-[1.15rem] border border-[#E8EBF1] bg-gradient-to-br from-[#FAFBFC] to-[#F2F5F9] px-6 py-[1.125rem] sm:rounded-[1.4rem] sm:px-7 sm:py-6 lg:px-8 lg:py-[1.35rem]">
-          <p className="text-[13px] font-semibold uppercase tracking-[0.1em] text-[#455468] lg:text-[14px]">
-            {t("landing.showroom.flow.mock.needsTitle")}
-          </p>
-          <p className="mt-3 text-[17px] font-medium leading-[1.52] text-[#111827] sm:mt-[0.875rem] sm:text-[18px] sm:leading-[1.48] lg:text-[19px] lg:leading-[1.46]">
-            {t("landing.showroom.heroPreview.needsSnippet")}
-          </p>
-        </div>
-        <div className="grid gap-4 sm:grid-cols-2 sm:gap-5 lg:gap-6">
-          <div className="rounded-[1.15rem] border border-[#E8EBF1] bg-white px-6 py-[1.125rem] sm:rounded-[1.25rem] sm:py-5 lg:px-7 lg:py-6">
-            <p className="text-[13px] font-semibold uppercase tracking-[0.09em] text-[#455468] lg:text-[14px]">
-              {t("landing.showroom.flow.mock.smsTitle")}
-            </p>
-            <p className="mt-3 text-[15px] leading-relaxed text-[#374151] lg:mt-[0.875rem] lg:text-[16px] lg:leading-[1.5]">
-              {t("landing.showroom.heroPreview.smsSnippet")}
-            </p>
+      <div className="divide-y divide-[#EEF1F6] bg-white px-4 py-1 sm:px-6 sm:py-2">
+        {rows.map(({ titleKey, bodyKey }) => (
+          <div key={titleKey} className="space-y-1 py-3 sm:py-3.5">
+            <p className="text-[10px] font-bold uppercase tracking-[0.07em] text-[#475569] sm:text-[11px]">{t(titleKey)}</p>
+            <p className="text-[13px] leading-[1.45] text-[#334155] sm:text-[14px] sm:leading-[1.5]">{t(bodyKey)}</p>
           </div>
-          <div className="rounded-[1.15rem] border border-[#E8EBF1] bg-white px-6 py-[1.125rem] sm:rounded-[1.25rem] sm:py-5 lg:px-7 lg:py-6">
-            <p className="text-[13px] font-semibold uppercase tracking-[0.09em] text-[#455468] lg:text-[14px]">
-              {t("landing.showroom.flow.mock.followupTitle")}
-            </p>
-            <p className="mt-3 text-[15px] font-semibold leading-snug text-[#111827] lg:mt-[0.875rem] lg:text-[16px]">
-              {t("landing.showroom.heroPreview.followupSnippet")}
-            </p>
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   );
@@ -161,34 +161,63 @@ function ShowroomHero({ onOpenAppWorkspace }: { onOpenAppWorkspace: () => void }
   const { t } = useLanguage();
 
   return (
-    <section
-      className="landing-showroom-hero-shell landing-showroom-hero-scene relative mx-auto w-full max-w-[1280px] overflow-x-hidden px-5 pb-14 pt-10 sm:px-6 sm:pb-16 sm:pt-11 lg:flex lg:min-h-[calc(100svh-5rem)] lg:items-center lg:justify-center lg:py-14"
-    >
-      <div className="relative z-[2] mx-auto grid w-full max-w-[1260px] items-center gap-11 sm:gap-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)] lg:gap-x-12 lg:gap-y-10 xl:grid-cols-[minmax(0,1fr)_minmax(0,1.42fr)] xl:gap-x-16 2xl:gap-x-[4.75rem]">
-        <div className="min-w-0 lg:max-w-[34rem] xl:max-w-[36rem] 2xl:max-w-none">
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-            <span className="rounded-full border border-[#E2E8F0] bg-white/80 px-3 py-1 text-[11px] font-semibold tracking-[0.06em] text-[#475569] backdrop-blur-sm sm:text-[12px]">
-              {t("landing.showroom.hero.kickerBadge")}
-            </span>
-          </div>
-          <h1 className="mt-6 text-balance text-[clamp(1.4375rem,5.1vw+0.75rem,2.875rem)] font-semibold leading-[1.13] tracking-[-0.032em] text-[#111827] sm:mt-8 sm:text-[clamp(1.875rem,3.8vw,2.875rem)] sm:leading-[1.1] lg:leading-[1.06]">
-            {t("landing.showroom.hero.headline")}
-          </h1>
-          <p className="mt-6 max-w-[42rem] text-[14px] leading-[1.65] text-[#4B5563] sm:mt-8 sm:text-[17px] sm:leading-[1.62] lg:mt-9">
-            {t("landing.showroom.hero.sub")}
-          </p>
-          <div className="mt-10 flex max-w-full flex-col gap-3.5 sm:mt-12 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-5 sm:gap-y-3 lg:gap-x-6">
-            <Link href={JOIN_PATH} prefetch={false} className={`relative z-20 inline-flex touch-manipulation pointer-events-auto ${heroPrimaryBtn}`}>
-              {t("cta.joinBeta")}
-            </Link>
-            <button type="button" onClick={onOpenAppWorkspace} className={`relative z-20 cursor-pointer touch-manipulation pointer-events-auto ${heroGhostBtn}`}>
-              {t("cta.tryAppExperience")}
-            </button>
+    <section className="relative mx-auto w-full max-w-[1280px] px-5 pb-10 pt-8 sm:px-6 sm:pb-14 sm:pt-10 lg:pb-16 lg:pt-12 landing-showroom-hero-scene">
+      <div className="relative isolate overflow-hidden rounded-[26px] border border-white/10 bg-gradient-to-br from-[#0b1222] via-[#101b2f] to-[#0f172a] px-6 py-10 shadow-[0_28px_90px_-20px_rgba(15,23,42,0.55)] sm:rounded-[32px] sm:px-9 sm:py-12 lg:min-h-[min(620px,calc(100svh-6rem))] lg:rounded-[36px] lg:px-12 lg:py-14">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_14%_-10%,rgba(255,255,255,0.09),transparent_55%),radial-gradient(ellipse_70%_50%_at_104%_12%,rgba(56,189,248,0.06),transparent_60%)]"
+        />
+
+        <div aria-hidden className="pointer-events-none absolute -right-[12%] top-1/2 z-0 hidden h-[72%] w-[52%] max-w-xl -translate-y-1/2 lg:block">
+          <div className="relative h-full w-full overflow-hidden rounded-2xl opacity-[0.28] saturate-[0.75]">
+            <div className="absolute inset-0 z-[1] bg-gradient-to-l from-transparent via-[#0f172a]/75 to-[#101b2f]" />
+            <div className="absolute inset-y-[-8%] right-[-14%] w-[92%] scale-[1.08] blur-md">
+              <ImageSlot
+                src={LANDING_SHOWROOM_IMAGE_PATHS.hero}
+                alt=""
+                tone="hero"
+                className="relative h-[min(400px,70vh)] w-full rounded-2xl border-0 lg:h-full lg:min-h-[320px]"
+              />
+            </div>
           </div>
         </div>
-        <div className="relative z-[2] min-w-0 lg:flex lg:items-center lg:justify-end">
-          <div className="mx-auto w-full max-w-[min(640px,100%)] lg:mx-0 lg:max-w-none">
-            <HeroPreviewTile />
+
+        <div aria-hidden className="pointer-events-none absolute bottom-[-5%] right-[-14%] z-0 h-40 w-[55%] max-w-[14rem] opacity-[0.12] saturate-[0.72] blur-2xl sm:h-52 sm:w-[48%] lg:hidden">
+          <ImageSlot
+            src={LANDING_SHOWROOM_IMAGE_PATHS.hero}
+            alt=""
+            tone="hero"
+            className="h-full min-h-[9rem] w-full rounded-xl border-0"
+          />
+        </div>
+
+        <div className="relative z-[2] mx-auto grid w-full max-w-[1160px] items-start gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.12fr)] lg:items-center lg:gap-12 xl:gap-16">
+          <div className="min-w-0 max-w-xl lg:max-w-none">
+            <span className="inline-flex rounded-full border border-white/15 bg-white/[0.07] px-3 py-1 text-[11px] font-semibold tracking-[0.06em] text-slate-200 backdrop-blur-sm sm:text-[12px]">
+              {t("landing.showroom.hero.kickerBadge")}
+            </span>
+            <h1 className="mt-5 text-balance text-[clamp(1.4375rem,4.25vw+0.62rem,2.75rem)] font-semibold leading-[1.14] tracking-[-0.03em] text-white sm:mt-6">
+              {t("landing.showroom.hero.headline")}
+            </h1>
+            <p className="mt-5 max-w-[40rem] text-[14px] leading-[1.65] text-slate-300 sm:mt-6 sm:text-[16px] sm:leading-[1.62]">
+              {t("landing.showroom.hero.sub")}
+            </p>
+            <div className="mt-9 flex max-w-full flex-col gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4 lg:gap-5">
+              <Link href={JOIN_PATH} prefetch={false} className={`relative z-20 justify-center pointer-events-auto ${heroPrimaryDark} touch-manipulation`}>
+                {t("cta.joinBeta")}
+              </Link>
+              <button
+                type="button"
+                onClick={onOpenAppWorkspace}
+                className={`relative z-20 cursor-pointer justify-center pointer-events-auto ${heroGhostDark} touch-manipulation`}
+              >
+                {t("cta.tryAppExperience")}
+              </button>
+            </div>
+          </div>
+
+          <div className="relative z-[4] mx-auto min-w-0 w-full max-w-[min(100%,560px)] lg:mx-0 lg:max-w-none">
+            <HeroDashboardPreview />
           </div>
         </div>
       </div>
