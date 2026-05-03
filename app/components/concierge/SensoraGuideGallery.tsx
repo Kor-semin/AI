@@ -14,6 +14,8 @@ type Props = {
   tapToExpandLabel: string;
   getTitle: (g: SensoraGuideEntry) => string;
   getDescription: (g: SensoraGuideEntry) => string;
+  /** 상단 숨김 헤더(모바일 "Guides" 라벨) 제거 시 true */
+  hideThumbnailHeading?: boolean;
 };
 
 export function SensoraGuideGallery({
@@ -24,6 +26,7 @@ export function SensoraGuideGallery({
   tapToExpandLabel,
   getTitle,
   getDescription,
+  hideThumbnailHeading = false,
 }: Props) {
   const active = guides.find((g) => g.id === activeId) ?? guides[0];
 
@@ -70,9 +73,11 @@ export function SensoraGuideGallery({
       </button>
 
       <div>
-        <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-sky-400/75 sm:hidden" aria-hidden>
-          Guides
-        </p>
+        {!hideThumbnailHeading ?
+          <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-sky-400/75 sm:hidden" aria-hidden>
+            Guides
+          </p>
+        : null}
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-3 lg:gap-4">
           {guides.map((g) => (
             <SensoraGuideCard

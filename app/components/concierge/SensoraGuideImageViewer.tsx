@@ -88,10 +88,17 @@ export function SensoraGuideImageViewer({
     if (!open) return undefined;
     const onKey = (e: KeyboardEvent) => {
       if (immersiveOpen) {
-        if (e.key === "Escape") setImmersiveOpen(false);
+        if (e.key === "Escape") {
+          e.stopPropagation();
+          setImmersiveOpen(false);
+        }
         return;
       }
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") {
+        onClose();
+        e.stopPropagation();
+        return;
+      }
       if (e.key === "ArrowLeft") goPrev();
       if (e.key === "ArrowRight") goNext();
     };

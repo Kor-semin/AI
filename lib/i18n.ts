@@ -403,6 +403,20 @@ export type TranslationKey =
   | "guide.sensora-guide-04.desc"
   | "guide.sensora-guide-05.title"
   | "guide.sensora-guide-05.desc"
+  | "guide.unified.pageTitle"
+  | "guide.unified.header.kicker"
+  | "guide.unified.header.sub"
+  | "guide.unified.intro.title"
+  | "guide.unified.intro.body"
+  | "guide.unified.flow.kicker"
+  | "guide.unified.flow.title"
+  | "guide.unified.flow.lead"
+  | "guide.unified.flow.rail"
+  | "guide.unified.guideNav.prev"
+  | "guide.unified.guideNav.next"
+  | "guide.unified.start.title"
+  | "guide.unified.start.lead"
+  | "guide.unified.disclaimer"
   | "preview.diagram.caption.security"
   | "preview.diagram.caption.workspace"
   | "preview.diagram.caption.hub"
@@ -962,6 +976,23 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "guide.sensora-guide-04.desc": "고객관리, AI 비서, 일정, 사후관리를 한 업무 표면에서 묶어둔 구조 소개입니다.",
     "guide.sensora-guide-05.title": "Sensora 비주얼 레퍼런스",
     "guide.sensora-guide-05.desc": "Sensora의 미래형 UI 분위기를 보여주는 보조 이미지입니다.",
+    "guide.unified.pageTitle": "Sensora 안내·온보딩",
+    "guide.unified.header.kicker": "Sensora 안내",
+    "guide.unified.header.sub": "4단계로 소개 예시 안내 이미지를 이어 확인할 수 있습니다. 마지막에서 업무 화면 또는 계정 안내를 선택합니다.",
+    "guide.unified.intro.title": "Sensora Auto CRM",
+    "guide.unified.intro.body":
+      "전시장·상담 현장에서 고객 이야기와 다음 연락, 보낼 문구까지 한곳에 이어 둘 수 있습니다.",
+    "guide.unified.flow.kicker": "예시 화면 · 4단계 중 3",
+    "guide.unified.flow.title": "실제 사용 흐름",
+    "guide.unified.flow.lead":
+      "기본안은 이용 시작 방법 안내예요. 위쪽 「이전/다음 안내」로 순서만 바꾸거나, 카드와 큰 이미지로 다른 예시 화면을 고를 수 있어요. 큰 이미지를 눌러 확대해 보세요.",
+    "guide.unified.flow.rail": "상담 정리 · 고객 니즈 요약 · 발송 문자 · 다음 연락",
+    "guide.unified.guideNav.prev": "이전 안내",
+    "guide.unified.guideNav.next": "다음 안내",
+    "guide.unified.start.title": "시작하기",
+    "guide.unified.start.lead":
+      "준비되셨으면 업무 화면이나 AI 비서로 들어가거나, 영업 계정 등록과 베타 신청 안내를 이어가실 수 있습니다.",
+    "guide.unified.disclaimer": "예시 화면이며 저장은 베타 승인·계정 준비 후 제공 경로에서 가능합니다. 메뉴나 문구는 베타에서 달라질 수 있습니다.",
     "preview.diagram.caption.security": "불러온 연락처는 미리보기·검토 후 저장됩니다.",
     "preview.diagram.caption.workspace": "베타·영업 계정 흐름을 거친 뒤 동일 계정으로 업무 화면이 열립니다.",
     "preview.diagram.caption.hub": "고객·상담·일정·문자를 한 화면 구조로 오갑니다.",
@@ -1536,6 +1567,25 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "guide.sensora-guide-04.desc": "Customers, assistant, schedule, and follow-up on one calm surface.",
     "guide.sensora-guide-05.title": "Visual reference",
     "guide.sensora-guide-05.desc": "A supporting render of the futuristic, quiet UI direction.",
+    "guide.unified.pageTitle": "Sensora onboarding",
+    "guide.unified.header.kicker": "Sensora guide",
+    "guide.unified.header.sub":
+      "Four short steps preview how Sensora connects your work—a sample-first walkthrough ending with workspace or signup choices.",
+    "guide.unified.intro.title": "Sensora Auto CRM",
+    "guide.unified.intro.body":
+      "Bring customer conversations, next follow-ups, and draft messages onto one workspace built for showroom and field sales rhythm.",
+    "guide.unified.flow.kicker": "Sample screens · Step 3 of 4",
+    "guide.unified.flow.title": "How it connects in practice",
+    "guide.unified.flow.lead":
+      "The default spotlight is Getting started. Switch images with Prev/Next, cards, or the large preview—tap the preview to zoom in.",
+    "guide.unified.flow.rail": "Consult notes · Customer needs recap · Outreach draft · Next follow-up",
+    "guide.unified.guideNav.prev": "Previous sample",
+    "guide.unified.guideNav.next": "Next sample",
+    "guide.unified.start.title": "Start",
+    "guide.unified.start.lead":
+      "Open your workspace or the AI assistant—or continue with seller registration and the beta signup link.",
+    "guide.unified.disclaimer":
+      "Sample screens only; persisted storage arrives after beta approval or your seller path. Placement and wording may evolve during beta.",
     "preview.diagram.caption.security": "Imports stay preview-first: review before anything is committed.",
     "preview.diagram.caption.workspace": "After signup paths clear, you return with the same account.",
     "preview.diagram.caption.hub": "Customers, consultation, schedules, and messages share one calm spine.",
