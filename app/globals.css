@@ -1545,3 +1545,20 @@ html[lang="ko"] body {
   filter: saturate(0.28) brightness(1.03);
 }
 
+/* 랜딩 앱 쇼케이스 Hero (LandingShowcaseHero) */
+.landing-showcase-hero {
+  isolation: isolate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-showcase-tip-card,
+  .landing-showcase-flow-step {
+    transition: none !important;
+    transform: none !important;
+  }
+
+  .landing-showcase-tip-card:hover {
+    transform: none !important;
+  }
+}
+

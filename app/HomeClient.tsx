@@ -180,7 +180,9 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                     <div className="text-balance text-[15px] font-semibold leading-[1.2] tracking-[-0.02em] text-slate-50 sm:text-[1.05rem]">
                       {t("product.name")}
                     </div>
-                    <p className="mt-1.5 text-[11px] font-medium leading-snug text-slate-400 sm:text-xs sm:leading-relaxed">{t("brand.slogan")}</p>
+                    <p className="mt-1.5 whitespace-pre-line text-[11px] font-medium leading-snug text-slate-400 sm:text-xs sm:leading-relaxed">
+                      {t("landing.showroom.hero.headline")}
+                    </p>
                   </div>
                   <p
                     className="max-w-full shrink-0 text-[10px] leading-snug text-slate-500 sm:max-w-[13.5rem] sm:pt-0.5 sm:text-right sm:text-[11px]"
@@ -238,12 +240,10 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                     href="/join"
                     prefetch={false}
                     className={[
-                      "landing-nav-cta-join relative z-[20] inline-flex min-h-[48px] w-full items-center justify-center rounded-xl px-3 py-2.5 text-center text-[13px] font-semibold tracking-tight",
+                      "landing-nav-cta-join sensora-premium-primary-workspace relative z-[20] inline-flex min-h-[48px] w-full items-center justify-center rounded-xl px-3 py-2.5 text-center text-[13px] font-semibold tracking-tight text-slate-50",
                       "touch-manipulation sm:min-h-[48px] sm:w-auto sm:px-8",
-                      "bg-gradient-to-b from-white to-slate-100 text-[#0c1222]",
-                      "shadow-[0_2px_0_rgba(255,255,255,0.38)_inset,0_8px_28px_-8px_rgba(56,189,248,0.16)] ring-1 ring-white/38",
-                      "transition duration-[220ms] ease-out hover:from-white hover:to-slate-50",
-                      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/55 focus-visible:ring-offset-2 focus-visible:ring-offset-[#07111f]",
+                      "transition duration-[220ms] ease-out active:scale-[0.99]",
+                      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/48 focus-visible:ring-offset-2 focus-visible:ring-offset-[#07111f]",
                     ].join(" ")}
                   >
                     {t("cta.joinBeta")}

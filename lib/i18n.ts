@@ -711,18 +711,18 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.showroom.hero.quietFuture": "실무 현장 안내형",
     "landing.showroom.hero.senseAuraTag": "Sense · Aura",
     "landing.showroom.hero.kickerBadge": "자동차 영업사원 업무용",
-    "landing.showroom.hero.headline": "자동차 영업사원을 위한 AI 고객관리 워크스페이스",
+    "landing.showroom.hero.headline": "자동차 영업사원을 위한\nAI 고객관리 워크스페이스",
     "landing.showroom.hero.sub":
       "상담부터 사후관리까지 한 흐름으로 관리합니다.\n\nAI는 초안을 돕고, 최종 판단은 영업사원이 합니다.",
     "landing.showroom.bridge.line1": "상담은 기록으로,",
     "landing.showroom.bridge.line2": "기록은 다음 행동으로.",
-    "landing.showroom.heroDash.todayTitle": "오늘 연락할 고객",
+    "landing.showroom.heroDash.todayTitle": "오늘 연락 대상",
     "landing.showroom.heroDash.todaySnippet": "시승 후 금융 조건 검토 예정",
     "landing.showroom.heroDash.priorityTitle": "우선 확인할 고객",
     "landing.showroom.heroDash.prioritySnippet": "관심 차량과 예산 조건이 정리된 고객",
     "landing.showroom.heroDash.followupTitle": "후속 연락 필요",
     "landing.showroom.heroDash.followupSnippet": "출고 안내 후 사후관리 예정",
-    "landing.showroom.heroDash.aiDraftTitle": "AI 추천 메시지",
+    "landing.showroom.heroDash.aiDraftTitle": "AI 제안 메시지",
     "landing.showroom.heroDash.aiDraftSnippet": "상담 내용을 바탕으로 검토용 문자 초안을 제안합니다.",
     "landing.showroom.heroDash.summaryTitle": "최근 상담 요약",
     "landing.showroom.heroDash.summarySnippet":
@@ -741,7 +741,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.showroom.flow.mock.followupBody": "내일 오전 11시 재연락 · 전화",
     "landing.showroom.guide.title": "고객의 신호가 영업 액션으로 이어지는 지점입니다.",
     "landing.showroom.guide.desc":
-      "SensoraGuide는 상담 메모를 읽고 고객 니즈, 영업 포인트, 고객 발송 문장을 정리합니다. 민감한 상담 원문은 그대로 되풀이하지 않고, 승차감·승하차 편의성·예산·일정처럼 응대 기준으로 바꿔줍니다.",
+      "SensoraGuide가 메모에서 니즈·응대 포인트를 응대 기준으로 정리합니다. 원문을 그대로 반복하지 않습니다.",
     "landing.showroom.guide.memoLabel": "상담 메모",
     "landing.showroom.guide.memoQuote": "가족 이동이 많고 승하차 편의성을 중요하게 보심.",
     "landing.showroom.guide.guideQuote": "2열 공간, 승하차 동선, 탑승 편안함을 중심으로 안내하세요.",
@@ -1163,7 +1163,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.showroom.hero.quietFuture": "Quiet futurism",
     "landing.showroom.hero.senseAuraTag": "Sense · Aura",
     "landing.showroom.hero.kickerBadge": "Built for automotive sales reps",
-    "landing.showroom.hero.headline": "AI customer-relationship workspace for automotive sales reps",
+    "landing.showroom.hero.headline": "AI customer-relationship workspace\nfor automotive sales reps",
     "landing.showroom.hero.sub":
       "We keep consultation through after-sales care on one disciplined flow.\n\nAI helps with draft ideas; salespeople make the final calls.",
     "landing.showroom.bridge.line1": "Consultation settles into notes,",
@@ -1174,7 +1174,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.showroom.heroDash.prioritySnippet": "Buyer with vehicle preference and budget already aligned.",
     "landing.showroom.heroDash.followupTitle": "Aftercare outreach due",
     "landing.showroom.heroDash.followupSnippet": "Delivery walkthrough logged—planned aftercare cadence.",
-    "landing.showroom.heroDash.aiDraftTitle": "AI-assisted message draft",
+    "landing.showroom.heroDash.aiDraftTitle": "Suggested message draft",
     "landing.showroom.heroDash.aiDraftSnippet": "Offers a respectful SMS outline from your notes—you edit before sending.",
     "landing.showroom.heroDash.summaryTitle": "Recent consultation recap",
     "landing.showroom.heroDash.summarySnippet":
@@ -1193,7 +1193,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.showroom.flow.mock.followupBody": "Tomorrow · 11:00 · outbound call",
     "landing.showroom.guide.title": "Where customer signals tighten into salesperson action.",
     "landing.showroom.guide.desc":
-      "SensoraGuide reads memo lines and organizes needs, sales angles, and customer-facing copy—to practical criteria like ride ease, ergonomics, budget, timing—without repeating sensitive detail verbatim.",
+      "SensoraGuide turns memo lines into needs and speaking points you can verify—without echoing sensitive detail verbatim.",
     "landing.showroom.guide.memoLabel": "Consultation memo",
     "landing.showroom.guide.memoQuote":
       "Heavy family hauling; entry/exit comfort is decisive for them.",

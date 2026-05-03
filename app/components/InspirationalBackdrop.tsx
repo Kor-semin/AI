@@ -40,7 +40,7 @@ export function InspirationalBackdrop() {
           />
           <div
             aria-hidden
-            className="absolute inset-0 bg-[radial-gradient(70%_50%_at_96%_10%,rgba(139,92,246,0.09),transparent_55%),radial-gradient(ellipse_62%_48%_at_8%_72%,rgba(56,189,248,0.045),transparent_58%)]"
+            className="absolute inset-0 bg-[radial-gradient(ellipse_80%_52%_at_50%_-4%,rgba(56,189,248,0.05),transparent_60%),radial-gradient(70%_50%_at_96%_10%,rgba(139,92,246,0.09),transparent_55%),radial-gradient(ellipse_62%_48%_at_8%_72%,rgba(56,189,248,0.045),transparent_58%)]"
           />
           <div
             aria-hidden
