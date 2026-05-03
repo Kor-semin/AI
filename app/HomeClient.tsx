@@ -166,8 +166,8 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
         className={[
           "sticky top-0 z-30 isolate backdrop-blur-xl",
           /** iPhone 상태바/notch 안전영역을 반영해 헤더 콘텐츠가 겹치지 않도록 */
-          view === "landing"
-            ? "landing-service-nav pt-[max(8px,calc(env(safe-area-inset-top,0px)+4px))] pb-2"
+            view === "landing"
+            ? "landing-service-nav landing-service-nav--compact pt-[max(8px,calc(env(safe-area-inset-top,0px)+4px))] pb-1.5 sm:pb-2"
             : [
                 "border-b border-white/[0.1]",
                 "px-4 pb-3 pt-[max(14px,calc(env(safe-area-inset-top,0px)+12px))] sm:px-6",
@@ -178,12 +178,14 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
         <div
           className={[
             "mx-auto flex w-full min-w-0 px-4 sm:px-6 lg:px-10",
-            view === "landing" ? "max-w-[1440px] flex-col gap-4 xl:flex-row xl:items-center xl:justify-between" : "max-w-[1280px] flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4",
+            view === "landing"
+              ? "max-w-[1440px] flex-col gap-2.5 sm:gap-3 xl:flex-row xl:items-center xl:justify-between xl:gap-4"
+              : "max-w-[1280px] flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4",
           ].join(" ")}
         >
           {view === "landing" ? (
             <>
-              <div className="flex min-w-0 flex-1 flex-col gap-4 sm:flex-row sm:items-center sm:gap-6 xl:gap-8">
+              <div className="flex min-w-0 flex-1 flex-col gap-2.5 sm:flex-row sm:items-center sm:gap-6 xl:gap-7">
                 <div className="flex min-w-0 items-start gap-3 sm:items-center">
                   <SensoraAnimatedMark size={44} animated={false} className="pointer-events-none hidden shrink-0 sm:block drop-shadow-[0_0_24px_-4px_rgba(56,189,248,0.35)]" aria-hidden />
                   <div className="min-w-0">
@@ -229,7 +231,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                     type="button"
                     onClick={openAppPreviewToc}
                     className={[
-                      "landing-nav-cta-preview relative z-[20] inline-flex min-h-14 w-full shrink-0 cursor-pointer items-center justify-center gap-2 rounded-2xl",
+                      "landing-nav-cta-preview relative z-[20] inline-flex min-h-14 w-full shrink-0 cursor-pointer items-center justify-center gap-2 rounded-2xl whitespace-nowrap",
                       "border border-white/30 bg-white/[0.092] px-5 py-3.5 text-center text-sm font-semibold text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_0_0_1px_rgba(56,189,248,0.06)_inset,0_0_40px_-10px_rgba(56,189,248,0.16)] ring-1 ring-inset ring-sky-400/14",
                       "backdrop-blur-md transition duration-[220ms] ease-out",
                       "hover:border-sky-300/42 hover:bg-white/[0.12]",
@@ -250,7 +252,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                     href="/join"
                     prefetch={false}
                     className={[
-                      "landing-nav-cta-join sensora-premium-primary-workspace relative z-[20] inline-flex min-h-14 w-full items-center justify-center rounded-2xl px-7 py-3.5 text-center text-sm font-semibold tracking-tight text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.13),0_0_44px_-8px_rgba(56,189,248,0.22),0_12px_32px_-8px_rgba(139,92,246,0.12)]",
+                      "landing-nav-cta-join sensora-premium-primary-workspace relative z-[20] inline-flex min-h-14 w-full items-center justify-center whitespace-nowrap rounded-2xl px-7 py-3.5 text-center text-sm font-semibold tracking-tight text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.13),0_0_44px_-8px_rgba(56,189,248,0.22),0_12px_32px_-8px_rgba(139,92,246,0.12)]",
                       "touch-manipulation min-[420px]:min-w-[12.5rem] min-[420px]:flex-1 min-[420px]:w-auto xl:min-w-[11.75rem] xl:flex-none",
                       "transition duration-[220ms] ease-out active:scale-[0.99]",
                       "focus-visible:outline-none",
@@ -328,7 +330,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
       />
 
       <main
-        className={`relative z-10 flex-1 ${view === "landing" ? "sensora-landing-main-depth bg-transparent" : ""}`}
+        className={`relative z-10 ${view === "landing" ? "max-lg:flex-none lg:flex-1" : "flex-1"} ${view === "landing" ? "sensora-landing-main-depth bg-transparent" : ""}`}
       >
         {view === "landing" ? <LandingShowroom onOpenAppWorkspace={openAppPreviewToc} /> : null}
 

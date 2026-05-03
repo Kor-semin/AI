@@ -302,8 +302,8 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
         onClose={() => setViewer({ open: false, title: "", initialSlideIndex: 0 })}
       />
 
-      <section className="landing-showcase-hero relative mx-auto w-full max-w-[1480px] px-[max(1rem,calc(env(safe-area-inset-left,0px)+12px))] pb-8 pr-[max(1rem,calc(env(safe-area-inset-right,0px)+12px))] pt-0 sm:px-5 sm:pb-10 sm:pt-1 md:px-7 lg:px-9 lg:pb-11 lg:pt-3 xl:px-11 xl:pt-4">
-        <div className="sensora-nebula-shell landing-hero-canvas relative overflow-hidden rounded-[26px] border border-white/[0.15] px-4 py-5 shadow-[0_42px_108px_-44px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.084),0_0_80px_-40px_rgba(56,189,248,0.06)] ring-1 ring-inset ring-white/[0.065] sm:rounded-[28px] sm:px-6 sm:py-6 lg:rounded-[30px] lg:px-8 lg:py-8 xl:px-10 xl:py-9">
+      <section className="landing-showcase-hero landing-showcase-hero--dock relative mx-auto w-full max-w-[min(100%,1580px)] px-[max(1rem,calc(env(safe-area-inset-left,0px)+12px))] pb-8 pr-[max(1rem,calc(env(safe-area-inset-right,0px)+12px))] pt-8 sm:px-5 sm:pb-10 sm:pt-2.5 md:px-7 md:pt-2 lg:px-10 lg:pb-11 lg:pt-1.5 xl:px-12 xl:pt-2">
+        <div className="sensora-nebula-shell landing-hero-canvas relative overflow-hidden rounded-[26px] border border-white/[0.15] px-5 py-4 shadow-[0_42px_108px_-44px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.084),0_0_80px_-40px_rgba(56,189,248,0.06)] ring-1 ring-inset ring-white/[0.065] sm:rounded-[28px] sm:px-6 sm:py-5 lg:rounded-[30px] lg:px-9 lg:py-7 xl:px-11 xl:py-8">
           <div
             aria-hidden
             className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_78%_62%_at_58%_-4%,rgba(139,92,246,0.185),transparent_53%),radial-gradient(ellipse_88%_64%_at_8%_96%,rgba(56,189,248,0.14),transparent_57%),radial-gradient(ellipse_62%_50%_at_92%_42%,rgba(99,102,241,0.105),transparent_55%),linear-gradient(165deg,rgba(5,14,26,0.96) 0%,rgba(8,24,46,0.55) 48%,rgba(4,11,22,0.94) 100%)]"
@@ -317,30 +317,30 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
             className="pointer-events-none absolute -right-[14%] top-[14%] h-[78%] w-[78%] max-w-[720px] rounded-full bg-[radial-gradient(circle_at_40%_36%,rgba(56,189,248,0.2),transparent_57%),radial-gradient(circle_at_70%_56%,rgba(139,92,246,0.14),transparent_55%)] opacity-[0.98] blur-3xl lg:-right-[4%]"
           />
 
-          <div className="relative z-[1] grid items-start gap-6 sm:gap-7 lg:grid-cols-[minmax(0,0.86fr)_minmax(0,1.3fr)] lg:gap-x-11 lg:gap-y-8 lg:pb-1 lg:pr-2 xl:gap-x-[3.25rem] xl:pr-5">
-            <div className="landing-showcase-copy-col order-1 min-w-0">
+          <div className="relative z-[1] grid items-start gap-4 max-lg:gap-5 sm:gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.22fr)] lg:gap-x-10 lg:gap-y-6 lg:pb-0 lg:pr-0 xl:grid-cols-[minmax(0,0.96fr)_minmax(0,1.26fr)] xl:gap-x-12 xl:gap-y-7 2xl:gap-x-14">
+            <div className="landing-showcase-copy-col max-lg:order-2 order-1 min-w-0 lg:max-w-[34rem] xl:max-w-[36rem] 2xl:max-w-[38rem]">
               <span className="inline-flex rounded-full border border-white/[0.18] bg-white/[0.082] px-3.5 py-1.5 text-xs font-semibold tracking-[0.08em] text-slate-100 backdrop-blur-sm">
                 {t("landing.showroom.hero.kickerBadge")}
               </span>
-              <h1 className="landing-showcase-hero-headline mt-4 max-w-[min(100%,46rem)] text-balance text-[clamp(1.92rem,5.15vw,3.62rem)] font-semibold leading-[1.12] tracking-[-0.041em] text-white [word-break:keep-all] sm:mt-5 lg:max-w-[min(100%,50rem)]">
-                <span className="block">{t("landing.showroom.hero.headlineLine1")}</span>
-                <span className="mt-[0.12em] block text-white">{t("landing.showroom.hero.headlineLine2")}</span>
+              <h1 className="landing-showcase-hero-headline mt-3 max-w-[min(100%,40rem)] text-balance font-semibold leading-[1.14] tracking-[-0.038em] text-white [word-break:keep-all] text-[clamp(1.62rem,calc(0.35rem+4.85vw),3.38rem)] sm:mt-4 lg:leading-[1.18] xl:leading-[1.2] xl:max-w-[36rem] 2xl:max-w-[38rem] 2xl:text-[clamp(1.9rem,2.85vw,3.45rem)]">
+                <span className="landing-showcase-hero-headline-line block">{t("landing.showroom.hero.headlineLine1")}</span>
+                <span className="landing-showcase-hero-headline-line mt-[0.08em] block text-white">{t("landing.showroom.hero.headlineLine2")}</span>
               </h1>
-              <p className="mt-5 max-w-[min(100%,42rem)] whitespace-pre-line text-base leading-[1.72] text-slate-200/96 sm:mt-6 sm:text-lg sm:leading-[1.66] lg:max-w-[min(100%,44rem)]">
+              <p className="mt-4 max-w-[min(100%,40rem)] whitespace-pre-line text-base leading-[1.72] text-slate-200/96 sm:mt-5 sm:text-[1.065rem] sm:leading-[1.68] lg:max-w-[min(100%,42ch)] xl:max-w-[46ch]">
                 {t("landing.showroom.hero.sub")}
               </p>
-              <div className="mt-7 grid w-full max-w-xl grid-cols-1 gap-3 sm:mt-9 md:max-w-none md:grid-cols-2 md:gap-4">
-                <Link href={JOIN_PATH} prefetch={false} className={`${ctaPrimaryShowcase} justify-center`}>
+              <div className="mt-6 grid w-full max-w-xl grid-cols-1 gap-3 sm:mt-7 md:max-w-none md:grid-cols-2 md:gap-4 lg:mt-8">
+                <Link href={JOIN_PATH} prefetch={false} className={`${ctaPrimaryShowcase} justify-center whitespace-nowrap`}>
                   {t("cta.joinBeta")}
                 </Link>
-                <button type="button" onClick={onOpenAppWorkspace} className={`${ctaGhostShowcase} justify-center`}>
+                <button type="button" onClick={onOpenAppWorkspace} className={`${ctaGhostShowcase} justify-center whitespace-nowrap`}>
                   <IconAppWindowPlay className="size-[1.2rem] shrink-0 opacity-95" />
                   {t("cta.tryAppExperience")}
                 </button>
               </div>
             </div>
 
-            <div className="landing-showcase-mock-col motion-safe:transition-transform order-2 relative mx-auto w-full max-w-[min(100%,25rem)] min-[410px]:max-w-[min(100%,36rem)] lg:mx-0 lg:max-w-none lg:justify-self-stretch lg:origin-top lg:[transform:scale(1.085)] xl:[transform:scale(1.12)] motion-reduce:lg:transform-none">
+            <div className="landing-showcase-mock-col motion-safe:transition-transform max-lg:order-1 order-2 relative mx-auto w-full max-w-[min(100%,26rem)] min-[410px]:max-w-[min(100%,38rem)] lg:mx-0 lg:max-w-none lg:justify-self-stretch lg:origin-top lg:self-start lg:[transform:scale(1.038)] xl:max-w-[min(100%,52rem)] xl:[transform:scale(1.055)] motion-reduce:lg:transform-none">
               <div
                 aria-hidden
                 className="pointer-events-none absolute -inset-4 rounded-[40px] bg-[radial-gradient(ellipse_90%_75%_at_52%_50%,rgba(56,189,248,0.26),transparent_60%),radial-gradient(ellipse_70%_60%_at_85%_25%,rgba(139,92,246,0.18),transparent_56%)] opacity-100 blur-2xl sm:-inset-6"
@@ -351,24 +351,24 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
             </div>
           </div>
 
-          <div className="landing-hero-bridge relative z-[1] mt-7 border-t border-white/[0.09] px-2 pt-6 sm:mt-9 sm:px-4 sm:pt-8">
-            <div className="landing-hero-bridge-panel mx-auto max-w-[min(100%,40rem)] rounded-[22px] border border-white/[0.1] bg-gradient-to-b from-white/[0.055] via-white/[0.02] to-transparent px-6 py-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.085)] sm:px-8 sm:py-6">
-              <div className="flex w-full items-center gap-3 sm:gap-4" aria-hidden>
-                <span className="h-px min-w-[2rem] flex-1 bg-gradient-to-r from-transparent via-sky-400/42 to-transparent" />
-                <span className="size-1.5 shrink-0 rounded-full bg-gradient-to-br from-sky-400 to-violet-400 shadow-[0_0_14px_-1px_rgba(56,189,248,0.55)] ring-2 ring-sky-400/25" />
-                <span className="h-px min-w-[2rem] flex-1 bg-gradient-to-l from-transparent via-violet-400/38 to-transparent" />
+          <div className="landing-hero-bridge relative z-[1] mt-5 px-2 sm:-mx-1 sm:mt-6 sm:px-3 lg:-mx-2 lg:mt-5 xl:mt-6">
+            <div className="landing-hero-bridge-panel mx-auto max-w-[min(100%,36rem)] rounded-[18px] border border-white/[0.09] bg-gradient-to-b from-white/[0.06] via-white/[0.025] to-white/[0.02] px-5 py-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] sm:max-w-[min(100%,38rem)] sm:rounded-[20px] sm:px-6 sm:py-5">
+              <div className="flex w-full items-center gap-3 opacity-[0.9] sm:gap-4" aria-hidden>
+                <span className="h-px min-w-[1.5rem] flex-1 bg-gradient-to-r from-transparent via-sky-400/38 to-transparent" />
+                <span className="size-1.5 shrink-0 rounded-full bg-gradient-to-br from-sky-400 to-violet-400 shadow-[0_0_14px_-1px_rgba(56,189,248,0.52)] ring-2 ring-sky-400/22" />
+                <span className="h-px min-w-[1.5rem] flex-1 bg-gradient-to-l from-transparent via-violet-400/34 to-transparent" />
               </div>
-              <p className="mt-5 text-center text-[clamp(1.08rem,2.25vw,1.46rem)] font-semibold leading-snug tracking-[-0.022em] text-slate-100">
+              <p className="mt-3 text-center text-[clamp(1.02rem,2.05vw,1.38rem)] font-semibold leading-snug tracking-[-0.021em] text-slate-100 sm:mt-4">
                 {t("landing.showroom.bridge.line1")}
               </p>
-              <p className="-mt-0.5 pt-3 text-center text-[clamp(1.06rem,2.2vw,1.42rem)] font-semibold leading-snug tracking-[-0.022em] text-slate-200">
+              <p className="-mt-0.5 pt-2 text-center text-[clamp(1rem,2vw,1.34rem)] font-semibold leading-snug tracking-[-0.021em] text-slate-200/95">
                 {t("landing.showroom.bridge.line2")}
               </p>
             </div>
           </div>
         </div>
 
-        <div className="sensora-nebula-shell landing-showcase-lower landing-showcase-lower-canvas relative z-[1] mt-8 flex flex-col gap-7 rounded-[26px] border border-white/[0.13] bg-gradient-to-b from-white/[0.062] via-[#040a14]/65 to-[#020810]/92 px-4 py-7 shadow-[0_34px_92px_-38px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.065),0_0_72px_-34px_rgba(56,189,248,0.078)] ring-1 ring-inset ring-white/[0.06] backdrop-blur-md sm:mt-10 sm:gap-8 sm:px-6 sm:py-9 lg:mt-11 lg:gap-9 lg:px-8 xl:px-10">
+        <div className="sensora-nebula-shell landing-showcase-lower landing-showcase-lower-canvas relative z-[1] mt-6 flex flex-col gap-7 rounded-[26px] border border-white/[0.13] bg-gradient-to-b from-white/[0.062] via-[#040a14]/65 to-[#020810]/92 px-4 py-7 shadow-[0_34px_92px_-38px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.065),0_0_72px_-34px_rgba(56,189,248,0.078)] ring-1 ring-inset ring-white/[0.06] backdrop-blur-md sm:mt-8 sm:gap-8 sm:px-6 sm:py-9 lg:mt-9 lg:gap-9 lg:px-8 xl:px-10">
           <div className="relative min-w-0 overflow-hidden rounded-[22px]">
             <div className="sensora-preview-galaxy-stars pointer-events-none absolute inset-0 opacity-[0.5]" aria-hidden />
             <div className="relative z-[1]">
