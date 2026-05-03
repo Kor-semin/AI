@@ -2,14 +2,17 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Fragment, useEffect, useMemo, useState } from "react";
 
+import { SensoraGuideDetailModal } from "@/app/components/concierge/SensoraGuideDetailModal";
+import {
+  SENSORA_CONCEPT_STORY_SLIDES,
+  sensoraGuideIdFromConceptSlideId,
+} from "@/app/components/concierge/sensoraConceptStory";
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
-import { SensoraGuideImageViewer } from "@/app/components/concierge/SensoraGuideImageViewer";
-import { SensoraFullscreenImageOverlay } from "@/app/components/concierge/SensoraFullscreenImageOverlay";
-import { SENSORA_GUIDE_IMAGES } from "@/app/components/concierge/sensoraGuideImages";
-import { SENSORA_CONCEPT_STORY_SLIDES } from "@/app/components/concierge/sensoraConceptStory";
-import { sensoraGuideIndex } from "@/lib/sensoraGuide";
+import { DEFAULT_GUIDE_ID, type SensoraGuideId } from "@/lib/sensoraGuide";
+import { crmSectionToHash, type CrmSection } from "@/app/crm/crmSectionTypes";
 
 const JOIN_PATH = "/join" as const;
 
@@ -97,9 +100,6 @@ function IconFlowNext({ className }: { className?: string }) {
   );
 }
 
-const GUIDE_VIEWER_IMAGES = SENSORA_GUIDE_IMAGES.map((s) => ({ src: s.src }));
-const GUIDE_SLIDE_TITLE_KEYS = SENSORA_GUIDE_IMAGES.map((s) => s.titleKey);
-
 function HeroDashboardPreview() {
   const { t, language } = useLanguage();
   const [dateLabel, setDateLabel] = useState("");
@@ -148,7 +148,7 @@ function HeroDashboardPreview() {
         </div>
       </div>
 
-      <div className="flex min-h-0 flex-1 flex-col max-lg:min-h-[296px] sm:min-h-[312px] sm:flex-row md:min-h-[328px] lg:min-h-[352px]">
+      <div className="flex min-h-0 flex-1 flex-col max-lg:min-h-[246px] sm:min-h-[312px] sm:flex-row md:min-h-[328px] lg:min-h-[352px]">
         <nav
           className="flex shrink-0 flex-row gap-0 overflow-x-auto overflow-y-hidden border-b border-white/[0.12] bg-[#030d18]/99 [scrollbar-width:none] sm:w-[9.5rem] sm:flex-col sm:overflow-visible sm:border-b-0 sm:border-r sm:border-white/[0.12] sm:py-1.5 [&::-webkit-scrollbar]:hidden"
           aria-hidden
@@ -159,7 +159,7 @@ function HeroDashboardPreview() {
               <div
                 key={key}
                 className={[
-                  "flex min-w-[4.6rem] shrink-0 items-center gap-2 border-white/[0.06] px-2.5 py-2 sm:min-w-0 sm:flex-initial sm:border-b sm:border-l-[3px] sm:px-2.5 sm:py-2",
+                  "flex min-w-[4.35rem] shrink-0 items-center gap-1.5 border-white/[0.06] px-2 py-[0.4375rem] sm:min-w-0 sm:gap-2 sm:border-b sm:border-l-[3px] sm:px-2.5 sm:py-2",
                   active
                     ? "border-b-2 border-b-sky-400/85 bg-gradient-to-t from-sky-500/[0.14] to-transparent sm:border-b-0 sm:border-l-sky-400 sm:bg-gradient-to-r sm:from-sky-500/[0.12] sm:to-transparent"
                     : "border-b-2 border-b-transparent sm:border-l-transparent sm:opacity-[0.88]",
@@ -199,8 +199,8 @@ function HeroDashboardPreview() {
             </div>
           </div>
 
-          <div className="flex min-h-0 flex-1 flex-col gap-2.5 px-3 py-2.5 sm:gap-3 sm:px-3.5 sm:py-3">
-            <div className="grid grid-cols-2 gap-2 sm:gap-2.5" aria-hidden>
+          <div className="flex min-h-0 flex-1 flex-col gap-2 px-[0.65rem] py-2 max-lg:pb-2 sm:gap-3 sm:px-3.5 sm:py-3">
+            <div className="grid grid-cols-2 gap-1.5 sm:gap-2.5" aria-hidden>
               {[cards.today, cards.followup].map(({ titleKey, bodyKey }) => (
                 <div
                   key={titleKey}
@@ -238,12 +238,19 @@ function HeroDashboardPreview() {
 
 export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace: () => void }) {
   const { t } = useLanguage();
-  const [viewer, setViewer] = useState<{
-    open: boolean;
-    title: string;
-    initialSlideIndex: number;
-  }>(() => ({ open: false, title: "", initialSlideIndex: 0 }));
-  const [conceptExpand, setConceptExpand] = useState<{ src: string; alt: string } | null>(null);
+  const router = useRouter();
+  const [landingDetailOpen, setLandingDetailOpen] = useState(false);
+  const [landingGuideId, setLandingGuideId] = useState<SensoraGuideId>(DEFAULT_GUIDE_ID);
+
+  const openLandingGuideDetail = (id: SensoraGuideId) => {
+    setLandingGuideId(id);
+    setLandingDetailOpen(true);
+  };
+
+  const goWorkspaceFromLandingDetail = (section: CrmSection) => {
+    setLandingDetailOpen(false);
+    router.push(`/?view=app#${crmSectionToHash(section)}`);
+  };
 
   /** 상담 흐름 섹션 — 컨셉 가이드·워크스페이스 캡처 */
   const FLOW_STEP_ART = [
@@ -282,27 +289,16 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
 
   return (
     <>
-      <SensoraFullscreenImageOverlay
-        open={conceptExpand !== null}
-        src={conceptExpand?.src ?? ""}
-        alt={conceptExpand?.alt ?? ""}
-        onClose={() => setConceptExpand(null)}
-        closeLabel={t("preview.toc.close")}
-        openOriginalAria={t("landing.showroom.tip.openOriginalAria")}
-        openOriginalHint={t("landing.showroom.tip.openOriginal")}
+      <SensoraGuideDetailModal
+        open={landingDetailOpen}
+        onClose={() => setLandingDetailOpen(false)}
+        activeGuideId={landingGuideId}
+        onActiveGuideChange={setLandingGuideId}
+        onGoToRelated={goWorkspaceFromLandingDetail}
+        overlayZClass="z-[220]"
       />
 
-      <SensoraGuideImageViewer
-        open={viewer.open}
-        title={viewer.title}
-        images={GUIDE_VIEWER_IMAGES}
-        initialSlideIndex={viewer.initialSlideIndex}
-        slideTitleKeys={GUIDE_SLIDE_TITLE_KEYS}
-        overlayZClass="z-[200]"
-        onClose={() => setViewer({ open: false, title: "", initialSlideIndex: 0 })}
-      />
-
-      <section className="landing-showcase-hero landing-showcase-hero--dock relative mx-auto w-full max-w-[min(100%,1580px)] max-lg:min-h-0 px-[max(1rem,calc(env(safe-area-inset-left,0px)+12px))] pb-8 pr-[max(1rem,calc(env(safe-area-inset-right,0px)+12px))] pt-6 max-lg:pt-7 sm:px-5 sm:pb-10 sm:pt-2.5 md:px-7 md:pt-2 lg:px-10 lg:pb-11 lg:pt-1.5 xl:px-12 xl:pt-2">
+      <section className="landing-showcase-hero landing-showcase-hero--dock relative mx-auto w-full max-w-[min(100%,1580px)] max-lg:min-h-0 px-[max(1rem,calc(env(safe-area-inset-left,0px)+12px))] pb-[max(2.125rem,calc(env(safe-area-inset-bottom,0px)+1.25rem))] pr-[max(1rem,calc(env(safe-area-inset-right,0px)+12px))] pt-6 max-lg:pb-[max(2.875rem,calc(env(safe-area-inset-bottom,0px)+1.625rem))] max-lg:pt-7 sm:px-5 sm:pb-10 sm:pt-2.5 md:px-7 md:pt-2 lg:px-10 lg:pb-11 lg:pt-1.5 xl:px-12 xl:pt-2">
         <div className="sensora-nebula-shell landing-hero-canvas relative max-lg:min-h-0 max-lg:!overflow-visible lg:overflow-hidden rounded-[26px] border border-white/[0.15] px-5 py-3 max-lg:py-4 shadow-[0_42px_108px_-44px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.084),0_0_80px_-40px_rgba(56,189,248,0.06)] ring-1 ring-inset ring-white/[0.065] sm:rounded-[28px] sm:px-6 sm:py-5 lg:rounded-[30px] lg:px-9 lg:py-7 xl:px-11 xl:py-8">
           <div
             aria-hidden
@@ -317,7 +313,7 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
             className="sensora-nebula-layer-absolute pointer-events-none absolute -right-[14%] top-[14%] h-[78%] w-[78%] max-w-[720px] rounded-full bg-[radial-gradient(circle_at_40%_36%,rgba(56,189,248,0.2),transparent_57%),radial-gradient(circle_at_70%_56%,rgba(139,92,246,0.14),transparent_55%)] opacity-[0.98] blur-3xl lg:-right-[4%]"
           />
 
-          <div className="relative z-[1] grid max-lg:min-h-0 items-start gap-4 max-lg:gap-3 sm:gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.22fr)] lg:gap-x-10 lg:gap-y-6 lg:pb-0 lg:pr-0 xl:grid-cols-[minmax(0,0.96fr)_minmax(0,1.26fr)] xl:gap-x-12 xl:gap-y-7 2xl:gap-x-14">
+          <div className="relative z-[1] grid max-lg:min-h-0 items-start gap-4 max-lg:gap-2.5 sm:gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.22fr)] lg:gap-x-10 lg:gap-y-6 lg:pb-0 lg:pr-0 xl:grid-cols-[minmax(0,0.96fr)_minmax(0,1.26fr)] xl:gap-x-12 xl:gap-y-7 2xl:gap-x-14">
             <div className="landing-showcase-copy-col order-1 min-w-0 lg:max-w-[34rem] xl:max-w-[36rem] 2xl:max-w-[38rem]">
               <span className="inline-flex rounded-full border border-white/[0.18] bg-white/[0.082] px-3.5 py-1.5 text-xs font-semibold tracking-[0.08em] text-slate-100 backdrop-blur-sm">
                 {t("landing.showroom.hero.kickerBadge")}
@@ -329,7 +325,7 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
               <p className="mt-4 max-w-[min(100%,40rem)] whitespace-pre-line text-base leading-[1.72] text-slate-200/96 sm:mt-5 sm:text-[1.065rem] sm:leading-[1.68] lg:max-w-[min(100%,42ch)] xl:max-w-[46ch]">
                 {t("landing.showroom.hero.sub")}
               </p>
-              <div className="mt-6 grid w-full max-w-xl grid-cols-1 gap-3 sm:mt-7 md:max-w-none md:grid-cols-2 md:gap-4 lg:mt-8">
+              <div className="mt-6 grid w-full max-w-xl grid-cols-1 gap-3 max-lg:mt-5 sm:mt-7 md:max-w-none md:grid-cols-2 md:gap-4 lg:mt-8">
                 <Link href={JOIN_PATH} prefetch={false} className={`${ctaPrimaryShowcase} justify-center whitespace-nowrap`}>
                   {t("cta.joinBeta")}
                 </Link>
@@ -351,7 +347,7 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
             </div>
           </div>
 
-          <div className="landing-hero-bridge relative z-[1] mt-5 px-2 sm:-mx-1 sm:mt-6 sm:px-3 lg:-mx-2 lg:mt-5 xl:mt-6">
+          <div className="landing-hero-bridge relative z-[1] mt-[max(1.25rem,env(safe-area-inset-bottom,0px)+0.5rem)] px-2 max-lg:mt-8 sm:-mx-1 sm:mt-6 sm:px-3 lg:-mx-2 lg:mt-5 xl:mt-6">
             <div className="landing-hero-bridge-panel mx-auto max-w-[min(100%,36rem)] rounded-[18px] border border-white/[0.09] bg-gradient-to-b from-white/[0.06] via-white/[0.025] to-white/[0.02] px-5 py-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] sm:max-w-[min(100%,38rem)] sm:rounded-[20px] sm:px-6 sm:py-5">
               <div className="flex w-full items-center gap-3 opacity-[0.9] sm:gap-4" aria-hidden>
                 <span className="h-px min-w-[1.5rem] flex-1 bg-gradient-to-r from-transparent via-sky-400/38 to-transparent" />
@@ -381,8 +377,11 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
                   <button
                     key={slide.id}
                     type="button"
-                    onClick={() => setConceptExpand({ src: slide.src, alt: t(slide.titleKey) })}
-                    className="landing-tip-feature-card group flex min-h-0 flex-col overflow-hidden rounded-[14px] border border-white/[0.2] bg-gradient-to-b from-slate-900/82 to-[#050d14]/92 text-left shadow-[0_16px_48px_-20px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(255,255,255,0.08),0_0_40px_-12px_rgba(56,189,248,0.14)] ring-1 ring-inset ring-sky-400/15 backdrop-blur-md transition-[transform,border-color,box-shadow] duration-[220ms] hover:-translate-y-1 hover:border-sky-400/45 hover:shadow-[0_24px_56px_-16px_rgba(0,0,0,0.5),0_0_48px_-10px_rgba(56,189,248,0.22)] motion-reduce:transition-none motion-reduce:hover:translate-y-0 touch-manipulation sm:min-h-[13.25rem] sm:rounded-[17px]"
+                    onClick={() => {
+                      const gid = sensoraGuideIdFromConceptSlideId(slide.id);
+                      if (gid) openLandingGuideDetail(gid);
+                    }}
+                    className="landing-tip-feature-card sensora-concept-tip-card group flex min-h-0 cursor-pointer flex-col overflow-hidden rounded-[14px] border border-white/[0.2] bg-gradient-to-b from-slate-900/82 to-[#050d14]/92 text-left shadow-[0_16px_48px_-20px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(255,255,255,0.08),0_0_40px_-12px_rgba(56,189,248,0.14)] ring-1 ring-inset ring-sky-400/14 backdrop-blur-md transition-[transform,border-color,box-shadow] duration-[220ms] hover:-translate-y-0.5 hover:border-sky-400/52 hover:ring-sky-400/28 hover:shadow-[0_24px_56px_-16px_rgba(0,0,0,0.5),0_0_52px_-10px_rgba(56,189,248,0.24)] active:translate-y-[0.5px] active:brightness-[1.025] motion-reduce:transition-none motion-reduce:hover:translate-y-0 touch-manipulation sm:min-h-[13.25rem] sm:rounded-[17px]"
                   >
                     <div className="relative h-36 w-full shrink-0 overflow-hidden bg-[#020617] sm:h-auto sm:aspect-[5/4]">
                       <Image
@@ -390,11 +389,17 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
                         alt=""
                         fill
                         className="object-cover object-center opacity-[0.9] saturate-[0.92] brightness-[1.03] contrast-[1.02] transition-[opacity,filter] duration-300 group-hover:opacity-100 group-hover:saturate-100 sm:brightness-[1.04]"
-                        sizes="(max-width: 640px) 50vw, 24vw"
+                        sizes="(max-width:640px) 42vw,(max-width:1024px) 22vw, 240px"
+                        quality={92}
                       />
                       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#020817]/94 via-[#020617]/42 to-[#0a1624]/55" />
                       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_90%_70%_at_76%_-8%,rgba(56,189,248,0.11),transparent_55%),radial-gradient(ellipse_70%_55%_at_14%_88%,rgba(139,92,246,0.09),transparent_54%)]" />
-                      <span className="absolute bottom-2 left-2.5 right-2 text-[10px] font-semibold uppercase tracking-[0.1em] text-sky-200/90">{t("landing.showroom.concept.tapToExpand")}</span>
+                      <span className="absolute bottom-2 left-2.5 right-2 inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-[0.1em] text-sky-200/94">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="shrink-0 opacity-92" aria-hidden>
+                          <path d="M9 18l6-6-6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                        {t("preview.guide.tapDetail")}
+                      </span>
                     </div>
                     <div className="flex flex-1 flex-col px-2.5 pb-2.5 pt-2 max-lg:min-h-0 sm:px-3.5 sm:pb-3.5 sm:pt-3">
                       <span className="line-clamp-2 text-[0.78rem] font-semibold leading-snug text-slate-50 sm:text-[0.9375rem]">{t(slide.titleKey)}</span>
@@ -407,13 +412,7 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
                 <button
                   type="button"
                   className="rounded-lg border border-white/[0.12] bg-white/[0.04] px-3 py-1.5 font-semibold text-slate-300 transition hover:border-sky-400/35 hover:text-slate-50"
-                  onClick={() =>
-                    setViewer({
-                      open: true,
-                      title: t("landing.showroom.tip.title"),
-                      initialSlideIndex: sensoraGuideIndex("sensora-guide-03"),
-                    })
-                  }
+                  onClick={() => openLandingGuideDetail(DEFAULT_GUIDE_ID)}
                 >
                   {t("crm.guideTip.openViewer")}
                 </button>
@@ -456,6 +455,7 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
                             fill
                             className="object-cover object-center opacity-[0.9] saturate-[0.9] brightness-[1.03] transition-[opacity,filter] duration-300 group-hover:opacity-100 group-hover:saturate-100"
                             sizes="(max-width:1024px) 46vw, 200px"
+                            quality={92}
                           />
                           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#020617]/94 via-transparent to-transparent" aria-hidden />
                           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_65%_at_82%_0%,rgba(56,189,248,0.14),transparent_60%),radial-gradient(ellipse_70%_55%_at_12%_96%,rgba(139,92,246,0.1),transparent_55%),radial-gradient(ellipse_90%_50%_at_50%_-10%,rgba(56,189,248,0.06),transparent_50%)]" aria-hidden />

@@ -2,6 +2,8 @@
 
 import Image from "next/image";
 
+import { useLanguage } from "@/app/components/i18n/LanguageProvider";
+
 type Props = {
   title: string;
   description: string;
@@ -11,6 +13,7 @@ type Props = {
 };
 
 export function SensoraGuideCard({ title, description, image, selected, onSelect }: Props) {
+  const { t } = useLanguage();
   return (
     <button
       type="button"
@@ -22,9 +25,9 @@ export function SensoraGuideCard({ title, description, image, selected, onSelect
         "shadow-[inset_0_1px_0_rgba(255,255,255,0.065),0_12px_36px_-22px_rgba(0,0,0,0.55)] backdrop-blur-xl",
         "ring-1 ring-inset ring-white/[0.05]",
         "transition-[transform,border-color,box-shadow,background] duration-[220ms] ease-out",
-        "hover:-translate-y-0.5 hover:border-sky-400/28 hover:shadow-[0_20px_46px_-18px_rgba(0,0,0,0.5),0_0_40px_-14px_rgba(56,189,248,0.14)]",
+        "hover:-translate-y-0.5 hover:border-sky-400/32 hover:shadow-[0_20px_46px_-18px_rgba(0,0,0,0.5),0_0_46px_-12px_rgba(56,189,248,0.18)] hover:brightness-[1.02]",
         "motion-reduce:transition-none motion-reduce:hover:translate-y-0",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/45",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/45 active:brightness-[1.03]",
         selected ?
           "sensora-guide-pick-card--active border-cyan-400/75 z-[1] -translate-y-0.5 ring-[3px] ring-cyan-400/55 ring-offset-2 ring-offset-[#020617] shadow-[inset_0_1px_0_rgba(255,255,255,0.11),0_0_0_1px_rgba(34,211,238,0.22),0_0_56px_-10px_rgba(34,211,238,0.28),0_0_88px_-28px_rgba(56,189,248,0.2)] motion-reduce:translate-y-0 motion-reduce:ring-2 motion-reduce:shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_0_0_1px_rgba(34,211,238,0.18)]"
         : "active:scale-[0.992]",
@@ -59,9 +62,20 @@ export function SensoraGuideCard({ title, description, image, selected, onSelect
           }}
         />
       </div>
-      <div className="flex min-h-0 flex-1 flex-col px-[0.6875rem] pb-3 pt-[0.625rem] sm:px-[0.95rem] sm:pb-4 sm:pt-3.5">
-        <p className="line-clamp-2 text-[0.765625rem] font-semibold leading-snug tracking-tight text-slate-50 sm:line-clamp-none sm:text-sm">{title}</p>
-        <p className="mt-1 line-clamp-2 text-[10.25px] leading-[1.45] text-slate-400 sm:mt-1.5 sm:line-clamp-3 sm:text-[12px] sm:leading-relaxed">{description}</p>
+      <div className="relative flex min-h-0 flex-1 flex-col px-[0.6875rem] pb-3 pt-[0.625rem] sm:px-[0.95rem] sm:pb-4 sm:pt-3.5">
+        <svg
+          className="pointer-events-none absolute right-2.5 top-[0.5625rem] size-[0.9375rem] text-sky-300/72 opacity-85 transition-[transform,color] duration-200 group-hover:translate-x-0.5 group-hover:text-sky-200 motion-reduce:group-hover:translate-x-0 sm:right-3 sm:top-[0.75rem]"
+          viewBox="0 0 20 20"
+          fill="none"
+          aria-hidden
+        >
+          <path d="M7 4l7 6-7 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.88" />
+        </svg>
+        <p className="line-clamp-2 pr-6 text-[0.765625rem] font-semibold leading-snug tracking-tight text-slate-50 sm:line-clamp-none sm:pr-0 sm:text-sm">{title}</p>
+        <p className="mt-1 line-clamp-2 text-[0.6425rem] leading-[1.45] text-slate-400 sm:mt-1.5 sm:line-clamp-3 sm:text-[12px] sm:leading-relaxed">{description}</p>
+        <p className="mt-auto flex shrink-0 items-center gap-1 pt-2 text-[0.65625rem] font-semibold leading-tight text-sky-300/85 sm:hidden">
+          {t("preview.guide.tapDetail")}
+        </p>
       </div>
     </button>
   );
