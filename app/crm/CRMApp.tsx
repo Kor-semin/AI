@@ -1532,27 +1532,27 @@ export function CRMApp({
 
   return (
     <>
-      <div id="crm-main" className="w-full min-w-0 pb-8 lg:pb-10">
+      <div id="crm-main" className="w-full min-w-0 pb-8 text-slate-100 lg:pb-10">
         <div className="mx-auto flex w-full max-w-[1580px] flex-col gap-6 px-2 sm:px-4 xl:px-0">
           {!uid ? (
             <div
-              className="rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-4 py-3 text-left text-[13px] leading-[1.6] text-[#475569] max-[390px]:px-3.5"
+              className="rounded-xl border border-white/[0.1] bg-slate-900/45 px-4 py-3 text-left text-[13px] leading-[1.6] text-slate-400 backdrop-blur-md max-[390px]:px-3.5"
               role="status"
               aria-live="polite"
             >
-              <p className="font-medium text-[#334155]">{t("crm.demoContextNotice.primary")}</p>
+              <p className="font-medium text-slate-100">{t("crm.demoContextNotice.primary")}</p>
               <p className="mt-2 text-[13px] leading-relaxed">{t("crm.demoContextNotice.secondary")}</p>
-              <p className="mt-2 text-[13px] leading-relaxed font-medium text-[#475569]">
+              <p className="mt-2 text-[13px] leading-relaxed font-medium text-slate-300">
                 {t("crm.demoContextNotice.accessAfterBeta")}
               </p>
             </div>
           ) : null}
           <header className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between lg:gap-6">
             <div className="min-w-0">
-              <h1 className="text-[clamp(22px,2.8vw,30px)] font-semibold leading-tight tracking-tight text-[#111827]">
+              <h1 className="text-[clamp(22px,2.8vw,30px)] font-semibold leading-tight tracking-tight text-slate-50">
                 {t("product.name")}
               </h1>
-              <p className="mt-2 max-w-xl text-[15px] leading-relaxed text-[#6B7280]">
+              <p className="mt-2 max-w-xl text-[15px] leading-relaxed text-slate-400">
                 {!uid ? (
                   t("crm.previewMode.headerSubtitle")
                 ) : (
@@ -1595,25 +1595,25 @@ export function CRMApp({
                     }
                     aria-controls="crm-unified-search-results"
                     aria-autocomplete="list"
-                    className="min-h-[44px] w-full rounded-[20px] border border-[#E5E7EB] bg-[#FFFFFF] px-4 py-3 text-[15px] text-[#111827] outline-none transition focus:border-[#94A3B8] focus:ring-2 focus:ring-[#CBD5E1]/65"
+                    className="min-h-[44px] w-full rounded-[20px] border border-white/[0.12] bg-slate-900/55 px-4 py-3 text-[15px] text-slate-100 outline-none backdrop-blur-sm transition placeholder:text-slate-500 focus:border-sky-400/35 focus:ring-2 focus:ring-sky-500/20"
                   />
                 </label>
                 {searchOpen && normalizeSearchFold(searchQuery).length >= 1 ? (
                   <div
                     id="crm-unified-search-results"
                     role="listbox"
-                    className="pointer-events-auto absolute left-0 right-0 top-[calc(100%+4px)] z-50 flex max-h-[min(440px,calc(100vh-7rem))] flex-col overflow-hidden rounded-[18px] border border-[#E5E7EB] bg-[#FFFFFF] shadow-[0_12px_40px_-12px_rgba(15,23,42,0.2)] sm:max-h-[min(480px,calc(100vh-6rem))]"
+                    className="pointer-events-auto absolute left-0 right-0 top-[calc(100%+4px)] z-50 flex max-h-[min(440px,calc(100vh-7rem))] flex-col overflow-hidden rounded-[18px] border border-white/[0.1] bg-[#07111f]/97 shadow-[0_24px_56px_-20px_rgba(0,0,0,0.55)] backdrop-blur-md sm:max-h-[min(480px,calc(100vh-6rem))]"
                   >
                     <div className="max-h-[min(440px,calc(100vh-7rem))] overflow-y-auto overscroll-contain px-1 py-2 sm:max-h-[min(480px,calc(100vh-6rem))]">
                       {customerSearchResults.length === 0 && featureSearchResults.length === 0 ? (
-                        <p className="px-4 py-8 text-center text-[14px] leading-relaxed text-[#64748B]">
+                        <p className="px-4 py-8 text-center text-[14px] leading-relaxed text-slate-500">
                           고객명 또는 기능명을 입력해 주세요.
                         </p>
                       ) : (
                         <>
                           {customerSearchResults.length > 0 ? (
                             <div className="pb-2">
-                              <div className="px-3 pb-1 pt-1 text-[11px] font-bold uppercase tracking-wider text-[#94A3B8]">
+                              <div className="px-3 pb-1 pt-1 text-[11px] font-bold uppercase tracking-wider text-slate-500">
                                 고객
                               </div>
                               <ul className="space-y-0.5">
@@ -1626,12 +1626,12 @@ export function CRMApp({
                                       <button
                                         type="button"
                                         role="option"
-                                        className="w-full rounded-[14px] px-3 py-2.5 text-left text-[15px] font-semibold leading-snug text-[#111827] transition hover:bg-[#F1F5F9]"
+                                        className="w-full rounded-[14px] px-3 py-2.5 text-left text-[15px] font-semibold leading-snug text-slate-100 transition hover:bg-white/[0.06]"
                                         onMouseDown={(e) => e.preventDefault()}
                                         onClick={() => handleSelectCustomerSearchResult(c.id)}
                                       >
-                                        <span className="text-[#64748B]">[고객]</span> {c.name} · {vehicle} ·{" "}
-                                        <span className="font-medium text-[#475569]">
+                                        <span className="text-slate-500">[고객]</span> {c.name} · {vehicle} ·{" "}
+                                        <span className="font-medium text-slate-400">
                                           {maskPhoneForSearchList(c.phone)}
                                         </span>
                                       </button>
@@ -1642,8 +1642,8 @@ export function CRMApp({
                             </div>
                           ) : null}
                           {featureSearchResults.length > 0 ? (
-                            <div className={customerSearchResults.length > 0 ? "border-t border-[#F1F5F9] pt-2" : ""}>
-                              <div className="px-3 pb-1 pt-1 text-[11px] font-bold uppercase tracking-wider text-[#94A3B8]">
+                            <div className={customerSearchResults.length > 0 ? "border-t border-white/[0.08] pt-2" : ""}>
+                              <div className="px-3 pb-1 pt-1 text-[11px] font-bold uppercase tracking-wider text-slate-500">
                                 바로가기
                               </div>
                               <ul className="space-y-0.5">
@@ -1652,14 +1652,14 @@ export function CRMApp({
                                     <button
                                       type="button"
                                       role="option"
-                                      className="flex w-full flex-col rounded-[14px] px-3 py-2.5 text-left transition hover:bg-[#F1F5F9]"
+                                      className="flex w-full flex-col rounded-[14px] px-3 py-2.5 text-left transition hover:bg-white/[0.06]"
                                       onMouseDown={(e) => e.preventDefault()}
                                       onClick={() => activateSearchFeature(f.id)}
                                     >
-                                      <span className="text-[15px] font-semibold leading-snug text-[#111827]">
-                                        <span className="text-[#64748B]">[바로가기]</span> {f.title}
+                                      <span className="text-[15px] font-semibold leading-snug text-slate-100">
+                                        <span className="text-slate-500">[바로가기]</span> {f.title}
                                       </span>
-                                      <span className="mt-1 text-[13px] leading-relaxed text-[#64748B]">
+                                      <span className="mt-1 text-[13px] leading-relaxed text-slate-500">
                                         {f.subtitle}
                                       </span>
                                     </button>
@@ -1676,7 +1676,7 @@ export function CRMApp({
               </div>
               <button
                 type="button"
-                className="min-h-[44px] shrink-0 rounded-[20px] bg-[#111827] px-5 py-3 text-[15px] font-semibold text-white shadow-sm transition hover:bg-[#1F2937] focus:outline-none focus:ring-2 focus:ring-[#94A3B8] sm:w-auto sm:whitespace-nowrap touch-manipulation"
+                className="min-h-[44px] shrink-0 rounded-[20px] border border-sky-400/25 bg-gradient-to-b from-[#1e293b] to-[#0f172a] px-5 py-3 text-[15px] font-semibold text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition hover:border-sky-400/40 focus:outline-none focus:ring-2 focus:ring-sky-500/30 sm:w-auto sm:whitespace-nowrap touch-manipulation"
                 onClick={openCreateCustomerModal}
               >
                 + {t("crm.addCustomer")}
@@ -1686,10 +1686,10 @@ export function CRMApp({
 
           <div
             id="crm-section-title"
-            className="scroll-mt-24 rounded-2xl border border-[#E2E8F0] bg-[#FAFBFC] px-4 py-3.5 shadow-[0_1px_8px_rgba(15,23,42,0.05)] max-[390px]:px-3.5 max-[390px]:py-3 lg:hidden"
+            className="scroll-mt-24 rounded-2xl border border-white/[0.1] bg-slate-900/45 px-4 py-3.5 shadow-[0_18px_40px_-24px_rgba(0,0,0,0.45)] backdrop-blur-md max-[390px]:px-3.5 max-[390px]:py-3 lg:hidden"
           >
-            <p className="text-[18px] font-bold tracking-tight text-[#0F172A]">{CRM_SECTION_LABELS[activeSection].title}</p>
-            <p className="mt-1 text-[13px] font-semibold leading-snug text-[#475569]">
+            <p className="text-[18px] font-bold tracking-tight text-slate-50">{CRM_SECTION_LABELS[activeSection].title}</p>
+            <p className="mt-1 text-[13px] font-semibold leading-snug text-slate-400">
               {t(CRM_SECTION_MOBILE_SUBTITLE_KEYS[activeSection])}
             </p>
           </div>
@@ -3620,37 +3620,37 @@ export function CRMApp({
 
       {previewGateOpen ? (
         <div
-          className="fixed inset-0 z-[460] flex items-end justify-center bg-black/45 px-3 pb-[max(16px,calc(12px+env(safe-area-inset-bottom,0px)))] pt-10 backdrop-blur-sm sm:items-center sm:px-4 sm:pb-6"
+          className="fixed inset-0 z-[460] flex items-end justify-center bg-black/55 px-3 pb-[max(16px,calc(12px+env(safe-area-inset-bottom,0px)))] pt-10 backdrop-blur-md sm:items-center sm:px-4 sm:pb-6"
           role="dialog"
           aria-modal="true"
           aria-labelledby="crm-preview-gate-title"
         >
-          <div className="w-full max-w-md rounded-2xl border border-[#E5E7EB] bg-[#FFFFFF] p-6 shadow-[0_24px_64px_-24px_rgba(15,23,42,0.35)] max-[390px]:p-5">
+          <div className="w-full max-w-md rounded-2xl border border-white/[0.12] bg-[#07111f]/96 p-6 shadow-[0_32px_80px_-28px_rgba(0,0,0,0.65)] backdrop-blur-md max-[390px]:p-5">
             <h2
               id="crm-preview-gate-title"
-              className="text-[17px] font-semibold tracking-tight text-[#111827] sm:text-lg"
+              className="text-[17px] font-semibold tracking-tight text-slate-50 sm:text-lg"
             >
               {t("crm.previewGate.title")}
             </h2>
-            <p className="mt-3 text-[14px] leading-relaxed text-[#475569]">{t("crm.previewGate.body")}</p>
+            <p className="mt-3 text-[14px] leading-relaxed text-slate-400">{t("crm.previewGate.body")}</p>
             <div className="mt-6 flex flex-col gap-2.5">
               <Link
                 href="/join?returnTo=preview"
-                className="inline-flex min-h-[48px] w-full touch-manipulation items-center justify-center rounded-xl bg-[#111827] px-4 py-3 text-center text-[14px] font-semibold text-[#FFFFFF] transition hover:bg-[#1f2937]"
+                className="inline-flex min-h-[48px] w-full touch-manipulation items-center justify-center rounded-xl border border-sky-400/25 bg-gradient-to-b from-[#1e293b] to-[#0f172a] px-4 py-3 text-center text-[14px] font-semibold text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition hover:border-sky-400/40"
                 onClick={() => setPreviewGateOpen(false)}
               >
                 {t("crm.previewGate.join")}
               </Link>
               <Link
                 href="/register"
-                className="inline-flex min-h-[48px] w-full touch-manipulation items-center justify-center rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] px-4 py-3 text-center text-[14px] font-semibold text-[#374151] transition hover:bg-[#F3F4F6]"
+                className="sensora-dark-ghost-btn inline-flex min-h-[48px] w-full touch-manipulation items-center justify-center rounded-xl px-4 py-3 text-center text-[14px] font-semibold transition"
                 onClick={() => setPreviewGateOpen(false)}
               >
                 {t("crm.previewGate.register")}
               </Link>
               <button
                 type="button"
-                className="min-h-[48px] w-full touch-manipulation rounded-xl border border-transparent px-4 py-3 text-[14px] font-semibold text-[#64748B] underline underline-offset-4 hover:text-[#111827]"
+                className="min-h-[48px] w-full touch-manipulation rounded-xl border border-transparent px-4 py-3 text-[14px] font-semibold text-slate-400 underline underline-offset-4 hover:text-slate-200"
                 onClick={() => setPreviewGateOpen(false)}
               >
                 {t("crm.previewGate.continuePreview")}
@@ -3662,7 +3662,7 @@ export function CRMApp({
 
       {toast ? (
         <div className="pointer-events-none fixed bottom-4 left-1/2 z-[400] w-[min(520px,calc(100vw-24px))] -translate-x-1/2">
-          <div className="rounded-full border border-[#E5E7EB] bg-white/95 px-4 py-2 text-center text-xs font-semibold text-[#111827] shadow-lg backdrop-blur">
+          <div className="rounded-full border border-white/[0.12] bg-[#07111f]/92 px-4 py-2 text-center text-xs font-semibold text-slate-100 shadow-lg backdrop-blur-md">
             {toast}
           </div>
         </div>
