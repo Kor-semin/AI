@@ -69,6 +69,9 @@ export type TranslationKey =
   | "form.motivation"
   | "join.submit"
   | "join.submitting"
+  | "join.trustNoticeLine1"
+  | "join.trustNoticeLine2"
+  | "join.trustNoticeLine3"
   | "register.title"
   | "register.continueWithGoogle"
   | "crm.stat.todayFollowups"
@@ -354,8 +357,11 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "form.dealership": "소속 브랜드 / 전시장",
     "form.currentCrm": "현재 고객관리 방식",
     "form.motivation": "사용해 보고 싶은 이유",
-    "join.submit": "베타 신청 제출",
+    "join.submit": "베타 신청 제출하기",
     "join.submitting": "제출 중…",
+    "join.trustNoticeLine1": "입력하신 정보는 Sensora 베타 안내와 사용자 확인을 위해서만 사용됩니다.",
+    "join.trustNoticeLine2": "Sensora는 고객 연락처나 고객 정보를 자동으로 수집하지 않으며,",
+    "join.trustNoticeLine3": "사용자가 직접 확인하고 저장하는 구조를 기준으로 합니다.",
     "register.title": "영업 계정 등록",
     "register.continueWithGoogle": "Google로 시작하기",
     "crm.stat.todayFollowups": "오늘 연락",
@@ -664,8 +670,12 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "form.dealership": "Brand / Showroom",
     "form.currentCrm": "Current Customer Management Method",
     "form.motivation": "Why You Want to Try Sensora",
-    "join.submit": "Submit Beta Request",
+    "join.submit": "Submit beta signup",
     "join.submitting": "Submitting…",
+    "join.trustNoticeLine1":
+      "The information you enter is used only for Sensora beta communications and to confirm your request.",
+    "join.trustNoticeLine2": "Sensora does not automatically collect your customers’ contacts or customer records,",
+    "join.trustNoticeLine3": "and the product is built around you reviewing and saving data yourself.",
     "register.title": "Sales Account Registration",
     "register.continueWithGoogle": "Continue with Google",
     "crm.stat.todayFollowups": "Today’s Follow-ups",

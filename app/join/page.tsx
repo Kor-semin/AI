@@ -75,7 +75,7 @@ export default function BetaJoinPage() {
             {t("join.title")}
           </h1>
           <p className="mt-3 max-w-[42ch] text-sm leading-relaxed text-[color:var(--ink-2)]">
-            {t("join.intro")} (Sales Concierge AI)
+            {t("join.intro")}
           </p>
         </div>
 
@@ -163,11 +163,19 @@ export default function BetaJoinPage() {
             </div>
           </fieldset>
 
-          <div className="mt-8 flex flex-col gap-3 border-t border-[#d7dce2] pt-8">
+          <div className="mt-8 flex flex-col gap-4 border-t border-[#d7dce2] pt-8">
+            <div
+              className="rounded-xl border border-[#e2e8f0] bg-[#f8fafc] px-4 py-3 text-left text-[12px] leading-[1.65] text-[#475569]"
+              role="note"
+            >
+              <p className="font-medium text-[#334155]">{t("join.trustNoticeLine1")}</p>
+              <p className="mt-2">{t("join.trustNoticeLine2")}</p>
+              <p className="mt-1">{t("join.trustNoticeLine3")}</p>
+            </div>
             <button
               type="submit"
               disabled={pending}
-              className="crm-ink-btn w-full rounded-xl py-3.5 text-[13px] font-semibold disabled:cursor-not-allowed disabled:opacity-55"
+              className="crm-ink-btn w-full min-h-[48px] rounded-xl py-3.5 text-[13px] font-semibold disabled:cursor-not-allowed disabled:opacity-55 touch-manipulation"
             >
               {pending ? t("join.submitting") : t("join.submit")}
             </button>
