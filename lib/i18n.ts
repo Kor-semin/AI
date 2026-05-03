@@ -78,6 +78,8 @@ export type TranslationKey =
   | "crm.stat.dealProbability"
   | "crm.stat.followupNeeded"
   | "crm.stat.recentConsultations"
+  | "crm.demoContextNotice.primary"
+  | "crm.demoContextNotice.secondary"
   | "crm.addCustomer"
   | "crm.nextAction"
   | "crm.aiRecommendation"
@@ -368,6 +370,10 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.stat.dealProbability": "계약 가능성",
     "crm.stat.followupNeeded": "예정된 할 일",
     "crm.stat.recentConsultations": "최근 상담",
+    "crm.demoContextNotice.primary":
+      "이 화면은 자동차 영업사원이 상담 메모, 관심 차량, 다음 연락, 사후관리를 한 곳에서 정리하는 예시 화면입니다.",
+    "crm.demoContextNotice.secondary":
+      "AI는 상담 내용을 정리하고 검토용 초안을 제안하지만, 최종 확인과 저장은 사용자가 직접 합니다.",
     "crm.addCustomer": "고객 추가",
     "crm.nextAction": "다음 액션",
     "crm.aiRecommendation": "AI 추천 메시지",
@@ -682,6 +688,10 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.stat.dealProbability": "Deal Probability",
     "crm.stat.followupNeeded": "Follow-up Needed",
     "crm.stat.recentConsultations": "Recent Consultations",
+    "crm.demoContextNotice.primary":
+      "This is a sample CRM layout for automotive sales reps—consultation notes, interested vehicles, follow-ups, and aftercare in one place.",
+    "crm.demoContextNotice.secondary":
+      "AI summarizes memos and suggests drafts for review; you decide what to confirm and save.",
     "crm.addCustomer": "Add Customer",
     "crm.nextAction": "Next Action",
     "crm.aiRecommendation": "AI Recommendation",

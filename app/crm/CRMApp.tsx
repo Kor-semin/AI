@@ -1449,6 +1449,16 @@ export function CRMApp({
     <>
       <div id="crm-main" className="w-full min-w-0 pb-8 lg:pb-10">
         <div className="mx-auto flex w-full max-w-[1580px] flex-col gap-6 px-2 sm:px-4 xl:px-0">
+          {!uid ? (
+            <div
+              className="rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-4 py-3 text-left text-[13px] leading-[1.6] text-[#475569] max-[390px]:px-3.5"
+              role="status"
+              aria-live="polite"
+            >
+              <p className="font-medium text-[#334155]">{t("crm.demoContextNotice.primary")}</p>
+              <p className="mt-2 text-[13px] leading-relaxed">{t("crm.demoContextNotice.secondary")}</p>
+            </div>
+          ) : null}
           <header className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between lg:gap-6">
             <div className="min-w-0">
               <h1 className="text-[clamp(22px,2.8vw,30px)] font-semibold leading-tight tracking-tight text-[#111827]">
