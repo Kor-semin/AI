@@ -10,9 +10,6 @@ type Props = {
   onSelect: () => void;
 };
 
-const glassInteractive =
-  "sensora-glass-surface rounded-2xl text-left ring-1 transition-[border-color,box-shadow,transform] duration-200 hover:border-sky-400/32 hover:shadow-[0_0_32px_-12px_rgba(56,189,248,0.18)] motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/38";
-
 export function SensoraGuideCard({ title, description, image, selected, onSelect }: Props) {
   return (
     <button
@@ -20,18 +17,43 @@ export function SensoraGuideCard({ title, description, image, selected, onSelect
       onClick={onSelect}
       aria-pressed={selected}
       className={[
-        glassInteractive,
-        "flex w-[min(11.5rem,72vw)] shrink-0 snap-start touch-manipulation flex-col overflow-hidden pb-3.5 pt-0",
-        selected ? "sensora-glass-surface--cta ring-sky-400/45" : "ring-white/[0.07]",
+        "sensora-guide-pick-card group flex w-full touch-manipulation flex-col overflow-hidden rounded-[18px] text-left",
+        "border border-white/[0.1] bg-gradient-to-br from-slate-950/88 via-[#070f1c]/76 to-slate-950/45",
+        "shadow-[inset_0_1px_0_rgba(255,255,255,0.065),0_12px_36px_-22px_rgba(0,0,0,0.55)] backdrop-blur-xl",
+        "ring-1 ring-inset ring-white/[0.05]",
+        "transition-[transform,border-color,box-shadow,background] duration-[220ms] ease-out",
+        "hover:-translate-y-0.5 hover:border-sky-400/28 hover:shadow-[0_20px_46px_-18px_rgba(0,0,0,0.5),0_0_40px_-14px_rgba(56,189,248,0.14)]",
+        "motion-reduce:transition-none motion-reduce:hover:translate-y-0",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/45",
+        selected ?
+          "sensora-guide-pick-card--active border-sky-400/38 ring-2 ring-sky-400/28 shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_0_48px_-16px_rgba(56,189,248,0.2),0_0_64px_-28px_rgba(139,92,246,0.1)]"
+        : "active:scale-[0.992]",
       ].join(" ")}
     >
-      <div className="relative aspect-[16/11] w-full overflow-hidden rounded-t-xl border-b border-white/[0.08] bg-[#030712]/90">
-        <Image src={image} alt="" fill className="object-cover object-center opacity-[0.94]" sizes="184px" />
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#020617]/90 via-transparent to-transparent" aria-hidden />
+      <div className="relative aspect-[16/10] w-full overflow-hidden border-b border-white/[0.07] bg-[#030712]/95 sm:aspect-[16/11]">
+        <Image
+          src={image}
+          alt=""
+          fill
+          className="object-cover object-center opacity-[0.94] transition duration-300 group-hover:opacity-[0.99]"
+          sizes="(max-width:640px) 92vw, (max-width:1024px) 44vw, 360px"
+        />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#020617]/92 via-[#020617]/25 to-transparent" aria-hidden />
+        <div
+          className={[
+            "pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100",
+            selected ? "opacity-100" : "",
+          ].join(" ")}
+          aria-hidden
+          style={{
+            background:
+              "linear-gradient(135deg, rgba(56,189,248,0.12) 0%, transparent 42%, rgba(139,92,246,0.07) 100%)",
+          }}
+        />
       </div>
-      <div className="min-h-0 flex-1 px-3 pt-2.5">
-        <p className="text-[0.8125rem] font-semibold leading-snug text-slate-50 sm:text-sm">{title}</p>
-        <p className="mt-1.5 line-clamp-3 text-[11px] leading-relaxed text-slate-400 sm:text-xs">{description}</p>
+      <div className="flex min-h-0 flex-1 flex-col px-3 pb-3.5 pt-3 sm:px-[0.95rem] sm:pb-4 sm:pt-3.5">
+        <p className="text-[0.8125rem] font-semibold leading-snug tracking-tight text-slate-50 sm:text-sm">{title}</p>
+        <p className="mt-1.5 line-clamp-[4] text-[11px] leading-relaxed text-slate-400 sm:line-clamp-3 sm:text-[12px]">{description}</p>
       </div>
     </button>
   );
