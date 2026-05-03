@@ -386,6 +386,21 @@ export type TranslationKey =
   | "preview.flow.footer.prev"
   | "preview.flow.footer.next"
   | "preview.flow.storyRailTitle"
+  | "preview.guide.pageTitle"
+  | "preview.guide.headerKicker"
+  | "preview.guide.headerSub"
+  | "preview.guide.tapMainToExpand"
+  | "preview.guide.viewerTitle"
+  | "guide.sensora-guide-01.title"
+  | "guide.sensora-guide-01.desc"
+  | "guide.sensora-guide-02.title"
+  | "guide.sensora-guide-02.desc"
+  | "guide.sensora-guide-03.title"
+  | "guide.sensora-guide-03.desc"
+  | "guide.sensora-guide-04.title"
+  | "guide.sensora-guide-04.desc"
+  | "guide.sensora-guide-05.title"
+  | "guide.sensora-guide-05.desc"
   | "preview.diagram.caption.security"
   | "preview.diagram.caption.workspace"
   | "preview.diagram.caption.hub"
@@ -927,6 +942,22 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "preview.flow.footer.prev": "이전",
     "preview.flow.footer.next": "다음",
     "preview.flow.storyRailTitle": "예시 속 흐름",
+    "preview.guide.pageTitle": "기능 안내",
+    "preview.guide.headerKicker": "앱 미리보기",
+    "preview.guide.headerSub": "아래 카드로 안내 이미지를 바꿀 수 있습니다. 큰 이미지를 누르면 자세히 볼 수 있습니다.",
+    "preview.guide.tapMainToExpand": "탭하여 크게 보기",
+    "preview.guide.viewerTitle": "가이드 이미지",
+    "guide.sensora-guide-01.title": "실제 사용 흐름",
+    "guide.sensora-guide-01.desc": "상담 기록부터 고객 요약, 메시지, 일정까지 한 흐름으로 이어집니다.",
+    "guide.sensora-guide-02.title": "저장과 검토 원칙",
+    "guide.sensora-guide-02.desc":
+      "고객 정보는 사용자가 확인한 뒤 저장합니다. 초안만 덧씌우지 않으며, 바로 저장되지 않는 흐름을 지향합니다.",
+    "guide.sensora-guide-03.title": "이용 시작 방법",
+    "guide.sensora-guide-03.desc": "베타 신청부터 승인·계정 등록 후 업무 화면까지 진행되는 단계 안내입니다.",
+    "guide.sensora-guide-04.title": "Sensora 전체 구조",
+    "guide.sensora-guide-04.desc": "고객관리, AI 비서, 일정, 사후관리를 한 업무 표면에서 묶어둔 구조 소개입니다.",
+    "guide.sensora-guide-05.title": "Sensora 비주얼 레퍼런스",
+    "guide.sensora-guide-05.desc": "Sensora의 미래형 UI 분위기를 보여주는 보조 이미지입니다.",
     "preview.diagram.caption.security": "불러온 연락처는 미리보기·검토 후 저장됩니다.",
     "preview.diagram.caption.workspace": "베타·영업 계정 흐름을 거친 뒤 동일 계정으로 업무 화면이 열립니다.",
     "preview.diagram.caption.hub": "고객·상담·일정·문자를 한 화면 구조로 오갑니다.",
@@ -1484,6 +1515,21 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "preview.flow.footer.prev": "Back",
     "preview.flow.footer.next": "Next",
     "preview.flow.storyRailTitle": "How it connects",
+    "preview.guide.pageTitle": "Feature guide",
+    "preview.guide.headerKicker": "App preview",
+    "preview.guide.headerSub": "Use the cards to switch guide images. Tap the large image to zoom in.",
+    "preview.guide.tapMainToExpand": "Tap to view full screen",
+    "preview.guide.viewerTitle": "Guide images",
+    "guide.sensora-guide-01.title": "End-to-end workspace flow",
+    "guide.sensora-guide-01.desc": "Consultation notes carry into customer summaries, messages, and schedule cues.",
+    "guide.sensora-guide-02.title": "Save and review discipline",
+    "guide.sensora-guide-02.desc": "Customer records are saved after deliberate review—no silent overwrites.",
+    "guide.sensora-guide-03.title": "How to get started",
+    "guide.sensora-guide-03.desc": "From beta request and approval to account setup and your workspace.",
+    "guide.sensora-guide-04.title": "Sensora map",
+    "guide.sensora-guide-04.desc": "Customers, assistant, schedule, and follow-up on one calm surface.",
+    "guide.sensora-guide-05.title": "Visual reference",
+    "guide.sensora-guide-05.desc": "A supporting render of the futuristic, quiet UI direction.",
     "preview.diagram.caption.security": "Imports stay preview-first: review before anything is committed.",
     "preview.diagram.caption.workspace": "After signup paths clear, you return with the same account.",
     "preview.diagram.caption.hub": "Customers, consultation, schedules, and messages share one calm spine.",
