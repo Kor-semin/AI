@@ -432,7 +432,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "join.alert.betaReceivedRemote": "베타 신청이 접수되었습니다.",
     "join.alert.betaNotPersisted":
       "테스트 제출이 완료되었습니다.\n현재는 저장 기능이 연결되지 않은 상태입니다.",
-    "join.alert.betaSaveFailed": "신청 저장에 실패했습니다. 잠시 후 다시 시도해주세요.",
+    "join.alert.betaSaveFailed": "제출 중 문제가 발생했습니다. 잠시 후 다시 시도해 주세요.",
     "join.devBetaEndpointHint":
       "개발 전용: 베타 폼을 시트·웹훅으로 보내려면 NEXT_PUBLIC_BETA_SIGNUP_ENDPOINT(예: Google Apps Script URL)를 설정하세요. 비어 있으면 원격 저장 없이 제출만 확인할 수 있습니다.",
     "register.title": "영업 계정 등록",
@@ -829,7 +829,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "join.alert.betaReceivedRemote": "Thanks — your beta signup was received.",
     "join.alert.betaNotPersisted":
       "Your test submission is complete.\nSaving to our systems isn’t connected yet.",
-    "join.alert.betaSaveFailed": "We couldn’t save your signup. Please try again shortly.",
+    "join.alert.betaSaveFailed": "Something went wrong while submitting. Please try again in a moment.",
     "join.devBetaEndpointHint":
       "Dev only: set NEXT_PUBLIC_BETA_SIGNUP_ENDPOINT (e.g. a Google Apps Script web app URL) to POST submissions to a sheet/webhook. If unset, submit actions are not sent remotely.",
     "register.title": "Sales Account Registration",
