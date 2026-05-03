@@ -64,17 +64,17 @@ const onboardCloseBtn =
 
 /** 주 CTA — 워크스페이스 primary와 같은 프리미엄 그라데이션 */
 const onboardPrimaryBtn =
-  "sensora-premium-primary-workspace inline-flex min-h-[50px] w-full max-w-[min(300px,90vw)] touch-manipulation items-center justify-center self-center rounded-2xl px-7 text-[14px] font-semibold leading-none motion-reduce:transition-none disabled:cursor-not-allowed disabled:opacity-40";
+  "sensora-premium-primary-workspace inline-flex min-h-[52px] w-full max-w-[min(360px,min(94vw,calc(100vw-32px)))] touch-manipulation items-center justify-center self-center rounded-2xl px-6 py-3.5 text-[15px] font-semibold leading-tight shadow-[inset_0_1px_0_rgba(255,255,255,0.09)] motion-reduce:transition-none disabled:cursor-not-allowed disabled:opacity-40 sm:max-w-[min(320px,90vw)] sm:px-7";
 
 /** 보조 — 글래스 고스트 */
 const onboardGhostBtn =
-  "inline-flex min-h-[46px] w-full max-w-[min(300px,90vw)] touch-manipulation items-center justify-center self-center rounded-2xl border border-white/[0.22] bg-white/[0.07] px-7 text-[13px] font-semibold leading-none text-[#EEF2FF] shadow-[inset_0_1px_0_rgba(255,255,255,0.07)] backdrop-blur-sm transition-[background,border-color,transform,box-shadow] duration-[220ms] motion-reduce:transition-none hover:border-sky-300/38 hover:bg-white/[0.12] hover:shadow-[0_0_32px_-10px_rgba(56,189,248,0.12)] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/40 disabled:cursor-not-allowed disabled:opacity-35";
+  "inline-flex min-h-[50px] w-full max-w-[min(360px,min(94vw,calc(100vw-32px)))] touch-manipulation items-center justify-center self-center rounded-2xl border border-white/[0.24] bg-white/[0.08] px-6 py-3.5 text-[14px] font-semibold leading-tight text-slate-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.07)] backdrop-blur-sm transition-[background,border-color,transform,box-shadow] duration-[220ms] motion-reduce:transition-none hover:border-sky-300/42 hover:bg-white/[0.13] hover:shadow-[0_0_36px_-10px_rgba(56,189,248,0.12)] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/40 disabled:cursor-not-allowed disabled:opacity-35 sm:max-w-[min(320px,90vw)]";
 
 const onboardNavMutedBtn =
-  "inline-flex min-h-[46px] min-w-[5.25rem] flex-1 touch-manipulation items-center justify-center rounded-2xl border border-white/[0.2] px-4 text-[13px] font-semibold leading-none text-[#CBD5E1] transition-[background,color,border-color,transform] duration-[220ms] motion-reduce:transition-none hover:border-white/[0.28] hover:bg-white/[0.08] hover:text-[#F1F5F9] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 disabled:cursor-not-allowed disabled:opacity-[0.38] motion-reduce:hover:bg-transparent";
+  "sensora-dark-ghost-btn inline-flex min-h-[52px] min-w-0 flex-1 touch-manipulation items-center justify-center rounded-2xl px-5 py-3.5 text-[14px] font-semibold leading-tight text-slate-200 transition-[border-color,background,color,transform] duration-[220ms] motion-reduce:transition-none active:scale-[0.99] focus-visible:ring-2 focus-visible:ring-sky-400/35 disabled:cursor-not-allowed disabled:opacity-[0.38] sm:min-w-[6rem]";
 
 const onboardNavPrimaryBtn =
-  "inline-flex min-h-[46px] min-w-[5.25rem] flex-1 touch-manipulation items-center justify-center rounded-2xl border border-sky-400/35 bg-white/[0.14] px-4 text-[13px] font-semibold leading-none text-[#F8FAFC] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition-[background,border-color,transform,box-shadow] duration-[220ms] motion-reduce:transition-none hover:border-sky-400/48 hover:bg-white/[0.22] hover:shadow-[0_0_28px_-8px_rgba(56,189,248,0.15)] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/45 motion-reduce:hover:bg-white/[0.14]";
+  "inline-flex min-h-[52px] min-w-0 flex-1 touch-manipulation items-center justify-center rounded-2xl border border-sky-400/42 bg-white/[0.12] px-5 py-3.5 text-[14px] font-semibold leading-tight text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] transition-[background,border-color,transform,box-shadow] duration-[220ms] motion-reduce:transition-none hover:border-sky-400/52 hover:bg-white/[0.18] hover:shadow-[0_0_34px_-8px_rgba(56,189,248,0.18)] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/45 motion-reduce:hover:bg-white/[0.12] sm:min-w-[6rem]";
 
 /** 전체 화면 표지 — 3페이지 온보딩 (Sense + Aura, 실버·그레이 톤) */
 export function NotebookCover() {
@@ -222,7 +222,7 @@ export function NotebookCover() {
         aria-labelledby="notebook-cover-panel-heading"
         tabIndex={-1}
         className={[
-          "notebook-cover-cover-layer notebook-cover-biz-micro notebook-cover-reveal notebook-cover-editorial-shell relative z-10 mx-auto flex min-h-[100dvh] min-h-[100svh] w-full max-w-[min(720px,calc(100vw-48px))] flex-col overflow-y-auto overscroll-contain pl-[max(22px,calc(env(safe-area-inset-left,0px)+1.25rem))] pr-[max(22px,calc(env(safe-area-inset-right,0px)+1.25rem))] pb-[max(1rem,calc(0.75rem+env(safe-area-inset-bottom,0px)))] pt-[max(12px,calc(env(safe-area-inset-top,0px)+0.75rem))] text-center",
+          "notebook-cover-cover-layer notebook-cover-biz-micro notebook-cover-reveal notebook-cover-editorial-shell relative z-10 mx-auto flex min-h-[100dvh] min-h-[100svh] w-full max-w-[min(780px,calc(100vw-28px))] flex-col overflow-y-auto overscroll-contain pl-[max(18px,calc(env(safe-area-inset-left,0px)+1rem))] pr-[max(18px,calc(env(safe-area-inset-right,0px)+1rem))] pb-[max(0.875rem,calc(0.5rem+env(safe-area-inset-bottom,0px)))] pt-[max(10px,calc(env(safe-area-inset-top,0px)+0.5rem))] text-center",
           "max-[480px]:[scrollbar-width:none] max-[480px]:[-ms-overflow-style:none] max-[480px]:[&::-webkit-scrollbar]:hidden",
         ].join(" ")}
         onClick={(e) => e.stopPropagation()}
@@ -238,27 +238,27 @@ export function NotebookCover() {
           className={[
             "notebook-cover-inner-stage flex flex-1 flex-col px-1 sm:px-5",
             pageIdx === 0 ?
-              "justify-center py-8 max-[480px]:py-5 sm:py-10"
+              "justify-center py-7 max-[480px]:py-4 sm:py-10"
             : pageIdx === 1 ?
-              "min-h-0 justify-center py-5 max-[480px]:py-2 max-[480px]:pb-1 sm:py-10"
-            : `justify-center py-8 max-[480px]:py-5 max-[480px]:pb-3 sm:py-10 max-lg:justify-start max-lg:pt-6`,
+              "min-h-0 justify-center py-6 max-[480px]:py-3 max-[480px]:pb-2 sm:py-10"
+            : `justify-center py-7 max-[480px]:py-4 max-[480px]:pb-3 sm:py-10 max-lg:justify-start max-lg:pt-5`,
           ].join(" ")}
           key={pageIdx}
           data-notebook-cover-tone={coverTheme}
         >
-          <div className="notebook-cover-inner-stack mx-auto flex w-full max-w-[min(460px,94vw)] flex-col items-center gap-0">
+          <div className="notebook-cover-inner-stack mx-auto flex w-full max-w-[min(548px,min(96vw,calc(100vw-28px)))] flex-col items-center gap-0">
             <div
               className={[
                 "notebook-cover-logo-wrap pointer-events-none flex shrink-0 justify-center",
-                pageIdx === 0 ? "mb-7 max-[480px]:mb-5 sm:mb-9"
-                : pageIdx === 1 ? "mb-3 max-[480px]:mb-1.5 sm:mb-9"
-                : "mb-7 max-[480px]:mb-4 sm:mb-9",
+                pageIdx === 0 ? "mb-6 max-[480px]:mb-4 sm:mb-8"
+                : pageIdx === 1 ? "mb-2.5 max-[480px]:mb-2 sm:mb-8"
+                : "mb-6 max-[480px]:mb-3 sm:mb-8",
               ].join(" ")}
             >
               <SensoraAnimatedMark
-                size={pageIdx === 0 ? 104 : pageIdx === 1 ? 68 : 76}
+                size={pageIdx === 0 ? 112 : pageIdx === 1 ? 76 : 84}
                 animated={pageIdx === 0}
-                className={pageIdx === 0 ? "max-[380px]:scale-[0.98] motion-reduce:opacity-[0.96]" : ""}
+                className={pageIdx === 0 ? "max-[380px]:scale-[1.02] motion-reduce:opacity-[0.96]" : "max-[480px]:scale-[1.02]"}
                 label={pageIdx === 0 ? t("product.name") : undefined}
               />
             </div>
@@ -268,10 +268,12 @@ export function NotebookCover() {
             <h1
               id="notebook-cover-panel-heading"
               className={[
-                "max-w-[22ch] text-balance text-[clamp(1.32rem,4.35vw,1.82rem)] font-semibold leading-[1.22] tracking-[-0.03em] text-[#F8FAFC]",
-                pageIdx === 0 ? "mt-4 max-[480px]:mt-3 sm:mt-5"
-                : pageIdx === 1 ? "mt-2 max-[480px]:mt-1 sm:mt-5"
-                : "mt-4 max-[480px]:mt-3 sm:mt-5",
+                "max-w-[26ch] text-balance font-semibold leading-[1.2] tracking-[-0.03em] text-[#F8FAFC]",
+                pageIdx === 0 ?
+                  "mt-3 text-[clamp(1.42rem,4.9vw,1.92rem)] max-[480px]:mt-2.5 sm:mt-5"
+                : pageIdx === 1 ?
+                  "mt-1.5 text-[clamp(1.38rem,4.65vw,1.85rem)] max-[480px]:mt-1 sm:mt-5"
+                : "mt-3 text-[clamp(1.4rem,4.75vw,1.88rem)] max-[480px]:mt-2 sm:mt-5",
               ].join(" ")}
             >
               {heading}
@@ -280,19 +282,19 @@ export function NotebookCover() {
             <div
               className={[
                 "notebook-cover-body-block w-full shrink-0 text-left",
-                pageIdx === 0 ? "mt-7 max-[480px]:mt-5 sm:mt-8"
-                : pageIdx === 1 ? "mt-4 max-[480px]:mt-2 sm:mt-8"
-                : "mt-7 max-[480px]:mt-5 sm:mt-8",
+                pageIdx === 0 ? "mt-6 max-[480px]:mt-4 sm:mt-8"
+                : pageIdx === 1 ? "mt-3 max-[480px]:mt-2.5 sm:mt-8"
+                : "mt-6 max-[480px]:mt-4 sm:mt-8",
               ].join(" ")}
             >
               {pageIdx === 0 ? (
-                <div className="mx-auto flex w-full max-w-[280px] flex-col items-center">
-                  <div className="w-full space-y-3 text-center text-[13px] leading-relaxed text-[#CBD5E1] max-[480px]:space-y-2 sm:text-[14px]">
+                <div className="mx-auto flex w-full max-w-[min(360px,92vw)] flex-col items-center max-[389px]:max-w-[calc(100vw-32px)]">
+                  <div className="w-full space-y-2.5 text-center text-[14px] leading-relaxed text-slate-300 max-[480px]:space-y-2 max-[480px]:text-[13.5px] sm:text-[15px] sm:leading-[1.6]">
                     {splitLines(t("cover.onboarding.page1.description")).map((line) => (
                       <p key={line}>{line}</p>
                     ))}
                   </div>
-                  <div className="mt-7 flex w-full max-[480px]:mt-5 flex-col items-center gap-3 max-[480px]:gap-2.5">
+                  <div className="mt-6 flex w-full max-[480px]:mt-5 flex-col items-center gap-2.5 max-[480px]:gap-2">
                     <button
                       type="button"
                       className={onboardPrimaryBtn}
@@ -311,18 +313,18 @@ export function NotebookCover() {
               ) : null}
 
               {pageIdx === 1 ? (
-                <div className="mx-auto w-full max-w-[min(26rem,94vw)]">
-                  <ul className="grid gap-2 max-[480px]:gap-1.5 sm:gap-3">
+                <div className="mx-auto w-full max-w-[min(32rem,min(96vw,calc(100vw-28px)))]">
+                  <ul className="grid gap-2.5 max-[480px]:gap-2 sm:gap-3.5">
                     {tocKeys.map((key) => {
                       const { title, line } = tocCard(t(key));
                       return (
                         <li
                           key={key}
-                          className="notebook-cover-toc-pane rounded-[14px] border border-white/12 bg-black/[0.08] px-3 py-2 backdrop-blur-sm max-[480px]:rounded-xl max-[480px]:py-1.5 sm:rounded-[18px] sm:px-5 sm:py-3.5"
+                          className="notebook-cover-toc-pane min-h-[4.75rem] rounded-2xl border border-white/14 bg-black/[0.12] px-4 py-3.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-sm max-[480px]:min-h-[4.35rem] max-[480px]:rounded-[15px] max-[480px]:px-3.5 max-[480px]:py-3 active:scale-[0.997] motion-reduce:active:scale-100 sm:rounded-[18px] sm:px-5 sm:py-4"
                         >
-                          <p className="text-[13px] font-semibold leading-tight text-[#F8FAFC]">{title}</p>
+                          <p className="text-[14px] font-semibold leading-snug text-[#F8FAFC] sm:text-[15px]">{title}</p>
                           {line ?
-                            <p className="mt-0.5 text-[12px] leading-snug text-[#B4C4D6] max-[480px]:text-[11.5px] sm:mt-1">
+                            <p className="mt-1 text-[12.5px] leading-snug text-slate-400 max-[480px]:text-[12px] sm:mt-1.5 sm:text-[13px]">
                               {line}
                             </p>
                           : null}
@@ -334,17 +336,17 @@ export function NotebookCover() {
               ) : null}
 
               {pageIdx === 2 ? (
-                <div className="mx-auto flex w-full max-w-[min(26rem,94vw)] flex-col items-center gap-5 max-[480px]:gap-4 sm:gap-6">
-                  <div className="w-full space-y-3 text-center text-[13px] leading-relaxed text-[#CBD5E1] max-[480px]:space-y-2 sm:text-[14px]">
+                <div className="mx-auto flex w-full max-w-[min(32rem,min(96vw,calc(100vw-28px)))] flex-col items-center gap-4 max-[480px]:gap-3 sm:gap-6">
+                  <div className="w-full space-y-2.5 text-center text-[14px] leading-relaxed text-slate-300 max-[480px]:space-y-2 max-[480px]:text-[13.5px] sm:text-[15px] sm:leading-[1.6]">
                     {splitLines(t("cover.onboarding.page3.description")).map((line) => (
                       <p key={line}>{line}</p>
                     ))}
                   </div>
-                  <details className="notebook-cover-theme-panel w-full rounded-[16px] border border-white/12 bg-black/[0.08] px-4 py-3.5 text-left shadow-[0_8px_28px_rgba(0,0,0,0.2)] backdrop-blur-sm max-[480px]:px-3 max-[480px]:py-2.5 [&_summary::-webkit-details-marker]:hidden">
-                    <summary className="cursor-pointer list-none text-center text-[12px] font-semibold tracking-[0.08em] text-[#E2E8F0] hover:text-[#F8FAFC] motion-reduce:transition-none">
+                  <details className="notebook-cover-theme-panel w-full rounded-[17px] border border-white/[0.14] bg-black/[0.12] px-4 py-4 text-left shadow-[0_12px_32px_-8px_rgba(0,0,0,0.38)] backdrop-blur-sm max-[480px]:px-3.5 max-[480px]:py-3 [&_summary::-webkit-details-marker]:hidden">
+                    <summary className="cursor-pointer list-none py-0.5 text-center text-[12.5px] font-semibold tracking-[0.08em] text-slate-200 hover:text-[#F8FAFC] motion-reduce:transition-none sm:text-[13px]">
                       {t("cover.onboarding.themeLabel")}
                     </summary>
-                    <p className="mt-3 text-center text-[11px] leading-relaxed text-[#94A3B8]">
+                    <p className="mt-2 text-center text-[12px] leading-relaxed text-slate-400 max-[480px]:text-[11.5px]">
                       {t("cover.onboarding.themeHint")}
                     </p>
                     <div
@@ -377,7 +379,7 @@ export function NotebookCover() {
                     </div>
                   </details>
 
-                  <div className="flex w-full max-w-[280px] flex-col items-center gap-3">
+                  <div className="flex w-full max-w-[min(360px,92vw)] flex-col items-center gap-2.5 max-[389px]:max-w-[calc(100vw-32px)]">
                     <button type="button" className={onboardPrimaryBtn} onClick={() => dismissAndNavigate(WORKSPACE_PATH)}>
                       {t("cover.onboarding.page3.workspaceCta")}
                     </button>
@@ -393,12 +395,12 @@ export function NotebookCover() {
 
         <footer
           className={[
-            "mx-auto flex w-full max-w-[420px] shrink-0 flex-col px-1 pb-[max(0.5rem,env(safe-area-inset-bottom,0px))] pt-4",
-            "mt-6 gap-5 sm:mt-8 sm:gap-6",
-            "max-[480px]:mt-3 max-[480px]:gap-3 max-[480px]:pt-2 max-[480px]:pb-[max(0.25rem,env(safe-area-inset-bottom,0px))]",
+            "mx-auto flex w-full max-w-[min(440px,min(94vw,calc(100vw-28px)))] shrink-0 flex-col px-0.5 pb-[max(0.5rem,env(safe-area-inset-bottom,0px))] pt-3",
+            "mt-5 gap-4 sm:mt-8 sm:gap-6",
+            "max-[480px]:mt-4 max-[480px]:gap-3 max-[480px]:pt-2 max-[480px]:pb-[max(0.35rem,env(safe-area-inset-bottom,0px))]",
           ].join(" ")}
         >
-          <nav className="flex justify-center gap-2 motion-reduce:gap-2" aria-label="온보딩 단계">
+          <nav className="flex justify-center gap-2.5 px-1 motion-reduce:gap-2" aria-label="온보딩 단계">
             {Array.from({ length: LAST_PAGE + 1 }, (_, i) => (
               <button
                 key={i}
@@ -406,15 +408,15 @@ export function NotebookCover() {
                 aria-current={pageIdx === i ? "step" : undefined}
                 aria-label={`${i + 1} / ${LAST_PAGE + 1}`}
                 className={[
-                  "h-2 min-w-[2.25rem] max-w-[2.75rem] rounded-full border border-white/14 transition-[opacity,transform] motion-reduce:transition-none",
-                  pageIdx === i ? "scale-100 bg-white/80 opacity-100" : "bg-white/20 opacity-50 hover:opacity-75 motion-reduce:transform-none",
+                  "min-h-[12px] h-2.5 min-w-[2.65rem] max-w-[3rem] touch-manipulation rounded-full border border-white/22 transition-[opacity,transform,background-color] motion-reduce:transition-none motion-reduce:transform-none active:opacity-95",
+                  pageIdx === i ? "scale-100 bg-slate-100/92 opacity-100" : "bg-white/20 opacity-50 hover:bg-white/30 hover:opacity-80 motion-reduce:transform-none",
                 ].join(" ")}
                 onClick={() => setPageIdx(i)}
               />
             ))}
           </nav>
 
-          <div className="flex flex-row gap-3">
+          <div className="flex flex-row gap-2.5 px-0.5 sm:gap-3">
             <button
               type="button"
               className={onboardNavMutedBtn}
