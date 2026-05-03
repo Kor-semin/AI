@@ -174,12 +174,12 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
             <>
               <div className="flex min-w-0 flex-1 flex-col gap-4 sm:flex-row sm:items-center sm:gap-6 xl:gap-8">
                 <div className="flex min-w-0 items-start gap-3 sm:items-center">
-                  <SensoraAnimatedMark size={40} animated={false} className="pointer-events-none hidden shrink-0 sm:block" aria-hidden />
+                  <SensoraAnimatedMark size={44} animated={false} className="pointer-events-none hidden shrink-0 sm:block drop-shadow-[0_0_24px_-4px_rgba(56,189,248,0.35)]" aria-hidden />
                   <div className="min-w-0">
-                    <div className="text-balance text-[17px] font-semibold leading-tight tracking-[-0.022em] text-slate-50 sm:text-[1.125rem] lg:text-xl">
+                    <div className="text-balance text-[17px] font-semibold leading-tight tracking-[-0.024em] text-white sm:text-[1.15rem] lg:text-[1.25rem]">
                       {t("product.name")}
                     </div>
-                    <p className="mt-1 text-[12px] font-medium leading-snug text-slate-400 sm:text-[13px]">
+                    <p className="mt-1 text-[12px] font-medium leading-snug text-slate-300 sm:text-[13px]">
                       {t("landing.showroom.header.subline")}
                     </p>
                   </div>
@@ -218,12 +218,12 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                     type="button"
                     onClick={openAppWorkspace}
                     className={[
-                      "landing-nav-cta-preview relative z-[20] inline-flex min-h-[52px] w-full shrink-0 cursor-pointer items-center justify-center gap-2 rounded-2xl",
-                      "border border-white/22 bg-white/[0.07] px-5 py-3 text-center text-[14px] font-semibold text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] ring-1 ring-inset ring-white/[0.08]",
+                      "landing-nav-cta-preview relative z-[20] inline-flex min-h-[56px] w-full shrink-0 cursor-pointer items-center justify-center gap-2 rounded-2xl",
+                      "border border-white/30 bg-white/[0.092] px-5 py-3.5 text-center text-[14px] font-semibold text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_0_0_1px_rgba(56,189,248,0.06)_inset,0_0_40px_-10px_rgba(56,189,248,0.16)] ring-1 ring-inset ring-sky-400/14",
                       "backdrop-blur-md transition duration-[220ms] ease-out",
-                      "hover:border-sky-300/38 hover:bg-white/[0.11]",
+                      "hover:border-sky-300/42 hover:bg-white/[0.12]",
                       "active:scale-[0.99] focus-visible:outline-none",
-                      "touch-manipulation min-[420px]:min-w-[12.5rem] min-[420px]:flex-1 min-[420px]:w-auto xl:min-w-[11.5rem] xl:flex-none",
+                      "touch-manipulation min-[420px]:min-w-[12.5rem] min-[420px]:flex-1 min-[420px]:w-auto xl:min-w-[11.75rem] xl:flex-none",
                     ].join(" ")}
                   >
                     <svg className="size-[1.1rem] shrink-0 opacity-90" viewBox="0 0 20 20" fill="none" aria-hidden>
@@ -239,8 +239,8 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                     href="/join"
                     prefetch={false}
                     className={[
-                      "landing-nav-cta-join sensora-premium-primary-workspace relative z-[20] inline-flex min-h-[52px] w-full items-center justify-center rounded-2xl px-6 py-3 text-center text-[14px] font-semibold tracking-tight text-slate-50",
-                      "touch-manipulation min-[420px]:min-w-[12.5rem] min-[420px]:flex-1 min-[420px]:w-auto xl:min-w-[11.5rem] xl:flex-none",
+                      "landing-nav-cta-join sensora-premium-primary-workspace relative z-[20] inline-flex min-h-[56px] w-full items-center justify-center rounded-2xl px-7 py-3.5 text-center text-[14px] font-semibold tracking-tight text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.13),0_0_44px_-8px_rgba(56,189,248,0.22),0_12px_32px_-8px_rgba(139,92,246,0.12)]",
+                      "touch-manipulation min-[420px]:min-w-[12.5rem] min-[420px]:flex-1 min-[420px]:w-auto xl:min-w-[11.75rem] xl:flex-none",
                       "transition duration-[220ms] ease-out active:scale-[0.99]",
                       "focus-visible:outline-none",
                     ].join(" ")}

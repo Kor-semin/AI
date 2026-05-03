@@ -10,13 +10,13 @@ import { SENSORA_GUIDE_IMAGES, SENSORA_TIP_CARD_INITIAL_INDEX } from "@/app/comp
 const JOIN_PATH = "/join" as const;
 
 const mockShell =
-  "landing-showcase-mock-frame relative overflow-hidden rounded-[18px] border border-white/[0.14] bg-gradient-to-b from-[#070f1a]/98 to-[#020910]/99 shadow-[0_36px_92px_-34px_rgba(0,0,0,0.78),inset_0_1px_0_rgba(255,255,255,0.085),0_0_0_1px_rgba(56,189,248,0.05)_inset,0_0_72px_-26px_rgba(56,189,248,0.1),0_0_88px_-38px_rgba(139,92,246,0.07)] ring-1 ring-inset ring-white/[0.055] backdrop-blur-xl before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-white/18 before:to-transparent sm:rounded-[22px] lg:rounded-[24px]";
+  "landing-showcase-mock-frame relative overflow-hidden rounded-[18px] border border-white/[0.17] bg-gradient-to-b from-[#081222]/98 to-[#030b14]/99 shadow-[0_38px_96px_-32px_rgba(0,0,0,0.82),inset_0_1px_0_rgba(255,255,255,0.095),0_0_0_1px_rgba(56,189,248,0.07)_inset,0_0_80px_-24px_rgba(56,189,248,0.14),0_0_96px_-36px_rgba(139,92,246,0.1)] ring-1 ring-inset ring-white/[0.07] backdrop-blur-xl before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-white/22 before:to-transparent sm:rounded-[22px] lg:rounded-[24px]";
 
 const ctaPrimaryShowcase =
-  "landing-showcase-cta-primary landing-showroom-cta-join sensora-premium-primary-workspace inline-flex min-h-[56px] w-full min-w-0 shrink-0 items-center justify-center rounded-2xl px-9 py-4 text-[16px] font-semibold tracking-tight shadow-[inset_0_1px_0_rgba(255,255,255,0.11),0_14px_44px_-12px_rgba(56,189,248,0.26)] sm:w-auto sm:min-h-[58px] sm:px-11 sm:text-[17px] touch-manipulation";
+  "landing-showcase-cta-primary landing-showroom-cta-join sensora-premium-primary-workspace inline-flex min-h-[56px] w-full min-w-0 shrink-0 items-center justify-center rounded-2xl px-9 py-4 text-[16px] font-semibold tracking-tight shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_16px_48px_-12px_rgba(56,189,248,0.3),0_0_48px_-10px_rgba(139,92,246,0.08)] sm:w-auto sm:min-h-[58px] sm:px-11 sm:text-[17px] touch-manipulation";
 
 const ctaGhostShowcase =
-  "landing-showcase-cta-ghost landing-showroom-cta-preview inline-flex min-h-[56px] w-full min-w-0 shrink-0 items-center justify-center gap-2 rounded-2xl border border-white/[0.32] bg-white/[0.09] px-8 py-4 text-[15px] font-semibold tracking-tight text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.11),0_0_0_1px_rgba(255,255,255,0.04)_inset] ring-1 ring-inset ring-sky-400/15 backdrop-blur-md sm:w-auto sm:min-h-[58px] sm:px-10 sm:text-[16px] touch-manipulation";
+  "landing-showcase-cta-ghost landing-showroom-cta-preview inline-flex min-h-[56px] w-full min-w-0 shrink-0 items-center justify-center gap-2 rounded-2xl border border-white/[0.34] bg-white/[0.1] px-8 py-4 text-[15px] font-semibold tracking-tight text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_0_0_1px_rgba(56,189,248,0.06)_inset,0_0_40px_-10px_rgba(56,189,248,0.14)] ring-1 ring-inset ring-sky-400/22 backdrop-blur-md sm:w-auto sm:min-h-[58px] sm:px-10 sm:text-[16px] touch-manipulation";
 
 const HERO_MOCK_NAV_KEYS = [
   "landing.showroom.heroMock.nav.home",
@@ -189,7 +189,7 @@ function HeroDashboardPreview() {
 
       <div className="flex min-h-0 flex-col sm:min-h-[312px] sm:flex-row md:min-h-[328px] lg:min-h-[352px]">
         <nav
-          className="flex shrink-0 flex-row gap-0 overflow-x-auto overflow-y-hidden border-b border-white/[0.1] bg-[#020910]/98 [scrollbar-width:none] sm:w-[9.5rem] sm:flex-col sm:overflow-visible sm:border-b-0 sm:border-r sm:border-white/[0.1] sm:py-1.5 [&::-webkit-scrollbar]:hidden"
+          className="flex shrink-0 flex-row gap-0 overflow-x-auto overflow-y-hidden border-b border-white/[0.12] bg-[#030d18]/99 [scrollbar-width:none] sm:w-[9.5rem] sm:flex-col sm:overflow-visible sm:border-b-0 sm:border-r sm:border-white/[0.12] sm:py-1.5 [&::-webkit-scrollbar]:hidden"
           aria-hidden
         >
           {HERO_MOCK_NAV_KEYS.map((key, i) => {
@@ -226,11 +226,11 @@ function HeroDashboardPreview() {
               <p className="mt-1 text-[10.5px] font-medium text-slate-500 sm:text-[11px]">{t("landing.showroom.heroDash.windowSubline")}</p>
             </div>
             <div className="flex shrink-0 items-center gap-2">
-              <time className="rounded-[10px] border border-white/[0.12] bg-white/[0.04] px-2.5 py-1.5 text-[10px] font-semibold tabular-nums text-slate-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] sm:text-[11px]">
+              <time className="rounded-[10px] border border-white/[0.16] bg-white/[0.065] px-2.5 py-1.5 text-[10px] font-semibold tabular-nums text-slate-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_0_28px_-10px_rgba(56,189,248,0.12)] sm:text-[11px]">
                 {dateLabel}
               </time>
               <span
-                className="inline-flex size-9 items-center justify-center rounded-[10px] border border-white/[0.12] bg-white/[0.04] text-slate-300 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]"
+                className="inline-flex size-9 items-center justify-center rounded-[10px] border border-white/[0.16] bg-white/[0.065] text-slate-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.07),0_0_26px_-10px_rgba(56,189,248,0.1)]"
                 aria-hidden
               >
                 <IconBellSoft className="size-[18px] opacity-90" />
@@ -243,16 +243,16 @@ function HeroDashboardPreview() {
               {[cards.today, cards.followup].map(({ titleKey, bodyKey }) => (
                 <div
                   key={titleKey}
-                  className="rounded-[12px] border border-white/[0.12] bg-gradient-to-br from-white/[0.07] to-transparent px-2.5 py-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_0_24px_-16px_rgba(56,189,248,0.08)] sm:rounded-[13px] sm:px-3 sm:py-2.5"
+                  className="rounded-[12px] border border-white/[0.15] bg-gradient-to-br from-white/[0.095] to-transparent px-2.5 py-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_0_32px_-14px_rgba(56,189,248,0.12)] sm:rounded-[13px] sm:px-3 sm:py-2.5"
                 >
-                  <p className="text-[9.5px] font-bold uppercase tracking-[0.1em] text-slate-400 sm:text-[10px]">{t(titleKey)}</p>
+                  <p className="text-[9.5px] font-bold uppercase tracking-[0.1em] text-slate-300 sm:text-[10px]">{t(titleKey)}</p>
                   <p className="mt-1 line-clamp-2 text-[11.5px] font-semibold leading-snug text-slate-50 sm:text-[12.5px]">{t(bodyKey)}</p>
                 </div>
               ))}
             </div>
 
             <div
-              className="rounded-[13px] border border-sky-400/38 bg-gradient-to-br from-sky-500/[0.16] via-violet-500/[0.08] to-[#050d16]/92 px-3 py-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_0_40px_-12px_rgba(56,189,248,0.16),0_16px_44px_-24px_rgba(0,0,0,0.55)] ring-1 ring-sky-400/28 sm:rounded-[14px] sm:px-3.5 sm:py-3"
+              className="rounded-[13px] border border-sky-400/45 bg-gradient-to-br from-sky-500/[0.2] via-violet-500/[0.1] to-[#050d16]/93 px-3 py-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_0_52px_-10px_rgba(56,189,248,0.22),0_18px_48px_-22px_rgba(0,0,0,0.55)] ring-1 ring-sky-400/38 sm:rounded-[14px] sm:px-3.5 sm:py-3"
               aria-hidden
             >
               <div className="flex items-center justify-between gap-2">
@@ -264,7 +264,7 @@ function HeroDashboardPreview() {
               <p className="mt-1.5 text-[12.5px] font-medium leading-[1.52] text-slate-50 sm:text-[13.5px]">{t(cards.ai.bodyKey)}</p>
             </div>
 
-            <div className="rounded-[12px] border border-white/[0.1] bg-white/[0.035] px-2.5 py-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] sm:rounded-[13px] sm:px-3 sm:py-2.5" aria-hidden>
+            <div className="rounded-[12px] border border-white/[0.14] bg-white/[0.048] px-2.5 py-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.07),0_0_26px_-16px_rgba(56,189,248,0.06)] sm:rounded-[13px] sm:px-3 sm:py-2.5" aria-hidden>
               <p className="text-[9.5px] font-bold uppercase tracking-[0.1em] text-slate-500 sm:text-[10px]">{t(cards.summary.titleKey)}</p>
               <p className="mt-1 line-clamp-3 text-[11.5px] font-medium leading-snug text-slate-100 sm:text-[12.5px] sm:leading-[1.52]">{t(cards.summary.bodyKey)}</p>
             </div>
@@ -333,26 +333,30 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
         onClose={() => setViewer({ open: false, title: "", initialSlideIndex: 0 })}
       />
 
-      <section className="landing-showcase-hero relative mx-auto w-full max-w-[1390px] px-[max(1rem,calc(env(safe-area-inset-left,0px)+12px))] pb-8 pr-[max(1rem,calc(env(safe-area-inset-right,0px)+12px))] pt-1 sm:px-5 sm:pb-10 sm:pt-2 md:px-7 lg:px-9 lg:pb-11 lg:pt-5 xl:pt-6">
-        <div className="landing-hero-canvas relative overflow-hidden rounded-[26px] border border-white/[0.14] px-5 py-6 shadow-[0_40px_100px_-44px_rgba(0,0,0,0.68),inset_0_1px_0_rgba(255,255,255,0.078)] ring-1 ring-inset ring-white/[0.05] sm:rounded-[28px] sm:px-6 sm:py-8 lg:rounded-[30px] lg:px-8 lg:py-9 xl:px-10 xl:py-11">
+      <section className="landing-showcase-hero relative mx-auto w-full max-w-[1480px] px-[max(1rem,calc(env(safe-area-inset-left,0px)+12px))] pb-8 pr-[max(1rem,calc(env(safe-area-inset-right,0px)+12px))] pt-1 sm:px-5 sm:pb-10 sm:pt-2 md:px-7 lg:px-9 lg:pb-11 lg:pt-5 xl:px-11 xl:pt-6">
+        <div className="landing-hero-canvas relative overflow-hidden rounded-[26px] border border-white/[0.15] px-5 py-6 shadow-[0_42px_108px_-44px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.084),0_0_80px_-40px_rgba(56,189,248,0.06)] ring-1 ring-inset ring-white/[0.065] sm:rounded-[28px] sm:px-6 sm:py-8 lg:rounded-[30px] lg:px-8 lg:py-9 xl:px-11 xl:py-11">
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_78%_62%_at_58%_-4%,rgba(139,92,246,0.16),transparent_54%),radial-gradient(ellipse_88%_64%_at_8%_96%,rgba(56,189,248,0.12),transparent_58%),radial-gradient(ellipse_62%_50%_at_92%_42%,rgba(99,102,241,0.09),transparent_56%),linear-gradient(165deg,rgba(5,14,26,0.96) 0%,rgba(8,24,46,0.55) 48%,rgba(4,11,22,0.94) 100%)]"
+            className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_78%_62%_at_58%_-4%,rgba(139,92,246,0.185),transparent_53%),radial-gradient(ellipse_88%_64%_at_8%_96%,rgba(56,189,248,0.14),transparent_57%),radial-gradient(ellipse_62%_50%_at_92%_42%,rgba(99,102,241,0.105),transparent_55%),linear-gradient(165deg,rgba(5,14,26,0.96) 0%,rgba(8,24,46,0.55) 48%,rgba(4,11,22,0.94) 100%)]"
           />
           <div
             aria-hidden
-            className="pointer-events-none absolute -right-[14%] top-[14%] h-[78%] w-[78%] max-w-[720px] rounded-full bg-[radial-gradient(circle_at_40%_36%,rgba(56,189,248,0.17),transparent_58%),radial-gradient(circle_at_70%_56%,rgba(139,92,246,0.12),transparent_56%)] opacity-[0.97] blur-3xl lg:-right-[4%]"
+            className="pointer-events-none absolute -left-[28%] top-[22%] h-[72%] w-[72%] max-w-[560px] rounded-full bg-[radial-gradient(circle_at_62%_44%,rgba(56,189,248,0.14),transparent_58%),radial-gradient(circle_at_28%_58%,rgba(139,92,246,0.09),transparent_56%)] opacity-[0.95] blur-3xl sm:-left-[20%]"
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -right-[14%] top-[14%] h-[78%] w-[78%] max-w-[720px] rounded-full bg-[radial-gradient(circle_at_40%_36%,rgba(56,189,248,0.2),transparent_57%),radial-gradient(circle_at_70%_56%,rgba(139,92,246,0.14),transparent_55%)] opacity-[0.98] blur-3xl lg:-right-[4%]"
           />
 
-          <div className="relative z-[1] grid items-start gap-8 sm:gap-9 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.18fr)] lg:gap-x-12 lg:pb-3 lg:pr-2 xl:gap-x-14 xl:pr-4">
+          <div className="relative z-[1] grid items-start gap-8 sm:gap-9 lg:grid-cols-[minmax(0,0.86fr)_minmax(0,1.3fr)] lg:gap-x-12 lg:pb-3 lg:pr-2 xl:gap-x-[3.5rem] xl:pr-5">
             <div className="landing-showcase-copy-col order-1 min-w-0">
-              <span className="inline-flex rounded-full border border-white/[0.17] bg-white/[0.075] px-3.5 py-1.5 text-[11px] font-semibold tracking-[0.08em] text-slate-100 backdrop-blur-sm sm:text-[12px]">
+              <span className="inline-flex rounded-full border border-white/[0.18] bg-white/[0.082] px-3.5 py-1.5 text-[11px] font-semibold tracking-[0.08em] text-slate-100 backdrop-blur-sm sm:text-[12px]">
                 {t("landing.showroom.hero.kickerBadge")}
               </span>
-              <h1 className="mt-5 max-w-[min(100%,44rem)] whitespace-pre-line text-balance text-[clamp(1.85rem,4.9vw,3.45rem)] font-semibold leading-[1.05] tracking-[-0.04em] text-white sm:mt-6">
+              <h1 className="mt-5 max-w-[min(100%,48rem)] whitespace-pre-line text-balance text-[clamp(1.92rem,5.15vw,3.62rem)] font-semibold leading-[1.065] tracking-[-0.041em] text-white sm:mt-6 lg:max-w-[min(100%,52rem)]">
                 {t("landing.showroom.hero.headline")}
               </h1>
-              <p className="mt-6 max-w-[min(100%,40rem)] whitespace-pre-line text-[16px] leading-[1.68] text-slate-200/96 sm:text-[17.5px] sm:leading-[1.64]">
+              <p className="mt-6 max-w-[min(100%,42rem)] whitespace-pre-line text-[16px] leading-[1.72] text-slate-200/96 sm:text-[17.5px] sm:leading-[1.66] lg:max-w-[min(100%,44rem)]">
                 {t("landing.showroom.hero.sub")}
               </p>
               <div className="mt-9 flex w-full flex-col gap-3.5 sm:mt-10 sm:flex-row sm:flex-wrap sm:gap-4">
@@ -366,10 +370,10 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
               </div>
             </div>
 
-            <div className="landing-showcase-mock-col motion-safe:transition-transform order-2 relative mx-auto w-full max-w-[min(100%,25rem)] min-[410px]:max-w-[min(100%,36rem)] lg:mx-0 lg:max-w-none lg:justify-self-stretch lg:origin-top lg:[transform:scale(1.04)] xl:[transform:scale(1.06)] motion-reduce:lg:transform-none">
+            <div className="landing-showcase-mock-col motion-safe:transition-transform order-2 relative mx-auto w-full max-w-[min(100%,25rem)] min-[410px]:max-w-[min(100%,36rem)] lg:mx-0 lg:max-w-none lg:justify-self-stretch lg:origin-top lg:[transform:scale(1.085)] xl:[transform:scale(1.12)] motion-reduce:lg:transform-none">
               <div
                 aria-hidden
-                className="pointer-events-none absolute -inset-4 rounded-[40px] bg-[radial-gradient(ellipse_90%_75%_at_52%_50%,rgba(56,189,248,0.2),transparent_62%),radial-gradient(ellipse_70%_60%_at_85%_25%,rgba(139,92,246,0.15),transparent_58%)] opacity-100 blur-2xl sm:-inset-6"
+                className="pointer-events-none absolute -inset-4 rounded-[40px] bg-[radial-gradient(ellipse_90%_75%_at_52%_50%,rgba(56,189,248,0.26),transparent_60%),radial-gradient(ellipse_70%_60%_at_85%_25%,rgba(139,92,246,0.18),transparent_56%)] opacity-100 blur-2xl sm:-inset-6"
               />
               <div data-sensora-landing-showcase-preview>
                 <HeroDashboardPreview />
@@ -380,9 +384,9 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
           <div className="landing-hero-bridge relative z-[1] mt-10 px-2 sm:mt-12 sm:px-4">
             <div className="mx-auto flex max-w-[44rem] flex-col items-center gap-5 py-8 sm:gap-6 sm:py-10">
               <div className="flex w-full max-w-lg items-center gap-3 sm:gap-4" aria-hidden>
-                <span className="h-px flex-1 bg-gradient-to-r from-transparent via-sky-400/28 to-transparent" />
-                <span className="size-1.5 shrink-0 rounded-full bg-sky-400/55 shadow-[0_0_14px_-1px_rgba(56,189,248,0.45)]" />
-                <span className="h-px flex-1 bg-gradient-to-l from-transparent via-violet-400/22 to-transparent" />
+                <span className="h-px flex-1 bg-gradient-to-r from-transparent via-sky-400/38 to-transparent" />
+                <span className="size-1.5 shrink-0 rounded-full bg-sky-400/65 shadow-[0_0_16px_-1px_rgba(56,189,248,0.52)]" />
+                <span className="h-px flex-1 bg-gradient-to-l from-transparent via-violet-400/30 to-transparent" />
               </div>
               <p className="text-center text-[clamp(1.05rem,2.35vw,1.48rem)] font-semibold leading-snug tracking-[-0.022em] text-slate-100">
                 {t("landing.showroom.bridge.line1")}
@@ -394,7 +398,7 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
           </div>
         </div>
 
-        <div className="landing-showcase-lower landing-showcase-lower-canvas relative z-[1] mt-8 flex flex-col gap-7 rounded-[26px] border border-white/[0.12] bg-gradient-to-b from-white/[0.055] via-[#040a14]/62 to-[#020810]/90 px-4 py-7 shadow-[0_32px_88px_-40px_rgba(0,0,0,0.58),inset_0_1px_0_rgba(255,255,255,0.06),0_0_64px_-36px_rgba(56,189,248,0.06)] ring-1 ring-inset ring-white/[0.05] backdrop-blur-md sm:mt-10 sm:gap-8 sm:px-6 sm:py-9 lg:mt-11 lg:gap-9 lg:px-8 xl:px-10">
+        <div className="landing-showcase-lower landing-showcase-lower-canvas relative z-[1] mt-8 flex flex-col gap-7 rounded-[26px] border border-white/[0.13] bg-gradient-to-b from-white/[0.062] via-[#040a14]/65 to-[#020810]/92 px-4 py-7 shadow-[0_34px_92px_-38px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.065),0_0_72px_-34px_rgba(56,189,248,0.078)] ring-1 ring-inset ring-white/[0.06] backdrop-blur-md sm:mt-10 sm:gap-8 sm:px-6 sm:py-9 lg:mt-11 lg:gap-9 lg:px-8 xl:px-10">
           <div className="min-w-0">
             <div className="flex items-end justify-between gap-3 border-b border-white/[0.09] pb-3">
               <h2 className="text-[clamp(1.18rem,2.4vw,1.58rem)] font-semibold tracking-[-0.028em] text-slate-50">{t("landing.showroom.tip.title")}</h2>
@@ -405,16 +409,16 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
                 <button
                   key={titleKey}
                   type="button"
-                  className="landing-tip-card-shell landing-tip-feature-card group relative flex min-h-[14rem] flex-col rounded-[18px] border border-white/[0.2] bg-gradient-to-b from-slate-900/78 to-[#061018]/90 p-4 text-left shadow-[0_16px_52px_-22px_rgba(0,0,0,0.58),inset_0_1px_0_rgba(255,255,255,0.075)] ring-1 ring-inset ring-sky-400/14 backdrop-blur-md motion-safe:transition-[transform,box-shadow,border-color] motion-safe:duration-[220ms] motion-safe:ease-[cubic-bezier(0.22,1,0.32,1)] hover:-translate-y-1.5 hover:border-sky-400/48 hover:shadow-[0_26px_64px_-20px_rgba(0,0,0,0.62),0_0_56px_-10px_rgba(56,189,248,0.22),inset_0_1px_0_rgba(255,255,255,0.1)] motion-reduce:transition-none motion-reduce:hover:translate-y-0 sm:min-h-[14.25rem] sm:rounded-[19px] sm:p-[1.12rem]"
+                  className="landing-tip-card-shell landing-tip-feature-card group relative flex min-h-[14rem] cursor-pointer flex-col rounded-[18px] border border-white/[0.24] bg-gradient-to-b from-slate-900/82 to-[#061018]/92 p-4 text-left shadow-[0_18px_56px_-22px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.085),0_0_44px_-16px_rgba(56,189,248,0.12)] ring-1 ring-inset ring-sky-400/18 backdrop-blur-md motion-safe:transition-[transform,box-shadow,border-color] motion-safe:duration-[220ms] motion-safe:ease-[cubic-bezier(0.22,1,0.32,1)] hover:-translate-y-1.5 hover:border-sky-400/55 hover:shadow-[0_28px_72px_-20px_rgba(0,0,0,0.64),0_0_64px_-10px_rgba(56,189,248,0.28),inset_0_1px_0_rgba(255,255,255,0.11)] motion-reduce:transition-none motion-reduce:hover:translate-y-0 sm:min-h-[14.25rem] sm:rounded-[19px] sm:p-[1.12rem]"
                   onClick={() =>
                     setViewer({ open: true, title: t(titleKey), initialSlideIndex: SENSORA_TIP_CARD_INITIAL_INDEX[n] })
                   }
                 >
                   <div className="flex items-start justify-between gap-2">
-                    <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-xl border border-sky-400/42 bg-gradient-to-br from-sky-500/[0.3] to-violet-600/[0.18] text-[13px] font-bold tabular-nums text-sky-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)]">
+                    <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-xl border border-sky-400/52 bg-gradient-to-br from-sky-500/[0.34] to-violet-600/[0.21] text-[13px] font-bold tabular-nums text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.2),0_0_24px_-6px_rgba(56,189,248,0.25)]">
                       {n}
                     </span>
-                    <span className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-sky-400/22 bg-white/[0.08] text-sky-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.09),0_0_28px_-8px_rgba(56,189,248,0.15)] ring-1 ring-inset ring-white/[0.08] transition-[transform,box-shadow] duration-[220ms] group-hover:-translate-y-0.5 group-hover:border-sky-400/38 group-hover:text-white">
+                    <span className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-sky-400/28 bg-white/[0.1] text-sky-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_0_32px_-6px_rgba(56,189,248,0.2)] ring-1 ring-inset ring-white/[0.1] transition-[transform,box-shadow,border-color] duration-[220ms] group-hover:-translate-y-0.5 group-hover:border-sky-400/42 group-hover:text-white">
                       <Icon className="size-[22px] opacity-[0.98] sm:size-6" />
                     </span>
                   </div>
@@ -423,7 +427,7 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
                     {t(descKey)}
                   </span>
                   <span className="mt-auto flex justify-end pt-4 sm:pt-5">
-                    <span className="inline-flex size-10 items-center justify-center rounded-full border border-sky-400/38 bg-gradient-to-br from-white/[0.14] to-white/[0.04] text-[15px] font-bold text-sky-50 shadow-[0_12px_32px_-8px_rgba(56,189,248,0.35)] transition-[transform,border-color,box-shadow] duration-[220ms] group-hover:translate-x-1 group-hover:border-sky-400/58 group-hover:shadow-[0_14px_36px_-6px_rgba(56,189,248,0.42)] group-hover:text-white motion-reduce:group-hover:translate-x-0">
+                    <span className="inline-flex size-10 items-center justify-center rounded-full border border-sky-400/42 bg-gradient-to-br from-white/[0.17] to-white/[0.05] text-[15px] font-bold text-sky-50 shadow-[0_12px_32px_-8px_rgba(56,189,248,0.38)] transition-[transform,border-color,box-shadow] duration-[220ms] group-hover:translate-x-1 group-hover:border-sky-400/65 group-hover:shadow-[0_16px_40px_-6px_rgba(56,189,248,0.48)] group-hover:text-white motion-reduce:group-hover:translate-x-0">
                       →
                     </span>
                   </span>
@@ -441,7 +445,7 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
             </div>
             <div className="landing-flow-process relative mt-6">
               <div
-                className="pointer-events-none absolute left-[6%] right-[6%] top-[42px] hidden h-px bg-gradient-to-r from-transparent via-sky-400/35 to-transparent opacity-75 blur-[0.5px] lg:block"
+                className="pointer-events-none absolute left-[5%] right-[5%] top-[41px] z-0 hidden h-px bg-gradient-to-r from-transparent via-sky-400/52 to-transparent shadow-[0_0_26px_-2px_rgba(56,189,248,0.42),0_0_48px_-4px_rgba(129,140,248,0.14)] lg:block"
                 aria-hidden
               />
               <ol className="m-0 flex list-none flex-col gap-3 p-0 sm:gap-4 lg:flex-row lg:items-stretch lg:gap-0">
@@ -449,29 +453,29 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
                   <Fragment key={step.titleKey}>
                     {idx > 0 ? (
                       <>
-                        <li className="mx-auto flex h-px w-[min(100%,12rem)] shrink-0 bg-gradient-to-r from-transparent via-sky-400/38 to-transparent lg:hidden" aria-hidden />
+                        <li className="mx-auto flex h-[2px] w-[min(100%,13rem)] shrink-0 rounded-full bg-gradient-to-r from-transparent via-sky-400/48 to-transparent shadow-[0_0_22px_-2px_rgba(56,189,248,0.35)] lg:hidden" aria-hidden />
                         <li className="relative hidden w-6 shrink-0 items-center justify-center lg:flex" aria-hidden>
-                          <span className="absolute left-1/2 top-[42px] h-2 w-2 -translate-x-1/2 rounded-full bg-sky-400/35 shadow-[0_0_12px_-1px_rgba(56,189,248,0.5)]" />
-                          <span className="mt-[2.125rem] h-px w-full min-w-[0.5rem] bg-gradient-to-r from-sky-400/25 via-indigo-400/22 to-violet-400/28" />
+                          <span className="absolute left-1/2 top-[40px] h-2.5 w-2.5 -translate-x-1/2 rounded-full border border-sky-400/35 bg-[radial-gradient(circle,rgba(56,189,248,0.45),rgba(139,92,246,0.12))] shadow-[0_0_16px_-1px_rgba(56,189,248,0.62)] ring-2 ring-sky-400/15" />
+                          <span className="mt-[2.125rem] h-[2px] w-full min-w-[0.5rem] rounded-full bg-gradient-to-r from-sky-400/42 via-indigo-400/32 to-violet-400/38 shadow-[0_0_22px_-2px_rgba(56,189,248,0.28)]" />
                         </li>
                       </>
                     ) : null}
-                    <li className="min-w-0 flex-1">
+                    <li className="relative z-[1] min-w-0 flex-1">
                       <div
                         className={[
-                          "landing-flow-strip-card landing-showcase-flow-step group relative flex h-full min-h-[10.25rem] min-w-[calc(48%-6px)] flex-col rounded-[16px] border border-white/[0.17] bg-gradient-to-br from-white/[0.09] via-[#050d18]/94 to-transparent px-4 py-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.078),0_14px_40px_-18px_rgba(0,0,0,0.5),0_0_40px_-24px_rgba(56,189,248,0.08)] ring-1 ring-inset ring-sky-400/08 backdrop-blur-sm motion-safe:transition-[transform,box-shadow,border-color] motion-safe:duration-[220ms] hover:-translate-y-1 hover:border-sky-400/38 hover:shadow-[0_22px_52px_-18px_rgba(0,0,0,0.55),0_0_48px_-12px_rgba(56,189,248,0.14)] sm:min-h-[10.5rem] sm:min-w-0 sm:rounded-2xl sm:px-[1.15rem] sm:py-[1.2rem]",
+                          "landing-flow-strip-card landing-showcase-flow-step group relative flex h-full min-h-[10.5rem] min-w-[calc(48%-6px)] flex-col rounded-[16px] border border-white/[0.19] bg-gradient-to-br from-white/[0.1] via-[#050d18]/95 to-transparent px-4 py-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.086),0_16px_44px_-18px_rgba(0,0,0,0.52),0_0_48px_-22px_rgba(56,189,248,0.1)] ring-1 ring-inset ring-sky-400/12 backdrop-blur-sm motion-safe:transition-[transform,box-shadow,border-color] motion-safe:duration-[220ms] hover:-translate-y-1 hover:border-sky-400/42 hover:shadow-[0_24px_56px_-18px_rgba(0,0,0,0.56),0_0_54px_-12px_rgba(56,189,248,0.18)] sm:min-h-[10.75rem] sm:min-w-0 sm:rounded-2xl sm:px-[1.18rem] sm:py-[1.25rem]",
                         ].join(" ")}
                       >
                         <div className="flex items-start gap-3">
-                          <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-white/[0.15] bg-slate-950/85 text-[12.5px] font-bold tabular-nums text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] ring-2 ring-sky-400/22">
+                          <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-white/[0.18] bg-slate-950/92 text-[12.5px] font-bold tabular-nums text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] ring-2 ring-sky-400/28">
                             {String(idx + 1).padStart(2, "0")}
                           </span>
-                          <span className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-sky-400/22 bg-sky-500/[0.1] text-sky-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] ring-1 ring-inset ring-white/[0.06]">
-                            <step.Icon className="size-[21px]" />
+                          <span className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-sky-400/32 bg-sky-500/[0.14] text-sky-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_0_28px_-8px_rgba(56,189,248,0.15)] ring-1 ring-inset ring-white/[0.08]">
+                            <step.Icon className="size-[22px]" />
                           </span>
                         </div>
-                        <p className="mt-3.5 text-[14px] font-semibold leading-snug text-slate-50 sm:text-[15px] sm:leading-tight">{t(step.titleKey)}</p>
-                        <p className="mt-2 line-clamp-3 text-[11.5px] leading-relaxed text-slate-400 sm:text-[12.5px] sm:leading-[1.52]">{t(step.bodyKey)}</p>
+                        <p className="mt-3.5 text-[14.5px] font-semibold leading-snug text-slate-50 sm:text-[15.25px] sm:leading-[1.2]">{t(step.titleKey)}</p>
+                        <p className="mt-2.5 line-clamp-3 text-[11.75px] leading-relaxed text-slate-300 sm:text-[12.75px] sm:leading-[1.54]">{t(step.bodyKey)}</p>
                       </div>
                     </li>
                   </Fragment>

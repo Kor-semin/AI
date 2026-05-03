@@ -23,13 +23,13 @@ export {
 const JOIN_PATH = "/join" as const;
 
 const cardChrome =
-  "landing-showcase-surface-card rounded-[22px] border border-white/[0.15] bg-gradient-to-b from-white/[0.082] via-slate-900/55 to-[#050d14]/9 shadow-[0_28px_72px_-26px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.065),0_0_48px_-26px_rgba(56,189,248,0.07)] backdrop-blur-md ring-1 ring-inset ring-white/[0.055] transition-[border-color,box-shadow,transform] duration-[240ms] ease-[cubic-bezier(0.22,1,0.32,1)] hover:-translate-y-1 hover:border-sky-400/32 hover:shadow-[0_34px_80px_-22px_rgba(0,0,0,0.62),0_0_52px_-18px_rgba(56,189,248,0.11)] motion-reduce:transform-none motion-reduce:transition-none active:translate-y-0 active:scale-[0.996]";
+  "landing-showcase-surface-card rounded-[22px] border border-white/[0.16] bg-gradient-to-b from-white/[0.09] via-slate-900/58 to-[#050d14]/94 shadow-[0_30px_76px_-24px_rgba(0,0,0,0.62),inset_0_1px_0_rgba(255,255,255,0.072),0_0_56px_-24px_rgba(56,189,248,0.084)] backdrop-blur-md ring-1 ring-inset ring-white/[0.065] transition-[border-color,box-shadow,transform] duration-[240ms] ease-[cubic-bezier(0.22,1,0.32,1)] hover:-translate-y-1 hover:border-sky-400/36 hover:shadow-[0_36px_84px_-20px_rgba(0,0,0,0.64),0_0_60px_-16px_rgba(56,189,248,0.13)] motion-reduce:transform-none motion-reduce:transition-none active:translate-y-0 active:scale-[0.996]";
 
 const primaryBtn =
-  "landing-showroom-cta-join sensora-premium-primary-workspace inline-flex min-h-[54px] min-w-[min(100%,13rem)] items-center justify-center rounded-2xl px-9 py-3.5 text-[15px] font-semibold shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_14px_44px_-10px_rgba(56,189,248,0.22)] touch-manipulation";
+  "landing-showroom-cta-join sensora-premium-primary-workspace inline-flex min-h-[56px] min-w-[min(100%,13rem)] items-center justify-center rounded-2xl px-9 py-4 text-[15px] font-semibold shadow-[inset_0_1px_0_rgba(255,255,255,0.13),0_16px_48px_-10px_rgba(56,189,248,0.26),0_0_40px_-8px_rgba(139,92,246,0.06)] touch-manipulation";
 
 const ghostBtn =
-  "landing-showroom-cta-preview inline-flex min-h-[54px] min-w-[min(100%,13rem)] items-center justify-center gap-2 rounded-2xl border border-white/[0.3] bg-white/[0.09] px-8 py-3.5 text-[15px] font-semibold text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] ring-1 ring-inset ring-sky-400/16 backdrop-blur-md transition-[border-color,background-color,box-shadow,transform] duration-[240ms] hover:border-sky-300/48 hover:bg-white/[0.13] active:scale-[0.987] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/42 focus-visible:ring-offset-2 focus-visible:ring-offset-[#020817] touch-manipulation motion-reduce:transition-none";
+  "landing-showroom-cta-preview inline-flex min-h-[56px] min-w-[min(100%,13rem)] items-center justify-center gap-2 rounded-2xl border border-white/[0.32] bg-white/[0.1] px-8 py-4 text-[15px] font-semibold text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.11),0_0_0_1px_rgba(56,189,248,0.055)_inset,0_0_36px_-8px_rgba(56,189,248,0.12)] ring-1 ring-inset ring-sky-400/22 backdrop-blur-md transition-[border-color,background-color,box-shadow,transform] duration-[240ms] hover:border-sky-300/52 hover:bg-white/[0.14] active:scale-[0.987] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/42 focus-visible:ring-offset-2 focus-visible:ring-offset-[#020817] touch-manipulation motion-reduce:transition-none";
 
 function IconAppWindowPlay({ className }: { className?: string }) {
   return (
@@ -112,7 +112,7 @@ export function LandingShowroom({ onOpenAppWorkspace }: { onOpenAppWorkspace: ()
     <div className="relative overflow-x-hidden bg-[#020817]">
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-[min(66vh,620px)] bg-[radial-gradient(ellipse_82%_52%_at_52%_6%,rgba(56,189,248,0.078),transparent_56%),radial-gradient(ellipse_58%_42%_at_96%_16%,rgba(139,92,246,0.065),transparent_52%),radial-gradient(ellipse_44%_38%_at_8%_40%,rgba(30,58,138,0.055),transparent_50%)]"
+        className="pointer-events-none absolute inset-x-0 top-0 h-[min(66vh,620px)] bg-[radial-gradient(ellipse_82%_52%_at_52%_6%,rgba(56,189,248,0.092),transparent_55%),radial-gradient(ellipse_58%_42%_at_96%_16%,rgba(139,92,246,0.078),transparent_52%),radial-gradient(ellipse_44%_38%_at_8%_40%,rgba(30,58,138,0.065),transparent_50%)]"
       />
       <div className="relative z-[1]">
         <LandingShowcaseHero onOpenAppWorkspace={onOpenAppWorkspace} />
@@ -194,7 +194,7 @@ function FinalShowroomCTAInner({ onOpenAppWorkspace }: { onOpenAppWorkspace: () 
 
   return (
     <div
-      className={`${cardChrome} landing-footer-cta-shell mx-auto flex max-w-[720px] flex-col items-center border-white/[0.16] px-8 py-12 text-center shadow-[0_36px_88px_-28px_rgba(0,0,0,0.62),inset_0_1px_0_rgba(255,255,255,0.07),0_0_72px_-32px_rgba(56,189,248,0.12)] sm:px-12 sm:py-[4.25rem]`}
+      className={`${cardChrome} landing-footer-cta-shell mx-auto flex max-w-[720px] flex-col items-center border-white/[0.17] px-8 py-12 text-center shadow-[0_38px_92px_-26px_rgba(0,0,0,0.64),inset_0_1px_0_rgba(255,255,255,0.075),0_0_80px_-28px_rgba(56,189,248,0.14),0_0_64px_-36px_rgba(139,92,246,0.06)] sm:px-12 sm:py-[4.25rem]`}
     >
       <p className="text-[clamp(1.28rem,2.95vw,1.68rem)] font-semibold tracking-[-0.024em] text-slate-50">{t("brand.slogan")}</p>
       <p className="mx-auto mt-5 max-w-[48ch] text-[15px] leading-relaxed text-slate-400 sm:mt-6 sm:text-[16.5px] sm:leading-[1.58]">{t("landing.showroom.closing.desc")}</p>
