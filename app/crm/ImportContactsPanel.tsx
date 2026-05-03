@@ -10,6 +10,7 @@ import {
 } from "@/app/crm/contactImport/normalizeImportedContact";
 import { parseCsvContactsText } from "@/app/crm/contactImport/parseCsvContacts";
 import { parseVcfContactsText } from "@/app/crm/contactImport/parseVcfContacts";
+import { ContactExportLinksModal, type ContactExportLinksVariant } from "@/app/crm/ContactExportLinksModal";
 import { useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent } from "react";
 
 /** 2차 확장: Google People API OAuth 동기화 — 이번 배포 범위에서는 CSV/vCard 내보내기만 지원 */
@@ -48,17 +49,8 @@ const importGuideButtonClass =
 const importTabRailClass =
   "-mx-0.5 mt-3 flex flex-nowrap gap-1.5 overflow-x-auto overscroll-x-contain px-0.5 pb-1 pt-0.5 [scrollbar-width:none] [-ms-overflow-style:none] sm:mx-0 sm:mt-4 sm:flex-wrap sm:gap-2 sm:overflow-visible sm:px-0 sm:pb-0 sm:pt-0 [&::-webkit-scrollbar]:hidden";
 
-const GOOGLE_CONTACTS_URL = "https://contacts.google.com/";
-const GOOGLE_CONTACTS_EXPORT_HELP_URL = "https://support.google.com/contacts/answer/7199294";
-const ICLOUD_CONTACTS_URL = "https://www.icloud.com/contacts";
-const ICLOUD_CONTACTS_EXPORT_HELP_URL =
-  "https://support.apple.com/guide/icloud/import-export-and-print-contacts-mmfba748b2/icloud";
-
-/** 외부 연락처 웹(새 탭) — 동기화·자동 반영 오인 방지 카피만 사용 */
-const extOpenLinkClass =
-  "inline-flex min-h-[44px] items-center justify-center rounded-xl border border-[#E5E7EB] bg-white px-4 py-2 text-[13px] font-semibold text-[#1D4ED8] hover:bg-[#F8FAFC]";
-const extHelpLinkClass =
-  "inline-flex min-h-[40px] items-center text-[12px] font-semibold text-[#475569] underline decoration-[#CBD5E1] underline-offset-2 hover:text-[#111827]";
+const exportLinksOpenerPrimary =
+  "inline-flex min-h-[44px] w-full touch-manipulation items-center justify-center rounded-xl bg-[#111827] px-5 py-3 text-[14px] font-semibold text-white shadow-sm hover:bg-[#1E293B] sm:w-auto";
 
 function tryParseImportRawText(text: string): NormalizedImportedContact[] {
   const t = text.trim();
@@ -161,7 +153,9 @@ export function ImportContactsPanel({
   const [pasteText, setPasteText] = useState("");
   const [staging, setStaging] = useState<NormalizedImportedContact[]>([]);
   const [previewRows, setPreviewRows] = useState<PreviewRow[] | null>(null);
+  const [exportLinksVariant, setExportLinksVariant] = useState<ContactExportLinksVariant | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const autoNativePickerTriggeredRef = useRef(false);
 
   const pickerOk = useMemo(() => contactPickerSupported(), [open]);
   const onIos = useMemo(() => iosLike(), [open]);
@@ -187,6 +181,10 @@ export function ImportContactsPanel({
     if (hubTabsOrdered.includes(tab)) return;
     setTab(resolveDefaultHubTab());
   }, [open, hubTabsOrdered, resolveDefaultHubTab, tab]);
+
+  useEffect(() => {
+    if (!open) setExportLinksVariant(null);
+  }, [open]);
 
   const resetAll = useCallback(() => {
     setPasteText("");
@@ -269,6 +267,21 @@ export function ImportContactsPanel({
       showToast("연락처 선택이 취소되었거나 허용되지 않았습니다.");
     }
   }, [appendParsed, nativePick, pickerOk, showToast]);
+
+  /** 지원 브라우저: 패널이 열리면 연락처 선택(피커)를 즉시 띄움 — 사용자가 고른 사람만 목록 반영 */
+  useEffect(() => {
+    if (!open) {
+      autoNativePickerTriggeredRef.current = false;
+      return;
+    }
+    if (!nativePick || tab !== "device") return;
+    if (autoNativePickerTriggeredRef.current) return;
+    autoNativePickerTriggeredRef.current = true;
+    const timer = window.setTimeout(() => {
+      void pickDeviceContacts();
+    }, 240);
+    return () => window.clearTimeout(timer);
+  }, [open, nativePick, tab, pickDeviceContacts]);
 
   const ingestPaste = useCallback(() => {
     appendParsed(tryParseImportRawText(pasteText));
@@ -384,6 +397,7 @@ export function ImportContactsPanel({
   };
 
   return (
+    <>
     <div
       className="fixed inset-0 z-[300] flex items-start justify-center overflow-y-auto bg-black/[0.56] backdrop-blur-[2px] px-3 pb-[max(2rem,calc(env(safe-area-inset-bottom,0px)+0.85rem))] pt-[max(2.75rem,calc(env(safe-area-inset-top,0px)+0.65rem))] max-[480px]:[scrollbar-width:none] max-[480px]:[-ms-overflow-style:none] max-[480px]:[&::-webkit-scrollbar]:hidden sm:px-4 sm:pb-10 sm:pt-12"
       onClick={() => onClose()}
@@ -487,9 +501,8 @@ export function ImportContactsPanel({
         </div>
 
         {desktopUa && !nativePick ? (
-          <p className="mt-2 text-[11px] leading-snug text-[#94A3B8]">
-            휴대폰 연락처를 브라우저에서 고르는 방식은 여기에서는 제공되지 않습니다. Google 안내·파일 업로드·붙여넣기를
-            이용해 주세요.
+          <p className="mt-2 rounded-lg border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-2 text-[12px] leading-snug text-[#475569]">
+            PC에서는 Google 연락처에서 CSV 또는 vCard 파일을 내보낸 뒤 업로드하거나, 연락처 내용을 붙여넣어 주세요.
           </p>
         ) : null}
 
@@ -501,6 +514,7 @@ export function ImportContactsPanel({
               </p>
               <ul className="list-disc space-y-1 pl-4 text-[12px] leading-snug text-[#475569]">
                 <li>선택한 연락처만 가져옵니다.</li>
+                <li>전체 주소록을 자동으로 열람하지 않습니다.</li>
                 <li>저장 전 미리보기에서 확인합니다.</li>
                 <li>기존 고객 정보는 자동으로 덮어쓰지 않습니다.</li>
               </ul>
@@ -592,24 +606,13 @@ export function ImportContactsPanel({
                 Google 연락처에서 선택한 뒤 CSV 또는 vCard로 내보내 주세요. 내보낸 파일을 이 화면에서 파일로 올리거나 내용만
                 붙여 넣으면 됩니다. 이름·전화 등 흔한 열 이름은 읽히는 편입니다.
               </p>
-              <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
-                <a
-                  href={GOOGLE_CONTACTS_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`${extOpenLinkClass} w-full sm:w-auto`}
-                >
-                  Google 연락처 열기
-                </a>
-                <a
-                  href={GOOGLE_CONTACTS_EXPORT_HELP_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`${extHelpLinkClass} justify-center px-1 sm:px-2`}
-                >
-                  내보내기 도움말 보기
-                </a>
-              </div>
+              <button
+                type="button"
+                className={exportLinksOpenerPrimary}
+                onClick={() => setExportLinksVariant("google")}
+              >
+                Google 연락처·파일 준비 안내 열기
+              </button>
               {onOpenFileGuide ? (
                 <button
                   type="button"
@@ -639,24 +642,13 @@ export function ImportContactsPanel({
                 iCloud 연락처에서 vCard 파일로 내보낸 뒤 업로드해 주세요. 기기에서 공유·내보낸 <strong>.vcf</strong> 파일도
                 올릴 수 있습니다. 이름·전화·이메일·메모 노트는 가능한 범위에서 반영합니다(원문 유지).
               </p>
-              <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
-                <a
-                  href={ICLOUD_CONTACTS_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`${extOpenLinkClass} w-full sm:w-auto`}
-                >
-                  iCloud 연락처 열기
-                </a>
-                <a
-                  href={ICLOUD_CONTACTS_EXPORT_HELP_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`${extHelpLinkClass} justify-center px-1 sm:px-2`}
-                >
-                  iCloud 내보내기 도움말 보기
-                </a>
-              </div>
+              <button
+                type="button"
+                className={exportLinksOpenerPrimary}
+                onClick={() => setExportLinksVariant("icloud")}
+              >
+                iCloud·vCard 준비 안내 열기
+              </button>
               {onOpenFileGuide ? (
                 <button
                   type="button"
@@ -829,5 +821,11 @@ export function ImportContactsPanel({
         </div>
       </div>
     </div>
+    <ContactExportLinksModal
+      open={exportLinksVariant != null}
+      variant={exportLinksVariant}
+      onClose={() => setExportLinksVariant(null)}
+    />
+    </>
   );
 }

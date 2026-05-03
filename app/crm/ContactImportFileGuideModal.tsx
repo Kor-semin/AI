@@ -1,11 +1,13 @@
 "use client";
 
+import { ContactExportLinksModal, type ContactExportLinksVariant } from "@/app/crm/ContactExportLinksModal";
 import { useEffect, useState } from "react";
 
 const PRIVACY_PRINCIPLES = [
+  "선택한 연락처만 가져옵니다.",
   "기존 고객 정보는 자동으로 덮어쓰지 않습니다.",
   "저장 전 항상 미리보기로 확인합니다.",
-  "선택한 연락처만 저장합니다.",
+  "선택한 항목만 저장합니다.",
   "Sensora는 고객 정보를 임의로 수집하거나 자동 저장하지 않습니다.",
 ] as const;
 
@@ -16,16 +18,8 @@ const summaryClass =
 
 const sectionMuted = "mt-2 text-[12px] leading-relaxed text-[#64748B]";
 
-const GOOGLE_CONTACTS_URL = "https://contacts.google.com/";
-const GOOGLE_CONTACTS_EXPORT_HELP_URL = "https://support.google.com/contacts/answer/7199294";
-const ICLOUD_CONTACTS_URL = "https://www.icloud.com/contacts";
-const ICLOUD_CONTACTS_EXPORT_HELP_URL =
-  "https://support.apple.com/guide/icloud/import-export-and-print-contacts-mmfba748b2/icloud";
-
-const guideExtLinkPrimary =
-  "inline-flex min-h-[40px] items-center rounded-lg border border-[#E2E8F0] bg-white px-3 py-2 text-[12px] font-semibold text-[#1D4ED8] hover:bg-[#F8FAFC]";
-const guideExtLinkSub =
-  "inline-flex min-h-[36px] items-center text-[12px] font-semibold text-[#475569] underline decoration-[#CBD5E1] underline-offset-2 hover:text-[#0F172A]";
+const exportLinksOpenerPrimary =
+  "inline-flex min-h-[44px] w-full touch-manipulation items-center justify-center rounded-xl bg-[#111827] px-5 py-3 text-[14px] font-semibold text-white shadow-sm hover:bg-[#1E293B] sm:w-auto";
 
 /** 아이폰·갤럭시·구글 연락처 파일 준비 안내(Audit: 자동 수집·전체 동기화 오인 표현 미사용) */
 export function ContactImportFileGuideModal({
@@ -40,6 +34,11 @@ export function ContactImportFileGuideModal({
 }) {
   /** 모달을 열 때마다 details를 리마운트해 브라우저/OS에 따라 남을 수 있는 펼침 상태를 초기화합니다. */
   const [accordionMountKey, setAccordionMountKey] = useState(0);
+  const [exportLinksVariant, setExportLinksVariant] = useState<ContactExportLinksVariant | null>(null);
+
+  useEffect(() => {
+    if (!open) setExportLinksVariant(null);
+  }, [open]);
 
   useEffect(() => {
     if (!open) return;
@@ -57,6 +56,7 @@ export function ContactImportFileGuideModal({
   if (!open) return null;
 
   return (
+    <>
     <div
       className="fixed inset-0 z-[340] flex items-center justify-center overflow-y-auto bg-black/[0.56] px-3 pb-[max(14px,calc(env(safe-area-inset-bottom,0px)+10px))] pt-[max(18px,calc(env(safe-area-inset-top,0px)+10px))] backdrop-blur-[2px] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden sm:p-4"
       role="presentation"
@@ -113,24 +113,16 @@ export function ContactImportFileGuideModal({
                   선택하고 vCard(.vcf)로 내보낸 파일을 업로드해 주세요. Mac을 쓰신다면 Mac의 연락처 앱에서도 vCard로
                   내보낼 수 있습니다.
                 </p>
-                <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:flex-wrap">
-                  <a
-                    href={ICLOUD_CONTACTS_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={guideExtLinkPrimary}
-                  >
-                    iCloud 연락처 열기
-                  </a>
-                  <a
-                    href={ICLOUD_CONTACTS_EXPORT_HELP_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={guideExtLinkSub}
-                  >
-                    iCloud 내보내기 도움말 보기
-                  </a>
-                </div>
+                <button
+                  type="button"
+                  className={exportLinksOpenerPrimary}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setExportLinksVariant("icloud");
+                  }}
+                >
+                  iCloud·vCard 준비 안내 열기
+                </button>
               </div>
             </details>
 
@@ -138,11 +130,11 @@ export function ContactImportFileGuideModal({
               <summary className={summaryClass}>Galaxy/Samsung 연락처 내보내기</summary>
               <div className="mt-3 border-t border-[#F1F5F9] pt-3">
                 <p>
-                  연락처 앱에서 연락처 관리 {">"} 가져오기/내보내기 {">"} 내보내기 메뉴를 통해 연락처 파일을 만들 수
+                  연락처 앱에서 연락처 관리 {">"} 가져오기/내보내기 {">"} 내보내기 메뉴를 통해 VCF 파일을 만들 수
                   있습니다.
                 </p>
                 <p className={sectionMuted}>
-                  기기나 연락처 앱 버전에 따라 메뉴 이름은 조금 다를 수 있습니다. 내보내기 형식은 보통 VCF 파일입니다.
+                  기기나 One UI 버전에 따라 메뉴 이름은 조금 다를 수 있습니다.
                 </p>
               </div>
             </details>
@@ -154,19 +146,16 @@ export function ContactImportFileGuideModal({
                 <p className={sectionMuted}>
                   내보낸 파일을 업로드하거나 내용만 복사해 붙여 넣을 수 있습니다.
                 </p>
-                <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:flex-wrap">
-                  <a href={GOOGLE_CONTACTS_URL} target="_blank" rel="noopener noreferrer" className={guideExtLinkPrimary}>
-                    Google 연락처 열기
-                  </a>
-                  <a
-                    href={GOOGLE_CONTACTS_EXPORT_HELP_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={guideExtLinkSub}
-                  >
-                    내보내기 도움말 보기
-                  </a>
-                </div>
+                <button
+                  type="button"
+                  className={exportLinksOpenerPrimary}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setExportLinksVariant("google");
+                  }}
+                >
+                  Google 연락처·파일 준비 안내 열기
+                </button>
               </div>
             </details>
           </div>
@@ -193,5 +182,11 @@ export function ContactImportFileGuideModal({
         </div>
       </div>
     </div>
+    <ContactExportLinksModal
+      open={exportLinksVariant != null}
+      variant={exportLinksVariant}
+      onClose={() => setExportLinksVariant(null)}
+    />
+    </>
   );
 }

@@ -112,6 +112,11 @@ export function scorePurchaseIntent(
   return { percent, grade, hints };
 }
 
+/** 주소록 가져오기 직후 등 단계에서는 가망 %·등급을 목록에 보이지 않음(Audit: 자동 채점 오인 방지). */
+export function shouldShowPurchaseIntentScore(customer: Pick<Customer, "stage">): boolean {
+  return customer.stage !== "연락처 가져옴";
+}
+
 /** UI용: 점수가 어떻게 나왔는지 줄글 설명 */
 export function explainPurchaseIntent(
   customer: Pick<Customer, "memo" | "phone" | "email"> & {

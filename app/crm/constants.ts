@@ -1,6 +1,9 @@
 /** 자동차 딜러(한국 매장) 기준 기본 목록 */
 
 export const DEALER_PIPELINE_STAGES = [
+  /** 주소록 가져오기로만 등록된 직후(상담 전) — 목록 가망 점수 미표시 */
+  "연락처 가져옴",
+  "미상담",
   "신규 문의",
   "상담 완료",
   "견적 발송",
@@ -13,6 +16,8 @@ export const DEALER_PIPELINE_STAGES = [
 ] as const;
 
 export const DEALER_LEAD_SOURCES = [
+  /** CSV/VCF 등 주소록 가져오기 — 자동 채점·등급과 구분 */
+  "주소록 가져오기",
   "전화·매장방문",
   "카카오",
   "네이버(플레이스·검색)",

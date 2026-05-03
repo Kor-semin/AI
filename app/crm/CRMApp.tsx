@@ -40,6 +40,7 @@ import {
   explainPurchaseIntent,
   LEAD_SCORE_HOTWORDS,
   scorePurchaseIntent,
+  shouldShowPurchaseIntentScore,
 } from "./leadScore";
 import {
   buildUsedCarSearchQuery,
@@ -903,6 +904,7 @@ export function CRMApp({
 
     let highPotential = 0;
     for (const c of state.customers) {
+      if (!shouldShowPurchaseIntentScore(c)) continue;
       const sx = scorePurchaseIntent(c);
       if (sx.grade === "S" || sx.grade === "A" || sx.percent >= 66) highPotential++;
     }
@@ -1189,9 +1191,11 @@ export function CRMApp({
       phone: draft.phone,
       email: draft.email,
       memo: draft.memoRaw,
-      interestedModel: draft.interestedModelHint,
-      leadSource: "전화·매장방문",
-      stage: "신규 문의",
+      /** 상담·관심차량 입력 전: 목록 가망·등급은 표시하지 않음 */
+      interestedModel: undefined,
+      compareVehicles: undefined,
+      leadSource: "주소록 가져오기",
+      stage: "연락처 가져옴",
     };
   }
 
@@ -1226,6 +1230,10 @@ export function CRMApp({
 
     setSelectedCustomerId((sel) => payload.creates[0]?.id ?? mergeIds[0] ?? sel);
     setTab("고객");
+
+    for (const c of payload.creates) {
+      addNextAction(c.id, "상담 메모 입력 필요", { skipTabSwitch: true });
+    }
 
     showToast(
       payload.creates.length || payload.merges.length ?
@@ -1820,6 +1828,7 @@ export function CRMApp({
                             ? formatDateTime(c.nextContactAt)
                             : "—";
                         const sx = scorePurchaseIntent(c);
+                        const showScore = shouldShowPurchaseIntentScore(c);
                         return (
                           <tr
                             key={c.id}
@@ -1851,14 +1860,18 @@ export function CRMApp({
                               {clampText(nextLbl, 90)}
                             </td>
                             <td className="px-5 py-4 align-top sm:px-6">
-                              <button
-                                type="button"
-                                title="산정 기준"
-                                className="text-[15px] font-semibold text-[#475569] underline decoration-[#CBD5E1] underline-offset-[5px] hover:text-[#111827]"
-                                onClick={() => setLeadExplainForId(c.id)}
-                              >
-                                {sx.percent}% · {sx.grade}
-                              </button>
+                              {showScore ? (
+                                <button
+                                  type="button"
+                                  title="산정 기준"
+                                  className="text-[15px] font-semibold text-[#475569] underline decoration-[#CBD5E1] underline-offset-[5px] hover:text-[#111827]"
+                                  onClick={() => setLeadExplainForId(c.id)}
+                                >
+                                  {sx.percent}% · {sx.grade}
+                                </button>
+                              ) : (
+                                <span className="text-[15px] font-medium text-[#64748B]">분석 전 · —</span>
+                              )}
                             </td>
                           </tr>
                         );
