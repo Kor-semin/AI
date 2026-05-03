@@ -65,11 +65,11 @@ const onboardCloseBtn =
 
 /** 주 CTA — 워크스페이스 primary와 같은 프리미엄 그라데이션 */
 const onboardPrimaryBtn =
-  "sensora-premium-primary-workspace inline-flex min-h-[3.25rem] w-full max-w-[min(360px,min(94vw,calc(100vw-32px)))] touch-manipulation items-center justify-center self-center rounded-2xl px-6 py-3.5 text-[0.9375rem] font-semibold leading-tight shadow-[inset_0_1px_0_rgba(255,255,255,0.09)] motion-reduce:transition-none disabled:cursor-not-allowed disabled:opacity-40 sm:max-w-[min(320px,90vw)] sm:px-7 sm:text-base";
+  "sensora-premium-primary-workspace inline-flex min-h-[3.25rem] w-full max-w-[min(360px,min(94vw,calc(100vw-32px)))] touch-manipulation items-center justify-center self-center rounded-2xl px-[clamp(1.125rem,4.2vw,1.5rem)] py-[clamp(0.65rem,2.4vw,0.9rem)] text-[clamp(0.875rem,calc(0.82rem+0.5vw),1rem)] font-semibold leading-tight shadow-[inset_0_1px_0_rgba(255,255,255,0.09)] motion-reduce:transition-none disabled:cursor-not-allowed disabled:opacity-40 sm:max-w-[min(320px,90vw)] sm:px-7 sm:py-3.5 sm:text-base";
 
 /** 보조 — 글래스 고스트 */
 const onboardGhostBtn =
-  "inline-flex min-h-[3.125rem] w-full max-w-[min(360px,min(94vw,calc(100vw-32px)))] touch-manipulation items-center justify-center self-center rounded-2xl border border-white/[0.24] bg-white/[0.08] px-6 py-3.5 text-sm font-semibold leading-tight text-slate-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.07)] backdrop-blur-sm transition-[background,border-color,transform,box-shadow] duration-[220ms] motion-reduce:transition-none hover:border-sky-300/42 hover:bg-white/[0.13] hover:shadow-[0_0_36px_-10px_rgba(56,189,248,0.12)] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/40 disabled:cursor-not-allowed disabled:opacity-35 sm:max-w-[min(320px,90vw)]";
+  "inline-flex min-h-[3.125rem] w-full max-w-[min(360px,min(94vw,calc(100vw-32px)))] touch-manipulation items-center justify-center self-center rounded-2xl border border-white/[0.24] bg-white/[0.08] px-[clamp(1.125rem,4.2vw,1.5rem)] py-[clamp(0.6rem,2.2vw,0.88rem)] text-[clamp(0.8125rem,calc(0.78rem+0.45vw),0.9375rem)] font-semibold leading-tight text-slate-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.07)] backdrop-blur-sm transition-[background,border-color,transform,box-shadow] duration-[220ms] motion-reduce:transition-none hover:border-sky-300/42 hover:bg-white/[0.13] hover:shadow-[0_0_36px_-10px_rgba(56,189,248,0.12)] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/40 disabled:cursor-not-allowed disabled:opacity-35 sm:max-w-[min(320px,90vw)] sm:px-6 sm:py-3.5 sm:text-sm";
 
 const onboardNavMutedBtn =
   "sensora-dark-ghost-btn inline-flex min-h-[3.25rem] min-w-0 flex-1 touch-manipulation items-center justify-center rounded-2xl px-5 py-3.5 text-sm font-semibold leading-tight text-slate-200 transition-[border-color,background,color,transform] duration-[220ms] motion-reduce:transition-none active:scale-[0.99] focus-visible:ring-2 focus-visible:ring-sky-400/35 disabled:cursor-not-allowed disabled:opacity-[0.38] sm:min-w-[6rem]";
@@ -245,10 +245,10 @@ export function NotebookCover() {
           className={[
             "notebook-cover-inner-stage flex flex-1 flex-col px-1 sm:px-5",
             pageIdx === 0 ?
-              "justify-center py-7 max-[480px]:py-3 max-[480px]:pt-5 sm:py-10"
+              "justify-center py-6 max-[480px]:py-2.5 max-[480px]:pt-4 sm:py-10"
             : pageIdx === 1 ?
-              "min-h-0 justify-center py-6 max-[480px]:py-2.5 max-[480px]:pb-2 sm:py-10"
-            : `justify-center py-7 max-[480px]:py-3.5 max-[480px]:pb-2.5 sm:py-10 max-lg:justify-start max-lg:pt-5`,
+              "min-h-0 justify-center py-5 max-[480px]:py-2 max-[480px]:pb-2 sm:py-10"
+            : `justify-center py-6 max-[480px]:py-3 max-[480px]:pb-2 sm:py-10 max-lg:justify-start max-lg:pt-4`,
           ].join(" ")}
           key={pageIdx}
           data-notebook-cover-tone={coverTheme}
@@ -411,9 +411,9 @@ export function NotebookCover() {
 
         <footer
           className={[
-            "mx-auto flex w-full max-w-[min(440px,min(94vw,calc(100vw-28px)))] shrink-0 flex-col px-0.5 pb-[max(0.85rem,calc(env(safe-area-inset-bottom,0px)+10px))] pt-3",
-            "mt-5 gap-4 sm:mt-8 sm:gap-6",
-            "max-[480px]:mt-5 max-[480px]:gap-3.5 max-[480px]:pt-2.5 max-[480px]:pb-[max(0.65rem,calc(env(safe-area-inset-bottom,0px)+12px))]",
+            "mx-auto flex w-full max-w-[min(440px,min(94vw,calc(100vw-28px)))] shrink-0 flex-col px-0.5 pb-[max(0.85rem,calc(env(safe-area-inset-bottom,0px)+10px))] pt-2.5",
+            "mt-4 gap-3 sm:mt-8 sm:gap-6 sm:pt-3",
+            "max-[480px]:mt-3 max-[480px]:gap-3 max-[480px]:pt-2 max-[480px]:pb-[max(0.65rem,calc(env(safe-area-inset-bottom,0px)+12px))]",
           ].join(" ")}
         >
           <nav className="flex justify-center gap-2.5 px-1 motion-reduce:gap-2" aria-label="온보딩 단계">

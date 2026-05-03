@@ -1472,6 +1472,23 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   font-family: var(--font-cover-sans), "Noto Sans KR", "Apple SD Gothic Neo", sans-serif;
 }
 
+/* 표지 온보딩: 설정(large 글씨) 시 루트 rem이 커져도 세로 리듬이 과하게 벌어지지 않도록 */
+@media (max-width: 520px) {
+  html[data-text-size="large"] .notebook-cover-inner-stage {
+    padding-top: clamp(0.45rem, 2.2vw, 1.4rem);
+    padding-bottom: clamp(0.45rem, 2.2vw, 1.4rem);
+  }
+
+  html[data-text-size="large"] .notebook-cover-body-block {
+    margin-top: clamp(0.55rem, 2.8vw, 1.35rem);
+  }
+
+  html[data-text-size="large"] .notebook-cover-cover-layer > footer {
+    margin-top: clamp(0.625rem, 2.8vw, 1.125rem);
+    gap: clamp(0.625rem, 3vw, 1rem);
+  }
+}
+
 .notebook-cover-quote-stack {
   border-radius: 4px;
 }

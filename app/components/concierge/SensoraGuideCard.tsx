@@ -17,7 +17,7 @@ export function SensoraGuideCard({ title, description, image, selected, onSelect
       onClick={onSelect}
       aria-pressed={selected}
       className={[
-        "sensora-guide-pick-card group relative flex w-full touch-manipulation flex-col overflow-hidden rounded-[18px] text-left",
+        "sensora-guide-pick-card group relative flex w-full touch-manipulation flex-col overflow-hidden rounded-[14px] text-left sm:rounded-[18px]",
         "border border-white/[0.1] bg-gradient-to-br from-slate-950/88 via-[#070f1c]/76 to-slate-950/45",
         "shadow-[inset_0_1px_0_rgba(255,255,255,0.065),0_12px_36px_-22px_rgba(0,0,0,0.55)] backdrop-blur-xl",
         "ring-1 ring-inset ring-white/[0.05]",
@@ -30,7 +30,7 @@ export function SensoraGuideCard({ title, description, image, selected, onSelect
         : "active:scale-[0.992]",
       ].join(" ")}
     >
-      <div className="relative aspect-[16/10] w-full overflow-hidden border-b border-white/[0.07] bg-[#030712]/95 sm:aspect-[16/11]">
+      <div className="relative h-32 max-h-40 w-full shrink-0 overflow-hidden border-b border-white/[0.07] bg-[#030712]/95 sm:h-auto sm:max-h-none sm:aspect-[16/11]">
         {selected ? (
           <span
             className="pointer-events-none absolute right-3 top-3 z-[2] flex size-2.5 items-center justify-center rounded-full bg-sky-400 shadow-[0_0_16px_-1px_rgba(56,189,248,0.85)] ring-2 ring-sky-300/45"
@@ -58,9 +58,9 @@ export function SensoraGuideCard({ title, description, image, selected, onSelect
           }}
         />
       </div>
-      <div className="flex min-h-0 flex-1 flex-col px-3 pb-3.5 pt-3 sm:px-[0.95rem] sm:pb-4 sm:pt-3.5">
-        <p className="text-[0.8125rem] font-semibold leading-snug tracking-tight text-slate-50 sm:text-sm">{title}</p>
-        <p className="mt-1.5 line-clamp-[4] text-[11px] leading-relaxed text-slate-400 sm:line-clamp-3 sm:text-[12px]">{description}</p>
+      <div className="flex min-h-0 flex-1 flex-col px-[0.6875rem] pb-3 pt-[0.625rem] sm:px-[0.95rem] sm:pb-4 sm:pt-3.5">
+        <p className="line-clamp-2 text-[0.765625rem] font-semibold leading-snug tracking-tight text-slate-50 sm:line-clamp-none sm:text-sm">{title}</p>
+        <p className="mt-1 line-clamp-2 text-[10.25px] leading-[1.45] text-slate-400 sm:mt-1.5 sm:line-clamp-3 sm:text-[12px] sm:leading-relaxed">{description}</p>
       </div>
     </button>
   );

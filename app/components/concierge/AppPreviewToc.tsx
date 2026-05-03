@@ -124,10 +124,10 @@ export function AppPreviewToc({ open, onClose, onSelectSection }: Props) {
           {t("preview.guide.pageTitle")}
         </h2>
 
-        <header className="relative z-[2] mx-auto flex w-full max-w-[min(1200px,100%-1.5rem)] shrink-0 flex-col gap-1 px-1 pt-[max(12px,calc(env(safe-area-inset-top,0px)+10px))] pb-1 text-center sm:px-2">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-sky-400/85">{t("preview.guide.headerKicker")}</p>
-          <p className="mx-auto max-w-[40rem] text-sm leading-snug text-slate-400">{t("preview.guide.headerSub")}</p>
-          <div className="mt-2 flex justify-end pb-2">
+        <header className="relative z-[2] mx-auto flex w-full max-w-[min(1200px,100%-1.5rem)] shrink-0 flex-col gap-0.5 px-1 pb-0 pt-[max(10px,calc(env(safe-area-inset-top,0px)+8px))] text-center sm:gap-1 sm:px-2 sm:pb-1 sm:pt-[max(12px,calc(env(safe-area-inset-top,0px)+10px))]">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-sky-400/85 sm:text-[11px] sm:tracking-[0.16em]">{t("preview.guide.headerKicker")}</p>
+          <p className="mx-auto max-w-[40rem] text-xs leading-snug text-slate-400 sm:text-sm">{t("preview.guide.headerSub")}</p>
+          <div className="mt-1 flex justify-end pb-1 sm:mt-2 sm:pb-2">
             <button
               type="button"
               className={`${glassInteractive} min-h-11 shrink-0 px-4 py-2 text-sm font-semibold text-slate-100 touch-manipulation`}
@@ -139,8 +139,8 @@ export function AppPreviewToc({ open, onClose, onSelectSection }: Props) {
         </header>
 
         <div className="relative z-[2] flex min-h-0 flex-1 flex-col px-3 sm:px-5 lg:px-8">
-          <div className="sensora-guide-preview-hide-scroll sensora-guide-toc-scroll flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-y-contain [-webkit-overflow-scrolling:touch] pb-1 lg:pb-3">
-            <main className="app-preview-guide-main-inner mx-auto flex w-full max-w-[min(1200px,100%-12px)] flex-col pb-3 sm:pb-4 lg:pb-2">
+          <div className="sensora-guide-preview-hide-scroll sensora-guide-toc-scroll min-h-0 flex-1 overflow-y-auto overscroll-y-contain [-webkit-overflow-scrolling:touch] pb-2 lg:pb-3">
+            <main className="app-preview-guide-main-inner mx-auto flex w-full max-w-[min(1200px,100%-12px)] flex-col pb-2 sm:pb-4 lg:pb-2">
               <SensoraGuideGallery
                 guides={SENSORA_GUIDES}
                 activeId={activeGuideId}
@@ -151,8 +151,8 @@ export function AppPreviewToc({ open, onClose, onSelectSection }: Props) {
                 getDescription={(g) => t(g.descKey)}
               />
 
-              <div className="mt-8 w-full lg:mt-10">
-                <div className="mx-auto grid w-full max-w-[36rem] grid-cols-1 gap-2.5 sm:mx-0 sm:max-w-none sm:grid-cols-2 sm:gap-3 lg:max-w-[640px]">
+              <div className="mt-5 w-full lg:mt-10">
+                <div className="mx-auto grid w-full max-w-[36rem] grid-cols-1 gap-2 sm:mx-0 sm:max-w-none sm:grid-cols-2 sm:gap-3 lg:max-w-[640px]">
                   <button
                     type="button"
                     onClick={() => pick("dashboard")}
@@ -169,7 +169,7 @@ export function AppPreviewToc({ open, onClose, onSelectSection }: Props) {
                   </button>
                 </div>
 
-                <div className="mx-auto mt-5 flex flex-col items-center gap-3 border-t border-white/[0.07] pt-5 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-x-10 sm:gap-y-1 sm:pt-6">
+                <div className="mx-auto mt-4 flex flex-col items-center gap-2 border-t border-white/[0.07] pt-4 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-x-10 sm:gap-y-1 sm:gap-3 sm:pt-6">
                   <Link
                     href={REGISTER_PATH}
                     prefetch={false}
@@ -189,43 +189,41 @@ export function AppPreviewToc({ open, onClose, onSelectSection }: Props) {
                 </div>
               </div>
 
-              <div className="mx-auto mt-8 max-w-[min(100%,52rem)] space-y-2 text-[11px] leading-relaxed text-slate-500 sm:mt-10" role="note">
+              <div className="mx-auto mt-6 max-w-[min(100%,52rem)] space-y-1.5 text-[10px] leading-relaxed text-slate-500 sm:mt-10 sm:space-y-2 sm:text-[11px]" role="note">
                 <p>{t("preview.toc.disclaimer1")}</p>
                 <p>{t("preview.toc.disclaimer2")}</p>
               </div>
             </main>
-
-            <footer className="app-preview-guide-footer sensora-guide-toc-footer relative z-[1] mx-auto mt-4 w-full max-w-[min(720px,100%-16px)] shrink-0 max-lg:sticky max-lg:bottom-0 max-lg:border-t max-lg:border-white/[0.1] max-lg:bg-[#020817]/94 max-lg:px-4 max-lg:py-[max(10px,calc(env(safe-area-inset-bottom,0px)+9px))] max-lg:pb-[max(12px,calc(env(safe-area-inset-bottom,0px)+10px))] max-lg:shadow-[0_-14px_40px_-22px_rgba(0,0,0,0.55)] max-lg:backdrop-blur-md sm:max-lg:px-6 lg:mx-auto lg:mt-8 lg:max-w-[min(680px,calc(100%-32px))] lg:rounded-2xl lg:border lg:border-white/[0.1] lg:bg-[linear-gradient(180deg,rgba(56,189,248,0.035)_0%,rgba(15,26,43,0.42)_52%,rgba(8,17,31,0.62)_100%)] lg:px-5 lg:py-3 lg:shadow-[inset_0_1px_0_rgba(255,255,255,0.07)] lg:backdrop-blur-sm">
-              <div className="flex w-full items-center justify-between gap-3 max-lg:max-w-[min(720px,100%)] max-lg:mx-auto">
-                <button
-                  type="button"
-                  onClick={goPrevGuide}
-                  className="app-preview-guide-nav-btn sensora-guide-toc-prev min-h-11 min-w-0 flex-1 rounded-xl border border-white/[0.12] bg-white/[0.052] px-3 py-2.5 text-sm font-semibold text-slate-200 transition hover:border-sky-400/32 hover:bg-white/[0.065] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 touch-manipulation lg:min-h-10 lg:flex-none lg:border-white/[0.1] lg:px-4 lg:bg-white/[0.04]"
-                >
-                  {t("preview.flow.footer.prev")}
-                </button>
-
-                <div className="flex shrink-0 flex-wrap justify-center gap-1.5 px-1 opacity-95 sm:gap-2 lg:px-3" aria-hidden>
-                  {SENSORA_GUIDES.map((g) => (
-                    <span
-                      key={g.id}
-                      className={`h-1.5 w-1.5 rounded-full transition-[transform,opacity,box-shadow] sm:h-2 sm:w-2 lg:h-[7px] lg:w-[7px] ${g.id === activeGuideId ? "scale-125 bg-sky-400 shadow-[0_0_12px_rgba(56,189,248,0.65)]" : "bg-slate-600/75 opacity-70"}`}
-                    />
-                  ))}
-                </div>
-
-                <button
-                  type="button"
-                  onClick={goNextGuide}
-                  className="app-preview-guide-nav-btn sensora-guide-toc-next min-h-11 min-w-0 flex-1 rounded-xl border border-sky-400/42 bg-white/[0.065] px-3 py-2.5 text-sm font-semibold text-sky-50 transition hover:border-sky-400/55 hover:bg-white/[0.085] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 touch-manipulation lg:min-h-10 lg:flex-none lg:border-white/[0.12] lg:px-4 lg:bg-white/[0.055] lg:text-slate-100"
-                >
-                  {t("preview.flow.footer.next")}
-                </button>
-              </div>
-            </footer>
-
-            <div className="h-[max(4px,calc(env(safe-area-inset-bottom,0px)+2px))] shrink-0 max-lg:hidden" aria-hidden />
           </div>
+
+          <footer className="app-preview-guide-footer sensora-guide-toc-footer shrink-0 border-t border-white/[0.1] bg-[#020817]/94 px-3 py-[max(10px,calc(env(safe-area-inset-bottom,0px)+12px))] shadow-[0_-10px_32px_-18px_rgba(0,0,0,0.55)] backdrop-blur-md sm:px-5 lg:mx-auto lg:mt-0 lg:max-w-[min(680px,calc(100%-32px))] lg:rounded-2xl lg:border lg:border-white/[0.1] lg:bg-[linear-gradient(180deg,rgba(56,189,248,0.035)_0%,rgba(15,26,43,0.42)_52%,rgba(8,17,31,0.62)_100%)] lg:px-5 lg:py-3 lg:shadow-[inset_0_1px_0_rgba(255,255,255,0.07)] lg:backdrop-blur-sm">
+            <div className="mx-auto flex w-full max-w-[min(720px,100%-8px)] items-center justify-between gap-2 sm:max-w-[min(720px,100%)] sm:gap-3">
+              <button
+                type="button"
+                onClick={goPrevGuide}
+                className="app-preview-guide-nav-btn sensora-guide-toc-prev min-h-11 min-w-0 flex-1 rounded-xl border border-white/[0.12] bg-white/[0.052] px-3 py-2.5 text-sm font-semibold text-slate-200 transition hover:border-sky-400/32 hover:bg-white/[0.065] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 touch-manipulation lg:min-h-10 lg:flex-none lg:border-white/[0.1] lg:px-4 lg:bg-white/[0.04]"
+              >
+                {t("preview.flow.footer.prev")}
+              </button>
+
+              <div className="flex shrink-0 flex-wrap justify-center gap-1 px-0.5 opacity-95 sm:gap-2 lg:px-3" aria-hidden>
+                {SENSORA_GUIDES.map((g) => (
+                  <span
+                    key={g.id}
+                    className={`h-1.5 w-1.5 rounded-full transition-[transform,opacity,box-shadow] sm:h-2 sm:w-2 lg:h-[7px] lg:w-[7px] ${g.id === activeGuideId ? "scale-125 bg-sky-400 shadow-[0_0_12px_rgba(56,189,248,0.65)]" : "bg-slate-600/75 opacity-70"}`}
+                  />
+                ))}
+              </div>
+
+              <button
+                type="button"
+                onClick={goNextGuide}
+                className="app-preview-guide-nav-btn sensora-guide-toc-next min-h-11 min-w-0 flex-1 rounded-xl border border-sky-400/42 bg-white/[0.065] px-3 py-2.5 text-sm font-semibold text-sky-50 transition hover:border-sky-400/55 hover:bg-white/[0.085] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 touch-manipulation lg:min-h-10 lg:flex-none lg:border-white/[0.12] lg:px-4 lg:bg-white/[0.055] lg:text-slate-100"
+              >
+                {t("preview.flow.footer.next")}
+              </button>
+            </div>
+          </footer>
         </div>
       </div>
     </>
