@@ -112,12 +112,12 @@ export function LandingShowroom({ onOpenAppWorkspace }: { onOpenAppWorkspace: ()
     <div className="relative overflow-x-hidden bg-[#020817]">
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-[min(88vh,820px)] bg-[radial-gradient(ellipse_92%_62%_at_42%-12%,rgba(56,189,248,0.11),transparent_56%),radial-gradient(ellipse_74%_52%_at_104%_10%,rgba(139,92,246,0.085),transparent_52%),radial-gradient(ellipse_58%_44%_at_4%_36%,rgba(30,58,138,0.06),transparent_50%)]"
+        className="pointer-events-none absolute inset-x-0 top-0 h-[min(64vh,600px)] bg-[radial-gradient(ellipse_88%_58%_at_52%_8%,rgba(56,189,248,0.065),transparent_58%),radial-gradient(ellipse_62%_48%_at_96%_18%,rgba(139,92,246,0.055),transparent_54%),radial-gradient(ellipse_48%_40%_at_8%_42%,rgba(30,58,138,0.045),transparent_52%)]"
       />
       <div className="relative z-[1]">
         <LandingShowcaseHero onOpenAppWorkspace={onOpenAppWorkspace} />
 
-        <RevealSection className="relative mx-auto w-full max-w-[1200px] overflow-x-hidden px-5 pb-10 pt-6 sm:px-6 sm:pb-14 sm:pt-10">
+        <RevealSection className="relative mx-auto w-full max-w-[1200px] overflow-x-hidden px-5 pb-9 pt-3 sm:px-6 sm:pb-11 sm:pt-6">
           <SensoraGuideSectionInner />
         </RevealSection>
 
@@ -137,7 +137,7 @@ function SensoraGuideSectionInner() {
   const { t } = useLanguage();
   return (
     <>
-      <div className="landing-showroom-premium-rule mx-auto mb-8 sm:mb-10 pointer-events-none opacity-95" aria-hidden />
+      <div className="landing-showroom-premium-rule mx-auto mb-6 sm:mb-8 pointer-events-none opacity-95" aria-hidden />
       <div className="mx-auto max-w-[720px] text-center lg:max-w-[760px]">
         <h2 className="text-[clamp(1.35rem,2.85vw,1.875rem)] font-semibold tracking-[-0.025em] text-slate-50">
           {t("landing.showroom.guide.title")}

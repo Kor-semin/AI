@@ -22,7 +22,7 @@ const heroGhostDark =
   "landing-showroom-cta-preview inline-flex min-h-[50px] w-full min-w-0 shrink-0 items-center justify-center gap-2 rounded-2xl border border-white/[0.22] bg-white/[0.08] px-6 py-3.5 text-[15px] font-semibold tracking-tight text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] ring-1 ring-inset ring-white/[0.1] backdrop-blur-md transition-[border-color,background-color,box-shadow,transform] duration-200 hover:border-sky-300/44 hover:bg-white/[0.12] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/42 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050b14] sm:w-auto sm:min-h-[52px] touch-manipulation motion-reduce:active:scale-100";
 
 const tipCompactCard =
-  "landing-showcase-tip-card group flex min-h-[7.5rem] w-full cursor-pointer touch-manipulation flex-col rounded-[15px] border border-white/[0.14] bg-gradient-to-b from-slate-900/65 to-[#07111f]/78 p-3.5 text-left shadow-[0_10px_36px_-14px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(255,255,255,0.05)] ring-1 ring-inset ring-white/[0.05] backdrop-blur-md transition-[border-color,box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:border-sky-400/35 hover:shadow-[0_16px_44px_-16px_rgba(0,0,0,0.58),0_0_40px_-12px_rgba(56,189,248,0.1)] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/45 focus-visible:ring-offset-2 focus-visible:ring-offset-[#020817] motion-reduce:transition-none motion-reduce:hover:translate-y-0 sm:min-h-[7.75rem] sm:rounded-[17px] sm:p-4";
+  "landing-showcase-tip-card group flex min-h-[6.75rem] w-full cursor-pointer touch-manipulation flex-col rounded-[15px] border border-white/[0.14] bg-gradient-to-b from-slate-900/65 to-[#07111f]/78 p-3 text-left shadow-[0_10px_36px_-14px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(255,255,255,0.05)] ring-1 ring-inset ring-white/[0.05] backdrop-blur-md transition-[border-color,box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:border-sky-400/35 hover:shadow-[0_16px_44px_-16px_rgba(0,0,0,0.58),0_0_40px_-12px_rgba(56,189,248,0.1)] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/45 focus-visible:ring-offset-2 focus-visible:ring-offset-[#020817] motion-reduce:transition-none motion-reduce:hover:translate-y-0 sm:min-h-[7.25rem] sm:rounded-[17px] sm:p-3.5 lg:min-h-[7.4rem]";
 
 const flowStepCard =
   "landing-showcase-flow-step flex min-h-[5.5rem] flex-1 flex-col rounded-[14px] border border-white/[0.11] bg-gradient-to-br from-white/[0.06] to-transparent px-3 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-sm transition-[border-color,transform,box-shadow] duration-200 hover:border-sky-400/28 hover:shadow-[0_12px_32px_-18px_rgba(0,0,0,0.5)] sm:min-h-[6rem] sm:rounded-2xl sm:px-4 sm:py-3.5";
@@ -108,8 +108,10 @@ function HeroDashboardPreview() {
   const feedRows = rows.slice(2);
 
   return (
-    <div className={`${heroPreviewShell} w-full max-[1023px]:max-w-[min(100%,28rem)] max-[390px]:max-w-[calc(100vw-28px)]`}>
-      <div className="relative flex items-center gap-2.5 border-b border-white/[0.12] bg-gradient-to-b from-[#070f1e]/96 to-[#050c18]/94 px-3 py-2.5 sm:gap-3 sm:px-4 sm:py-3">
+    <div
+      className={`${heroPreviewShell} mx-auto w-full max-w-[calc(100vw-28px)] sm:max-w-[min(100%,32rem)] lg:mx-0 lg:max-w-none`}
+    >
+      <div className="relative flex items-center gap-2.5 border-b border-white/[0.12] bg-gradient-to-b from-[#070f1e]/96 to-[#050c18]/94 px-3 py-2.5 sm:gap-3 sm:px-[1.125rem] sm:py-[0.7rem]">
         <div className="flex gap-1.5" aria-hidden>
           <span className="size-[7px] rounded-full bg-rose-400/50 shadow-[inset_0_1px_0_rgba(255,255,255,0.22)] sm:size-2" />
           <span className="size-[7px] rounded-full bg-amber-400/42 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)] sm:size-2" />
@@ -117,18 +119,18 @@ function HeroDashboardPreview() {
         </div>
         <div className="flex min-w-0 flex-1 items-center gap-2">
           <span className="size-[6px] shrink-0 rounded-full bg-emerald-400/80 ring-2 ring-emerald-400/20 shadow-[0_0_10px_-2px_rgba(52,211,153,0.35)]" aria-hidden />
-          <p className="min-w-0 flex-1 truncate text-left text-[9px] font-semibold uppercase tracking-[0.12em] text-slate-300 sm:text-[10px]">
+          <p className="min-w-0 flex-1 truncate text-left text-[10px] font-semibold uppercase tracking-[0.11em] text-slate-300 sm:text-[11px]">
             {t("product.name")}
           </p>
         </div>
-        <span className="hidden shrink-0 rounded-md border border-white/[0.1] bg-white/[0.04] px-1.5 py-0.5 text-[8px] font-semibold uppercase tracking-[0.14em] text-slate-500 sm:inline">
+        <span className="hidden shrink-0 rounded-md border border-white/[0.1] bg-white/[0.04] px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-[0.12em] text-slate-500 sm:inline">
           preview
         </span>
       </div>
 
-      <div className="flex min-h-0 flex-col sm:min-h-[240px] sm:flex-row md:min-h-[260px] lg:min-h-[280px]">
+      <div className="flex min-h-0 flex-col sm:min-h-[268px] sm:flex-row md:min-h-[288px] lg:min-h-[308px]">
         <div
-          className="flex shrink-0 flex-row gap-0 overflow-x-auto overflow-y-hidden border-b border-white/[0.1] bg-[#030910]/96 [scrollbar-width:none] sm:w-[7.85rem] sm:flex-col sm:overflow-visible sm:border-b-0 sm:border-r sm:border-white/[0.1] [&::-webkit-scrollbar]:hidden"
+          className="flex shrink-0 flex-row gap-0 overflow-x-auto overflow-y-hidden border-b border-white/[0.1] bg-[#030910]/96 [scrollbar-width:none] sm:w-[9rem] sm:flex-col sm:overflow-visible sm:border-b-0 sm:border-r sm:border-white/[0.1] [&::-webkit-scrollbar]:hidden"
           aria-hidden
         >
           {HERO_MOCK_SIDEBAR.map((section) => {
@@ -145,39 +147,41 @@ function HeroDashboardPreview() {
                 ].join(" ")}
               >
                 <span className={[ "size-[6px] shrink-0 rounded-full sm:size-1.5", active ? "bg-sky-400 shadow-[0_0_10px_-1px_rgba(56,189,248,0.45)]" : "bg-white/20" ].join(" ")} />
-                <span className="truncate text-[9px] font-bold leading-tight text-slate-200 sm:text-[10px]">{t(key)}</span>
+                <span className="truncate text-[10px] font-bold leading-tight text-slate-200 sm:text-[11px]">{t(key)}</span>
               </div>
             );
           })}
         </div>
 
         <div className="flex min-w-0 flex-1 flex-col bg-gradient-to-br from-[#020817]/96 via-[#040d18]/95 to-[#051018]/92">
-          <div className="flex flex-wrap items-center gap-1.5 border-b border-white/[0.08] px-2.5 py-2 sm:gap-2 sm:px-3" aria-hidden>
-            <div className="relative min-h-[30px] min-w-0 flex-1 rounded-[9px] border border-white/[0.1] bg-black/28 px-2.5 py-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]">
-              <span className="text-[9px] text-slate-500">{t("common.search")}</span>
-              <span className="absolute right-1.5 top-1/2 hidden -translate-y-1/2 rounded border border-white/[0.1] px-1 py-px text-[8px] text-slate-500 sm:inline">⌘K</span>
+          <div className="flex flex-wrap items-center gap-1.5 border-b border-white/[0.08] px-2.5 py-2 sm:gap-2 sm:px-3 sm:py-2.5" aria-hidden>
+            <div className="relative min-h-[32px] min-w-0 flex-1 rounded-[10px] border border-white/[0.1] bg-black/28 px-2.5 py-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]">
+              <span className="text-[10px] text-slate-500">{t("common.search")}</span>
+              <span className="absolute right-1.5 top-1/2 hidden -translate-y-1/2 rounded border border-white/[0.1] px-1 py-px text-[9px] text-slate-500 sm:inline">
+                ⌘K
+              </span>
             </div>
-            <span className="rounded-[9px] border border-violet-400/22 bg-violet-500/[0.09] px-2 py-1 text-[8px] font-semibold uppercase text-violet-100/92 sm:text-[9px]">
+            <span className="rounded-[10px] border border-violet-400/22 bg-violet-500/[0.09] px-2 py-1.5 text-[9px] font-semibold uppercase text-violet-100/92 sm:text-[10px]">
               Tip
             </span>
-            <span className="rounded-[9px] border border-sky-400/28 bg-gradient-to-b from-[#27364b] to-[#0f172a] px-2 py-1 text-[9px] font-semibold text-slate-50 ring-1 ring-sky-400/25">
+            <span className="rounded-[10px] border border-sky-400/28 bg-gradient-to-b from-[#27364b] to-[#0f172a] px-2 py-1.5 text-[10px] font-semibold text-slate-50 ring-1 ring-sky-400/25">
               + {t("crm.addCustomer")}
             </span>
           </div>
 
-          <div className="grid grid-cols-2 gap-1.5 px-2 pt-2 sm:gap-2 sm:px-3 sm:pt-2.5" aria-hidden>
+          <div className="grid grid-cols-2 gap-2 px-2.5 pt-2 sm:gap-2.5 sm:px-3 sm:pt-2.5" aria-hidden>
             {metricSnippet.map(({ titleKey, bodyKey }) => (
               <div
                 key={titleKey}
                 className="rounded-[11px] border border-white/[0.1] bg-gradient-to-br from-white/[0.05] to-transparent px-2 py-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] sm:rounded-xl sm:px-2.5 sm:py-2"
               >
-                <p className="text-[8px] font-bold uppercase tracking-[0.1em] text-slate-500 sm:text-[9px]">{t(titleKey)}</p>
-                <p className="mt-0.5 line-clamp-2 text-[10px] font-semibold leading-snug text-slate-50 sm:text-[11px]">{t(bodyKey)}</p>
+                <p className="text-[9px] font-bold uppercase tracking-[0.1em] text-slate-500 sm:text-[10px]">{t(titleKey)}</p>
+                <p className="mt-0.5 line-clamp-2 text-[11px] font-semibold leading-snug text-slate-50 sm:text-[12px]">{t(bodyKey)}</p>
               </div>
             ))}
           </div>
 
-          <div className="min-h-[5.5rem] flex-1 space-y-px overflow-hidden px-1.5 pb-2 pt-1 max-[389px]:min-h-[5rem] sm:min-h-[6.5rem] sm:space-y-0.5 sm:px-2 sm:pb-2.5 sm:pt-1.5">
+          <div className="min-h-[6rem] flex-1 space-y-0.5 overflow-hidden px-2 pb-2 pt-1.5 max-[389px]:min-h-[5.5rem] sm:min-h-[7rem] sm:space-y-1 sm:px-2.5 sm:pb-3 sm:pt-2">
             {feedRows.map(({ titleKey, bodyKey, ...rest }) => (
               <div
                 key={titleKey}
@@ -188,8 +192,8 @@ function HeroDashboardPreview() {
                   : "",
                 ].join(" ")}
               >
-                <p className="text-[8px] font-bold uppercase tracking-[0.09em] text-slate-500 sm:text-[9px]">{t(titleKey)}</p>
-                <p className="mt-0.5 line-clamp-2 text-[11px] font-medium leading-snug text-slate-50 sm:text-[12px] sm:leading-[1.5]">{t(bodyKey)}</p>
+                <p className="text-[9px] font-bold uppercase tracking-[0.09em] text-slate-500 sm:text-[10px]">{t(titleKey)}</p>
+                <p className="mt-0.5 line-clamp-2 text-[12px] font-medium leading-snug text-slate-50 sm:text-[13px] sm:leading-[1.52]">{t(bodyKey)}</p>
               </div>
             ))}
           </div>
@@ -241,25 +245,26 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
         onClose={() => setViewer({ open: false, title: "", initialSlideIndex: 0 })}
       />
 
-      <section className="landing-showcase-hero relative mx-auto w-full max-w-[1360px] px-[max(1rem,calc(env(safe-area-inset-left,0px)+12px))] pb-8 pr-[max(1rem,calc(env(safe-area-inset-right,0px)+12px))] pt-2 sm:px-6 sm:pb-10 sm:pt-3 lg:min-h-[calc(100svh-7.25rem)] lg:min-h-[calc(100dvh-7.25rem)] lg:flex lg:flex-col lg:pb-12">
+      <section className="landing-showcase-hero relative mx-auto w-full max-w-[1380px] px-[max(1rem,calc(env(safe-area-inset-left,0px)+12px))] pb-7 pr-[max(1rem,calc(env(safe-area-inset-right,0px)+12px))] pt-1 sm:px-5 sm:pb-9 sm:pt-3 md:px-6 lg:px-8 lg:pb-10 lg:pt-6 xl:pt-7">
+        {/* 글로우: 상단 빈 공간이 아니라 카피·목업 주변에만 은은히 */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-x-[4%] top-[2%] h-[42%] rounded-[40px] bg-[radial-gradient(ellipse_70%_60%_at_50%_0%,rgba(56,189,248,0.07),transparent_62%),radial-gradient(ellipse_55%_45%_at_90%_20%,rgba(139,92,246,0.055),transparent_58%)] opacity-90 sm:inset-x-[6%]"
+          className="pointer-events-none absolute left-1/2 top-[clamp(3rem,14vw,5.75rem)] h-[min(56vh,500px)] w-[min(104%,1180px)] max-w-none -translate-x-1/2 rounded-[48px] bg-[radial-gradient(ellipse_68%_52%_at_42%_44%,rgba(56,189,248,0.07),transparent_62%),radial-gradient(ellipse_52%_44%_at_78%_40%,rgba(139,92,246,0.052),transparent_58%)] opacity-[0.92] lg:h-[min(50vh,520px)]"
         />
 
-        <div className="relative z-[1] flex min-h-0 flex-1 flex-col gap-7 lg:gap-8">
-          <div className="grid flex-1 items-start gap-7 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.02fr)] lg:items-center lg:gap-10 xl:gap-14">
-            <div className="min-w-0 max-w-xl lg:max-w-none">
+        <div className="relative z-[1] flex flex-col gap-5 sm:gap-6 lg:gap-7">
+          <div className="grid items-start gap-6 sm:gap-7 lg:grid-cols-[minmax(0,0.96fr)_minmax(0,1.06fr)] lg:items-start lg:gap-x-10 lg:gap-y-8 xl:gap-x-12">
+            <div className="landing-showcase-copy-col order-1 min-w-0 max-w-xl lg:max-w-none">
               <span className="inline-flex rounded-full border border-white/[0.14] bg-white/[0.06] px-3 py-1 text-[11px] font-semibold tracking-[0.08em] text-slate-200 backdrop-blur-sm sm:text-[12px]">
                 {t("landing.showroom.hero.kickerBadge")}
               </span>
-              <h1 className="mt-4 whitespace-pre-line text-balance text-[clamp(1.5rem,4.15vw,2.875rem)] font-semibold leading-[1.13] tracking-[-0.032em] text-white sm:mt-5">
+              <h1 className="mt-3 whitespace-pre-line text-balance text-[clamp(1.45rem,3.95vw,2.75rem)] font-semibold leading-[1.13] tracking-[-0.032em] text-white sm:mt-4 lg:mt-3 xl:text-[clamp(1.6rem,3.25vw,2.85rem)]">
                 {t("landing.showroom.hero.headline")}
               </h1>
-              <p className="mt-4 max-w-[42rem] whitespace-pre-line text-[15px] leading-[1.62] text-slate-300 sm:mt-5 sm:text-[16px] sm:leading-[1.58]">
+              <p className="mt-3 max-w-[42rem] whitespace-pre-line text-[15px] leading-[1.6] text-slate-300 sm:mt-4 sm:text-[16px] sm:leading-[1.58]">
                 {t("landing.showroom.hero.sub")}
               </p>
-              <div className="mt-8 flex w-full flex-col gap-2.5 sm:mt-9 sm:flex-row sm:flex-wrap sm:gap-3">
+              <div className="mt-7 flex w-full flex-col gap-2.5 sm:mt-8 sm:flex-row sm:flex-wrap sm:gap-3">
                 <Link href={JOIN_PATH} prefetch={false} className={`${heroJoinPrimary} justify-center sm:min-w-[12.5rem]`}>
                   {t("cta.joinBeta")}
                 </Link>
@@ -270,21 +275,21 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
               </div>
             </div>
 
-            <div className="relative mx-auto w-full max-w-[min(100%,26rem)] min-[391px]:max-w-[min(100%,32rem)] lg:mx-0 lg:max-w-none">
+            <div className="landing-showcase-mock-col order-2 relative mx-auto w-full max-w-[min(100%,24rem)] min-[400px]:max-w-[min(100%,30rem)] lg:mx-0 lg:max-w-none">
               <div
                 aria-hidden
-                className="pointer-events-none absolute -inset-4 rounded-[38px] bg-[radial-gradient(ellipse_88%_70%_at_50%_45%,rgba(56,189,248,0.11),transparent_65%),radial-gradient(ellipse_70%_55%_at_78%_28%,rgba(139,92,246,0.08),transparent_60%)] opacity-[0.95] blur-2xl sm:-inset-6"
+                className="pointer-events-none absolute -inset-3 rounded-[34px] bg-[radial-gradient(ellipse_90%_72%_at_52%_48%,rgba(56,189,248,0.13),transparent_64%),radial-gradient(ellipse_68%_56%_at_82%_30%,rgba(139,92,246,0.09),transparent_58%)] opacity-[0.98] blur-2xl sm:-inset-5 lg:-inset-6"
               />
               <HeroDashboardPreview />
             </div>
           </div>
 
-          <div className="landing-showcase-lower relative z-[1] flex flex-col gap-7 border-t border-white/[0.09] pt-7 sm:gap-8 sm:pt-8 lg:mt-auto lg:gap-9 lg:pt-9">
+          <div className="landing-showcase-lower relative z-[1] flex flex-col gap-5 border-t border-white/[0.08] pt-5 sm:gap-6 sm:pt-6 lg:gap-7 lg:pt-7">
             <div className="min-w-0">
               <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
-                <h2 className="text-[clamp(1.2rem,2.65vw,1.625rem)] font-semibold tracking-[-0.025em] text-slate-50">{t("landing.showroom.tip.title")}</h2>
+                <h2 className="text-[clamp(1.15rem,2.5vw,1.55rem)] font-semibold tracking-[-0.025em] text-slate-50">{t("landing.showroom.tip.title")}</h2>
               </div>
-              <div className="mt-5 grid grid-cols-2 gap-2.5 sm:gap-3 lg:grid-cols-4">
+              <div className="mt-4 grid grid-cols-2 gap-2 sm:gap-2.5 lg:grid-cols-4 lg:gap-3">
                 {tipCards.map(({ n, titleKey, descKey, Icon }) => (
                   <button
                     key={titleKey}
@@ -309,8 +314,8 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
             </div>
 
             <div className="min-w-0">
-              <h2 className="text-[clamp(1.2rem,2.65vw,1.625rem)] font-semibold tracking-[-0.025em] text-slate-50">{t("landing.showroom.flow.title")}</h2>
-              <div className="mt-5 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:thin] sm:grid sm:grid-cols-2 sm:overflow-visible sm:pb-0 lg:grid-cols-4 lg:gap-3 [&::-webkit-scrollbar]:h-1">
+              <h2 className="text-[clamp(1.15rem,2.5vw,1.55rem)] font-semibold tracking-[-0.025em] text-slate-50">{t("landing.showroom.flow.title")}</h2>
+              <div className="mt-4 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:thin] sm:grid sm:grid-cols-2 sm:overflow-visible sm:pb-0 lg:grid-cols-4 lg:gap-2.5 [&::-webkit-scrollbar]:h-1">
                 {flowSteps.map((step, idx) => (
                   <div key={step.titleKey} className={`${flowStepCard} min-w-[calc(46%-8px)] shrink-0 sm:min-w-0`}>
                     <span className="inline-flex size-7 items-center justify-center rounded-full border border-white/[0.12] bg-slate-950/70 text-[11px] font-bold text-slate-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] ring-2 ring-sky-400/12">

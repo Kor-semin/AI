@@ -1548,6 +1548,7 @@ html[lang="ko"] body {
 /* 랜딩 앱 쇼케이스 Hero (LandingShowcaseHero) */
 .landing-showcase-hero {
   isolation: isolate;
+  scroll-margin-top: 0.5rem;
 }
 
 @media (prefers-reduced-motion: reduce) {

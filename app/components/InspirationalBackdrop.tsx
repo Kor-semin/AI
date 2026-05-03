@@ -36,11 +36,11 @@ export function InspirationalBackdrop() {
           />
           <div
             aria-hidden
-            className="absolute inset-0 bg-[radial-gradient(ellipse_92%_58%_at_18%_-6%,rgba(56,189,248,0.12),transparent_58%),radial-gradient(ellipse_50%_36%_at_50%_92%,rgba(15,23,42,0.5),transparent_62%),radial-gradient(ellipse_45%_32%_at_62%_38%,rgba(99,102,241,0.045),transparent_55%)]"
+            className="absolute inset-0 bg-[radial-gradient(ellipse_70%_48%_at_58%_22%,rgba(56,189,248,0.09),transparent_60%),radial-gradient(ellipse_50%_36%_at_50%_92%,rgba(15,23,42,0.5),transparent_62%),radial-gradient(ellipse_42%_30%_at_72%_36%,rgba(99,102,241,0.04),transparent_55%)]"
           />
           <div
             aria-hidden
-            className="absolute inset-0 bg-[radial-gradient(ellipse_80%_52%_at_50%_-4%,rgba(56,189,248,0.05),transparent_60%),radial-gradient(70%_50%_at_96%_10%,rgba(139,92,246,0.09),transparent_55%),radial-gradient(ellipse_62%_48%_at_8%_72%,rgba(56,189,248,0.045),transparent_58%)]"
+            className="absolute inset-0 bg-[radial-gradient(ellipse_74%_50%_at_62%_12%,rgba(56,189,248,0.055),transparent_58%),radial-gradient(62%_48%_at_96%_18%,rgba(139,92,246,0.075),transparent_52%),radial-gradient(ellipse_58%_44%_at_12%_68%,rgba(56,189,248,0.035),transparent_56%)]"
           />
           <div
             aria-hidden
