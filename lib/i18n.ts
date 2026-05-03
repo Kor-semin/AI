@@ -100,7 +100,10 @@ export type TranslationKey =
   | "register.busyRedirecting"
   | "register.busyUploading"
   | "register.footerNote"
-  | "register.firebaseSetupHint"
+  | "register.fallbackUnavailableTitle"
+  | "register.fallbackUnavailableBody"
+  | "register.linkBetaSignup"
+  | "register.firebaseDevHint"
   | "crm.stat.todayFollowups"
   | "crm.stat.dealProbability"
   | "crm.stat.followupNeeded"
@@ -431,7 +434,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "register.stepInfrastructure":
       "Firestore·Storage는 무료 한도(Spark) 안에서 쓰시는 것을 권장합니다.",
     "register.errorGoogleDisabled": "현재 Google 로그인은 잠시 꺼져 있습니다(준비중).",
-    "register.errorFirebaseEnv": "Firebase 미설정: .env.local 확인.",
+    "register.errorFirebaseEnv": "지금은 이 화면에서 계정 등록을 이어 갈 수 없습니다. 베타 신청을 통해 남겨 주세요.",
     "register.errorPickCard": "명함 이미지를 선택해 주세요.",
     "register.errorLoginFirst": "먼저 Google 계정으로 로그인해 주세요.",
     "register.errorUploadFailed": "업로드 실패.",
@@ -450,8 +453,12 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "register.busyUploading": "업로드 중…",
     "register.footerNote":
       "Sensora Auto CRM · SMS 발신 요금 없음 · Firebase Spark(무료) 한도는 사용량에 따라 달라질 수 있습니다.",
-    "register.firebaseSetupHint":
-      "로컬에 NEXT_PUBLIC_FIREBASE_* 환경 변수를 설정해 주세요.",
+    "register.fallbackUnavailableTitle": "영업 계정 등록은 준비 중입니다.",
+    "register.fallbackUnavailableBody":
+      "Sensora Auto CRM은 현재 베타 신청을 먼저 받고 있습니다.\n베타 신청을 남겨주시면 검토 후 순차적으로 안내드리겠습니다.",
+    "register.linkBetaSignup": "베타 신청으로 이동하기",
+    "register.firebaseDevHint":
+      "개발 전용: Firebase 클라이언트 설정값이 비어 있습니다. 로컬 .env.local 또는 문서를 확인하세요.",
     "crm.stat.todayFollowups": "오늘 연락",
     "crm.stat.dealProbability": "계약 가능성",
     "crm.stat.followupNeeded": "예정된 할 일",
@@ -812,7 +819,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "register.stepInfrastructure":
       "Firestore and Storage are easiest to stay within the free Spark quotas.",
     "register.errorGoogleDisabled": "Google sign-in is temporarily disabled.",
-    "register.errorFirebaseEnv": "Firebase isn’t configured—check .env.local.",
+    "register.errorFirebaseEnv": "Registration can’t continue on this screen right now. Please use the beta signup form.",
     "register.errorPickCard": "Please choose a business-card image.",
     "register.errorLoginFirst": "Please sign in with Google first.",
     "register.errorUploadFailed": "Upload failed.",
@@ -833,8 +840,12 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "register.busyUploading": "Uploading…",
     "register.footerNote":
       "Sensora Auto CRM · no SMS sending charges · Firebase Spark free-tier limits depend on usage.",
-    "register.firebaseSetupHint":
-      "Add NEXT_PUBLIC_FIREBASE_* variables locally (see .env.local).",
+    "register.fallbackUnavailableTitle": "Sales account registration isn’t available yet.",
+    "register.fallbackUnavailableBody":
+      "Sensora Auto CRM is currently taking beta signup requests first.\nSubmit your request and we’ll follow up after review.",
+    "register.linkBetaSignup": "Go to beta signup",
+    "register.firebaseDevHint":
+      "Dev only: Firebase client config is missing. Check .env.local or internal docs.",
     "crm.stat.todayFollowups": "Today’s Follow-ups",
     "crm.stat.dealProbability": "Deal Probability",
     "crm.stat.followupNeeded": "Follow-up Needed",

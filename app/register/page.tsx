@@ -35,16 +35,17 @@ export default function RegisterPage() {
   const { t } = useLanguage();
 
   const seller = useSellerProfile(uid);
+  const firebaseConfigured = isFirebaseConfigured();
 
   useEffect(() => {
-    if (!isFirebaseConfigured()) return;
+    if (!firebaseConfigured) return;
     const auth = getFirebaseAuth();
     const unsub = onAuthStateChanged(auth, (u) => setUid(u?.uid ?? null));
     return () => unsub();
-  }, []);
+  }, [firebaseConfigured]);
 
   useEffect(() => {
-    if (!isFirebaseConfigured()) return;
+    if (!firebaseConfigured) return;
     let cancelled = false;
     const auth = getFirebaseAuth();
     void (async () => {
@@ -75,7 +76,7 @@ export default function RegisterPage() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [firebaseConfigured]);
 
   useEffect(() => {
     if (!uid) return;
@@ -98,7 +99,7 @@ export default function RegisterPage() {
       setError(t("register.errorGoogleDisabled"));
       return;
     }
-    if (!isFirebaseConfigured()) {
+    if (!firebaseConfigured) {
       setError(t("register.errorFirebaseEnv"));
       return;
     }
@@ -122,7 +123,7 @@ export default function RegisterPage() {
       setError(t("register.errorPickCard"));
       return;
     }
-    if (!isFirebaseConfigured()) {
+    if (!firebaseConfigured) {
       setError(t("register.errorFirebaseEnv"));
       return;
     }
@@ -190,6 +191,56 @@ export default function RegisterPage() {
     </div>
   );
 
+  if (!firebaseConfigured) {
+    return (
+      <main className="relative flex min-h-[100dvh] min-h-[100svh] flex-col overflow-x-hidden bg-[#ebe5dc] px-[max(1rem,env(safe-area-inset-left))] pb-[max(1.75rem,calc(8rem+env(safe-area-inset-bottom,0px)))] max-sm:pb-[max(1.75rem,calc(8.5rem+env(safe-area-inset-bottom,0px)))] pr-[max(1rem,env(safe-area-inset-right))] pt-[max(1.25rem,env(safe-area-inset-top))] text-[#2a251f]">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_120%_92%_at_48%_-6%,rgba(255,252,246,0.96),transparent_54%)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_82%_50%_at_103%_-2%,rgba(255,218,178,0.18),transparent_58%)]" />
+
+        <div className="relative z-[1] mx-auto w-full max-w-md">
+          <div className="mb-6 max-sm:mb-5">
+            <Link
+              href="/"
+              className="inline-flex items-center gap-2 text-[12px] font-semibold text-[#584d42] transition hover:text-[#231d18]"
+            >
+              <span aria-hidden>←</span> {t("join.backHome")}
+            </Link>
+            <p className="mt-6 text-[11px] font-semibold tracking-[0.14em] text-[#584d42]">SENSORA · AUTO CRM</p>
+            <h1 className="mt-2 text-2xl font-semibold tracking-tight text-[#231d18] sm:text-[1.35rem]">
+              {t("register.fallbackUnavailableTitle")}
+            </h1>
+            <p className="mt-3 max-w-[min(100%,40rem)] text-pretty text-sm leading-relaxed text-[#4c433a] whitespace-pre-line max-sm:max-w-none">
+              {t("register.fallbackUnavailableBody")}
+            </p>
+          </div>
+
+          <div className="mb-5 max-sm:mb-4">{trustBlock}</div>
+
+          <div className="rounded-[1.35rem] border border-black/10 bg-white/92 p-6 shadow-[0_20px_50px_-18px_rgba(60,50,42,0.28)] backdrop-blur-sm sm:p-8">
+            <Link
+              href="/join"
+              className="inline-flex min-h-[48px] w-full touch-manipulation items-center justify-center rounded-xl bg-[#2f2720] px-4 py-3 text-sm font-semibold text-[#fcf9f3] hover:opacity-95"
+            >
+              {t("register.linkBetaSignup")}
+            </Link>
+            {process.env.NODE_ENV !== "production" ? (
+              <p
+                className="mt-4 rounded-xl border border-dashed border-amber-800/35 bg-amber-500/10 px-3 py-2.5 text-left text-[11px] leading-relaxed text-amber-950"
+                role="status"
+              >
+                {t("register.firebaseDevHint")}
+              </p>
+            ) : null}
+          </div>
+
+          <footer className="mt-8 text-center text-[11px] leading-relaxed text-[#766b5f] max-sm:mt-7 max-sm:px-0.5 max-sm:leading-[1.55]">
+            {t("register.footerNote")}
+          </footer>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="relative flex min-h-[100dvh] min-h-[100svh] flex-col overflow-x-hidden bg-[#ebe5dc] px-[max(1rem,env(safe-area-inset-left))] pb-[max(1.75rem,calc(8rem+env(safe-area-inset-bottom,0px)))] max-sm:pb-[max(1.75rem,calc(8.5rem+env(safe-area-inset-bottom,0px)))] pr-[max(1rem,env(safe-area-inset-right))] pt-[max(1.25rem,env(safe-area-inset-top))] text-[#2a251f]">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_120%_92%_at_48%_-6%,rgba(255,252,246,0.96),transparent_54%)]" />
@@ -216,13 +267,6 @@ export default function RegisterPage() {
         <div className="mb-5 max-sm:mb-4">{trustBlock}</div>
 
         <div className="rounded-[1.35rem] border border-black/10 bg-white/92 p-6 shadow-[0_20px_50px_-18px_rgba(60,50,42,0.28)] backdrop-blur-sm sm:p-8">
-          {!isFirebaseConfigured() ? (
-            <p className="text-sm text-red-800">
-              {t("register.firebaseSetupHint")}{" "}
-              <code className="rounded bg-black/10 px-1 font-mono text-[11px]">NEXT_PUBLIC_FIREBASE_*</code>
-            </p>
-          ) : null}
-
           {seller.loading && uid ? (
             <p className="py-10 text-center text-sm text-[#584d42]">{t("register.loadingProfile")}</p>
           ) : null}
