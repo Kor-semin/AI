@@ -135,6 +135,9 @@ export type TranslationKey =
   | "crm.previewGate.join"
   | "crm.previewGate.register"
   | "crm.previewGate.continuePreview"
+  | "crm.guideTip.body"
+  | "crm.guideTip.openViewer"
+  | "crm.sensoraTip.openButton"
   | "crm.import.heroTitle"
   | "crm.import.heroSub"
   | "crm.import.trustNoSync"
@@ -548,6 +551,10 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.previewGate.join": "베타 신청하기",
     "crm.previewGate.register": "영업 계정 등록",
     "crm.previewGate.continuePreview": "미리보기 계속 보기",
+    "crm.guideTip.body":
+      "처음 보는 분도 쉽게 이해할 수 있도록, 핵심 사용 흐름을 이미지로 정리했습니다.",
+    "crm.guideTip.openViewer": "가이드 보기",
+    "crm.sensoraTip.openButton": "Sensora TIP",
     "crm.import.heroTitle": "주소록 가져오기",
     "crm.import.heroSub": "연락처 파일을 올리고, 필요한 고객만 확인해 저장합니다.",
     "crm.import.trustNoSync": "전체 주소록을 자동 동기화하지 않습니다.",
@@ -995,6 +1002,10 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.previewGate.join": "Join the beta",
     "crm.previewGate.register": "Sales account registration",
     "crm.previewGate.continuePreview": "Continue preview",
+    "crm.guideTip.body":
+      "We distilled the essentials into images so newcomers can skim the workflow quickly.",
+    "crm.guideTip.openViewer": "View guide",
+    "crm.sensoraTip.openButton": "Sensora tips",
     "crm.import.heroTitle": "Import address book",
     "crm.import.heroSub": "Upload a contacts file, review, then save only who you need.",
     "crm.import.trustNoSync": "We never auto-sync your entire address book.",

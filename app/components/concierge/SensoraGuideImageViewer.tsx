@@ -4,33 +4,49 @@ import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
+import type { TranslationKey } from "@/lib/i18n";
 
-/** 가이드 이미지 에셋 — 파일이 없어도 뷰어는 폴백으로 동작합니다. */
-export const SENSORA_GUIDE_IMAGE_PATHS = [
-  "/images/guides/sensora-guide-01.png",
-  "/images/guides/sensora-guide-02.png",
-  "/images/guides/sensora-guide-03.png",
-] as const;
+export type SensoraGuideImageItem = {
+  src: string;
+};
 
 type Props = {
   open: boolean;
   onClose: () => void;
+  /** 동일 순서가 뷰어 슬라이드 1·2·… */
+  images: readonly SensoraGuideImageItem[];
+  /** 열 때 보여 줄 슬라이드 인덱스 */
+  initialSlideIndex?: number;
+  /** 헤더 제목 */
   title: string;
+  /** 썸네일 `Image` 대체 접근 이름 (슬라이드 titleKey 번역 가능 시) */
+  slideTitleKeys?: readonly TranslationKey[];
+  /** 루트 오버레이 z-index (CRM 내부 다른 모달과 겹침 조절) */
+  overlayZClass?: string;
 };
 
-export function SensoraGuideImageViewer({ open, onClose, title }: Props) {
+export function SensoraGuideImageViewer({
+  open,
+  onClose,
+  images,
+  initialSlideIndex = 0,
+  title,
+  slideTitleKeys,
+  overlayZClass = "z-[440]",
+}: Props) {
   const { t } = useLanguage();
   const [index, setIndex] = useState(0);
   const [broken, setBroken] = useState<Record<number, boolean>>({});
 
-  const total = SENSORA_GUIDE_IMAGE_PATHS.length;
-  const safeIndex = ((index % total) + total) % total;
+  const total = images.length;
+  const safeIndex = total > 0 ? ((index % total) + total) % total : 0;
 
   useEffect(() => {
-    if (!open) return;
-    setIndex(0);
+    if (!open || total === 0) return;
+    const next = Math.min(Math.max(0, initialSlideIndex), total - 1);
+    setIndex(next);
     setBroken({});
-  }, [open]);
+  }, [open, initialSlideIndex, total]);
 
   useEffect(() => {
     if (!open || typeof document === "undefined") return;
@@ -42,10 +58,12 @@ export function SensoraGuideImageViewer({ open, onClose, title }: Props) {
   }, [open]);
 
   const goPrev = useCallback(() => {
+    if (total <= 0) return;
     setIndex((i) => (i - 1 + total) % total);
   }, [total]);
 
   const goNext = useCallback(() => {
+    if (total <= 0) return;
     setIndex((i) => (i + 1) % total);
   }, [total]);
 
@@ -60,11 +78,14 @@ export function SensoraGuideImageViewer({ open, onClose, title }: Props) {
     return () => window.removeEventListener("keydown", onKey);
   }, [open, onClose, goPrev, goNext]);
 
-  if (!open) return null;
+  if (!open || total === 0) return null;
 
   return (
     <div
-      className="fixed inset-0 z-[200] flex items-end justify-center bg-black/55 px-0 pb-0 pt-8 backdrop-blur-md sm:items-center sm:px-4 sm:pb-6 sm:pt-6"
+      className={[
+        "fixed inset-0 flex items-end justify-center bg-black/55 px-0 pb-0 pt-8 backdrop-blur-md sm:items-center sm:px-4 sm:pb-6 sm:pt-6",
+        overlayZClass,
+      ].join(" ")}
       role="dialog"
       aria-modal="true"
       aria-labelledby="sensora-guide-viewer-title"
@@ -100,8 +121,8 @@ export function SensoraGuideImageViewer({ open, onClose, title }: Props) {
           </button>
         </div>
 
-        <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-hidden p-3 sm:flex-row sm:gap-4 sm:p-5">
-          <div className="relative flex min-h-[200px] flex-1 items-center justify-center overflow-hidden rounded-xl border border-white/[0.08] bg-[#020817]/90 sm:min-h-[min(52dvh,420px)]">
+        <div className="flex min-h-0 min-w-0 flex-1 flex-col gap-3 overflow-hidden p-3 sm:flex-row sm:gap-4 sm:p-5">
+          <div className="relative flex min-h-[min(200px,40dvh)] min-w-0 flex-1 items-center justify-center overflow-hidden rounded-xl border border-white/[0.08] bg-[#020817]/90 sm:min-h-[min(52dvh,420px)]">
             {broken[safeIndex] ? (
               <div className="max-w-sm px-6 text-center">
                 <p className="text-[14px] font-medium leading-relaxed text-slate-300">
@@ -110,11 +131,11 @@ export function SensoraGuideImageViewer({ open, onClose, title }: Props) {
               </div>
             ) : (
               <Image
-                src={SENSORA_GUIDE_IMAGE_PATHS[safeIndex]}
-                alt=""
+                src={images[safeIndex].src}
+                alt={slideTitleKeys?.[safeIndex] ? t(slideTitleKeys[safeIndex]) : ""}
                 width={1600}
                 height={1200}
-                className="h-auto max-h-[min(52dvh,420px)] w-full object-contain sm:max-h-[min(56dvh,480px)]"
+                className="h-auto max-h-[min(52dvh,420px)] w-full max-w-full object-contain sm:max-h-[min(56dvh,480px)]"
                 sizes="(max-width: 640px) 100vw, 880px"
                 priority={safeIndex === 0}
                 onError={() => setBroken((m) => ({ ...m, [safeIndex]: true }))}
@@ -149,12 +170,15 @@ export function SensoraGuideImageViewer({ open, onClose, title }: Props) {
             </div>
           </div>
 
-          <div className="flex shrink-0 flex-row gap-2 overflow-x-auto pb-1 sm:w-[5.5rem] sm:flex-col sm:overflow-y-auto sm:pb-0">
-            {SENSORA_GUIDE_IMAGE_PATHS.map((src, i) => {
+          <div className="flex max-w-full shrink-0 flex-row gap-2 overflow-x-auto overflow-y-hidden pb-1 sm:w-[5.5rem] sm:max-w-none sm:flex-col sm:overflow-y-auto sm:overflow-x-hidden sm:pb-0">
+            {images.map((item, i) => {
               const active = i === safeIndex;
+              const thumbLabel = slideTitleKeys?.[i]
+                ? t(slideTitleKeys[i])
+                : `${t("landing.showroom.tip.guideWord")} ${i + 1}`;
               return (
                 <button
-                  key={src}
+                  key={`${item.src}-${i}`}
                   type="button"
                   onClick={() => setIndex(i)}
                   className={[
@@ -164,7 +188,7 @@ export function SensoraGuideImageViewer({ open, onClose, title }: Props) {
                       : "border-white/10 opacity-80 hover:border-white/20 hover:opacity-100",
                   ].join(" ")}
                   aria-current={active ? "true" : undefined}
-                  aria-label={`${t("landing.showroom.tip.guideWord")} ${i + 1}`}
+                  aria-label={thumbLabel}
                 >
                   {broken[i] ? (
                     <span className="flex h-full w-full items-center justify-center bg-slate-900/80 text-[10px] font-semibold text-slate-500">
@@ -172,7 +196,7 @@ export function SensoraGuideImageViewer({ open, onClose, title }: Props) {
                     </span>
                   ) : (
                     <Image
-                      src={src}
+                      src={item.src}
                       alt=""
                       width={200}
                       height={120}

@@ -88,6 +88,11 @@ import {
   type SeasonCareSeason,
   type SeasonCareTone,
 } from "./seasonCareMessage";
+import { SensoraGuideImageViewer } from "@/app/components/concierge/SensoraGuideImageViewer";
+import { SENSORA_GUIDE_IMAGES } from "@/app/components/concierge/sensoraGuideImages";
+
+const CRM_GUIDE_VIEWER_IMAGES = SENSORA_GUIDE_IMAGES.map((s) => ({ src: s.src }));
+const CRM_GUIDE_SLIDE_TITLE_KEYS = SENSORA_GUIDE_IMAGES.map((s) => s.titleKey);
 
 const LEAD_SOURCES = [...DEALER_LEAD_SOURCES] satisfies LeadSource[];
 const STAGES = [...DEALER_PIPELINE_STAGES] satisfies PipelineStage[];
@@ -396,6 +401,9 @@ export function CRMApp({
   const [contactFileGuideOpen, setContactFileGuideOpen] = useState(false);
   const [previewGateOpen, setPreviewGateOpen] = useState(false);
   const openPreviewGate = useCallback(() => setPreviewGateOpen(true), []);
+  const [sensoraTipIntroOpen, setSensoraTipIntroOpen] = useState(false);
+  const [sensoraGuideViewerOpen, setSensoraGuideViewerOpen] = useState(false);
+  const [sensoraGuideInitialIndex, setSensoraGuideInitialIndex] = useState(0);
   const openCustomersImportHub = useCallback(() => {
     if (!uid) {
       openPreviewGate();
@@ -1568,7 +1576,17 @@ export function CRMApp({
                 )}
               </p>
             </div>
-            <div className="flex w-full min-w-0 flex-col gap-3 sm:flex-row sm:items-stretch lg:max-w-[540px]">
+            <div className="flex w-full min-w-0 flex-col gap-3 lg:max-w-[600px]">
+              <div className="flex shrink-0 justify-end sm:justify-start">
+                <button
+                  type="button"
+                  className="sensora-dark-ghost-btn inline-flex min-h-[40px] touch-manipulation items-center justify-center rounded-xl px-4 py-2 text-[13px] font-semibold"
+                  onClick={() => setSensoraTipIntroOpen(true)}
+                >
+                  {t("crm.sensoraTip.openButton")}
+                </button>
+              </div>
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-stretch">
               <div ref={crmSearchWrapRef} className="relative min-w-0 flex-1">
                 <label className="block min-w-0">
                   <span className="sr-only">고객·기능 통합 검색</span>
@@ -1681,6 +1699,7 @@ export function CRMApp({
               >
                 + {t("crm.addCustomer")}
               </button>
+              </div>
             </div>
           </header>
 
@@ -3617,6 +3636,64 @@ export function CRMApp({
           </div>
         </div>
       ) : null}
+
+      {sensoraTipIntroOpen ? (
+        <div
+          className="fixed inset-0 z-[430] flex items-end justify-center bg-black/55 px-3 pb-[max(16px,calc(12px+env(safe-area-inset-bottom,0px)))] pt-[max(12px,calc(env(safe-area-inset-top,0px)+8px))] backdrop-blur-md sm:items-center sm:px-4 sm:pb-6"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="crm-sensora-tip-intro-title"
+        >
+          <button
+            type="button"
+            className="absolute inset-0 cursor-default"
+            aria-label={t("landing.showroom.tip.closeOverlay")}
+            onClick={() => setSensoraTipIntroOpen(false)}
+          />
+          <div
+            className="relative z-[1] w-full max-w-md rounded-2xl border border-white/[0.12] bg-[#07111f]/96 p-6 shadow-[0_32px_80px_-28px_rgba(0,0,0,0.65)] backdrop-blur-md max-[390px]:p-5"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h2
+              id="crm-sensora-tip-intro-title"
+              className="text-[17px] font-semibold tracking-tight text-slate-50 sm:text-lg"
+            >
+              {t("landing.showroom.tip.title")}
+            </h2>
+            <p className="mt-3 text-[14px] leading-relaxed text-slate-400">{t("crm.guideTip.body")}</p>
+            <p className="mt-3 text-[11px] leading-relaxed text-slate-500">{t("crm.demoContextNotice.accessAfterBeta")}</p>
+            <div className="mt-6 flex flex-col gap-2.5">
+              <button
+                type="button"
+                className="inline-flex min-h-[48px] w-full touch-manipulation items-center justify-center rounded-xl border border-sky-400/25 bg-gradient-to-b from-[#1e293b] to-[#0f172a] px-4 py-3 text-center text-[14px] font-semibold text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition hover:border-sky-400/40"
+                onClick={() => {
+                  setSensoraGuideInitialIndex(0);
+                  setSensoraTipIntroOpen(false);
+                  setSensoraGuideViewerOpen(true);
+                }}
+              >
+                {t("crm.guideTip.openViewer")}
+              </button>
+              <button
+                type="button"
+                className="min-h-[44px] w-full touch-manipulation rounded-xl border border-white/[0.1] bg-white/[0.04] px-4 py-2.5 text-[13px] font-semibold text-slate-300 transition hover:bg-white/[0.07]"
+                onClick={() => setSensoraTipIntroOpen(false)}
+              >
+                {t("landing.showroom.tip.close")}
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
+
+      <SensoraGuideImageViewer
+        open={sensoraGuideViewerOpen}
+        onClose={() => setSensoraGuideViewerOpen(false)}
+        images={CRM_GUIDE_VIEWER_IMAGES}
+        initialSlideIndex={sensoraGuideInitialIndex}
+        title={t("landing.showroom.tip.title")}
+        slideTitleKeys={CRM_GUIDE_SLIDE_TITLE_KEYS}
+      />
 
       {previewGateOpen ? (
         <div

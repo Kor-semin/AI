@@ -6,8 +6,16 @@ import { useEffect, useRef, useState } from "react";
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
 import { ImageSlot } from "@/app/components/concierge/ImageSlot";
 import { SensoraGuideImageViewer } from "@/app/components/concierge/SensoraGuideImageViewer";
+import {
+  SENSORA_GUIDE_IMAGES,
+  SENSORA_TIP_CARD_INITIAL_INDEX,
+} from "@/app/components/concierge/sensoraGuideImages";
 
-export { SENSORA_GUIDE_IMAGE_PATHS } from "@/app/components/concierge/SensoraGuideImageViewer";
+export {
+  SENSORA_GUIDE_IMAGES,
+  SENSORA_TIP_CARD_INITIAL_INDEX,
+  sensoraGuideImageSources,
+} from "@/app/components/concierge/sensoraGuideImages";
 
 const JOIN_PATH = "/join" as const;
 
@@ -189,34 +197,43 @@ function IconTipBeta({ className }: { className?: string }) {
   );
 }
 
+const GUIDE_VIEWER_IMAGES = SENSORA_GUIDE_IMAGES.map((s) => ({ src: s.src }));
+
+const GUIDE_SLIDE_TITLE_KEYS = SENSORA_GUIDE_IMAGES.map((s) => s.titleKey);
+
 function SensoraTipSectionInner() {
   const { t } = useLanguage();
-  const [viewer, setViewer] = useState<{ open: boolean; title: string }>(() => ({
+  const [viewer, setViewer] = useState<{
+    open: boolean;
+    title: string;
+    initialSlideIndex: number;
+  }>(() => ({
     open: false,
     title: "",
+    initialSlideIndex: 0,
   }));
 
   const cards = [
     {
-      n: 1,
+      n: 1 as const,
       titleKey: "landing.showroom.tip.card1.title" as const,
       descKey: "landing.showroom.tip.card1.desc" as const,
       Icon: IconTipStart,
     },
     {
-      n: 2,
+      n: 2 as const,
       titleKey: "landing.showroom.tip.card2.title" as const,
       descKey: "landing.showroom.tip.card2.desc" as const,
       Icon: IconTipGrid,
     },
     {
-      n: 3,
+      n: 3 as const,
       titleKey: "landing.showroom.tip.card3.title" as const,
       descKey: "landing.showroom.tip.card3.desc" as const,
       Icon: IconTipFlow,
     },
     {
-      n: 4,
+      n: 4 as const,
       titleKey: "landing.showroom.tip.card4.title" as const,
       descKey: "landing.showroom.tip.card4.desc" as const,
       Icon: IconTipBeta,
@@ -228,7 +245,11 @@ function SensoraTipSectionInner() {
       <SensoraGuideImageViewer
         open={viewer.open}
         title={viewer.title}
-        onClose={() => setViewer({ open: false, title: "" })}
+        images={GUIDE_VIEWER_IMAGES}
+        initialSlideIndex={viewer.initialSlideIndex}
+        slideTitleKeys={GUIDE_SLIDE_TITLE_KEYS}
+        overlayZClass="z-[200]"
+        onClose={() => setViewer({ open: false, title: "", initialSlideIndex: 0 })}
       />
       <div className="relative mx-auto max-w-[980px] px-5 pb-4 pt-2 sm:px-6 sm:pb-10 sm:pt-6">
         <div className="pointer-events-none absolute inset-x-[-20%] top-[-40%] h-[70%] bg-[radial-gradient(ellipse_70%_50%_at_50%_0%,rgba(99,102,241,0.12),transparent_70%)] opacity-90" />
@@ -249,7 +270,13 @@ function SensoraTipSectionInner() {
               key={titleKey}
               type="button"
               className={tipCardBase}
-              onClick={() => setViewer({ open: true, title: t(titleKey) })}
+              onClick={() =>
+                setViewer({
+                  open: true,
+                  title: t(titleKey),
+                  initialSlideIndex: SENSORA_TIP_CARD_INITIAL_INDEX[n],
+                })
+              }
             >
               <div className="flex items-start justify-between gap-3">
                 <span
