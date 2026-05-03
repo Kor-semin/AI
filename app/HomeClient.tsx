@@ -156,7 +156,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
           "sticky top-0 z-30 isolate backdrop-blur-xl",
           /** iPhone 상태바/notch 안전영역을 반영해 헤더 콘텐츠가 겹치지 않도록 */
           view === "landing"
-            ? "landing-app-nav-shell mx-3 mt-2 max-sm:mx-2 max-sm:mt-1.5 rounded-2xl border border-white/[0.12] bg-[#07111f]/80 px-4 pb-3 pt-[max(12px,calc(env(safe-area-inset-top,0px)+8px))] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-2xl sm:mx-5 sm:mt-2.5 sm:px-6 lg:mx-auto lg:max-w-[min(92rem,calc(100%-2rem))]"
+            ? "landing-service-nav pt-[max(10px,calc(env(safe-area-inset-top,0px)+6px))] pb-3"
             : [
                 "border-b border-white/[0.1]",
                 "px-4 pb-3 pt-[max(14px,calc(env(safe-area-inset-top,0px)+12px))] sm:px-6",
@@ -166,40 +166,36 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
       >
         <div
           className={[
-            "mx-auto flex w-full min-w-0 max-w-[1280px]",
-            view === "landing"
-              ? "flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-4"
-              : "flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4",
+            "mx-auto flex w-full min-w-0 px-4 sm:px-6 lg:px-10",
+            view === "landing" ? "max-w-[1440px] flex-col gap-4 xl:flex-row xl:items-center xl:justify-between" : "max-w-[1280px] flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4",
           ].join(" ")}
         >
           {view === "landing" ? (
             <>
-              <div className="min-w-0 shrink-0 sm:max-w-[min(100%,28rem)] sm:pr-4">
-                <div className="flex min-w-0 flex-col gap-1.5 sm:flex-row sm:items-start sm:justify-between sm:gap-x-4">
+              <div className="flex min-w-0 flex-1 flex-col gap-4 sm:flex-row sm:items-center sm:gap-6 xl:gap-8">
+                <div className="flex min-w-0 items-start gap-3 sm:items-center">
+                  <SensoraAnimatedMark size={40} animated={false} className="pointer-events-none hidden shrink-0 sm:block" aria-hidden />
                   <div className="min-w-0">
-                    <div className="text-balance text-[16px] font-semibold leading-[1.18] tracking-[-0.02em] text-slate-50 sm:text-[1.08rem]">
+                    <div className="text-balance text-[17px] font-semibold leading-tight tracking-[-0.022em] text-slate-50 sm:text-[1.125rem] lg:text-xl">
                       {t("product.name")}
                     </div>
-                    <p className="mt-1.5 text-[12px] font-medium leading-snug text-slate-300 sm:text-[13px] sm:leading-relaxed">
+                    <p className="mt-1 text-[12px] font-medium leading-snug text-slate-400 sm:text-[13px]">
                       {t("landing.showroom.header.subline")}
                     </p>
                   </div>
-                  <p
-                    className="max-w-full shrink-0 text-[10px] leading-snug text-slate-500 sm:max-w-[13.5rem] sm:pt-0.5 sm:text-right sm:text-[11px]"
-                    role="note"
-                  >
-                    {t("header.zoomHint")}
-                  </p>
                 </div>
+                <p className="max-w-full shrink-0 text-[10px] leading-snug text-slate-500 sm:max-w-[14rem] sm:text-[11px] xl:hidden" role="note">
+                  {t("header.zoomHint")}
+                </p>
               </div>
-              <div className="relative z-[1] flex w-full min-w-0 flex-col gap-3 sm:w-auto sm:max-w-[min(100%,28rem)] sm:items-end">
-                <div className="flex min-w-0 flex-wrap items-center gap-2 sm:justify-end">
+              <div className="relative z-[1] flex w-full min-w-0 flex-col gap-4 sm:flex-1 xl:w-auto xl:max-w-none xl:flex-none xl:flex-row xl:flex-wrap xl:items-center xl:justify-end xl:gap-5">
+                <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-2 sm:justify-between xl:flex-nowrap xl:justify-end">
                   <LanguageSelect dense />
                   {auth.status === "loading" ? (
                     <span className="text-[11px] text-slate-400">{t("auth.checkingLogin")}</span>
                   ) : auth.status === "signed-in" ? (
                     <>
-                      <span className="hidden max-w-[10rem] truncate text-[11px] text-slate-400 lg:inline">{auth.name ?? auth.email ?? auth.uid}</span>
+                      <span className="hidden max-w-[10rem] truncate text-[11px] text-slate-400 xl:inline">{auth.name ?? auth.email ?? auth.uid}</span>
                       <button
                         type="button"
                         className="sensora-dark-ghost-btn inline-flex min-h-[44px] shrink-0 items-center rounded-xl px-3 py-2 text-xs font-semibold touch-manipulation"
@@ -213,21 +209,24 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                       {authError}
                     </span>
                   ) : null}
+                  <p className="ml-auto hidden max-w-[15rem] text-right text-[10px] leading-snug text-slate-500 xl:block" role="note">
+                    {t("header.zoomHint")}
+                  </p>
                 </div>
-                <div className="grid w-full min-w-0 grid-cols-2 gap-2 sm:flex sm:w-auto sm:flex-shrink-0 sm:flex-nowrap sm:justify-end sm:gap-2.5">
+                <div className="flex w-full min-w-0 flex-col gap-2.5 min-[420px]:flex-row min-[420px]:flex-wrap min-[420px]:justify-end sm:gap-3">
                   <button
                     type="button"
                     onClick={openAppWorkspace}
                     className={[
-                      "landing-nav-cta-preview relative z-[20] inline-flex min-h-[48px] w-full shrink-0 cursor-pointer items-center justify-center gap-2 rounded-xl",
-                      "border border-white/22 bg-white/[0.07] px-3 py-2.5 text-center text-[13px] font-semibold text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] ring-1 ring-inset ring-white/[0.08]",
+                      "landing-nav-cta-preview relative z-[20] inline-flex min-h-[52px] w-full shrink-0 cursor-pointer items-center justify-center gap-2 rounded-2xl",
+                      "border border-white/22 bg-white/[0.07] px-5 py-3 text-center text-[14px] font-semibold text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] ring-1 ring-inset ring-white/[0.08]",
                       "backdrop-blur-md transition duration-[220ms] ease-out",
                       "hover:border-sky-300/38 hover:bg-white/[0.11]",
-                      "active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/45 focus-visible:ring-offset-2 focus-visible:ring-offset-[#07111f]",
-                      "touch-manipulation sm:min-h-[48px] sm:w-auto sm:px-7",
+                      "active:scale-[0.99] focus-visible:outline-none",
+                      "touch-manipulation min-[420px]:min-w-[12.5rem] min-[420px]:flex-1 min-[420px]:w-auto xl:min-w-[11.5rem] xl:flex-none",
                     ].join(" ")}
                   >
-                    <svg className="size-[1.05rem] shrink-0 opacity-90" viewBox="0 0 20 20" fill="none" aria-hidden>
+                    <svg className="size-[1.1rem] shrink-0 opacity-90" viewBox="0 0 20 20" fill="none" aria-hidden>
                       <path
                         d="M6.75 11.08V9.92c0-.6.323-1.15.839-1.424l5.62-3.068a1.583 1.583 0 012.541 1.424v8.088a1.584 1.584 0 01-2.541 1.424l-5.62-3.069a1.583 1.583 0 01-.839-1.423z"
                         fill="currentColor"
@@ -240,10 +239,10 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                     href="/join"
                     prefetch={false}
                     className={[
-                      "landing-nav-cta-join sensora-premium-primary-workspace relative z-[20] inline-flex min-h-[48px] w-full items-center justify-center rounded-xl px-3 py-2.5 text-center text-[13px] font-semibold tracking-tight text-slate-50",
-                      "touch-manipulation sm:min-h-[48px] sm:w-auto sm:px-8",
+                      "landing-nav-cta-join sensora-premium-primary-workspace relative z-[20] inline-flex min-h-[52px] w-full items-center justify-center rounded-2xl px-6 py-3 text-center text-[14px] font-semibold tracking-tight text-slate-50",
+                      "touch-manipulation min-[420px]:min-w-[12.5rem] min-[420px]:flex-1 min-[420px]:w-auto xl:min-w-[11.5rem] xl:flex-none",
                       "transition duration-[220ms] ease-out active:scale-[0.99]",
-                      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/48 focus-visible:ring-offset-2 focus-visible:ring-offset-[#07111f]",
+                      "focus-visible:outline-none",
                     ].join(" ")}
                   >
                     {t("cta.joinBeta")}

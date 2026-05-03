@@ -414,7 +414,43 @@ html[lang="ko"] body {
   }
 }
 
-/* 랜딩 상단 — 앱 서비스형 플로팅 바 */
+/* 랜딩 상단 — 전폭 SaaS 네비게이션 바 (플로팅 카드형 대체) */
+.landing-service-nav {
+  width: 100%;
+  margin: 0;
+  border-radius: 0;
+  border-width: 0 0 1px;
+  border-style: solid;
+  border-color: rgba(255, 255, 255, 0.1);
+  background: linear-gradient(180deg, rgba(6, 14, 28, 0.94) 0%, rgba(4, 10, 20, 0.9) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 0 0 1px rgba(0, 0, 0, 0.2) inset,
+    0 12px 40px -16px rgba(0, 0, 0, 0.45),
+    0 0 64px -32px rgba(56, 189, 248, 0.08),
+    0 0 56px -36px rgba(139, 92, 246, 0.05);
+  backdrop-filter: blur(22px);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .landing-nav-cta-join:is(a, button):focus-visible,
+  .landing-nav-cta-preview:is(button):focus-visible {
+    box-shadow:
+      0 0 0 2px rgba(15, 23, 42, 0.9),
+      0 0 0 4px rgba(56, 189, 248, 0.35),
+      0 0 28px -4px rgba(56, 189, 248, 0.22);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-nav-cta-join:is(a, button):focus-visible,
+  .landing-nav-cta-preview:is(button):focus-visible {
+    outline: 2px solid rgba(125, 211, 252, 0.55);
+    outline-offset: 2px;
+  }
+}
+
+/* 랜딩 상단 — 앱 서비스형 플로팅 바 (레거시: 필요 시 참고용) */
 .landing-app-nav-shell {
   border-color: rgba(255, 255, 255, 0.14);
   background: linear-gradient(180deg, rgba(7, 17, 31, 0.88) 0%, rgba(5, 12, 22, 0.82) 100%);

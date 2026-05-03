@@ -301,6 +301,17 @@ export type TranslationKey =
   | "landing.showroom.heroDash.aiDraftSnippet"
   | "landing.showroom.heroDash.summaryTitle"
   | "landing.showroom.heroDash.summarySnippet"
+  | "landing.showroom.heroMock.previewBadge"
+  | "landing.showroom.heroMock.greeting"
+  | "landing.showroom.heroMock.draftLabel"
+  | "landing.showroom.heroMock.nav.home"
+  | "landing.showroom.heroMock.nav.customers"
+  | "landing.showroom.heroMock.nav.consult"
+  | "landing.showroom.heroMock.nav.schedule"
+  | "landing.showroom.heroMock.nav.messages"
+  | "landing.showroom.heroMock.nav.aiAssistant"
+  | "landing.showroom.heroMock.nav.stats"
+  | "landing.showroom.heroMock.nav.settings"
   | "landing.showroom.flow.title"
   | "landing.showroom.flow.desc"
   | "landing.showroom.flow.mock.contactTitle"
@@ -739,6 +750,17 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.showroom.heroDash.summaryTitle": "최근 상담 요약",
     "landing.showroom.heroDash.summarySnippet":
       "관심 차량, 예산, 희망 출고 시점, 다음 연락 일정을 한눈에 정리합니다.",
+    "landing.showroom.heroMock.previewBadge": "미리보기",
+    "landing.showroom.heroMock.greeting": "김현우 매니저님, 오늘도 좋은 하루 보내세요!",
+    "landing.showroom.heroMock.draftLabel": "초안",
+    "landing.showroom.heroMock.nav.home": "홈",
+    "landing.showroom.heroMock.nav.customers": "고객",
+    "landing.showroom.heroMock.nav.consult": "상담",
+    "landing.showroom.heroMock.nav.schedule": "일정·알림",
+    "landing.showroom.heroMock.nav.messages": "메시지",
+    "landing.showroom.heroMock.nav.aiAssistant": "AI 도우미",
+    "landing.showroom.heroMock.nav.stats": "통계",
+    "landing.showroom.heroMock.nav.settings": "설정",
     "landing.showroom.flow.title": "상담에서 다음 연락까지, 한 흐름으로",
     "landing.showroom.flow.desc":
       "상담 → 니즈 → 발송 문자 → 다음 연락 순으로 업무 블록을 이어 두어 바쁜 딜플로어에서 빠져나가지 않게 합니다.",
@@ -1196,6 +1218,17 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.showroom.heroDash.summaryTitle": "Recent consultation recap",
     "landing.showroom.heroDash.summarySnippet":
       "Keeps stated vehicle interests, budgets, hopeful timing, and the next outreach date on one line.",
+    "landing.showroom.heroMock.previewBadge": "Preview",
+    "landing.showroom.heroMock.greeting": "Good day, Manager Hyunwoo Kim—here’s a calm read on today’s lane.",
+    "landing.showroom.heroMock.draftLabel": "Draft",
+    "landing.showroom.heroMock.nav.home": "Home",
+    "landing.showroom.heroMock.nav.customers": "Customers",
+    "landing.showroom.heroMock.nav.consult": "Consultation",
+    "landing.showroom.heroMock.nav.schedule": "Schedule",
+    "landing.showroom.heroMock.nav.messages": "Messages",
+    "landing.showroom.heroMock.nav.aiAssistant": "AI assistant",
+    "landing.showroom.heroMock.nav.stats": "Insights",
+    "landing.showroom.heroMock.nav.settings": "Settings",
     "landing.showroom.flow.title": "From consultation cues to dependable follow‑through.",
     "landing.showroom.flow.desc":
       "Consultation · needs · outbound SMS · next follow-up stacked in one calm SaaS‑style rail so nothing slips on the showroom floor.",
