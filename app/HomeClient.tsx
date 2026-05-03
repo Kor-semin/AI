@@ -156,7 +156,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
           "sticky top-0 z-30 isolate backdrop-blur-xl",
           /** iPhone 상태바/notch 안전영역을 반영해 헤더 콘텐츠가 겹치지 않도록 */
           view === "landing"
-            ? "landing-app-nav-shell mx-3 mt-2 max-sm:mx-2 max-sm:mt-1.5 rounded-2xl border border-white/[0.12] bg-[#07111f]/78 px-4 pb-3 pt-[max(12px,calc(env(safe-area-inset-top,0px)+8px))] sm:mx-5 sm:mt-2.5 sm:px-6 lg:mx-auto lg:max-w-[1240px]"
+            ? "landing-app-nav-shell mx-3 mt-2 max-sm:mx-2 max-sm:mt-1.5 rounded-2xl border border-white/[0.12] bg-[#07111f]/80 px-4 pb-3 pt-[max(12px,calc(env(safe-area-inset-top,0px)+8px))] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-2xl sm:mx-5 sm:mt-2.5 sm:px-6 lg:mx-auto lg:max-w-[min(92rem,calc(100%-2rem))]"
             : [
                 "border-b border-white/[0.08]",
                 "px-4 pb-3 pt-[max(14px,calc(env(safe-area-inset-top,0px)+12px))] sm:px-6",
@@ -180,8 +180,8 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                     <div className="text-balance text-[15px] font-semibold leading-[1.2] tracking-[-0.02em] text-slate-50 sm:text-[1.05rem]">
                       {t("product.name")}
                     </div>
-                    <p className="mt-1.5 whitespace-pre-line text-[11px] font-medium leading-snug text-slate-400 sm:text-xs sm:leading-relaxed">
-                      {t("landing.showroom.hero.headline")}
+                    <p className="mt-1.5 text-[11px] font-medium leading-snug text-slate-400 sm:text-xs sm:leading-relaxed">
+                      {t("landing.showroom.header.subline")}
                     </p>
                   </div>
                   <p

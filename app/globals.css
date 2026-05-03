@@ -1553,13 +1553,32 @@ html[lang="ko"] body {
 
 @media (prefers-reduced-motion: reduce) {
   .landing-showcase-tip-card,
-  .landing-showcase-flow-step {
+  .landing-showcase-flow-step,
+  .landing-tip-feature-card,
+  .landing-flow-strip-card {
     transition: none !important;
     transform: none !important;
   }
 
-  .landing-showcase-tip-card:hover {
+  .landing-showcase-tip-card:hover,
+  .landing-tip-feature-card:hover {
     transform: none !important;
+  }
+}
+
+.landing-showcase-lower-canvas {
+  scroll-margin-top: 0.5rem;
+}
+
+.landing-showcase-cta-primary:active,
+.landing-showcase-cta-ghost:active {
+  transform: translateY(1px) scale(0.992);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-showcase-cta-primary:active,
+  .landing-showcase-cta-ghost:active {
+    transform: none;
   }
 }
 

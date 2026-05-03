@@ -285,6 +285,12 @@ export type TranslationKey =
   | "landing.showroom.hero.sub"
   | "landing.showroom.bridge.line1"
   | "landing.showroom.bridge.line2"
+  | "landing.showroom.header.subline"
+  | "landing.showroom.heroDash.windowSubline"
+  | "landing.showroom.heroDash.greetingLine"
+  | "landing.showroom.heroDash.greetingSub"
+  | "landing.showroom.heroDash.detailCta"
+  | "landing.showroom.heroDash.messageCta"
   | "landing.showroom.heroDash.todayTitle"
   | "landing.showroom.heroDash.todaySnippet"
   | "landing.showroom.heroDash.priorityTitle"
@@ -716,6 +722,12 @@ export const translations: Record<LanguageCode, TranslationDict> = {
       "상담부터 사후관리까지 한 흐름으로 관리합니다.\n\nAI는 초안을 돕고, 최종 판단은 영업사원이 합니다.",
     "landing.showroom.bridge.line1": "상담은 기록으로,",
     "landing.showroom.bridge.line2": "기록은 다음 행동으로.",
+    "landing.showroom.header.subline": "자동차 영업사원을 위한 AI 고객관리 워크스페이스",
+    "landing.showroom.heroDash.windowSubline": "오늘의 연락 · 업무 요약",
+    "landing.showroom.heroDash.greetingLine": "오늘 진행하면 좋은 일이에요",
+    "landing.showroom.heroDash.greetingSub": "연락 우선 확인과 검토용 초안을 한 화면에 모았습니다.",
+    "landing.showroom.heroDash.detailCta": "상세 보기",
+    "landing.showroom.heroDash.messageCta": "메시지 보기",
     "landing.showroom.heroDash.todayTitle": "오늘 연락 대상",
     "landing.showroom.heroDash.todaySnippet": "시승 후 금융 조건 검토 예정",
     "landing.showroom.heroDash.priorityTitle": "우선 확인할 고객",
@@ -740,8 +752,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.showroom.flow.mock.followupTitle": "다음 연락",
     "landing.showroom.flow.mock.followupBody": "내일 오전 11시 재연락 · 전화",
     "landing.showroom.guide.title": "고객의 신호가 영업 액션으로 이어지는 지점입니다.",
-    "landing.showroom.guide.desc":
-      "SensoraGuide가 메모에서 니즈·응대 포인트를 응대 기준으로 정리합니다. 원문을 그대로 반복하지 않습니다.",
+    "landing.showroom.guide.desc": "메모에서 응대 포인트를 정리해 SensoraGuide가 검토용 제안으로 이어 줍니다.",
     "landing.showroom.guide.memoLabel": "상담 메모",
     "landing.showroom.guide.memoQuote": "가족 이동이 많고 승하차 편의성을 중요하게 보심.",
     "landing.showroom.guide.guideQuote": "2열 공간, 승하차 동선, 탑승 편안함을 중심으로 안내하세요.",
@@ -1168,6 +1179,12 @@ export const translations: Record<LanguageCode, TranslationDict> = {
       "We keep consultation through after-sales care on one disciplined flow.\n\nAI helps with draft ideas; salespeople make the final calls.",
     "landing.showroom.bridge.line1": "Consultation settles into notes,",
     "landing.showroom.bridge.line2": "notes guide the disciplined next touch.",
+    "landing.showroom.header.subline": "AI customer-relationship workspace for automotive sales reps",
+    "landing.showroom.heroDash.windowSubline": "Today's queue · workspace digest",
+    "landing.showroom.heroDash.greetingLine": "Here's a calm starting lane for today.",
+    "landing.showroom.heroDash.greetingSub": "Catch priority follow-ups alongside draft snippets in one glance.",
+    "landing.showroom.heroDash.detailCta": "Details",
+    "landing.showroom.heroDash.messageCta": "Messages",
     "landing.showroom.heroDash.todayTitle": "Today's follow-ups",
     "landing.showroom.heroDash.todaySnippet": "Test drive logged—finance options review next.",
     "landing.showroom.heroDash.priorityTitle": "Needs review soon",
@@ -1193,7 +1210,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.showroom.flow.mock.followupBody": "Tomorrow · 11:00 · outbound call",
     "landing.showroom.guide.title": "Where customer signals tighten into salesperson action.",
     "landing.showroom.guide.desc":
-      "SensoraGuide turns memo lines into needs and speaking points you can verify—without echoing sensitive detail verbatim.",
+      "Memo lines become reviewable talking points that SensoraGuide keeps tied to your judgement.",
     "landing.showroom.guide.memoLabel": "Consultation memo",
     "landing.showroom.guide.memoQuote":
       "Heavy family hauling; entry/exit comfort is decisive for them.",

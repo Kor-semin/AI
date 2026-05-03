@@ -36,7 +36,7 @@ export function InspirationalBackdrop() {
           />
           <div
             aria-hidden
-            className="absolute inset-0 bg-[radial-gradient(ellipse_70%_48%_at_58%_22%,rgba(56,189,248,0.09),transparent_60%),radial-gradient(ellipse_50%_36%_at_50%_92%,rgba(15,23,42,0.5),transparent_62%),radial-gradient(ellipse_42%_30%_at_72%_36%,rgba(99,102,241,0.04),transparent_55%)]"
+            className="absolute inset-0 bg-[radial-gradient(ellipse_72%_52%_at_56%_20%,rgba(56,189,248,0.095),transparent_60%),radial-gradient(ellipse_48%_38%_at_50%_90%,rgba(15,23,42,0.52),transparent_62%),radial-gradient(ellipse_44%_32%_at_74%_34%,rgba(99,102,241,0.05),transparent_55%)]"
           />
           <div
             aria-hidden

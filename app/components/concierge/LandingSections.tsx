@@ -23,7 +23,7 @@ export {
 const JOIN_PATH = "/join" as const;
 
 const cardChrome =
-  "rounded-[22px] border border-white/[0.11] bg-slate-900/47 shadow-[0_22px_58px_-28px_rgba(0,0,0,0.58),0_2px_12px_rgba(15,23,42,0.38)] backdrop-blur-md ring-1 ring-inset ring-white/[0.04] transition-[border-color,box-shadow,transform] duration-[240ms] ease-[cubic-bezier(0.22,1,0.32,1)] hover:-translate-y-[1px] hover:border-white/[0.15] hover:shadow-[0_28px_64px_-26px_rgba(0,0,0,0.6)] motion-reduce:transform-none motion-reduce:transition-none active:translate-y-0 active:scale-[0.997]";
+  "landing-showcase-surface-card rounded-[22px] border border-white/[0.13] bg-gradient-to-b from-white/[0.07] via-slate-900/52 to-[#050d14]/88 shadow-[0_26px_64px_-28px_rgba(0,0,0,0.58),inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-md ring-1 ring-inset ring-white/[0.045] transition-[border-color,box-shadow,transform] duration-[240ms] ease-[cubic-bezier(0.22,1,0.32,1)] hover:-translate-y-[1px] hover:border-sky-400/26 hover:shadow-[0_30px_70px_-24px_rgba(0,0,0,0.62),0_0_40px_-20px_rgba(56,189,248,0.08)] motion-reduce:transform-none motion-reduce:transition-none active:translate-y-0 active:scale-[0.997]";
 
 const primaryBtn =
   "landing-showroom-cta-join sensora-premium-primary-workspace inline-flex min-h-[46px] items-center justify-center rounded-xl px-8 py-[0.7rem] text-sm font-semibold shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] touch-manipulation";

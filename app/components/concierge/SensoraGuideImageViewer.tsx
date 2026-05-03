@@ -82,6 +82,7 @@ export function SensoraGuideImageViewer({
 
   return (
     <div
+      data-sensora-guide-viewer
       className={[
         "fixed inset-0 flex items-end justify-center bg-black/[0.58] px-0 pb-0 pt-8 backdrop-blur-xl motion-safe:transition-[background-color] motion-safe:duration-300 sm:items-center sm:px-4 sm:pb-6 sm:pt-6",
         overlayZClass,
