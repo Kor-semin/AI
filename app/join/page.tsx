@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import type { BetaSignupPayload } from "@/lib/betaSignupSubmit";
 import { submitBetaSignup } from "@/lib/betaSignupSubmit";
@@ -9,11 +9,14 @@ import { useLanguage } from "@/app/components/i18n/LanguageProvider";
 
 export default function BetaJoinPage() {
   const [pending, setPending] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
   const { t } = useLanguage();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const form = e.currentTarget;
+    /** 비동기 이후에는 e.currentTarget이 null일 수 있으므로 ref(또는 동기 스냅샷)만 사용 */
+    const form = formRef.current ?? e.currentTarget;
+    if (!form) return;
     const fd = new FormData(form);
 
     const payload: BetaSignupPayload = {
@@ -50,7 +53,10 @@ export default function BetaJoinPage() {
         return;
       }
       window.alert(res.savedToBackend ? t("join.alert.betaReceivedRemote") : t("join.alert.betaNotPersisted"));
-      form.reset();
+      const mounted = formRef.current;
+      if (mounted?.isConnected) {
+        mounted.reset();
+      }
     } finally {
       setPending(false);
     }
@@ -85,7 +91,7 @@ export default function BetaJoinPage() {
           </p>
         </div>
 
-        <form className="crm-card rounded-[1.35rem] p-6 sm:p-9" onSubmit={(ev) => void handleSubmit(ev)} noValidate>
+        <form ref={formRef} className="crm-card rounded-[1.35rem] p-6 sm:p-9" onSubmit={(ev) => void handleSubmit(ev)} noValidate>
           <fieldset className="space-y-5 border-0 p-0 [&_legend]:sr-only">
             <legend>{t("join.formLegend")}</legend>
 
