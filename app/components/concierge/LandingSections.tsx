@@ -26,10 +26,10 @@ const cardChrome =
   "landing-showcase-surface-card rounded-[22px] border border-white/[0.13] bg-gradient-to-b from-white/[0.07] via-slate-900/52 to-[#050d14]/88 shadow-[0_26px_64px_-28px_rgba(0,0,0,0.58),inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-md ring-1 ring-inset ring-white/[0.045] transition-[border-color,box-shadow,transform] duration-[240ms] ease-[cubic-bezier(0.22,1,0.32,1)] hover:-translate-y-[1px] hover:border-sky-400/26 hover:shadow-[0_30px_70px_-24px_rgba(0,0,0,0.62),0_0_40px_-20px_rgba(56,189,248,0.08)] motion-reduce:transform-none motion-reduce:transition-none active:translate-y-0 active:scale-[0.997]";
 
 const primaryBtn =
-  "landing-showroom-cta-join sensora-premium-primary-workspace inline-flex min-h-[46px] items-center justify-center rounded-xl px-8 py-[0.7rem] text-sm font-semibold shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] touch-manipulation";
+  "landing-showroom-cta-join sensora-premium-primary-workspace inline-flex min-h-[48px] items-center justify-center rounded-xl px-8 py-3 text-[15px] font-semibold shadow-[inset_0_1px_0_rgba(255,255,255,0.11),0_12px_36px_-10px_rgba(56,189,248,0.18)] touch-manipulation";
 
 const ghostBtn =
-  "landing-showroom-cta-preview inline-flex min-h-[46px] items-center justify-center gap-2 rounded-xl border border-white/[0.22] bg-white/[0.075] px-7 py-[0.7rem] text-sm font-semibold text-slate-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.07)] backdrop-blur-md transition-[border-color,background-color,box-shadow,transform] duration-240 hover:border-sky-300/42 hover:bg-white/[0.11] active:scale-[0.985] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/42 focus-visible:ring-offset-2 focus-visible:ring-offset-[#020817] touch-manipulation motion-reduce:transition-none";
+  "landing-showroom-cta-preview inline-flex min-h-[48px] items-center justify-center gap-2 rounded-xl border border-white/[0.3] bg-white/[0.09] px-7 py-3 text-[15px] font-semibold text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] ring-1 ring-inset ring-sky-400/14 backdrop-blur-md transition-[border-color,background-color,box-shadow,transform] duration-240 hover:border-sky-300/48 hover:bg-white/[0.13] active:scale-[0.987] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/42 focus-visible:ring-offset-2 focus-visible:ring-offset-[#020817] touch-manipulation motion-reduce:transition-none";
 
 function IconAppWindowPlay({ className }: { className?: string }) {
   return (
@@ -112,7 +112,7 @@ export function LandingShowroom({ onOpenAppWorkspace }: { onOpenAppWorkspace: ()
     <div className="relative overflow-x-hidden bg-[#020817]">
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-[min(64vh,600px)] bg-[radial-gradient(ellipse_88%_58%_at_52%_8%,rgba(56,189,248,0.065),transparent_58%),radial-gradient(ellipse_62%_48%_at_96%_18%,rgba(139,92,246,0.055),transparent_54%),radial-gradient(ellipse_48%_40%_at_8%_42%,rgba(30,58,138,0.045),transparent_52%)]"
+        className="pointer-events-none absolute inset-x-0 top-0 h-[min(66vh,620px)] bg-[radial-gradient(ellipse_82%_52%_at_52%_6%,rgba(56,189,248,0.078),transparent_56%),radial-gradient(ellipse_58%_42%_at_96%_16%,rgba(139,92,246,0.065),transparent_52%),radial-gradient(ellipse_44%_38%_at_8%_40%,rgba(30,58,138,0.055),transparent_50%)]"
       />
       <div className="relative z-[1]">
         <LandingShowcaseHero onOpenAppWorkspace={onOpenAppWorkspace} />
@@ -139,21 +139,21 @@ function SensoraGuideSectionInner() {
     <>
       <div className="landing-showroom-premium-rule mx-auto mb-6 sm:mb-8 pointer-events-none opacity-95" aria-hidden />
       <div className="mx-auto max-w-[720px] text-center lg:max-w-[760px]">
-        <h2 className="text-[clamp(1.35rem,2.85vw,1.875rem)] font-semibold tracking-[-0.025em] text-slate-50">
+        <h2 className="text-[clamp(1.4rem,2.95vw,1.95rem)] font-semibold tracking-[-0.026em] text-slate-50">
           {t("landing.showroom.guide.title")}
         </h2>
-        <p className="mx-auto mt-3 max-w-[52ch] line-clamp-4 text-[14px] leading-relaxed text-slate-400 sm:mt-4 sm:text-[15px] sm:leading-[1.56]">
+        <p className="mx-auto mt-3 max-w-[52ch] line-clamp-4 text-[15px] leading-relaxed text-slate-400 sm:mt-[1.125rem] sm:text-[16px] sm:leading-[1.58]">
           {t("landing.showroom.guide.desc")}
         </p>
       </div>
       <div className="mx-auto mt-10 grid max-w-[860px] gap-4 sm:grid-cols-2 sm:gap-5 lg:gap-6">
-        <div className={`${cardChrome} p-7 sm:p-8`}>
-          <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-400">{t("landing.showroom.guide.memoLabel")}</p>
-          <p className="mt-4 text-[16px] font-medium leading-relaxed text-slate-100 sm:text-[17px]">&ldquo;{t("landing.showroom.guide.memoQuote")}&rdquo;</p>
+        <div className={`${cardChrome} px-8 py-[1.85rem] sm:p-9`}>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">{t("landing.showroom.guide.memoLabel")}</p>
+          <p className="mt-4 text-[16.5px] font-medium leading-[1.65] text-slate-50 sm:text-[17.5px]">&ldquo;{t("landing.showroom.guide.memoQuote")}&rdquo;</p>
         </div>
-        <div className={`${cardChrome} border-violet-400/12 bg-slate-900/52 p-7 sm:p-8`}>
-          <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-violet-200/75">SensoraGuide</p>
-          <p className="mt-4 text-[16px] font-medium leading-relaxed text-slate-100 sm:text-[17px]">{t("landing.showroom.guide.guideQuote")}</p>
+        <div className={`${cardChrome} border-violet-400/12 bg-slate-900/52 px-8 py-[1.85rem] sm:p-9`}>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-violet-200/85">SensoraGuide</p>
+          <p className="mt-4 text-[16.5px] font-medium leading-[1.65] text-slate-50 sm:text-[17.5px]">{t("landing.showroom.guide.guideQuote")}</p>
         </div>
       </div>
     </>
@@ -174,14 +174,14 @@ function SalesFeatureGridInner() {
   return (
     <>
       <div className="landing-showroom-premium-rule mx-auto mb-8 sm:mb-10 pointer-events-none" aria-hidden />
-      <h2 className="mx-auto max-w-[640px] text-center text-[clamp(1.35rem,2.85vw,1.95rem)] font-semibold tracking-[-0.025em] text-slate-50">
+      <h2 className="mx-auto max-w-[640px] text-center text-[clamp(1.4rem,2.95vw,2rem)] font-semibold tracking-[-0.026em] text-slate-50">
         {t("landing.showroom.features.title")}
       </h2>
       <div className="mx-auto mt-9 grid max-w-[900px] gap-4 sm:grid-cols-2 lg:gap-5">
         {tiles.map(({ titleKey, descKey }) => (
-          <article key={titleKey} className={`${cardChrome} px-7 py-6 sm:px-8 sm:py-7`}>
-            <h3 className="text-[16px] font-semibold tracking-tight text-slate-50 sm:text-[17px]">{t(titleKey)}</h3>
-            <p className="mt-2.5 line-clamp-4 text-[14px] leading-relaxed text-slate-400 sm:text-[15px]">{t(descKey)}</p>
+          <article key={titleKey} className={`${cardChrome} px-[1.875rem] py-7 sm:px-9 sm:py-8`}>
+            <h3 className="text-[17px] font-semibold tracking-tight text-slate-50 sm:text-[18px]">{t(titleKey)}</h3>
+            <p className="mt-3 line-clamp-4 text-[15px] leading-relaxed text-slate-400 sm:text-[15.5px] sm:leading-[1.58]">{t(descKey)}</p>
           </article>
         ))}
       </div>
@@ -193,9 +193,9 @@ function FinalShowroomCTAInner({ onOpenAppWorkspace }: { onOpenAppWorkspace: () 
   const { t } = useLanguage();
 
   return (
-    <div className={`${cardChrome} mx-auto flex max-w-[680px] flex-col items-center px-7 py-12 text-center sm:px-10 sm:py-14`}>
-      <p className="text-[clamp(1.15rem,2.75vw,1.5rem)] font-semibold tracking-[-0.02em] text-slate-50">{t("brand.slogan")}</p>
-      <p className="mt-4 max-w-[46ch] text-[14px] leading-relaxed text-slate-400 sm:mt-5 sm:text-[15px]">{t("landing.showroom.closing.desc")}</p>
+    <div className={`${cardChrome} mx-auto flex max-w-[680px] flex-col items-center px-9 py-[3.25rem] text-center sm:px-11 sm:py-16`}>
+      <p className="text-[clamp(1.2rem,2.85vw,1.56rem)] font-semibold tracking-[-0.021em] text-slate-50">{t("brand.slogan")}</p>
+      <p className="mt-[1.125rem] max-w-[46ch] text-[15px] leading-relaxed text-slate-400 sm:mt-5 sm:text-[16px] sm:leading-[1.58]">{t("landing.showroom.closing.desc")}</p>
       <div className="mt-9 flex w-full max-w-md flex-col flex-wrap justify-center gap-2.5 sm:flex-row sm:gap-3">
         <Link href={JOIN_PATH} prefetch={false} className={`relative z-20 inline-flex flex-1 justify-center touch-manipulation pointer-events-auto sm:flex-none ${primaryBtn}`}>
           {t("cta.joinBeta")}

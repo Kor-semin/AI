@@ -11,7 +11,7 @@ import { useLanguage } from "@/app/components/i18n/LanguageProvider";
 
 function navButtonClass(active: boolean): string {
   return [
-    "group relative flex min-h-[50px] shrink-0 touch-manipulation items-center justify-between gap-3 rounded-xl py-2.5 text-[16px] font-bold outline-none ring-offset-2 ring-offset-[#020817] focus-visible:ring-2 focus-visible:ring-sky-500/40",
+    "group relative flex min-h-[52px] shrink-0 touch-manipulation items-center justify-between gap-3 rounded-xl py-3 text-[16.5px] font-bold outline-none ring-offset-2 ring-offset-[#020817] focus-visible:ring-2 focus-visible:ring-sky-500/40",
     "motion-safe:transition-[background,box-shadow,transform,color,border-color] motion-safe:duration-[220ms] motion-safe:ease-out",
     active
       ? "border border-sky-400/22 bg-gradient-to-r from-sky-500/[0.14] via-white/[0.04] to-transparent pl-[calc(12px+0.375rem)] pr-3 text-[#F8FAFC] shadow-[inset_0_1px_0_rgba(255,255,255,0.07),0_0_40px_-12px_rgba(56,189,248,0.14),0_0_48px_-18px_rgba(139,92,246,0.06)] before:absolute before:left-[3px] before:top-2 before:bottom-2 before:w-[3px] before:rounded-full before:bg-gradient-to-b before:from-sky-300/95 before:to-indigo-400/75"
@@ -48,8 +48,8 @@ export function ConciergeSidebar({
             <span>{title}</span>
             <span
               className={[
-                "text-[14px] font-semibold tracking-[-0.01em]",
-                active ? "text-[#E2E8F0]" : "text-[#94A3B8] group-hover:text-[#E2E8F0]",
+                "text-[14.5px] font-semibold tracking-[-0.01em]",
+                active ? "text-[#EDF4FC]" : "text-[#ADB7C9] group-hover:text-[#E9F0FA]",
               ].join(" ")}
             >
               {subtitle}

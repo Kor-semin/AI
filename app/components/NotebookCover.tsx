@@ -238,10 +238,10 @@ export function NotebookCover() {
           className={[
             "notebook-cover-inner-stage flex flex-1 flex-col px-1 sm:px-5",
             pageIdx === 0 ?
-              "justify-center py-7 max-[480px]:py-4 sm:py-10"
+              "justify-center py-7 max-[480px]:py-3 max-[480px]:pt-5 sm:py-10"
             : pageIdx === 1 ?
-              "min-h-0 justify-center py-6 max-[480px]:py-3 max-[480px]:pb-2 sm:py-10"
-            : `justify-center py-7 max-[480px]:py-4 max-[480px]:pb-3 sm:py-10 max-lg:justify-start max-lg:pt-5`,
+              "min-h-0 justify-center py-6 max-[480px]:py-2.5 max-[480px]:pb-2 sm:py-10"
+            : `justify-center py-7 max-[480px]:py-3.5 max-[480px]:pb-2.5 sm:py-10 max-lg:justify-start max-lg:pt-5`,
           ].join(" ")}
           key={pageIdx}
           data-notebook-cover-tone={coverTheme}
@@ -250,9 +250,9 @@ export function NotebookCover() {
             <div
               className={[
                 "notebook-cover-logo-wrap pointer-events-none flex shrink-0 justify-center",
-                pageIdx === 0 ? "mb-6 max-[480px]:mb-4 sm:mb-8"
-                : pageIdx === 1 ? "mb-2.5 max-[480px]:mb-2 sm:mb-8"
-                : "mb-6 max-[480px]:mb-3 sm:mb-8",
+                pageIdx === 0 ? "mb-5 max-[480px]:mb-3 sm:mb-8"
+                : pageIdx === 1 ? "mb-2.5 max-[480px]:mb-1.5 sm:mb-8"
+                : "mb-5 max-[480px]:mb-2.5 sm:mb-8",
               ].join(" ")}
             >
               <SensoraAnimatedMark
@@ -270,10 +270,10 @@ export function NotebookCover() {
               className={[
                 "max-w-[26ch] text-balance font-semibold leading-[1.2] tracking-[-0.03em] text-[#F8FAFC]",
                 pageIdx === 0 ?
-                  "mt-3 text-[clamp(1.42rem,4.9vw,1.92rem)] max-[480px]:mt-2.5 sm:mt-5"
+                  "mt-2.5 text-[clamp(1.48rem,5.1vw,1.95rem)] max-[480px]:mt-2 sm:mt-5"
                 : pageIdx === 1 ?
-                  "mt-1.5 text-[clamp(1.38rem,4.65vw,1.85rem)] max-[480px]:mt-1 sm:mt-5"
-                : "mt-3 text-[clamp(1.4rem,4.75vw,1.88rem)] max-[480px]:mt-2 sm:mt-5",
+                  "mt-1.5 text-[clamp(1.4rem,4.85vw,1.88rem)] max-[480px]:mt-1 sm:mt-5"
+                : "mt-2.5 text-[clamp(1.44rem,4.95vw,1.9rem)] max-[480px]:mt-2 sm:mt-5",
               ].join(" ")}
             >
               {heading}

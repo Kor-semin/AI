@@ -14,7 +14,7 @@ function StatCard({
   hint?: string;
 }) {
   return (
-    <div className="sensora-premium-card sensora-premium-panel-interactive rounded-[20px] px-5 py-4 motion-reduce:transform-none motion-reduce:transition-none">
+    <div className="sensora-premium-card sensora-premium-panel-interactive rounded-[20px] px-6 py-[1.125rem] motion-reduce:transform-none motion-reduce:transition-none">
       <div className="text-[11px] font-bold uppercase tracking-[0.11em] text-slate-500">{label}</div>
       <div className="mt-2.5 text-[1.65rem] font-semibold tabular-nums leading-none tracking-tight text-slate-50 sm:text-[1.75rem]">
         {value}
@@ -53,13 +53,13 @@ export function DashboardSection({
   onGoSection,
 }: DashboardSectionProps) {
   const panelQuiet =
-    "sensora-premium-card rounded-[22px] px-5 py-5 sm:px-6 motion-reduce:transition-none";
+    "sensora-premium-card rounded-[22px] px-[1.35rem] py-6 sm:px-7 motion-reduce:transition-none";
 
   return (
     <div className="flex flex-col gap-8">
       <div>
-        <h2 className="text-[22px] font-semibold tracking-tight text-slate-50">오늘의 영업 흐름</h2>
-        <p className="mt-1.5 text-[14px] leading-relaxed text-slate-400">한눈에 보는 지표와 일정입니다.</p>
+        <h2 className="text-[23px] font-semibold tracking-tight text-slate-50">오늘의 영업 흐름</h2>
+        <p className="mt-2 text-[15px] leading-relaxed text-slate-400">한눈에 보는 지표와 일정입니다.</p>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -80,8 +80,8 @@ export function DashboardSection({
       />
 
       <section className={panelQuiet}>
-        <h3 className="text-[16px] font-semibold text-slate-50">놓치면 안 되는 연락</h3>
-        <p className="mt-1 text-[13px] text-slate-500">오늘 기한인 연락·할 일만 요약했습니다.</p>
+        <h3 className="text-[17px] font-semibold text-slate-50">놓치면 안 되는 연락</h3>
+        <p className="mt-1.5 text-[14px] leading-relaxed text-slate-500">오늘 기한인 연락·할 일만 요약했습니다.</p>
         {todayDueLines.length === 0 ? (
           <p className="mt-4 text-[14px] text-slate-500">오늘 기한인 항목이 없습니다.</p>
         ) : (
@@ -106,8 +106,8 @@ export function DashboardSection({
       </section>
 
       <section className={panelQuiet}>
-        <h3 className="text-[16px] font-semibold text-slate-50">최근 상담 요약</h3>
-        <p className="mt-1 text-[13px] text-slate-500">최근 수정된 고객의 메모 앞부분입니다. AI가 임의로 바꾸지 않습니다.</p>
+        <h3 className="text-[17px] font-semibold text-slate-50">최근 상담 요약</h3>
+        <p className="mt-1.5 text-[14px] leading-relaxed text-slate-500">최근 수정된 고객의 메모 앞부분입니다. AI가 임의로 바꾸지 않습니다.</p>
         {recentMemoLines.length === 0 ? (
           <p className="mt-4 text-[14px] text-slate-500">아직 등록된 메모가 없습니다.</p>
         ) : (

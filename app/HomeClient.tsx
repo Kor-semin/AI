@@ -177,10 +177,10 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
               <div className="min-w-0 shrink-0 sm:max-w-[min(100%,28rem)] sm:pr-4">
                 <div className="flex min-w-0 flex-col gap-1.5 sm:flex-row sm:items-start sm:justify-between sm:gap-x-4">
                   <div className="min-w-0">
-                    <div className="text-balance text-[15px] font-semibold leading-[1.2] tracking-[-0.02em] text-slate-50 sm:text-[1.05rem]">
+                    <div className="text-balance text-[16px] font-semibold leading-[1.18] tracking-[-0.02em] text-slate-50 sm:text-[1.08rem]">
                       {t("product.name")}
                     </div>
-                    <p className="mt-1.5 text-[11px] font-medium leading-snug text-slate-400 sm:text-xs sm:leading-relaxed">
+                    <p className="mt-1.5 text-[12px] font-medium leading-snug text-slate-300 sm:text-[13px] sm:leading-relaxed">
                       {t("landing.showroom.header.subline")}
                     </p>
                   </div>

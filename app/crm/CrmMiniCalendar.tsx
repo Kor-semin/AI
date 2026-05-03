@@ -165,7 +165,7 @@ export function CrmMiniCalendar({
       aria-label="미니 캘린더"
     >
       <div className="flex flex-wrap items-center justify-between gap-2 gap-y-3">
-        <div className="text-[15px] font-semibold text-slate-50">일정 미리보기</div>
+        <div className="text-[16px] font-semibold tracking-tight text-slate-50">일정 미리보기</div>
         <div className="flex flex-wrap items-center gap-1 sm:gap-2">
           <button
             type="button"
@@ -196,9 +196,9 @@ export function CrmMiniCalendar({
         </div>
       </div>
 
-      <div className="mt-4 grid grid-cols-7 gap-px rounded-xl border border-white/[0.1] bg-white/[0.08] text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+      <div className="mt-4 grid grid-cols-7 gap-px rounded-xl border border-white/[0.11] bg-white/[0.08] text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
         {["일", "월", "화", "수", "목", "금", "토"].map((w) => (
-          <div key={w} className="bg-[#07111f]/90 py-2 text-[12px] font-bold tracking-wide text-slate-400">
+          <div key={w} className="bg-[#07111f]/92 py-2.5 text-[13px] font-bold tracking-wide text-slate-400">
             {w}
           </div>
         ))}
@@ -212,12 +212,12 @@ export function CrmMiniCalendar({
               type="button"
               onClick={() => setSelected(dt)}
               className={[
-                "relative flex min-h-[42px] flex-col items-center justify-center rounded-lg border px-0.5 py-1 text-[13px] font-semibold transition duration-200 ease-out touch-manipulation",
+                "relative flex min-h-[46px] flex-col items-center justify-center rounded-lg border px-0.5 py-1.5 text-[14px] font-semibold transition duration-200 ease-out touch-manipulation",
                 selected && sameDay(selected, dt)
-                  ? "border-sky-400/45 bg-sky-500/15 text-slate-50 shadow-[inset_0_0_0_1px_rgba(56,189,248,0.25),0_0_24px_-6px_rgba(56,189,248,0.12)] ring-1 ring-sky-400/30"
+                  ? "border-sky-400/52 bg-sky-500/[0.17] text-slate-50 shadow-[inset_0_0_0_1px_rgba(56,189,248,0.28),0_0_28px_-6px_rgba(56,189,248,0.14)] ring-1 ring-sky-400/35"
                   : sameDay(new Date(), dt)
-                    ? "border-white/[0.18] bg-white/[0.07] text-slate-100 hover:border-sky-400/28"
-                    : "border-transparent bg-[#020817]/50 text-slate-300 hover:z-[1] hover:border-sky-400/22 hover:bg-[#07111f]/82",
+                    ? "border-white/[0.2] bg-white/[0.08] text-slate-100 hover:border-sky-400/32"
+                    : "border-transparent bg-[#020817]/55 text-slate-200 hover:z-[1] hover:border-sky-400/26 hover:bg-[#07111f]/85",
               ].join(" ")}
             >
               <span className={sameDay(new Date(), dt) && !(selected && sameDay(selected, dt)) ? "font-bold text-slate-50" : ""}>
@@ -235,18 +235,18 @@ export function CrmMiniCalendar({
               })()}
             </button>
           ) : (
-            <div key={idx} className="min-h-[42px] rounded-lg bg-[#020817]/25" />
+            <div key={idx} className="min-h-[46px] rounded-lg bg-[#020817]/25" />
           ),
         )}
       </div>
 
       <div className="crm-mini-cal-list-shell mt-6 border-t border-white/[0.09] pt-5">
-        <div className="text-[13px] font-bold text-slate-100">
+        <div className="text-[14px] font-bold tracking-tight text-slate-100">
           {selected.toLocaleDateString("ko-KR", { month: "long", day: "numeric", weekday: "short" })}
         </div>
-        <p className="mt-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">해당 날짜 일정</p>
+        <p className="mt-1.5 text-[11.5px] font-semibold uppercase tracking-[0.12em] text-slate-500">해당 날짜 일정</p>
         {list.length === 0 ? (
-          <p className="mt-3 text-[13px] text-slate-500">선택한 날짜에 예정된 항목이 없습니다.</p>
+          <p className="mt-3 text-[14px] leading-snug text-slate-400">선택한 날짜에 예정된 항목이 없습니다.</p>
         ) : (
           <ul className="mt-4 space-y-2">
             {list.map((it) => (

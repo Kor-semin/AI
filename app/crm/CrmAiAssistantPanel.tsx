@@ -64,7 +64,7 @@ export function CrmAiAssistantPanel({
     !selectedCustomerId || !(ft.length > 0 ? true : workspaceAiMemoDraft.trim().length > 0);
 
   const inputCls =
-    "sensora-premium-input min-h-[44px] w-full rounded-[14px] px-3 py-3 text-[14px] font-medium";
+    "sensora-premium-input min-h-[46px] w-full rounded-[14px] px-3.5 py-3 text-[15px] font-medium";
 
   const insightTileCls =
     "sensora-premium-card flex min-h-0 min-w-0 flex-col rounded-[16px] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]";
@@ -78,10 +78,10 @@ export function CrmAiAssistantPanel({
     >
       <div className="flex flex-wrap items-start justify-between gap-3 border-b border-white/[0.1] pb-4">
         <div className="min-w-0">
-          <h2 id="crm-ai-assistant-title" className="text-[17px] font-semibold text-slate-50">
+          <h2 id="crm-ai-assistant-title" className="text-[18px] font-semibold tracking-tight text-slate-50">
             {t("crm.workspaceAi.title")}
           </h2>
-          <p className="mt-1 max-w-[58ch] text-[13px] leading-relaxed text-slate-400">
+          <p className="mt-1.5 max-w-[58ch] text-[14px] leading-relaxed text-slate-400">
             {t("crm.workspaceAi.subtitle")}
           </p>
           <p className="mt-3 max-w-[72ch] rounded-[12px] border border-white/[0.1] bg-[#020817]/52 px-3 py-2 text-[11px] leading-snug text-slate-400">

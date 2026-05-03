@@ -16,10 +16,10 @@ const mockShell =
   "landing-showcase-mock-frame relative overflow-hidden rounded-[20px] border border-white/[0.16] bg-gradient-to-b from-[#060f1c]/96 to-[#020b14]/98 shadow-[0_40px_100px_-32px_rgba(0,0,0,0.75),inset_0_1px_0_rgba(255,255,255,0.08),0_0_0_1px_rgba(56,189,248,0.04)_inset,0_0_80px_-28px_rgba(56,189,248,0.09),0_0_96px_-40px_rgba(139,92,246,0.06)] ring-1 ring-inset ring-white/[0.06] backdrop-blur-xl before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-white/22 before:to-transparent sm:rounded-[24px] lg:rounded-[26px]";
 
 const ctaPrimaryShowcase =
-  "landing-showcase-cta-primary landing-showroom-cta-join sensora-premium-primary-workspace inline-flex min-h-[52px] w-full min-w-0 shrink-0 items-center justify-center rounded-2xl px-8 py-3.5 text-[15px] font-semibold tracking-tight sm:w-auto sm:min-h-[54px] sm:px-9 sm:text-[16px] touch-manipulation";
+  "landing-showcase-cta-primary landing-showroom-cta-join sensora-premium-primary-workspace inline-flex min-h-[54px] w-full min-w-0 shrink-0 items-center justify-center rounded-2xl px-8 py-3.5 text-[16px] font-semibold tracking-tight shadow-[inset_0_1px_0_rgba(255,255,255,0.11),0_14px_40px_-12px_rgba(56,189,248,0.22)] sm:w-auto sm:min-h-[56px] sm:px-10 sm:text-[17px] touch-manipulation";
 
 const ctaGhostShowcase =
-  "landing-showcase-cta-ghost landing-showroom-cta-preview inline-flex min-h-[52px] w-full min-w-0 shrink-0 items-center justify-center gap-2 rounded-2xl border border-white/[0.26] bg-white/[0.06] px-7 py-3.5 text-[15px] font-semibold tracking-tight text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.09)] ring-1 ring-inset ring-white/[0.08] backdrop-blur-md sm:w-auto sm:min-h-[54px] sm:px-8 touch-manipulation";
+  "landing-showcase-cta-ghost landing-showroom-cta-preview inline-flex min-h-[54px] w-full min-w-0 shrink-0 items-center justify-center gap-2 rounded-2xl border border-white/[0.32] bg-white/[0.09] px-7 py-3.5 text-[15px] font-semibold tracking-tight text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.11),0_0_0_1px_rgba(255,255,255,0.04)_inset] ring-1 ring-inset ring-sky-400/15 backdrop-blur-md sm:w-auto sm:min-h-[56px] sm:px-9 sm:text-[16px] touch-manipulation";
 
 function IconAppWindowPlay({ className }: { className?: string }) {
   return (
@@ -285,22 +285,22 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
         <div className="landing-hero-canvas relative overflow-hidden rounded-[26px] border border-white/[0.13] px-5 py-6 shadow-[0_36px_90px_-40px_rgba(0,0,0,0.65),inset_0_1px_0_rgba(255,255,255,0.07)] ring-1 ring-inset ring-white/[0.04] sm:rounded-[28px] sm:px-6 sm:py-8 lg:rounded-[30px] lg:px-8 lg:py-9 xl:px-10 xl:py-10">
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_88%_70%_at_72%_-8%,rgba(139,92,246,0.11),transparent_55%),radial-gradient(ellipse_92%_64%_at_8%_100%,rgba(56,189,248,0.08),transparent_58%),linear-gradient(165deg,rgba(5,14,26,0.96) 0%,rgba(8,22,42,0.55) 45%,rgba(4,11,22,0.92) 100%)]"
+            className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_76%_58%_at_62%_-2%,rgba(139,92,246,0.13),transparent_52%),radial-gradient(ellipse_82%_58%_at_12%_102%,rgba(56,189,248,0.095),transparent_56%),linear-gradient(165deg,rgba(5,14,26,0.96) 0%,rgba(8,22,42,0.52) 45%,rgba(4,11,22,0.92) 100%)]"
           />
           <div
             aria-hidden
-            className="pointer-events-none absolute -right-[20%] top-[22%] h-[68%] w-[72%] max-w-[640px] rounded-full bg-[radial-gradient(circle_at_40%_40%,rgba(56,189,248,0.12),transparent_62%),radial-gradient(circle_at_70%_60%,rgba(139,92,246,0.09),transparent_58%)] opacity-95 blur-3xl lg:-right-[8%]"
+            className="pointer-events-none absolute -right-[18%] top-[20%] h-[72%] w-[76%] max-w-[700px] rounded-full bg-[radial-gradient(circle_at_42%_38%,rgba(56,189,248,0.14),transparent_60%),radial-gradient(circle_at_72%_58%,rgba(139,92,246,0.1),transparent_56%)] opacity-[0.98] blur-3xl lg:-right-[6%]"
           />
 
-          <div className="relative z-[1] grid items-start gap-7 sm:gap-8 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.08fr)] lg:gap-x-12 xl:gap-x-14">
+          <div className="relative z-[1] grid items-start gap-7 sm:gap-8 lg:grid-cols-[minmax(0,0.86fr)_minmax(0,1.26fr)] lg:gap-x-10 lg:pb-2 lg:pr-3 xl:gap-x-[3.25rem] xl:pr-5">
             <div className="landing-showcase-copy-col order-1 min-w-0">
               <span className="inline-flex rounded-full border border-white/[0.16] bg-white/[0.07] px-3 py-1.5 text-[11px] font-semibold tracking-[0.08em] text-slate-100 backdrop-blur-sm sm:text-[12px]">
                 {t("landing.showroom.hero.kickerBadge")}
               </span>
-              <h1 className="mt-4 whitespace-pre-line text-balance text-[clamp(1.5rem,3.85vw,2.9rem)] font-semibold leading-[1.1] tracking-[-0.035em] text-white sm:mt-5">
+              <h1 className="mt-4 whitespace-pre-line text-balance text-[clamp(1.65rem,4.2vw,3.125rem)] font-semibold leading-[1.06] tracking-[-0.039em] text-white sm:mt-5">
                 {t("landing.showroom.hero.headline")}
               </h1>
-              <p className="mt-4 max-w-[41rem] whitespace-pre-line text-[15px] leading-[1.62] text-slate-300 sm:text-[17px] sm:leading-[1.58]">
+              <p className="mt-5 max-w-[41rem] whitespace-pre-line text-[16px] leading-[1.65] text-slate-200/95 sm:text-[17.5px] sm:leading-[1.62]">
                 {t("landing.showroom.hero.sub")}
               </p>
               <div className="mt-8 flex w-full flex-col gap-3 sm:mt-9 sm:flex-row sm:flex-wrap sm:gap-3.5">
@@ -314,10 +314,10 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
               </div>
             </div>
 
-            <div className="landing-showcase-mock-col order-2 relative mx-auto w-full max-w-[min(100%,25rem)] min-[410px]:max-w-[min(100%,34rem)] lg:mx-0 lg:max-w-none">
+            <div className="landing-showcase-mock-col motion-safe:transition-transform order-2 relative mx-auto w-full max-w-[min(100%,25rem)] min-[410px]:max-w-[min(100%,34rem)] lg:mx-0 lg:max-w-none lg:justify-self-stretch lg:origin-top lg:[transform:scale(1.06)] xl:[transform:scale(1.1)] motion-reduce:lg:transform-none">
               <div
                 aria-hidden
-                className="pointer-events-none absolute -inset-4 rounded-[40px] bg-[radial-gradient(ellipse_90%_75%_at_52%_50%,rgba(56,189,248,0.16),transparent_64%),radial-gradient(ellipse_70%_60%_at_85%_25%,rgba(139,92,246,0.11),transparent_58%)] opacity-100 blur-2xl sm:-inset-6"
+                className="pointer-events-none absolute -inset-4 rounded-[40px] bg-[radial-gradient(ellipse_90%_75%_at_52%_50%,rgba(56,189,248,0.18),transparent_62%),radial-gradient(ellipse_70%_60%_at_85%_25%,rgba(139,92,246,0.13),transparent_58%)] opacity-100 blur-2xl sm:-inset-6"
               />
               <div data-sensora-landing-showcase-preview>
                 <HeroDashboardPreview />
@@ -345,25 +345,25 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
                 <button
                   key={titleKey}
                   type="button"
-                  className="landing-tip-feature-card group relative flex flex-col rounded-[17px] border border-white/[0.14] bg-gradient-to-b from-slate-900/72 to-[#061018]/85 p-[14px] text-left shadow-[0_14px_48px_-20px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(255,255,255,0.06)] ring-1 ring-inset ring-white/[0.05] backdrop-blur-md motion-safe:transition-[transform,box-shadow,border-color] motion-safe:duration-200 hover:-translate-y-1 hover:border-sky-400/38 hover:shadow-[0_22px_56px_-18px_rgba(0,0,0,0.58),0_0_48px_-12px_rgba(56,189,248,0.18),inset_0_1px_0_rgba(255,255,255,0.08)] motion-reduce:transition-none motion-reduce:hover:translate-y-0 sm:rounded-[18px] sm:p-4"
+                  className="landing-tip-feature-card group relative flex min-h-[12.25rem] flex-col rounded-[17px] border border-white/[0.2] bg-gradient-to-b from-slate-900/72 to-[#061018]/85 p-4 text-left shadow-[0_14px_48px_-20px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(255,255,255,0.07)] ring-1 ring-inset ring-sky-400/12 backdrop-blur-md motion-safe:transition-[transform,box-shadow,border-color] motion-safe:duration-200 hover:-translate-y-1 hover:border-sky-400/42 hover:shadow-[0_22px_56px_-18px_rgba(0,0,0,0.58),0_0_48px_-12px_rgba(56,189,248,0.2),inset_0_1px_0_rgba(255,255,255,0.09)] motion-reduce:transition-none motion-reduce:hover:translate-y-0 sm:min-h-[12.5rem] sm:rounded-[18px] sm:p-[1.05rem]"
                   onClick={() =>
                     setViewer({ open: true, title: t(titleKey), initialSlideIndex: SENSORA_TIP_CARD_INITIAL_INDEX[n] })
                   }
                 >
                   <div className="flex items-start justify-between gap-2">
-                    <span className="inline-flex size-7 shrink-0 items-center justify-center rounded-lg border border-sky-400/28 bg-gradient-to-br from-sky-500/[0.2] to-violet-600/[0.12] text-[11px] font-bold tabular-nums text-sky-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.14)] sm:size-8 sm:rounded-xl sm:text-[12px]">
+                    <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-lg border border-sky-400/38 bg-gradient-to-br from-sky-500/[0.26] to-violet-600/[0.15] text-[12px] font-bold tabular-nums text-sky-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.16)] sm:size-8 sm:rounded-xl sm:text-[12px]">
                       {n}
                     </span>
-                    <span className="flex size-9 shrink-0 items-center justify-center rounded-xl border border-white/[0.12] bg-white/[0.05] text-sky-50 sm:size-10">
-                      <Icon className="size-[19px] opacity-95 sm:size-[21px]" />
+                    <span className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-white/[0.18] bg-white/[0.07] text-sky-100 sm:size-10">
+                      <Icon className="size-[20px] opacity-95 sm:size-[22px]" />
                     </span>
                   </div>
-                  <span className="mt-4 line-clamp-2 text-[14px] font-semibold leading-snug tracking-tight text-slate-50 sm:text-[15px]">{t(titleKey)}</span>
-                  <span className="mt-2 line-clamp-3 flex-1 text-[12px] leading-relaxed text-slate-500 sm:text-[13px] sm:leading-[1.5]">
+                  <span className="mt-4 line-clamp-2 text-[15px] font-semibold leading-snug tracking-tight text-slate-50 sm:text-[15.5px]">{t(titleKey)}</span>
+                  <span className="mt-2 line-clamp-3 flex-1 text-[12.5px] leading-relaxed text-slate-400 sm:text-[13px] sm:leading-[1.52]">
                     {t(descKey)}
                   </span>
-                  <span className="mt-5 flex justify-end pt-1 sm:mt-6">
-                    <span className="inline-flex size-9 items-center justify-center rounded-full border border-white/[0.16] bg-gradient-to-br from-white/[0.1] to-white/[0.03] text-sm font-semibold text-sky-100 shadow-[0_10px_24px_-8px_rgba(56,189,248,0.25)] transition-[transform,border-color,box-shadow] duration-200 group-hover:translate-x-0.5 group-hover:border-sky-400/40 group-hover:text-white">
+                  <span className="mt-auto flex justify-end pt-4 sm:pt-5">
+                    <span className="inline-flex size-9 items-center justify-center rounded-full border border-sky-400/35 bg-gradient-to-br from-white/[0.12] to-white/[0.04] text-sm font-bold text-sky-50 shadow-[0_10px_28px_-8px_rgba(56,189,248,0.32)] transition-[transform,border-color,box-shadow] duration-200 group-hover:translate-x-0.5 group-hover:border-sky-400/55 group-hover:text-white">
                       →
                     </span>
                   </span>
@@ -392,7 +392,7 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
                   ) : null}
                   <div
                     className={[
-                      "landing-flow-strip-card landing-showcase-flow-step group relative min-h-[6.75rem] min-w-[calc(48%-6px)] flex-1 rounded-[14px] border border-white/[0.12] bg-gradient-to-br from-white/[0.07] via-[#050d18]/92 to-transparent px-3.5 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_10px_32px_-16px_rgba(0,0,0,0.45)] backdrop-blur-sm motion-safe:transition-[transform,box-shadow,border-color] motion-safe:duration-200 hover:-translate-y-0.5 hover:border-sky-400/32 hover:shadow-[0_16px_40px_-16px_rgba(0,0,0,0.5)] sm:min-h-[7rem] sm:min-w-0 sm:rounded-2xl sm:px-4 sm:py-4",
+                      "landing-flow-strip-card landing-showcase-flow-step group relative min-h-[7.5rem] min-w-[calc(48%-6px)] flex-1 rounded-[14px] border border-white/[0.16] bg-gradient-to-br from-white/[0.085] via-[#050d18]/92 to-transparent px-4 py-3.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.07),0_12px_36px_-16px_rgba(0,0,0,0.48)] ring-1 ring-inset ring-sky-400/06 backdrop-blur-sm motion-safe:transition-[transform,box-shadow,border-color] motion-safe:duration-200 hover:-translate-y-0.5 hover:border-sky-400/36 hover:shadow-[0_18px_44px_-16px_rgba(0,0,0,0.52)] sm:min-h-[7.75rem] sm:min-w-0 sm:rounded-2xl sm:px-[1.125rem] sm:py-[1.125rem]",
                       idx === 0 ? "" : "",
                       idx === flowSteps.length - 1 ? "" : "",
                     ].join(" ")}
@@ -406,8 +406,8 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
                         <div className="h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent sm:hidden" aria-hidden />
                       </div>
                     </div>
-                    <p className="mt-3 text-[13px] font-semibold leading-snug text-slate-100 sm:mt-3.5 sm:text-[14px] sm:leading-tight">{t(step.titleKey)}</p>
-                    <p className="mt-2 line-clamp-2 text-[11px] leading-relaxed text-slate-500 sm:line-clamp-3 sm:text-[12px] sm:leading-[1.5]">{t(step.bodyKey)}</p>
+                    <p className="mt-3 text-[14px] font-semibold leading-snug text-slate-50 sm:mt-3.5 sm:text-[15px] sm:leading-tight">{t(step.titleKey)}</p>
+                    <p className="mt-2 line-clamp-2 text-[11.5px] leading-relaxed text-slate-400 sm:line-clamp-3 sm:text-[12.5px] sm:leading-[1.52]">{t(step.bodyKey)}</p>
                   </div>
                 </Fragment>
               ))}

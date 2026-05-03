@@ -1541,26 +1541,26 @@ export function CRMApp({
   return (
     <>
       <div id="crm-main" className="w-full min-w-0 pb-8 text-slate-100 lg:pb-10">
-        <div className="mx-auto flex w-full max-w-[1580px] flex-col gap-6 px-2 sm:px-4 xl:px-0">
+        <div className="mx-auto flex w-full max-w-[1580px] flex-col gap-7 px-2 sm:gap-8 sm:px-4 xl:px-0">
           {!uid ? (
             <div
-              className="sensora-premium-card rounded-[18px] px-4 py-3.5 text-left text-[13px] leading-[1.6] text-slate-400 max-[390px]:px-3.5"
+              className="sensora-premium-card rounded-[18px] px-5 py-4 text-left text-[14px] leading-[1.65] text-slate-400 max-[390px]:px-[1.125rem]"
               role="status"
               aria-live="polite"
             >
-              <p className="font-medium text-slate-100">{t("crm.demoContextNotice.primary")}</p>
-              <p className="mt-2 text-[13px] leading-relaxed">{t("crm.demoContextNotice.secondary")}</p>
-              <p className="mt-2 text-[13px] leading-relaxed font-medium text-slate-300">
+              <p className="font-semibold text-slate-50">{t("crm.demoContextNotice.primary")}</p>
+              <p className="mt-2.5 text-[14px] leading-relaxed text-slate-400">{t("crm.demoContextNotice.secondary")}</p>
+              <p className="mt-2.5 text-[14px] leading-relaxed font-medium text-slate-300">
                 {t("crm.demoContextNotice.accessAfterBeta")}
               </p>
             </div>
           ) : null}
           <header className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between lg:gap-6">
             <div className="min-w-0">
-              <h1 className="text-[clamp(22px,2.8vw,30px)] font-semibold leading-tight tracking-tight text-slate-50">
+              <h1 className="text-[clamp(24px,3vw,34px)] font-semibold leading-tight tracking-tight text-slate-50">
                 {t("product.name")}
               </h1>
-              <p className="mt-2 max-w-xl text-[15px] leading-relaxed text-slate-400">
+              <p className="mt-2.5 max-w-xl text-[16px] leading-relaxed text-slate-400">
                 {!uid ? (
                   t("crm.previewMode.headerSubtitle")
                 ) : (
@@ -1604,7 +1604,7 @@ export function CRMApp({
                     }
                     aria-controls="crm-unified-search-results"
                     aria-autocomplete="list"
-                    className="sensora-premium-input min-h-[46px] w-full rounded-[1.125rem] px-4 py-3 text-[15px] backdrop-blur-md"
+                    className="sensora-premium-input min-h-[48px] w-full rounded-[1.125rem] px-4 py-3 text-[16px] backdrop-blur-md"
                   />
                 </label>
                 {searchOpen && normalizeSearchFold(searchQuery).length >= 1 ? (
@@ -1685,14 +1685,14 @@ export function CRMApp({
               </div>
                 <button
                   type="button"
-                  className="sensora-premium-ghost inline-flex min-h-[46px] shrink-0 touch-manipulation items-center justify-center self-stretch rounded-xl px-4 py-2.5 text-[13px] font-semibold sm:min-w-[9.25rem] sm:max-w-[11rem]"
+                  className="sensora-premium-ghost inline-flex min-h-[48px] shrink-0 touch-manipulation items-center justify-center self-stretch rounded-xl px-4 py-2.5 text-[14px] font-semibold sm:min-w-[9.25rem] sm:max-w-[11rem]"
                   onClick={() => setSensoraTipIntroOpen(true)}
                 >
                   {t("crm.sensoraTip.openButton")}
                 </button>
               <button
                 type="button"
-                className="sensora-premium-primary-workspace min-h-[46px] shrink-0 rounded-[1.125rem] px-5 py-3 text-[15px] font-semibold shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_12px_36px_-12px_rgba(56,189,248,0.2)] sm:w-auto sm:whitespace-nowrap touch-manipulation focus:outline-none"
+                className="sensora-premium-primary-workspace min-h-[48px] shrink-0 rounded-[1.125rem] px-5 py-3 text-[16px] font-semibold shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_12px_36px_-12px_rgba(56,189,248,0.2)] sm:w-auto sm:whitespace-nowrap touch-manipulation focus:outline-none"
                 onClick={openCreateCustomerModal}
               >
                 + {t("crm.addCustomer")}
@@ -1703,10 +1703,10 @@ export function CRMApp({
 
           <div
             id="crm-section-title"
-            className="sensora-premium-panel scroll-mt-24 rounded-[22px] px-4 py-3.5 shadow-[0_22px_48px_-26px_rgba(0,0,0,0.48)] backdrop-blur-xl max-[390px]:px-3.5 max-[390px]:py-3 lg:hidden"
+            className="sensora-premium-card scroll-mt-24 rounded-[22px] px-[1.125rem] py-4 shadow-[0_22px_48px_-26px_rgba(0,0,0,0.48)] max-[390px]:px-5 max-[390px]:py-[1.125rem] lg:hidden"
           >
-            <p className="text-[18px] font-bold tracking-tight text-slate-50">{CRM_SECTION_LABELS[activeSection].title}</p>
-            <p className="mt-1 text-[13px] font-semibold leading-snug text-slate-400">
+            <p className="text-[19px] font-bold tracking-tight text-slate-50">{CRM_SECTION_LABELS[activeSection].title}</p>
+            <p className="mt-1.5 text-[14px] font-semibold leading-snug text-slate-400">
               {t(CRM_SECTION_MOBILE_SUBTITLE_KEYS[activeSection])}
             </p>
           </div>
@@ -1714,14 +1714,14 @@ export function CRMApp({
           {showSellerToolsRow ? (
             <div className="flex flex-wrap items-center gap-2 sm:justify-between">
               <label className="flex flex-1 flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
-                <span className="whitespace-nowrap text-[13px] font-semibold text-slate-300">
+                <span className="whitespace-nowrap text-[14px] font-semibold text-slate-200">
                   내 이름 · 템플릿 치환
                 </span>
                 <input
                   value={sellerNickname}
                   onChange={(e) => persistSellerNickname(e.target.value)}
                   placeholder="예: 김실장"
-                  className="max-w-xs flex-1 rounded-xl border border-white/[0.11] bg-slate-950/55 px-4 py-2.5 text-[15px] text-slate-50 outline-none placeholder:text-slate-500 focus:border-sky-400/45"
+                  className="sensora-premium-input max-w-xs flex-1 rounded-xl px-4 py-3 text-[16px]"
                 />
               </label>
               <div className="flex flex-wrap gap-2">
@@ -3658,8 +3658,8 @@ export function CRMApp({
             >
               {t("landing.showroom.tip.title")}
             </h2>
-            <p className="mt-3 text-[14px] leading-relaxed text-slate-400">{t("crm.guideTip.body")}</p>
-            <p className="mt-3 text-[11px] leading-relaxed text-slate-500">{t("crm.demoContextNotice.accessAfterBeta")}</p>
+            <p className="mt-3 text-[15px] leading-relaxed text-slate-400">{t("crm.guideTip.body")}</p>
+            <p className="mt-3 text-[12px] leading-relaxed text-slate-400">{t("crm.demoContextNotice.accessAfterBeta")}</p>
             <div className="mt-7 flex flex-col gap-3">
               <button
                 type="button"
@@ -3716,7 +3716,7 @@ export function CRMApp({
             >
               {t("crm.previewGate.title")}
             </h2>
-            <p className="mt-3 text-[14px] leading-relaxed text-slate-400">{t("crm.previewGate.body")}</p>
+            <p className="mt-3 text-[15px] leading-relaxed text-slate-400">{t("crm.previewGate.body")}</p>
             <div className="mt-7 flex flex-col gap-3">
               <Link
                 href="/join?returnTo=preview"

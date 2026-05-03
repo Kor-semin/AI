@@ -71,9 +71,9 @@ function BetaJoinForm() {
   }
 
   const fieldClass =
-    "sensora-premium-input mt-2 w-full min-h-[48px] rounded-xl px-4 py-3 text-[15px] leading-snug";
+    "sensora-premium-input mt-2 w-full min-h-[50px] rounded-xl px-4 py-[0.9rem] text-[16px] leading-snug";
 
-  const textareaFieldClass = `${fieldClass} resize-y py-3.5 leading-relaxed min-h-[100px] sm:min-h-[7.125rem]`;
+  const textareaFieldClass = `${fieldClass} resize-y py-4 leading-relaxed min-h-[7.75rem] sm:min-h-[7.75rem]`;
 
   return (
     <main className="crm-bg crm-app-stage join-premium-surface relative min-h-[100dvh] min-h-[100svh] overflow-x-hidden px-[max(1rem,calc(env(safe-area-inset-left,1rem)))] pb-[max(2rem,calc(7.5rem+env(safe-area-inset-bottom,0px)))] max-sm:pb-[max(2rem,calc(8rem+env(safe-area-inset-bottom,0px)))] pr-[max(1rem,calc(env(safe-area-inset-right,1rem)))] pt-[max(1.25rem,env(safe-area-inset-top))]">
@@ -90,28 +90,28 @@ function BetaJoinForm() {
           <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-white/[0.14] bg-slate-950/65 px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-300 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_0_40px_-16px_rgba(56,189,248,0.09)] backdrop-blur-md">
             SENSORA · AUTO CRM
           </div>
-          <h1 className="mt-4 text-balance text-2xl font-semibold tracking-tight text-slate-50 sm:text-3xl">
+          <h1 className="mt-4 text-balance text-[1.625rem] font-semibold tracking-tight text-slate-50 sm:text-[2rem]">
             {t("join.title")}
           </h1>
-          <p className="mt-3 max-w-[min(100%,38rem)] text-pretty whitespace-pre-line text-[15px] leading-relaxed text-slate-400 max-sm:text-[14px]">
+          <p className="mt-3 max-w-[min(100%,38rem)] text-pretty whitespace-pre-line text-[16px] leading-relaxed text-slate-400 max-sm:text-[15px]">
             {t("join.intro")}
           </p>
         </div>
 
-        <div className="sensora-premium-card relative rounded-[24px] p-6 max-[389px]:p-5 sm:p-9">
+        <div className="sensora-premium-card relative rounded-[24px] px-6 py-7 max-[389px]:p-6 sm:p-10">
           <form ref={formRef} className="relative" onSubmit={(ev) => void handleSubmit(ev)} noValidate>
-            <fieldset className="space-y-5 border-0 p-0 [&_legend]:sr-only">
+            <fieldset className="space-y-6 border-0 p-0 [&_legend]:sr-only">
               <legend>{t("join.formLegend")}</legend>
 
               <div>
-                <label htmlFor="fullName" className="text-[13px] font-semibold text-slate-200">
+                <label htmlFor="fullName" className="text-[14px] font-semibold text-slate-100">
                   {t("form.name")}
                 </label>
                 <input id="fullName" name="fullName" type="text" autoComplete="name" required className={fieldClass} placeholder="홍길동" />
               </div>
 
               <div>
-                <label htmlFor="contact" className="text-[13px] font-semibold text-slate-200">
+                <label htmlFor="contact" className="text-[14px] font-semibold text-slate-100">
                   {t("form.contact")}
                 </label>
                 <input
@@ -126,7 +126,7 @@ function BetaJoinForm() {
               </div>
 
               <div>
-                <label htmlFor="email" className="text-[13px] font-semibold text-slate-200">
+                <label htmlFor="email" className="text-[14px] font-semibold text-slate-100">
                   {t("form.email")}
                 </label>
                 <input
@@ -141,7 +141,7 @@ function BetaJoinForm() {
               </div>
 
               <div>
-                <label htmlFor="dealership" className="text-[13px] font-semibold text-slate-200">
+                <label htmlFor="dealership" className="text-[14px] font-semibold text-slate-100">
                   {t("form.dealership")}
                 </label>
                 <input
@@ -155,7 +155,7 @@ function BetaJoinForm() {
               </div>
 
               <div>
-                <label htmlFor="currentCrmApproach" className="text-[13px] font-semibold text-slate-200">
+                <label htmlFor="currentCrmApproach" className="text-[14px] font-semibold text-slate-100">
                   {t("form.currentCrm")}
                 </label>
                 <textarea
@@ -169,7 +169,7 @@ function BetaJoinForm() {
               </div>
 
               <div>
-                <label htmlFor="motivation" className="text-[13px] font-semibold text-slate-200">
+                <label htmlFor="motivation" className="text-[14px] font-semibold text-slate-100">
                   {t("form.motivation")}
                 </label>
                 <textarea
@@ -185,7 +185,7 @@ function BetaJoinForm() {
 
             <div className="mt-8 flex flex-col gap-5 border-t border-white/[0.1] pt-8">
               <div
-                className="space-y-2.5 rounded-xl border border-white/[0.12] bg-[#020817]/62 px-4 py-4 text-left text-[13px] leading-[1.65] text-slate-400 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-md max-[389px]:px-3.5 max-[389px]:py-3.5 max-[389px]:text-[12px]"
+                className="space-y-2.5 rounded-xl border border-white/[0.12] bg-[#020817]/62 px-4 py-[1.125rem] text-left text-[14px] leading-[1.65] text-slate-400 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-md max-[389px]:px-3.5 max-[389px]:py-3.5 max-[389px]:text-[13px]"
                 role="note"
               >
                 <p className="font-semibold text-slate-100">{t("join.trustNoticeLine1")}</p>
@@ -195,7 +195,7 @@ function BetaJoinForm() {
               <button
                 type="submit"
                 disabled={pending}
-                className="sensora-premium-primary-workspace min-h-[50px] w-full rounded-2xl py-3.5 text-[15px] font-semibold touch-manipulation disabled:cursor-not-allowed disabled:opacity-55"
+                className="sensora-premium-primary-workspace min-h-[52px] w-full rounded-2xl py-3.5 text-[16px] font-semibold touch-manipulation disabled:cursor-not-allowed disabled:opacity-55"
               >
                 {pending ? t("join.submitting") : t("join.submit")}
               </button>
