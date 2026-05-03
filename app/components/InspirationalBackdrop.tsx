@@ -36,7 +36,7 @@ export function InspirationalBackdrop() {
           />
           <div
             aria-hidden
-            className="absolute inset-0 bg-[radial-gradient(ellipse_90%_55%_at_18%_-8%,rgba(56,189,248,0.09),transparent_58%)]"
+            className="absolute inset-0 bg-[radial-gradient(ellipse_92%_58%_at_18%_-6%,rgba(56,189,248,0.095),transparent_58%),radial-gradient(ellipse_50%_36%_at_50%_92%,rgba(15,23,42,0.5),transparent_62%)]"
           />
           <div
             aria-hidden

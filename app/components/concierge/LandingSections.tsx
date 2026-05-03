@@ -34,19 +34,20 @@ const primaryBtn =
   "sensora-premium-primary-workspace inline-flex min-h-[44px] items-center justify-center rounded-xl px-7 py-2.5 text-sm font-semibold touch-manipulation";
 
 const ghostBtn =
-  "inline-flex min-h-[44px] items-center justify-center rounded-xl border border-white/[0.18] bg-white/[0.05] px-6 py-2.5 text-sm font-semibold text-slate-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-sm transition duration-200 hover:border-white/28 hover:bg-white/[0.1] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 focus-visible:ring-offset-2 focus-visible:ring-offset-[#020817] touch-manipulation";
+  "inline-flex min-h-[44px] items-center justify-center rounded-xl border border-white/[0.2] bg-white/[0.06] px-7 py-2.5 text-sm font-semibold text-slate-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.055)] backdrop-blur-md transition-[border-color,background-color,box-shadow,transform] duration-[220ms] ease-out hover:border-sky-300/38 hover:bg-white/[0.11] hover:shadow-[0_0_28px_-10px_rgba(56,189,248,0.12)] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[#020817] touch-manipulation motion-reduce:transition-none";
 
-const heroPrimaryDark =
-  "inline-flex min-h-[48px] min-w-[12rem] w-full shrink-0 items-center justify-center rounded-2xl bg-gradient-to-b from-white to-slate-100 px-7 py-3.5 text-[15px] font-semibold tracking-tight text-[#0c1222] shadow-[0_2px_0_rgba(255,255,255,0.35)_inset,0_8px_32px_-8px_rgba(56,189,248,0.12),0_16px_48px_-16px_rgba(0,0,0,0.5)] ring-1 ring-white/30 transition duration-200 hover:from-white hover:to-slate-50 hover:shadow-[0_2px_0_rgba(255,255,255,0.45)_inset,0_12px_40px_-8px_rgba(56,189,248,0.16)] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/55 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0d1628] sm:w-auto sm:min-h-[50px] sm:min-w-[12.5rem] sm:py-4 sm:text-[16px] lg:min-h-[52px] lg:px-10 lg:text-[17px]";
+/** 베타 신청 — 프리미엄 primary(luminous blue·은은한 바이올렛 는 전역 클래스에서) */
+const heroJoinPrimary =
+  "sensora-premium-primary-workspace inline-flex min-h-[48px] min-w-[12rem] w-full shrink-0 items-center justify-center rounded-2xl px-8 py-3.5 text-[15px] font-semibold tracking-tight sm:w-auto sm:min-h-[50px] sm:min-w-[12.75rem] sm:py-4 sm:text-[16px] lg:min-h-[52px] lg:px-10 lg:text-[17px]";
 
 const heroGhostDark =
-  "inline-flex min-h-[48px] min-w-[12rem] w-full shrink-0 items-center justify-center rounded-2xl border border-white/20 bg-white/[0.06] px-7 py-3.5 text-[15px] font-semibold tracking-tight text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] ring-1 ring-inset ring-white/[0.08] backdrop-blur-md transition duration-200 hover:border-sky-300/35 hover:bg-white/[0.1] hover:shadow-[0_0_28px_-8px_rgba(56,189,248,0.12)] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0d1628] sm:w-auto sm:min-h-[50px] sm:min-w-[12.5rem] sm:py-4 sm:text-[16px] lg:min-h-[52px] lg:px-10 lg:text-[17px]";
+  "inline-flex min-h-[48px] min-w-[12rem] w-full shrink-0 items-center justify-center rounded-2xl border border-white/[0.2] bg-white/[0.07] px-7 py-3.5 text-[15px] font-semibold tracking-tight text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.07)] ring-1 ring-inset ring-white/[0.09] backdrop-blur-md transition-[border-color,background-color,box-shadow,color,transform] duration-[220ms] ease-out hover:border-sky-300/42 hover:bg-white/[0.11] hover:shadow-[0_0_32px_-8px_rgba(56,189,248,0.14)] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/45 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0d1628] sm:w-auto sm:min-h-[50px] sm:min-w-[12.5rem] sm:py-4 sm:text-[16px] lg:min-h-[52px] lg:px-10 lg:text-[17px] motion-reduce:transition-none";
 
 const heroPreviewShell =
-  "overflow-hidden rounded-[30px] border border-white/[0.14] bg-slate-900/60 shadow-[0_28px_70px_-24px_rgba(0,0,0,0.65),0_0_0_1px_rgba(255,255,255,0.04)_inset] ring-1 ring-white/[0.06] backdrop-blur-md sm:rounded-[34px] lg:rounded-[36px]";
+  "relative overflow-hidden rounded-[30px] border border-white/[0.16] bg-gradient-to-b from-slate-900/72 to-[#050d18]/92 shadow-[0_32px_80px_-28px_rgba(0,0,0,0.68),0_0_0_1px_rgba(255,255,255,0.05)_inset] ring-1 ring-white/[0.07] backdrop-blur-xl before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-white/18 before:to-transparent sm:rounded-[34px] lg:rounded-[36px]";
 
 const tipCardBase =
-  "group relative flex min-h-[240px] w-full cursor-pointer touch-manipulation flex-col rounded-[22px] border border-white/[0.16] bg-gradient-to-b from-slate-900/58 to-[#07111f]/78 p-5 text-left shadow-[0_4px_28px_-8px_rgba(0,0,0,0.48)] ring-1 ring-inset ring-white/[0.05] backdrop-blur-md transition-[border-color,box-shadow,transform] duration-300 hover:-translate-y-0.5 hover:border-sky-400/38 hover:shadow-[0_0_0_1px_rgba(56,189,248,0.06),0_0_42px_-12px_rgba(56,189,248,0.1),0_0_52px_-16px_rgba(139,92,246,0.07),0_20px_52px_-20px_rgba(0,0,0,0.55)] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 focus-visible:ring-offset-2 focus-visible:ring-offset-[#020817] sm:min-h-[288px] sm:p-6";
+  "group relative flex min-h-[256px] w-full cursor-pointer touch-manipulation flex-col rounded-[22px] border border-white/[0.17] bg-gradient-to-b from-slate-900/62 to-[#07111f]/82 p-5 text-left shadow-[0_6px_32px_-10px_rgba(0,0,0,0.5)] ring-1 ring-inset ring-white/[0.055] backdrop-blur-xl transition-[border-color,box-shadow,transform] duration-[240ms] ease-[cubic-bezier(0.22,1,0.32,1)] motion-reduce:transition-none hover:-translate-y-px hover:border-sky-400/42 hover:border-violet-400/18 hover:shadow-[0_0_0_1px_rgba(56,189,248,0.055),0_0_48px_-12px_rgba(56,189,248,0.11),0_0_56px_-18px_rgba(139,92,246,0.075),0_22px_56px_-22px_rgba(0,0,0,0.58)] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[#020817] sm:min-h-[296px] sm:p-6 motion-reduce:hover:translate-y-0";
 
 /** 스크롤 진입 리빌 — reduced-motion에서는 즉시 표시 · 모바일은 짧은 이동량 */
 function useShowroomReveal() {
@@ -125,22 +126,28 @@ function HeroDashboardPreview() {
   ];
 
   return (
-    <div className={`${heroPreviewShell} relative z-[3] w-full max-w-[640px] lg:mx-0 lg:max-w-none`}>
-      <div className="flex items-center gap-3 border-b border-white/[0.12] bg-gradient-to-b from-slate-900/85 to-[#07111f]/92 px-5 py-3.5 sm:px-8 sm:py-4 lg:py-5">
+    <div className={`${heroPreviewShell} z-[3] w-full max-w-[640px] lg:mx-0 lg:max-w-none`}>
+      <div className="relative flex items-center gap-3 border-b border-white/[0.13] bg-gradient-to-b from-slate-900/92 to-[#07111f]/95 px-5 py-3.5 sm:px-8 sm:py-4 lg:py-5">
         <div className="flex gap-2" aria-hidden>
-          <span className="size-2.5 rounded-full bg-white/25" />
-          <span className="size-2.5 rounded-full bg-white/20" />
-          <span className="size-2.5 rounded-full bg-white/15" />
+          <span className="size-2.5 rounded-full bg-white/25 shadow-[inset_0_1px_0_rgba(255,255,255,0.25)]" />
+          <span className="size-2.5 rounded-full bg-white/20 shadow-[inset_0_1px_0_rgba(255,255,255,0.22)]" />
+          <span className="size-2.5 rounded-full bg-white/15 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]" />
         </div>
-        <p className="min-w-0 flex-1 truncate text-left text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-300">
-          {t("product.name")}
-        </p>
+        <div className="flex min-w-0 flex-1 items-center gap-2">
+          <span className="size-2 shrink-0 rounded-full bg-emerald-400/80 shadow-[0_0_10px_rgba(52,211,153,0.28)] ring-2 ring-emerald-400/15" aria-hidden />
+          <p className="min-w-0 flex-1 truncate text-left text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-300">
+            {t("product.name")}
+          </p>
+        </div>
       </div>
-      <div className="divide-y divide-white/[0.1] bg-[#020817]/72 px-4 py-1 sm:px-6 sm:py-2">
+      <div className="divide-y divide-white/[0.09] bg-[#020817]/78 px-3 py-0.5 sm:px-6 sm:py-1">
         {rows.map(({ titleKey, bodyKey }) => (
-          <div key={titleKey} className="space-y-1 py-3 sm:py-3.5">
-            <p className="text-[10px] font-bold uppercase tracking-[0.07em] text-slate-400 sm:text-[11px]">{t(titleKey)}</p>
-            <p className="text-[13px] leading-[1.45] text-slate-100 sm:text-[14px] sm:leading-[1.54]">{t(bodyKey)}</p>
+          <div
+            key={titleKey}
+            className="group/row rounded-xl px-2 py-3 transition-[background-color,border-color] duration-[220ms] ease-out sm:py-3.5 border border-transparent hover:border-white/[0.06] hover:bg-white/[0.035] motion-reduce:transition-none"
+          >
+            <p className="text-[10px] font-bold uppercase tracking-[0.08em] text-slate-500 sm:text-[11px]">{t(titleKey)}</p>
+            <p className="mt-1 text-[13px] font-medium leading-[1.5] text-slate-100 sm:text-[14px] sm:leading-[1.55]">{t(bodyKey)}</p>
           </div>
         ))}
       </div>
@@ -252,8 +259,8 @@ function SensoraTipSectionInner() {
         onClose={() => setViewer({ open: false, title: "", initialSlideIndex: 0 })}
       />
       <div className="landing-showroom-premium-rule mx-auto mb-8 max-sm:mb-6 sm:mb-10 pointer-events-none" aria-hidden />
-      <div className="relative mx-auto max-w-[1040px] px-5 pb-4 pt-2 sm:px-6 sm:pb-12 sm:pt-6">
-        <div className="pointer-events-none absolute inset-x-[-18%] top-[-38%] h-[72%] bg-[radial-gradient(ellipse_68%_48%_at_50%_0%,rgba(99,102,241,0.1),transparent_72%)] opacity-95" />
+      <div className="relative mx-auto max-w-[1080px] px-5 pb-6 pt-2 sm:px-6 sm:pb-14 sm:pt-6">
+        <div className="pointer-events-none absolute inset-x-[-20%] top-[-40%] h-[74%] bg-[radial-gradient(ellipse_70%_50%_at_50%_0%,rgba(99,102,241,0.11),transparent_72%),radial-gradient(ellipse_55%_42%_at_80%_20%,rgba(56,189,248,0.05),transparent_58%)] opacity-[0.96]" />
 
         <div className="relative mx-auto max-w-[720px] text-center lg:max-w-[800px]">
           <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-sky-300/85 sm:text-[12px]">TIP</p>
@@ -265,7 +272,7 @@ function SensoraTipSectionInner() {
           </p>
         </div>
 
-        <div className="relative mx-auto mt-10 grid max-w-[1040px] grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-x-8 sm:gap-y-7 lg:gap-x-9 lg:gap-y-8">
+        <div className="relative mx-auto mt-10 grid max-w-[1080px] grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-x-10 sm:gap-y-8 lg:gap-x-11 lg:gap-y-9">
           {cards.map(({ n, titleKey, descKey, Icon }) => (
             <button
               key={titleKey}
@@ -281,24 +288,24 @@ function SensoraTipSectionInner() {
             >
               <div className="flex items-center justify-between gap-4">
                 <span
-                  className="flex size-12 shrink-0 items-center justify-center rounded-2xl border border-white/[0.14] bg-gradient-to-br from-sky-400/16 via-white/[0.05] to-violet-500/10 text-sky-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] ring-1 ring-inset ring-white/[0.06]"
+                  className="flex size-[3.125rem] shrink-0 items-center justify-center rounded-2xl border border-white/[0.15] bg-gradient-to-br from-sky-400/18 via-white/[0.06] to-violet-500/12 text-sky-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] ring-1 ring-inset ring-white/[0.08] transition-[box-shadow,border-color,transform] duration-[220ms] ease-out group-hover:-translate-y-px group-hover:border-sky-400/35 group-hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_0_36px_-8px_rgba(56,189,248,0.14)] motion-reduce:group-hover:translate-y-0"
                   aria-hidden
                 >
-                  <Icon className="size-[22px] opacity-[0.95]" />
+                  <Icon className="size-[22px] opacity-[0.96]" />
                 </span>
-                <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-full border border-white/[0.12] bg-slate-950/40 text-[12px] font-semibold tabular-nums tracking-tight text-slate-400">
+                <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-full border border-white/[0.14] bg-slate-950/55 text-[12px] font-semibold tabular-nums tracking-tight text-slate-400 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] ring-1 ring-white/[0.05] transition duration-200 group-hover:border-sky-400/28 group-hover:text-slate-300">
                   {n}
                 </span>
               </div>
-              <h3 className="mt-5 text-[17px] font-semibold leading-snug tracking-tight text-slate-50 sm:text-[17.5px]">{t(titleKey)}</h3>
-              <p className="mt-3 flex-1 text-[14px] leading-relaxed text-slate-400/95 sm:text-[15px] sm:leading-[1.55]">{t(descKey)}</p>
+              <h3 className="mt-5 text-[17px] font-semibold leading-snug tracking-tight text-slate-50 sm:text-[18px]">{t(titleKey)}</h3>
+              <p className="mt-3 flex-1 text-[14px] leading-relaxed text-slate-400 sm:text-[15px] sm:leading-[1.56]">{t(descKey)}</p>
               <div className="mt-auto flex justify-end pt-5 sm:pt-6">
                 <span
-                  className="inline-flex items-center gap-1.5 rounded-full border border-sky-400/25 bg-sky-500/[0.08] px-3.5 py-2 text-[13px] font-semibold text-sky-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] ring-1 ring-inset ring-white/[0.04] transition group-hover:border-sky-400/40 group-hover:bg-sky-400/[0.12] group-hover:text-sky-100"
+                  className="inline-flex items-center gap-1.5 rounded-full border border-sky-400/32 bg-gradient-to-r from-sky-500/[0.1] to-violet-500/[0.06] px-4 py-2.5 text-[13px] font-semibold text-sky-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_8px_24px_-12px_rgba(0,0,0,0.35)] ring-1 ring-inset ring-white/[0.06] transition-[border-color,background-color,box-shadow,color,transform] duration-[220ms] ease-[cubic-bezier(0.22,1,0.32,1)] group-hover:-translate-y-px group-hover:border-sky-400/48 group-hover:from-sky-500/[0.16] group-hover:to-violet-500/[0.1] group-hover:text-white group-hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_12px_32px_-10px_rgba(56,189,248,0.18)] active:translate-y-0 active:scale-[0.98] motion-reduce:transition-none motion-reduce:group-hover:translate-y-0"
                   aria-hidden
                 >
                   {t("landing.showroom.tip.guideWord")}
-                  <span className="translate-x-0 transition group-hover:translate-x-1" aria-hidden>
+                  <span className="translate-x-0 transition-[transform] duration-200 ease-out group-hover:translate-x-1" aria-hidden>
                     →
                   </span>
                 </span>
@@ -329,13 +336,13 @@ export function LandingShowroom({ onOpenAppWorkspace }: { onOpenAppWorkspace: ()
         <RevealSection className="relative mx-auto w-full max-w-[1280px] overflow-x-hidden">
           <ProductFlowSectionInner />
         </RevealSection>
-        <RevealSection className="mx-auto w-full max-w-[1200px] px-5 py-8 sm:px-6 sm:py-14 lg:py-20">
+        <RevealSection className="mx-auto w-full max-w-[1200px] px-5 py-10 sm:px-6 sm:py-[4rem] lg:py-[5rem]">
           <SensoraGuideSectionInner />
         </RevealSection>
-        <RevealSection className="mx-auto w-full max-w-[1200px] px-5 py-14 sm:px-6 sm:py-20 lg:py-24">
+        <RevealSection className="mx-auto w-full max-w-[1200px] px-5 py-12 sm:px-6 sm:py-[4.75rem] lg:py-28">
           <SalesFeatureGridInner />
         </RevealSection>
-        <RevealSection className="mx-auto w-full max-w-[1200px] px-5 pb-20 pt-10 sm:px-6 sm:pb-28">
+        <RevealSection className="mx-auto w-full max-w-[1200px] px-5 pb-[5.25rem] pt-8 sm:px-6 sm:pb-32 sm:pt-11">
           <FinalShowroomCTAInner onOpenAppWorkspace={onOpenAppWorkspace} />
         </RevealSection>
       </div>
@@ -377,7 +384,7 @@ function ShowroomHero({ onOpenAppWorkspace }: { onOpenAppWorkspace: () => void }
           />
         </div>
 
-        <div className="relative z-[2] mx-auto grid w-full max-w-[1160px] items-start gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.12fr)] lg:items-center lg:gap-12 xl:gap-16">
+        <div className="relative z-[2] mx-auto grid w-full max-w-[1160px] items-start gap-10 lg:grid-cols-[minmax(0,1.06fr)_minmax(0,1fr)] lg:items-center lg:gap-14 xl:gap-[4.25rem]">
           <div className="min-w-0 max-w-xl lg:max-w-none">
             <span className="inline-flex rounded-full border border-white/[0.15] bg-white/[0.06] px-3 py-1 text-[11px] font-semibold tracking-[0.06em] text-slate-200 backdrop-blur-sm sm:text-[12px]">
               {t("landing.showroom.hero.kickerBadge")}
@@ -389,7 +396,7 @@ function ShowroomHero({ onOpenAppWorkspace }: { onOpenAppWorkspace: () => void }
               {t("landing.showroom.hero.sub")}
             </p>
             <div className="mt-9 flex max-w-full flex-col gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4 lg:gap-5">
-              <Link href={JOIN_PATH} prefetch={false} className={`relative z-20 justify-center pointer-events-auto ${heroPrimaryDark} touch-manipulation`}>
+              <Link href={JOIN_PATH} prefetch={false} className={`relative z-20 justify-center pointer-events-auto ${heroJoinPrimary} touch-manipulation`}>
                 {t("cta.joinBeta")}
               </Link>
               <button
@@ -405,7 +412,7 @@ function ShowroomHero({ onOpenAppWorkspace }: { onOpenAppWorkspace: () => void }
           <div className="relative z-[4] mx-auto min-w-0 w-full max-w-[min(100%,560px)] lg:mx-0 lg:max-w-none">
             <div
               aria-hidden
-              className="pointer-events-none absolute -inset-3 rounded-[36px] bg-[radial-gradient(ellipse_85%_70%_at_55%_45%,rgba(56,189,248,0.09),transparent_68%),radial-gradient(ellipse_70%_60%_at_72%_38%,rgba(139,92,246,0.06),transparent_65%)] opacity-95 blur-xl sm:-inset-4 lg:-inset-5"
+              className="pointer-events-none absolute -inset-[14px] rounded-[38px] bg-[radial-gradient(ellipse_88%_72%_at_52%_48%,rgba(56,189,248,0.11),transparent_68%),radial-gradient(ellipse_74%_64%_at_74%_36%,rgba(139,92,246,0.075),transparent_64%)] opacity-[0.97] blur-2xl sm:-inset-5 lg:-inset-[22px]"
             />
             <div className="relative">
               <HeroDashboardPreview />
@@ -420,26 +427,19 @@ function ShowroomHero({ onOpenAppWorkspace }: { onOpenAppWorkspace: () => void }
 function ShowroomBridge() {
   const { t } = useLanguage();
   return (
-    <div className="mx-auto max-w-[680px] px-5 pb-6 pt-2 text-center sm:px-6 sm:pb-10 sm:pt-8 lg:max-w-[720px] lg:pb-14 lg:pt-14">
+    <div className="mx-auto max-w-[680px] px-5 pb-8 pt-4 text-center sm:px-6 sm:pb-12 sm:pt-10 lg:max-w-[720px] lg:pb-14 lg:pt-14">
       <p className="text-[clamp(1.125rem,2.9vw,1.625rem)] font-semibold leading-[1.4] tracking-[-0.024em] text-slate-200">
         {t("landing.showroom.bridge.line1")}
         <br />
         <span className="text-slate-400">{t("landing.showroom.bridge.line2")}</span>
       </p>
-      <div
-        className="mx-auto mt-7 h-[2px] w-[min(280px,80%)] rounded-full opacity-75 max-sm:mx-auto sm:mt-9"
-        style={{
-          background: "linear-gradient(90deg, transparent, rgba(56,189,248,0.25), transparent)",
-          filter: "blur(0.8px)",
-        }}
-        aria-hidden
-      />
+      <div className="landing-showroom-premium-rule landing-showroom-premium-rule--narrow mx-auto mt-7 opacity-95 sm:mt-9" aria-hidden />
     </div>
   );
 }
 
 const flowCardWrap =
-  "group mx-auto rounded-[28px] border border-white/[0.13] bg-gradient-to-b from-slate-950/45 to-[#07111f]/55 shadow-[0_32px_80px_-38px_rgba(0,0,0,0.75)] ring-1 ring-inset ring-white/[0.045] backdrop-blur-xl landing-showroom-flow-card-shadow transition-[border-color,box-shadow,transform] duration-[260ms] ease-[cubic-bezier(0.22,1,0.32,1)] hover:-translate-y-[1px] hover:border-sky-400/22 hover:shadow-[0_36px_88px_-36px_rgba(0,0,0,0.76),0_0_52px_-20px_rgba(56,189,248,0.065)] motion-reduce:transform-none motion-reduce:transition-none";
+  "group/flowdeck mx-auto rounded-[28px] border border-white/[0.13] bg-gradient-to-b from-slate-950/48 to-[#07111f]/58 shadow-[0_36px_88px_-40px_rgba(0,0,0,0.76)] ring-1 ring-inset ring-white/[0.048] backdrop-blur-xl landing-showroom-flow-card-shadow transition-[border-color,box-shadow,transform] duration-[240ms] ease-[cubic-bezier(0.22,1,0.32,1)] motion-reduce:transition-none hover:-translate-y-px hover:border-sky-400/26 hover:shadow-[0_40px_96px_-38px_rgba(0,0,0,0.78),0_0_56px_-22px_rgba(56,189,248,0.078)] motion-reduce:hover:translate-y-0";
 
 function ProductFlowSectionInner() {
   const { t } = useLanguage();
@@ -451,10 +451,11 @@ function ProductFlowSectionInner() {
   ] as const;
 
   return (
-    <div className="px-5 pb-14 pt-6 sm:px-6 sm:pb-20 sm:pt-6 lg:pb-24 lg:pt-10">
-      <div className="landing-showroom-premium-rule mx-auto mb-8 sm:mb-10 lg:mb-11 pointer-events-none" aria-hidden />
+    <div className="relative px-5 pb-16 pt-8 sm:px-6 sm:pb-[4.75rem] sm:pt-8 lg:pb-28 lg:pt-11">
+      <div className="pointer-events-none absolute inset-x-[8%] top-[18%] h-[45%] bg-[radial-gradient(ellipse_70%_50%_at_50%_30%,rgba(56,189,248,0.04),transparent_68%)] opacity-90" aria-hidden />
+      <div className="landing-showroom-premium-rule mx-auto mb-9 sm:mb-11 lg:mb-12 pointer-events-none" aria-hidden />
 
-      <div className="mx-auto max-w-[800px] text-center lg:max-w-[860px]">
+      <div className="relative mx-auto max-w-[800px] text-center lg:max-w-[860px]">
         <h2 className="text-[clamp(1.6rem,3.4vw,2.375rem)] font-semibold leading-[1.2] tracking-[-0.028em] text-slate-50">
           {t("landing.showroom.flow.title")}
         </h2>
@@ -464,35 +465,36 @@ function ProductFlowSectionInner() {
       </div>
 
       <div
-        className={`${flowCardWrap} relative mx-auto mt-10 max-w-[min(760px,100%)] overflow-hidden sm:mt-12 sm:max-w-[min(800px,100%)] lg:mt-14 lg:max-w-[min(860px,100%)]`}
+        className={`${flowCardWrap} relative mx-auto mt-10 max-w-[min(760px,100%)] overflow-hidden sm:mt-12 sm:max-w-[min(800px,100%)] lg:mt-14 lg:max-w-[min(880px,100%)]`}
       >
-        <div className="px-6 pb-8 pt-6 sm:px-10 sm:pb-11 sm:pt-9">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-white/12 to-transparent sm:inset-x-10"
+        />
+        <div className="relative space-y-0 px-5 pb-9 pt-7 sm:px-9 sm:pb-11 sm:pt-10">
           {rows.map((row, idx) => (
-            <div
-              key={row.titleKey}
-              className="relative flex gap-5 pb-11 last:pb-0 sm:gap-8"
-            >
-              <div className="relative mt-1 flex shrink-0 flex-col items-center sm:w-14">
+            <div key={row.titleKey} className="relative flex gap-4 pb-10 last:pb-0 sm:gap-7">
+              <div className="relative flex w-[2.875rem] shrink-0 flex-col items-center pt-1 sm:w-14">
                 <span
-                  className="relative z-[2] flex h-10 w-10 items-center justify-center rounded-full border border-white/[0.14] bg-gradient-to-br from-slate-800/98 to-[#0b1424] text-[12px] font-semibold tracking-tight text-slate-100 shadow-[0_10px_24px_-8px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(255,255,255,0.08)] ring-1 ring-white/[0.05] transition duration-200 ease-out group-hover:border-sky-400/35 group-hover:shadow-[0_12px_32px_-8px_rgba(56,189,248,0.12)]"
+                  className="relative z-[2] flex h-10 w-10 items-center justify-center rounded-full border border-white/[0.15] bg-gradient-to-br from-slate-800 to-[#0b1424] text-[12px] font-semibold tracking-tight text-slate-100 shadow-[0_12px_28px_-8px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(255,255,255,0.09)] ring-2 ring-sky-400/15 transition duration-[220ms] ease-out group-hover/flowdeck:border-sky-400/42 group-hover/flowdeck:shadow-[0_14px_36px_-8px_rgba(56,189,248,0.14)]"
                   aria-hidden
                 >
                   {idx + 1}
                 </span>
                 {idx < rows.length - 1 ? (
-                  <span
-                    className="relative mt-5 h-[4rem] w-[2px] shrink-0 rounded-full bg-gradient-to-b from-sky-400/42 via-indigo-400/28 to-transparent shadow-[0_0_16px_-1px_rgba(56,189,248,0.22)] motion-reduce:shadow-none motion-reduce:opacity-70 sm:h-[4.75rem]"
-                    aria-hidden
-                  />
+                  <div className="mt-4 flex flex-1 flex-col items-center pb-1" aria-hidden>
+                    <span className="min-h-[2.85rem] w-[2px] shrink-0 rounded-full bg-gradient-to-b from-sky-400/48 via-indigo-400/26 to-violet-500/14 shadow-[0_0_22px_-1px_rgba(56,189,248,0.28)] motion-reduce:shadow-none sm:min-h-[3.35rem]" />
+                    <span className="relative z-[1] -mt-1.5 flex size-2.5 items-center justify-center rounded-full border border-white/28 bg-[#07111f] shadow-[0_0_14px_-1px_rgba(56,189,248,0.42)] ring-4 ring-[#07111f]/90" />
+                  </div>
                 ) : null}
               </div>
-              <div className="min-w-0 flex-1 pb-px pt-1">
-                <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-slate-400 sm:text-[13px]">
-                  {t(row.titleKey)}
-                </p>
-                <p className="mt-3 text-[16px] font-medium leading-[1.55] text-slate-100 sm:text-[17px] sm:leading-[1.52]">
-                  {t(row.bodyKey)}
-                </p>
+              <div className="group/step min-w-0 flex-1">
+                <div className="rounded-[20px] border border-white/[0.09] bg-gradient-to-br from-white/[0.055] via-[#07111f]/4 to-transparent px-5 py-4 shadow-[0_14px_44px_-28px_rgba(0,0,0,0.58)] backdrop-blur-sm transition-[border-color,box-shadow,transform,background-color] duration-[230ms] ease-[cubic-bezier(0.22,1,0.32,1)] motion-reduce:transition-none hover:border-sky-400/26 hover:bg-white/[0.045] hover:shadow-[0_22px_52px_-26px_rgba(0,0,0,0.62),0_0_44px_-16px_rgba(56,189,248,0.07)] hover:-translate-y-px motion-reduce:hover:translate-y-0 active:translate-y-0 active:scale-[0.998]">
+                  <p className="text-[11px] font-bold uppercase tracking-[0.13em] text-slate-500">{t(row.titleKey)}</p>
+                  <p className="mt-2.5 text-[15px] font-semibold leading-[1.5] tracking-[-0.015em] text-slate-100 sm:text-[16px] sm:leading-[1.53]">
+                    {t(row.bodyKey)}
+                  </p>
+                </div>
               </div>
             </div>
           ))}

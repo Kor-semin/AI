@@ -97,7 +97,7 @@ export function SensoraGuideImageViewer({
         onClick={onClose}
       />
       <div
-        className="relative z-[1] flex max-h-[min(92dvh,92vh)] w-full max-w-[min(100%,920px)] flex-col overflow-hidden rounded-t-[22px] border border-white/[0.14] bg-gradient-to-b from-[#0a1628]/98 to-[#07111f]/97 shadow-[0_40px_100px_-28px_rgba(0,0,0,0.72),0_0_0_1px_rgba(255,255,255,0.045)_inset,0_0_60px_-24px_rgba(56,189,248,0.065)] backdrop-blur-2xl sm:max-h-[min(88dvh,88vh)] sm:rounded-2xl"
+        className="landing-guide-dialog-animate relative z-[1] flex max-h-[min(92dvh,92vh)] w-full max-w-[min(100%,920px)] flex-col overflow-hidden rounded-t-[22px] border border-white/[0.14] bg-gradient-to-b from-[#0a1628]/98 to-[#07111f]/97 shadow-[0_40px_100px_-28px_rgba(0,0,0,0.72),0_0_0_1px_rgba(255,255,255,0.045)_inset,0_0_60px_-24px_rgba(56,189,248,0.065)] backdrop-blur-2xl sm:max-h-[min(88dvh,88vh)] sm:rounded-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-start justify-between gap-3 border-b border-white/[0.08] px-4 py-3.5 sm:px-5 sm:py-4">
@@ -148,7 +148,7 @@ export function SensoraGuideImageViewer({
               <button
                 type="button"
                 onClick={goPrev}
-                className="pointer-events-auto flex size-10 items-center justify-center rounded-full border border-white/18 bg-[#0f172a]/92 text-slate-100 shadow-[0_8px_24px_-6px_rgba(0,0,0,0.45)] backdrop-blur-md transition duration-200 hover:-translate-y-px hover:border-sky-400/42 hover:bg-[#141f33] hover:shadow-[0_12px_28px_-8px_rgba(56,189,248,0.12)] active:translate-y-0 active:scale-[0.96] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35"
+                className="pointer-events-auto flex size-10 items-center justify-center rounded-full border border-white/[0.18] bg-[#0f172a]/92 text-slate-100 shadow-[0_8px_24px_-6px_rgba(0,0,0,0.45)] backdrop-blur-md transition duration-[220ms] ease-out hover:-translate-y-px hover:border-sky-400/42 hover:bg-[#141f33] hover:shadow-[0_12px_28px_-8px_rgba(56,189,248,0.12)] active:translate-y-0 active:scale-[0.96] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
                 aria-label={t("landing.showroom.tip.prev")}
               >
                 <span className="text-lg leading-none" aria-hidden>
@@ -160,7 +160,7 @@ export function SensoraGuideImageViewer({
               <button
                 type="button"
                 onClick={goNext}
-                className="pointer-events-auto flex size-10 items-center justify-center rounded-full border border-white/18 bg-[#0f172a]/92 text-slate-100 shadow-[0_8px_24px_-6px_rgba(0,0,0,0.45)] backdrop-blur-md transition duration-200 hover:-translate-y-px hover:border-sky-400/42 hover:bg-[#141f33] hover:shadow-[0_12px_28px_-8px_rgba(56,189,248,0.12)] active:translate-y-0 active:scale-[0.96] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35"
+                className="pointer-events-auto flex size-10 items-center justify-center rounded-full border border-white/[0.18] bg-[#0f172a]/92 text-slate-100 shadow-[0_8px_24px_-6px_rgba(0,0,0,0.45)] backdrop-blur-md transition duration-[220ms] ease-out hover:-translate-y-px hover:border-sky-400/42 hover:bg-[#141f33] hover:shadow-[0_12px_28px_-8px_rgba(56,189,248,0.12)] active:translate-y-0 active:scale-[0.96] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
                 aria-label={t("landing.showroom.tip.next")}
               >
                 <span className="text-lg leading-none" aria-hidden>
@@ -182,10 +182,14 @@ export function SensoraGuideImageViewer({
                   type="button"
                   onClick={() => setIndex(i)}
                   className={[
-                    "relative h-14 w-[4.5rem] shrink-0 overflow-hidden rounded-lg border transition sm:h-16 sm:w-full",
+                    "relative h-14 w-[4.5rem] shrink-0 overflow-hidden rounded-lg border shadow-[0_10px_28px_-16px_rgba(0,0,0,0.45)] transition-[border-color,opacity,transform,box-shadow] duration-[220ms] ease-[cubic-bezier(0.22,1,0.32,1)] sm:h-16 sm:w-full motion-reduce:transition-none",
                     active
-                      ? "border-sky-400/45 ring-2 ring-sky-500/25"
-                      : "border-white/10 opacity-80 hover:border-white/20 hover:opacity-100",
+                      ? "border-sky-400/52 ring-2 ring-sky-500/28 opacity-100 shadow-[0_0_28px_-8px_rgba(56,189,248,0.22)]"
+                      : [
+                          "border-white/[0.11] opacity-[0.82]",
+                          "hover:-translate-y-0.5 hover:border-sky-400/26 hover:opacity-100 hover:shadow-[0_14px_32px_-14px_rgba(0,0,0,0.5)]",
+                          "motion-reduce:hover:translate-y-0 active:translate-y-0 active:scale-[0.98]",
+                        ].join(" "),
                   ].join(" ")}
                   aria-current={active ? "true" : undefined}
                   aria-label={thumbLabel}
