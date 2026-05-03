@@ -45,6 +45,10 @@ type PreviewRow = {
 const importGuideButtonClass =
   "inline-flex min-h-[40px] w-full max-w-full touch-manipulation items-center justify-center rounded-xl border border-[#E2E8F0] bg-[#FFFFFF] px-3 py-2 text-[12px] font-semibold text-[#334155] shadow-[0_1px_2px_rgba(15,23,42,0.04)] hover:bg-[#F8FAFC] sm:w-auto sm:min-w-[12rem]";
 
+/** 모바일: 탭을 한 줄 스크롤 칩 형태로, 데스크톱: 기존 감각 유지 */
+const importTabRailClass =
+  "-mx-0.5 mt-3 flex flex-nowrap gap-1.5 overflow-x-auto overscroll-x-contain px-0.5 pb-1 pt-0.5 [scrollbar-width:none] [-ms-overflow-style:none] sm:mx-0 sm:mt-4 sm:flex-wrap sm:gap-2 sm:overflow-visible sm:px-0 sm:pb-0 sm:pt-0 [&::-webkit-scrollbar]:hidden";
+
 function tryParseImportRawText(text: string): NormalizedImportedContact[] {
   const t = text.trim();
   if (!t) return [];
@@ -288,12 +292,14 @@ export function ImportContactsPanel({
     <button
       key={id}
       type="button"
+      role="tab"
+      aria-selected={tab === id}
       onClick={() => setTab(id)}
       className={[
-        "min-h-[44px] touch-manipulation rounded-xl border px-3 py-2.5 text-[13px] font-semibold transition",
+        "shrink-0 snap-start touch-manipulation rounded-full border px-3 py-1.5 text-[12px] font-medium transition outline-none focus-visible:ring-2 focus-visible:ring-[#CBD5E1] sm:min-h-[44px] sm:rounded-xl sm:px-3 sm:py-2.5 sm:text-[13px] sm:font-semibold",
         tab === id
-          ? "border-[#111827] bg-[#111827] text-white"
-          : "border-[#E5E7EB] bg-[#F9FAFB] text-[#374151] hover:bg-[#F3F4F6]",
+          ? "border-[#111827] bg-[#111827] text-white shadow-sm ring-2 ring-[#111827]/10 ring-offset-1 ring-offset-white"
+          : "border-[#E2E8F0] bg-white text-[#475569] hover:bg-[#F8FAFC]",
       ].join(" ")}
     >
       {label}
@@ -302,7 +308,7 @@ export function ImportContactsPanel({
 
   return (
     <div
-      className="fixed inset-0 z-[300] flex items-start justify-center overflow-y-auto bg-black/50 px-4 pb-[max(2.5rem,calc(env(safe-area-inset-bottom,0px)+1rem))] pt-[max(2rem,calc(env(safe-area-inset-top,0px)+1rem))] max-[480px]:[scrollbar-width:none] max-[480px]:[-ms-overflow-style:none] max-[480px]:[&::-webkit-scrollbar]:hidden sm:pb-10 sm:pt-12"
+      className="fixed inset-0 z-[300] flex items-start justify-center overflow-y-auto bg-black/[0.56] backdrop-blur-[2px] px-3 pb-[max(2rem,calc(env(safe-area-inset-bottom,0px)+0.85rem))] pt-[max(2.75rem,calc(env(safe-area-inset-top,0px)+0.65rem))] max-[480px]:[scrollbar-width:none] max-[480px]:[-ms-overflow-style:none] max-[480px]:[&::-webkit-scrollbar]:hidden sm:px-4 sm:pb-10 sm:pt-12"
       onClick={() => onClose()}
       onKeyDown={(e) => e.key === "Escape" && onClose()}
     >
@@ -310,15 +316,35 @@ export function ImportContactsPanel({
         role="dialog"
         aria-modal="true"
         aria-labelledby="import-contacts-title"
-        className="my-auto w-full max-w-4xl rounded-2xl border border-[#E5E7EB] bg-[#FFFFFF] p-3 shadow-xl max-[480px]:max-h-[min(92dvh,920px)] max-[480px]:overflow-y-auto max-[480px]:[scrollbar-width:none] max-[480px]:[-ms-overflow-style:none] max-[480px]:[&::-webkit-scrollbar]:hidden sm:max-h-none sm:overflow-visible sm:p-6"
+        className="my-auto flex w-full max-w-4xl flex-col rounded-2xl border border-[#E5E7EB] bg-[#FFFFFF] p-3 shadow-xl max-[480px]:min-h-0 max-[480px]:max-h-[min(94dvh,calc(100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-1.25rem))] max-[480px]:overflow-y-auto max-[480px]:[scrollbar-width:thin] sm:max-h-none sm:overflow-visible sm:p-6"
         onClick={(ev) => ev.stopPropagation()}
       >
-        <h2 id="import-contacts-title" className="text-lg font-bold text-[#111827]">
-          주소록 가져오기
-        </h2>
-        <div className="mt-2 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-2.5 text-[12px] leading-relaxed text-[#475569] sm:py-3">
+        <div className="flex items-start justify-between gap-3">
+          <h2 id="import-contacts-title" className="min-w-0 flex-1 text-lg font-bold leading-snug text-[#111827]">
+            주소록 가져오기
+          </h2>
+          <button
+            type="button"
+            className="flex h-10 w-10 shrink-0 touch-manipulation items-center justify-center rounded-full text-[#64748B] transition hover:bg-[#F1F5F9] focus-visible:ring-2 focus-visible:ring-[#CBD5E1] max-sm:-mr-1 sm:hidden"
+            aria-label="닫기"
+            onClick={() => {
+              resetAll();
+              onClose();
+            }}
+          >
+            <span className="text-xl leading-none" aria-hidden="true">
+              ×
+            </span>
+          </button>
+        </div>
+        <div className="mt-2 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-2 text-[12px] leading-relaxed text-[#475569] sm:py-3">
           <p className="font-semibold text-[#334155]">개인정보·연락처 처리 안내</p>
-          <div className="mt-1.5 space-y-1.5 text-[13px] leading-snug sm:mt-2 sm:leading-relaxed">
+          <ul className="mt-2 list-disc space-y-1 pl-4 text-[12px] leading-snug text-[#475569] sm:hidden">
+            <li>iPhone·Google·Galaxy(Samsung) 연락처에서 준비한 파일을 올 수 있습니다.</li>
+            <li>바로 저장되지 않으며, 미리보기 후 선택한 항목만 저장됩니다.</li>
+            <li>임의 수집·자동 저장은 하지 않습니다.</li>
+          </ul>
+          <div className="mt-1.5 hidden space-y-1.5 text-[13px] leading-snug sm:mt-2 sm:block sm:leading-relaxed">
             <p className="text-[#475569]">
               iPhone, Google 연락처, Galaxy/Samsung 연락처에서 연락처 파일을 준비한 뒤 업로드할 수 있습니다.
             </p>
@@ -329,7 +355,7 @@ export function ImportContactsPanel({
               Sensora는 고객 정보를 임의로 수집하거나 자동 저장하지 않습니다.
             </p>
           </div>
-          <p className="mt-2 border-t border-[#E2E8F0] pt-2 text-[11px] leading-snug text-[#64748B]">
+          <p className="mt-2 border-t border-[#E2E8F0] pt-2 text-[11px] leading-snug text-[#64748B] sm:mt-2">
             붙여넣기·파일·휴대폰에서 고른 연락처도 본인이 넣은 내용만 목록에 반영됩니다.
           </p>
         </div>
@@ -349,7 +375,7 @@ export function ImportContactsPanel({
           </div>
         ) : null}
 
-        <div className="mt-4 flex flex-wrap gap-2">
+        <div className={importTabRailClass} role="tablist" aria-label="가져오기 방법">
           {tabBtn("device", "휴대폰 선택")}
           {tabBtn("paste", "붙여넣기")}
           {tabBtn("file", "파일")}
@@ -359,30 +385,48 @@ export function ImportContactsPanel({
 
         <div className="mt-4 min-h-[120px] rounded-xl border border-[#E5E7EB] bg-[#FAFBFC] p-4 text-[13px] text-[#374151]">
           {tab === "device" ? (
-            <div className="space-y-3">
+            <div className="space-y-2.5 sm:space-y-3">
               <p className="text-[12px] leading-relaxed text-[#64748B]">
                 Android(Chrome 등)에서 지원하는 연락처 선택 화면입니다. 직접 고른 사람만 목록에 담으며, 서버나 앱이
                 주소록 전체를 열어보지 않습니다.
               </p>
               {onIos ? (
-                <p className="text-[12px] font-semibold text-[#B45309]">
-                  iPhone Safari에서는 이 방식을 쓰기 어렵습니다. “iPhone 안내” 탭에서 안내된 방식으로 vCard 파일을
-                  올려 주세요.
-                </p>
+                <div className="rounded-lg border border-[#E2E8F0] bg-[#F1F5F9] px-3 py-2 text-[11.5px] leading-snug text-[#475569]">
+                  iPhone Safari에서는 휴대폰 연락처 직접 선택이 제한될 수 있습니다. 이 경우 iPhone 안내 탭에서 vCard
+                  파일을 준비한 뒤 업로드해 주세요.
+                </div>
               ) : null}
-              <button
-                type="button"
-                disabled={!pickerOk || onIos}
-                className="min-h-[44px] rounded-xl bg-[#111827] px-5 py-2.5 text-[14px] font-semibold text-white shadow-sm disabled:cursor-not-allowed disabled:bg-[#9CA3AF] touch-manipulation"
-                onClick={() => void pickDeviceContacts()}
+              <div
+                className={[
+                  "rounded-xl border px-3 py-2.5 sm:py-3",
+                  !pickerOk || onIos ? "border-dashed border-[#E5E7EB] bg-[#FAFAFA]" : "border-transparent bg-transparent p-0 sm:p-0",
+                ].join(" ")}
               >
-                휴대폰 연락처에서 선택
-              </button>
-              {!pickerOk ? (
-                <p className="text-[12px] text-[#6B7280]">
-                  이 브라우저는 Contact Picker를 지원하지 않습니다. 붙여넣기 또는 파일 업로드를 이용해 주세요.
-                </p>
-              ) : null}
+                <button
+                  type="button"
+                  disabled={!pickerOk || onIos}
+                  className={
+                    pickerOk && !onIos ?
+                      "min-h-[44px] w-full touch-manipulation rounded-xl bg-[#111827] px-5 py-2.5 text-[14px] font-semibold text-white shadow-sm sm:w-auto"
+                    : "max-sm:w-full h-10 touch-manipulation rounded-lg border border-[#E5E7EB] bg-white px-4 text-[13px] font-medium text-[#64748B] disabled:cursor-not-allowed disabled:opacity-65 sm:h-11 sm:w-auto sm:rounded-xl sm:border-0 sm:bg-[#F3F4F6] sm:px-5 sm:text-[14px] sm:font-semibold sm:text-[#9CA3AF]"
+                  }
+                  onClick={() => void pickDeviceContacts()}
+                >
+                  휴대폰 연락처에서 선택
+                </button>
+                {!pickerOk ? (
+                  <>
+                    <p className="mt-2 text-[11px] leading-snug text-[#94A3B8]">
+                      현재 브라우저에서는 지원되지 않습니다.
+                    </p>
+                    <p className="mt-1 text-[11px] leading-snug text-[#94A3B8]">
+                      붙여넣기 또는 파일 업로드를 이용해 주세요.
+                    </p>
+                  </>
+                ) : onIos ? (
+                  <p className="mt-2 text-[11px] leading-snug text-[#94A3B8]">이 환경에서는 아래 버튼을 사용할 수 없습니다.</p>
+                ) : null}
+              </div>
             </div>
           ) : null}
 
@@ -532,23 +576,25 @@ export function ImportContactsPanel({
           ) : null}
         </div>
 
-        <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-[#E5E7EB] pt-4">
-          <div className="text-[13px] font-semibold text-[#111827]">
-            가져올 연락처 <span className="tabular-nums text-[#64748B]">({staging.length})</span>
+        <div className="mt-4 space-y-2 border-t border-[#E5E7EB] pt-3 sm:flex sm:flex-wrap sm:items-center sm:gap-2 sm:space-y-0 sm:pt-4">
+          <div className="flex items-center justify-between gap-3 sm:flex-1 sm:justify-start">
+            <div className="text-[12px] font-semibold text-[#111827] sm:text-[13px]">
+              가져올 연락처 <span className="tabular-nums text-[#64748B]">({staging.length})</span>
+            </div>
+            <button
+              type="button"
+              className="shrink-0 touch-manipulation rounded-lg border border-transparent px-2 py-1.5 text-[12px] font-medium text-[#64748B] underline underline-offset-2 hover:text-[#374151] sm:border-[#E5E7EB] sm:bg-white sm:px-3 sm:py-2 sm:text-[13px] sm:font-semibold sm:no-underline sm:text-[#374151]"
+              onClick={() => {
+                setStaging([]);
+                setPreviewRows(null);
+              }}
+            >
+              목록 비우기
+            </button>
           </div>
           <button
             type="button"
-            className="min-h-[44px] rounded-xl border border-[#E5E7EB] bg-white px-4 py-2 text-[13px] font-semibold text-[#374151] touch-manipulation"
-            onClick={() => {
-              setStaging([]);
-              setPreviewRows(null);
-            }}
-          >
-            목록 비우기
-          </button>
-          <button
-            type="button"
-            className="min-h-[44px] rounded-xl bg-[#1D4ED8] px-5 py-2 text-[14px] font-semibold text-white touch-manipulation"
+            className="w-full touch-manipulation rounded-xl bg-[#1D4ED8] px-5 py-3 text-[14px] font-semibold text-white shadow-sm hover:bg-[#1E40AF] sm:w-auto sm:min-h-[44px] sm:py-2"
             onClick={() => runDuplicateScan()}
           >
             미리보기·중복 검사
@@ -654,10 +700,10 @@ export function ImportContactsPanel({
           </div>
         ) : null}
 
-        <div className="mt-5 flex flex-wrap justify-end gap-2 border-t border-[#E5E7EB] pt-4">
+        <div className="mt-4 flex flex-col-reverse gap-2 border-t border-[#E5E7EB] pt-3 pb-[max(0rem,env(safe-area-inset-bottom))] max-sm:border-t-[#EBEEF4] sm:mt-5 sm:flex-row sm:flex-wrap sm:justify-end sm:gap-2 sm:pt-4">
           <button
             type="button"
-            className="min-h-[44px] rounded-xl border border-[#E5E7EB] px-5 py-2.5 text-[14px] font-semibold text-[#374151] touch-manipulation"
+            className="hidden min-h-[44px] rounded-xl border border-[#E5E7EB] px-5 py-2.5 text-[14px] font-semibold text-[#374151] touch-manipulation sm:inline-flex sm:items-center sm:justify-center"
             onClick={() => {
               resetAll();
               onClose();
@@ -667,7 +713,7 @@ export function ImportContactsPanel({
           </button>
           <button
             type="button"
-            className="min-h-[44px] rounded-xl bg-[#111827] px-6 py-2.5 text-[14px] font-semibold text-white touch-manipulation"
+            className="min-h-[48px] w-full touch-manipulation rounded-xl bg-[#111827] px-6 py-3 text-[15px] font-semibold text-white disabled:cursor-not-allowed disabled:bg-[#CBD5E1] sm:w-auto sm:min-h-[44px] sm:py-2.5 sm:text-[14px]"
             onClick={() => commit()}
             disabled={!previewRows?.length}
           >

@@ -47,7 +47,7 @@ export function ContactImportFileGuideModal({
 
   return (
     <div
-      className="fixed inset-0 z-[340] flex items-center justify-center overflow-y-auto bg-black/55 p-3 pb-[max(12px,calc(env(safe-area-inset-bottom,0px)+8px))] pt-[max(12px,calc(env(safe-area-inset-top,0px)+8px))] backdrop-blur-sm [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden sm:p-4"
+      className="fixed inset-0 z-[340] flex items-center justify-center overflow-y-auto bg-black/[0.56] px-3 pb-[max(14px,calc(env(safe-area-inset-bottom,0px)+10px))] pt-[max(18px,calc(env(safe-area-inset-top,0px)+10px))] backdrop-blur-[2px] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden sm:p-4"
       role="presentation"
       onClick={onClose}
       onKeyDown={(e) => {
@@ -61,11 +61,11 @@ export function ContactImportFileGuideModal({
         role="dialog"
         aria-modal="true"
         aria-labelledby="contact-file-guide-title"
-        className="my-auto flex max-h-[min(88dvh,720px)] w-full max-w-[min(100%,460px)] flex-col overflow-hidden rounded-2xl border border-[#E2E8F0] bg-white shadow-[0_24px_64px_rgba(15,23,42,0.18)] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+        className="my-auto flex max-h-[min(89dvh,720px)] w-full max-w-[min(100%,460px)] flex-col overflow-hidden rounded-2xl border border-[#E2E8F0] bg-white shadow-[0_24px_64px_rgba(15,23,42,0.2)] max-[430px]:max-h-[min(86dvh,680px)] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
         onMouseDown={(e) => e.stopPropagation()}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="shrink-0 border-b border-[#E5E7EB] px-4 pb-3 pt-4 sm:px-6 sm:pb-4 sm:pt-5">
+        <div className="shrink-0 border-b border-[#E5E7EB] px-4 pb-3 pt-[max(14px,calc(env(safe-area-inset-top,0px)+4px))] sm:px-6 sm:pb-4 sm:pt-5">
           <h2 id="contact-file-guide-title" className="text-[17px] font-bold tracking-tight text-[#111827]">
             연락처 파일 준비 방법
           </h2>
