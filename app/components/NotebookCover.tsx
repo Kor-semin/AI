@@ -202,7 +202,7 @@ export function NotebookCover() {
     <div
       className={`notebook-cover-sheet notebook-cover-sheet-consultant notebook-cover-sheet--tone-${coverTheme} outline-none [-webkit-tap-highlight-color:transparent]`}
     >
-      <div className="notebook-cover-consultant-hero" aria-hidden>
+        <div className="notebook-cover-consultant-hero sensora-notebook-nebula-accent" aria-hidden>
         <div className="notebook-cover-hero-abstract" />
         <div className="notebook-cover-hero-dim" />
         <div className="notebook-cover-tone-scrim" />

@@ -137,6 +137,67 @@ html[lang="ko"] body {
   }
 }
 
+/* 앱 미리보기·은하 배경 — 미세 별점(타일) */
+.sensora-preview-galaxy-stars {
+  background-color: transparent;
+  background-image:
+    radial-gradient(1.2px 1.2px at 12% 18%, rgba(255, 255, 255, 0.38), transparent),
+    radial-gradient(1px 1px at 48% 82%, rgba(255, 255, 255, 0.26), transparent),
+    radial-gradient(1.2px 1.2px at 72% 32%, rgba(255, 255, 255, 0.42), transparent),
+    radial-gradient(0.9px 0.9px at 88% 61%, rgba(255, 255, 255, 0.22), transparent),
+    radial-gradient(1.1px 1.1px at 34% 64%, rgba(186, 230, 253, 0.32), transparent);
+  background-size:
+    180px 180px,
+    220px 220px,
+    160px 160px,
+    200px 200px,
+    240px 240px;
+  background-position:
+    0 0,
+    40px 60px,
+    120px 20px,
+    200px 140px,
+    60px 180px;
+}
+
+/* 랜딩·패널 공통 성운 레이아웃 헬퍼 */
+.sensora-nebula-shell {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.sensora-nebula-shell::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: -2px;
+  z-index: 0;
+  opacity: 0.95;
+  background:
+    radial-gradient(ellipse 90% 70% at 78% -8%, rgba(56, 189, 248, 0.16), transparent 58%),
+    radial-gradient(ellipse 70% 55% at 6% 18%, rgba(139, 92, 246, 0.13), transparent 56%),
+    radial-gradient(ellipse 55% 45% at 102% 88%, rgba(30, 27, 75, 0.15), transparent 55%);
+}
+
+.sensora-nebula-shell > * {
+  position: relative;
+  z-index: 1;
+}
+
+.notebook-cover-consultant-hero.sensora-notebook-nebula-accent::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  opacity: 0.55;
+  background:
+    radial-gradient(ellipse 100% 80% at 50% -20%, rgba(56, 189, 248, 0.12), transparent 50%),
+    radial-gradient(ellipse 80% 60% at 95% 40%, rgba(139, 92, 246, 0.1), transparent 52%);
+  mix-blend-mode: screen;
+}
+
 /* 워크스페이스 — 다크 네이비 베이스(랜딩·미리보기와 톤 정렬) */
 .crm-bg {
   background-color: #020817;

@@ -109,7 +109,7 @@ function RevealSection({
 
 export function LandingShowroom({ onOpenAppWorkspace }: { onOpenAppWorkspace: () => void }) {
   return (
-    <div className="relative overflow-x-hidden bg-[#020817]">
+    <div className="sensora-nebula-shell relative overflow-x-hidden bg-[#020817]">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-0 h-[min(66vh,620px)] bg-[radial-gradient(ellipse_82%_52%_at_52%_6%,rgba(56,189,248,0.092),transparent_55%),radial-gradient(ellipse_58%_42%_at_96%_16%,rgba(139,92,246,0.078),transparent_52%),radial-gradient(ellipse_44%_38%_at_8%_40%,rgba(30,58,138,0.065),transparent_50%)]"
