@@ -11,7 +11,7 @@ import {
 } from "@/app/crm/contactImport/normalizeImportedContact";
 import { parseCsvContactsText } from "@/app/crm/contactImport/parseCsvContacts";
 import { parseVcfContactsText } from "@/app/crm/contactImport/parseVcfContacts";
-import { useCallback, useMemo, useRef, useState, type ChangeEvent } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent } from "react";
 
 /** 2차 확장: Google People API OAuth 동기화 — 이번 배포 범위에서는 CSV/vCard 내보내기만 지원 */
 
@@ -75,6 +75,47 @@ export function contactPickerSupported(): boolean {
   );
 }
 
+/** 일반 노트북·데스크톱 Chrome 등: 피커 제공 대상 외 UX로 안내 분기 */
+function isLikelyDesktopBrowser(): boolean {
+  if (typeof navigator === "undefined") return false;
+  const ua = navigator.userAgent;
+  if (/Android|iPhone|iPad|iPod/i.test(ua)) return false;
+  return true;
+}
+
+/** Android 모바일 크롬 등: Contact Picker를 실제 진입점으로 제공 */
+function canOfferNativeContactPicker(): boolean {
+  return contactPickerSupported() && !iosLike() && !isLikelyDesktopBrowser();
+}
+
+const HUB_TAB_LABELS: Record<HubTab, string> = {
+  device: "연락처 선택",
+  paste: "붙여넣기",
+  file: "파일",
+  google: "Google 안내",
+  iphone: "iPhone 안내",
+};
+
+function hubTabsOrderedFor(profile: {
+  nativePick: boolean;
+  ios: boolean;
+  desktop: boolean;
+}): HubTab[] {
+  if (profile.nativePick) return ["device", "paste", "file", "google"];
+  if (profile.ios) return ["iphone", "file", "paste", "google"];
+  if (profile.desktop) return ["google", "paste", "file", "iphone"];
+  /** Android 등 모바일이나 피커 미지원: 파일·붙여넣기 우선 */
+  return ["paste", "file", "google", "iphone"];
+}
+
+function defaultHubTab(profile: {
+  nativePick: boolean;
+  ios: boolean;
+  desktop: boolean;
+}): HubTab {
+  return hubTabsOrderedFor(profile)[0]!;
+}
+
 function appendImportMemo(existing: string | undefined, appended: string): string {
   const a = (existing ?? "").trim();
   const b = (appended ?? "").trim();
@@ -105,7 +146,7 @@ export function ImportContactsPanel({
   showToast,
   onOpenFileGuide,
 }: ImportContactsPanelProps) {
-  const [tab, setTab] = useState<HubTab>("device");
+  const [tab, setTab] = useState<HubTab>("paste");
   const [pasteText, setPasteText] = useState("");
   const [staging, setStaging] = useState<NormalizedImportedContact[]>([]);
   const [previewRows, setPreviewRows] = useState<PreviewRow[] | null>(null);
@@ -113,13 +154,35 @@ export function ImportContactsPanel({
 
   const pickerOk = useMemo(() => contactPickerSupported(), [open]);
   const onIos = useMemo(() => iosLike(), [open]);
+  const desktopUa = useMemo(() => isLikelyDesktopBrowser(), [open]);
+  const nativePick = useMemo(() => canOfferNativeContactPicker(), [open]);
+
+  const hubProfile = useMemo(
+    () => ({ nativePick, ios: onIos, desktop: desktopUa }),
+    [nativePick, onIos, desktopUa],
+  );
+
+  const hubTabsOrdered = useMemo(() => hubTabsOrderedFor(hubProfile), [hubProfile]);
+
+  const resolveDefaultHubTab = useCallback(() => defaultHubTab(hubProfile), [hubProfile]);
+
+  useEffect(() => {
+    if (!open) return;
+    setTab(resolveDefaultHubTab());
+  }, [open, resolveDefaultHubTab]);
+
+  useEffect(() => {
+    if (!open) return;
+    if (hubTabsOrdered.includes(tab)) return;
+    setTab(resolveDefaultHubTab());
+  }, [open, hubTabsOrdered, resolveDefaultHubTab, tab]);
 
   const resetAll = useCallback(() => {
     setPasteText("");
     setStaging([]);
     setPreviewRows(null);
-    setTab("device");
-  }, []);
+    setTab(resolveDefaultHubTab());
+  }, [resolveDefaultHubTab]);
 
   const appendParsed = useCallback(
     (rows: NormalizedImportedContact[]) => {
@@ -162,8 +225,8 @@ export function ImportContactsPanel({
     const nav = navigator as Navigator & {
       contacts?: { select: (props: string[], opts?: { multiple?: boolean }) => Promise<unknown[]> };
     };
-    if (!pickerOk || !nav.contacts?.select) {
-      showToast("이 환경에서는 휴대폰 연락처 선택 API를 사용할 수 없습니다.");
+    if (!nativePick || !pickerOk || !nav.contacts?.select) {
+      showToast("이 환경에서는 휴대폰 연락처 선택을 사용할 수 없습니다.");
       return;
     }
 
@@ -194,7 +257,7 @@ export function ImportContactsPanel({
     } catch {
       showToast("연락처 선택이 취소되었거나 허용되지 않았습니다.");
     }
-  }, [appendParsed, pickerOk, showToast]);
+  }, [appendParsed, nativePick, pickerOk, showToast]);
 
   const ingestPaste = useCallback(() => {
     appendParsed(tryParseImportRawText(pasteText));
@@ -288,23 +351,26 @@ export function ImportContactsPanel({
 
   if (!open) return null;
 
-  const tabBtn = (id: HubTab, label: string) => (
-    <button
-      key={id}
-      type="button"
-      role="tab"
-      aria-selected={tab === id}
-      onClick={() => setTab(id)}
-      className={[
-        "shrink-0 snap-start touch-manipulation rounded-full border px-3 py-1.5 text-[12px] font-medium transition outline-none focus-visible:ring-2 focus-visible:ring-[#CBD5E1] sm:min-h-[44px] sm:rounded-xl sm:px-3 sm:py-2.5 sm:text-[13px] sm:font-semibold",
-        tab === id
-          ? "border-[#111827] bg-[#111827] text-white shadow-sm ring-2 ring-[#111827]/10 ring-offset-1 ring-offset-white"
-          : "border-[#E2E8F0] bg-white text-[#475569] hover:bg-[#F8FAFC]",
-      ].join(" ")}
-    >
-      {label}
-    </button>
-  );
+  const renderHubTabBtn = (id: HubTab) => {
+    const label = HUB_TAB_LABELS[id];
+    return (
+      <button
+        key={id}
+        type="button"
+        role="tab"
+        aria-selected={tab === id}
+        onClick={() => setTab(id)}
+        className={[
+          "shrink-0 snap-start touch-manipulation rounded-full border px-3 py-1.5 text-[12px] font-medium transition outline-none focus-visible:ring-2 focus-visible:ring-[#CBD5E1] sm:min-h-[44px] sm:rounded-xl sm:px-3 sm:py-2.5 sm:text-[13px] sm:font-semibold",
+          tab === id
+            ? "border-[#111827] bg-[#111827] text-white shadow-sm ring-2 ring-[#111827]/10 ring-offset-1 ring-offset-white"
+            : "border-[#E2E8F0] bg-white text-[#475569] hover:bg-[#F8FAFC]",
+        ].join(" ")}
+      >
+        {label}
+      </button>
+    );
+  };
 
   return (
     <div
@@ -341,30 +407,48 @@ export function ImportContactsPanel({
           <p className="font-semibold text-[#334155]">개인정보·연락처 처리 안내</p>
           <ul className="mt-2 list-disc space-y-1 pl-4 text-[12px] leading-snug text-[#475569] sm:hidden">
             <li>iPhone·Google·Galaxy(Samsung) 연락처에서 준비한 파일을 올 수 있습니다.</li>
-            <li>바로 저장되지 않으며, 미리보기 후 선택한 항목만 저장됩니다.</li>
-            <li>임의 수집·자동 저장은 하지 않습니다.</li>
+            <li>
+              저장 전 미리보기에서 확인합니다. 선택한 항목만 저장되며 기존 고객 정보는 자동으로 덮어쓰지 않습니다.
+            </li>
+            <li>Sensora는 고객 정보를 임의로 수집하거나 자동 저장하지 않습니다.</li>
           </ul>
           <div className="mt-1.5 hidden space-y-1.5 text-[13px] leading-snug sm:mt-2 sm:block sm:leading-relaxed">
             <p className="text-[#475569]">
               iPhone, Google 연락처, Galaxy/Samsung 연락처에서 연락처 파일을 준비한 뒤 업로드할 수 있습니다.
             </p>
             <p className="text-[#334155]">
-              업로드한 연락처는 미리보기에서 확인한 뒤, 선택한 항목만 저장됩니다.
+              저장 전 미리보기에서 확인한 뒤, 선택한 항목만 저장됩니다.
             </p>
             <p className="text-[#334155]">
               Sensora는 고객 정보를 임의로 수집하거나 자동 저장하지 않습니다.
             </p>
+            <p className="text-[#334155]">기존 고객 정보는 자동으로 덮어쓰지 않습니다.</p>
           </div>
           <p className="mt-2 border-t border-[#E2E8F0] pt-2 text-[11px] leading-snug text-[#64748B] sm:mt-2">
             붙여넣기·파일·휴대폰에서 고른 연락처도 본인이 넣은 내용만 목록에 반영됩니다.
           </p>
         </div>
 
+        {onIos ? (
+          <div className="mt-3 rounded-lg border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-2 text-[12px] leading-snug text-[#475569]">
+            iPhone에서는 연락처 파일을 준비한 뒤 업로드하는 방식을 권장합니다.
+          </div>
+        ) : null}
+
         {onOpenFileGuide ? (
-          <div className="mt-3 flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+          <div
+            className={[
+              "mt-3 flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-4",
+              onIos ? "max-sm:mt-2" : "",
+            ].join(" ")}
+          >
             <button
               type="button"
-              className={importGuideButtonClass}
+              className={
+                onIos ?
+                  "inline-flex min-h-[44px] w-full max-w-full touch-manipulation items-center justify-center rounded-xl border border-[#111827] bg-[#111827] px-3 py-2.5 text-[13px] font-semibold text-white shadow-sm hover:bg-[#1E293B] sm:w-auto sm:min-w-[12rem]"
+                : importGuideButtonClass
+              }
               onClick={(ev) => {
                 ev.stopPropagation();
                 onOpenFileGuide();
@@ -372,61 +456,50 @@ export function ImportContactsPanel({
             >
               연락처 파일 준비 방법 보기
             </button>
+            {onIos ? (
+              <button
+                type="button"
+                className="inline-flex min-h-[40px] w-full touch-manipulation items-center justify-center rounded-xl border border-[#CBD5E1] bg-white px-3 py-2 text-[12px] font-semibold text-[#374151] hover:bg-[#F8FAFC] sm:w-auto sm:min-w-[10rem]"
+                onClick={(ev) => {
+                  ev.stopPropagation();
+                  setTab("iphone");
+                }}
+              >
+                iPhone 안내 보기
+              </button>
+            ) : null}
           </div>
         ) : null}
 
         <div className={importTabRailClass} role="tablist" aria-label="가져오기 방법">
-          {tabBtn("device", "휴대폰 선택")}
-          {tabBtn("paste", "붙여넣기")}
-          {tabBtn("file", "파일")}
-          {tabBtn("google", "Google 안내")}
-          {tabBtn("iphone", "iPhone 안내")}
+          {hubTabsOrdered.map((id) => renderHubTabBtn(id))}
         </div>
 
+        {desktopUa && !nativePick ? (
+          <p className="mt-2 text-[11px] leading-snug text-[#94A3B8]">
+            휴대폰 연락처를 브라우저에서 고르는 방식은 여기에서는 제공되지 않습니다. Google 안내·파일 업로드·붙여넣기를
+            이용해 주세요.
+          </p>
+        ) : null}
+
         <div className="mt-4 min-h-[120px] rounded-xl border border-[#E5E7EB] bg-[#FAFBFC] p-4 text-[13px] text-[#374151]">
-          {tab === "device" ? (
-            <div className="space-y-2.5 sm:space-y-3">
+          {tab === "device" && nativePick ? (
+            <div className="space-y-3">
               <p className="text-[12px] leading-relaxed text-[#64748B]">
-                Android(Chrome 등)에서 지원하는 연락처 선택 화면입니다. 직접 고른 사람만 목록에 담으며, 서버나 앱이
-                주소록 전체를 열어보지 않습니다.
+                브라우저에서 연락처 목록 중 직접 고른 사람만 가져오기 목록에 담습니다. 서버가 주소록 전체를 읽지 않습니다.
               </p>
-              {onIos ? (
-                <div className="rounded-lg border border-[#E2E8F0] bg-[#F1F5F9] px-3 py-2 text-[11.5px] leading-snug text-[#475569]">
-                  iPhone Safari에서는 휴대폰 연락처 직접 선택이 제한될 수 있습니다. 이 경우 iPhone 안내 탭에서 vCard
-                  파일을 준비한 뒤 업로드해 주세요.
-                </div>
-              ) : null}
-              <div
-                className={[
-                  "rounded-xl border px-3 py-2.5 sm:py-3",
-                  !pickerOk || onIos ? "border-dashed border-[#E5E7EB] bg-[#FAFAFA]" : "border-transparent bg-transparent p-0 sm:p-0",
-                ].join(" ")}
+              <ul className="list-disc space-y-1 pl-4 text-[12px] leading-snug text-[#475569]">
+                <li>선택한 연락처만 가져옵니다.</li>
+                <li>저장 전 미리보기에서 확인합니다.</li>
+                <li>기존 고객 정보는 자동으로 덮어쓰지 않습니다.</li>
+              </ul>
+              <button
+                type="button"
+                className="min-h-[48px] w-full touch-manipulation rounded-xl bg-[#111827] px-5 py-3 text-[14px] font-semibold text-white shadow-sm hover:bg-[#1E293B] sm:w-auto sm:min-h-[44px] sm:py-2.5"
+                onClick={() => void pickDeviceContacts()}
               >
-                <button
-                  type="button"
-                  disabled={!pickerOk || onIos}
-                  className={
-                    pickerOk && !onIos ?
-                      "min-h-[44px] w-full touch-manipulation rounded-xl bg-[#111827] px-5 py-2.5 text-[14px] font-semibold text-white shadow-sm sm:w-auto"
-                    : "max-sm:w-full h-10 touch-manipulation rounded-lg border border-[#E5E7EB] bg-white px-4 text-[13px] font-medium text-[#64748B] disabled:cursor-not-allowed disabled:opacity-65 sm:h-11 sm:w-auto sm:rounded-xl sm:border-0 sm:bg-[#F3F4F6] sm:px-5 sm:text-[14px] sm:font-semibold sm:text-[#9CA3AF]"
-                  }
-                  onClick={() => void pickDeviceContacts()}
-                >
-                  휴대폰 연락처에서 선택
-                </button>
-                {!pickerOk ? (
-                  <>
-                    <p className="mt-2 text-[11px] leading-snug text-[#94A3B8]">
-                      현재 브라우저에서는 지원되지 않습니다.
-                    </p>
-                    <p className="mt-1 text-[11px] leading-snug text-[#94A3B8]">
-                      붙여넣기 또는 파일 업로드를 이용해 주세요.
-                    </p>
-                  </>
-                ) : onIos ? (
-                  <p className="mt-2 text-[11px] leading-snug text-[#94A3B8]">이 환경에서는 아래 버튼을 사용할 수 없습니다.</p>
-                ) : null}
-              </div>
+                휴대폰 연락처에서 선택
+              </button>
             </div>
           ) : null}
 
