@@ -161,7 +161,7 @@ export function CrmMiniCalendar({
   return (
     <section
       id="crm-mini-calendar"
-      className="sensora-premium-panel scroll-mt-28 rounded-[22px] px-4 py-4 backdrop-blur-xl sm:px-5 sm:py-5"
+      className="sensora-premium-card scroll-mt-28 rounded-[22px] px-4 py-4 sm:px-5 sm:py-5"
       aria-label="미니 캘린더"
     >
       <div className="flex flex-wrap items-center justify-between gap-2 gap-y-3">

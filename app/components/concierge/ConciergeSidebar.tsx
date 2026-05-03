@@ -12,12 +12,12 @@ import { useLanguage } from "@/app/components/i18n/LanguageProvider";
 function navButtonClass(active: boolean): string {
   return [
     "group relative flex min-h-[50px] shrink-0 touch-manipulation items-center justify-between gap-3 rounded-xl py-2.5 text-[16px] font-bold outline-none ring-offset-2 ring-offset-[#020817] focus-visible:ring-2 focus-visible:ring-sky-500/40",
-    "transition-[background,box-shadow,transform,color,border-color] duration-[220ms] ease-out",
+    "motion-safe:transition-[background,box-shadow,transform,color,border-color] motion-safe:duration-[220ms] motion-safe:ease-out",
     active
-      ? "bg-sky-500/14 pl-[calc(12px+0.375rem)] pr-3 text-[#F8FAFC] ring-2 ring-inset ring-sky-400/35 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_0_36px_-12px_rgba(56,189,248,0.12)] before:absolute before:left-[3px] before:top-2 before:bottom-2 before:w-[3px] before:rounded-full before:bg-sky-400/85"
+      ? "border border-sky-400/22 bg-gradient-to-r from-sky-500/[0.14] via-white/[0.04] to-transparent pl-[calc(12px+0.375rem)] pr-3 text-[#F8FAFC] shadow-[inset_0_1px_0_rgba(255,255,255,0.07),0_0_40px_-12px_rgba(56,189,248,0.14),0_0_48px_-18px_rgba(139,92,246,0.06)] before:absolute before:left-[3px] before:top-2 before:bottom-2 before:w-[3px] before:rounded-full before:bg-gradient-to-b before:from-sky-300/95 before:to-indigo-400/75"
       : [
-          "px-3.5 text-[#E5E7EB]",
-          "hover:-translate-y-px hover:bg-white/[0.07] hover:text-white hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_0_28px_-10px_rgba(56,189,248,0.06)] active:translate-y-0",
+          "border border-transparent px-3.5 text-[#E5E7EB]",
+          "hover:-translate-y-px hover:border-white/[0.1] hover:bg-white/[0.08] hover:text-white hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_0_32px_-12px_rgba(56,189,248,0.08)] motion-reduce:hover:translate-y-0 active:translate-y-0",
         ].join(" "),
   ].join(" ");
 }
@@ -67,7 +67,7 @@ export function ConciergeSidebar({
         className="landing-mobile-nav-shell relative lg:hidden -mx-1 mb-4 max-[1023px]:mb-5"
         aria-label="업무 영역 메뉴"
       >
-        <div className="rounded-2xl border border-white/[0.12] bg-gradient-to-b from-slate-950/60 to-[#07111f]/72 px-1.5 py-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_12px_40px_-20px_rgba(0,0,0,0.45)] backdrop-blur-xl">
+        <div className="rounded-[22px] border border-white/[0.13] bg-gradient-to-b from-slate-950/65 to-[#07111f]/78 px-1.5 py-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_16px_44px_-22px_rgba(0,0,0,0.48),0_0_48px_-22px_rgba(56,189,248,0.06)] backdrop-blur-xl ring-1 ring-inset ring-white/[0.035]">
           <p className="sr-only">가로로 스크롤하여 메뉴를 선택합니다.</p>
           <div
             className="crm-mobile-section-rail flex snap-x snap-mandatory gap-2 overflow-x-auto overflow-y-hidden overscroll-x-contain px-1 py-1 pr-10 [scrollbar-width:thin] max-[390px]:gap-2.5"
@@ -116,18 +116,18 @@ export function ConciergeSidebar({
 
       {/* 데스크톱 사이드바 */}
       <aside className="hidden w-[274px] shrink-0 lg:block">
-        <div className="sticky top-24 flex min-h-[calc(100vh-8rem)] flex-col rounded-[20px] border border-white/[0.12] bg-gradient-to-b from-[#07111f]/98 to-[#020817]/95 pb-6 pt-5 shadow-[0_28px_64px_-24px_rgba(0,0,0,0.55),0_0_0_1px_rgba(255,255,255,0.03)_inset] backdrop-blur-xl">
+        <div className="sticky top-24 flex min-h-[calc(100vh-8rem)] flex-col rounded-[22px] border border-white/[0.13] bg-gradient-to-b from-[#0a1524]/96 via-[#07111f]/95 to-[#020817]/94 pb-6 pt-5 shadow-[0_32px_72px_-26px_rgba(0,0,0,0.58),inset_0_1px_0_rgba(255,255,255,0.055),0_0_64px_-28px_rgba(56,189,248,0.07)] backdrop-blur-xl ring-1 ring-inset ring-white/[0.04]">
           <button
             type="button"
-            className="w-full border-b border-[#1E293B] px-5 pb-5 text-left transition duration-200 hover:bg-[#1e293b]/55 hover:shadow-[0_12px_32px_-20px_rgba(0,0,0,0.35)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500/35"
+            className="w-full border-b border-white/[0.08] px-5 pb-5 text-left transition duration-200 hover:bg-white/[0.04] hover:shadow-[inset_0_-1px_0_rgba(56,189,248,0.08)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500/35"
             onClick={() => onNavigate("dashboard")}
             aria-label={`${t("header.workspace")} · ${t("product.name")} — 요약으로 이동`}
           >
-            <div className="flex justify-start pb-4 cursor-default pointer-events-none" aria-hidden>
+            <div className="flex justify-start pb-3.5 cursor-default pointer-events-none" aria-hidden>
               <SensoraAnimatedMark size={52} animated={false} />
             </div>
-            <div className="text-[12px] font-bold tracking-[0.08em] text-[#CBD5E1]">{t("header.workspace")}</div>
-            <div className="mt-3 text-[16px] font-bold leading-snug tracking-tight text-[#F9FAFB]">
+            <div className="text-[11px] font-bold uppercase tracking-[0.12em] text-sky-200/75">{t("header.workspace")}</div>
+            <div className="mt-2.5 text-[16px] font-bold leading-snug tracking-tight text-[#F9FAFB]">
               {t("product.name")}
             </div>
             <div className="mt-1.5 text-[13px] font-semibold leading-snug text-[#94A3B8]">{t("brand.subline")}</div>

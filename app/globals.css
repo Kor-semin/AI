@@ -260,6 +260,127 @@ html[lang="ko"] body {
     0 0 0 4px rgba(56, 189, 248, 0.4);
 }
 
+/* 프리미엄 카드·위젯 — 대시보드·패널 공통 */
+.sensora-premium-card {
+  border-radius: 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: linear-gradient(
+    165deg,
+    rgba(15, 23, 42, 0.78) 0%,
+    rgba(2, 8, 23, 0.62) 52%,
+    rgba(7, 17, 31, 0.52) 100%
+  );
+  box-shadow:
+    0 4px 32px -10px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.055),
+    0 0 48px -22px rgba(56, 189, 248, 0.07),
+    0 0 56px -30px rgba(139, 92, 246, 0.04);
+  backdrop-filter: blur(16px);
+}
+
+.sensora-premium-input {
+  border-radius: 1.125rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(2, 8, 23, 0.58);
+  color: #f1f5f9;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  transition:
+    border-color 0.2s ease-out,
+    box-shadow 0.2s ease-out;
+}
+.sensora-premium-input::placeholder {
+  color: rgba(148, 163, 184, 0.88);
+}
+.sensora-premium-input:hover:not(:disabled) {
+  border-color: rgba(255, 255, 255, 0.18);
+}
+.sensora-premium-input:focus {
+  outline: none;
+  border-color: rgba(56, 189, 248, 0.42);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.055),
+    0 0 0 3px rgba(56, 189, 248, 0.14);
+}
+
+/* 안내 모달 패널 — preview gate · Sensora TIP */
+.sensora-premium-modal-shell {
+  border-radius: 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.96) 0%, rgba(7, 17, 31, 0.98) 100%);
+  box-shadow:
+    0 32px 88px -32px rgba(0, 0, 0, 0.72),
+    inset 0 1px 0 rgba(255, 255, 255, 0.065),
+    0 0 64px -28px rgba(56, 189, 248, 0.1),
+    0 0 72px -36px rgba(139, 92, 246, 0.06);
+  backdrop-filter: blur(18px);
+}
+
+.sensora-premium-ghost {
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  color: #e2e8f0;
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  transition:
+    border-color 0.22s ease-out,
+    background-color 0.22s ease-out,
+    box-shadow 0.22s ease-out,
+    transform 0.18s ease-out;
+}
+.sensora-premium-ghost:hover {
+  border-color: rgba(56, 189, 248, 0.36);
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    0 0 32px -12px rgba(56, 189, 248, 0.14);
+}
+.sensora-premium-ghost:active {
+  transform: scale(0.99);
+}
+.sensora-premium-ghost:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px rgba(2, 8, 23, 0.95),
+    0 0 0 4px rgba(56, 189, 248, 0.32);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sensora-premium-ghost:active {
+    transform: none;
+  }
+}
+
+/* CRM 상단 툴바 — 검색·TIP·추가 정렬 */
+.crm-workspace-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+  border-radius: 1.375rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.5) 0%, rgba(2, 8, 23, 0.42) 45%, rgba(7, 17, 31, 0.38) 100%);
+  box-shadow:
+    0 22px 56px -28px rgba(0, 0, 0, 0.52),
+    inset 0 1px 0 rgba(255, 255, 255, 0.055),
+    0 0 40px -20px rgba(56, 189, 248, 0.06);
+  backdrop-filter: blur(18px);
+}
+@media (min-width: 640px) {
+  .crm-workspace-toolbar {
+    flex-direction: row;
+    align-items: stretch;
+    padding: 1rem 1.1rem;
+    gap: 0.85rem;
+  }
+}
+
+.sensora-premium-muted-text-btn {
+  color: rgba(148, 163, 184, 0.95);
+  transition: color 0.2s ease-out;
+}
+.sensora-premium-muted-text-btn:hover {
+  color: rgba(226, 232, 240, 0.95);
+}
+
 @keyframes sensora-modal-in {
   from {
     opacity: 0;
@@ -542,8 +663,9 @@ html[lang="ko"] body {
 /* 컨설턴트 온보딩 — natural 톤을 다크 네이비 성운과 정렬(Sensora 워크스페이스와 연속감) */
 .notebook-cover-sheet-consultant.notebook-cover-sheet--tone-natural .notebook-cover-hero-abstract {
   background:
-    radial-gradient(980px 640px at 18% 10%, rgba(56, 189, 248, 0.1), transparent 58%),
-    radial-gradient(820px 560px at 88% 18%, rgba(139, 92, 246, 0.068), transparent 56%),
+    radial-gradient(980px 640px at 18% 10%, rgba(56, 189, 248, 0.12), transparent 58%),
+    radial-gradient(760px 520px at 52% 72%, rgba(99, 102, 241, 0.045), transparent 58%),
+    radial-gradient(820px 560px at 88% 18%, rgba(139, 92, 246, 0.085), transparent 56%),
     linear-gradient(168deg, #020817 0%, #07111f 46%, #0a1628 100%);
 }
 
@@ -1119,12 +1241,31 @@ html[lang="ko"] body {
 
 /* 온보딩 2단계 카드 — 모바일 터치·밀도(컨설턴트 natural) */
 .notebook-cover-sheet-consultant.notebook-cover-sheet--tone-natural .notebook-cover-toc-pane {
-  border-color: rgba(148, 163, 184, 0.24);
-  background: rgba(2, 8, 23, 0.48);
+  border-color: rgba(148, 163, 184, 0.28);
+  background: linear-gradient(145deg, rgba(15, 23, 42, 0.55) 0%, rgba(2, 8, 23, 0.52) 100%);
   min-height: 4.7rem;
   padding: 0.9rem 1rem;
   border-radius: 1rem;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    0 12px 36px -14px rgba(0, 0, 0, 0.42),
+    0 0 40px -18px rgba(56, 189, 248, 0.06);
+  transition:
+    border-color 0.22s ease-out,
+    transform 0.22s ease-out,
+    box-shadow 0.22s ease-out;
+}
+.notebook-cover-sheet-consultant.notebook-cover-sheet--tone-natural .notebook-cover-toc-pane:hover {
+  border-color: rgba(56, 189, 248, 0.32);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 14px 40px -12px rgba(0, 0, 0, 0.48),
+    0 0 44px -14px rgba(56, 189, 248, 0.12);
+}
+@media (prefers-reduced-motion: reduce) {
+  .notebook-cover-sheet-consultant.notebook-cover-sheet--tone-natural .notebook-cover-toc-pane {
+    transition: none;
+  }
 }
 
 @media (min-width: 640px) {

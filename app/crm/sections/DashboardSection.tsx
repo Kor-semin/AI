@@ -14,10 +14,12 @@ function StatCard({
   hint?: string;
 }) {
   return (
-    <div className="sensora-premium-panel sensora-premium-panel-interactive rounded-[20px] border border-white/[0.11] px-5 py-4 motion-reduce:transform-none motion-reduce:transition-none">
-      <div className="text-[12px] font-semibold uppercase tracking-[0.04em] text-slate-400">{label}</div>
-      <div className="mt-2 text-2xl font-semibold tabular-nums tracking-tight text-slate-50">{value}</div>
-      {hint ? <div className="mt-2 text-[13px] leading-snug text-slate-500">{hint}</div> : null}
+    <div className="sensora-premium-card sensora-premium-panel-interactive rounded-[20px] px-5 py-4 motion-reduce:transform-none motion-reduce:transition-none">
+      <div className="text-[11px] font-bold uppercase tracking-[0.11em] text-slate-500">{label}</div>
+      <div className="mt-2.5 text-[1.65rem] font-semibold tabular-nums leading-none tracking-tight text-slate-50 sm:text-[1.75rem]">
+        {value}
+      </div>
+      {hint ? <div className="mt-2.5 text-[12px] font-medium leading-snug text-slate-500 sm:text-[13px]">{hint}</div> : null}
     </div>
   );
 }
@@ -51,7 +53,7 @@ export function DashboardSection({
   onGoSection,
 }: DashboardSectionProps) {
   const panelQuiet =
-    "sensora-premium-panel rounded-[22px] border border-white/[0.11] px-5 py-5 shadow-[0_22px_50px_-28px_rgba(0,0,0,0.5)] backdrop-blur-xl sm:px-6 motion-reduce:transition-none";
+    "sensora-premium-card rounded-[22px] px-5 py-5 sm:px-6 motion-reduce:transition-none";
 
   return (
     <div className="flex flex-col gap-8">

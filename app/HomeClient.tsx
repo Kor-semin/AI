@@ -158,9 +158,9 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
           view === "landing"
             ? "landing-app-nav-shell mx-3 mt-2 max-sm:mx-2 max-sm:mt-1.5 rounded-2xl border border-white/[0.12] bg-[#07111f]/80 px-4 pb-3 pt-[max(12px,calc(env(safe-area-inset-top,0px)+8px))] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-2xl sm:mx-5 sm:mt-2.5 sm:px-6 lg:mx-auto lg:max-w-[min(92rem,calc(100%-2rem))]"
             : [
-                "border-b border-white/[0.08]",
+                "border-b border-white/[0.1]",
                 "px-4 pb-3 pt-[max(14px,calc(env(safe-area-inset-top,0px)+12px))] sm:px-6",
-                "bg-[#07111f]/86",
+                "bg-[#07111f]/88 shadow-[inset_0_-1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl",
               ].join(" "),
         ].join(" ")}
       >

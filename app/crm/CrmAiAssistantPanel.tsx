@@ -14,7 +14,7 @@ const WORKSPACE_AI_STYLE_KEYS: Record<DemoSalesStyle, TranslationKey> = {
 const WORKSPACE_AI_STYLE_ORDER: DemoSalesStyle[] = ["polite", "simple", "premium", "friendly", "active"];
 
 const SENSORA_FLOW_AI_BADGE =
-  "inline-flex shrink-0 items-center rounded-full border border-white/[0.1] bg-sky-500/14 px-2 py-[2px] text-[10px] font-semibold uppercase tracking-[0.1em] text-sky-100/92";
+  "inline-flex shrink-0 items-center rounded-full border border-sky-400/28 bg-gradient-to-r from-sky-500/18 to-violet-500/12 px-2.5 py-[3px] text-[10px] font-bold uppercase tracking-[0.11em] text-sky-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]";
 
 export type CrmAiAssistantPanelProps = {
   t: (key: TranslationKey) => string;
@@ -64,16 +64,16 @@ export function CrmAiAssistantPanel({
     !selectedCustomerId || !(ft.length > 0 ? true : workspaceAiMemoDraft.trim().length > 0);
 
   const inputCls =
-    "min-h-[44px] w-full rounded-[14px] border border-white/[0.12] bg-slate-950/55 px-3 py-3 text-[14px] font-medium text-slate-100 outline-none focus:border-sky-400/45 focus:ring-2 focus:ring-sky-500/22";
+    "sensora-premium-input min-h-[44px] w-full rounded-[14px] px-3 py-3 text-[14px] font-medium";
 
   const insightTileCls =
-    "flex min-h-0 min-w-0 flex-col rounded-[14px] border border-white/[0.1] bg-gradient-to-br from-slate-950/55 to-[#07111f]/65 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_8px_28px_-12px_rgba(0,0,0,0.45)]";
+    "sensora-premium-card flex min-h-0 min-w-0 flex-col rounded-[16px] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]";
 
   return (
     <section
       id="crm-ai-assistant"
       tabIndex={-1}
-      className="sensora-premium-panel scroll-mt-[max(7rem,calc(5rem+env(safe-area-inset-top,0px)))] rounded-[22px] border-white/[0.12] px-5 py-5 shadow-[0_28px_64px_-28px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-xl sm:px-6"
+      className="sensora-premium-card scroll-mt-[max(7rem,calc(5rem+env(safe-area-inset-top,0px)))] rounded-[22px] px-5 py-5 sm:px-6"
       aria-labelledby="crm-ai-assistant-title"
     >
       <div className="flex flex-wrap items-start justify-between gap-3 border-b border-white/[0.1] pb-4">

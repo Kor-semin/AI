@@ -1544,7 +1544,7 @@ export function CRMApp({
         <div className="mx-auto flex w-full max-w-[1580px] flex-col gap-6 px-2 sm:px-4 xl:px-0">
           {!uid ? (
             <div
-              className="sensora-premium-panel rounded-[18px] px-4 py-3.5 text-left text-[13px] leading-[1.6] text-slate-400 backdrop-blur-xl max-[390px]:px-3.5"
+              className="sensora-premium-card rounded-[18px] px-4 py-3.5 text-left text-[13px] leading-[1.6] text-slate-400 max-[390px]:px-3.5"
               role="status"
               aria-live="polite"
             >
@@ -1576,15 +1576,8 @@ export function CRMApp({
                 )}
               </p>
             </div>
-            <div className="flex w-full min-w-0 flex-col gap-3 lg:max-w-[640px]">
-              <div className="flex flex-col gap-3 rounded-[22px] border border-white/[0.12] bg-gradient-to-br from-slate-950/40 to-[#07111f]/45 p-3 shadow-[0_22px_52px_-28px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-xl sm:flex-row sm:items-stretch sm:gap-3 sm:p-4">
-                <button
-                  type="button"
-                  className="sensora-dark-ghost-btn inline-flex min-h-[44px] shrink-0 touch-manipulation items-center justify-center self-stretch rounded-xl px-4 py-2 text-[13px] font-semibold sm:min-w-[9.5rem]"
-                  onClick={() => setSensoraTipIntroOpen(true)}
-                >
-                  {t("crm.sensoraTip.openButton")}
-                </button>
+            <div className="flex w-full min-w-0 flex-col gap-3 lg:max-w-[680px] xl:max-w-[720px]">
+              <div className="crm-workspace-toolbar">
               <div ref={crmSearchWrapRef} className="relative min-w-0 flex-1">
                 <label className="block min-w-0">
                   <span className="sr-only">고객·기능 통합 검색</span>
@@ -1611,7 +1604,7 @@ export function CRMApp({
                     }
                     aria-controls="crm-unified-search-results"
                     aria-autocomplete="list"
-                    className="min-h-[44px] w-full rounded-[20px] border border-white/[0.14] bg-[#020817]/55 px-4 py-3 text-[15px] text-slate-100 outline-none shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-md transition placeholder:text-slate-500 focus:border-sky-400/38 focus:ring-2 focus:ring-sky-500/25"
+                    className="sensora-premium-input min-h-[46px] w-full rounded-[1.125rem] px-4 py-3 text-[15px] backdrop-blur-md"
                   />
                 </label>
                 {searchOpen && normalizeSearchFold(searchQuery).length >= 1 ? (
@@ -1690,9 +1683,16 @@ export function CRMApp({
                   </div>
                 ) : null}
               </div>
+                <button
+                  type="button"
+                  className="sensora-premium-ghost inline-flex min-h-[46px] shrink-0 touch-manipulation items-center justify-center self-stretch rounded-xl px-4 py-2.5 text-[13px] font-semibold sm:min-w-[9.25rem] sm:max-w-[11rem]"
+                  onClick={() => setSensoraTipIntroOpen(true)}
+                >
+                  {t("crm.sensoraTip.openButton")}
+                </button>
               <button
                 type="button"
-                className="sensora-premium-primary-workspace min-h-[44px] shrink-0 rounded-[20px] px-5 py-3 text-[15px] font-semibold sm:w-auto sm:whitespace-nowrap touch-manipulation focus:outline-none"
+                className="sensora-premium-primary-workspace min-h-[46px] shrink-0 rounded-[1.125rem] px-5 py-3 text-[15px] font-semibold shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_12px_36px_-12px_rgba(56,189,248,0.2)] sm:w-auto sm:whitespace-nowrap touch-manipulation focus:outline-none"
                 onClick={openCreateCustomerModal}
               >
                 + {t("crm.addCustomer")}
@@ -3648,21 +3648,22 @@ export function CRMApp({
             onClick={() => setSensoraTipIntroOpen(false)}
           />
           <div
-            className="sensora-modal-panel-reveal relative z-[1] w-full max-w-md rounded-2xl border border-white/[0.14] bg-gradient-to-b from-slate-950/95 to-[#07111f]/98 p-6 shadow-[0_32px_80px_-28px_rgba(0,0,0,0.72),inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-md max-[390px]:p-5"
+            className="sensora-premium-modal-shell sensora-modal-panel-reveal relative z-[1] w-full max-w-md p-6 max-[390px]:p-5"
             onClick={(e) => e.stopPropagation()}
           >
+            <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-sky-300/80">{t("landing.showroom.tip.guideWord")}</p>
             <h2
               id="crm-sensora-tip-intro-title"
-              className="text-[17px] font-semibold tracking-tight text-slate-50 sm:text-lg"
+              className="mt-2 text-[17px] font-semibold tracking-tight text-slate-50 sm:text-lg"
             >
               {t("landing.showroom.tip.title")}
             </h2>
             <p className="mt-3 text-[14px] leading-relaxed text-slate-400">{t("crm.guideTip.body")}</p>
             <p className="mt-3 text-[11px] leading-relaxed text-slate-500">{t("crm.demoContextNotice.accessAfterBeta")}</p>
-            <div className="mt-6 flex flex-col gap-2.5">
+            <div className="mt-7 flex flex-col gap-3">
               <button
                 type="button"
-                className="inline-flex min-h-[48px] w-full touch-manipulation items-center justify-center rounded-xl border border-sky-400/25 bg-gradient-to-b from-[#1e293b] to-[#0f172a] px-4 py-3 text-center text-[14px] font-semibold text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition hover:border-sky-400/40"
+                className="sensora-premium-primary-workspace inline-flex min-h-[50px] w-full touch-manipulation items-center justify-center rounded-xl px-4 py-3 text-center text-[14px] font-semibold"
                 onClick={() => {
                   setSensoraGuideInitialIndex(0);
                   setSensoraTipIntroOpen(false);
@@ -3673,7 +3674,7 @@ export function CRMApp({
               </button>
               <button
                 type="button"
-                className="min-h-[44px] w-full touch-manipulation rounded-xl border border-white/[0.1] bg-white/[0.04] px-4 py-2.5 text-[13px] font-semibold text-slate-300 transition hover:bg-white/[0.07]"
+                className="sensora-premium-ghost min-h-[48px] w-full touch-manipulation rounded-xl px-4 py-2.5 text-[13px] font-semibold"
                 onClick={() => setSensoraTipIntroOpen(false)}
               >
                 {t("landing.showroom.tip.close")}
@@ -3706,7 +3707,7 @@ export function CRMApp({
             onClick={() => setPreviewGateOpen(false)}
           />
           <div
-            className="sensora-modal-panel-reveal relative z-[1] w-full max-w-md rounded-2xl border border-white/[0.14] bg-gradient-to-b from-slate-950/95 to-[#07111f]/98 p-6 shadow-[0_32px_80px_-28px_rgba(0,0,0,0.72),inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-md max-[390px]:p-5"
+            className="sensora-premium-modal-shell sensora-modal-panel-reveal relative z-[1] w-full max-w-md p-6 max-[390px]:p-5"
             onClick={(e) => e.stopPropagation()}
           >
             <h2
@@ -3716,24 +3717,24 @@ export function CRMApp({
               {t("crm.previewGate.title")}
             </h2>
             <p className="mt-3 text-[14px] leading-relaxed text-slate-400">{t("crm.previewGate.body")}</p>
-            <div className="mt-6 flex flex-col gap-2.5">
+            <div className="mt-7 flex flex-col gap-3">
               <Link
                 href="/join?returnTo=preview"
-                className="inline-flex min-h-[48px] w-full touch-manipulation items-center justify-center rounded-xl border border-sky-400/25 bg-gradient-to-b from-[#1e293b] to-[#0f172a] px-4 py-3 text-center text-[14px] font-semibold text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition hover:border-sky-400/40"
+                className="sensora-premium-primary-workspace inline-flex min-h-[50px] w-full touch-manipulation items-center justify-center rounded-xl px-4 py-3 text-center text-[14px] font-semibold"
                 onClick={() => setPreviewGateOpen(false)}
               >
                 {t("crm.previewGate.join")}
               </Link>
               <Link
                 href="/register"
-                className="sensora-dark-ghost-btn inline-flex min-h-[48px] w-full touch-manipulation items-center justify-center rounded-xl px-4 py-3 text-center text-[14px] font-semibold transition"
+                className="sensora-premium-ghost inline-flex min-h-[50px] w-full touch-manipulation items-center justify-center rounded-xl px-4 py-3 text-center text-[14px] font-semibold"
                 onClick={() => setPreviewGateOpen(false)}
               >
                 {t("crm.previewGate.register")}
               </Link>
               <button
                 type="button"
-                className="min-h-[48px] w-full touch-manipulation rounded-xl border border-transparent px-4 py-3 text-[14px] font-semibold text-slate-400 underline underline-offset-4 hover:text-slate-200"
+                className="sensora-premium-muted-text-btn min-h-[48px] w-full touch-manipulation rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-3 text-[14px] font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35"
                 onClick={() => setPreviewGateOpen(false)}
               >
                 {t("crm.previewGate.continuePreview")}
@@ -3772,7 +3773,7 @@ function Field({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full rounded-xl border border-white/[0.11] bg-slate-950/55 px-3 py-3 text-[15px] text-slate-100 outline-none placeholder:text-slate-500 focus:border-sky-400/45"
+        className="sensora-premium-input w-full rounded-xl px-3 py-3 text-[15px] outline-none"
       />
     </label>
   );
