@@ -29,10 +29,10 @@ const cardChrome =
   "landing-showcase-surface-card rounded-[17px] border border-white/[0.16] bg-gradient-to-b from-white/[0.09] via-slate-900/58 to-[#050d14]/94 shadow-[0_28px_64px_-22px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.072),0_0_56px_-24px_rgba(56,189,248,0.084)] backdrop-blur-md ring-1 ring-inset ring-white/[0.065] transition-[border-color,box-shadow,transform] duration-[240ms] ease-[cubic-bezier(0.22,1,0.32,1)] hover:-translate-y-1 hover:border-sky-400/36 hover:shadow-[0_36px_84px_-20px_rgba(0,0,0,0.64),0_0_60px_-16px_rgba(56,189,248,0.13)] motion-reduce:transform-none motion-reduce:transition-none active:translate-y-0 active:scale-[0.996] sm:rounded-[22px]";
 
 const primaryBtn =
-  "landing-showroom-cta-join sensora-premium-primary-workspace inline-flex min-h-14 min-w-[min(100%,13rem)] items-center justify-center rounded-xl px-[clamp(1.125rem,3.5vw,2.25rem)] py-[clamp(0.7rem,2.2vw,1rem)] text-[clamp(0.875rem,calc(0.82rem+0.35vw),1rem)] font-semibold shadow-[inset_0_1px_0_rgba(255,255,255,0.13),0_16px_48px_-10px_rgba(56,189,248,0.26),0_0_40px_-8px_rgba(139,92,246,0.06)] touch-manipulation sm:rounded-2xl sm:px-9 sm:py-4 sm:text-base";
+  "landing-showroom-cta-join sensora-premium-primary-workspace inline-flex min-h-[3.375rem] min-w-0 shrink-0 items-center justify-center rounded-xl px-[clamp(1.125rem,3.5vw,2.25rem)] py-[clamp(0.72rem,2.2vw,1.06rem)] text-[clamp(0.96875rem,calc(0.88rem+0.35vw),1.0625rem)] font-semibold shadow-[inset_0_1px_0_rgba(255,255,255,0.13),0_16px_48px_-10px_rgba(56,189,248,0.26),0_0_40px_-8px_rgba(139,92,246,0.06)] touch-manipulation sm:rounded-2xl sm:px-9 sm:py-[1.05rem] sm:text-[1.0625rem]";
 
 const ghostBtn =
-  "landing-showroom-cta-preview inline-flex min-h-14 min-w-[min(100%,13rem)] items-center justify-center gap-2 rounded-xl border border-white/[0.32] bg-white/[0.1] px-[clamp(1rem,3.2vw,2rem)] py-[clamp(0.65rem,2vw,1rem)] text-[clamp(0.875rem,calc(0.82rem+0.35vw),1rem)] font-semibold text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.11),0_0_0_1px_rgba(56,189,248,0.055)_inset,0_0_36px_-8px_rgba(56,189,248,0.12)] ring-1 ring-inset ring-sky-400/22 backdrop-blur-md transition-[border-color,background-color,box-shadow,transform] duration-[240ms] hover:border-sky-300/52 hover:bg-white/[0.14] active:scale-[0.987] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/42 focus-visible:ring-offset-2 focus-visible:ring-offset-[#020817] touch-manipulation motion-reduce:transition-none sm:rounded-2xl sm:px-8 sm:py-4 sm:text-base";
+  "landing-showroom-cta-preview inline-flex min-h-[3.375rem] min-w-0 shrink-0 items-center justify-center gap-2 rounded-xl border border-white/[0.32] bg-white/[0.1] px-[clamp(1rem,3.2vw,2rem)] py-[clamp(0.65rem,2vw,1rem)] text-[clamp(0.9375rem,calc(0.84rem+0.35vw),1.0625rem)] font-semibold text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.11),0_0_0_1px_rgba(56,189,248,0.055)_inset,0_0_36px_-8px_rgba(56,189,248,0.12)] ring-1 ring-inset ring-sky-400/22 backdrop-blur-md transition-[border-color,background-color,box-shadow,transform] duration-[240ms] hover:border-sky-300/52 hover:bg-white/[0.14] active:scale-[0.987] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/42 focus-visible:ring-offset-2 focus-visible:ring-offset-[#020817] touch-manipulation motion-reduce:transition-none sm:rounded-2xl sm:px-8 sm:py-[1.05rem] sm:text-[1.0625rem]";
 
 function IconAppWindowPlay({ className }: { className?: string }) {
   return (
@@ -188,7 +188,7 @@ function SensoraGuideSectionInner() {
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#050d14]/95 via-transparent to-transparent" aria-hidden />
           </div>
           <div className="relative flex flex-1 flex-col px-5 pb-5 pt-4 sm:px-10 sm:pb-10 sm:pt-7">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-violet-200/88 sm:text-xs sm:tracking-[0.16em]">SensoraGuide</p>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-violet-200/88 sm:text-xs sm:tracking-[0.16em]">{t("landing.showroom.guide.panelLabel")}</p>
             <div className="relative mt-3 sm:mt-5">
               <PreviewDiagramSecurityStrip labels={securityLabels} />
             </div>
@@ -241,18 +241,20 @@ function FinalShowroomCTAInner({ onOpenAppWorkspace }: { onOpenAppWorkspace: () 
     >
       <p className="text-[clamp(1.12rem,min(5vw,2.4vw+0.85rem),1.68rem)] font-semibold tracking-[-0.024em] text-slate-50">{t("brand.slogan")}</p>
       <p className="mx-auto mt-3 max-w-[48ch] text-[0.8125rem] leading-[1.5] text-slate-400 max-lg:line-clamp-4 sm:mt-6 sm:line-clamp-none sm:text-[1.03rem] sm:leading-[1.58]">{t("landing.showroom.closing.desc")}</p>
-      <div className="mt-6 flex w-full max-w-lg flex-col flex-wrap justify-center gap-3 sm:mt-10 sm:flex-row sm:justify-center sm:gap-4">
-        <Link href={JOIN_PATH} prefetch={false} className={`relative z-20 inline-flex w-full justify-center touch-manipulation pointer-events-auto sm:w-auto sm:flex-initial ${primaryBtn}`}>
-          {t("cta.joinBeta")}
-        </Link>
-        <button
-          type="button"
-          onClick={onOpenAppWorkspace}
-          className={`relative z-20 inline-flex w-full cursor-pointer justify-center touch-manipulation pointer-events-auto sm:w-auto sm:flex-initial ${ghostBtn}`}
-        >
-          <IconAppWindowPlay className="size-[1.08rem] shrink-0 opacity-95 sm:size-[1.14rem]" />
-          {t("cta.tryAppExperience")}
-        </button>
+      <div className="mt-6 flex w-full justify-center sm:mt-10">
+        <div className="landing-footer-cta-buttons flex w-full max-w-xl min-w-0 flex-col gap-3 sm:flex-row sm:justify-center sm:gap-4">
+          <Link href={JOIN_PATH} prefetch={false} className={`relative z-20 inline-flex w-full min-w-0 justify-center touch-manipulation pointer-events-auto sm:flex-1 sm:basis-0 ${primaryBtn}`}>
+            {t("cta.joinBeta")}
+          </Link>
+          <button
+            type="button"
+            onClick={onOpenAppWorkspace}
+            className={`relative z-20 inline-flex w-full min-w-0 cursor-pointer justify-center touch-manipulation pointer-events-auto sm:flex-1 sm:basis-0 ${ghostBtn}`}
+          >
+            <IconAppWindowPlay className="size-[1.08rem] shrink-0 opacity-95 sm:size-[1.14rem]" />
+            {t("cta.tryAppExperience")}
+          </button>
+        </div>
       </div>
     </div>
   );

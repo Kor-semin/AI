@@ -9,7 +9,7 @@ type Props = {
   alt: string;
   onClose: () => void;
   closeLabel: string;
-  /** 새 탭으로 원본 열기 접근 이름 */
+  /** (레거시) 새 탭 열기 라벨이었으나, 현재는 새 탭 금지 정책으로 닫기 안내에 재사용 */
   openOriginalAria: string;
   openOriginalHint: string;
 };
@@ -41,18 +41,6 @@ export function SensoraFullscreenImageOverlay({
     return () => window.removeEventListener("keydown", onKey);
   }, [open, onClose]);
 
-  const openOriginal = () => {
-    try {
-      const abs =
-        src.startsWith("http://") || src.startsWith("https://")
-          ? src
-          : `${window.location.origin}${src.startsWith("/") ? src : `/${src}`}`;
-      window.open(abs, "_blank", "noopener,noreferrer");
-    } catch {
-      /* ignore */
-    }
-  };
-
   if (!open || !src) return null;
 
   return (
@@ -63,14 +51,9 @@ export function SensoraFullscreenImageOverlay({
       aria-label={alt}
     >
       <div className="flex items-center justify-between gap-3 border-b border-white/[0.08] px-4 py-3 pt-[max(12px,calc(env(safe-area-inset-top,0px)+8px))] sm:px-5">
-        <button
-          type="button"
-          onClick={openOriginal}
-          className="min-h-11 shrink-0 rounded-xl border border-sky-400/28 bg-white/[0.06] px-4 py-2 text-sm font-semibold text-sky-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] hover:border-sky-400/42 hover:bg-white/[0.09] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 touch-manipulation"
-          aria-label={openOriginalAria}
-        >
+        <p className="min-h-11 flex-1 truncate text-left text-[12px] font-medium leading-tight text-slate-300 sm:text-sm">
           {openOriginalHint}
-        </button>
+        </p>
         <button
           type="button"
           className="min-h-11 shrink-0 rounded-xl border border-white/[0.14] bg-white/[0.06] px-4 py-2 text-sm font-semibold text-slate-100 hover:bg-white/[0.1] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 touch-manipulation"
@@ -84,7 +67,7 @@ export function SensoraFullscreenImageOverlay({
           type="button"
           className="relative mx-auto flex h-full max-h-[min(88dvh,88vh)] w-full max-w-[min(100%,1200px)] cursor-zoom-out items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-sky-400/40"
           aria-label={openOriginalAria}
-          onClick={openOriginal}
+          onClick={onClose}
         >
           <Image
             src={src}

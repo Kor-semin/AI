@@ -328,6 +328,7 @@ export type TranslationKey =
   | "landing.showroom.guide.desc"
   | "landing.showroom.guide.memoLabel"
   | "landing.showroom.guide.memoQuote"
+  | "landing.showroom.guide.panelLabel"
   | "landing.showroom.guide.guideQuote"
   | "landing.showroom.features.title"
   | "landing.showroom.closing.desc"
@@ -873,15 +874,15 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.crmDemo.startCta": "고객관리 시작하기",
     "landing.showroom.hero.quietFuture": "실무 현장 안내형",
     "landing.showroom.hero.senseAuraTag": "Sense · Aura",
-    "landing.showroom.hero.kickerBadge": "자동차 영업사원 업무용",
+    "landing.showroom.hero.kickerBadge": "영업 현장용 고객관리",
     "landing.showroom.hero.headline": "자동차 영업사원을 위한\nAI 고객관리 워크스페이스",
     "landing.showroom.hero.headlineLine1": "자동차 영업사원을 위한",
     "landing.showroom.hero.headlineLine2": "AI 고객관리 워크스페이스",
     "landing.showroom.hero.sub":
-      "상담부터 사후관리까지 한 흐름으로 관리합니다.\n\nAI는 초안을 돕고, 최종 판단은 영업사원이 합니다.",
+      "상담 메모·다음 연락·사후관리까지 한 화면에서 이어집니다.\n\nAI는 검토용 초안을 돕고, 최종 판단과 저장은 영업사원이 합니다.",
     "landing.showroom.bridge.line1": "상담은 기록으로,",
     "landing.showroom.bridge.line2": "기록은 다음 행동으로.",
-    "landing.showroom.header.subline": "자동차 영업사원을 위한 AI 고객관리 워크스페이스",
+    "landing.showroom.header.subline": "자동차 영업사원을 위한 고객관리·상담 정리 워크스페이스",
     "landing.showroom.heroDash.windowSubline": "오늘의 연락 · 업무 요약",
     "landing.showroom.heroDash.greetingLine": "오늘 진행하면 좋은 일이에요",
     "landing.showroom.heroDash.greetingSub": "연락 우선 확인과 검토용 초안을 한 화면에 모았습니다.",
@@ -893,7 +894,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.showroom.heroDash.prioritySnippet": "관심 차량과 예산 조건이 정리된 고객",
     "landing.showroom.heroDash.followupTitle": "후속 연락 필요",
     "landing.showroom.heroDash.followupSnippet": "출고 안내 후 사후관리 예정",
-    "landing.showroom.heroDash.aiDraftTitle": "AI 제안 메시지",
+    "landing.showroom.heroDash.aiDraftTitle": "검토용 문자 초안",
     "landing.showroom.heroDash.aiDraftSnippet": "상담 내용을 바탕으로 검토용 문자 초안을 제안합니다.",
     "landing.showroom.heroDash.summaryTitle": "최근 상담 요약",
     "landing.showroom.heroDash.summarySnippet":
@@ -906,7 +907,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.showroom.heroMock.nav.consult": "상담",
     "landing.showroom.heroMock.nav.schedule": "일정·알림",
     "landing.showroom.heroMock.nav.messages": "메시지",
-    "landing.showroom.heroMock.nav.aiAssistant": "AI 도우미",
+    "landing.showroom.heroMock.nav.aiAssistant": "AI 비서",
     "landing.showroom.heroMock.nav.stats": "통계",
     "landing.showroom.heroMock.nav.settings": "설정",
     "landing.showroom.flow.title": "상담에서 다음 연락까지, 한 흐름으로",
@@ -922,14 +923,15 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.showroom.flow.mock.followupTitle": "다음 연락",
     "landing.showroom.flow.mock.followupBody": "내일 오전 11시 재연락 · 전화",
     "landing.showroom.guide.title": "고객의 신호가 영업 액션으로 이어지는 지점입니다.",
-    "landing.showroom.guide.desc": "메모에서 응대 포인트를 정리해 SensoraGuide가 검토용 제안으로 이어 줍니다.",
+    "landing.showroom.guide.desc": "메모에서 응대 포인트를 정리하면, 검토용 가이드 제안으로 이어집니다.",
     "landing.showroom.guide.memoLabel": "상담 메모",
     "landing.showroom.guide.memoQuote": "가족 이동이 많고 승하차 편의성을 중요하게 보심.",
+    "landing.showroom.guide.panelLabel": "검토용 가이드",
     "landing.showroom.guide.guideQuote": "2열 공간, 승하차 동선, 탑승 편안함을 중심으로 안내하세요.",
     "landing.showroom.features.title": "영업 현장 업무가 덜 헤매도록 돕습니다",
     "landing.showroom.closing.desc":
       "상담·고객 응대·사후관리까지 한 흐름으로 묶어, 오늘 해야 할 일을 분명하게 보여 줍니다.",
-    "landing.showroom.tip.title": "Sensora 알아가면 좋은 TIP",
+    "landing.showroom.tip.title": "활용 안내 TIP",
     "landing.showroom.tip.subtitle":
       "처음 보는 분도 쉽게 이해할 수 있도록, 핵심 내용을 이미지로 정리했습니다.",
     "landing.showroom.tip.card1.title": "이용 시작 방법",
@@ -1085,7 +1087,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "concept.story.hub.desc": "고객 목록, 상담 메모, 일정·다음 연락을 탭으로 오갈 수 있는 구조입니다.",
     "concept.story.memo.title": "메모에서 다음 행동까지",
     "concept.story.memo.desc": "상담 메모를 바탕으로 니즈 정리·보낼 문구 초안·다음 연락 제안을 이어서 봅니다.",
-    "landing.showroom.concept.sectionTitle": "Sensora 알아가면 좋은 TIP",
+    "landing.showroom.concept.sectionTitle": "활용 안내 카드",
     "landing.showroom.concept.sectionSub":
       "카드를 누르면 앱 안에서 상세 안내와 큰 이미지를 확인할 수 있습니다. 예시 화면이며 실제 고객 데이터는 저장되지 않습니다.",
     "landing.showroom.concept.tipStep1Short": "이용 시작 방법",
@@ -1550,8 +1552,9 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.showroom.flow.mock.followupBody": "Tomorrow · 11:00 · outbound call",
     "landing.showroom.guide.title": "Where customer signals tighten into salesperson action.",
     "landing.showroom.guide.desc":
-      "Memo lines become reviewable talking points that SensoraGuide keeps tied to your judgement.",
+      "Memo cues become reviewable talking points—then flow into guided suggestions you still approve.",
     "landing.showroom.guide.memoLabel": "Consultation memo",
+    "landing.showroom.guide.panelLabel": "Review guide",
     "landing.showroom.guide.memoQuote":
       "Heavy family hauling; entry/exit comfort is decisive for them.",
     "landing.showroom.guide.guideQuote": "Lead with cabin space, egress paths, boarding comfort—not generic claims.",

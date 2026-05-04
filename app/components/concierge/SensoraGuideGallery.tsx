@@ -77,7 +77,7 @@ export function SensoraGuideGallery({
       <div>
         {!hideThumbnailHeading ?
           <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-sky-400/75 sm:hidden" aria-hidden>
-            Guides
+            가이드
           </p>
         : null}
         <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-2 sm:gap-2.5 lg:gap-3.5">

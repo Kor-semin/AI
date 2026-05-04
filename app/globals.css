@@ -881,6 +881,17 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   .landing-service-nav .landing-nav-header-cta-row {
     display: none !important;
   }
+
+  /* 모바일: 상단 바 높이·여백 축소 (PC lg 이상은 아래 미디어쿼리 밖의 유틸 그대로) */
+  header.landing-service-nav.landing-service-nav--compact {
+    padding-top: max(4px, calc(env(safe-area-inset-top, 0px) + 1px));
+    padding-bottom: 2px;
+  }
+
+  /* 히어로 섹션: 헤더 직후 시각적 간격만 살짝 줄여 위로 이어지게 (LandingShowcaseHero 파일 미수정) */
+  section.landing-showcase-hero.landing-showcase-hero--dock.landing-showcase-hero--unified {
+    padding-top: 0.8rem;
+  }
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -2226,7 +2237,7 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
       inset 0 1px 0 rgba(255, 255, 255, 0.05);
   }
 
-  /* 모바일 히어로 CTA: 카드 content box 안에 고정 (getBoundingClientRect 기준 QA와 동일) */
+  /* 모바일 히어로 CTA: 카드 content box 안에서 가운데 정렬된 너비로 고정 */
   .landing-showcase-hero--unified .landing-hero-showcase-cta-row {
     width: 100%;
     max-width: 100%;
@@ -2237,10 +2248,20 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
     padding-right: 0;
     box-sizing: border-box;
     overflow-x: hidden;
+    justify-content: center;
   }
 
-  .landing-showcase-hero--unified .landing-hero-showcase-cta-row > a,
-  .landing-showcase-hero--unified .landing-hero-showcase-cta-row > button {
+  .landing-showcase-hero--unified .landing-hero-showcase-cta-cluster {
+    width: 100%;
+    max-width: min(100%, 36rem);
+    min-width: 0;
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+  }
+
+  .landing-showcase-hero--unified .landing-hero-showcase-cta-cluster > a,
+  .landing-showcase-hero--unified .landing-hero-showcase-cta-cluster > button {
     display: flex;
     box-sizing: border-box;
     width: 100%;
@@ -2256,6 +2277,16 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
 @media (min-width: 1024px) {
   .landing-showcase-hero--unified .landing-hero-copy-stack {
     box-shadow: none;
+  }
+
+  .landing-showcase-hero--unified .landing-hero-showcase-cta-row {
+    justify-content: center;
+  }
+
+  .landing-showcase-hero--unified .landing-hero-showcase-cta-cluster {
+    max-width: min(100%, 38rem);
+    margin-left: auto;
+    margin-right: auto;
   }
 }
 
