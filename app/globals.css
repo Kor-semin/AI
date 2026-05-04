@@ -2401,6 +2401,22 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   min-height: 0;
 }
 
+@media (max-width: 1023px) {
+  .sensora-landing-slide-panel.sensora-landing-slide-panel--dock-pad {
+    padding-bottom: max(5.75rem, calc(env(safe-area-inset-bottom, 0px) + 5rem));
+  }
+
+  .landing-slide-hero-app-shell {
+    border-radius: 1.3125rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: linear-gradient(180deg, rgba(6, 18, 33, 0.78) 0%, rgba(3, 10, 20, 0.92) 100%);
+    padding: 0.75rem 0.625rem 0.875rem;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.056),
+      0 16px 48px -22px rgba(0, 0, 0, 0.55);
+  }
+}
+
 /* 랜딩 공지 슬롯 · 앱형 서비스 메뉴(1차 틀) */
 .landing-announcement-slot {
   scroll-margin-top: 0.75rem;

@@ -4,10 +4,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 
-import { SensoraGuideDetailModal } from "@/app/components/concierge/SensoraGuideDetailModal";
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
 import type { CrmSection } from "@/app/crm/crmSectionTypes";
-import { DEFAULT_GUIDE_ID, SENSORA_GUIDES, type SensoraGuideId } from "@/lib/sensoraGuide";
+import { SENSORA_GUIDES } from "@/lib/sensoraGuide";
 
 /** 랜딩 보조 이미지 에셋 경로(@/public 기준). README 등에서 참고합니다. */
 export const LANDING_SHOWROOM_IMAGE_PATHS = {
@@ -27,37 +26,72 @@ const JOIN_PATH = "/join" as const;
 const SLIDE_COUNT = 4;
 const GUIDE03 = "/images/guides/sensora-guide-03.png";
 
+function thumbGuideImage(guideId: "sensora-guide-01" | "sensora-guide-02" | "sensora-guide-04") {
+  return SENSORA_GUIDES.find((g) => g.id === guideId)?.image ?? GUIDE03;
+}
+
 const entPrimaryBtn =
-  "landing-enterprise-btn-primary inline-flex min-h-[3rem] shrink-0 items-center justify-center rounded-xl px-7 py-3 text-[0.9375rem] font-semibold tracking-tight touch-manipulation sm:min-h-[3.125rem] sm:text-[1rem]";
+  "landing-enterprise-btn-primary inline-flex shrink-0 items-center justify-center rounded-xl px-6 py-2.5 text-[0.8625rem] font-semibold tracking-tight touch-manipulation sm:min-h-[3rem] sm:py-3 sm:text-[0.9375rem] lg:min-h-[3.125rem] lg:text-[1rem]";
 
 const entGhostBtn =
-  "landing-enterprise-btn-secondary inline-flex min-h-[3rem] shrink-0 cursor-pointer items-center justify-center gap-2 rounded-xl px-6 py-3 text-[0.9rem] font-semibold tracking-tight touch-manipulation sm:min-h-[3.125rem] sm:px-7 sm:text-[0.9625rem]";
+  "landing-enterprise-btn-secondary inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-xl px-6 py-2.5 text-[0.8375rem] font-semibold tracking-tight touch-manipulation sm:min-h-[3rem] sm:py-3 sm:text-[0.9625rem] lg:min-h-[3.125rem]";
 
 const tertiaryLink =
-  "inline-flex min-h-10 items-center justify-center rounded-lg border border-white/[0.12] bg-white/[0.03] px-4 py-2 text-[0.875rem] font-semibold text-slate-100/93 transition hover:border-white/[0.2] hover:bg-white/[0.055] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 touch-manipulation";
+  "inline-flex min-h-9 items-center justify-center rounded-lg border border-white/[0.12] bg-white/[0.03] px-3.5 py-1.5 text-[0.8125rem] font-semibold text-slate-100/93 transition hover:border-white/[0.2] hover:bg-white/[0.055] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 touch-manipulation sm:min-h-10 sm:px-4 sm:text-[0.875rem]";
 
-const MENU_ROW = [
+type LandingMenuWorkspaceRow = {
+  key: string;
+  target: "workspace";
+  section: CrmSection;
+  thumbGuideId: "sensora-guide-01" | "sensora-guide-02" | "sensora-guide-04";
+  titleKey: "landing.showroom.serviceMenu.customersTitle" | "landing.showroom.serviceMenu.aiTitle" | "landing.showroom.serviceMenu.aftercareTitle";
+  descKey:
+    | "landing.showroom.serviceMenu.customersDesc"
+    | "landing.showroom.serviceMenu.aiDesc"
+    | "landing.showroom.serviceMenu.aftercareDesc";
+};
+
+type LandingMenuDeliveryRow = {
+  key: string;
+  target: "delivery";
+  titleKey: "landing.showroom.serviceMenu.deliveryTitle";
+  descKey: "landing.showroom.serviceMenu.deliveryDesc";
+};
+
+type LandingMenuRow = LandingMenuWorkspaceRow | LandingMenuDeliveryRow;
+
+const MENU_ITEMS: LandingMenuRow[] = [
   {
-    guideId: "sensora-guide-01" as const,
-    titleKey: "landing.showroom.serviceMenu.customersTitle" as const,
-    descKey: "landing.showroom.serviceMenu.customersDesc" as const,
+    key: "customers",
+    target: "workspace",
+    section: "customers",
+    thumbGuideId: "sensora-guide-01",
+    titleKey: "landing.showroom.serviceMenu.customersTitle",
+    descKey: "landing.showroom.serviceMenu.customersDesc",
   },
   {
-    guideId: "sensora-guide-02" as const,
-    titleKey: "landing.showroom.serviceMenu.aiTitle" as const,
-    descKey: "landing.showroom.serviceMenu.aiDesc" as const,
+    key: "ai",
+    target: "workspace",
+    section: "ai",
+    thumbGuideId: "sensora-guide-02",
+    titleKey: "landing.showroom.serviceMenu.aiTitle",
+    descKey: "landing.showroom.serviceMenu.aiDesc",
   },
   {
-    guideId: "sensora-guide-04" as const,
-    titleKey: "landing.showroom.serviceMenu.aftercareTitle" as const,
-    descKey: "landing.showroom.serviceMenu.aftercareDesc" as const,
+    key: "followup",
+    target: "workspace",
+    section: "followup",
+    thumbGuideId: "sensora-guide-04",
+    titleKey: "landing.showroom.serviceMenu.aftercareTitle",
+    descKey: "landing.showroom.serviceMenu.aftercareDesc",
   },
   {
-    guideId: "sensora-guide-03" as const,
-    titleKey: "landing.showroom.serviceMenu.deliveryTitle" as const,
-    descKey: "landing.showroom.serviceMenu.deliveryDesc" as const,
+    key: "delivery",
+    target: "delivery",
+    titleKey: "landing.showroom.serviceMenu.deliveryTitle",
+    descKey: "landing.showroom.serviceMenu.deliveryDesc",
   },
-] as const;
+];
 
 const PHILOSOPHY_LINE_KEYS = [
   "landing.slides.philosophy.line1",
@@ -92,6 +126,27 @@ function IconChevron({ className }: { className?: string }) {
   );
 }
 
+function IconDeliveryThumb({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path
+        d="M13 17h8v3h-2.5M13 17V9h8v8"
+        stroke="currentColor"
+        strokeWidth="1.55"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M13 17H3v-7l4-6h6v13zM9 22a1.5 1.5 0 1 0 .001-3.001A1.5 1.5 0 0 0 9 22zm10 0a1.5 1.5 0 1 0 .001-3.001A1.5 1.5 0 0 0 19 22zM6 10h7"
+        stroke="currentColor"
+        strokeWidth="1.55"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 type Props = {
   slideIndex: number;
   onSlideChange: (index: number) => void;
@@ -107,8 +162,7 @@ export function LandingShowroom({
 }: Props) {
   const { t } = useLanguage();
   const safeSlide = ((slideIndex % SLIDE_COUNT) + SLIDE_COUNT) % SLIDE_COUNT;
-  const [guideModalOpen, setGuideModalOpen] = useState(false);
-  const [activeGuideId, setActiveGuideId] = useState<SensoraGuideId>(DEFAULT_GUIDE_ID);
+  const [deliveryPrepOpen, setDeliveryPrepOpen] = useState(false);
 
   const goSlide = useCallback(
     (i: number) => {
@@ -117,25 +171,11 @@ export function LandingShowroom({
     [onSlideChange],
   );
 
-  const openGuide = useCallback((id: SensoraGuideId) => {
-    setActiveGuideId(id);
-    setGuideModalOpen(true);
-  }, []);
-
-  const handleGoToRelated = useCallback(
-    (section: CrmSection) => {
-      setGuideModalOpen(false);
-      onEnterWorkspaceSection(section);
-    },
-    [onEnterWorkspaceSection],
-  );
-
-  /** 키보드 화살표: 모달 오픈 시에는 슬라이드 이동 비활성 */
   useEffect(() => {
     const el = typeof document !== "undefined" ? document.getElementById("sensora-landing-slide-deck") : null;
     if (!el) return undefined;
     const onKey = (e: KeyboardEvent) => {
-      if (guideModalOpen) return;
+      if (deliveryPrepOpen) return;
       if (e.key === "ArrowRight" && safeSlide < SLIDE_COUNT - 1) {
         e.preventDefault();
         goSlide(safeSlide + 1);
@@ -147,7 +187,36 @@ export function LandingShowroom({
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [goSlide, guideModalOpen, safeSlide]);
+  }, [deliveryPrepOpen, goSlide, safeSlide]);
+
+  useEffect(() => {
+    if (!deliveryPrepOpen || typeof document === "undefined") return undefined;
+    const onEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setDeliveryPrepOpen(false);
+    };
+    window.addEventListener("keydown", onEsc);
+    return () => window.removeEventListener("keydown", onEsc);
+  }, [deliveryPrepOpen]);
+
+  useEffect(() => {
+    if (!deliveryPrepOpen || typeof document === "undefined") return undefined;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [deliveryPrepOpen]);
+
+  const handleMenuNavigate = useCallback(
+    (row: LandingMenuRow) => {
+      if (row.target === "delivery") {
+        setDeliveryPrepOpen(true);
+        return;
+      }
+      onEnterWorkspaceSection(row.section);
+    },
+    [onEnterWorkspaceSection],
+  );
 
   const dockSafe = "pb-[max(10px,calc(env(safe-area-inset-bottom,0px)+8px))] pt-2";
 
@@ -161,45 +230,65 @@ export function LandingShowroom({
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_82%_52%_at_52%_8%,rgba(56,189,248,0.1),transparent_55%),radial-gradient(ellipse_58%_42%_at_96%_18%,rgba(139,92,246,0.08),transparent_52%),linear-gradient(180deg,#050f1e_0%,#020817_45%,#030b16_100%)]"
       />
 
-      <SensoraGuideDetailModal
-        open={guideModalOpen}
-        onClose={() => setGuideModalOpen(false)}
-        activeGuideId={activeGuideId}
-        onActiveGuideChange={setActiveGuideId}
-        onGoToRelated={handleGoToRelated}
-        overlayZClass="z-[280]"
-      />
+      {deliveryPrepOpen ? (
+        <>
+          <button
+            type="button"
+            className="fixed inset-0 z-[282] cursor-default bg-black/[0.55] backdrop-blur-md"
+            aria-label={t("landing.slides.deliveryPrep.dismiss")}
+            onClick={() => setDeliveryPrepOpen(false)}
+          />
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="landing-delivery-prep-title"
+            className="fixed left-[50%] top-[42%] z-[284] w-[min(calc(100vw-28px),22rem)] -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-white/[0.13] bg-gradient-to-b from-[#0a1628]/99 to-[#050f18]/97 p-5 shadow-[0_36px_80px_-28px_rgba(0,0,0,0.75)]"
+          >
+            <h3 id="landing-delivery-prep-title" className="text-base font-semibold tracking-tight text-slate-50">
+              {t("landing.slides.deliveryPrep.title")}
+            </h3>
+            <p className="mt-3 text-[0.88rem] leading-relaxed text-slate-300/[0.92]">{t("landing.slides.deliveryPrep.body")}</p>
+            <button
+              type="button"
+              onClick={() => setDeliveryPrepOpen(false)}
+              className={`${entPrimaryBtn} mt-6 w-full justify-center`}
+            >
+              {t("landing.slides.deliveryPrep.dismiss")}
+            </button>
+          </div>
+        </>
+      ) : null}
 
       <div className="relative z-[1] flex min-h-0 flex-1 flex-col overflow-hidden">
         <div className="relative min-h-0 flex-1 overflow-hidden px-4 pt-2 sm:px-6 sm:pt-3 lg:pt-4">
-          {/* 0 — 제품 발표형 히어로 */}
+          {/* 0 — 첫 슬라이드 */}
           <div
             className={[
-              "sensora-landing-slide-panel absolute inset-x-4 inset-y-0 flex flex-col overflow-y-auto overflow-x-hidden pb-2 sm:inset-x-6",
+              "sensora-landing-slide-panel sensora-landing-slide-panel--dock-pad absolute inset-x-4 inset-y-0 flex flex-col overflow-y-auto overflow-x-hidden pb-2 sm:inset-x-6",
               safeSlide === 0 ? "pointer-events-auto z-[2] opacity-100" : "pointer-events-none z-0 opacity-0",
             ].join(" ")}
             aria-hidden={safeSlide !== 0}
           >
-            <div className="mx-auto flex h-full w-full max-w-[1280px] flex-col lg:min-h-0 lg:flex-row lg:items-center lg:justify-between lg:gap-10 xl:gap-14">
-              <div className="flex w-full shrink-0 flex-col items-center text-center lg:max-w-[min(100%,26rem)] xl:max-w-[28rem]">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-sky-400/90 sm:text-[11px]">
+            <div className="landing-slide-hero-app-shell mx-auto flex h-full w-full max-w-[min(100%,400px)] flex-col gap-3 sm:max-w-[420px] lg:max-h-none lg:max-w-[1280px] lg:flex-row lg:items-center lg:justify-between lg:gap-10 xl:gap-14">
+              <div className="flex w-full shrink-0 flex-col items-center text-center lg:max-w-[min(100%,26rem)] lg:items-start lg:text-left xl:max-w-[28rem]">
+                <p className="text-[9px] font-semibold uppercase tracking-[0.18em] text-sky-400/88 sm:text-[10px] lg:text-[11px]">
                   {t("landing.slides.enterprise.productKicker")}
                 </p>
-                <h1 className="mt-3 max-w-[20ch] text-pretty text-[clamp(1.65rem,calc(0.75rem+4.5vw),2.65rem)] font-semibold leading-[1.08] tracking-[-0.038em] text-white [word-break:keep-all] sm:max-w-[22ch] lg:mx-auto xl:max-w-[24ch]">
+                <h1 className="mt-2 max-w-[21ch] text-pretty text-[clamp(1.35rem,calc(0.7rem+3.9vw),2.5rem)] font-semibold leading-[1.1] tracking-[-0.036em] text-white [word-break:keep-all] sm:max-w-[22ch] lg:max-w-[24ch] lg:mt-3 lg:text-[clamp(1.65rem,calc(0.75rem+4.5vw),2.65rem)]">
                   {t("landing.slides.enterprise.heroDefinition")}
                 </h1>
-                <p className="mt-3 max-w-[34ch] text-[0.9rem] font-medium leading-snug text-slate-200/[0.93] sm:mt-3.5 sm:text-[0.9575rem] lg:mx-auto lg:max-w-[36ch]">
+                <p className="mt-2 max-w-[32ch] text-[0.84rem] font-medium leading-snug text-slate-200/[0.92] sm:text-[0.9rem] lg:mt-3 sm:leading-snug lg:max-w-[36ch] lg:text-[0.9575rem] line-clamp-3 sm:line-clamp-none">
                   {t("landing.slides.enterprise.heroSub")}
                 </p>
-                <p className="mt-2 max-w-[32ch] text-[0.8rem] font-medium leading-snug text-violet-200/78 sm:text-[0.8275rem] lg:mx-auto">
+                <p className="mt-2 max-w-[34ch] text-[0.72rem] font-medium leading-snug text-violet-200/72 sm:mt-1.5 sm:text-[0.78rem] lg:mt-2 lg:text-[0.8275rem] lg:text-violet-200/78">
                   {t("landing.showroom.hero.trustLine")}
                 </p>
 
-                <div className="landing-slide-cta-cluster mt-7 flex w-full max-w-[22rem] flex-col items-stretch gap-2.5 sm:mt-8 sm:max-w-[26rem] sm:flex-row sm:flex-wrap sm:justify-center">
+                <div className="landing-slide-cta-cluster mt-4 flex w-full max-w-[20rem] flex-col items-stretch gap-2 sm:mt-5 sm:max-w-[21rem] sm:gap-2.5 lg:mt-7 lg:w-full lg:max-w-[22rem] lg:flex-row lg:flex-wrap lg:justify-start">
                   <Link
                     href={JOIN_PATH}
                     prefetch={false}
-                    className={`${entPrimaryBtn} w-full sm:w-auto sm:min-w-[10.75rem]`}
+                    className={`${entPrimaryBtn} min-h-[2.6875rem] w-full lg:min-h-[3rem] sm:w-auto sm:min-w-[10.5rem]`}
                   >
                     {t("cta.joinBeta")}
                   </Link>
@@ -208,13 +297,13 @@ export function LandingShowroom({
                     onClick={() => {
                       onOpenAppWorkspace();
                     }}
-                    className={`${entGhostBtn} w-full sm:w-auto sm:min-w-[10.75rem]`}
+                    className={`${entGhostBtn} min-h-[2.6875rem] w-full lg:min-h-[3rem] sm:w-auto sm:min-w-[10.5rem]`}
                   >
-                    <IconPlay className="size-[1.05rem] shrink-0 opacity-95" />
+                    <IconPlay className="size-[1.02rem] shrink-0 opacity-95" />
                     {t("cta.tryAppExperience")}
                   </button>
                 </div>
-                <div className="mt-2 flex w-full max-w-[22rem] justify-center sm:max-w-[26rem]">
+                <div className="mt-1.5 flex w-full justify-center lg:justify-start">
                   <Link href="/register" prefetch={false} className={`${tertiaryLink}`}>
                     {t("auth.salesRegistration")}
                   </Link>
@@ -223,55 +312,60 @@ export function LandingShowroom({
                 <button
                   type="button"
                   onClick={() => goSlide(1)}
-                  className="mt-9 inline-flex min-h-10 items-center justify-center rounded-lg border border-white/[0.14] bg-white/[0.04] px-5 py-2 text-[13px] font-semibold text-slate-100/93 transition hover:border-sky-400/32 hover:bg-white/[0.07] touch-manipulation sm:mt-10"
+                  className="mt-10 hidden min-h-10 shrink-0 items-center justify-center self-center rounded-lg border border-white/[0.14] bg-white/[0.04] px-5 py-2 text-[13px] font-semibold text-slate-100/93 transition hover:border-sky-400/32 hover:bg-white/[0.07] touch-manipulation lg:inline-flex lg:self-start"
                 >
                   {t("landing.slides.home.nextCta")}
                 </button>
               </div>
 
-              <div className="relative mt-8 flex min-h-[min(56vh,460px)] flex-1 items-center justify-center lg:mt-0 lg:min-h-0 lg:max-w-[min(54%,560px)] xl:max-w-[580px]">
-                <div
-                  aria-hidden
-                  className="pointer-events-none absolute inset-[-8%_-4%_-4%_-4%] rounded-[36px] bg-[radial-gradient(ellipse_70%_62%_at_50%_42%,rgba(56,189,248,0.11),transparent_68%)] opacity-90 blur-[40px]"
-                />
-                <div className="relative w-full max-w-[min(100%,460px)] lg:max-w-none">
-                  <div className="overflow-hidden rounded-[16px] border border-white/[0.16] bg-[#020a14]/98 shadow-[0_36px_90px_-32px_rgba(0,0,0,0.82),inset_0_1px_0_rgba(255,255,255,0.088)] ring-1 ring-white/[0.04] sm:rounded-[18px] lg:rounded-[20px]">
-                    <div className="flex items-center gap-1.5 border-b border-white/[0.085] bg-[#040f1d]/96 px-2.5 py-1.5 sm:px-3 sm:py-2">
+              <div className="flex w-full flex-col items-center gap-4 lg:flex-1 lg:max-w-[min(54%,560px)] xl:max-w-[580px]">
+                <div className="relative flex w-full max-w-[min(100%,340px)] justify-center lg:max-w-none">
+                  <div
+                    aria-hidden
+                    className="pointer-events-none absolute inset-[-6%_-3%_-2%_-3%] rounded-[28px] bg-[radial-gradient(ellipse_70%_62%_at_50%_42%,rgba(56,189,248,0.1),transparent_68%)] opacity-90 blur-[36px]"
+                  />
+                  <div className="relative w-full max-w-[340px] overflow-hidden rounded-[14px] border border-white/[0.14] bg-[#020a14]/98 shadow-[0_28px_72px_-28px_rgba(0,0,0,0.82),inset_0_1px_0_rgba(255,255,255,0.08)] ring-1 ring-white/[0.035] lg:max-w-none lg:rounded-[18px] lg:ring-white/[0.04] xl:rounded-[20px]">
+                    <div className="flex items-center gap-1.5 border-b border-white/[0.078] bg-[#040f1d]/96 px-2 py-1.5 sm:px-2.5 lg:px-3 lg:py-2">
                       <span className="size-2 rounded-full bg-rose-500/45" aria-hidden />
                       <span className="size-2 rounded-full bg-amber-400/45" aria-hidden />
                       <span className="size-2 rounded-full bg-emerald-400/42" aria-hidden />
-                      <span className="ml-1 truncate text-[10px] font-semibold text-slate-500 sm:text-[11px]">
-                        {t("product.name")}
-                      </span>
-                      <span className="ml-auto rounded border border-sky-400/22 bg-sky-500/[0.08] px-1.5 py-px text-[9px] font-semibold uppercase tracking-[0.08em] text-sky-100/88 sm:px-2 sm:text-[10px]">
+                      <span className="ml-1 truncate text-[10px] font-semibold text-slate-500 lg:text-[11px]">{t("product.name")}</span>
+                      <span className="ml-auto rounded border border-sky-400/22 bg-sky-500/[0.08] px-1.5 py-px text-[9px] font-semibold uppercase tracking-[0.08em] text-sky-100/85 sm:text-[10px]">
                         {t("landing.showroom.heroMock.previewBadge")}
                       </span>
                     </div>
-                    <div className="relative aspect-[4/5] w-full bg-[#020617] lg:aspect-[10/13] xl:aspect-[42/53]">
+                    <div className="relative aspect-[4/3] max-h-[min(38vh,260px)] w-full bg-[#020617] sm:aspect-[5/6] sm:max-h-[min(44vh,320px)] lg:aspect-[10/13] lg:max-h-none xl:aspect-[42/53]">
                       <Image
                         src={GUIDE03}
                         alt=""
                         fill
-                        className="object-cover object-top opacity-[0.97]"
-                        sizes="(max-width:1024px) 92vw, 460px"
+                        className="opacity-[0.97] lg:object-cover lg:object-top max-lg:object-contain max-lg:object-top"
+                        sizes="(max-width:640px) 88vw,(max-width:1024px) 42vw, 460px"
                         quality={100}
                         priority
                       />
                       <div
-                        className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#020817]/75 via-transparent to-[#030a14]/12"
+                        className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#020817]/65 via-transparent to-[#030a14]/08 max-lg:from-[#020817]/50"
                         aria-hidden
                       />
                     </div>
                   </div>
                 </div>
+                <button
+                  type="button"
+                  onClick={() => goSlide(1)}
+                  className="mt-2 inline-flex min-h-9 shrink-0 items-center justify-center rounded-lg border border-white/[0.12] bg-white/[0.035] px-4 py-2 text-[12px] font-semibold text-slate-100/93 transition hover:border-sky-400/28 hover:bg-white/[0.06] touch-manipulation sm:min-h-10 sm:px-5 sm:text-[13px] lg:hidden"
+                >
+                  {t("landing.slides.home.nextCta")}
+                </button>
               </div>
             </div>
           </div>
 
-          {/* 1 — 핵심 업무 4 */}
+          {/* 1 — 핵심 업무 */}
           <div
             className={[
-              "sensora-landing-slide-panel absolute inset-x-4 inset-y-0 flex flex-col overflow-y-auto pb-2 sm:inset-x-6",
+              "sensora-landing-slide-panel sensora-landing-slide-panel--dock-pad absolute inset-x-4 inset-y-0 flex flex-col overflow-y-auto pb-2 sm:inset-x-6",
               safeSlide === 1 ? "pointer-events-auto z-[2] opacity-100" : "pointer-events-none z-0 opacity-0",
             ].join(" ")}
             aria-hidden={safeSlide !== 1}
@@ -287,35 +381,43 @@ export function LandingShowroom({
                 {t("landing.slides.menu.enterpriseSub")}
               </p>
               <div className="mt-5 flex w-full flex-col gap-2 sm:mt-6 sm:gap-2.5">
-                {MENU_ROW.map((row) => (
+                {MENU_ITEMS.map((row) => (
                   <button
-                    key={row.guideId}
+                    key={row.key}
                     type="button"
-                    aria-label={`${t(row.titleKey)} — ${t("landing.slides.menu.actionChevronAria")}`}
-                    onClick={() => openGuide(row.guideId)}
-                    className="landing-slide-menu-row group flex min-h-[4.25rem] w-full items-center gap-3 rounded-xl border border-white/[0.1] bg-[#050f1a]/88 px-3 py-2.5 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.045)] transition-[border-color,background-color] hover:border-sky-400/28 hover:bg-[#071425]/95 active:scale-[0.996] touch-manipulation sm:min-h-[4.625rem] sm:gap-4 sm:px-4 sm:py-3"
+                    aria-label={
+                      row.target === "delivery"
+                        ? `${t(row.titleKey)} · ${t("landing.slides.menu.deliveryPrepAria")}`
+                        : `${t(row.titleKey)} · ${t("landing.slides.menu.enterWorkspaceAria")}`
+                    }
+                    onClick={() => handleMenuNavigate(row)}
+                    className="landing-slide-menu-row group flex min-h-[4rem] w-full items-center gap-3 rounded-xl border border-white/[0.1] bg-[#050f1a]/88 px-3 py-2.5 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.045)] transition-[border-color,background-color] hover:border-sky-400/28 hover:bg-[#071425]/95 active:scale-[0.996] touch-manipulation sm:min-h-[4.375rem] sm:gap-4 sm:px-4 sm:py-3"
                   >
-                    <div className="relative h-[2.875rem] w-[3.85rem] shrink-0 overflow-hidden rounded-lg border border-white/[0.07] bg-[#020617] sm:h-[3.125rem] sm:w-[4.25rem]">
-                      <Image
-                        src={SENSORA_GUIDES.find((g) => g.id === row.guideId)?.image ?? GUIDE03}
-                        alt=""
-                        fill
-                        className="object-cover object-center opacity-[0.92]"
-                        sizes="72px"
-                        quality={92}
-                      />
-                    </div>
+                    {row.target === "workspace" ? (
+                      <div className="relative h-[2.75rem] w-[3.7rem] shrink-0 overflow-hidden rounded-lg border border-white/[0.07] bg-[#020617] sm:h-[3rem] sm:w-[4.1rem]">
+                        <Image
+                          src={thumbGuideImage(row.thumbGuideId)}
+                          alt=""
+                          fill
+                          className="object-cover object-center opacity-[0.9]"
+                          sizes="72px"
+                          quality={92}
+                        />
+                      </div>
+                    ) : (
+                      <div className="flex size-[2.75rem] shrink-0 items-center justify-center rounded-lg border border-dashed border-sky-400/22 bg-[#081422]/92 text-sky-300/82 sm:size-[3rem]">
+                        <IconDeliveryThumb className="size-[1.35rem]" />
+                      </div>
+                    )}
                     <div className="min-w-0 flex-1 text-left">
-                      <p className="text-[1.065rem] font-semibold leading-tight tracking-[-0.02em] text-slate-50 sm:text-[1.12rem]">
+                      <p className="text-[1.03rem] font-semibold leading-tight tracking-[-0.02em] text-slate-50 sm:text-[1.1rem]">
                         {t(row.titleKey)}
                       </p>
-                      <p className="mt-0.5 line-clamp-1 text-[0.78rem] leading-snug text-slate-400/92 sm:text-[0.815rem]">
-                        {t(row.descKey)}
-                      </p>
+                      <p className="mt-0.5 line-clamp-1 text-[0.765rem] leading-snug text-slate-400/92 sm:text-[0.8rem]">{t(row.descKey)}</p>
                     </div>
                     <span className="flex shrink-0 items-center gap-1.5 text-sky-300/82">
                       <span className="hidden text-[11px] font-semibold uppercase tracking-[0.05em] sm:inline">{t("landing.showroom.serviceMenu.tapHint")}</span>
-                      <IconChevron className="size-[1.15rem] opacity-85 transition group-hover:translate-x-0.5" />
+                      <IconChevron className="size-[1.1rem] opacity-85 transition group-hover:translate-x-0.5" />
                     </span>
                   </button>
                 ))}
@@ -339,18 +441,16 @@ export function LandingShowroom({
             </div>
           </div>
 
-          {/* 2 — 운영 원칙 / 신뢰 */}
+          {/* 2 — 운영 원칙 */}
           <div
             className={[
-              "sensora-landing-slide-panel absolute inset-x-4 inset-y-0 flex flex-col overflow-y-auto pb-2 sm:inset-x-6",
+              "sensora-landing-slide-panel sensora-landing-slide-panel--dock-pad absolute inset-x-4 inset-y-0 flex flex-col overflow-y-auto pb-2 sm:inset-x-6",
               safeSlide === 2 ? "pointer-events-auto z-[2] opacity-100" : "pointer-events-none z-0 opacity-0",
             ].join(" ")}
             aria-hidden={safeSlide !== 2}
           >
             <div className="mx-auto flex w-full max-w-[560px] flex-col items-center sm:max-w-[600px] lg:max-w-[640px]">
-              <p className="text-center text-[10px] font-semibold uppercase tracking-[0.16em] text-violet-300/78 sm:text-[11px]">
-                {t("landing.slides.philosophy.kicker")}
-              </p>
+              <p className="text-center text-[10px] font-semibold uppercase tracking-[0.16em] text-violet-300/78 sm:text-[11px]">{t("landing.slides.philosophy.kicker")}</p>
               <h2 className="mt-4 max-w-[18ch] text-center text-[clamp(1.28rem,calc(0.7rem+2.35vw),1.92rem)] font-semibold leading-[1.12] tracking-[-0.034em] text-slate-50 [word-break:keep-all] sm:max-w-[22ch]">
                 {t("landing.slides.philosophy.title")}
               </h2>
@@ -364,11 +464,7 @@ export function LandingShowroom({
                 ))}
               </ul>
               <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center sm:gap-6">
-                <button
-                  type="button"
-                  onClick={() => goSlide(3)}
-                  className={`${entPrimaryBtn} min-w-[10.5rem] px-8`}
-                >
+                <button type="button" onClick={() => goSlide(3)} className={`${entPrimaryBtn} min-h-[3rem] px-8`}>
                   {t("landing.slides.philosophy.nextCta")}
                 </button>
                 <button
@@ -382,10 +478,10 @@ export function LandingShowroom({
             </div>
           </div>
 
-          {/* 3 — 시작 액션 */}
+          {/* 3 — 전환 */}
           <div
             className={[
-              "sensora-landing-slide-panel absolute inset-x-4 inset-y-0 flex flex-col overflow-y-auto pb-2 sm:inset-x-6",
+              "sensora-landing-slide-panel sensora-landing-slide-panel--dock-pad absolute inset-x-4 inset-y-0 flex flex-col overflow-y-auto pb-2 sm:inset-x-6",
               safeSlide === 3 ? "pointer-events-auto z-[2] opacity-100" : "pointer-events-none z-0 opacity-0",
             ].join(" ")}
             aria-hidden={safeSlide !== 3}
@@ -408,11 +504,7 @@ export function LandingShowroom({
                   <IconPlay className="size-[1.05rem] shrink-0 opacity-95" />
                   {t("landing.slides.actions.browseAppCta")}
                 </button>
-                <Link
-                  href="/register"
-                  prefetch={false}
-                  className={`${entGhostBtn} w-full justify-center border border-violet-300/[0.2]`}
-                >
+                <Link href="/register" prefetch={false} className={`${entGhostBtn} w-full justify-center border border-violet-300/[0.2]`}>
                   {t("auth.salesRegistration")}
                 </Link>
               </div>
@@ -427,7 +519,6 @@ export function LandingShowroom({
           </div>
         </div>
 
-        {/* 하단 독 */}
         <nav
           className={`landing-slide-nav-dock relative z-[5] shrink-0 border-t border-white/[0.09] bg-[#020817]/94 backdrop-blur-md ${dockSafe}`}
           aria-label={t("landing.slides.dotNav")}
@@ -451,9 +542,7 @@ export function LandingShowroom({
                   onClick={() => goSlide(i)}
                   className={[
                     "size-2.5 shrink-0 rounded-full transition sm:size-3",
-                    safeSlide === i
-                      ? "scale-[1.06] bg-sky-400 landing-enterprise-slide-dot-active"
-                      : "bg-slate-600/82 hover:bg-slate-500",
+                    safeSlide === i ? "scale-[1.06] bg-sky-400 landing-enterprise-slide-dot-active" : "bg-slate-600/82 hover:bg-slate-500",
                   ].join(" ")}
                 />
               ))}

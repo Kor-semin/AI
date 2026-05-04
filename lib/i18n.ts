@@ -329,6 +329,11 @@ export type TranslationKey =
   | "landing.slides.actions.closingHeadline"
   | "landing.slides.actions.browseAppCta"
   | "landing.slides.menu.actionChevronAria"
+  | "landing.slides.menu.enterWorkspaceAria"
+  | "landing.slides.menu.deliveryPrepAria"
+  | "landing.slides.deliveryPrep.title"
+  | "landing.slides.deliveryPrep.body"
+  | "landing.slides.deliveryPrep.dismiss"
   | "landing.showroom.closing.title"
   | "landing.showroom.bridge.line1"
   | "landing.showroom.bridge.line2"
@@ -969,6 +974,12 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.slides.actions.closingHeadline": "자동차 영업 업무를 더 정확하게 정리하고 싶다면, 지금 시작하세요.",
     "landing.slides.actions.browseAppCta": "앱 화면 둘러보기",
     "landing.slides.menu.actionChevronAria": "해당 업무 안내 열기",
+    "landing.slides.menu.enterWorkspaceAria": "해당 업무 화면으로 이동합니다",
+    "landing.slides.menu.deliveryPrepAria": "출고 안내 준비 상태 확인",
+    "landing.slides.deliveryPrep.title": "출고 안내",
+    "landing.slides.deliveryPrep.body":
+      "출고 안내 전용 예시 화면은 준비 중입니다. 차량 인도 후 안내·문구 정리 기능은 베타 과정에서 순차적으로 보강합니다.",
+    "landing.slides.deliveryPrep.dismiss": "닫기",
     "landing.showroom.closing.title": "고객관리, 상담 메모, 사후관리를 한 곳에서 시작하세요.",
     "landing.showroom.bridge.line1": "상담은 기록으로,",
     "landing.showroom.bridge.line2": "기록은 다음 행동으로.",
@@ -1644,6 +1655,12 @@ export const translations: Record<LanguageCode, TranslationDict> = {
       "If you want showroom work captured with more precision, start now.",
     "landing.slides.actions.browseAppCta": "Browse app screens",
     "landing.slides.menu.actionChevronAria": "Open guide for this workspace",
+    "landing.slides.menu.enterWorkspaceAria": "Open this workspace section",
+    "landing.slides.menu.deliveryPrepAria": "View delivery guidance status",
+    "landing.slides.deliveryPrep.title": "Delivery guidance",
+    "landing.slides.deliveryPrep.body":
+      "A dedicated sample screen for delivery guidance is not available yet. We will expand this area during beta.",
+    "landing.slides.deliveryPrep.dismiss": "Close",
     "landing.showroom.closing.title": "Bring customer CRM, consultation notes, and aftercare together in one place.",
     "landing.showroom.bridge.line1": "Consultation settles into notes,",
     "landing.showroom.bridge.line2": "notes guide the disciplined next touch.",
