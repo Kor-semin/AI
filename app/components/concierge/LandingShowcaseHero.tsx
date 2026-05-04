@@ -314,7 +314,7 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
           />
 
           <div className="relative z-[1] grid max-lg:min-h-0 items-start gap-4 max-lg:gap-2.5 sm:gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.22fr)] lg:gap-x-10 lg:gap-y-6 lg:pb-0 lg:pr-0 xl:grid-cols-[minmax(0,0.96fr)_minmax(0,1.26fr)] xl:gap-x-12 xl:gap-y-7 2xl:gap-x-14">
-            <div className="landing-showcase-copy-col order-1 min-w-0 lg:max-w-[34rem] xl:max-w-[36rem] 2xl:max-w-[38rem]">
+            <div className="landing-showcase-copy-col order-1 w-full min-w-0 lg:max-w-[34rem] xl:max-w-[36rem] 2xl:max-w-[38rem]">
               <span className="inline-flex rounded-full border border-white/[0.18] bg-white/[0.082] px-3.5 py-1.5 text-xs font-semibold tracking-[0.08em] text-slate-100 backdrop-blur-sm">
                 {t("landing.showroom.hero.kickerBadge")}
               </span>
@@ -325,7 +325,7 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
               <p className="mt-4 max-w-[min(100%,40rem)] whitespace-pre-line text-base leading-[1.72] text-slate-200/96 sm:mt-5 sm:text-[1.065rem] sm:leading-[1.68] lg:max-w-[min(100%,42ch)] xl:max-w-[46ch]">
                 {t("landing.showroom.hero.sub")}
               </p>
-              <div className="mt-6 grid w-full max-w-xl grid-cols-1 gap-3 max-lg:mt-5 sm:mt-7 md:max-w-none md:grid-cols-2 md:gap-4 lg:mt-8">
+              <div className="mt-6 grid w-full max-w-xl grid-cols-1 gap-3 max-lg:mx-auto max-lg:w-[calc(100%-6rem)] max-lg:max-w-[calc(100%-6rem)] max-lg:grid-cols-1 max-lg:gap-3 max-lg:mt-5 sm:mt-7 md:max-w-none md:grid-cols-2 md:gap-4 lg:mt-8">
                 <Link href={JOIN_PATH} prefetch={false} className={`${ctaPrimaryShowcase} justify-center whitespace-normal`}>
                   {t("cta.joinBeta")}
                 </Link>

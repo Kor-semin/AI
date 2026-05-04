@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "qa:responsive-screenshots": "node scripts/qa-responsive-screenshots.cjs",
     "pwa-icons": "node scripts/generate-pwa-icons.mjs",
     "pwa-icons-v3": "node scripts/generate-pwa-icons-v3-from-source.mjs"
   },
@@ -19,6 +20,7 @@
     "react-dom": "19.2.4"
   },
   "devDependencies": {
+    "@playwright/test": "^1.59.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/nodemailer": "^8.0.0",
