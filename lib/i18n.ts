@@ -311,7 +311,7 @@ export type TranslationKey =
   | "landing.slides.guide.thumbHint"
   | "landing.slides.enterprise.productKicker"
   | "landing.slides.enterprise.heroDefinition"
-  | "landing.slides.enterprise.heroTrust"
+  | "landing.slides.enterprise.heroSub"
   | "landing.slides.philosophy.kicker"
   | "landing.slides.philosophy.title"
   | "landing.slides.philosophy.line1"
@@ -326,6 +326,9 @@ export type TranslationKey =
   | "landing.slides.actions.backToPhilosophy"
   | "landing.slides.actions.openSampleScreens"
   | "landing.slides.actions.openWorkspace"
+  | "landing.slides.actions.closingHeadline"
+  | "landing.slides.actions.browseAppCta"
+  | "landing.slides.menu.actionChevronAria"
   | "landing.showroom.closing.title"
   | "landing.showroom.bridge.line1"
   | "landing.showroom.bridge.line2"
@@ -942,20 +945,20 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.slides.home.nextCta": "핵심 업무 보기",
     "landing.slides.menu.kicker": "핵심 업무",
     "landing.slides.menu.nextCta": "운영 원칙 보기",
-    "landing.slides.menu.enterpriseSub": "네 가지 업무 표면으로 고객 흐름을 잡습니다.",
+    "landing.slides.menu.enterpriseSub": "네 가지 업무를 메뉴에서 바로 열 수 있습니다.",
     "landing.slides.guide.kicker": "화면 안내",
     "landing.slides.guide.title": "예시 화면을 골라 확인하세요",
     "landing.slides.guide.lead": "썸네일을 누르면 이 앱 안에서 설명과 함께 크게 볼 수 있습니다.",
     "landing.slides.guide.thumbHint": "자세히",
     "landing.slides.enterprise.productKicker": "Sensora Auto CRM",
     "landing.slides.enterprise.heroDefinition": "자동차 영업사원을 위한 AI 고객관리 워크스페이스",
-    "landing.slides.enterprise.heroTrust": "상담부터 사후관리까지 한 흐름으로 정리합니다.",
-    "landing.slides.philosophy.kicker": "운영 원칙",
-    "landing.slides.philosophy.title": "현장 업무를 붙들어 두는 네 가지 기준",
-    "landing.slides.philosophy.line1": "상담은 기록으로, 기록은 다음 행동으로.",
-    "landing.slides.philosophy.line2": "AI는 초안을 돕고, 최종 판단은 영업사원이 합니다.",
-    "landing.slides.philosophy.line3": "고객 정보는 사용자가 확인한 뒤 저장합니다.",
-    "landing.slides.philosophy.line4": "상담부터 사후관리까지 한 흐름으로 관리합니다.",
+    "landing.slides.enterprise.heroSub": "상담 메모, 고객관리, 사후관리, 출고 안내를 한 흐름으로 정리합니다.",
+    "landing.slides.philosophy.kicker": "신뢰 · 운영 원칙",
+    "landing.slides.philosophy.title": "상담은 기록으로, 기록은 다음 행동으로",
+    "landing.slides.philosophy.line1": "고객 정보는 사용자가 확인하고 저장합니다.",
+    "landing.slides.philosophy.line2": "AI는 검토용 초안을 돕습니다.",
+    "landing.slides.philosophy.line3": "상담부터 사후관리까지 한 흐름으로 이어집니다.",
+    "landing.slides.philosophy.line4": "자동차 영업 현장에 맞는 업무 도구입니다.",
     "landing.slides.philosophy.nextCta": "시작 단계로",
     "landing.slides.menu.nextPhilosophy": "운영 원칙으로",
     "landing.slides.actions.kicker": "시작하기",
@@ -963,6 +966,9 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.slides.actions.backToPhilosophy": "운영 원칙으로",
     "landing.slides.actions.openSampleScreens": "예시 화면 보기",
     "landing.slides.actions.openWorkspace": "업무 화면 둘러보기",
+    "landing.slides.actions.closingHeadline": "자동차 영업 업무를 더 정확하게 정리하고 싶다면, 지금 시작하세요.",
+    "landing.slides.actions.browseAppCta": "앱 화면 둘러보기",
+    "landing.slides.menu.actionChevronAria": "해당 업무 안내 열기",
     "landing.showroom.closing.title": "고객관리, 상담 메모, 사후관리를 한 곳에서 시작하세요.",
     "landing.showroom.bridge.line1": "상담은 기록으로,",
     "landing.showroom.bridge.line2": "기록은 다음 행동으로.",
@@ -1619,13 +1625,14 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.slides.guide.thumbHint": "Details",
     "landing.slides.enterprise.productKicker": "Sensora Auto CRM",
     "landing.slides.enterprise.heroDefinition": "AI customer-management workspace for automotive sales reps",
-    "landing.slides.enterprise.heroTrust": "Consultation through aftercare in one disciplined flow.",
-    "landing.slides.philosophy.kicker": "Operating principles",
-    "landing.slides.philosophy.title": "Four standards that anchor field workflow",
-    "landing.slides.philosophy.line1": "Consultation settles into notes; notes settle into clear next actions.",
-    "landing.slides.philosophy.line2": "AI assists with drafts—you own the final decision.",
-    "landing.slides.philosophy.line3": "Customer data saves only after explicit confirmation.",
-    "landing.slides.philosophy.line4": "Consultation through aftercare stays one connected flow.",
+    "landing.slides.enterprise.heroSub":
+      "Consultation notes, CRM, aftercare, and delivery guidance—organized in one flow.",
+    "landing.slides.philosophy.kicker": "Trust · operating principles",
+    "landing.slides.philosophy.title": "Consultation becomes notes; notes become the next action.",
+    "landing.slides.philosophy.line1": "Customer data is saved only after you confirm it.",
+    "landing.slides.philosophy.line2": "AI helps with review-ready drafts.",
+    "landing.slides.philosophy.line3": "Consultation through aftercare stays one connected flow.",
+    "landing.slides.philosophy.line4": "A field tool shaped for automotive sales desks.",
     "landing.slides.philosophy.nextCta": "Get started",
     "landing.slides.menu.nextPhilosophy": "Operating principles →",
     "landing.slides.actions.kicker": "Next steps",
@@ -1633,6 +1640,10 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.slides.actions.backToPhilosophy": "Operating principles",
     "landing.slides.actions.openSampleScreens": "Sample screens",
     "landing.slides.actions.openWorkspace": "Browse workspace",
+    "landing.slides.actions.closingHeadline":
+      "If you want showroom work captured with more precision, start now.",
+    "landing.slides.actions.browseAppCta": "Browse app screens",
+    "landing.slides.menu.actionChevronAria": "Open guide for this workspace",
     "landing.showroom.closing.title": "Bring customer CRM, consultation notes, and aftercare together in one place.",
     "landing.showroom.bridge.line1": "Consultation settles into notes,",
     "landing.showroom.bridge.line2": "notes guide the disciplined next touch.",

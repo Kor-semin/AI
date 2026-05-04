@@ -78,6 +78,20 @@ function IconPlay({ className }: { className?: string }) {
   );
 }
 
+function IconChevron({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 20 20" fill="none" aria-hidden>
+      <path
+        d="M7.65 14.42 12.41 10 7.65 5.58"
+        stroke="currentColor"
+        strokeWidth="1.55"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 type Props = {
   slideIndex: number;
   onSlideChange: (index: number) => void;
@@ -105,11 +119,6 @@ export function LandingShowroom({
 
   const openGuide = useCallback((id: SensoraGuideId) => {
     setActiveGuideId(id);
-    setGuideModalOpen(true);
-  }, []);
-
-  const openSampleGuideModal = useCallback(() => {
-    setActiveGuideId(DEFAULT_GUIDE_ID);
     setGuideModalOpen(true);
   }, []);
 
@@ -171,22 +180,22 @@ export function LandingShowroom({
             ].join(" ")}
             aria-hidden={safeSlide !== 0}
           >
-            <div className="mx-auto flex h-full w-full max-w-[1200px] flex-col lg:min-h-0 lg:flex-row lg:items-center lg:justify-between lg:gap-8 xl:gap-12">
-              <div className="flex shrink-0 flex-col items-center text-center lg:max-w-[min(100%,28rem)] lg:items-start lg:text-left xl:max-w-[30rem]">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-sky-400/88 sm:text-[11px]">
+            <div className="mx-auto flex h-full w-full max-w-[1280px] flex-col lg:min-h-0 lg:flex-row lg:items-center lg:justify-between lg:gap-10 xl:gap-14">
+              <div className="flex w-full shrink-0 flex-col items-center text-center lg:max-w-[min(100%,26rem)] xl:max-w-[28rem]">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-sky-400/90 sm:text-[11px]">
                   {t("landing.slides.enterprise.productKicker")}
                 </p>
-                <h1 className="mt-3 text-pretty text-[clamp(1.5rem,calc(0.65rem+3.8vw),2.35rem)] font-semibold leading-[1.12] tracking-[-0.035em] text-white [word-break:keep-all] lg:mt-3.5">
-                  {t("product.name")}
-                </h1>
-                <p className="mt-2 max-w-[32ch] text-[0.95rem] font-medium leading-snug text-slate-200/94 sm:text-[1.015rem] lg:max-w-none">
+                <h1 className="mt-3 max-w-[20ch] text-pretty text-[clamp(1.65rem,calc(0.75rem+4.5vw),2.65rem)] font-semibold leading-[1.08] tracking-[-0.038em] text-white [word-break:keep-all] sm:max-w-[22ch] lg:mx-auto xl:max-w-[24ch]">
                   {t("landing.slides.enterprise.heroDefinition")}
+                </h1>
+                <p className="mt-3 max-w-[34ch] text-[0.9rem] font-medium leading-snug text-slate-200/[0.93] sm:mt-3.5 sm:text-[0.9575rem] lg:mx-auto lg:max-w-[36ch]">
+                  {t("landing.slides.enterprise.heroSub")}
                 </p>
-                <p className="mt-2 max-w-[34ch] text-[0.8125rem] font-medium leading-snug text-sky-200/82 sm:text-[0.8375rem] lg:max-w-none">
-                  {t("landing.slides.enterprise.heroTrust")}
+                <p className="mt-2 max-w-[32ch] text-[0.8rem] font-medium leading-snug text-violet-200/78 sm:text-[0.8275rem] lg:mx-auto">
+                  {t("landing.showroom.hero.trustLine")}
                 </p>
 
-                <div className="landing-slide-cta-cluster mt-7 flex w-full max-w-[22rem] flex-col items-stretch gap-2.5 sm:max-w-[26rem] sm:flex-row sm:flex-wrap sm:justify-center lg:mt-8 lg:max-w-none lg:justify-start">
+                <div className="landing-slide-cta-cluster mt-7 flex w-full max-w-[22rem] flex-col items-stretch gap-2.5 sm:mt-8 sm:max-w-[26rem] sm:flex-row sm:flex-wrap sm:justify-center">
                   <Link
                     href={JOIN_PATH}
                     prefetch={false}
@@ -205,7 +214,7 @@ export function LandingShowroom({
                     {t("cta.tryAppExperience")}
                   </button>
                 </div>
-                <div className="mt-2 flex w-full max-w-[22rem] justify-center sm:max-w-[26rem] lg:justify-start">
+                <div className="mt-2 flex w-full max-w-[22rem] justify-center sm:max-w-[26rem]">
                   <Link href="/register" prefetch={false} className={`${tertiaryLink}`}>
                     {t("auth.salesRegistration")}
                   </Link>
@@ -214,13 +223,13 @@ export function LandingShowroom({
                 <button
                   type="button"
                   onClick={() => goSlide(1)}
-                  className="mt-8 inline-flex min-h-10 items-center justify-center rounded-lg border border-white/[0.14] bg-white/[0.04] px-5 py-2 text-[13px] font-semibold text-slate-100/93 transition hover:border-sky-400/32 hover:bg-white/[0.07] touch-manipulation lg:mt-10"
+                  className="mt-9 inline-flex min-h-10 items-center justify-center rounded-lg border border-white/[0.14] bg-white/[0.04] px-5 py-2 text-[13px] font-semibold text-slate-100/93 transition hover:border-sky-400/32 hover:bg-white/[0.07] touch-manipulation sm:mt-10"
                 >
                   {t("landing.slides.home.nextCta")}
                 </button>
               </div>
 
-              <div className="relative mt-7 flex min-h-[min(52vh,420px)] flex-1 items-center justify-center lg:mt-0 lg:min-h-0 lg:max-w-[min(52%,520px)] xl:max-w-[540px]">
+              <div className="relative mt-8 flex min-h-[min(56vh,460px)] flex-1 items-center justify-center lg:mt-0 lg:min-h-0 lg:max-w-[min(54%,560px)] xl:max-w-[580px]">
                 <div
                   aria-hidden
                   className="pointer-events-none absolute inset-[-8%_-4%_-4%_-4%] rounded-[36px] bg-[radial-gradient(ellipse_70%_62%_at_50%_42%,rgba(56,189,248,0.11),transparent_68%)] opacity-90 blur-[40px]"
@@ -267,43 +276,47 @@ export function LandingShowroom({
             ].join(" ")}
             aria-hidden={safeSlide !== 1}
           >
-            <div className="mx-auto flex w-full max-w-[900px] flex-col pb-1">
+            <div className="mx-auto flex w-full max-w-[720px] flex-col pb-1 lg:max-w-[800px]">
               <p className="text-center text-[10px] font-semibold uppercase tracking-[0.16em] text-sky-400/85 sm:text-[11px]">
                 {t("landing.slides.menu.kicker")}
               </p>
-              <h2 className="mt-2 text-center text-[clamp(1.2rem,calc(0.8rem+1.9vw),1.62rem)] font-semibold tracking-[-0.03em] text-slate-50">
+              <h2 className="mt-2 text-center text-[clamp(1.35rem,calc(0.85rem+2.1vw),1.85rem)] font-semibold tracking-[-0.032em] text-slate-50">
                 {t("landing.showroom.serviceMenu.sectionTitle")}
               </h2>
-              <p className="mx-auto mt-1.5 max-w-[42ch] text-center text-[0.815rem] leading-snug text-slate-400 sm:mt-2 sm:text-[0.84rem]">
+              <p className="mx-auto mt-1.5 max-w-[40ch] text-center text-[0.8rem] leading-snug text-slate-500 sm:mt-2 sm:text-[0.825rem]">
                 {t("landing.slides.menu.enterpriseSub")}
               </p>
-              <div className="mt-5 grid grid-cols-1 gap-3 sm:mt-7 sm:grid-cols-2 sm:gap-x-5 sm:gap-y-4">
+              <div className="mt-5 flex w-full flex-col gap-2 sm:mt-6 sm:gap-2.5">
                 {MENU_ROW.map((row) => (
                   <button
                     key={row.guideId}
                     type="button"
+                    aria-label={`${t(row.titleKey)} — ${t("landing.slides.menu.actionChevronAria")}`}
                     onClick={() => openGuide(row.guideId)}
-                    className="landing-slide-menu-row group flex min-h-[4.625rem] w-full items-center gap-3 rounded-2xl border border-white/[0.12] bg-gradient-to-br from-[#081424]/95 to-[#030910]/98 px-3 py-2.5 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.055)] ring-1 ring-inset ring-white/[0.04] transition-[transform,border-color] hover:border-sky-400/32 active:scale-[0.995] touch-manipulation sm:min-h-[5.125rem] sm:gap-3.5 sm:px-4 sm:py-3.5"
+                    className="landing-slide-menu-row group flex min-h-[4.25rem] w-full items-center gap-3 rounded-xl border border-white/[0.1] bg-[#050f1a]/88 px-3 py-2.5 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.045)] transition-[border-color,background-color] hover:border-sky-400/28 hover:bg-[#071425]/95 active:scale-[0.996] touch-manipulation sm:min-h-[4.625rem] sm:gap-4 sm:px-4 sm:py-3"
                   >
-                    <div className="relative h-[3.125rem] w-[4.25rem] shrink-0 overflow-hidden rounded-xl border border-white/[0.08] bg-[#020617] sm:h-[3.5rem] sm:w-[5rem]">
+                    <div className="relative h-[2.875rem] w-[3.85rem] shrink-0 overflow-hidden rounded-lg border border-white/[0.07] bg-[#020617] sm:h-[3.125rem] sm:w-[4.25rem]">
                       <Image
                         src={SENSORA_GUIDES.find((g) => g.id === row.guideId)?.image ?? GUIDE03}
                         alt=""
                         fill
-                        className="object-cover object-center opacity-94"
-                        sizes="80px"
+                        className="object-cover object-center opacity-[0.92]"
+                        sizes="72px"
                         quality={92}
                       />
                     </div>
-                    <div className="min-w-0 flex-1">
-                      <p className="text-[1rem] font-semibold text-slate-50 sm:text-[1.05rem]">{t(row.titleKey)}</p>
-                      <p className="mt-0.5 line-clamp-2 text-[0.785rem] leading-relaxed text-slate-400 sm:text-[0.8125rem]">
+                    <div className="min-w-0 flex-1 text-left">
+                      <p className="text-[1.065rem] font-semibold leading-tight tracking-[-0.02em] text-slate-50 sm:text-[1.12rem]">
+                        {t(row.titleKey)}
+                      </p>
+                      <p className="mt-0.5 line-clamp-1 text-[0.78rem] leading-snug text-slate-400/92 sm:text-[0.815rem]">
                         {t(row.descKey)}
                       </p>
-                      <p className="mt-1 text-[11px] font-semibold uppercase tracking-[0.06em] text-sky-400/72">
-                        {t("landing.showroom.serviceMenu.tapHint")}
-                      </p>
                     </div>
+                    <span className="flex shrink-0 items-center gap-1.5 text-sky-300/82">
+                      <span className="hidden text-[11px] font-semibold uppercase tracking-[0.05em] sm:inline">{t("landing.showroom.serviceMenu.tapHint")}</span>
+                      <IconChevron className="size-[1.15rem] opacity-85 transition group-hover:translate-x-0.5" />
+                    </span>
                   </button>
                 ))}
               </div>
@@ -334,26 +347,17 @@ export function LandingShowroom({
             ].join(" ")}
             aria-hidden={safeSlide !== 2}
           >
-            <div className="mx-auto flex w-full max-w-[640px] flex-col items-center xl:max-w-[720px]">
+            <div className="mx-auto flex w-full max-w-[560px] flex-col items-center sm:max-w-[600px] lg:max-w-[640px]">
               <p className="text-center text-[10px] font-semibold uppercase tracking-[0.16em] text-violet-300/78 sm:text-[11px]">
                 {t("landing.slides.philosophy.kicker")}
               </p>
-              <h2 className="mt-3 max-w-[24ch] text-center text-[clamp(1.12rem,calc(0.75rem+1.85vw),1.52rem)] font-semibold leading-tight tracking-[-0.028em] text-slate-50">
+              <h2 className="mt-4 max-w-[18ch] text-center text-[clamp(1.28rem,calc(0.7rem+2.35vw),1.92rem)] font-semibold leading-[1.12] tracking-[-0.034em] text-slate-50 [word-break:keep-all] sm:max-w-[22ch]">
                 {t("landing.slides.philosophy.title")}
               </h2>
-              <ul className="mt-6 w-full space-y-0 divide-y divide-white/[0.08] rounded-2xl border border-white/[0.1] bg-[#040d18]/92 shadow-[inset_0_1px_0_rgba(255,255,255,0.048)] backdrop-blur-sm sm:mt-8">
-                {PHILOSOPHY_LINE_KEYS.map((lineKey, idx) => (
-                  <li
-                    key={lineKey}
-                    className="flex gap-3 px-4 py-4 sm:gap-4 sm:px-5 sm:py-[1.125rem]"
-                  >
-                    <span
-                      aria-hidden
-                      className="mt-0.5 flex h-[1.6rem] w-9 shrink-0 items-center justify-center rounded-md border border-sky-400/22 bg-gradient-to-br from-sky-500/12 to-violet-500/8 text-[11px] font-bold tabular-nums text-sky-200/92 sm:h-[1.75rem] sm:w-10 sm:text-[12px]"
-                    >
-                      {idx + 1}
-                    </span>
-                    <p className="min-w-0 flex-1 text-left text-[0.875rem] font-medium leading-snug text-slate-200/93 sm:text-[0.9275rem] sm:leading-[1.45]">
+              <ul className="mt-8 w-full border-t border-white/[0.08] sm:mt-10">
+                {PHILOSOPHY_LINE_KEYS.map((lineKey) => (
+                  <li key={lineKey} className="border-b border-white/[0.08] py-[1.05rem] sm:py-[1.2rem]">
+                    <p className="border-l-[3px] border-sky-400/45 pl-4 text-left text-[0.9rem] font-medium leading-snug text-slate-200/93 sm:pl-[1.125rem] sm:text-[0.9575rem] sm:leading-[1.42]">
                       {t(lineKey)}
                     </p>
                   </li>
@@ -386,50 +390,39 @@ export function LandingShowroom({
             ].join(" ")}
             aria-hidden={safeSlide !== 3}
           >
-            <div className="mx-auto flex w-full max-w-[480px] flex-col items-center text-center sm:max-w-[520px]">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-sky-400/85 sm:text-[11px]">
-                {t("landing.slides.actions.kicker")}
-              </p>
-              <h2 className="mt-4 max-w-[22ch] text-[clamp(1.1rem,calc(0.88rem+1.5vw),1.55rem)] font-semibold leading-snug tracking-[-0.028em] text-slate-50">
-                {t("landing.showroom.closing.title")}
+            <div className="mx-auto flex w-full max-w-[440px] flex-col items-center text-center sm:max-w-[460px]">
+              <h2 className="max-w-[24ch] text-[clamp(1.2rem,calc(0.82rem+1.85vw),1.65rem)] font-semibold leading-[1.2] tracking-[-0.03em] text-slate-50 [word-break:keep-all] sm:max-w-[26ch]">
+                {t("landing.slides.actions.closingHeadline")}
               </h2>
-              <div className="landing-slide-actions-cta-cluster mt-8 flex w-full max-w-md flex-col items-stretch gap-2.5 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-3">
-                <Link href={JOIN_PATH} prefetch={false} className={`${entPrimaryBtn} w-full sm:w-auto sm:min-w-[11rem]`}>
+              <div className="landing-slide-actions-cta-cluster mx-auto mt-9 flex w-full max-w-[22rem] flex-col items-stretch gap-2.5 sm:mt-10 sm:max-w-[24rem]">
+                <Link href={JOIN_PATH} prefetch={false} className={`${entPrimaryBtn} w-full justify-center`}>
                   {t("cta.joinBeta")}
                 </Link>
-                <Link
-                  href="/register"
-                  prefetch={false}
-                  className={`${entGhostBtn} w-full border border-violet-300/22 sm:w-auto sm:min-w-[11rem]`}
-                >
-                  {t("auth.salesRegistration")}
-                </Link>
-              </div>
-              <div className="mt-6 flex w-full max-w-md flex-col items-center gap-3 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-x-6 sm:gap-y-2">
-                <button
-                  type="button"
-                  onClick={() => goSlide(2)}
-                  className="text-[13px] font-semibold text-slate-400 underline-offset-[3px] hover:text-slate-200 hover:underline touch-manipulation"
-                >
-                  {t("landing.slides.actions.backToPhilosophy")}
-                </button>
-                <button
-                  type="button"
-                  onClick={openSampleGuideModal}
-                  className="text-[13px] font-semibold text-sky-300/88 underline-offset-[3px] hover:text-sky-200 hover:underline touch-manipulation"
-                >
-                  {t("landing.slides.actions.openSampleScreens")}
-                </button>
                 <button
                   type="button"
                   onClick={() => {
                     onOpenAppWorkspace();
                   }}
-                  className="text-[13px] font-semibold text-slate-400 underline-offset-[3px] hover:text-slate-200 hover:underline touch-manipulation"
+                  className={`${entGhostBtn} w-full justify-center gap-2 border border-white/[0.12]`}
                 >
-                  {t("landing.slides.actions.openWorkspace")}
+                  <IconPlay className="size-[1.05rem] shrink-0 opacity-95" />
+                  {t("landing.slides.actions.browseAppCta")}
                 </button>
+                <Link
+                  href="/register"
+                  prefetch={false}
+                  className={`${entGhostBtn} w-full justify-center border border-violet-300/[0.2]`}
+                >
+                  {t("auth.salesRegistration")}
+                </Link>
               </div>
+              <button
+                type="button"
+                onClick={() => goSlide(2)}
+                className="mt-8 text-[12px] font-semibold text-slate-500 underline-offset-[3px] hover:text-slate-300 hover:underline touch-manipulation sm:text-[13px]"
+              >
+                {t("landing.slides.actions.backToPhilosophy")}
+              </button>
             </div>
           </div>
         </div>
