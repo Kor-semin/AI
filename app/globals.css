@@ -2219,20 +2219,30 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
       inset 0 1px 0 rgba(255, 255, 255, 0.05);
   }
 
-  /* 모바일 히어로 CTA: 그리드·nowrap min-content로 카드 밖으로 밀리는 것 방지 */
+  /* 모바일 히어로 CTA: 카드 content box 안에 고정 (getBoundingClientRect 기준 QA와 동일) */
   .landing-showcase-hero--unified .landing-hero-showcase-cta-row {
     width: 100%;
     max-width: 100%;
     min-width: 0;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 0;
+    padding-right: 0;
     box-sizing: border-box;
+    overflow-x: hidden;
   }
 
   .landing-showcase-hero--unified .landing-hero-showcase-cta-row > a,
   .landing-showcase-hero--unified .landing-hero-showcase-cta-row > button {
+    display: flex;
     box-sizing: border-box;
     width: 100%;
     max-width: 100%;
     min-width: 0;
+    margin-left: 0;
+    margin-right: 0;
+    white-space: normal;
+    overflow-wrap: anywhere;
   }
 }
 

@@ -30,6 +30,10 @@ const ev = require("./qa-evaluators.cjs") as {
     rects: Record<string, { ok: boolean; detail: string; found: boolean }>;
     vw: number;
     vh: number;
+    scrollWidth: number;
+    scrollWidthOk: boolean;
+    heroContain: { ok: boolean; detail: string; padCheck?: boolean };
+    isDesktopNav: boolean;
   };
   modalStep0: () => { ok: boolean; reason?: string; out?: Record<string, { ok: boolean; detail: string; found: boolean }> };
   modalStep1: () => { ok: boolean; reason?: string; out?: Record<string, { ok: boolean; detail: string; found: boolean }> };
@@ -126,6 +130,20 @@ async function main() {
     await screenshotViewport(browser, 430, 932, "landing-430.png", "medium");
     await screenshotViewport(browser, 1440, 900, "landing-1440.png", "medium");
 
+    const ctx430Check = await browser.newContext({ viewport: { width: 430, height: 932 } });
+    const page430 = await ctx430Check.newPage();
+    await page430.goto(BASE, { waitUntil: "domcontentloaded", timeout: 120_000 });
+    await page430.waitForSelector(".landing-showcase-hero", { timeout: 60_000 });
+    await new Promise((r) => setTimeout(r, 900));
+    const metrics430 = await page430.evaluate(ev.afterReload);
+    await ctx430Check.close();
+    if (!metrics430.scrollWidthOk) {
+      throw new Error(`[430] scrollWidth overflow: ${metrics430.scrollWidth} > ${metrics430.vw}`);
+    }
+    if (!metrics430.heroContain?.ok) {
+      throw new Error(`[430] hero CTA containment: ${metrics430.heroContain?.detail ?? ""}`);
+    }
+
     const ctx390 = await browser.newContext({ viewport: { width: 390, height: 844 } });
     await ctx390.addInitScript((k) => {
       localStorage.setItem(k, "large");
@@ -156,19 +174,31 @@ async function main() {
         `document.documentElement.dataset.textSize: expected "large", got ${JSON.stringify(afterReload.datasetTextSize)}`,
       );
     }
+    if (!afterReload.scrollWidthOk) {
+      throw new Error(`[390-large] scrollWidth overflow: ${afterReload.scrollWidth} > ${afterReload.vw}`);
+    }
+    if (!afterReload.heroContain?.ok) {
+      throw new Error(`[390-large] hero CTA containment: ${afterReload.heroContain?.detail ?? ""}`);
+    }
+
+    const heroCtaViewportOk = afterReload.rects.heroJoin?.ok === true && afterReload.rects.heroPreview?.ok === true;
+    const navCtaOk =
+      !afterReload.isDesktopNav ||
+      (afterReload.rects.navPreview?.found === true &&
+        afterReload.rects.navJoin?.found === true &&
+        afterReload.rects.navPreview?.ok === true &&
+        afterReload.rects.navJoin?.ok === true);
 
     const landingChecks = {
-      headerCtaNoClip:
-        afterReload.rects.navPreview?.ok &&
-        afterReload.rects.navJoin?.ok &&
-        afterReload.rects.heroJoin?.ok &&
-        afterReload.rects.heroPreview?.ok,
-      navPreviewVisible: afterReload.rects.navPreview?.found === true,
+      headerCtaNoClip: heroCtaViewportOk && navCtaOk,
+      navPreviewVisible: afterReload.isDesktopNav === true && afterReload.rects.navPreview?.found === true,
+      heroCtaWithinCard: afterReload.heroContain.ok === true,
+      scrollWidthOk: afterReload.scrollWidthOk === true,
     };
 
     await page.screenshot({ path: path.join(outDir, "landing-390-large.png"), fullPage: true });
 
-    await page.locator("button.landing-nav-cta-preview").first().click();
+    await page.locator(".landing-hero-showcase-cta-row button.landing-showroom-cta-preview").first().click();
     await page.waitForSelector("[data-app-preview-toc]", { timeout: 30_000 });
     await new Promise((r) => setTimeout(r, 500));
 
@@ -212,7 +242,9 @@ async function main() {
 
     const checklist = {
       landingHeaderCtaNoClip: landingChecks.headerCtaNoClip === true,
-      appPreviewButtonOk: landingChecks.navPreviewVisible === true,
+      appPreviewButtonOk: afterReload.rects.heroPreview?.found === true && afterReload.rects.heroPreview?.ok === true,
+      heroCtaWithinCard: landingChecks.heroCtaWithinCard === true,
+      documentNoHorizontalOverflow: landingChecks.scrollWidthOk === true,
       onboardingModalNoClip:
         modalStep0.ok &&
         Object.values(modalStep0.out ?? {}).every((x) => !x.found || x.ok) &&
@@ -232,6 +264,7 @@ async function main() {
         "430": path.join(outDir, "landing-430.png"),
         "1440": path.join(outDir, "landing-1440.png"),
       },
+      metrics430,
       afterReloadLarge: afterReload,
       landingChecks,
       modalStep0,

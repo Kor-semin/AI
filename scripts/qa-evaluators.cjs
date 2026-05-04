@@ -24,11 +24,21 @@ function afterReload() {
         vh,
     };
   }
+  function isLaidOut(el) {
+    if (!el) return false;
+    const cs = window.getComputedStyle(el);
+    if (cs.display === "none" || cs.visibility === "hidden") return false;
+    const r = el.getBoundingClientRect();
+    return r.width > 1 && r.height > 1;
+  }
   const html = document.documentElement;
   const stored = localStorage.getItem("sensora:textSize");
   const ds = html.dataset.textSize;
   const vw = window.innerWidth;
   const vh = window.innerHeight;
+  const isDesktopNav = vw >= 1024;
+  const scrollWidth = html.scrollWidth;
+  const scrollWidthOk = scrollWidth <= vw + 1;
   const rects = {};
   const navPairs = [
     ["navPreview", "button.landing-nav-cta-preview"],
@@ -39,17 +49,19 @@ function afterReload() {
     const sel = navPairs[i][1];
     const el = document.querySelector(sel);
     if (!el) rects[key] = { ok: false, detail: "missing", found: false };
-    else {
+    else if (!isLaidOut(el)) {
+      rects[key] = { ok: true, detail: "hidden-below-lg", found: false };
+    } else {
       const r = el.getBoundingClientRect();
       const f = fitRect(r, vw, vh, 4);
       rects[key] = { ok: f.ok, detail: f.detail, found: true };
     }
   }
-  const heroGrid = document.querySelector(".landing-showcase-copy-col .grid");
-  if (heroGrid) heroGrid.scrollIntoView({ block: "center", inline: "nearest" });
+  const ctaRow = document.querySelector(".landing-hero-showcase-cta-row");
+  if (ctaRow) ctaRow.scrollIntoView({ block: "center", inline: "nearest" });
   const heroPairs = [
-    ["heroJoin", "a.landing-showroom-cta-join"],
-    ["heroPreview", "button.landing-showroom-cta-preview"],
+    ["heroJoin", ".landing-hero-showcase-cta-row a.landing-showroom-cta-join"],
+    ["heroPreview", ".landing-hero-showcase-cta-row button.landing-showroom-cta-preview"],
   ];
   for (let i = 0; i < heroPairs.length; i++) {
     const key = heroPairs[i][0];
@@ -62,7 +74,59 @@ function afterReload() {
       rects[key] = { ok: f.ok, detail: f.detail, found: true };
     }
   }
-  return { stored, datasetTextSize: ds, rects, vw, vh };
+  const card = document.querySelector("[data-sensora-landing-hero-copy-card]");
+  const joinEl = document.querySelector(".landing-hero-showcase-cta-row a.landing-showroom-cta-join");
+  const previewEl = document.querySelector(".landing-hero-showcase-cta-row button.landing-showroom-cta-preview");
+  let heroContain = { ok: false, detail: "missing-card-or-ctas", padCheck: false };
+  if (card && joinEl && previewEl) {
+    const cr = card.getBoundingClientRect();
+    const cs = window.getComputedStyle(card);
+    const pl = parseFloat(cs.paddingLeft) || 0;
+    const pr = parseFloat(cs.paddingRight) || 0;
+    const innerLeft = cr.left + pl;
+    const innerRight = cr.right - pr;
+    const jr = joinEl.getBoundingClientRect();
+    const prr = previewEl.getBoundingClientRect();
+    const tol = 1.5;
+    const padTarget = 16;
+    const padOk =
+      jr.left + tol >= cr.left + Math.min(padTarget, pl) &&
+      prr.left + tol >= cr.left + Math.min(padTarget, pl) &&
+      jr.right <= cr.right - Math.min(padTarget, pr) + tol &&
+      prr.right <= cr.right - Math.min(padTarget, pr) + tol;
+    const innerOk =
+      jr.left + tol >= innerLeft &&
+      prr.left + tol >= innerLeft &&
+      jr.right <= innerRight + tol &&
+      prr.right <= innerRight + tol;
+    const ok = innerOk && scrollWidthOk;
+    heroContain = {
+      ok: ok,
+      padCheck: padOk,
+      detail:
+        "card L" +
+        Math.round(cr.left) +
+        " R" +
+        Math.round(cr.right) +
+        " inner L" +
+        Math.round(innerLeft) +
+        " R" +
+        Math.round(innerRight) +
+        " join L" +
+        Math.round(jr.left) +
+        " R" +
+        Math.round(jr.right) +
+        " prev L" +
+        Math.round(prr.left) +
+        " R" +
+        Math.round(prr.right) +
+        " sw" +
+        scrollWidth +
+        " vw" +
+        vw,
+    };
+  }
+  return { stored, datasetTextSize: ds, rects, vw, vh, scrollWidth, scrollWidthOk, heroContain, isDesktopNav };
 }
 
 function modalStep0() {
