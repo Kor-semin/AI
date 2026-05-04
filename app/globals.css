@@ -2492,8 +2492,88 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
       0 16px 48px -22px rgba(0, 0, 0, 0.55);
   }
 
+  .landing-hero-start-panel {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    border-radius: 0;
+  }
+
+  .landing-hero-app-actions {
+    border-top: none;
+    padding-top: 0;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
   .landing-hero-trust-line {
     font-size: max(12px, 0.75rem);
+  }
+}
+
+@media (min-width: 1024px) {
+  .landing-hero-start-panel {
+    border-radius: 1.125rem;
+    border: 1px solid rgba(255, 255, 255, 0.11);
+    background: linear-gradient(
+      165deg,
+      rgba(8, 22, 38, 0.94) 0%,
+      rgba(5, 14, 26, 0.96) 48%,
+      rgba(3, 11, 21, 0.98) 100%
+    );
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.065),
+      0 14px 44px -20px rgba(0, 0, 0, 0.58),
+      0 1px 0 rgba(255, 255, 255, 0.03);
+    padding: 1.375rem 1.5rem 1.5rem;
+    width: 100%;
+    max-width: min(100%, 32rem);
+  }
+
+  .landing-hero-app-actions {
+    margin-top: 1.35rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.09);
+  }
+
+  /* 히어로 앱형 버튼 — 랜딩 광고형 글로우 완화, 실무 앱 툴바에 가깝게 */
+  .landing-hero-app-btn.landing-enterprise-btn-primary {
+    border-color: rgba(56, 189, 248, 0.3);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.075),
+      0 3px 14px -6px rgba(0, 0, 0, 0.55);
+  }
+
+  .landing-hero-app-secondary-cta.landing-enterprise-btn-secondary {
+    border-color: rgba(148, 163, 184, 0.28);
+    background: rgba(15, 23, 42, 0.52);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.048);
+  }
+
+  .landing-hero-app-tertiary {
+    border-color: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.025);
+  }
+
+  .landing-hero-primary-cta.landing-hero-app-btn.landing-enterprise-btn-primary {
+    border-color: rgba(56, 189, 248, 0.36);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.085),
+      0 5px 20px -8px rgba(56, 189, 248, 0.22),
+      0 4px 16px -10px rgba(0, 0, 0, 0.5);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @media (min-width: 1024px) {
+    .landing-hero-primary-cta.landing-hero-app-btn.landing-enterprise-btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.1),
+        0 12px 32px -10px rgba(56, 189, 248, 0.26),
+        0 8px 24px -12px rgba(139, 92, 246, 0.1);
+    }
   }
 }
 

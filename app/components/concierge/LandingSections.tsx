@@ -269,83 +269,87 @@ export function LandingShowroom({
             ].join(" ")}
             aria-hidden={safeSlide !== 0}
           >
-            <div className="landing-slide-hero-app-shell mx-auto flex h-full w-full max-w-[min(100%,400px)] flex-col gap-3 sm:max-w-[420px] lg:max-h-none lg:max-w-[1280px] lg:flex-row lg:items-center lg:justify-between lg:gap-10 xl:gap-14">
-              <div className="flex w-full shrink-0 flex-col items-center text-center lg:max-w-[min(100%,26rem)] lg:items-start lg:text-left xl:max-w-[28rem]">
-                <h1 className="max-w-[22ch] text-pretty text-[clamp(1.5rem,calc(0.82rem+4.2vw),2.75rem)] font-semibold leading-[1.08] tracking-[-0.038em] text-white [word-break:keep-all] sm:max-w-[24ch] lg:max-w-none lg:text-[clamp(1.85rem,calc(0.9rem+4.8vw),2.85rem)]">
-                  {t("product.name")}
-                </h1>
-                <p className="mt-2.5 max-w-[30ch] text-[clamp(0.94rem,calc(0.82rem+0.55vw),1.0625rem)] font-semibold leading-snug text-slate-100/[0.96] sm:mt-3 sm:max-w-[34ch] lg:max-w-[36ch] lg:text-[1.0625rem]">
-                  {t("landing.slides.enterprise.heroDefinition")}
-                </p>
-                <p className="mt-2 max-w-[32ch] text-[0.9rem] font-medium leading-snug text-slate-200/95 sm:text-[0.9375rem] lg:mt-2.5 lg:max-w-[36ch]">
-                  {t("landing.slides.enterprise.heroSub")}
-                </p>
-                <p className="landing-hero-trust-line mt-2 max-w-[34ch] font-medium leading-snug text-violet-200/88 sm:mt-2 sm:text-[13px] lg:text-[0.8125rem] lg:text-violet-200/90">
-                  {t("landing.showroom.hero.trustLine")}
-                </p>
+            <div className="landing-slide-hero-app-shell mx-auto flex h-full w-full max-w-[min(100%,400px)] flex-col gap-3 sm:max-w-[420px] lg:max-h-none lg:max-w-[1280px] lg:flex-row lg:items-stretch lg:justify-between lg:gap-10 xl:gap-12">
+              <div className="flex w-full shrink-0 flex-col items-center text-center lg:max-w-[min(100%,30rem)] lg:items-start lg:justify-center lg:text-left xl:max-w-[32rem]">
+                <div className="landing-hero-start-panel flex w-full flex-col items-center text-center lg:items-start lg:text-left">
+                  <h1 className="max-w-[22ch] text-pretty text-[clamp(1.5rem,calc(0.82rem+4.2vw),2.75rem)] font-semibold leading-[1.08] tracking-[-0.038em] text-white [word-break:keep-all] sm:max-w-[24ch] lg:max-w-none lg:text-[clamp(1.95rem,calc(1rem+4.6vw),2.95rem)]">
+                    {t("product.name")}
+                  </h1>
+                  <p className="mt-2.5 max-w-[30ch] text-[clamp(0.94rem,calc(0.82rem+0.55vw),1.0625rem)] font-semibold leading-snug text-slate-100/[0.96] sm:mt-3 sm:max-w-[34ch] lg:mt-3 lg:max-w-[38ch] lg:text-[1.0625rem]">
+                    {t("landing.slides.enterprise.heroDefinition")}
+                  </p>
+                  <p className="mt-2 max-w-[32ch] text-[0.9rem] font-medium leading-snug text-slate-200/95 sm:text-[0.9375rem] lg:mt-2.5 lg:max-w-[38ch]">
+                    {t("landing.slides.enterprise.heroSub")}
+                  </p>
+                  <p className="landing-hero-trust-line mt-2 max-w-[34ch] font-medium leading-snug text-violet-200/88 sm:mt-2 sm:text-[13px] lg:text-[0.8125rem] lg:text-violet-200/90">
+                    {t("landing.showroom.hero.trustLine")}
+                  </p>
 
-                <div className="landing-slide-cta-cluster mt-4 flex w-full max-w-[20rem] flex-col items-stretch gap-2 sm:mt-5 sm:max-w-[21rem] sm:gap-2.5 lg:mt-7 lg:w-full lg:max-w-[22rem] lg:flex-row lg:flex-wrap lg:justify-start">
-                  <Link
-                    href={JOIN_PATH}
-                    prefetch={false}
-                    className={`${entPrimaryBtn} landing-hero-primary-cta min-h-[2.6875rem] w-full lg:min-h-[3.125rem] sm:w-auto sm:min-w-[11rem]`}
-                  >
-                    {t("cta.joinBeta")}
-                  </Link>
+                  <div className="landing-hero-app-actions mt-5 flex w-full max-w-[20rem] flex-col items-stretch gap-0 sm:mt-6 sm:max-w-[21rem] lg:mt-0 lg:w-full lg:max-w-none">
+                    <div className="landing-slide-cta-cluster landing-hero-app-cta-row flex w-full flex-col items-stretch gap-2 sm:gap-2.5 lg:flex-row lg:flex-wrap lg:gap-2.5">
+                      <Link
+                        href={JOIN_PATH}
+                        prefetch={false}
+                        className={`${entPrimaryBtn} landing-hero-app-btn landing-hero-primary-cta min-h-[2.6875rem] w-full rounded-lg sm:min-h-[2.875rem] lg:min-h-[2.875rem] sm:w-auto sm:min-w-[11.25rem]`}
+                      >
+                        {t("cta.joinBeta")}
+                      </Link>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          onOpenAppWorkspace();
+                        }}
+                        className={`${entGhostBtn} landing-hero-app-btn landing-hero-app-secondary-cta min-h-[2.6875rem] w-full rounded-lg sm:min-h-[2.875rem] lg:min-h-[2.875rem] sm:w-auto sm:min-w-[10.75rem]`}
+                      >
+                        <IconPlay className="size-[1.02rem] shrink-0 opacity-95" />
+                        {t("cta.tryAppExperience")}
+                      </button>
+                    </div>
+                    <div className="mt-2 flex w-full justify-center lg:mt-2.5 lg:justify-start">
+                      <Link href="/register" prefetch={false} className={`${tertiaryLink} landing-hero-app-tertiary`}>
+                        {t("auth.salesRegistration")}
+                      </Link>
+                    </div>
+                  </div>
+
                   <button
                     type="button"
-                    onClick={() => {
-                      onOpenAppWorkspace();
-                    }}
-                    className={`${entGhostBtn} min-h-[2.6875rem] w-full lg:min-h-[3rem] sm:w-auto sm:min-w-[10.5rem]`}
+                    onClick={() => goSlide(1)}
+                    className="mt-8 hidden min-h-10 shrink-0 items-center justify-center self-center rounded-lg border border-white/[0.12] bg-white/[0.035] px-5 py-2 text-[13px] font-semibold text-slate-100/93 transition hover:border-sky-400/28 hover:bg-white/[0.055] touch-manipulation lg:mt-9 lg:inline-flex lg:self-stretch"
                   >
-                    <IconPlay className="size-[1.02rem] shrink-0 opacity-95" />
-                    {t("cta.tryAppExperience")}
+                    {t("landing.slides.home.nextCta")}
                   </button>
                 </div>
-                <div className="mt-1.5 flex w-full justify-center lg:justify-start">
-                  <Link href="/register" prefetch={false} className={`${tertiaryLink}`}>
-                    {t("auth.salesRegistration")}
-                  </Link>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => goSlide(1)}
-                  className="mt-10 hidden min-h-10 shrink-0 items-center justify-center self-center rounded-lg border border-white/[0.14] bg-white/[0.04] px-5 py-2 text-[13px] font-semibold text-slate-100/93 transition hover:border-sky-400/32 hover:bg-white/[0.07] touch-manipulation lg:inline-flex lg:self-start"
-                >
-                  {t("landing.slides.home.nextCta")}
-                </button>
               </div>
 
-              <div className="flex w-full flex-col items-center gap-4 lg:flex-1 lg:max-w-[min(54%,560px)] xl:max-w-[580px]">
+              <div className="landing-hero-mock-column flex w-full flex-col items-center gap-4 lg:flex-1 lg:max-w-[min(56%,600px)] xl:max-w-[620px] lg:justify-center">
                 <div className="relative flex w-full max-w-[min(100%,340px)] justify-center lg:max-w-none">
                   <div
                     aria-hidden
-                    className="pointer-events-none absolute inset-[-6%_-3%_-2%_-3%] rounded-[28px] bg-[radial-gradient(ellipse_70%_62%_at_50%_42%,rgba(56,189,248,0.1),transparent_68%)] opacity-90 blur-[36px]"
+                    className="pointer-events-none absolute inset-[-5%_-2%_-1%_-2%] rounded-[28px] bg-[radial-gradient(ellipse_72%_64%_at_50%_40%,rgba(56,189,248,0.12),transparent_70%)] opacity-75 blur-[22px] lg:opacity-80"
                   />
-                  <div className="relative w-full max-w-[340px] overflow-hidden rounded-[14px] border border-white/[0.14] bg-[#020a14]/98 shadow-[0_28px_72px_-28px_rgba(0,0,0,0.82),inset_0_1px_0_rgba(255,255,255,0.08)] ring-1 ring-white/[0.035] lg:max-w-none lg:rounded-[18px] lg:ring-white/[0.04] xl:rounded-[20px]">
-                    <div className="flex items-center gap-1.5 border-b border-white/[0.078] bg-[#040f1d]/96 px-2 py-1.5 sm:px-2.5 lg:px-3 lg:py-2">
+                  <div className="landing-hero-mock-frame relative w-full max-w-[340px] overflow-hidden rounded-[14px] border border-white/[0.16] bg-[#050f18]/[0.99] shadow-[0_24px_64px_-24px_rgba(0,0,0,0.72),inset_0_1px_0_rgba(255,255,255,0.1)] ring-1 ring-white/[0.06] lg:max-w-none lg:rounded-[18px] xl:rounded-[20px]">
+                    <div className="flex items-center gap-1.5 border-b border-white/[0.1] bg-[#051525]/98 px-2 py-1.5 sm:px-2.5 lg:px-3 lg:py-2">
                       <span className="size-2 rounded-full bg-rose-500/45" aria-hidden />
                       <span className="size-2 rounded-full bg-amber-400/45" aria-hidden />
                       <span className="size-2 rounded-full bg-emerald-400/42" aria-hidden />
-                      <span className="ml-1 truncate text-[10px] font-semibold text-slate-500 lg:text-[11px]">{t("product.name")}</span>
-                      <span className="ml-auto rounded border border-sky-400/22 bg-sky-500/[0.08] px-1.5 py-px text-[9px] font-semibold uppercase tracking-[0.08em] text-sky-100/85 sm:text-[10px]">
+                      <span className="ml-1 truncate text-[10px] font-semibold text-slate-400 lg:text-[11px]">{t("product.name")}</span>
+                      <span className="ml-auto rounded border border-sky-400/28 bg-sky-500/[0.12] px-1.5 py-px text-[9px] font-semibold uppercase tracking-[0.08em] text-sky-100/92 sm:text-[10px]">
                         {t("landing.showroom.heroMock.previewBadge")}
                       </span>
                     </div>
-                    <div className="relative aspect-[4/3] max-h-[min(38vh,260px)] w-full bg-[#020617] sm:aspect-[5/6] sm:max-h-[min(44vh,320px)] lg:aspect-[10/13] lg:max-h-none xl:aspect-[42/53]">
+                    <div className="relative aspect-[4/3] max-h-[min(38vh,260px)] w-full bg-[#030712] sm:aspect-[5/6] sm:max-h-[min(42vh,300px)] lg:aspect-[5/6] lg:max-h-[min(52vh,440px)] xl:max-h-[min(54vh,460px)]">
                       <Image
                         src={GUIDE03}
                         alt=""
                         fill
-                        className="opacity-[0.97] lg:object-cover lg:object-top max-lg:object-contain max-lg:object-top"
-                        sizes="(max-width:640px) 88vw,(max-width:1024px) 42vw, 460px"
+                        className="object-cover object-top opacity-100 brightness-[1.02] contrast-[1.02] max-lg:object-contain max-lg:object-top lg:brightness-[1.06] lg:contrast-[1.03]"
+                        sizes="(max-width:640px) 88vw,(max-width:1024px) 42vw, 480px"
                         quality={100}
                         priority
                       />
                       <div
-                        className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#020817]/65 via-transparent to-[#030a14]/08 max-lg:from-[#020817]/50"
+                        className="landing-hero-mock-scrim pointer-events-none absolute inset-0 bg-gradient-to-t from-[#020817]/42 via-transparent to-[#030a14]/04 max-lg:from-[#020817]/38 lg:from-[#020817]/28"
                         aria-hidden
                       />
                     </div>
