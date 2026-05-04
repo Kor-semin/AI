@@ -299,6 +299,19 @@ export type TranslationKey =
   | "landing.showroom.serviceMenu.deliveryTitle"
   | "landing.showroom.serviceMenu.deliveryDesc"
   | "landing.showroom.serviceMenu.tapHint"
+  | "landing.slides.nav.prev"
+  | "landing.slides.nav.next"
+  | "landing.slides.dotNav"
+  | "landing.slides.home.nextCta"
+  | "landing.slides.menu.kicker"
+  | "landing.slides.menu.nextCta"
+  | "landing.slides.guide.kicker"
+  | "landing.slides.guide.title"
+  | "landing.slides.guide.lead"
+  | "landing.slides.guide.thumbHint"
+  | "landing.slides.actions.kicker"
+  | "landing.slides.actions.backToGuide"
+  | "landing.slides.actions.openWorkspace"
   | "landing.showroom.closing.title"
   | "landing.showroom.bridge.line1"
   | "landing.showroom.bridge.line2"
@@ -909,6 +922,19 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.showroom.serviceMenu.deliveryTitle": "출고 안내",
     "landing.showroom.serviceMenu.deliveryDesc": "반복되는 안내 문구를 더 정확하게 준비합니다.",
     "landing.showroom.serviceMenu.tapHint": "눌러 안내 보기",
+    "landing.slides.nav.prev": "이전",
+    "landing.slides.nav.next": "다음",
+    "landing.slides.dotNav": "슬라이드 선택",
+    "landing.slides.home.nextCta": "핵심 기능 보기",
+    "landing.slides.menu.kicker": "업무 메뉴",
+    "landing.slides.menu.nextCta": "화면 안내 보기",
+    "landing.slides.guide.kicker": "화면 안내",
+    "landing.slides.guide.title": "예시 화면을 골라 확인하세요",
+    "landing.slides.guide.lead": "썸네일을 누르면 이 앱 안에서 설명과 함께 크게 볼 수 있습니다.",
+    "landing.slides.guide.thumbHint": "자세히",
+    "landing.slides.actions.kicker": "시작하기",
+    "landing.slides.actions.backToGuide": "안내 화면 다시 보기",
+    "landing.slides.actions.openWorkspace": "업무 화면 둘러보기",
     "landing.showroom.closing.title": "고객관리, 상담 메모, 사후관리를 한 곳에서 시작하세요.",
     "landing.showroom.bridge.line1": "상담은 기록으로,",
     "landing.showroom.bridge.line2": "기록은 다음 행동으로.",
@@ -1552,6 +1578,19 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.showroom.serviceMenu.deliveryTitle": "Delivery guidance",
     "landing.showroom.serviceMenu.deliveryDesc": "Prepare recurring guidance lines with clearer wording.",
     "landing.showroom.serviceMenu.tapHint": "Open guide",
+    "landing.slides.nav.prev": "Back",
+    "landing.slides.nav.next": "Next",
+    "landing.slides.dotNav": "Choose screen",
+    "landing.slides.home.nextCta": "Core menus",
+    "landing.slides.menu.kicker": "Workspace menus",
+    "landing.slides.menu.nextCta": "Sample screens",
+    "landing.slides.guide.kicker": "Screens",
+    "landing.slides.guide.title": "Pick a sample screen",
+    "landing.slides.guide.lead": "Tap a thumbnail to review it in-app with notes.",
+    "landing.slides.guide.thumbHint": "Details",
+    "landing.slides.actions.kicker": "Next steps",
+    "landing.slides.actions.backToGuide": "Back to guides",
+    "landing.slides.actions.openWorkspace": "Browse workspace",
     "landing.showroom.closing.title": "Bring customer CRM, consultation notes, and aftercare together in one place.",
     "landing.showroom.bridge.line1": "Consultation settles into notes,",
     "landing.showroom.bridge.line2": "notes guide the disciplined next touch.",

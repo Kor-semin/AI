@@ -2,14 +2,14 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
+import { SensoraGuideDetailModal } from "@/app/components/concierge/SensoraGuideDetailModal";
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
-import { LandingShowcaseHero } from "@/app/components/concierge/LandingShowcaseHero";
-import { PreviewDiagramSecurityStrip } from "@/app/components/concierge/SensoraFuturisticFlows";
-import { SENSORA_GUIDE_IMAGES } from "@/app/components/concierge/sensoraGuideImages";
+import type { CrmSection } from "@/app/crm/crmSectionTypes";
+import { DEFAULT_GUIDE_ID, SENSORA_GUIDES, type SensoraGuideId } from "@/lib/sensoraGuide";
 
-/** 랜딩 보조 이미지 에셋 경로(@/public 기준). Hero 쇼케이스에서는 미사용이나 교체 참고용으로 유지합니다. */
+/** 랜딩 보조 이미지 에셋 경로(@/public 기준). README 등에서 참고합니다. */
 export const LANDING_SHOWROOM_IMAGE_PATHS = {
   hero: "/images/hero-classic-car.jpg",
   interior: "/images/vintage-car-interior.jpg",
@@ -24,17 +24,42 @@ export {
 } from "@/app/components/concierge/sensoraGuideImages";
 
 const JOIN_PATH = "/join" as const;
-
-const cardChrome =
-  "landing-showcase-surface-card rounded-[17px] border border-white/[0.16] bg-gradient-to-b from-white/[0.09] via-slate-900/58 to-[#050d14]/94 shadow-[0_28px_64px_-22px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.072),0_0_56px_-24px_rgba(56,189,248,0.084)] backdrop-blur-md ring-1 ring-inset ring-white/[0.065] transition-[border-color,box-shadow,transform] duration-[240ms] ease-[cubic-bezier(0.22,1,0.32,1)] hover:-translate-y-1 hover:border-sky-400/36 hover:shadow-[0_36px_84px_-20px_rgba(0,0,0,0.64),0_0_60px_-16px_rgba(56,189,248,0.13)] motion-reduce:transform-none motion-reduce:transition-none active:translate-y-0 active:scale-[0.996] sm:rounded-[22px]";
+const SLIDE_COUNT = 4;
+const GUIDE03 = "/images/guides/sensora-guide-03.png";
 
 const primaryBtn =
-  "landing-showroom-cta-join sensora-premium-primary-workspace inline-flex min-h-[3.375rem] min-w-0 shrink-0 items-center justify-center rounded-xl px-[clamp(1.125rem,3.5vw,2.25rem)] py-[clamp(0.72rem,2.2vw,1.06rem)] text-[clamp(0.96875rem,calc(0.88rem+0.35vw),1.0625rem)] font-semibold shadow-[inset_0_1px_0_rgba(255,255,255,0.13),0_16px_48px_-10px_rgba(56,189,248,0.26),0_0_40px_-8px_rgba(139,92,246,0.06)] touch-manipulation sm:rounded-2xl sm:px-9 sm:py-[1.05rem] sm:text-[1.0625rem]";
+  "sensora-premium-primary-workspace inline-flex min-h-[3.125rem] w-full max-w-[min(100%,22rem)] shrink-0 items-center justify-center rounded-2xl px-8 py-3.5 text-[0.96875rem] font-semibold tracking-tight shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_16px_48px_-12px_rgba(56,189,248,0.28)] touch-manipulation sm:min-h-[3.375rem] sm:max-w-none sm:flex-1 sm:text-[1.0625rem]";
 
 const ghostBtn =
-  "landing-showroom-cta-preview inline-flex min-h-[3.375rem] min-w-0 shrink-0 items-center justify-center gap-2 rounded-xl border border-white/[0.32] bg-white/[0.1] px-[clamp(1rem,3.2vw,2rem)] py-[clamp(0.65rem,2vw,1rem)] text-[clamp(0.9375rem,calc(0.84rem+0.35vw),1.0625rem)] font-semibold text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.11),0_0_0_1px_rgba(56,189,248,0.055)_inset,0_0_36px_-8px_rgba(56,189,248,0.12)] ring-1 ring-inset ring-sky-400/22 backdrop-blur-md transition-[border-color,background-color,box-shadow,transform] duration-[240ms] hover:border-sky-300/52 hover:bg-white/[0.14] active:scale-[0.987] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/42 focus-visible:ring-offset-2 focus-visible:ring-offset-[#020817] touch-manipulation motion-reduce:transition-none sm:rounded-2xl sm:px-8 sm:py-[1.05rem] sm:text-[1.0625rem]";
+  "inline-flex min-h-[3.125rem] w-full max-w-[min(100%,22rem)] shrink-0 cursor-pointer items-center justify-center gap-2 rounded-2xl border border-white/[0.28] bg-white/[0.08] px-7 py-3.5 text-[0.9375rem] font-semibold text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.09),0_0_36px_-10px_rgba(56,189,248,0.14)] ring-1 ring-inset ring-sky-400/18 backdrop-blur-md transition hover:border-sky-400/35 hover:bg-white/[0.11] touch-manipulation sm:min-h-[3.375rem] sm:max-w-none sm:flex-1 sm:px-8 sm:text-[1rem]";
 
-function IconAppWindowPlay({ className }: { className?: string }) {
+const tertiaryLink =
+  "inline-flex min-h-11 items-center justify-center rounded-xl border border-white/[0.14] bg-white/[0.04] px-5 py-2.5 text-[0.9rem] font-semibold text-slate-100/95 backdrop-blur-md transition hover:border-sky-400/28 hover:bg-white/[0.07] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 touch-manipulation";
+
+const MENU_ROW = [
+  {
+    guideId: "sensora-guide-01" as const,
+    titleKey: "landing.showroom.serviceMenu.customersTitle" as const,
+    descKey: "landing.showroom.serviceMenu.customersDesc" as const,
+  },
+  {
+    guideId: "sensora-guide-02" as const,
+    titleKey: "landing.showroom.serviceMenu.aiTitle" as const,
+    descKey: "landing.showroom.serviceMenu.aiDesc" as const,
+  },
+  {
+    guideId: "sensora-guide-04" as const,
+    titleKey: "landing.showroom.serviceMenu.aftercareTitle" as const,
+    descKey: "landing.showroom.serviceMenu.aftercareDesc" as const,
+  },
+  {
+    guideId: "sensora-guide-03" as const,
+    titleKey: "landing.showroom.serviceMenu.deliveryTitle" as const,
+    descKey: "landing.showroom.serviceMenu.deliveryDesc" as const,
+  },
+] as const;
+
+function IconPlay({ className }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 20 20" fill="none" aria-hidden>
       <path
@@ -46,180 +71,315 @@ function IconAppWindowPlay({ className }: { className?: string }) {
   );
 }
 
-function useShowroomReveal() {
-  const ref = useRef<HTMLElement | null>(null);
-  const [revealed, setRevealed] = useState(false);
+type Props = {
+  slideIndex: number;
+  onSlideChange: (index: number) => void;
+  onOpenAppWorkspace: () => void;
+  onEnterWorkspaceSection: (section: CrmSection) => void;
+};
 
+export function LandingShowroom({ slideIndex, onSlideChange, onOpenAppWorkspace, onEnterWorkspaceSection }: Props) {
+  const { t } = useLanguage();
+  const safeSlide = ((slideIndex % SLIDE_COUNT) + SLIDE_COUNT) % SLIDE_COUNT;
+  const [guideModalOpen, setGuideModalOpen] = useState(false);
+  const [activeGuideId, setActiveGuideId] = useState<SensoraGuideId>(DEFAULT_GUIDE_ID);
+
+  const goSlide = useCallback(
+    (i: number) => {
+      onSlideChange(((i % SLIDE_COUNT) + SLIDE_COUNT) % SLIDE_COUNT);
+    },
+    [onSlideChange],
+  );
+
+  const openGuide = useCallback(
+    (id: SensoraGuideId) => {
+      setActiveGuideId(id);
+      setGuideModalOpen(true);
+      goSlide(2);
+    },
+    [goSlide],
+  );
+
+  const handleGoToRelated = useCallback(
+    (section: CrmSection) => {
+      setGuideModalOpen(false);
+      onEnterWorkspaceSection(section);
+    },
+    [onEnterWorkspaceSection],
+  );
+
+  /** 가이드 슬라이드(3번째): 키보드로 다음/이전 화면과 겹치지 않게 에스케이프만 모달 닫기는 모달 쪽 처리 */
   useEffect(() => {
-    const el = ref.current;
+    const el = typeof document !== "undefined" ? document.getElementById("sensora-landing-slide-deck") : null;
     if (!el) return undefined;
+    const onKey = (e: KeyboardEvent) => {
+      if (guideModalOpen) return;
+      if (e.key === "ArrowRight" && safeSlide < SLIDE_COUNT - 1) {
+        e.preventDefault();
+        goSlide(safeSlide + 1);
+      }
+      if (e.key === "ArrowLeft" && safeSlide > 0) {
+        e.preventDefault();
+        goSlide(safeSlide - 1);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [goSlide, guideModalOpen, safeSlide]);
 
-    if (
-      typeof window.matchMedia !== "undefined" &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    ) {
-      setRevealed(true);
-      return undefined;
-    }
-
-    const io = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (!entry.isIntersecting) continue;
-          setRevealed(true);
-          io.disconnect();
-          break;
-        }
-      },
-      { threshold: 0.06, rootMargin: "0px 0px -5% 0px" },
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
-
-  return { ref, revealed };
-}
-
-function RevealSection({
-  id,
-  className,
-  children,
-}: {
-  id?: string;
-  className?: string;
-  children: React.ReactNode;
-}) {
-  const { ref, revealed } = useShowroomReveal();
-  const interact = revealed ? "pointer-events-auto" : "pointer-events-none";
-  const innerStyles = revealed
-    ? "translate-y-0 opacity-100 transition-[opacity,transform] duration-[520ms] sm:duration-[720ms]"
-    : "opacity-0 max-sm:translate-y-3 sm:translate-y-2 transition-[opacity,transform] duration-[520ms] sm:duration-[720ms]";
-
-  return (
-    <section id={id} ref={ref} className={className}>
-      <div
-        className={[
-          "ease-[cubic-bezier(0.22,1,0.32,1)] will-change-[opacity,transform] motion-reduce:pointer-events-auto motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:transition-none",
-          interact,
-          innerStyles,
-        ].join(" ")}
-      >
-        {children}
-      </div>
-    </section>
-  );
-}
-
-export function LandingShowroom({ onOpenAppWorkspace }: { onOpenAppWorkspace: () => void }) {
-  return (
-    <div className="sensora-nebula-shell sensora-nebula-shell--drift relative overflow-x-hidden bg-[#020817]">
-      <div
-        aria-hidden
-        className="sensora-nebula-layer-absolute pointer-events-none absolute inset-x-0 top-0 h-[min(58vh,560px)] bg-[radial-gradient(ellipse_82%_52%_at_52%_6%,rgba(56,189,248,0.088),transparent_55%),radial-gradient(ellipse_58%_42%_at_96%_16%,rgba(139,92,246,0.074),transparent_52%),radial-gradient(ellipse_44%_38%_at_8%_40%,rgba(30,58,138,0.062),transparent_50%)]"
-      />
-      <div className="relative z-[1] max-lg:min-h-0">
-        <LandingShowcaseHero onOpenAppWorkspace={onOpenAppWorkspace} />
-
-        <RevealSection className="relative mx-auto w-full max-w-[1200px] overflow-x-hidden px-4 py-8 sm:px-6 sm:pb-14 sm:pt-10 lg:py-14">
-          <SensoraGuideSectionInner />
-        </RevealSection>
-
-        <RevealSection className="mx-auto w-full max-w-[1180px] px-4 py-12 sm:px-6 sm:py-[5.5rem] sm:pb-24 sm:pt-8">
-          <FinalShowroomCTAInner onOpenAppWorkspace={onOpenAppWorkspace} />
-        </RevealSection>
-      </div>
-    </div>
-  );
-}
-
-function SensoraGuideSectionInner() {
-  const { t } = useLanguage();
-
-  const securityLabels = useMemo(
-    () =>
-      [t("preview.diagram.security.view"), t("preview.diagram.security.review"), t("preview.diagram.security.confirm"), t("preview.diagram.security.save")] as const,
-    [t],
-  );
-
-  return (
-    <>
-      <div className="landing-showroom-premium-rule mx-auto mb-5 opacity-95 sm:mb-8 pointer-events-none max-lg:mb-4" aria-hidden />
-      <div className="mx-auto max-w-[800px] text-center lg:max-w-[820px]">
-        <h2 className="text-[clamp(1.28rem,min(5vw,2.1rem),2.1rem)] font-semibold tracking-[-0.03em] text-slate-50">
-          {t("landing.showroom.guide.title")}
-        </h2>
-        <p className="mx-auto mt-3 max-w-[56ch] text-[0.875rem] leading-[1.55] text-slate-400 max-lg:text-[clamp(0.8125rem,calc(0.78rem+0.5vw),0.9375rem)] sm:mt-5 sm:text-[1.03rem] sm:leading-[1.6]">
-          {t("landing.showroom.guide.desc")}
-        </p>
-      </div>
-      <div className="mx-auto mt-6 grid max-w-[880px] gap-3 sm:mt-11 sm:grid-cols-2 sm:items-stretch sm:gap-6">
-        <article className={`${cardChrome} flex min-h-0 flex-col overflow-hidden !p-0 sm:min-h-[240px]`}>
-          <div className="relative h-40 max-h-[11.25rem] w-full shrink-0 border-b border-white/[0.1] bg-[#030712]/90 sm:h-auto sm:max-h-none sm:aspect-[21/10]">
-            <Image
-              src={SENSORA_GUIDE_IMAGES[2]?.src ?? "/images/guides/sensora-guide-01.png"}
-              alt=""
-              fill
-              className="object-cover object-top opacity-95 transition duration-[240ms] group-hover:opacity-100"
-              sizes="(max-width: 640px) 100vw, 420px"
-            />
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#050d14]/95 via-transparent to-transparent" aria-hidden />
-            <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(120deg,rgba(56,189,248,0.08),transparent_55%)]" aria-hidden />
-          </div>
-          <div className="relative flex flex-1 flex-col px-5 pb-5 pt-4 sm:px-10 sm:pb-10 sm:pt-7">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-400 sm:text-xs sm:tracking-[0.18em]">{t("landing.showroom.guide.memoLabel")}</p>
-            <p className="mt-3 line-clamp-3 text-[0.9375rem] font-medium leading-[1.55] text-slate-50 sm:mt-5 sm:line-clamp-none sm:text-[1.09rem] sm:leading-[1.68]">&ldquo;{t("landing.showroom.guide.memoQuote")}&rdquo;</p>
-          </div>
-        </article>
-        <article
-          className={`${cardChrome} flex min-h-0 flex-col overflow-hidden !p-0 border-violet-400/22 bg-gradient-to-b from-violet-950/[0.18] via-slate-900/55 to-[#050d14]/92 shadow-[0_28px_72px_-26px_rgba(0,0,0,0.6),0_0_56px_-28px_rgba(139,92,246,0.09),inset_0_1px_0_rgba(255,255,255,0.06)] ring-violet-400/12 sm:min-h-[240px]`}
-        >
-          <div className="relative h-40 max-h-[11.25rem] w-full shrink-0 border-b border-white/[0.09] bg-[#030712]/90 sm:h-auto sm:max-h-none sm:aspect-[21/10]">
-            <Image
-              src={SENSORA_GUIDE_IMAGES[0]?.src ?? "/images/guides/sensora-guide-03.png"}
-              alt=""
-              fill
-              className="object-cover object-[center_20%] opacity-95"
-              sizes="(max-width: 640px) 100vw, 420px"
-            />
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#050d14]/95 via-transparent to-transparent" aria-hidden />
-          </div>
-          <div className="relative flex flex-1 flex-col px-5 pb-5 pt-4 sm:px-10 sm:pb-10 sm:pt-7">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-violet-200/88 sm:text-xs sm:tracking-[0.16em]">{t("landing.showroom.guide.panelLabel")}</p>
-            <div className="relative mt-3 sm:mt-5">
-              <PreviewDiagramSecurityStrip labels={securityLabels} />
-            </div>
-            <p className="mt-2 text-[10px] leading-snug text-slate-500 sm:mt-3 sm:text-[11px]">{t("preview.diagram.caption.security")}</p>
-            <p className="mt-3 line-clamp-3 text-[0.9375rem] font-medium leading-[1.55] text-slate-50 sm:mt-5 sm:line-clamp-none sm:text-[1.09rem] sm:leading-[1.68]">{t("landing.showroom.guide.guideQuote")}</p>
-          </div>
-        </article>
-      </div>
-    </>
-  );
-}
-
-function FinalShowroomCTAInner({ onOpenAppWorkspace }: { onOpenAppWorkspace: () => void }) {
-  const { t } = useLanguage();
+  const dockSafe = "pb-[max(10px,calc(env(safe-area-inset-bottom,0px)+8px))] pt-2";
 
   return (
     <div
-      className={`${cardChrome} landing-footer-cta-shell mx-auto flex max-w-[720px] flex-col items-center border-white/[0.17] px-5 py-8 text-center shadow-[0_38px_92px_-26px_rgba(0,0,0,0.64),inset_0_1px_0_rgba(255,255,255,0.075),0_0_80px_-28px_rgba(56,189,248,0.14),0_0_64px_-36px_rgba(139,92,246,0.06)] sm:px-12 sm:py-[4.25rem]`}
+      id="sensora-landing-slide-deck"
+      className="sensora-landing-slide-deck relative flex min-h-0 flex-1 flex-col overflow-hidden bg-[#020817]"
     >
-      <p className="text-[clamp(1.12rem,min(5vw,2.4vw+0.85rem),1.68rem)] font-semibold tracking-[-0.024em] text-slate-50">{t("landing.showroom.closing.title")}</p>
-      <p className="mx-auto mt-3 max-w-[48ch] text-[0.8125rem] leading-[1.5] text-slate-400 max-lg:line-clamp-4 sm:mt-6 sm:line-clamp-none sm:text-[1.03rem] sm:leading-[1.58]">{t("landing.showroom.closing.desc")}</p>
-      <div className="mt-6 flex w-full justify-center sm:mt-10">
-        <div className="landing-footer-cta-buttons flex w-full max-w-xl min-w-0 flex-col gap-3 sm:flex-row sm:justify-center sm:gap-4">
-          <Link href={JOIN_PATH} prefetch={false} className={`relative z-20 inline-flex w-full min-w-0 justify-center touch-manipulation pointer-events-auto sm:flex-1 sm:basis-0 ${primaryBtn}`}>
-            {t("cta.joinBeta")}
-          </Link>
-          <button
-            type="button"
-            onClick={onOpenAppWorkspace}
-            className={`relative z-20 inline-flex w-full min-w-0 cursor-pointer justify-center touch-manipulation pointer-events-auto sm:flex-1 sm:basis-0 ${ghostBtn}`}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_82%_52%_at_52%_8%,rgba(56,189,248,0.1),transparent_55%),radial-gradient(ellipse_58%_42%_at_96%_18%,rgba(139,92,246,0.08),transparent_52%),linear-gradient(180deg,#050f1e_0%,#020817_45%,#030b16_100%)]"
+      />
+
+      <SensoraGuideDetailModal
+        open={guideModalOpen}
+        onClose={() => setGuideModalOpen(false)}
+        activeGuideId={activeGuideId}
+        onActiveGuideChange={setActiveGuideId}
+        onGoToRelated={handleGoToRelated}
+        overlayZClass="z-[280]"
+      />
+
+      <div className="relative z-[1] flex min-h-0 flex-1 flex-col overflow-hidden">
+        {/* 슬라이드 패널 — 전환만으로 이동(페이지 세로 롤링 대신 한 뷰포트 안) */}
+        <div className="relative min-h-0 flex-1 overflow-hidden px-4 pt-3 sm:px-6 sm:pt-4">
+          {/* 0 — 홈 (guide-03 톤 · 앱 첫 화면 인상) */}
+          <div
+            className={[
+              "sensora-landing-slide-panel absolute inset-x-4 inset-y-0 flex flex-col overflow-y-auto overflow-x-hidden pb-2 sm:inset-x-6",
+              safeSlide === 0 ? "pointer-events-auto z-[2] opacity-100" : "pointer-events-none z-0 opacity-0",
+            ].join(" ")}
+            aria-hidden={safeSlide !== 0}
           >
-            <IconAppWindowPlay className="size-[1.08rem] shrink-0 opacity-95 sm:size-[1.14rem]" />
-            {t("cta.tryAppExperience")}
-          </button>
+            <div className="mx-auto flex w-full max-w-[720px] flex-col items-center text-center">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-sky-400/85">{t("landing.showroom.hero.kickerBadge")}</p>
+              <h1 className="mt-2 max-w-[22ch] text-pretty text-[clamp(1.35rem,calc(0.55rem+3.2vw),2.05rem)] font-semibold leading-[1.18] tracking-[-0.03em] text-white [word-break:keep-all]">
+                {t("product.name")}
+              </h1>
+              <p className="mt-2 max-w-[28ch] text-[0.91rem] font-semibold leading-snug text-slate-200/95 sm:text-[0.98rem]">
+                {t("landing.showroom.hero.headlineLine1")}
+                <span className="mt-0.5 block text-sky-100/95">{t("landing.showroom.hero.headlineLine2")}</span>
+              </p>
+              <p className="mt-3 max-w-[36ch] text-[0.875rem] font-medium leading-[1.55] text-slate-300/95 sm:mt-4 sm:text-[0.915rem]">
+                {t("landing.showroom.hero.sub")}
+              </p>
+              <p className="mt-2 max-w-[36ch] text-[0.8125rem] font-medium leading-[1.5] text-sky-200/88 sm:text-[0.8625rem]">{t("landing.showroom.hero.trustLine")}</p>
+
+              <div className="mt-5 flex w-full max-w-md flex-col items-center justify-center gap-2 sm:mt-6 sm:max-w-lg sm:flex-row sm:flex-wrap sm:gap-3">
+                <Link href={JOIN_PATH} prefetch={false} className={`${primaryBtn} sm:min-w-[10.5rem]`}>
+                  {t("cta.joinBeta")}
+                </Link>
+                <button type="button" onClick={() => goSlide(2)} className={`${ghostBtn} sm:min-w-[10.5rem]`}>
+                  <IconPlay className="size-[1.1rem] shrink-0 opacity-95" />
+                  {t("cta.tryAppExperience")}
+                </button>
+              </div>
+              <div className="mt-2.5 flex w-full justify-center sm:mt-3">
+                <Link href="/register" prefetch={false} className={tertiaryLink}>
+                  {t("auth.salesRegistration")}
+                </Link>
+              </div>
+
+              <div className="relative mt-5 w-full max-w-[min(100%,380px)] sm:mt-6 sm:max-w-[420px]">
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute -inset-3 rounded-[28px] bg-[radial-gradient(ellipse_80%_70%_at_50%_40%,rgba(56,189,248,0.16),transparent_62%)] opacity-90 blur-2xl"
+                />
+                <div className="relative overflow-hidden rounded-[18px] border border-white/[0.18] bg-[#030a14]/95 shadow-[0_32px_80px_-28px_rgba(0,0,0,0.75),inset_0_1px_0_rgba(255,255,255,0.1)] ring-1 ring-sky-400/15 sm:rounded-[22px]">
+                  <div className="flex items-center gap-2 border-b border-white/[0.1] bg-[#050f1c]/95 px-3 py-2">
+                    <span className="size-2 rounded-full bg-rose-400/55" aria-hidden />
+                    <span className="size-2 rounded-full bg-amber-400/45" aria-hidden />
+                    <span className="size-2 rounded-full bg-emerald-400/45" aria-hidden />
+                    <span className="ml-2 truncate text-[11px] font-semibold text-slate-400">{t("product.name")}</span>
+                    <span className="ml-auto rounded-md border border-sky-400/25 bg-sky-500/10 px-2 py-0.5 text-[10px] font-semibold text-sky-100/92">
+                      {t("landing.showroom.heroMock.previewBadge")}
+                    </span>
+                  </div>
+                  <div className="relative aspect-[4/5] w-full bg-[#020617]">
+                    <Image src={GUIDE03} alt="" fill className="object-cover object-top opacity-[0.98]" sizes="(max-width:640px) 92vw, 420px" quality={100} priority />
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#020817]/72 via-transparent to-transparent" aria-hidden />
+                  </div>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => goSlide(1)}
+                className="mt-4 inline-flex min-h-11 items-center justify-center rounded-full border border-white/[0.14] bg-white/[0.06] px-6 py-2.5 text-sm font-semibold text-slate-100 backdrop-blur-sm transition hover:border-sky-400/34 hover:bg-white/[0.1] touch-manipulation sm:mt-5"
+              >
+                {t("landing.slides.home.nextCta")}
+              </button>
+            </div>
+          </div>
+
+          {/* 1 — 업무 메뉴 */}
+          <div
+            className={[
+              "sensora-landing-slide-panel absolute inset-x-4 inset-y-0 flex flex-col overflow-y-auto pb-2 sm:inset-x-6",
+              safeSlide === 1 ? "pointer-events-auto z-[2] opacity-100" : "pointer-events-none z-0 opacity-0",
+            ].join(" ")}
+            aria-hidden={safeSlide !== 1}
+          >
+            <div className="mx-auto flex w-full max-w-[640px] flex-col">
+              <p className="text-center text-[11px] font-semibold uppercase tracking-[0.14em] text-sky-400/85">{t("landing.slides.menu.kicker")}</p>
+              <h2 className="mt-2 text-center text-[clamp(1.15rem,calc(0.85rem+1.8vw),1.55rem)] font-semibold tracking-[-0.028em] text-slate-50">{t("landing.showroom.serviceMenu.sectionTitle")}</h2>
+              <p className="mx-auto mt-2 max-w-[40ch] text-center text-[0.8375rem] leading-relaxed text-slate-400">{t("landing.showroom.serviceMenu.sectionSub")}</p>
+              <div className="mt-5 grid gap-3 sm:mt-6">
+                {MENU_ROW.map((row) => (
+                  <button
+                    key={row.guideId}
+                    type="button"
+                    onClick={() => openGuide(row.guideId)}
+                    className="landing-slide-menu-row group flex min-h-[4.75rem] w-full items-center gap-3 rounded-[17px] border border-white/[0.14] bg-gradient-to-r from-[#0a1728]/92 to-[#030a14]/95 px-3 py-3 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.07),0_12px_40px_-22px_rgba(0,0,0,0.5)] ring-1 ring-inset ring-sky-400/12 transition-[transform,border-color] hover:-translate-y-0.5 hover:border-sky-400/38 active:translate-y-0 touch-manipulation sm:gap-4 sm:px-4 sm:py-4"
+                  >
+                    <div className="relative h-[3.375rem] w-[4.5rem] shrink-0 overflow-hidden rounded-xl border border-white/[0.1] bg-[#030712] sm:h-16 sm:w-24">
+                      <Image src={SENSORA_GUIDES.find((g) => g.id === row.guideId)?.image ?? GUIDE03} alt="" fill className="object-cover object-center opacity-93" sizes="96px" quality={92} />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-[1.02rem] font-semibold text-slate-50 sm:text-[1.06rem]">{t(row.titleKey)}</p>
+                      <p className="mt-0.5 line-clamp-2 text-[0.8rem] leading-relaxed text-slate-400 sm:text-[0.8375rem]">{t(row.descKey)}</p>
+                    </div>
+                    <span className="shrink-0 rounded-full border border-white/[0.12] bg-white/[0.06] px-2.5 py-1 text-[10px] font-semibold text-sky-100/92 sm:text-[11px]">{t("landing.showroom.serviceMenu.tapHint")}</span>
+                  </button>
+                ))}
+              </div>
+              <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+                <button type="button" onClick={() => goSlide(2)} className="min-h-11 rounded-full border border-white/[0.14] bg-white/[0.05] px-7 py-2.5 text-sm font-semibold text-slate-100 backdrop-blur-sm transition hover:border-sky-400/28 hover:bg-white/[0.09] touch-manipulation">
+                  {t("landing.slides.menu.nextCta")}
+                </button>
+                <button type="button" onClick={() => goSlide(0)} className="text-sm font-semibold text-slate-500 underline-offset-4 hover:text-slate-300 hover:underline">
+                  {t("landing.slides.nav.prev")}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* 2 — 화면 안내 / 가이드 */}
+          <div
+            className={[
+              "sensora-landing-slide-panel absolute inset-x-4 inset-y-0 flex flex-col overflow-y-auto pb-2 sm:inset-x-6",
+              safeSlide === 2 ? "pointer-events-auto z-[2] opacity-100" : "pointer-events-none z-0 opacity-0",
+            ].join(" ")}
+            aria-hidden={safeSlide !== 2}
+          >
+            <div className="mx-auto flex w-full max-w-[760px] flex-col pb-4">
+              <p className="text-center text-[11px] font-semibold uppercase tracking-[0.14em] text-sky-400/85">{t("landing.slides.guide.kicker")}</p>
+              <h2 className="mt-2 text-center text-[clamp(1.1rem,calc(0.82rem+1.7vw),1.45rem)] font-semibold tracking-[-0.024em] text-slate-50">{t("landing.slides.guide.title")}</h2>
+              <p className="mx-auto mt-2 max-w-[44ch] text-center text-[0.8375rem] leading-relaxed text-slate-400">{t("landing.slides.guide.lead")}</p>
+              <div className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 lg:grid-cols-5">
+                {SENSORA_GUIDES.map((g) => (
+                  <button
+                    key={g.id}
+                    type="button"
+                    onClick={() => {
+                      setActiveGuideId(g.id);
+                      setGuideModalOpen(true);
+                    }}
+                    className="group flex flex-col overflow-hidden rounded-[14px] border border-white/[0.15] bg-[#07111f]/92 ring-1 ring-inset ring-sky-400/10 transition-[transform,border-color] hover:-translate-y-0.5 hover:border-sky-400/35 touch-manipulation"
+                  >
+                    <div className="relative aspect-[5/6] w-full bg-[#020617]">
+                      <Image src={g.image} alt="" fill className="object-cover object-top opacity-[0.92] transition group-hover:opacity-100" sizes="(max-width:640px) 44vw, 140px" quality={94} />
+                      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#020817]/80 to-transparent" aria-hidden />
+                    </div>
+                    <div className="px-2 py-2 text-left">
+                      <p className="line-clamp-2 text-[11px] font-semibold leading-snug text-slate-100 sm:text-[12px]">{t(g.titleKey)}</p>
+                      <p className="mt-0.5 text-[10px] font-medium text-sky-400/82">{t("landing.slides.guide.thumbHint")}</p>
+                    </div>
+                  </button>
+                ))}
+              </div>
+              <p className="mx-auto mt-4 max-w-[44ch] text-center text-[11px] leading-relaxed text-slate-600">{t("preview.toc.disclaimer1")}</p>
+              <div className="mx-auto mt-5 flex flex-wrap items-center justify-center gap-3">
+                <button type="button" onClick={() => goSlide(3)} className="sensora-premium-primary-workspace rounded-xl px-6 py-3 text-sm font-semibold touch-manipulation">
+                  {t("landing.slides.nav.next")}
+                </button>
+                <button type="button" onClick={() => goSlide(1)} className="text-sm font-semibold text-slate-500 hover:text-slate-300">
+                  {t("landing.slides.nav.prev")}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* 3 — 시작 액션 */}
+          <div
+            className={[
+              "sensora-landing-slide-panel absolute inset-x-4 inset-y-0 flex flex-col overflow-y-auto pb-2 sm:inset-x-6",
+              safeSlide === 3 ? "pointer-events-auto z-[2] opacity-100" : "pointer-events-none z-0 opacity-0",
+            ].join(" ")}
+            aria-hidden={safeSlide !== 3}
+          >
+            <div className="mx-auto flex w-full max-w-[520px] flex-col items-center text-center">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-sky-400/85">{t("landing.slides.actions.kicker")}</p>
+              <h2 className="mt-3 max-w-[20ch] text-[clamp(1.12rem,calc(0.92rem+1.6vw),1.6rem)] font-semibold leading-snug tracking-[-0.024em] text-slate-50">{t("landing.showroom.closing.title")}</h2>
+              <p className="mt-3 max-w-[40ch] text-[0.85rem] leading-relaxed text-slate-400">{t("landing.showroom.closing.desc")}</p>
+              <div className="mt-7 flex w-full max-w-md flex-col items-center gap-3 sm:flex-row sm:flex-wrap sm:justify-center">
+                <Link href={JOIN_PATH} prefetch={false} className={`${primaryBtn} sm:max-w-[14rem]`}>
+                  {t("cta.joinBeta")}
+                </Link>
+                <Link href="/register" prefetch={false} className={`${ghostBtn} border-violet-300/28 sm:max-w-[14rem]`}>
+                  {t("auth.salesRegistration")}
+                </Link>
+              </div>
+              <div className="mt-6 flex w-full flex-col items-center gap-2 sm:flex-row sm:justify-center sm:gap-4">
+                <button type="button" onClick={() => goSlide(2)} className="text-sm font-semibold text-sky-300/95 underline-offset-4 hover:underline">
+                  {t("landing.slides.actions.backToGuide")}
+                </button>
+                <button type="button" onClick={onOpenAppWorkspace} className="text-sm font-semibold text-slate-400 underline-offset-4 hover:text-slate-200 hover:underline">
+                  {t("landing.slides.actions.openWorkspace")}
+                </button>
+              </div>
+            </div>
+          </div>
+
         </div>
+
+        {/* 하단 독: 점 + 이전/다음 */}
+        <nav
+          className={`landing-slide-nav-dock relative z-[5] shrink-0 border-t border-white/[0.09] bg-[#020817]/94 backdrop-blur-md ${dockSafe}`}
+          aria-label={t("landing.slides.dotNav")}
+        >
+          <div className="mx-auto flex max-w-lg items-center justify-between gap-3 px-3 sm:px-4">
+            <button
+              type="button"
+              disabled={safeSlide <= 0}
+              onClick={() => goSlide(safeSlide - 1)}
+              className="min-h-10 min-w-[4.25rem] rounded-xl border border-white/[0.1] bg-white/[0.04] px-3 text-xs font-semibold text-slate-200 disabled:cursor-not-allowed disabled:opacity-35 touch-manipulation sm:text-sm"
+            >
+              {t("landing.slides.nav.prev")}
+            </button>
+            <div className="flex items-center gap-2 sm:gap-2.5">
+              {Array.from({ length: SLIDE_COUNT }, (_, i) => (
+                <button
+                  key={`dot-${String(i)}`}
+                  type="button"
+                  aria-current={safeSlide === i ? "step" : undefined}
+                  aria-label={`${String(i + 1)} / ${String(SLIDE_COUNT)}`}
+                  onClick={() => goSlide(i)}
+                  className={[
+                    "size-2.5 shrink-0 rounded-full transition sm:size-3",
+                    safeSlide === i ? "scale-110 bg-sky-400 shadow-[0_0_14px_-1px_rgba(56,189,248,0.55)]" : "bg-slate-600/75 hover:bg-slate-500",
+                  ].join(" ")}
+                />
+              ))}
+            </div>
+            <button
+              type="button"
+              disabled={safeSlide >= SLIDE_COUNT - 1}
+              onClick={() => goSlide(safeSlide + 1)}
+              className="min-h-10 min-w-[4.25rem] rounded-xl border border-white/[0.1] bg-white/[0.04] px-3 text-xs font-semibold text-slate-200 disabled:cursor-not-allowed disabled:opacity-35 touch-manipulation sm:text-sm"
+            >
+              {t("landing.slides.nav.next")}
+            </button>
+          </div>
+        </nav>
       </div>
     </div>
   );

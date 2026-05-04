@@ -888,9 +888,8 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
     padding-bottom: 2px;
   }
 
-  /* 히어로 섹션: 헤더 직후 시각적 간격만 살짝 줄여 위로 이어지게 (LandingShowcaseHero 파일 미수정) */
-  section.landing-showcase-hero.landing-showcase-hero--dock.landing-showcase-hero--unified {
-    padding-top: 0.8rem;
+  main.sensora-landing-main-depth .sensora-landing-slide-deck {
+    padding-top: 0.25rem;
   }
 }
 
@@ -2223,7 +2222,7 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   filter: saturate(0.28) brightness(1.03);
 }
 
-/* 랜딩 앱 쇼케이스 Hero (LandingShowcaseHero) */
+/* 랜딩 슬라이드형 쇼룸(LandingSections) */
 .landing-showcase-hero {
   isolation: isolate;
   scroll-margin-top: 0.5rem;
@@ -2307,6 +2306,21 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
 
 .landing-showcase-lower-canvas {
   scroll-margin-top: 0.5rem;
+}
+
+/* 슬라이드형 랜딩 패널 전환 */
+.sensora-landing-slide-panel {
+  transition: opacity 0.22s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sensora-landing-slide-panel {
+    transition: none;
+  }
+}
+
+.sensora-landing-slide-deck {
+  min-height: 0;
 }
 
 /* 랜딩 공지 슬롯 · 앱형 서비스 메뉴(1차 틀) */

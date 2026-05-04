@@ -36,6 +36,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
   const [view, setView] = useState<"landing" | "app">(initialView);
   const [crmSection, setCrmSection] = useState<CrmSection>("dashboard");
   const [appPreviewTocOpen, setAppPreviewTocOpen] = useState(false);
+  const [landingSlide, setLandingSlide] = useState(0);
   const router = useRouter();
 
   const navigateCrmSection = useCallback(
@@ -59,6 +60,11 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
   useEffect(() => {
     setView(initialView);
   }, [initialView]);
+
+  /** 랜딩 ↔ 앱 전환 시 슬라이드는 첫 화면으로 초기화 */
+  useEffect(() => {
+    if (view === "landing") setLandingSlide(0);
+  }, [view]);
 
   /** 앱 진입 시·해시 변경 시 섹션 동기화 */
   useEffect(() => {
@@ -230,7 +236,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                 <div className="landing-nav-header-cta-row max-lg:!hidden lg:flex w-full min-w-0 flex-col gap-2 lg:max-w-[26rem] lg:flex-nowrap lg:flex-row lg:items-stretch lg:justify-end lg:gap-4 xl:max-w-[28rem] xl:gap-5">
                   <button
                     type="button"
-                    onClick={openAppPreviewToc}
+                    onClick={() => setLandingSlide(2)}
                     className={[
                       "landing-nav-cta-preview landing-nav-cta-preview--compact relative z-[20] inline-flex min-h-14 w-full shrink-0 cursor-pointer items-center justify-center gap-1.5 rounded-2xl whitespace-nowrap max-sm:min-h-12 max-sm:rounded-xl max-sm:border-white/22 max-sm:bg-white/[0.055] max-sm:px-4 max-sm:py-2.5 max-sm:text-xs max-sm:font-medium max-sm:shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]",
                       "border border-white/[0.17] bg-white/[0.055] px-5 py-3.5 text-center text-sm font-semibold text-slate-100/95 shadow-[inset_0_1px_0_rgba(255,255,255,0.055),0_0_0_1px_rgba(56,189,248,0.035)_inset] ring-1 ring-inset ring-white/[0.07] backdrop-blur-md lg:border-white/[0.11] lg:bg-white/[0.042] lg:text-slate-100 lg:shadow-[inset_0_1px_0_rgba(255,255,255,0.03)] lg:ring-0",
@@ -334,9 +340,20 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
       />
 
       <main
-        className={`relative z-10 ${view === "landing" ? "max-lg:flex-none max-lg:min-h-0 lg:flex-1" : "flex-1"} ${view === "landing" ? "sensora-landing-main-depth bg-transparent" : ""}`}
+        className={
+          view === "landing"
+            ? "relative z-10 flex min-h-0 flex-1 flex-col overflow-hidden sensora-landing-main-depth bg-transparent"
+            : "relative z-10 flex flex-1 flex-col"
+        }
       >
-        {view === "landing" ? <LandingShowroom onOpenAppWorkspace={openAppPreviewToc} /> : null}
+        {view === "landing" ? (
+          <LandingShowroom
+            slideIndex={landingSlide}
+            onSlideChange={setLandingSlide}
+            onOpenAppWorkspace={openAppPreviewToc}
+            onEnterWorkspaceSection={enterAppFromPreviewToc}
+          />
+        ) : null}
 
         {view === "app" ? (
           <div
