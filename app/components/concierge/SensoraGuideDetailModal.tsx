@@ -6,6 +6,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
 import { DEFAULT_GUIDE_ID, SENSORA_GUIDES, type SensoraGuideId } from "@/lib/sensoraGuide";
 
+import { SensoraFullscreenImageOverlay } from "@/app/components/concierge/SensoraFullscreenImageOverlay";
 import type { CrmSection } from "@/app/crm/crmSectionTypes";
 
 type Props = {
@@ -27,12 +28,22 @@ export function SensoraGuideDetailModal({
 }: Props) {
   const { t } = useLanguage();
   const [broken, setBroken] = useState<Record<number, boolean>>({});
+  const [imageLightboxOpen, setImageLightboxOpen] = useState(false);
 
   const idx = SENSORA_GUIDES.findIndex((g) => g.id === activeGuideId);
   const safeIdx = idx < 0 ? sensoraGuideIndexSafe(activeGuideId) : idx;
 
+  const fullscreenSlides = SENSORA_GUIDES.map((g) => ({
+    src: g.image,
+    caption: t(g.titleKey),
+  }));
+
   useEffect(() => {
     if (open) setBroken({});
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) setImageLightboxOpen(false);
   }, [open]);
 
   useEffect(() => {
@@ -89,7 +100,21 @@ export function SensoraGuideDetailModal({
 
   const safeBottomThumb = "pb-[max(12px,calc(env(safe-area-inset-bottom,0px)+10px))]";
 
+  const imageExpandAria = `${t("landing.showroom.concept.tapToExpand")}: ${title}`;
+
   return (
+    <>
+    <SensoraFullscreenImageOverlay
+      open={imageLightboxOpen}
+      onClose={() => setImageLightboxOpen(false)}
+      closeLabel={closeLabel}
+      slides={fullscreenSlides}
+      initialIndex={safeIdx}
+      onSlideIndexSynced={(nextIdx) => {
+        const g = SENSORA_GUIDES[nextIdx];
+        if (g) onActiveGuideChange(g.id);
+      }}
+    />
     <div
       data-sensora-guide-detail-modal
       className={[
@@ -150,11 +175,21 @@ export function SensoraGuideDetailModal({
 
                 {!slideBroken ? (
                   <div className="relative h-[min(44dvh,320px)] w-full max-h-full sm:h-[min(46dvh,420px)] md:h-[min(48dvh,440px)]">
+                    <button
+                      type="button"
+                      className="absolute inset-0 z-[1] cursor-zoom-in touch-manipulation rounded-[inherit] outline-none ring-inset focus-visible:ring-2 focus-visible:ring-sky-400/40"
+                      aria-label={imageExpandAria}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setImageLightboxOpen(true);
+                      }}
+                    />
                     <Image
                       src={active.image}
                       alt=""
                       fill
-                      className="object-contain object-center"
+                      className="pointer-events-none object-contain object-center"
                       sizes="(max-width:640px) 92vw,(max-width:1024px) 88vw, min(840px, 92vw)"
                       quality={100}
                       priority={false}
@@ -272,6 +307,7 @@ export function SensoraGuideDetailModal({
         </div>
       </div>
     </div>
+    </>
   );
 }
 
