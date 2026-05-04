@@ -2309,6 +2309,28 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   scroll-margin-top: 0.5rem;
 }
 
+/* 랜딩 공지 슬롯 · 앱형 서비스 메뉴(1차 틀) */
+.landing-announcement-slot {
+  scroll-margin-top: 0.75rem;
+}
+
+.landing-service-menu-item:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px rgba(15, 23, 42, 0.92),
+    0 0 0 4px rgba(56, 189, 248, 0.36);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-service-menu-item {
+    transition: none !important;
+  }
+
+  .landing-service-menu-item:hover {
+    transform: none !important;
+  }
+}
+
 .landing-showcase-cta-primary:active,
 .landing-showcase-cta-ghost:active {
   transform: translateY(1px) scale(0.992);

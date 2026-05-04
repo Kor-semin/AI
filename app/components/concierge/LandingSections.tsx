@@ -120,15 +120,11 @@ export function LandingShowroom({ onOpenAppWorkspace }: { onOpenAppWorkspace: ()
       <div className="relative z-[1] max-lg:min-h-0">
         <LandingShowcaseHero onOpenAppWorkspace={onOpenAppWorkspace} />
 
-        <RevealSection className="relative mx-auto w-full max-w-[1200px] overflow-x-hidden px-4 py-8 sm:px-6 sm:py-12 sm:pt-4 lg:py-14">
+        <RevealSection className="relative mx-auto w-full max-w-[1200px] overflow-x-hidden px-4 py-8 sm:px-6 sm:pb-14 sm:pt-10 lg:py-14">
           <SensoraGuideSectionInner />
         </RevealSection>
 
-        <RevealSection className="relative mx-auto w-full max-w-[1200px] overflow-x-hidden px-4 py-10 sm:px-6 sm:py-[4.25rem] sm:pb-[3.75rem]">
-          <SalesFeatureGridInner />
-        </RevealSection>
-
-        <RevealSection className="mx-auto w-full max-w-[1180px] px-4 py-12 sm:px-6 sm:py-[7rem] sm:pb-28 sm:pt-4">
+        <RevealSection className="mx-auto w-full max-w-[1180px] px-4 py-12 sm:px-6 sm:py-[5.5rem] sm:pb-24 sm:pt-8">
           <FinalShowroomCTAInner onOpenAppWorkspace={onOpenAppWorkspace} />
         </RevealSection>
       </div>
@@ -201,37 +197,6 @@ function SensoraGuideSectionInner() {
   );
 }
 
-function SalesFeatureGridInner() {
-  const { t } = useLanguage();
-  const tiles = (
-    [
-      ["landing.feature.profile.title", "landing.feature.profile.desc"],
-      ["landing.feature.memory.title", "landing.feature.memory.desc"],
-      ["landing.feature.followup.title", "landing.feature.followup.desc"],
-      ["landing.feature.delivery.title", "landing.feature.delivery.desc"],
-    ] as const
-  ).map(([titleKey, descKey]) => ({ titleKey, descKey }));
-
-  return (
-    <>
-      <div className="landing-showroom-premium-rule mx-auto mb-6 max-lg:mb-5 sm:mb-10 pointer-events-none" aria-hidden />
-      <h2 className="mx-auto max-w-[680px] text-center text-[clamp(1.28rem,min(5vw,2.05rem),2.05rem)] font-semibold tracking-[-0.03em] text-slate-50">
-        {t("landing.showroom.features.title")}
-      </h2>
-      <div className="mx-auto mt-6 grid max-w-[920px] gap-3 sm:mt-10 sm:grid-cols-2 sm:items-stretch sm:gap-5 lg:gap-6">
-        {tiles.map(({ titleKey, descKey }) => (
-          <article key={titleKey} className={`${cardChrome} flex min-h-0 flex-col px-5 py-5 max-lg:max-h-none sm:min-h-[196px] sm:px-10 sm:py-9`}>
-            <h3 className="text-[clamp(0.98rem,calc(0.9rem+0.6vw),1.09rem)] font-semibold tracking-[-0.02em] text-slate-50 sm:text-[1.16rem]">{t(titleKey)}</h3>
-            <p className="mt-2 line-clamp-3 text-[0.8125rem] leading-[1.52] text-slate-400 sm:mt-3.5 sm:line-clamp-none sm:flex-1 sm:text-[0.97rem] sm:leading-[1.6]">
-              {t(descKey)}
-            </p>
-          </article>
-        ))}
-      </div>
-    </>
-  );
-}
-
 function FinalShowroomCTAInner({ onOpenAppWorkspace }: { onOpenAppWorkspace: () => void }) {
   const { t } = useLanguage();
 
@@ -239,7 +204,7 @@ function FinalShowroomCTAInner({ onOpenAppWorkspace }: { onOpenAppWorkspace: () 
     <div
       className={`${cardChrome} landing-footer-cta-shell mx-auto flex max-w-[720px] flex-col items-center border-white/[0.17] px-5 py-8 text-center shadow-[0_38px_92px_-26px_rgba(0,0,0,0.64),inset_0_1px_0_rgba(255,255,255,0.075),0_0_80px_-28px_rgba(56,189,248,0.14),0_0_64px_-36px_rgba(139,92,246,0.06)] sm:px-12 sm:py-[4.25rem]`}
     >
-      <p className="text-[clamp(1.12rem,min(5vw,2.4vw+0.85rem),1.68rem)] font-semibold tracking-[-0.024em] text-slate-50">{t("brand.slogan")}</p>
+      <p className="text-[clamp(1.12rem,min(5vw,2.4vw+0.85rem),1.68rem)] font-semibold tracking-[-0.024em] text-slate-50">{t("landing.showroom.closing.title")}</p>
       <p className="mx-auto mt-3 max-w-[48ch] text-[0.8125rem] leading-[1.5] text-slate-400 max-lg:line-clamp-4 sm:mt-6 sm:line-clamp-none sm:text-[1.03rem] sm:leading-[1.58]">{t("landing.showroom.closing.desc")}</p>
       <div className="mt-6 flex w-full justify-center sm:mt-10">
         <div className="landing-footer-cta-buttons flex w-full max-w-xl min-w-0 flex-col gap-3 sm:flex-row sm:justify-center sm:gap-4">

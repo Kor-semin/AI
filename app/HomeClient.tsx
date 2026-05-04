@@ -196,7 +196,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                   <div className="text-balance text-base font-semibold leading-[1.15] tracking-[-0.022em] text-white max-lg:text-[0.94rem] max-lg:leading-[1.12] max-sm:text-[0.97rem] sm:text-[1.12rem] lg:text-[1.22rem]">
                     {t("product.name")}
                   </div>
-                  <p className="mt-0.5 text-[11px] font-medium leading-snug text-slate-300/95 max-lg:mt-0 max-lg:text-[10px] max-lg:leading-snug sm:mt-1 sm:text-[0.8125rem] sm:text-slate-300 lg:text-sm">
+                  <p className="mt-0.5 text-[11px] font-medium leading-snug text-slate-300/95 max-lg:mt-0 max-lg:line-clamp-2 max-lg:text-[10px] max-lg:leading-snug sm:mt-1 sm:line-clamp-none sm:text-[0.8125rem] sm:text-slate-300 lg:text-sm">
                     {t("landing.showroom.header.subline")}
                   </p>
                 </div>

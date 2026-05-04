@@ -285,6 +285,21 @@ export type TranslationKey =
   | "landing.showroom.hero.headlineLine1"
   | "landing.showroom.hero.headlineLine2"
   | "landing.showroom.hero.sub"
+  | "landing.showroom.hero.trustLine"
+  | "landing.showroom.announcement.kicker"
+  | "landing.showroom.announcement.body"
+  | "landing.showroom.serviceMenu.sectionTitle"
+  | "landing.showroom.serviceMenu.sectionSub"
+  | "landing.showroom.serviceMenu.customersTitle"
+  | "landing.showroom.serviceMenu.customersDesc"
+  | "landing.showroom.serviceMenu.aiTitle"
+  | "landing.showroom.serviceMenu.aiDesc"
+  | "landing.showroom.serviceMenu.aftercareTitle"
+  | "landing.showroom.serviceMenu.aftercareDesc"
+  | "landing.showroom.serviceMenu.deliveryTitle"
+  | "landing.showroom.serviceMenu.deliveryDesc"
+  | "landing.showroom.serviceMenu.tapHint"
+  | "landing.showroom.closing.title"
   | "landing.showroom.bridge.line1"
   | "landing.showroom.bridge.line2"
   | "landing.showroom.header.subline"
@@ -874,15 +889,30 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.crmDemo.startCta": "고객관리 시작하기",
     "landing.showroom.hero.quietFuture": "실무 현장 안내형",
     "landing.showroom.hero.senseAuraTag": "Sense · Aura",
-    "landing.showroom.hero.kickerBadge": "영업 현장용 고객관리",
+    "landing.showroom.hero.kickerBadge": "자동차 영업사원 업무용",
     "landing.showroom.hero.headline": "자동차 영업사원을 위한\nAI 고객관리 워크스페이스",
     "landing.showroom.hero.headlineLine1": "자동차 영업사원을 위한",
     "landing.showroom.hero.headlineLine2": "AI 고객관리 워크스페이스",
-    "landing.showroom.hero.sub":
-      "상담 메모·다음 연락·사후관리까지 한 화면에서 이어집니다.\n\nAI는 검토용 초안을 돕고, 최종 판단과 저장은 영업사원이 합니다.",
+    "landing.showroom.hero.sub": "상담 메모, 고객관리, 사후관리, 다음 연락을 한 흐름으로 정리합니다.",
+    "landing.showroom.hero.trustLine": "AI는 초안을 돕고, 최종 판단은 영업사원이 합니다.",
+    "landing.showroom.announcement.kicker": "베타 사용자 안내",
+    "landing.showroom.announcement.body":
+      "현재 Sensora Auto CRM은 자동차 영업사원을 대상으로 베타 사용자를 순차적으로 받고 있습니다.",
+    "landing.showroom.serviceMenu.sectionTitle": "핵심 업무 메뉴",
+    "landing.showroom.serviceMenu.sectionSub": "예시 안내 화면을 열어 실제 업무 화면에 가까운 형태를 둘러볼 수 있습니다.",
+    "landing.showroom.serviceMenu.customersTitle": "고객관리",
+    "landing.showroom.serviceMenu.customersDesc": "상담 메모와 관심 차량을 고객별로 정리합니다.",
+    "landing.showroom.serviceMenu.aiTitle": "AI 비서",
+    "landing.showroom.serviceMenu.aiDesc": "상담 내용을 바탕으로 검토용 초안을 제안합니다.",
+    "landing.showroom.serviceMenu.aftercareTitle": "사후관리",
+    "landing.showroom.serviceMenu.aftercareDesc": "다음 연락과 출고 안내를 놓치지 않도록 돕습니다.",
+    "landing.showroom.serviceMenu.deliveryTitle": "출고 안내",
+    "landing.showroom.serviceMenu.deliveryDesc": "반복되는 안내 문구를 더 정확하게 준비합니다.",
+    "landing.showroom.serviceMenu.tapHint": "눌러 안내 보기",
+    "landing.showroom.closing.title": "고객관리, 상담 메모, 사후관리를 한 곳에서 시작하세요.",
     "landing.showroom.bridge.line1": "상담은 기록으로,",
     "landing.showroom.bridge.line2": "기록은 다음 행동으로.",
-    "landing.showroom.header.subline": "자동차 영업사원을 위한 고객관리·상담 정리 워크스페이스",
+    "landing.showroom.header.subline": "자동차 영업사원용 · 상담·고객·사후관리 워크스페이스",
     "landing.showroom.heroDash.windowSubline": "오늘의 연락 · 업무 요약",
     "landing.showroom.heroDash.greetingLine": "오늘 진행하면 좋은 일이에요",
     "landing.showroom.heroDash.greetingSub": "연락 우선 확인과 검토용 초안을 한 화면에 모았습니다.",
@@ -892,45 +922,44 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.showroom.heroDash.todaySnippet": "시승 후 금융 조건 검토 예정",
     "landing.showroom.heroDash.priorityTitle": "우선 확인할 고객",
     "landing.showroom.heroDash.prioritySnippet": "관심 차량과 예산 조건이 정리된 고객",
-    "landing.showroom.heroDash.followupTitle": "후속 연락 필요",
-    "landing.showroom.heroDash.followupSnippet": "출고 안내 후 사후관리 예정",
+    "landing.showroom.heroDash.followupTitle": "사후관리 연락",
+    "landing.showroom.heroDash.followupSnippet": "출고 안내 후 일정 재확인 예정",
     "landing.showroom.heroDash.aiDraftTitle": "검토용 문자 초안",
     "landing.showroom.heroDash.aiDraftSnippet": "상담 내용을 바탕으로 검토용 문자 초안을 제안합니다.",
     "landing.showroom.heroDash.summaryTitle": "최근 상담 요약",
     "landing.showroom.heroDash.summarySnippet":
       "관심 차량, 예산, 희망 출고 시점, 다음 연락 일정을 한눈에 정리합니다.",
-    "landing.showroom.heroMock.previewBadge": "미리보기",
+    "landing.showroom.heroMock.previewBadge": "화면 미리보기",
     "landing.showroom.heroMock.greeting": "김현우 매니저님, 오늘도 좋은 하루 보내세요!",
     "landing.showroom.heroMock.draftLabel": "초안",
-    "landing.showroom.heroMock.nav.home": "홈",
-    "landing.showroom.heroMock.nav.customers": "고객",
-    "landing.showroom.heroMock.nav.consult": "상담",
-    "landing.showroom.heroMock.nav.schedule": "일정·알림",
+    "landing.showroom.heroMock.nav.home": "요약",
+    "landing.showroom.heroMock.nav.customers": "고객관리",
+    "landing.showroom.heroMock.nav.consult": "상담 메모",
+    "landing.showroom.heroMock.nav.schedule": "일정",
     "landing.showroom.heroMock.nav.messages": "메시지",
     "landing.showroom.heroMock.nav.aiAssistant": "AI 비서",
-    "landing.showroom.heroMock.nav.stats": "통계",
+    "landing.showroom.heroMock.nav.stats": "업무 요약",
     "landing.showroom.heroMock.nav.settings": "설정",
     "landing.showroom.flow.title": "상담에서 다음 연락까지, 한 흐름으로",
     "landing.showroom.flow.desc":
-      "상담 → 니즈 → 발송 문자 → 다음 연락 순으로 업무 블록을 이어 두어 바쁜 딜플로어에서 빠져나가지 않게 합니다.",
-    "landing.showroom.flow.mock.contactTitle": "상담 정리 · 기록",
+      "상담 내용을 기록하고, 고객 니즈와 AI 초안 제안, 다음 연락·사후관리까지 업무 블록이 끊기지 않게 이어집니다.",
+    "landing.showroom.flow.mock.contactTitle": "상담 내용 기록",
     "landing.showroom.flow.mock.contactBody": "김민준 시승 상담 · 견적 단계 진입 · 회신 대기 확인",
-    "landing.showroom.flow.mock.needsTitle": "고객 니즈 요약",
+    "landing.showroom.flow.mock.needsTitle": "고객 니즈 정리",
     "landing.showroom.flow.mock.needsBody": "패밀리 이동, 승하차 편의, 월 부담·보증 선택지 비교 필요",
-    "landing.showroom.flow.mock.smsTitle": "발송 문자",
+    "landing.showroom.flow.mock.smsTitle": "AI 초안 제안",
     "landing.showroom.flow.mock.smsBody":
       "지난번 말씀 기준으로 정리했습니다. 오늘 잠깐이라도 시간 내주시면 조건 초안 차분히 안내드리겠습니다.",
-    "landing.showroom.flow.mock.followupTitle": "다음 연락",
+    "landing.showroom.flow.mock.followupTitle": "다음 연락 · 사후관리",
     "landing.showroom.flow.mock.followupBody": "내일 오전 11시 재연락 · 전화",
-    "landing.showroom.guide.title": "고객의 신호가 영업 액션으로 이어지는 지점입니다.",
-    "landing.showroom.guide.desc": "메모에서 응대 포인트를 정리하면, 검토용 가이드 제안으로 이어집니다.",
+    "landing.showroom.guide.title": "메모부터 검토 초안까지, 한 화면에서 이어집니다.",
+    "landing.showroom.guide.desc": "예시 안내입니다. 상담 메모 내용과 확인 흐름을 실제 업무 근처 느낌으로 확인해 보실 수 있습니다.",
     "landing.showroom.guide.memoLabel": "상담 메모",
     "landing.showroom.guide.memoQuote": "가족 이동이 많고 승하차 편의성을 중요하게 보심.",
     "landing.showroom.guide.panelLabel": "검토용 가이드",
     "landing.showroom.guide.guideQuote": "2열 공간, 승하차 동선, 탑승 편안함을 중심으로 안내하세요.",
-    "landing.showroom.features.title": "영업 현장 업무가 덜 헤매도록 돕습니다",
-    "landing.showroom.closing.desc":
-      "상담·고객 응대·사후관리까지 한 흐름으로 묶어, 오늘 해야 할 일을 분명하게 보여 줍니다.",
+    "landing.showroom.features.title": "영업 업무가 덜 헤매도록 돕습니다",
+    "landing.showroom.closing.desc": "예시 미리보기로 흐름을 확인하고, 필요하면 베타 신청을 이어가실 수 있습니다.",
     "landing.showroom.tip.title": "활용 안내 TIP",
     "landing.showroom.tip.subtitle":
       "처음 보는 분도 쉽게 이해할 수 있도록, 핵심 내용을 이미지로 정리했습니다.",
@@ -1502,15 +1531,31 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.crmDemo.startCta": "Start in CRM",
     "landing.showroom.hero.quietFuture": "Quiet futurism",
     "landing.showroom.hero.senseAuraTag": "Sense · Aura",
-    "landing.showroom.hero.kickerBadge": "Built for automotive sales reps",
+    "landing.showroom.hero.kickerBadge": "For automotive sales reps",
     "landing.showroom.hero.headline": "AI customer-relationship workspace\nfor automotive sales reps",
-    "landing.showroom.hero.headlineLine1": "AI customer-relationship workspace",
-    "landing.showroom.hero.headlineLine2": "for automotive sales reps",
+    "landing.showroom.hero.headlineLine1": "For automotive sales reps",
+    "landing.showroom.hero.headlineLine2": "AI customer-management workspace",
     "landing.showroom.hero.sub":
-      "We keep consultation through after-sales care on one disciplined flow.\n\nAI helps with draft ideas; salespeople make the final calls.",
+      "Consultation notes, customer CRM, aftercare, and next steps—organized in one flow.",
+    "landing.showroom.hero.trustLine": "AI proposes review drafts—you make the final call.",
+    "landing.showroom.announcement.kicker": "Beta users",
+    "landing.showroom.announcement.body":
+      "Sensora Auto CRM is currently onboarding beta sales reps gradually. Spaces may be limited while we stabilize the service.",
+    "landing.showroom.serviceMenu.sectionTitle": "Core workspaces",
+    "landing.showroom.serviceMenu.sectionSub": "Tap a menu item to open a sample guide screen.",
+    "landing.showroom.serviceMenu.customersTitle": "Customers",
+    "landing.showroom.serviceMenu.customersDesc": "Keep consultation notes and interest vehicles tidy per buyer.",
+    "landing.showroom.serviceMenu.aiTitle": "AI assistant",
+    "landing.showroom.serviceMenu.aiDesc": "Suggests review-ready drafts grounded in consultation notes.",
+    "landing.showroom.serviceMenu.aftercareTitle": "Aftercare",
+    "landing.showroom.serviceMenu.aftercareDesc": "Helps keep next outreach and delivery guidance from slipping.",
+    "landing.showroom.serviceMenu.deliveryTitle": "Delivery guidance",
+    "landing.showroom.serviceMenu.deliveryDesc": "Prepare recurring guidance lines with clearer wording.",
+    "landing.showroom.serviceMenu.tapHint": "Open guide",
+    "landing.showroom.closing.title": "Bring customer CRM, consultation notes, and aftercare together in one place.",
     "landing.showroom.bridge.line1": "Consultation settles into notes,",
     "landing.showroom.bridge.line2": "notes guide the disciplined next touch.",
-    "landing.showroom.header.subline": "AI customer-relationship workspace for automotive sales reps",
+    "landing.showroom.header.subline": "Consultation · customers · aftercare for sales reps",
     "landing.showroom.heroDash.windowSubline": "Today's queue · workspace digest",
     "landing.showroom.heroDash.greetingLine": "Here's a calm starting lane for today.",
     "landing.showroom.heroDash.greetingSub": "Catch priority follow-ups alongside draft snippets in one glance.",
@@ -1538,17 +1583,17 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.showroom.heroMock.nav.aiAssistant": "AI assistant",
     "landing.showroom.heroMock.nav.stats": "Insights",
     "landing.showroom.heroMock.nav.settings": "Settings",
-    "landing.showroom.flow.title": "From consultation cues to dependable follow‑through.",
+    "landing.showroom.flow.title": "From consultation notes to next outreach—in one flow",
     "landing.showroom.flow.desc":
-      "Consultation · needs · outbound SMS · next follow-up stacked in one calm SaaS‑style rail so nothing slips on the showroom floor.",
-    "landing.showroom.flow.mock.contactTitle": "Consultation notes",
+      "Consultation captured, buyer needs surfaced, drafts proposed, next outreach anchored—structured so showroom work keeps moving.",
+    "landing.showroom.flow.mock.contactTitle": "Capture consultation notes",
     "landing.showroom.flow.mock.contactBody": "Minjun · test drive recap · quoting stage entered · pending reply flagged",
-    "landing.showroom.flow.mock.needsTitle": "Needs distilled",
+    "landing.showroom.flow.mock.needsTitle": "Organize customer needs",
     "landing.showroom.flow.mock.needsBody": "Family hauling, ingress/egress ease, weighing monthly burden vs coverage choices.",
-    "landing.showroom.flow.mock.smsTitle": "Outbound SMS",
+    "landing.showroom.flow.mock.smsTitle": "AI draft proposal",
     "landing.showroom.flow.mock.smsBody":
       "Tight recap from our last conversation—could we carve a few quiet minutes later today for preliminary financing terms?",
-    "landing.showroom.flow.mock.followupTitle": "Next follow-up",
+    "landing.showroom.flow.mock.followupTitle": "Next outreach · aftercare",
     "landing.showroom.flow.mock.followupBody": "Tomorrow · 11:00 · outbound call",
     "landing.showroom.guide.title": "Where customer signals tighten into salesperson action.",
     "landing.showroom.guide.desc":
@@ -1559,8 +1604,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
       "Heavy family hauling; entry/exit comfort is decisive for them.",
     "landing.showroom.guide.guideQuote": "Lead with cabin space, egress paths, boarding comfort—not generic claims.",
     "landing.showroom.features.title": "Quiet automation—for sales desks",
-    "landing.showroom.closing.desc":
-      "Sensora aligns consultation work and disciplined follow-through into a single understated flow.",
+    "landing.showroom.closing.desc": "Skim sample screens above, then continue with beta signup when you’re ready.",
     "landing.showroom.tip.title": "Sensora tips worth knowing",
     "landing.showroom.tip.subtitle":
       "We distilled the essentials into a short image guide you can skim in a minute.",

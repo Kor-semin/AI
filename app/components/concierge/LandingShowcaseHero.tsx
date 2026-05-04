@@ -6,16 +6,28 @@ import { useRouter } from "next/navigation";
 import { Fragment, useEffect, useMemo, useState } from "react";
 
 import { SensoraGuideDetailModal } from "@/app/components/concierge/SensoraGuideDetailModal";
-import {
-  SENSORA_CONCEPT_STORY_SLIDES,
-  SENSORA_CONCEPT_TIP_SHORT_KEYS,
-  sensoraGuideIdFromConceptSlideId,
-} from "@/app/components/concierge/sensoraConceptStory";
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
 import { DEFAULT_GUIDE_ID, type SensoraGuideId } from "@/lib/sensoraGuide";
 import { crmSectionToHash, type CrmSection } from "@/app/crm/crmSectionTypes";
 
 const JOIN_PATH = "/join" as const;
+
+/** 랜딩 서비스 메뉴 → 안내 상세 모달 연결용 (통합 미리보기 가이드 id) */
+const LANDING_SERVICE_MENU: readonly {
+  readonly guideId: SensoraGuideId;
+  readonly titleKey: "landing.showroom.serviceMenu.customersTitle" | "landing.showroom.serviceMenu.aiTitle" | "landing.showroom.serviceMenu.aftercareTitle" | "landing.showroom.serviceMenu.deliveryTitle";
+  readonly descKey:
+    | "landing.showroom.serviceMenu.customersDesc"
+    | "landing.showroom.serviceMenu.aiDesc"
+    | "landing.showroom.serviceMenu.aftercareDesc"
+    | "landing.showroom.serviceMenu.deliveryDesc";
+}[] = [
+  { guideId: "sensora-guide-01", titleKey: "landing.showroom.serviceMenu.customersTitle", descKey: "landing.showroom.serviceMenu.customersDesc" },
+  { guideId: "sensora-guide-02", titleKey: "landing.showroom.serviceMenu.aiTitle", descKey: "landing.showroom.serviceMenu.aiDesc" },
+  { guideId: "sensora-guide-04", titleKey: "landing.showroom.serviceMenu.aftercareTitle", descKey: "landing.showroom.serviceMenu.aftercareDesc" },
+  /** 출고 안내 카피 안내 이미지: 베타·시작 플로우 예시 활용 */
+  { guideId: "sensora-guide-03", titleKey: "landing.showroom.serviceMenu.deliveryTitle", descKey: "landing.showroom.serviceMenu.deliveryDesc" },
+] as const;
 
 const mockShell =
   "landing-showcase-mock-frame relative overflow-hidden rounded-[18px] border border-white/[0.17] bg-gradient-to-b from-[#081222]/98 to-[#030b14]/99 shadow-[0_38px_96px_-32px_rgba(0,0,0,0.82),inset_0_1px_0_rgba(255,255,255,0.095),0_0_0_1px_rgba(56,189,248,0.07)_inset,0_0_80px_-24px_rgba(56,189,248,0.14),0_0_96px_-36px_rgba(139,92,246,0.1)] ring-1 ring-inset ring-white/[0.07] backdrop-blur-xl before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-white/22 before:to-transparent sm:rounded-[22px] lg:rounded-[24px]";
@@ -326,8 +338,11 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
                 <span className="landing-showcase-hero-headline-line block">{t("landing.showroom.hero.headlineLine1")}</span>
                 <span className="landing-showcase-hero-headline-line mt-[0.06em] block text-white">{t("landing.showroom.hero.headlineLine2")}</span>
               </h1>
-              <p className="landing-showcase-hero-lead mt-3 max-w-[min(100%,42rem)] whitespace-pre-line text-[0.9375rem] font-medium leading-[1.6] text-slate-100/95 max-sm:mt-2.5 max-sm:text-[0.895rem] max-sm:leading-[1.55] sm:mt-5 sm:text-[1.09rem] sm:leading-[1.68] lg:max-w-[min(100%,44ch)] lg:text-lg xl:max-w-[50ch]">
+              <p className="landing-showcase-hero-lead mt-3 max-w-[min(100%,42rem)] text-[0.9375rem] font-semibold leading-[1.6] text-slate-100 max-sm:mt-2.5 max-sm:text-[0.9125rem] max-sm:leading-[1.55] sm:mt-5 sm:text-[1.08rem] sm:leading-[1.62] lg:max-w-[min(100%,44ch)] lg:text-lg xl:max-w-[50ch]">
                 {t("landing.showroom.hero.sub")}
+              </p>
+              <p className="landing-showcase-hero-trust mt-3 max-w-[min(100%,42rem)] text-[0.875rem] font-medium leading-[1.55] text-sky-100/92 max-sm:mt-2.5 max-sm:text-[0.8375rem] sm:mt-4 sm:text-[0.9625rem] sm:leading-[1.6] lg:text-[1.02rem]">
+                {t("landing.showroom.hero.trustLine")}
               </p>
               <div className="landing-hero-showcase-cta-row mt-4 flex w-full min-w-0 justify-center box-border sm:mt-7 lg:mt-8">
                 <div className="landing-hero-showcase-cta-cluster grid w-full grid-cols-1 gap-2 max-sm:gap-2 sm:gap-3 lg:grid-cols-2 lg:gap-4">
@@ -371,19 +386,23 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
             </div>
           </div>
 
-          <div className="landing-hero-bridge landing-hero-bridge--slogan relative z-[1] mt-[max(0.75rem,env(safe-area-inset-bottom,0px)+0.25rem)] px-2 max-lg:mt-4 sm:-mx-1 sm:mt-6 sm:px-3 lg:-mx-2 lg:mt-5 xl:mt-6">
-            <div className="landing-hero-bridge-panel mx-auto max-w-[min(100%,36rem)] rounded-[16px] border border-white/[0.1] bg-gradient-to-b from-white/[0.07] via-white/[0.03] to-[#040a12]/88 px-4 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.09),0_12px_40px_-24px_rgba(56,189,248,0.08)] ring-1 ring-inset ring-white/[0.04] max-sm:px-3.5 max-sm:py-3 sm:max-w-[min(100%,38rem)] sm:rounded-[20px] sm:px-6 sm:py-5">
-              <div className="flex w-full items-center gap-3 opacity-[0.9] sm:gap-4" aria-hidden>
-                <span className="h-px min-w-[1.5rem] flex-1 bg-gradient-to-r from-transparent via-sky-400/38 to-transparent" />
-                <span className="size-1.5 shrink-0 rounded-full bg-gradient-to-br from-sky-400 to-violet-400 shadow-[0_0_14px_-1px_rgba(56,189,248,0.52)] ring-2 ring-sky-400/22" />
-                <span className="h-px min-w-[1.5rem] flex-1 bg-gradient-to-l from-transparent via-violet-400/34 to-transparent" />
+        </div>
+
+        {/* 운영/공지 정적 슬롯 · 추후 교체 가능 */}
+        <div className="landing-announcement-slot relative z-[1] mx-auto mt-5 w-full max-w-[min(100%,900px)] px-[max(0.875rem,calc(env(safe-area-inset-left,0px)+10px))] pr-[max(0.875rem,calc(env(safe-area-inset-right,0px)+10px))] sm:mt-7 lg:mt-8">
+          <div className="rounded-[18px] border border-sky-400/26 bg-[linear-gradient(135deg,rgba(8,26,52,0.92)_0%,rgba(6,14,26,0.88)_52%,rgba(4,11,22,0.94)_100%)] px-4 py-4 shadow-[0_28px_64px_-32px_rgba(56,189,248,0.22),inset_0_1px_0_rgba(255,255,255,0.08)] sm:rounded-[22px] sm:px-6 sm:py-5">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+              <div className="min-w-0">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-sky-400/88 sm:text-[12px]">{t("landing.showroom.announcement.kicker")}</p>
+                <p className="mt-1.5 text-[0.9rem] font-medium leading-[1.55] text-slate-100 sm:mt-2 sm:text-[0.9625rem] sm:leading-[1.6]">{t("landing.showroom.announcement.body")}</p>
               </div>
-              <p className="mt-3 text-center text-[clamp(1.06rem,2.15vw,1.44rem)] font-semibold leading-snug tracking-[-0.021em] text-slate-100 sm:mt-4">
-                {t("landing.showroom.bridge.line1")}
-              </p>
-              <p className="-mt-0.5 pt-2 text-center text-[clamp(1.04rem,2.05vw,1.4rem)] font-semibold leading-snug tracking-[-0.021em] text-slate-200/95">
-                {t("landing.showroom.bridge.line2")}
-              </p>
+              <Link
+                href={JOIN_PATH}
+                prefetch={false}
+                className="sensora-premium-primary-workspace inline-flex min-h-12 shrink-0 items-center justify-center rounded-xl px-6 py-3 text-center text-sm font-semibold tracking-tight text-slate-50 touch-manipulation sm:min-h-[2.75rem] sm:px-7"
+              >
+                {t("cta.joinBeta")}
+              </Link>
             </div>
           </div>
         </div>
@@ -392,68 +411,44 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
           <div className="relative min-w-0 overflow-hidden rounded-[22px]">
             <div className="sensora-preview-galaxy-stars pointer-events-none absolute inset-0 opacity-[0.5]" aria-hidden />
             <div className="relative z-[1]">
-              <div className="flex flex-col gap-2.5 border-b border-white/[0.09] pb-3 sm:flex-row sm:items-end sm:justify-between sm:gap-3 sm:pb-3.5">
+              <div className="flex flex-col gap-2 border-b border-white/[0.09] pb-3 sm:flex-row sm:items-end sm:justify-between sm:gap-3 sm:pb-3.5">
                 <div className="min-w-0">
-                  <h2 className="text-[clamp(1.12rem,2.35vw,1.55rem)] font-semibold leading-tight tracking-[-0.028em] text-slate-50 max-lg:text-[1.1rem]">{t("landing.showroom.concept.sectionTitle")}</h2>
+                  <h2 className="text-[clamp(1.12rem,2.35vw,1.55rem)] font-semibold leading-tight tracking-[-0.028em] text-slate-50 max-lg:text-[1.1rem]">{t("landing.showroom.serviceMenu.sectionTitle")}</h2>
+                  <p className="mt-1 max-w-[52ch] text-[0.8125rem] leading-[1.5] text-slate-400 sm:mt-1.5 sm:text-sm">{t("landing.showroom.serviceMenu.sectionSub")}</p>
                 </div>
-                <p className="max-w-[52ch] text-[0.8125rem] leading-[1.5] text-slate-400 max-lg:max-w-none max-lg:leading-relaxed sm:max-w-[40ch] sm:text-right sm:text-sm sm:leading-relaxed lg:text-[0.875rem]">
-                  {t("landing.showroom.concept.sectionSub")}
-                </p>
               </div>
-              <div className="mt-4 grid grid-cols-2 gap-2.5 sm:mt-6 sm:gap-3 md:gap-4 lg:grid-cols-4">
-                {SENSORA_CONCEPT_STORY_SLIDES.map((slide, slideIdx) => (
+              <div className="landing-service-menu-grid mt-4 grid grid-cols-1 gap-2 sm:mt-5 sm:grid-cols-2 sm:gap-3 lg:grid-cols-4">
+                {LANDING_SERVICE_MENU.map((item, i) => (
                   <button
-                    key={slide.id}
+                    key={item.guideId}
                     type="button"
-                    onClick={() => {
-                      const gid = sensoraGuideIdFromConceptSlideId(slide.id);
-                      if (gid) openLandingGuideDetail(gid);
-                    }}
-                    className="landing-tip-feature-card sensora-concept-tip-card group relative flex min-h-0 cursor-pointer flex-col overflow-hidden rounded-[14px] border border-white/[0.18] bg-gradient-to-b from-slate-900/85 to-[#050d14]/94 text-left shadow-[0_16px_48px_-20px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(255,255,255,0.08),0_0_40px_-12px_rgba(56,189,248,0.12)] ring-1 ring-inset ring-sky-400/12 backdrop-blur-md transition-[transform,border-color,box-shadow] duration-[220ms] hover:-translate-y-0.5 hover:border-sky-400/48 hover:ring-sky-400/26 hover:shadow-[0_24px_56px_-16px_rgba(0,0,0,0.5),0_0_52px_-10px_rgba(56,189,248,0.22)] active:translate-y-[0.5px] active:brightness-[1.025] motion-reduce:transition-none motion-reduce:hover:translate-y-0 touch-manipulation sm:min-h-[13rem] sm:rounded-[17px]"
+                    onClick={() => openLandingGuideDetail(item.guideId)}
+                    className="landing-service-menu-item group flex min-h-0 w-full cursor-pointer flex-col rounded-[16px] border border-white/[0.16] bg-gradient-to-b from-[#0a1524]/95 to-[#030a14]/96 px-4 py-3.5 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.07),0_14px_40px_-22px_rgba(0,0,0,0.55)] ring-1 ring-inset ring-sky-400/14 transition-[transform,border-color,box-shadow] duration-[200ms] hover:-translate-y-0.5 hover:border-sky-400/45 hover:shadow-[0_22px_52px_-18px_rgba(0,0,0,0.52),0_0_42px_-10px_rgba(56,189,248,0.18)] active:translate-y-0 active:scale-[0.995] motion-reduce:transition-none motion-reduce:hover:translate-y-0 touch-manipulation sm:min-h-[7.75rem] sm:rounded-[18px] sm:px-5 sm:py-4"
                   >
-                    <div className="relative h-[7.25rem] w-full shrink-0 overflow-hidden bg-[#020617] sm:h-auto sm:aspect-[5/4]">
-                      <span className="absolute left-2 top-2 z-[2] rounded-md border border-white/[0.14] bg-[#030a14]/88 px-1.5 py-0.5 text-[10px] font-bold tabular-nums tracking-tight text-sky-100/95 shadow-sm backdrop-blur-sm sm:left-2.5 sm:top-2.5 sm:px-2 sm:py-0.5 sm:text-[11px]">
-                        {String(slideIdx + 1).padStart(2, "0")}
+                    <div className="flex items-start justify-between gap-2">
+                      <span className="flex size-8 shrink-0 items-center justify-center rounded-lg border border-white/[0.12] bg-white/[0.06] font-mono text-[11px] font-bold tabular-nums text-sky-100/92 sm:size-9 sm:text-[12px]">
+                        {String(i + 1).padStart(2, "0")}
                       </span>
-                      <Image
-                        src={slide.src}
-                        alt=""
-                        fill
-                        className="object-cover object-center opacity-[0.9] saturate-[0.92] brightness-[1.03] contrast-[1.02] transition-[opacity,filter] duration-300 group-hover:opacity-100 group-hover:saturate-100 sm:brightness-[1.04]"
-                        sizes="(max-width:640px) 42vw,(max-width:1024px) 22vw, 240px"
-                        quality={92}
-                      />
-                      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#020817]/94 via-[#020617]/42 to-[#0a1624]/55" />
-                      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_90%_70%_at_76%_-8%,rgba(56,189,248,0.11),transparent_55%),radial-gradient(ellipse_70%_55%_at_14%_88%,rgba(139,92,246,0.09),transparent_54%)]" />
-                      <span className="absolute bottom-1.5 left-2 right-2 inline-flex items-center gap-1 text-[9px] font-medium tracking-[0.08em] text-sky-200/88 sm:bottom-2 sm:left-2.5 sm:text-[10px]">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" className="shrink-0 opacity-90" aria-hidden>
+                      <span className="inline-flex shrink-0 items-center gap-0.5 rounded-md border border-sky-400/22 bg-sky-500/[0.08] px-2 py-[3px] text-[10px] font-semibold text-sky-100/92">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className="opacity-95" aria-hidden>
                           <path d="M9 18l6-6-6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
-                        {t("preview.guide.tapDetail")}
+                        {t("landing.showroom.serviceMenu.tapHint")}
                       </span>
                     </div>
-                    <div className="flex flex-1 flex-col px-2.5 pb-2.5 pt-2 max-lg:min-h-0 max-lg:px-3 max-lg:pb-3 max-lg:pt-2.5 sm:px-3.5 sm:pb-3.5 sm:pt-3">
-                      <span className="line-clamp-2 text-[0.8rem] font-semibold leading-snug text-slate-50 max-lg:text-[0.84rem] max-lg:leading-snug sm:text-[0.92rem]">
-                        {t(SENSORA_CONCEPT_TIP_SHORT_KEYS[slideIdx])}
-                      </span>
-                      <span className="mt-1 line-clamp-2 text-[10px] leading-[1.45] text-slate-400 max-lg:mt-1.5 max-lg:text-[10.5px] max-lg:leading-[1.5] max-lg:line-clamp-3 sm:mt-1.5 sm:line-clamp-3 sm:text-[11px] sm:leading-relaxed sm:text-xs">
-                        {t(slide.descKey)}
-                      </span>
-                    </div>
+                    <span className="mt-3 text-[1.025rem] font-semibold tracking-[-0.02em] text-slate-50 sm:mt-3.5 sm:text-[1.06rem]">{t(item.titleKey)}</span>
+                    <span className="mt-1 flex-1 text-[0.8125rem] leading-[1.5] text-slate-400 sm:mt-1.5 sm:text-[0.84375rem] sm:leading-[1.55]">{t(item.descKey)}</span>
                   </button>
                 ))}
               </div>
-              <p className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-2 text-[11px] text-slate-500">
-                <button
-                  type="button"
-                  className="rounded-lg border border-white/[0.12] bg-white/[0.04] px-3 py-1.5 font-semibold text-slate-300 transition hover:border-sky-400/35 hover:text-slate-50"
-                  onClick={() => openLandingGuideDetail(DEFAULT_GUIDE_ID)}
-                >
-                  {t("crm.guideTip.openViewer")}
-                </button>
-                <span className="text-slate-600">·</span>
-                <span>{t("preview.toc.disclaimer1")}</span>
-              </p>
+              <p className="landing-service-menu-note mt-4 text-[11px] leading-relaxed text-slate-500 sm:mt-5 sm:text-[12px]">{t("preview.toc.disclaimer1")}</p>
+              <button
+                type="button"
+                className="mt-2 text-left text-[11px] font-semibold text-sky-400/90 underline-offset-4 hover:text-sky-300 hover:underline sm:text-[12px]"
+                onClick={() => openLandingGuideDetail(DEFAULT_GUIDE_ID)}
+              >
+                {t("crm.guideTip.openViewer")}
+              </button>
             </div>
           </div>
 
