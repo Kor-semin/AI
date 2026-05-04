@@ -309,8 +309,22 @@ export type TranslationKey =
   | "landing.slides.guide.title"
   | "landing.slides.guide.lead"
   | "landing.slides.guide.thumbHint"
+  | "landing.slides.enterprise.productKicker"
+  | "landing.slides.enterprise.heroDefinition"
+  | "landing.slides.enterprise.heroTrust"
+  | "landing.slides.philosophy.kicker"
+  | "landing.slides.philosophy.title"
+  | "landing.slides.philosophy.line1"
+  | "landing.slides.philosophy.line2"
+  | "landing.slides.philosophy.line3"
+  | "landing.slides.philosophy.line4"
+  | "landing.slides.philosophy.nextCta"
+  | "landing.slides.menu.enterpriseSub"
+  | "landing.slides.menu.nextPhilosophy"
   | "landing.slides.actions.kicker"
   | "landing.slides.actions.backToGuide"
+  | "landing.slides.actions.backToPhilosophy"
+  | "landing.slides.actions.openSampleScreens"
   | "landing.slides.actions.openWorkspace"
   | "landing.showroom.closing.title"
   | "landing.showroom.bridge.line1"
@@ -911,8 +925,8 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.showroom.announcement.kicker": "베타 사용자 안내",
     "landing.showroom.announcement.body":
       "현재 Sensora Auto CRM은 자동차 영업사원을 대상으로 베타 사용자를 순차적으로 받고 있습니다.",
-    "landing.showroom.serviceMenu.sectionTitle": "핵심 업무 메뉴",
-    "landing.showroom.serviceMenu.sectionSub": "예시 안내 화면을 열어 실제 업무 화면에 가까운 형태를 둘러볼 수 있습니다.",
+    "landing.showroom.serviceMenu.sectionTitle": "핵심 업무",
+    "landing.showroom.serviceMenu.sectionSub": "각 항목에서 예시 안내를 이 앱 안에서 확인할 수 있습니다.",
     "landing.showroom.serviceMenu.customersTitle": "고객관리",
     "landing.showroom.serviceMenu.customersDesc": "상담 메모와 관심 차량을 고객별로 정리합니다.",
     "landing.showroom.serviceMenu.aiTitle": "AI 비서",
@@ -925,20 +939,34 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.slides.nav.prev": "이전",
     "landing.slides.nav.next": "다음",
     "landing.slides.dotNav": "슬라이드 선택",
-    "landing.slides.home.nextCta": "핵심 기능 보기",
-    "landing.slides.menu.kicker": "업무 메뉴",
-    "landing.slides.menu.nextCta": "화면 안내 보기",
+    "landing.slides.home.nextCta": "핵심 업무 보기",
+    "landing.slides.menu.kicker": "핵심 업무",
+    "landing.slides.menu.nextCta": "운영 원칙 보기",
+    "landing.slides.menu.enterpriseSub": "네 가지 업무 표면으로 고객 흐름을 잡습니다.",
     "landing.slides.guide.kicker": "화면 안내",
     "landing.slides.guide.title": "예시 화면을 골라 확인하세요",
     "landing.slides.guide.lead": "썸네일을 누르면 이 앱 안에서 설명과 함께 크게 볼 수 있습니다.",
     "landing.slides.guide.thumbHint": "자세히",
+    "landing.slides.enterprise.productKicker": "Sensora Auto CRM",
+    "landing.slides.enterprise.heroDefinition": "자동차 영업사원을 위한 AI 고객관리 워크스페이스",
+    "landing.slides.enterprise.heroTrust": "상담부터 사후관리까지 한 흐름으로 정리합니다.",
+    "landing.slides.philosophy.kicker": "운영 원칙",
+    "landing.slides.philosophy.title": "현장 업무를 붙들어 두는 네 가지 기준",
+    "landing.slides.philosophy.line1": "상담은 기록으로, 기록은 다음 행동으로.",
+    "landing.slides.philosophy.line2": "AI는 초안을 돕고, 최종 판단은 영업사원이 합니다.",
+    "landing.slides.philosophy.line3": "고객 정보는 사용자가 확인한 뒤 저장합니다.",
+    "landing.slides.philosophy.line4": "상담부터 사후관리까지 한 흐름으로 관리합니다.",
+    "landing.slides.philosophy.nextCta": "시작 단계로",
+    "landing.slides.menu.nextPhilosophy": "운영 원칙으로",
     "landing.slides.actions.kicker": "시작하기",
     "landing.slides.actions.backToGuide": "안내 화면 다시 보기",
+    "landing.slides.actions.backToPhilosophy": "운영 원칙으로",
+    "landing.slides.actions.openSampleScreens": "예시 화면 보기",
     "landing.slides.actions.openWorkspace": "업무 화면 둘러보기",
     "landing.showroom.closing.title": "고객관리, 상담 메모, 사후관리를 한 곳에서 시작하세요.",
     "landing.showroom.bridge.line1": "상담은 기록으로,",
     "landing.showroom.bridge.line2": "기록은 다음 행동으로.",
-    "landing.showroom.header.subline": "자동차 영업사원용 · 상담·고객·사후관리 워크스페이스",
+    "landing.showroom.header.subline": "자동차 영업용 AI 고객관리 워크스페이스",
     "landing.showroom.heroDash.windowSubline": "오늘의 연락 · 업무 요약",
     "landing.showroom.heroDash.greetingLine": "오늘 진행하면 좋은 일이에요",
     "landing.showroom.heroDash.greetingSub": "연락 우선 확인과 검토용 초안을 한 화면에 모았습니다.",
@@ -1568,7 +1596,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.showroom.announcement.body":
       "Sensora Auto CRM is currently onboarding beta sales reps gradually. Spaces may be limited while we stabilize the service.",
     "landing.showroom.serviceMenu.sectionTitle": "Core workspaces",
-    "landing.showroom.serviceMenu.sectionSub": "Tap a menu item to open a sample guide screen.",
+    "landing.showroom.serviceMenu.sectionSub": "Each tile opens sample guidance inside the app preview.",
     "landing.showroom.serviceMenu.customersTitle": "Customers",
     "landing.showroom.serviceMenu.customersDesc": "Keep consultation notes and interest vehicles tidy per buyer.",
     "landing.showroom.serviceMenu.aiTitle": "AI assistant",
@@ -1581,20 +1609,34 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.slides.nav.prev": "Back",
     "landing.slides.nav.next": "Next",
     "landing.slides.dotNav": "Choose screen",
-    "landing.slides.home.nextCta": "Core menus",
-    "landing.slides.menu.kicker": "Workspace menus",
-    "landing.slides.menu.nextCta": "Sample screens",
+    "landing.slides.home.nextCta": "Core workspaces",
+    "landing.slides.menu.kicker": "Core workspaces",
+    "landing.slides.menu.nextCta": "Operating principles",
+    "landing.slides.menu.enterpriseSub": "Four workspace surfaces spanning the buyer journey.",
     "landing.slides.guide.kicker": "Screens",
     "landing.slides.guide.title": "Pick a sample screen",
     "landing.slides.guide.lead": "Tap a thumbnail to review it in-app with notes.",
     "landing.slides.guide.thumbHint": "Details",
+    "landing.slides.enterprise.productKicker": "Sensora Auto CRM",
+    "landing.slides.enterprise.heroDefinition": "AI customer-management workspace for automotive sales reps",
+    "landing.slides.enterprise.heroTrust": "Consultation through aftercare in one disciplined flow.",
+    "landing.slides.philosophy.kicker": "Operating principles",
+    "landing.slides.philosophy.title": "Four standards that anchor field workflow",
+    "landing.slides.philosophy.line1": "Consultation settles into notes; notes settle into clear next actions.",
+    "landing.slides.philosophy.line2": "AI assists with drafts—you own the final decision.",
+    "landing.slides.philosophy.line3": "Customer data saves only after explicit confirmation.",
+    "landing.slides.philosophy.line4": "Consultation through aftercare stays one connected flow.",
+    "landing.slides.philosophy.nextCta": "Get started",
+    "landing.slides.menu.nextPhilosophy": "Operating principles →",
     "landing.slides.actions.kicker": "Next steps",
     "landing.slides.actions.backToGuide": "Back to guides",
+    "landing.slides.actions.backToPhilosophy": "Operating principles",
+    "landing.slides.actions.openSampleScreens": "Sample screens",
     "landing.slides.actions.openWorkspace": "Browse workspace",
     "landing.showroom.closing.title": "Bring customer CRM, consultation notes, and aftercare together in one place.",
     "landing.showroom.bridge.line1": "Consultation settles into notes,",
     "landing.showroom.bridge.line2": "notes guide the disciplined next touch.",
-    "landing.showroom.header.subline": "Consultation · customers · aftercare for sales reps",
+    "landing.showroom.header.subline": "AI CRM workspace built for showroom sales teams",
     "landing.showroom.heroDash.windowSubline": "Today's queue · workspace digest",
     "landing.showroom.heroDash.greetingLine": "Here's a calm starting lane for today.",
     "landing.showroom.heroDash.greetingSub": "Catch priority follow-ups alongside draft snippets in one glance.",
