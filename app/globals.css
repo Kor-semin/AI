@@ -2218,6 +2218,22 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
       0 20px 56px -32px rgba(0, 0, 0, 0.55),
       inset 0 1px 0 rgba(255, 255, 255, 0.05);
   }
+
+  /* 모바일 히어로 CTA: 그리드·nowrap min-content로 카드 밖으로 밀리는 것 방지 */
+  .landing-showcase-hero--unified .landing-hero-showcase-cta-row {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  .landing-showcase-hero--unified .landing-hero-showcase-cta-row > a,
+  .landing-showcase-hero--unified .landing-hero-showcase-cta-row > button {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
 }
 
 @media (min-width: 1024px) {

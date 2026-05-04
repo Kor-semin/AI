@@ -315,7 +315,7 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
           />
 
           <div className="relative z-[1] flex max-lg:min-h-0 max-lg:flex-col max-lg:gap-5 items-start gap-3 sm:gap-6 lg:grid lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.98fr)] lg:gap-x-10 lg:gap-y-6 lg:pb-0 lg:pr-0 xl:grid-cols-[minmax(0,1.26fr)_minmax(0,0.92fr)] xl:gap-x-11 xl:gap-y-7 2xl:gap-x-14">
-            <div className="landing-showcase-copy-col landing-hero-copy-stack order-1 min-w-0 w-full overflow-visible pr-0.5 max-lg:rounded-2xl max-lg:border max-lg:border-white/[0.08] max-lg:bg-white/[0.03] max-lg:px-3.5 max-lg:py-4 max-lg:ring-1 max-lg:ring-inset max-lg:ring-white/[0.04] lg:max-w-[min(100%,44rem)] lg:border-0 lg:bg-transparent lg:p-0 lg:pr-1.5 xl:max-w-[min(100%,48rem)] 2xl:max-w-[min(100%,50rem)]">
+            <div className="landing-showcase-copy-col landing-hero-copy-stack order-1 min-w-0 w-full max-w-full overflow-visible pr-0.5 max-lg:box-border max-lg:max-w-full max-lg:overflow-x-clip max-lg:pr-0 max-lg:rounded-2xl max-lg:border max-lg:border-white/[0.08] max-lg:bg-white/[0.03] max-lg:px-3.5 max-lg:py-4 max-lg:ring-1 max-lg:ring-inset max-lg:ring-white/[0.04] lg:max-w-[min(100%,44rem)] lg:border-0 lg:bg-transparent lg:p-0 lg:pr-1.5 xl:max-w-[min(100%,48rem)] 2xl:max-w-[min(100%,50rem)]">
               <span className="inline-flex w-fit rounded-full border border-white/[0.2] bg-white/[0.07] px-3 py-1 text-[11px] font-semibold tracking-[0.06em] text-slate-100/95 backdrop-blur-sm max-sm:py-[0.3125rem] sm:px-3.5 sm:py-1.5 sm:text-[11px] sm:tracking-[0.08em]">
                 {t("landing.showroom.hero.kickerBadge")}
               </span>
@@ -326,11 +326,19 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
               <p className="mt-3 max-w-[min(100%,40rem)] whitespace-pre-line text-sm leading-[1.55] text-slate-200/95 max-sm:mt-2.5 max-sm:text-[0.8125rem] max-sm:leading-snug sm:mt-5 sm:text-[1.065rem] sm:leading-[1.68] lg:max-w-[min(100%,42ch)] xl:max-w-[48ch]">
                 {t("landing.showroom.hero.sub")}
               </p>
-              <div className="mt-4 grid w-full max-w-xl grid-cols-1 gap-2 max-sm:gap-2 sm:mt-7 sm:gap-3 md:max-w-none md:grid-cols-2 md:gap-4 lg:mt-8">
-                <Link href={JOIN_PATH} prefetch={false} className={`${ctaPrimaryShowcase} justify-center whitespace-nowrap`}>
+              <div className="landing-hero-showcase-cta-row mt-4 grid min-w-0 w-full max-w-xl grid-cols-1 gap-2 box-border max-lg:mx-0 max-lg:max-w-full max-lg:px-0 max-sm:gap-2 sm:mt-7 sm:gap-3 md:max-w-none md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] md:gap-4 lg:mt-8">
+                <Link
+                  href={JOIN_PATH}
+                  prefetch={false}
+                  className={`${ctaPrimaryShowcase} max-w-full min-w-0 justify-center text-center max-lg:whitespace-normal lg:whitespace-nowrap`}
+                >
                   {t("cta.joinBeta")}
                 </Link>
-                <button type="button" onClick={onOpenAppWorkspace} className={`${ctaGhostShowcase} justify-center whitespace-nowrap`}>
+                <button
+                  type="button"
+                  onClick={onOpenAppWorkspace}
+                  className={`${ctaGhostShowcase} max-w-full min-w-0 justify-center text-center max-lg:whitespace-normal lg:whitespace-nowrap`}
+                >
                   <IconAppWindowPlay className="size-[1.2rem] shrink-0 opacity-95" />
                   {t("cta.tryAppExperience")}
                 </button>
