@@ -876,6 +876,13 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   backdrop-filter: blur(22px);
 }
 
+/* 랜딩 헤더: 모바일(width < lg)에서는 미리보기·베타 CTA 숨김 — 히어로 CTA만 노출 */
+@media (max-width: 1023px) {
+  .landing-service-nav .landing-nav-header-cta-row {
+    display: none !important;
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .landing-nav-cta-join:is(a, button):focus-visible,
   .landing-nav-cta-preview:is(button):focus-visible {
