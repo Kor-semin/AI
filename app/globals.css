@@ -876,9 +876,9 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   backdrop-filter: blur(22px);
 }
 
-/* 랜딩 헤더: 모바일(width < lg)에서는 미리보기·베타 CTA 숨김 — 히어로 CTA만 노출 */
+/* 랜딩 헤더: 모바일(width < lg)에서는 실제 헤더 CTA wrapper를 숨기고 언어 선택은 유지 */
 @media (max-width: 1023px) {
-  .landing-service-nav .landing-nav-header-cta-row {
+  .landing-service-nav .landing-mobile-hidden-header-cta {
     display: none !important;
   }
 }

@@ -227,7 +227,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                     {t("header.zoomHint")}
                   </p>
                 </div>
-                <div className="landing-nav-header-cta-row max-lg:!hidden lg:flex w-full min-w-0 flex-col gap-2 lg:max-w-[26rem] lg:flex-nowrap lg:flex-row lg:items-stretch lg:justify-end lg:gap-4 xl:max-w-[28rem] xl:gap-5">
+                <div className="landing-nav-header-cta-row landing-mobile-hidden-header-cta max-lg:!hidden lg:flex w-full min-w-0 flex-col gap-2 lg:max-w-[26rem] lg:flex-nowrap lg:flex-row lg:items-stretch lg:justify-end lg:gap-4 xl:max-w-[28rem] xl:gap-5">
                   <button
                     type="button"
                     onClick={openAppPreviewToc}
