@@ -2248,8 +2248,11 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
     min-width: 0;
     margin-left: 0;
     margin-right: 0;
+    align-items: center;
+    justify-content: center;
     white-space: normal;
     overflow-wrap: anywhere;
+    text-align: center;
   }
 }
 

@@ -21,10 +21,10 @@ const mockShell =
   "landing-showcase-mock-frame relative overflow-hidden rounded-[18px] border border-white/[0.17] bg-gradient-to-b from-[#081222]/98 to-[#030b14]/99 shadow-[0_38px_96px_-32px_rgba(0,0,0,0.82),inset_0_1px_0_rgba(255,255,255,0.095),0_0_0_1px_rgba(56,189,248,0.07)_inset,0_0_80px_-24px_rgba(56,189,248,0.14),0_0_96px_-36px_rgba(139,92,246,0.1)] ring-1 ring-inset ring-white/[0.07] backdrop-blur-xl before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-white/22 before:to-transparent sm:rounded-[22px] lg:rounded-[24px]";
 
 const ctaPrimaryShowcase =
-  "landing-showcase-cta-primary landing-showroom-cta-join sensora-premium-primary-workspace inline-flex min-h-14 max-sm:min-h-[3.125rem] w-full min-w-0 shrink-0 items-center justify-center rounded-2xl px-9 py-4 text-base font-semibold tracking-tight shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_16px_48px_-12px_rgba(56,189,248,0.3),0_0_48px_-10px_rgba(139,92,246,0.08)] max-sm:px-7 max-sm:py-3 max-sm:text-[0.9375rem] sm:min-h-[3.625rem] sm:px-10 sm:py-4 sm:text-lg touch-manipulation";
+  "landing-showcase-cta-primary landing-showroom-cta-join sensora-premium-primary-workspace inline-flex min-h-14 max-sm:min-h-[3.125rem] w-full min-w-0 shrink-0 items-center justify-center gap-2 rounded-2xl px-8 py-4 text-center text-base font-semibold leading-snug tracking-tight shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_16px_48px_-12px_rgba(56,189,248,0.3),0_0_48px_-10px_rgba(139,92,246,0.08)] max-sm:px-6 max-sm:py-3 max-sm:text-[0.9375rem] sm:min-h-[3.625rem] sm:px-9 sm:py-4 sm:text-lg touch-manipulation";
 
 const ctaGhostShowcase =
-  "landing-showcase-cta-ghost landing-showroom-cta-preview inline-flex min-h-14 max-sm:min-h-[3.125rem] w-full min-w-0 shrink-0 items-center justify-center gap-2 rounded-2xl border border-white/[0.34] bg-white/[0.1] px-8 py-4 text-[0.9375rem] font-semibold tracking-tight text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_0_0_1px_rgba(56,189,248,0.06)_inset,0_0_40px_-10px_rgba(56,189,248,0.14)] ring-1 ring-inset ring-sky-400/22 backdrop-blur-md max-sm:gap-1.5 max-sm:px-6 max-sm:py-3 max-sm:text-[0.875rem] sm:min-h-[3.625rem] sm:px-9 sm:py-4 sm:text-base touch-manipulation";
+  "landing-showcase-cta-ghost landing-showroom-cta-preview inline-flex min-h-14 max-sm:min-h-[3.125rem] w-full min-w-0 shrink-0 items-center justify-center gap-2 rounded-2xl border border-white/[0.34] bg-white/[0.1] px-8 py-4 text-center text-base font-semibold leading-snug tracking-tight text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_0_0_1px_rgba(56,189,248,0.06)_inset,0_0_40px_-10px_rgba(56,189,248,0.14)] ring-1 ring-inset ring-sky-400/22 backdrop-blur-md max-sm:gap-1.5 max-sm:px-6 max-sm:py-3 max-sm:text-[0.9375rem] sm:min-h-[3.625rem] sm:px-9 sm:py-4 sm:text-base touch-manipulation";
 
 const HERO_MOCK_NAV_KEYS = [
   "landing.showroom.heroMock.nav.home",
@@ -59,6 +59,15 @@ function IconAppWindowPlay({ className }: { className?: string }) {
         fill="currentColor"
         opacity="0.9"
       />
+    </svg>
+  );
+}
+
+function IconArrowRightSoft({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 20 20" fill="none" aria-hidden>
+      <path d="M4.5 10h10" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+      <path d="M10.8 5.7L15.1 10l-4.3 4.3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -242,6 +251,10 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
   const router = useRouter();
   const [landingDetailOpen, setLandingDetailOpen] = useState(false);
   const [landingGuideId, setLandingGuideId] = useState<SensoraGuideId>(DEFAULT_GUIDE_ID);
+  const [heroDescription, heroPrinciple] = t("landing.showroom.hero.sub")
+    .split(/\n+/)
+    .map((line) => line.trim())
+    .filter(Boolean);
 
   const openLandingGuideDetail = (id: SensoraGuideId) => {
     setLandingGuideId(id);
@@ -314,36 +327,42 @@ export function LandingShowcaseHero({ onOpenAppWorkspace }: { onOpenAppWorkspace
             className="sensora-nebula-layer-absolute pointer-events-none absolute -right-[14%] top-[14%] h-[78%] w-[78%] max-w-[720px] rounded-full bg-[radial-gradient(circle_at_40%_36%,rgba(56,189,248,0.2),transparent_57%),radial-gradient(circle_at_70%_56%,rgba(139,92,246,0.14),transparent_55%)] opacity-[0.98] blur-3xl lg:-right-[4%]"
           />
 
-          <div className="relative z-[1] flex max-lg:min-h-0 max-lg:flex-col max-lg:gap-5 min-w-0 items-start gap-3 sm:gap-6 lg:grid lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.98fr)] lg:gap-x-10 lg:gap-y-6 lg:pb-0 lg:pr-0 xl:grid-cols-[minmax(0,1.26fr)_minmax(0,0.92fr)] xl:gap-x-11 xl:gap-y-7 2xl:gap-x-14">
+          <div className="relative z-[1] flex max-lg:min-h-0 max-lg:flex-col max-lg:gap-5 min-w-0 items-start gap-3 sm:gap-6 lg:grid lg:grid-cols-[minmax(0,1.12fr)_minmax(0,1fr)] lg:items-center lg:gap-x-10 lg:gap-y-6 lg:pb-0 lg:pr-0 xl:grid-cols-[minmax(0,1.18fr)_minmax(0,0.96fr)] xl:gap-x-11 xl:gap-y-7 2xl:gap-x-14">
             <div
               data-sensora-landing-hero-copy-card
-              className="landing-showcase-copy-col landing-hero-copy-stack order-1 min-w-0 w-full max-w-full overflow-visible pr-0.5 max-lg:box-border max-lg:max-w-full max-lg:overflow-x-clip max-lg:pr-0 max-lg:rounded-2xl max-lg:border max-lg:border-white/[0.08] max-lg:bg-white/[0.03] max-lg:px-3.5 max-lg:py-4 max-lg:ring-1 max-lg:ring-inset max-lg:ring-white/[0.04] lg:max-w-[min(100%,44rem)] lg:border-0 lg:bg-transparent lg:p-0 lg:pr-1.5 xl:max-w-[min(100%,48rem)] 2xl:max-w-[min(100%,50rem)]"
+              className="landing-showcase-copy-col landing-hero-copy-stack order-1 min-w-0 w-full max-w-full overflow-visible pr-0.5 max-lg:box-border max-lg:max-w-full max-lg:overflow-x-clip max-lg:pr-0 max-lg:rounded-2xl max-lg:border max-lg:border-white/[0.08] max-lg:bg-white/[0.03] max-lg:px-3.5 max-lg:py-4 max-lg:ring-1 max-lg:ring-inset max-lg:ring-white/[0.04] lg:max-w-[min(100%,43rem)] lg:border-0 lg:bg-transparent lg:p-0 lg:pr-1.5 xl:max-w-[min(100%,46rem)] 2xl:max-w-[min(100%,48rem)]"
             >
-              <span className="inline-flex w-fit rounded-full border border-white/[0.2] bg-white/[0.07] px-3 py-1 text-[11px] font-semibold tracking-[0.06em] text-slate-100/95 backdrop-blur-sm max-sm:py-[0.3125rem] sm:px-3.5 sm:py-1.5 sm:text-[11px] sm:tracking-[0.08em]">
+              <span className="inline-flex w-fit rounded-full border border-sky-300/28 bg-sky-400/[0.09] px-3 py-1 text-[11px] font-semibold tracking-[0.06em] text-sky-50 backdrop-blur-sm max-sm:py-[0.3125rem] sm:px-3.5 sm:py-1.5 sm:text-[11px] sm:tracking-[0.08em]">
                 {t("landing.showroom.hero.kickerBadge")}
               </span>
-              <h1 className="landing-showcase-hero-headline mt-2.5 max-w-[min(100%,44rem)] text-pretty font-semibold leading-[1.2] tracking-[-0.032em] text-white [word-break:keep-all] text-[clamp(1.45rem,calc(0.32rem+4.2vw),3.28rem)] max-sm:mt-2 max-sm:leading-[1.22] sm:mt-4 sm:max-w-[min(100%,40rem)] lg:max-w-none lg:leading-[1.22] lg:text-[clamp(1.48rem,calc(0.32rem+2.45vw),2.48rem)] xl:text-[clamp(1.52rem,calc(0.36rem+2.2vw),2.58rem)] 2xl:text-[clamp(1.58rem,2.15vw,2.72rem)]">
+              <h1 className="landing-showcase-hero-headline mt-3 max-w-[min(100%,44rem)] text-pretty font-semibold leading-[1.14] tracking-[-0.036em] text-white [word-break:keep-all] text-[clamp(1.52rem,calc(0.32rem+4.35vw),3.34rem)] max-sm:mt-2.5 max-sm:leading-[1.16] sm:mt-4 sm:max-w-[min(100%,40rem)] lg:max-w-none lg:leading-[1.16] lg:text-[clamp(1.58rem,calc(0.32rem+2.55vw),2.56rem)] xl:text-[clamp(1.64rem,calc(0.36rem+2.28vw),2.68rem)] 2xl:text-[clamp(1.7rem,2.22vw,2.8rem)]">
                 <span className="landing-showcase-hero-headline-line block">{t("landing.showroom.hero.headlineLine1")}</span>
                 <span className="landing-showcase-hero-headline-line mt-[0.06em] block text-white">{t("landing.showroom.hero.headlineLine2")}</span>
               </h1>
-              <p className="mt-3 max-w-[min(100%,40rem)] whitespace-pre-line text-sm leading-[1.55] text-slate-200/95 max-sm:mt-2.5 max-sm:text-[0.8125rem] max-sm:leading-snug sm:mt-5 sm:text-[1.065rem] sm:leading-[1.68] lg:max-w-[min(100%,42ch)] xl:max-w-[48ch]">
-                {t("landing.showroom.hero.sub")}
-              </p>
-              <div className="landing-hero-showcase-cta-row mt-4 grid min-w-0 w-full max-w-full grid-cols-1 gap-2 box-border max-lg:mx-0 max-lg:max-w-full max-lg:grid-cols-1 max-lg:overflow-x-hidden max-lg:px-0 max-sm:gap-2 sm:mt-7 sm:gap-3 lg:mt-8 lg:max-w-xl lg:grid-cols-2 lg:gap-4">
+              <div className="landing-hero-message-stack mt-3.5 max-w-[min(100%,40rem)] sm:mt-5 lg:max-w-[min(100%,44ch)] xl:max-w-[48ch]">
+                <p className="text-sm font-medium leading-[1.5] text-slate-100/96 max-sm:text-[0.875rem] max-sm:leading-[1.45] sm:text-[1.075rem] sm:leading-[1.62]">
+                  {heroDescription}
+                </p>
+                <p className="landing-hero-principle-card mt-2.5 rounded-2xl border border-white/[0.12] bg-white/[0.055] px-3.5 py-2.5 text-[0.8125rem] font-medium leading-[1.45] text-slate-300/95 shadow-[inset_0_1px_0_rgba(255,255,255,0.07)] max-sm:mt-2 max-sm:rounded-xl max-sm:px-3 max-sm:py-2 sm:text-[0.9375rem]">
+                  {heroPrinciple}
+                </p>
+              </div>
+              <div className="landing-hero-showcase-cta-row mt-4 grid min-w-0 w-full max-w-full grid-cols-1 gap-2.5 box-border max-lg:mx-auto max-lg:max-w-full max-lg:grid-cols-1 max-lg:overflow-x-hidden max-lg:px-0 max-sm:gap-2 sm:mt-6 sm:gap-3 lg:mt-7 lg:max-w-[38rem] lg:grid-cols-2 lg:gap-4">
                 <Link
                   href={JOIN_PATH}
                   prefetch={false}
-                  className={`${ctaPrimaryShowcase} max-w-full min-w-0 justify-center text-center max-lg:!mx-0 max-lg:!flex max-lg:!w-full max-lg:!max-w-full max-lg:!min-w-0 max-lg:whitespace-normal max-lg:[overflow-wrap:anywhere] lg:whitespace-nowrap`}
+                  className={`${ctaPrimaryShowcase} max-w-full min-w-0 justify-center text-center max-lg:!mx-auto max-lg:!flex max-lg:!w-full max-lg:!max-w-full max-lg:!min-w-0 max-lg:whitespace-normal max-lg:[overflow-wrap:anywhere] lg:whitespace-nowrap`}
                 >
-                  {t("cta.joinBeta")}
+                  <span>{t("cta.joinBeta")}</span>
+                  <IconArrowRightSoft className="size-[1.15rem] shrink-0 opacity-95" />
                 </Link>
                 <button
                   type="button"
                   onClick={onOpenAppWorkspace}
-                  className={`${ctaGhostShowcase} max-w-full min-w-0 justify-center text-center max-lg:!mx-0 max-lg:!flex max-lg:!w-full max-lg:!max-w-full max-lg:!min-w-0 max-lg:flex-wrap max-lg:whitespace-normal max-lg:[overflow-wrap:anywhere] lg:whitespace-nowrap`}
+                  className={`${ctaGhostShowcase} max-w-full min-w-0 justify-center text-center max-lg:!mx-auto max-lg:!flex max-lg:!w-full max-lg:!max-w-full max-lg:!min-w-0 max-lg:flex-wrap max-lg:whitespace-normal max-lg:[overflow-wrap:anywhere] lg:whitespace-nowrap`}
                 >
                   <IconAppWindowPlay className="size-[1.2rem] shrink-0 opacity-95" />
-                  {t("cta.tryAppExperience")}
+                  <span>{t("cta.tryAppExperience")}</span>
                 </button>
               </div>
             </div>
