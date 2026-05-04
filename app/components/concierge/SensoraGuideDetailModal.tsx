@@ -93,7 +93,7 @@ export function SensoraGuideDetailModal({
     <div
       data-sensora-guide-detail-modal
       className={[
-        "fixed inset-0 flex max-h-screen min-h-[100svh] items-end justify-center bg-black/[0.58] px-[max(0px,env(safe-area-inset-left,0px))] backdrop-blur-xl supports-[height:100dvh]:min-h-[100dvh] max-md:pb-[env(safe-area-inset-bottom,0px)] max-md:pt-2 max-md:pr-[max(0px,env(safe-area-inset-right,0px))] sm:items-center sm:px-4 sm:pb-[max(0.75rem,calc(env(safe-area-inset-bottom,0px)+10px))] sm:pt-[max(0.375rem,calc(env(safe-area-inset-top,0px)+6px))]",
+        "fixed inset-0 flex items-end justify-center bg-black/[0.58] backdrop-blur-xl max-md:pb-[env(safe-area-inset-bottom,0px)] max-md:pt-2 sm:items-center sm:px-4 sm:pb-[max(0.75rem,calc(env(safe-area-inset-bottom,0px)+10px))] sm:pt-[max(0.375rem,calc(env(safe-area-inset-top,0px)+6px))]",
         overlayZClass,
       ].join(" ")}
       role="dialog"
@@ -103,7 +103,7 @@ export function SensoraGuideDetailModal({
       <button type="button" className="absolute inset-0 z-0 cursor-default" aria-label={t("landing.showroom.tip.closeOverlay")} onClick={onClose} />
 
       <div
-        className="landing-guide-dialog-animate sensora-detail-modal-shell relative z-[1] flex max-h-[min(calc(100svh-0.85rem-env(safe-area-inset-bottom,0px)-env(safe-area-inset-top,0px)),96svh)] w-full max-w-[min(96vw,min(960px,100%))] flex-col overflow-hidden rounded-t-[20px] border border-white/[0.14] bg-gradient-to-b from-[#0a1628]/99 to-[#051018]/97 shadow-[0_40px_100px_-28px_rgba(0,0,0,0.72)] backdrop-blur-2xl supports-[height:100dvh]:max-h-[min(calc(100dvh-0.85rem-env(safe-area-inset-bottom,0px)-env(safe-area-inset-top,0px)),96dvh)] max-md:rounded-t-[18px] sm:max-h-[min(92svh,92vh)] sm:supports-[height:100dvh]:max-h-[min(92dvh,92vh)] sm:rounded-[20px]"
+        className="landing-guide-dialog-animate sensora-detail-modal-shell relative z-[1] flex max-h-[min(calc(100svh-0.85rem-env(safe-area-inset-bottom,0px)-env(safe-area-inset-top,0px)),96svh)] w-full max-w-[min(96vw,min(960px,100%))] flex-col overflow-hidden rounded-t-[20px] border border-white/[0.14] bg-gradient-to-b from-[#0a1628]/99 to-[#051018]/97 shadow-[0_40px_100px_-28px_rgba(0,0,0,0.72)] backdrop-blur-2xl max-md:rounded-t-[18px] sm:max-h-[min(92dvh,92vh)] sm:rounded-[20px]"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex shrink-0 items-start justify-between gap-3 border-b border-white/[0.08] px-4 py-2.5 pt-[max(8px,calc(env(safe-area-inset-top,0px)+2px))] sm:px-5 sm:py-3 sm:pt-[max(12px,calc(env(safe-area-inset-top,0px)+4px))]">
@@ -126,7 +126,7 @@ export function SensoraGuideDetailModal({
         <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
           <div className="sensora-detail-modal-scroll min-h-0 flex-1 overflow-y-auto overscroll-y-contain [-webkit-overflow-scrolling:touch] pb-[max(0.875rem,calc(env(safe-area-inset-bottom,0px)+4px))] md:pb-4">
             <div className="relative mx-auto px-4 py-3 sm:px-6 sm:pb-5 sm:pt-3">
-              <div className="relative mx-auto mb-5 flex min-h-[min(38svh,260px)] w-full max-w-[min(860px,calc(100vw-24px))] items-center justify-center rounded-[13px] border border-white/[0.12] bg-[#020817]/92 px-[2.125rem] supports-[height:100dvh]:min-h-[min(40dvh,300px)] sm:min-h-[min(280px,48svh)] sm:max-h-[min(52svh,500px)] sm:rounded-[16px] sm:px-[2.875rem] sm:supports-[height:100dvh]:min-h-[min(280px,48dvh)] sm:supports-[height:100dvh]:max-h-[min(52dvh,500px)] md:max-h-[min(54vh,520px)]">
+              <div className="relative mx-auto mb-5 flex min-h-[min(44dvh,300px)] w-full max-w-[min(860px,calc(100vw-24px))] items-center justify-center rounded-[13px] border border-white/[0.12] bg-[#020817]/92 px-[2.125rem] sm:min-h-[min(280px,48dvh)] sm:max-h-[min(52dvh,500px)] sm:rounded-[16px] sm:px-[2.875rem] md:max-h-[min(54vh,520px)]">
                 <button
                   type="button"
                   onClick={goPrev}
@@ -149,7 +149,7 @@ export function SensoraGuideDetailModal({
                 </button>
 
                 {!slideBroken ? (
-                  <div className="relative h-[min(40svh,300px)] w-full max-h-full supports-[height:100dvh]:h-[min(42dvh,320px)] sm:h-[min(46svh,420px)] sm:supports-[height:100dvh]:h-[min(46dvh,420px)] md:h-[min(48dvh,440px)]">
+                  <div className="relative h-[min(44dvh,320px)] w-full max-h-full sm:h-[min(46dvh,420px)] md:h-[min(48dvh,440px)]">
                     <Image
                       src={active.image}
                       alt=""

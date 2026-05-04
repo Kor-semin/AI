@@ -94,7 +94,7 @@ export function SensoraGuideImageViewer({
     <div
       data-sensora-guide-viewer
       className={[
-        "fixed inset-0 flex max-h-screen min-h-[100svh] items-end justify-center bg-black/[0.58] px-[max(0px,env(safe-area-inset-left,0px))] backdrop-blur-xl supports-[height:100dvh]:min-h-[100dvh] max-md:pb-[env(safe-area-inset-bottom,0px)] max-md:pt-2 max-md:pr-[max(0px,env(safe-area-inset-right,0px))] sm:items-center sm:px-4 sm:pb-[max(0.75rem,calc(env(safe-area-inset-bottom,0px)+10px))] sm:pt-[max(0.375rem,calc(env(safe-area-inset-top,0px)+8px))]",
+        "fixed inset-0 flex items-end justify-center bg-black/[0.58] backdrop-blur-xl max-md:pb-[env(safe-area-inset-bottom,0px)] max-md:pt-2 sm:items-center sm:px-4 sm:pb-[max(0.75rem,calc(env(safe-area-inset-bottom,0px)+10px))] sm:pt-[max(0.375rem,calc(env(safe-area-inset-top,0px)+8px))]",
         overlayZClass,
       ].join(" ")}
       role="dialog"
@@ -108,7 +108,7 @@ export function SensoraGuideImageViewer({
         onClick={onClose}
       />
       <div
-        className="landing-guide-dialog-animate sensora-guide-viewer-shell sensora-guide-modal-cosmos relative z-[1] flex max-h-[min(calc(100svh-0.85rem-env(safe-area-inset-bottom,0px)-env(safe-area-inset-top,0px)),96svh)] w-full max-w-[min(96vw,min(1320px,100%))] flex-col overflow-hidden rounded-t-[20px] border border-white/[0.14] bg-gradient-to-b from-[#0a1628]/98 to-[#07111f]/97 shadow-[0_40px_100px_-28px_rgba(0,0,0,0.72)] backdrop-blur-2xl supports-[height:100dvh]:max-h-[min(calc(100dvh-0.85rem-env(safe-area-inset-bottom,0px)-env(safe-area-inset-top,0px)),96dvh)] max-md:rounded-t-[18px] sm:max-h-[min(94svh,94vh)] sm:supports-[height:100dvh]:max-h-[min(94dvh,94vh)] sm:rounded-2xl"
+        className="landing-guide-dialog-animate sensora-guide-viewer-shell sensora-guide-modal-cosmos relative z-[1] flex max-h-[min(calc(100svh-0.85rem-env(safe-area-inset-bottom,0px)-env(safe-area-inset-top,0px)),96svh)] w-full max-w-[min(96vw,min(1320px,100%))] flex-col overflow-hidden rounded-t-[20px] border border-white/[0.14] bg-gradient-to-b from-[#0a1628]/98 to-[#07111f]/97 shadow-[0_40px_100px_-28px_rgba(0,0,0,0.72)] backdrop-blur-2xl max-md:rounded-t-[18px] sm:max-h-[min(94dvh,94vh)] sm:rounded-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex shrink-0 items-start justify-between gap-3 border-b border-white/[0.08] px-4 py-2.5 pt-[max(8px,calc(env(safe-area-inset-top,0px)+2px))] sm:px-5 sm:py-3.5 sm:pt-[max(12px,calc(env(safe-area-inset-top,0px)+8px))]">
@@ -132,7 +132,7 @@ export function SensoraGuideImageViewer({
 
         <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
           <div className="min-h-0 flex-1 overflow-y-auto overscroll-y-contain [-webkit-overflow-scrolling:touch] p-3 sm:p-5">
-            <div className="relative flex min-h-[min(42svh,280px)] items-center justify-center supports-[height:100dvh]:min-h-[min(46dvh,300px)] sm:min-h-[min(52svh,360px)] sm:supports-[height:100dvh]:min-h-[min(52dvh,360px)]">
+            <div className="relative flex min-h-[min(48dvh,300px)] items-center justify-center sm:min-h-[min(52dvh,360px)]">
               <button
                 type="button"
                 onClick={goPrev}
@@ -154,7 +154,7 @@ export function SensoraGuideImageViewer({
                 </svg>
               </button>
 
-              <div className="relative z-[1] mx-auto flex h-[min(50svh,390px)] w-full max-w-[min(1400px,calc(100vw-36px))] items-center justify-center px-10 supports-[height:100dvh]:h-[min(54dvh,420px)] sm:h-[min(60svh,520px)] sm:px-14 sm:supports-[height:100dvh]:h-[min(60dvh,520px)]">
+              <div className="relative z-[1] mx-auto flex h-[min(56dvh,420px)] w-full max-w-[min(1400px,calc(100vw-36px))] items-center justify-center px-10 sm:h-[min(60dvh,520px)] sm:px-14">
                 {broken[safeIndex] ? (
                   <div className="max-w-sm px-6 text-center">
                     <p className="text-sm font-medium leading-relaxed text-slate-300">{t("landing.showroom.tip.imageMissing")}</p>
