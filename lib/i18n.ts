@@ -331,6 +331,8 @@ export type TranslationKey =
   | "landing.slides.menu.actionChevronAria"
   | "landing.slides.menu.enterWorkspaceAria"
   | "landing.slides.menu.deliveryPrepAria"
+  | "landing.slides.menu.actionGoWorkspace"
+  | "landing.slides.menu.actionDeliveryStatus"
   | "landing.slides.deliveryPrep.title"
   | "landing.slides.deliveryPrep.body"
   | "landing.slides.deliveryPrep.dismiss"
@@ -957,7 +959,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.slides.guide.thumbHint": "자세히",
     "landing.slides.enterprise.productKicker": "Sensora Auto CRM",
     "landing.slides.enterprise.heroDefinition": "자동차 영업사원을 위한 AI 고객관리 워크스페이스",
-    "landing.slides.enterprise.heroSub": "상담 메모, 고객관리, 사후관리, 출고 안내를 한 흐름으로 정리합니다.",
+    "landing.slides.enterprise.heroSub": "상담부터 사후관리까지 한 흐름으로 정리합니다.",
     "landing.slides.philosophy.kicker": "신뢰 · 운영 원칙",
     "landing.slides.philosophy.title": "상담은 기록으로, 기록은 다음 행동으로",
     "landing.slides.philosophy.line1": "고객 정보는 사용자가 확인하고 저장합니다.",
@@ -976,6 +978,8 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.slides.menu.actionChevronAria": "해당 업무 안내 열기",
     "landing.slides.menu.enterWorkspaceAria": "해당 업무 화면으로 이동합니다",
     "landing.slides.menu.deliveryPrepAria": "출고 안내 준비 상태 확인",
+    "landing.slides.menu.actionGoWorkspace": "업무 화면으로",
+    "landing.slides.menu.actionDeliveryStatus": "출고 안내 준비 중",
     "landing.slides.deliveryPrep.title": "출고 안내",
     "landing.slides.deliveryPrep.body":
       "출고 안내 전용 예시 화면은 준비 중입니다. 차량 인도 후 안내·문구 정리 기능은 베타 과정에서 순차적으로 보강합니다.",
@@ -1637,7 +1641,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.slides.enterprise.productKicker": "Sensora Auto CRM",
     "landing.slides.enterprise.heroDefinition": "AI customer-management workspace for automotive sales reps",
     "landing.slides.enterprise.heroSub":
-      "Consultation notes, CRM, aftercare, and delivery guidance—organized in one flow.",
+      "From consultation through aftercare—organized in one flow.",
     "landing.slides.philosophy.kicker": "Trust · operating principles",
     "landing.slides.philosophy.title": "Consultation becomes notes; notes become the next action.",
     "landing.slides.philosophy.line1": "Customer data is saved only after you confirm it.",
@@ -1657,6 +1661,8 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.slides.menu.actionChevronAria": "Open guide for this workspace",
     "landing.slides.menu.enterWorkspaceAria": "Open this workspace section",
     "landing.slides.menu.deliveryPrepAria": "View delivery guidance status",
+    "landing.slides.menu.actionGoWorkspace": "Open workspace",
+    "landing.slides.menu.actionDeliveryStatus": "Delivery guidance — in preparation",
     "landing.slides.deliveryPrep.title": "Delivery guidance",
     "landing.slides.deliveryPrep.body":
       "A dedicated sample screen for delivery guidance is not available yet. We will expand this area during beta.",

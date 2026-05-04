@@ -271,16 +271,16 @@ export function LandingShowroom({
           >
             <div className="landing-slide-hero-app-shell mx-auto flex h-full w-full max-w-[min(100%,400px)] flex-col gap-3 sm:max-w-[420px] lg:max-h-none lg:max-w-[1280px] lg:flex-row lg:items-center lg:justify-between lg:gap-10 xl:gap-14">
               <div className="flex w-full shrink-0 flex-col items-center text-center lg:max-w-[min(100%,26rem)] lg:items-start lg:text-left xl:max-w-[28rem]">
-                <p className="text-[9px] font-semibold uppercase tracking-[0.18em] text-sky-400/88 sm:text-[10px] lg:text-[11px]">
-                  {t("landing.slides.enterprise.productKicker")}
-                </p>
-                <h1 className="mt-2 max-w-[21ch] text-pretty text-[clamp(1.35rem,calc(0.7rem+3.9vw),2.5rem)] font-semibold leading-[1.1] tracking-[-0.036em] text-white [word-break:keep-all] sm:max-w-[22ch] lg:max-w-[24ch] lg:mt-3 lg:text-[clamp(1.65rem,calc(0.75rem+4.5vw),2.65rem)]">
-                  {t("landing.slides.enterprise.heroDefinition")}
+                <h1 className="max-w-[22ch] text-pretty text-[clamp(1.5rem,calc(0.82rem+4.2vw),2.75rem)] font-semibold leading-[1.08] tracking-[-0.038em] text-white [word-break:keep-all] sm:max-w-[24ch] lg:max-w-none lg:text-[clamp(1.85rem,calc(0.9rem+4.8vw),2.85rem)]">
+                  {t("product.name")}
                 </h1>
-                <p className="mt-2 max-w-[32ch] text-[0.84rem] font-medium leading-snug text-slate-200/[0.92] sm:text-[0.9rem] lg:mt-3 sm:leading-snug lg:max-w-[36ch] lg:text-[0.9575rem] line-clamp-3 sm:line-clamp-none">
+                <p className="mt-2.5 max-w-[30ch] text-[clamp(0.94rem,calc(0.82rem+0.55vw),1.0625rem)] font-semibold leading-snug text-slate-100/[0.96] sm:mt-3 sm:max-w-[34ch] lg:max-w-[36ch] lg:text-[1.0625rem]">
+                  {t("landing.slides.enterprise.heroDefinition")}
+                </p>
+                <p className="mt-2 max-w-[32ch] text-[0.9rem] font-medium leading-snug text-slate-200/95 sm:text-[0.9375rem] lg:mt-2.5 lg:max-w-[36ch]">
                   {t("landing.slides.enterprise.heroSub")}
                 </p>
-                <p className="mt-2 max-w-[34ch] text-[0.72rem] font-medium leading-snug text-violet-200/72 sm:mt-1.5 sm:text-[0.78rem] lg:mt-2 lg:text-[0.8275rem] lg:text-violet-200/78">
+                <p className="landing-hero-trust-line mt-2 max-w-[34ch] font-medium leading-snug text-violet-200/88 sm:mt-2 sm:text-[13px] lg:text-[0.8125rem] lg:text-violet-200/90">
                   {t("landing.showroom.hero.trustLine")}
                 </p>
 
@@ -371,13 +371,13 @@ export function LandingShowroom({
             aria-hidden={safeSlide !== 1}
           >
             <div className="mx-auto flex w-full max-w-[720px] flex-col pb-1 lg:max-w-[800px]">
-              <p className="text-center text-[10px] font-semibold uppercase tracking-[0.16em] text-sky-400/85 sm:text-[11px]">
+              <p className="text-center text-xs font-semibold uppercase tracking-[0.14em] text-sky-400/88 sm:text-[11px]">
                 {t("landing.slides.menu.kicker")}
               </p>
               <h2 className="mt-2 text-center text-[clamp(1.35rem,calc(0.85rem+2.1vw),1.85rem)] font-semibold tracking-[-0.032em] text-slate-50">
                 {t("landing.showroom.serviceMenu.sectionTitle")}
               </h2>
-              <p className="mx-auto mt-1.5 max-w-[40ch] text-center text-[0.8rem] leading-snug text-slate-500 sm:mt-2 sm:text-[0.825rem]">
+              <p className="mx-auto mt-1.5 max-w-[40ch] text-center text-[0.8125rem] leading-snug text-slate-400/95 sm:mt-2 sm:text-[0.8375rem]">
                 {t("landing.slides.menu.enterpriseSub")}
               </p>
               <div className="mt-5 flex w-full flex-col gap-2 sm:mt-6 sm:gap-2.5">
@@ -415,9 +415,11 @@ export function LandingShowroom({
                       </p>
                       <p className="mt-0.5 line-clamp-1 text-[0.765rem] leading-snug text-slate-400/92 sm:text-[0.8rem]">{t(row.descKey)}</p>
                     </div>
-                    <span className="flex shrink-0 items-center gap-1.5 text-sky-300/82">
-                      <span className="hidden text-[11px] font-semibold uppercase tracking-[0.05em] sm:inline">{t("landing.showroom.serviceMenu.tapHint")}</span>
-                      <IconChevron className="size-[1.1rem] opacity-85 transition group-hover:translate-x-0.5" />
+                    <span className="flex shrink-0 items-center gap-1 text-sky-200/88">
+                      <span className="max-w-[6.5rem] text-right text-[11px] font-semibold leading-tight text-sky-100/88 sm:max-w-none sm:text-[12px]">
+                        {row.target === "delivery" ? t("landing.slides.menu.actionDeliveryStatus") : t("landing.slides.menu.actionGoWorkspace")}
+                      </span>
+                      <IconChevron className="size-[1.05rem] shrink-0 opacity-88 transition group-hover:translate-x-0.5 sm:size-[1.1rem]" />
                     </span>
                   </button>
                 ))}

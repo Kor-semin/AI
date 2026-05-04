@@ -231,6 +231,18 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                   ) : null}
                 </div>
                 <div className="landing-nav-header-cta-row max-lg:!hidden lg:flex w-full min-w-0 flex-col gap-2 lg:max-w-[26rem] lg:flex-nowrap lg:flex-row lg:items-stretch lg:justify-end lg:gap-4 xl:max-w-[28rem] xl:gap-5">
+                  <Link
+                    href="/join"
+                    prefetch={false}
+                    className={[
+                      "landing-nav-cta-join landing-enterprise-btn-primary relative z-[20] inline-flex min-h-14 w-full items-center justify-center whitespace-nowrap rounded-xl px-7 py-3.5 text-center text-sm font-semibold tracking-tight text-slate-50 max-sm:px-6 max-sm:py-3.5 max-sm:text-[0.8125rem]",
+                      "touch-manipulation min-[420px]:min-w-0 min-[420px]:flex-1 lg:min-w-[9.5rem] lg:flex-1 xl:min-w-[10.5rem] xl:flex-none",
+                      "transition duration-[220ms] ease-out active:scale-[0.99]",
+                      "focus-visible:outline-none",
+                    ].join(" ")}
+                  >
+                    {t("cta.joinBeta")}
+                  </Link>
                   <button
                     type="button"
                     onClick={() => {
@@ -251,18 +263,6 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                     </svg>
                     {t("cta.tryAppExperience")}
                   </button>
-                  <Link
-                    href="/join"
-                    prefetch={false}
-                    className={[
-                      "landing-nav-cta-join landing-enterprise-btn-primary relative z-[20] inline-flex min-h-14 w-full items-center justify-center whitespace-nowrap rounded-xl px-7 py-3.5 text-center text-sm font-semibold tracking-tight text-slate-50 max-sm:px-6 max-sm:py-3.5 max-sm:text-[0.8125rem]",
-                      "touch-manipulation min-[420px]:min-w-0 min-[420px]:flex-1 lg:min-w-[9.5rem] lg:flex-1 xl:min-w-[10.5rem] xl:flex-none",
-                      "transition duration-[220ms] ease-out active:scale-[0.99]",
-                      "focus-visible:outline-none",
-                    ].join(" ")}
-                  >
-                    {t("cta.joinBeta")}
-                  </Link>
                 </div>
               </div>
             </>
