@@ -766,6 +766,54 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   }
 }
 
+/* 랜딩 헤더 — 컴팩트 CTA: 빠른 진입용, 히어로 1순위보다 낮은 시각 강도 */
+.landing-service-nav .landing-nav-cta-join--compact.landing-nav-cta-join.landing-enterprise-btn-primary {
+  border-color: rgba(56, 189, 248, 0.22);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.055),
+    0 2px 10px -5px rgba(0, 0, 0, 0.42);
+}
+.landing-service-nav .landing-nav-cta-preview--compact.landing-nav-cta-preview.landing-enterprise-btn-secondary {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.045),
+    0 1px 6px -3px rgba(0, 0, 0, 0.35);
+}
+.landing-service-nav .landing-nav-cta-join--compact.landing-nav-cta-join.landing-enterprise-btn-primary:hover {
+  filter: none;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    0 5px 16px -8px rgba(0, 0, 0, 0.44);
+}
+
+/* 히어로 1순위 전환 CTA — 본문 아래 실제 전환 버튼 */
+.landing-hero-primary-cta.landing-enterprise-btn-primary {
+  border-color: rgba(56, 189, 248, 0.34);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.082),
+    0 6px 22px -8px rgba(56, 189, 248, 0.24),
+    0 4px 18px -10px rgba(0, 0, 0, 0.52);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .landing-hero-primary-cta.landing-enterprise-btn-primary:hover {
+    border-color: rgba(56, 189, 248, 0.46);
+    transform: translateY(-2px);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.12),
+      0 18px 44px -10px rgba(56, 189, 248, 0.3),
+      0 12px 32px -12px rgba(139, 92, 246, 0.14);
+    transition-duration: 0.22s;
+  }
+  .landing-hero-primary-cta.landing-enterprise-btn-primary:active {
+    transform: translateY(0) scale(0.987);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .landing-hero-primary-cta.landing-enterprise-btn-primary:hover,
+  .landing-hero-primary-cta.landing-enterprise-btn-primary:active {
+    transform: none;
+  }
+}
+
 /* 프리미엄 카드·위젯 — 대시보드·패널 공통 */
 .sensora-premium-card {
   border-radius: 1.25rem;
@@ -1013,8 +1061,21 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
     transition-duration: 0.23s;
   }
 
+  .landing-service-nav .landing-nav-cta-join--compact.landing-nav-cta-join:is(a, button):hover {
+    transform: translateY(-1px);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.1),
+      0 8px 22px -10px rgba(56, 189, 248, 0.16),
+      0 6px 18px -12px rgba(139, 92, 246, 0.07);
+    transition-duration: 0.2s;
+  }
+
   .landing-nav-cta-join:is(a, button):active {
     transform: translateY(0) scale(0.986);
+  }
+
+  .landing-service-nav .landing-nav-cta-join--compact.landing-nav-cta-join:is(a, button):active {
+    transform: translateY(0) scale(0.988);
   }
 
   .landing-nav-cta-preview:is(button):hover {
@@ -1026,6 +1087,15 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
     transition-duration: 0.23s;
   }
 
+  .landing-service-nav .landing-nav-cta-preview--compact.landing-nav-cta-preview:is(button):hover {
+    transform: translateY(-1px);
+    border-color: rgba(125, 211, 252, 0.26);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.048),
+      0 6px 18px -12px rgba(56, 189, 248, 0.1);
+    transition-duration: 0.2s;
+  }
+
   /* PC 헤더: 미리보기 CTA 기본/호버에서 흰색 번짐 과다 완화 */
   @media (min-width: 1024px) {
     .landing-service-nav .landing-nav-cta-preview:is(button):hover {
@@ -1034,6 +1104,12 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
       box-shadow:
         inset 0 1px 0 rgba(255, 255, 255, 0.042),
         0 0 20px -12px rgba(56, 189, 248, 0.09);
+    }
+
+    .landing-service-nav .landing-nav-cta-preview--compact.landing-nav-cta-preview:is(button):hover {
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.042),
+        0 4px 14px -10px rgba(56, 189, 248, 0.08);
     }
   }
 

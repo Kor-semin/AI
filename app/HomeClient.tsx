@@ -230,14 +230,13 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                     </span>
                   ) : null}
                 </div>
-                <div className="landing-nav-header-cta-row max-lg:!hidden lg:flex w-full min-w-0 flex-col gap-2 lg:max-w-[26rem] lg:flex-nowrap lg:flex-row lg:items-stretch lg:justify-end lg:gap-4 xl:max-w-[28rem] xl:gap-5">
+                <div className="landing-nav-header-cta-row max-lg:!hidden lg:flex w-full min-w-0 flex-col gap-2 lg:w-auto lg:max-w-none lg:flex-nowrap lg:flex-row lg:items-center lg:justify-end lg:gap-2.5 xl:gap-3">
                   <Link
                     href="/join"
                     prefetch={false}
                     className={[
-                      "landing-nav-cta-join landing-enterprise-btn-primary relative z-[20] inline-flex min-h-14 w-full items-center justify-center whitespace-nowrap rounded-xl px-7 py-3.5 text-center text-sm font-semibold tracking-tight text-slate-50 max-sm:px-6 max-sm:py-3.5 max-sm:text-[0.8125rem]",
-                      "touch-manipulation min-[420px]:min-w-0 min-[420px]:flex-1 lg:min-w-[9.5rem] lg:flex-1 xl:min-w-[10.5rem] xl:flex-none",
-                      "transition duration-[220ms] ease-out active:scale-[0.99]",
+                      "landing-nav-cta-join landing-nav-cta-join--compact landing-enterprise-btn-primary relative z-[20] inline-flex min-h-10 w-auto shrink-0 items-center justify-center whitespace-nowrap rounded-lg px-4 py-2 text-center text-[0.8125rem] font-semibold tracking-tight text-slate-50",
+                      "touch-manipulation transition duration-[200ms] ease-out active:scale-[0.99]",
                       "focus-visible:outline-none",
                     ].join(" ")}
                   >
@@ -249,12 +248,12 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                       openAppPreviewToc();
                     }}
                     className={[
-                      "landing-nav-cta-preview landing-enterprise-btn-secondary relative z-[20] inline-flex min-h-14 w-full shrink-0 cursor-pointer items-center justify-center gap-1.5 rounded-xl whitespace-nowrap px-5 py-3.5 text-center text-sm font-semibold text-slate-100/95 backdrop-blur-sm max-sm:min-h-12 max-sm:px-4 max-sm:py-2.5 max-sm:text-xs",
+                      "landing-nav-cta-preview landing-nav-cta-preview--compact landing-enterprise-btn-secondary relative z-[20] inline-flex min-h-10 w-auto shrink-0 cursor-pointer items-center justify-center gap-1 rounded-lg whitespace-nowrap px-3.5 py-2 text-center text-[0.8125rem] font-semibold text-slate-100/95 backdrop-blur-sm",
                       "transition duration-[180ms] ease-out focus-visible:outline-none active:scale-[0.99]",
-                      "touch-manipulation min-[420px]:min-w-0 min-[420px]:flex-1 lg:min-w-[9.5rem] lg:flex-1 xl:min-w-[10.5rem] xl:flex-none",
+                      "touch-manipulation",
                     ].join(" ")}
                   >
-                    <svg className="size-[1.1rem] shrink-0 opacity-90 max-sm:size-[1rem]" viewBox="0 0 20 20" fill="none" aria-hidden>
+                    <svg className="size-[0.95rem] shrink-0 opacity-88" viewBox="0 0 20 20" fill="none" aria-hidden>
                       <path
                         d="M6.75 11.08V9.92c0-.6.323-1.15.839-1.424l5.62-3.068a1.583 1.583 0 012.541 1.424v8.088a1.584 1.584 0 01-2.541 1.424l-5.62-3.069a1.583 1.583 0 01-.839-1.423z"
                         fill="currentColor"

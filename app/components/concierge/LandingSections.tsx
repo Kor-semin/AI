@@ -288,7 +288,7 @@ export function LandingShowroom({
                   <Link
                     href={JOIN_PATH}
                     prefetch={false}
-                    className={`${entPrimaryBtn} min-h-[2.6875rem] w-full lg:min-h-[3rem] sm:w-auto sm:min-w-[10.5rem]`}
+                    className={`${entPrimaryBtn} landing-hero-primary-cta min-h-[2.6875rem] w-full lg:min-h-[3.125rem] sm:w-auto sm:min-w-[11rem]`}
                   >
                     {t("cta.joinBeta")}
                   </Link>
