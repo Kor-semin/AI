@@ -147,6 +147,93 @@ function IconDeliveryThumb({ className }: { className?: string }) {
   );
 }
 
+function LandingHeroDashboardMock() {
+  return (
+    <div className="landing-hero-mock-column flex w-full flex-col items-center gap-4 lg:flex-1 lg:max-w-[min(60%,760px)] xl:max-w-[820px] lg:justify-center">
+      <div className="relative flex w-full max-w-[min(100%,410px)] justify-center sm:max-w-[500px] lg:max-w-none">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-[-7%_-5%_-6%_-5%] rounded-[38px] bg-[radial-gradient(ellipse_72%_64%_at_48%_42%,rgba(124,58,237,0.28),transparent_68%),radial-gradient(ellipse_56%_50%_at_64%_56%,rgba(56,189,248,0.16),transparent_68%)] opacity-85 blur-[28px] lg:opacity-95"
+        />
+        <div className="landing-hero-mock-frame relative w-full overflow-hidden rounded-[26px] border border-white/[0.16] bg-[#050b17]/[0.98] p-3 shadow-[0_38px_110px_-38px_rgba(0,0,0,0.82),0_0_80px_-44px_rgba(124,58,237,0.72),inset_0_1px_0_rgba(255,255,255,0.1)] ring-1 ring-white/[0.07] sm:rounded-[30px] sm:p-4 lg:rounded-[34px] lg:p-5">
+          <Image
+            src={LANDING_SHOWROOM_IMAGE_PATHS.hero}
+            alt=""
+            fill
+            className="pointer-events-none object-cover object-center opacity-[0.055] saturate-[1.2]"
+            sizes="(max-width:640px) 90vw,(max-width:1024px) 500px, 820px"
+            quality={100}
+            priority
+            aria-hidden
+          />
+          <div className="relative z-[1] rounded-[22px] border border-white/[0.1] bg-[#07111f]/82 p-3 backdrop-blur-xl sm:p-4 lg:p-5">
+            <div className="flex items-center gap-2 border-b border-white/[0.09] pb-3">
+              <span className="size-2.5 rounded-full bg-rose-400/55" aria-hidden />
+              <span className="size-2.5 rounded-full bg-amber-300/50" aria-hidden />
+              <span className="size-2.5 rounded-full bg-emerald-300/45" aria-hidden />
+              <span className="ml-2 text-[11px] font-semibold text-slate-400">Sensora Auto CRM</span>
+              <span className="ml-auto rounded-full border border-violet-300/24 bg-violet-300/[0.08] px-2.5 py-1 text-[10px] font-semibold text-violet-100/90">
+                Today
+              </span>
+            </div>
+
+            <div className="mt-4 grid gap-3 lg:grid-cols-[1.05fr_0.95fr]">
+              <section className="rounded-[22px] border border-white/[0.1] bg-white/[0.055] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-sky-300/80">Workspace</p>
+                <h3 className="mt-2 text-[1.15rem] font-semibold tracking-[-0.035em] text-slate-50 sm:text-[1.35rem]">안녕하세요, 김세일즈님</h3>
+                <p className="mt-2 text-xs leading-relaxed text-slate-400 sm:text-[13px]">오늘 연락할 고객과 상담 기록을 한 화면에서 확인합니다.</p>
+                <div className="mt-4 grid grid-cols-2 gap-2.5">
+                  {[
+                    ["오늘 연락 대상", "8명"],
+                    ["사후관리 항목", "14건"],
+                  ].map(([label, value]) => (
+                    <div key={label} className="rounded-2xl border border-white/[0.09] bg-[#020817]/58 p-3">
+                      <p className="text-[10px] font-medium text-slate-500">{label}</p>
+                      <p className="mt-2 text-2xl font-semibold tracking-[-0.05em] text-white">{value}</p>
+                    </div>
+                  ))}
+                </div>
+              </section>
+
+              <section className="rounded-[22px] border border-violet-300/[0.16] bg-violet-300/[0.07] p-4 shadow-[0_0_44px_-28px_rgba(168,85,247,0.8)]">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-violet-200/85">AI Draft</p>
+                <h3 className="mt-2 text-base font-semibold tracking-[-0.025em] text-slate-50">검토용 메시지 초안</h3>
+                <p className="mt-3 rounded-2xl border border-white/[0.08] bg-[#020817]/54 p-3 text-xs leading-relaxed text-slate-300">
+                  지난 상담 내용을 기준으로 다음 연락 문구를 정리했습니다. 최종 발송 전 직접 확인하세요.
+                </p>
+              </section>
+            </div>
+
+            <div className="mt-3 grid gap-3 lg:grid-cols-[0.88fr_1.12fr]">
+              <section className="rounded-[22px] border border-white/[0.1] bg-[#020817]/58 p-4">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-slate-500">Recent note</p>
+                <div className="mt-3 space-y-2">
+                  <span className="block h-2.5 w-28 rounded-full bg-white/18" />
+                  <span className="block h-2.5 rounded-full bg-white/12" />
+                  <span className="block h-2.5 w-3/4 rounded-full bg-white/10" />
+                </div>
+              </section>
+              <section className="rounded-[22px] border border-white/[0.1] bg-white/[0.045] p-4">
+                <div className="flex items-center justify-between gap-3">
+                  <p className="text-sm font-semibold text-slate-100">상담부터 사후관리까지</p>
+                  <span className="rounded-full bg-sky-300/[0.12] px-2.5 py-1 text-[10px] font-semibold text-sky-100">정리됨</span>
+                </div>
+                <div className="mt-3 grid grid-cols-3 gap-2">
+                  {["상담 메모", "관심 차량", "다음 연락"].map((item) => (
+                    <div key={item} className="rounded-2xl border border-white/[0.08] bg-[#020817]/52 px-2.5 py-3 text-center text-[11px] font-semibold text-slate-300">
+                      {item}
+                    </div>
+                  ))}
+                </div>
+              </section>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 type Props = {
   slideIndex: number;
   onSlideChange: (index: number) => void;
@@ -325,26 +412,69 @@ export function LandingShowroom({
               </div>
 
               <div className="landing-hero-mock-column flex w-full flex-col items-center gap-4 lg:flex-1 lg:max-w-[min(60%,760px)] xl:max-w-[820px] lg:justify-center">
-                <div className="relative flex w-full max-w-[min(100%,400px)] justify-center sm:max-w-[460px] lg:max-w-none">
+                <div className="relative flex w-full max-w-[min(100%,410px)] justify-center sm:max-w-[500px] lg:max-w-none">
                   <div
                     aria-hidden
                     className="pointer-events-none absolute inset-[-7%_-4%_-5%_-4%] rounded-[34px] bg-[radial-gradient(ellipse_72%_64%_at_48%_42%,rgba(124,58,237,0.24),transparent_68%),radial-gradient(ellipse_56%_50%_at_64%_56%,rgba(56,189,248,0.15),transparent_68%)] opacity-80 blur-[26px] lg:opacity-90"
                   />
-                  <div className="landing-hero-mock-frame relative w-full max-w-[400px] overflow-hidden rounded-[22px] border border-white/[0.16] bg-[#050f18]/[0.98] p-1.5 shadow-[0_34px_96px_-34px_rgba(0,0,0,0.78),0_0_72px_-42px_rgba(124,58,237,0.62),inset_0_1px_0_rgba(255,255,255,0.1)] ring-1 ring-white/[0.06] sm:max-w-[460px] sm:rounded-[26px] lg:max-w-none lg:rounded-[30px]">
-                    <div className="relative aspect-[16/9] w-full overflow-hidden rounded-[18px] bg-[#030712] sm:rounded-[22px] lg:max-h-[min(62vh,520px)]">
+                  <div className="landing-hero-mock-frame relative w-full max-w-[410px] overflow-hidden rounded-[24px] border border-white/[0.16] bg-[#050f18]/[0.98] p-3 shadow-[0_34px_96px_-34px_rgba(0,0,0,0.78),0_0_72px_-42px_rgba(124,58,237,0.62),inset_0_1px_0_rgba(255,255,255,0.1)] ring-1 ring-white/[0.06] sm:max-w-[500px] sm:rounded-[28px] sm:p-4 lg:max-w-none lg:rounded-[32px]">
+                    <div className="pointer-events-none absolute inset-0 opacity-[0.12]" aria-hidden>
                       <Image
                         src={LANDING_SHOWROOM_IMAGE_PATHS.hero}
                         alt=""
                         fill
-                        className="object-cover object-center opacity-100 brightness-[1.02] contrast-[1.02] lg:brightness-[1.04] lg:contrast-[1.03]"
+                        className="object-cover object-center"
                         sizes="(max-width:640px) 90vw,(max-width:1024px) 460px, 820px"
-                        quality={100}
                         priority
                       />
-                      <div
-                        className="landing-hero-mock-scrim pointer-events-none absolute inset-0 bg-gradient-to-t from-[#020817]/16 via-transparent to-white/[0.035]"
-                        aria-hidden
-                      />
+                    </div>
+                    <div className="relative overflow-hidden rounded-[20px] border border-white/[0.1] bg-[#07111f]/94 p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] sm:rounded-[24px] sm:p-4">
+                      <div className="flex items-center gap-1.5 border-b border-white/[0.08] pb-3">
+                        <span className="size-2.5 rounded-full bg-rose-300/60" aria-hidden />
+                        <span className="size-2.5 rounded-full bg-amber-300/50" aria-hidden />
+                        <span className="size-2.5 rounded-full bg-emerald-300/50" aria-hidden />
+                        <span className="ml-2 text-[11px] font-semibold text-slate-400">{t("product.name")}</span>
+                        <span className="ml-auto rounded-full border border-violet-300/25 bg-violet-300/[0.1] px-2.5 py-1 text-[10px] font-semibold text-violet-100">
+                          Workspace
+                        </span>
+                      </div>
+                      <div className="pt-4">
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-sky-300/85">Dashboard</p>
+                        <h2 className="mt-1 text-[clamp(1.1rem,3vw,1.6rem)] font-semibold tracking-[-0.035em] text-slate-50">오늘 상담과 다음 행동</h2>
+                        <div className="mt-4 grid grid-cols-2 gap-3">
+                          <div className="rounded-2xl border border-white/[0.1] bg-white/[0.055] p-3">
+                            <p className="text-[11px] text-slate-400">오늘의 연락 대상</p>
+                            <p className="mt-2 text-2xl font-semibold text-white">8명</p>
+                            <p className="mt-1 text-[11px] text-sky-200/85">사후관리 우선</p>
+                          </div>
+                          <div className="rounded-2xl border border-white/[0.1] bg-white/[0.055] p-3">
+                            <p className="text-[11px] text-slate-400">사후관리 항목</p>
+                            <p className="mt-2 text-2xl font-semibold text-white">12건</p>
+                            <p className="mt-1 text-[11px] text-violet-200/85">다음 행동 정리</p>
+                          </div>
+                        </div>
+                        <div className="mt-4 rounded-3xl border border-white/[0.11] bg-[#020817]/72 p-4">
+                          <div className="flex items-start justify-between gap-3">
+                            <div>
+                              <p className="text-[12px] font-semibold text-slate-50">최근 상담 요약</p>
+                              <p className="mt-2 text-[12px] leading-relaxed text-slate-400">싼타페 하이브리드 관심 · 가족 이동 · 6월 출고 문의</p>
+                            </div>
+                            <span className="rounded-full bg-sky-300/[0.12] px-2.5 py-1 text-[10px] font-semibold text-sky-100">상담 메모</span>
+                          </div>
+                          <div className="mt-4 grid gap-2">
+                            {["관심 차량 조건 정리", "시승 일정 제안", "견적 비교 초안"].map((item) => (
+                              <div key={item} className="flex items-center gap-2 rounded-2xl bg-white/[0.045] px-3 py-2">
+                                <span className="size-1.5 rounded-full bg-violet-300" aria-hidden />
+                                <span className="text-[12px] font-medium text-slate-200">{item}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                        <div className="mt-4 rounded-3xl border border-violet-300/18 bg-violet-300/[0.08] p-4">
+                          <p className="text-[12px] font-semibold text-violet-100">AI 검토용 초안</p>
+                          <p className="mt-2 text-[12px] leading-relaxed text-slate-300">고객 상황에 맞춰 다음 연락 메시지 초안을 준비했습니다. 발송 전 영업사원이 확인합니다.</p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>

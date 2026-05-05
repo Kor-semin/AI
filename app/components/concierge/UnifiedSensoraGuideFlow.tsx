@@ -118,6 +118,39 @@ function AppPreviewCardMock({ tone, points }: { tone: AppPreviewCardTone; points
   );
 }
 
+function FloatingPreviewPanel({ card, index, compact = false }: { card: AppPreviewCard; index: number; compact?: boolean }) {
+  const accents: Record<AppPreviewCardTone, string> = {
+    customers: "from-sky-300/22 to-cyan-300/8 text-sky-100",
+    ai: "from-violet-300/24 to-fuchsia-300/8 text-violet-100",
+    followup: "from-emerald-300/20 to-sky-300/8 text-emerald-100",
+    delivery: "from-amber-300/18 to-violet-300/8 text-amber-100",
+  };
+  const widthClass = compact ? "w-full" : ["w-[15.5rem]", "w-[16rem]", "w-[15.25rem]", "w-[15rem]"][index % 4];
+
+  return (
+    <div className={`${widthClass} rounded-[1.35rem] border border-white/[0.14] bg-[#07111f]/76 p-3.5 text-left shadow-[0_24px_70px_-34px_rgba(0,0,0,0.82),inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-xl`}>
+      <div className="flex items-center gap-2">
+        <span className={`flex size-9 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br ${accents[card.tone]} font-semibold ring-1 ring-white/[0.12]`}>
+          {String(index + 1).padStart(2, "0")}
+        </span>
+        <div className="min-w-0">
+          <p className="truncate text-[0.9rem] font-semibold tracking-[-0.02em] text-slate-50">{card.title}</p>
+          <p className="mt-0.5 text-[10px] font-medium uppercase tracking-[0.12em] text-slate-500">{card.action}</p>
+        </div>
+      </div>
+      <div className="mt-3 space-y-2 rounded-2xl border border-white/[0.08] bg-[#020817]/52 p-3">
+        {card.points.map((point, pointIndex) => (
+          <div key={`${card.id}-${point}`} className="flex items-center gap-2">
+            <span className={`size-2 rounded-full ${pointIndex === 0 ? "bg-violet-300" : "bg-sky-300/70"}`} />
+            <span className="h-2.5 flex-1 rounded-full bg-white/[0.13]" />
+            <span className="text-[10px] font-medium text-slate-400">{point}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function AppPreviewScreenBrowser({
   className,
   onSelectSection,
@@ -288,40 +321,37 @@ function AppPreviewScreenBrowser({
           </div>
 
           <div className="relative mx-auto mt-5 w-full max-w-[min(100%,70rem)] overflow-hidden rounded-[30px] border border-white/[0.13] bg-[#030712] shadow-[0_34px_96px_-42px_rgba(0,0,0,0.82),0_0_64px_-34px_rgba(124,58,237,0.38)] ring-1 ring-white/[0.06] sm:mt-7">
-            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_48%,rgba(168,85,247,0.2),transparent_28%),radial-gradient(ellipse_65%_48%_at_50%_48%,rgba(56,189,248,0.12),transparent_62%),linear-gradient(180deg,rgba(7,12,24,0.08),rgba(2,6,23,0.38))]" aria-hidden />
-            <div className="relative aspect-[16/9] min-h-[18.5rem] w-full sm:min-h-[27rem] lg:min-h-[34rem]">
-              <Image
-                src={APP_PREVIEW_REFERENCE_IMAGE}
-                alt=""
-                fill
-                className="object-cover object-center opacity-[0.32] brightness-[0.92] contrast-[1.08]"
-                sizes="(max-width:768px) calc(100vw - 2rem), 1120px"
-                quality={100}
-                priority
-              />
-              <div className="absolute left-1/2 top-[45%] flex size-20 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-violet-300/25 bg-violet-300/[0.08] text-violet-100 shadow-[0_0_70px_-10px_rgba(168,85,247,0.72)] sm:size-28">
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_48%,rgba(168,85,247,0.26),transparent_24%),radial-gradient(ellipse_70%_52%_at_50%_48%,rgba(56,189,248,0.13),transparent_66%),linear-gradient(180deg,rgba(7,12,24,0.04),rgba(2,6,23,0.52))]" aria-hidden />
+            <div className="pointer-events-none absolute inset-0 opacity-[0.08]" aria-hidden>
+              <Image src={APP_PREVIEW_REFERENCE_IMAGE} alt="" fill className="object-cover object-center" sizes="1120px" quality={75} priority />
+            </div>
+            <div className="relative min-h-[31rem] w-full px-4 py-6 sm:min-h-[34rem] sm:px-6 sm:py-8 lg:min-h-[37rem] lg:px-8">
+              <div className="absolute left-1/2 top-[43%] flex size-20 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-violet-300/25 bg-violet-300/[0.08] text-violet-100 shadow-[0_0_70px_-10px_rgba(168,85,247,0.72)] sm:size-28">
                 <span className="absolute inset-[-42%] rounded-full border border-sky-300/10" aria-hidden />
                 <span className="absolute inset-[-86%] rounded-full border border-violet-300/10" aria-hidden />
+                <span className="absolute inset-[-128%] rounded-full border border-white/[0.06]" aria-hidden />
                 <SensoraAnimatedMark size={70} animated label={t("product.name")} />
               </div>
-              <div className="absolute inset-x-4 bottom-4 top-4 hidden lg:block" aria-hidden>
+              <div className="absolute inset-x-4 bottom-5 top-5 hidden lg:block" aria-hidden>
                 {orbitCards.map((card, idx) => {
                   const positions = [
-                    "left-[4%] top-[10%] w-[18rem]",
-                    "right-[5%] top-[9%] w-[18rem]",
-                    "left-[6%] bottom-[12%] w-[18rem]",
-                    "left-1/2 bottom-[5%] w-[18rem] -translate-x-1/2",
-                    "right-[6%] bottom-[12%] w-[18rem]",
+                    "left-[5%] top-[7%]",
+                    "right-[6%] top-[8%]",
+                    "left-[6%] bottom-[13%]",
+                    "left-1/2 bottom-[5%] -translate-x-1/2",
+                    "right-[7%] bottom-[13%]",
                   ];
                   return (
-                    <div
-                      key={`orbit-${card.id}`}
-                      className={`absolute ${positions[idx] ?? positions[0]} rounded-3xl border border-white/[0.12] bg-[#07111f]/72 p-3 shadow-[0_24px_70px_-34px_rgba(0,0,0,0.78)] backdrop-blur-xl`}
-                    >
-                      <AppPreviewCardMock tone={card.tone} points={card.points} />
+                    <div key={`orbit-${card.id}`} className={`absolute ${positions[idx] ?? positions[0]}`}>
+                      <FloatingPreviewPanel card={card} index={idx} />
                     </div>
                   );
                 })}
+              </div>
+              <div className="relative z-[1] grid grid-cols-1 gap-3 pt-[9.5rem] sm:grid-cols-2 sm:pt-[11rem] lg:hidden">
+                {orbitCards.map((card, idx) => (
+                  <FloatingPreviewPanel key={`mobile-orbit-${card.id}`} card={card} index={idx} compact />
+                ))}
               </div>
             </div>
           </div>
