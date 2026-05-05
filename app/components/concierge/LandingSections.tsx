@@ -228,7 +228,7 @@ export function LandingShowroom({
   onOpenAppWorkspace,
   onEnterWorkspaceSection,
 }: Props) {
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
   const safeSlide = ((slideIndex % SLIDE_COUNT) + SLIDE_COUNT) % SLIDE_COUNT;
   const [deliveryPrepOpen, setDeliveryPrepOpen] = useState(false);
 
@@ -287,6 +287,14 @@ export function LandingShowroom({
   );
 
   const dockSafe = "pb-[max(10px,calc(env(safe-area-inset-bottom,0px)+8px))] pt-2";
+  const isKorean = language === "ko";
+  const heroKicker = isKorean ? "AI가 돕고, 영업이 완성합니다" : "AI supports. Salespeople complete.";
+  const heroTitleLines = isKorean
+    ? ["자동차 영업사원을 위한", "AI 고객관리 워크스페이스"]
+    : ["AI customer-management workspace", "for automotive sales reps"];
+  const heroSubLines = isKorean
+    ? ["상담부터 사후관리까지 한 흐름으로 관리합니다.", "AI는 초안을 돕고, 최종 판단은 영업사원이 합니다."]
+    : [t("landing.slides.enterprise.heroSub"), t("landing.showroom.hero.trustLine")];
 
   return (
     <div
@@ -338,23 +346,30 @@ export function LandingShowroom({
             aria-hidden={safeSlide !== 0}
           >
             <div className="landing-slide-hero-app-shell mx-auto grid h-full w-full max-w-[min(100%,420px)] content-start gap-4 sm:max-w-[460px] lg:max-w-[1320px] lg:grid-cols-[minmax(0,0.9fr)_minmax(420px,0.82fr)] lg:items-center lg:gap-7">
-              <div className="landing-first-screen-desktop-panel hidden min-h-[min(620px,calc(100vh-8rem))] grid-cols-[minmax(0,0.98fr)_minmax(360px,0.82fr)] gap-7 rounded-[34px] border border-white/[0.11] bg-[linear-gradient(145deg,rgba(9,22,39,0.94)_0%,rgba(5,13,25,0.96)_54%,rgba(2,8,18,0.98)_100%)] p-7 text-left shadow-[0_46px_128px_-66px_rgba(0,0,0,0.88),inset_0_1px_0_rgba(255,255,255,0.075)] lg:grid xl:p-8">
+              <div className="landing-first-screen-desktop-panel hidden min-h-[min(628px,calc(100vh-7.6rem))] grid-cols-[minmax(0,0.84fr)_minmax(440px,1fr)] gap-8 rounded-[34px] border border-white/[0.12] bg-[linear-gradient(145deg,rgba(8,20,37,0.96)_0%,rgba(5,13,26,0.98)_54%,rgba(2,8,18,0.99)_100%)] p-7 text-left shadow-[0_46px_128px_-66px_rgba(0,0,0,0.9),inset_0_1px_0_rgba(255,255,255,0.08)] lg:grid xl:p-8">
                 <section className="flex min-w-0 flex-col justify-between">
                   <div>
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-sky-100/70">{t("product.name")}</p>
-                    <h1 className="mt-5 max-w-[13ch] text-balance text-[clamp(3.25rem,5.25vw,5.75rem)] font-semibold leading-[0.98] tracking-[-0.065em] text-white [word-break:keep-all]">
-                      {t("landing.slides.enterprise.heroDefinition")}
-                    </h1>
-                    <p className="mt-5 max-w-[34rem] text-[1.08rem] font-medium leading-relaxed text-slate-200/88">
-                      {t("landing.slides.enterprise.heroSub")}
+                    <p className="inline-flex rounded-full border border-sky-300/[0.16] bg-sky-300/[0.06] px-3 py-1.5 text-[11px] font-semibold tracking-[-0.01em] text-sky-100/82">
+                      {heroKicker}
                     </p>
-                    <p className="mt-3 max-w-[33rem] text-[0.88rem] font-medium leading-relaxed text-slate-400">
-                      {t("landing.showroom.hero.trustLine")}
+                    <h1 className="mt-5 max-w-[13.5ch] text-balance text-[clamp(3.05rem,4.45vw,5.25rem)] font-semibold leading-[0.99] tracking-[-0.065em] text-white [word-break:keep-all]">
+                      {heroTitleLines.map((line) => (
+                        <span key={line} className="block">
+                          {line}
+                        </span>
+                      ))}
+                    </h1>
+                    <p className="mt-5 max-w-[34rem] text-[1.02rem] font-medium leading-relaxed text-slate-200/88">
+                      {heroSubLines.map((line) => (
+                        <span key={line} className="block">
+                          {line}
+                        </span>
+                      ))}
                     </p>
                   </div>
 
                   <div className="mt-8">
-                    <div className="grid max-w-[40rem] grid-cols-[1.05fr_1fr_1fr] gap-3">
+                    <div className="grid max-w-[41rem] grid-cols-[1.08fr_1fr_0.96fr] gap-2.5">
                       <Link href={JOIN_PATH} prefetch={false} className={`${entPrimaryBtn} landing-hero-app-btn landing-hero-primary-cta min-h-[3.35rem] rounded-2xl px-6 text-[1rem]`}>
                         {t("cta.joinBeta")}
                       </Link>
@@ -367,27 +382,27 @@ export function LandingShowroom({
                       </Link>
                     </div>
 
-                    <div className="mt-5 grid max-w-[44rem] grid-cols-4 gap-3">
+                    <div className="mt-4 grid max-w-[44rem] grid-cols-4 gap-2.5">
                       {MENU_ITEMS.map((row) => (
                         <button
                           key={`desktop-live-${row.key}`}
                           type="button"
                           onClick={() => handleMenuNavigate(row)}
-                          className="landing-first-screen-live-feature group min-h-[9.35rem] rounded-[24px] border border-white/[0.12] bg-white/[0.055] px-4 py-4 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.07),0_18px_42px_-34px_rgba(0,0,0,0.72)] transition hover:-translate-y-0.5 hover:border-sky-300/28 hover:bg-white/[0.075] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/38 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+                          className="landing-first-screen-live-feature group min-h-[5.55rem] rounded-[18px] border border-white/[0.11] bg-white/[0.045] px-3 py-3 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_14px_34px_-30px_rgba(0,0,0,0.72)] transition hover:-translate-y-0.5 hover:border-sky-300/26 hover:bg-white/[0.065] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/38 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
                           aria-label={row.target === "delivery" ? `${t(row.titleKey)} · ${t("landing.slides.menu.deliveryPrepAria")}` : `${t(row.titleKey)} · ${t("landing.slides.menu.enterWorkspaceAria")}`}
                         >
-                          <LandingFeatureIcon tone={row.key as "customers" | "ai" | "followup" | "delivery"} className="size-11" />
-                          <span className="mt-4 block text-[1rem] font-semibold tracking-[-0.035em] text-slate-50">{t(row.titleKey)}</span>
-                          <span className="mt-2 block line-clamp-2 text-[0.78rem] font-medium leading-relaxed text-slate-400">{t(row.descKey)}</span>
+                          <LandingFeatureIcon tone={row.key as "customers" | "ai" | "followup" | "delivery"} className="size-8" />
+                          <span className="mt-2.5 block text-[0.9rem] font-semibold tracking-[-0.035em] text-slate-50">{t(row.titleKey)}</span>
+                          <span className="mt-1 block line-clamp-1 text-[0.69rem] font-medium leading-snug text-slate-400">{t(row.descKey)}</span>
                         </button>
                       ))}
                     </div>
                   </div>
                 </section>
 
-                <aside className="landing-first-screen-product-area relative flex min-h-0 items-center">
-                  <div className="landing-first-screen-product-card w-full overflow-hidden rounded-[30px] border border-white/[0.12] bg-[#07111f]/92 p-3 shadow-[0_34px_92px_-58px_rgba(0,0,0,0.88),inset_0_1px_0_rgba(255,255,255,0.08)]">
-                    <div className="rounded-[24px] border border-slate-700/70 bg-[linear-gradient(180deg,#111827_0%,#0b1220_100%)] p-4">
+                <aside className="landing-first-screen-product-area relative flex min-h-[540px] items-center">
+                  <div className="landing-first-screen-product-card w-full overflow-hidden rounded-[31px] border border-white/[0.13] bg-[#07111f]/94 p-3.5 shadow-[0_34px_94px_-56px_rgba(0,0,0,0.9),inset_0_1px_0_rgba(255,255,255,0.085)]">
+                    <div className="flex min-h-[512px] flex-col rounded-[25px] border border-slate-700/70 bg-[linear-gradient(180deg,#111827_0%,#0b1220_100%)] p-5">
                       <div className="flex items-center justify-between border-b border-white/[0.08] pb-3">
                         <div>
                           <p className="text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-slate-500">Workspace</p>
@@ -395,8 +410,8 @@ export function LandingShowroom({
                         </div>
                         <span className="rounded-full border border-sky-300/18 bg-sky-300/[0.08] px-3 py-1 text-[0.72rem] font-semibold text-sky-100/88">Preview</span>
                       </div>
-                      <div className="mt-4 grid gap-3">
-                        <div className="rounded-[22px] border border-white/[0.08] bg-slate-900/70 p-4">
+                      <div className="mt-4 grid flex-1 content-start gap-3">
+                        <div className="rounded-[22px] border border-white/[0.08] bg-slate-900/70 p-[1.125rem]">
                           <div className="flex items-start justify-between gap-4">
                             <div>
                               <p className="text-[0.78rem] font-semibold text-slate-400">오늘의 상담</p>
@@ -434,15 +449,20 @@ export function LandingShowroom({
 
               <div className="landing-hero-start-panel landing-first-screen-live-panel flex min-w-0 flex-col rounded-[28px] border border-white/[0.11] bg-white/[0.055] p-3 text-left shadow-[0_30px_82px_-46px_rgba(0,0,0,0.72),inset_0_1px_0_rgba(255,255,255,0.07)] backdrop-blur-xl sm:p-4 lg:hidden lg:rounded-[32px] lg:p-5">
                 <div className="rounded-[24px] bg-[linear-gradient(145deg,#0a1b32_0%,#071221_52%,#050a13_100%)] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.09),0_22px_60px_-34px_rgba(56,189,248,0.35)] sm:p-6 lg:p-8">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.17em] text-sky-100/72">{t("product.name")}</p>
+                  <p className="inline-flex rounded-full border border-sky-300/[0.16] bg-sky-300/[0.06] px-3 py-1.5 text-[11px] font-semibold tracking-[-0.01em] text-sky-100/82">{heroKicker}</p>
                   <h1 className="mt-4 max-w-[13ch] text-balance text-[clamp(2rem,calc(1.25rem+4vw),3.75rem)] font-semibold leading-[1.02] tracking-[-0.055em] text-white [word-break:keep-all] lg:max-w-[12ch]">
-                    {t("landing.slides.enterprise.heroDefinition")}
+                    {heroTitleLines.map((line) => (
+                      <span key={line} className="block">
+                        {line}
+                      </span>
+                    ))}
                   </h1>
                   <p className="mt-4 max-w-[28ch] text-[0.93rem] font-medium leading-relaxed text-slate-200/90 sm:text-[1rem] lg:text-[1.05rem]">
-                    {t("landing.slides.enterprise.heroSub")}
-                  </p>
-                  <p className="landing-hero-trust-line mt-3 max-w-[31ch] text-[0.78rem] font-medium leading-relaxed text-slate-400 sm:text-[0.84rem]">
-                    {t("landing.showroom.hero.trustLine")}
+                    {heroSubLines.map((line) => (
+                      <span key={line} className="block">
+                        {line}
+                      </span>
+                    ))}
                   </p>
                   <div className="landing-hero-app-actions mt-6 grid gap-2.5 sm:mt-7">
                     <Link
