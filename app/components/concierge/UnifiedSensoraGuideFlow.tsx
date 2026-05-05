@@ -16,7 +16,7 @@ import type { CrmSection } from "@/app/crm/crmSectionTypes";
 
 const JOIN_PATH = "/join" as const;
 const REGISTER_PATH = "/register" as const;
-const APP_TOUR_REFERENCE_IMAGE = "/images/Sensora 화면 둘러보기.png";
+const APP_PREVIEW_PRIMARY_VISUAL = "/images/Sensora2.png";
 const GUIDE_FLOW_GUIDES = SENSORA_GUIDES.filter((guide) => guide.id !== "sensora-guide-03" && guide.id !== "sensora-guide-05");
 const DEFAULT_FLOW_GUIDE_ID: SensoraGuideId = "sensora-guide-01";
 
@@ -268,6 +268,20 @@ function AppPreviewScreenBrowser({
               <p className="mt-4 max-w-[28ch] text-[0.95rem] font-medium leading-relaxed text-slate-200/88 sm:text-[1.05rem]">{copy.sub}</p>
             </div>
 
+            <div className="app-preview-primary-visual-wrap px-4 pt-4 sm:px-6 sm:pt-5">
+              <div className="relative aspect-[1672/941] w-full overflow-hidden rounded-[24px] border border-slate-200 bg-[#020817] shadow-[0_22px_60px_-36px_rgba(15,23,42,0.56)]">
+                <Image
+                  src={APP_PREVIEW_PRIMARY_VISUAL}
+                  alt={ko ? "Sensora 앱 화면 미리보기 대표 이미지" : "Sensora app preview primary visual"}
+                  fill
+                  className="object-contain"
+                  sizes="(min-width: 1024px) 620px, calc(100vw - 2rem)"
+                  quality={100}
+                  priority
+                />
+              </div>
+            </div>
+
             <div className="flex gap-2 overflow-x-auto px-5 py-4 [scrollbar-width:none] sm:px-7 [&::-webkit-scrollbar]:hidden" role="tablist" aria-label={copy.title}>
               {APP_PREVIEW_TABS.map((tab) => (
                 <button
@@ -321,12 +335,20 @@ function AppPreviewScreenBrowser({
 
           <aside className="hidden lg:block">
             <div className="sticky top-8 overflow-hidden rounded-[32px] border border-white/[0.12] bg-[#07111f]/86 p-3 shadow-[0_34px_110px_-58px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.08)]">
-              <div className="relative aspect-[9/16] overflow-hidden rounded-[24px] bg-slate-950">
-                <Image src={APP_TOUR_REFERENCE_IMAGE} alt="" fill className="object-cover object-top" sizes="360px" quality={92} priority />
+              <div className="relative aspect-[1672/941] overflow-hidden rounded-[24px] bg-slate-950">
+                <Image
+                  src={APP_PREVIEW_PRIMARY_VISUAL}
+                  alt=""
+                  fill
+                  className="object-contain"
+                  sizes="360px"
+                  quality={100}
+                  priority
+                />
               </div>
             </div>
             <div className="mt-4 grid gap-3 rounded-[24px] border border-white/[0.1] bg-white/[0.045] p-4 text-sm leading-relaxed text-slate-400">
-              <p>{ko ? "기준 이미지의 세로 탐색 구조를 실제 카드 UI로 재구성했습니다." : "The reference tour structure is rebuilt as live cards."}</p>
+              <p>{ko ? "대표 이미지와 함께 주요 업무 화면으로 바로 이동할 수 있습니다." : "Use the primary visual with direct links into key workspace screens."}</p>
               <Link
                 href={JOIN_PATH}
                 prefetch={false}
