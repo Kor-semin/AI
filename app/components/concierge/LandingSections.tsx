@@ -24,7 +24,7 @@ export {
 
 const JOIN_PATH = "/join" as const;
 const SLIDE_COUNT = 4;
-const LANDING_FIRST_SCREEN_REFERENCE = "/images/Sensora 첫 화면.png";
+const LANDING_FIRST_SCREEN_REFERENCE = "/images/Sensora1.png";
 
 function thumbGuideImage(guideId: "sensora-guide-01" | "sensora-guide-02" | "sensora-guide-04") {
   return SENSORA_GUIDES.find((g) => g.id === guideId)?.image ?? "/images/guides/sensora-guide-01.png";
@@ -338,8 +338,45 @@ export function LandingShowroom({
             ].join(" ")}
             aria-hidden={safeSlide !== 0}
           >
-            <div className="landing-slide-hero-app-shell mx-auto grid h-full w-full max-w-[min(100%,420px)] content-start gap-4 sm:max-w-[460px] lg:max-w-[1320px] lg:grid-cols-[minmax(0,0.92fr)_minmax(420px,1.08fr)] lg:items-center lg:gap-10 xl:gap-12">
-              <div className="landing-hero-start-panel landing-first-screen-live-panel flex min-w-0 flex-col rounded-[28px] border border-white/[0.11] bg-white/[0.055] p-3 text-left shadow-[0_30px_82px_-46px_rgba(0,0,0,0.72),inset_0_1px_0_rgba(255,255,255,0.07)] backdrop-blur-xl sm:p-4 lg:rounded-[32px] lg:p-5">
+            <div className="landing-slide-hero-app-shell mx-auto grid h-full w-full max-w-[min(100%,420px)] content-start gap-4 sm:max-w-[460px] lg:block lg:max-w-[1320px]">
+              <div className="landing-first-screen-reference-canvas relative hidden w-full overflow-hidden rounded-[32px] border border-white/[0.12] bg-[#020817] shadow-[0_42px_120px_-58px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.08)] lg:block">
+                <Image
+                  src={LANDING_FIRST_SCREEN_REFERENCE}
+                  alt="Sensora 랜딩 첫 화면 시안"
+                  fill
+                  className="object-cover object-center"
+                  sizes="1320px"
+                  quality={100}
+                  priority
+                />
+                <Link href={JOIN_PATH} prefetch={false} className="landing-first-screen-hotspot landing-first-screen-hotspot--join" aria-label={t("cta.joinBeta")}>
+                  <span className="sr-only">{t("cta.joinBeta")}</span>
+                </Link>
+                <button
+                  type="button"
+                  onClick={onOpenAppWorkspace}
+                  className="landing-first-screen-hotspot landing-first-screen-hotspot--preview"
+                  aria-label={t("cta.tryAppExperience")}
+                >
+                  <span className="sr-only">{t("cta.tryAppExperience")}</span>
+                </button>
+                <Link href="/register" prefetch={false} className="landing-first-screen-hotspot landing-first-screen-hotspot--register" aria-label={t("auth.salesRegistration")}>
+                  <span className="sr-only">{t("auth.salesRegistration")}</span>
+                </Link>
+                {MENU_ITEMS.map((row, index) => (
+                  <button
+                    key={`reference-${row.key}`}
+                    type="button"
+                    onClick={() => handleMenuNavigate(row)}
+                    className={`landing-first-screen-hotspot landing-first-screen-hotspot--feature landing-first-screen-hotspot--feature-${index + 1}`}
+                    aria-label={row.target === "delivery" ? `${t(row.titleKey)} · ${t("landing.slides.menu.deliveryPrepAria")}` : `${t(row.titleKey)} · ${t("landing.slides.menu.enterWorkspaceAria")}`}
+                  >
+                    <span className="sr-only">{t(row.titleKey)}</span>
+                  </button>
+                ))}
+              </div>
+
+              <div className="landing-hero-start-panel landing-first-screen-live-panel flex min-w-0 flex-col rounded-[28px] border border-white/[0.11] bg-white/[0.055] p-3 text-left shadow-[0_30px_82px_-46px_rgba(0,0,0,0.72),inset_0_1px_0_rgba(255,255,255,0.07)] backdrop-blur-xl sm:p-4 lg:hidden lg:rounded-[32px] lg:p-5">
                 <div className="rounded-[24px] bg-[linear-gradient(145deg,#0a1b32_0%,#071221_52%,#050a13_100%)] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.09),0_22px_60px_-34px_rgba(56,189,248,0.35)] sm:p-6 lg:p-8">
                   <p className="text-[11px] font-semibold uppercase tracking-[0.17em] text-sky-100/72">{t("product.name")}</p>
                   <h1 className="mt-4 max-w-[13ch] text-balance text-[clamp(2rem,calc(1.25rem+4vw),3.75rem)] font-semibold leading-[1.02] tracking-[-0.055em] text-white [word-break:keep-all] lg:max-w-[12ch]">
@@ -412,7 +449,7 @@ export function LandingShowroom({
                 </button>
               </div>
 
-              <div className="landing-hero-mock-column relative hidden min-w-0 justify-center lg:flex">
+              <div className="landing-hero-mock-column relative hidden min-w-0 justify-center lg:hidden">
                 <div
                   aria-hidden
                   className="pointer-events-none absolute inset-[8%_-6%_3%_-6%] rounded-[48px] bg-[radial-gradient(ellipse_72%_64%_at_50%_40%,rgba(56,189,248,0.14),transparent_70%)] opacity-80 blur-[28px]"
