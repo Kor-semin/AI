@@ -16,7 +16,6 @@ import type { CrmSection } from "@/app/crm/crmSectionTypes";
 
 const JOIN_PATH = "/join" as const;
 const REGISTER_PATH = "/register" as const;
-const APP_TOUR_REFERENCE_IMAGE = "/images/Sensora2.png";
 const GUIDE_FLOW_GUIDES = SENSORA_GUIDES.filter((guide) => guide.id !== "sensora-guide-03" && guide.id !== "sensora-guide-05");
 const DEFAULT_FLOW_GUIDE_ID: SensoraGuideId = "sensora-guide-01";
 
@@ -251,24 +250,24 @@ function AppPreviewScreenBrowser({
   return (
     <div className={`flex min-h-0 flex-1 flex-col ${className}`.trim()}>
       <div className="sensora-guide-preview-hide-scroll min-h-0 flex-1 overflow-y-auto overscroll-y-contain [-webkit-overflow-scrolling:touch] pb-[max(2rem,calc(env(safe-area-inset-bottom,0px)+1.5rem))]">
-        <div className="mx-auto grid w-full max-w-[min(1120px,100%)] grid-cols-1 gap-5 px-0 pb-4 pt-2 sm:px-2 sm:pt-4 lg:grid-cols-[minmax(320px,0.56fr)_minmax(360px,0.44fr)] lg:items-start lg:gap-8">
-          <section className="app-preview-tour-screen overflow-hidden rounded-[30px] border border-slate-200 bg-slate-50 text-slate-950 shadow-[0_30px_86px_-52px_rgba(15,23,42,0.42),inset_0_1px_0_rgba(255,255,255,0.96)]">
-            <div className="flex items-center justify-between border-b border-slate-200/80 bg-white px-5 py-4">
-              <span className="text-left text-[1.05rem] font-semibold tracking-[-0.035em] text-slate-950">
-                {t("product.name")}
-              </span>
-              <span className="flex size-9 items-center justify-center rounded-full bg-slate-100 text-slate-400" aria-hidden>
-                <IconChevronNavigate className="size-[1rem]" />
-              </span>
+        <div className="mx-auto flex w-full max-w-[min(1180px,100%)] flex-col gap-5 px-0 pb-4 pt-2 sm:px-2 sm:pt-4 lg:gap-6">
+          <section className="app-preview-tour-screen overflow-hidden rounded-[30px] border border-white/[0.12] bg-slate-900/72 text-slate-100 shadow-[0_36px_104px_-58px_rgba(0,0,0,0.78),inset_0_1px_0_rgba(255,255,255,0.075)]">
+            <div className="grid gap-5 border-b border-white/[0.09] bg-[linear-gradient(135deg,rgba(11,35,64,0.94)_0%,rgba(7,19,35,0.98)_58%,rgba(3,10,20,0.99)_100%)] px-5 py-6 sm:px-7 sm:py-8 lg:grid-cols-[minmax(0,0.72fr)_auto] lg:items-end">
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-sky-100/72">{copy.eyebrow}</p>
+                <h2 className="mt-3 max-w-[16ch] text-balance text-[clamp(2rem,5vw,4.1rem)] font-semibold leading-[1.02] tracking-[-0.055em]">{copy.title}</h2>
+                <p className="mt-4 max-w-[40rem] text-[0.95rem] font-medium leading-relaxed text-slate-300 sm:text-[1.05rem]">{copy.sub}</p>
+              </div>
+              <Link
+                href={JOIN_PATH}
+                prefetch={false}
+                className="inline-flex min-h-11 items-center justify-center rounded-2xl border border-white/[0.14] bg-white/[0.055] px-5 py-2.5 text-sm font-semibold text-slate-100 transition hover:bg-white/[0.085] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35"
+              >
+                {t("cta.joinBeta")}
+              </Link>
             </div>
 
-            <div className="bg-[linear-gradient(145deg,#0b2340_0%,#071323_58%,#050a13_100%)] px-5 py-7 text-white sm:px-7 sm:py-9">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-sky-100/72">{copy.eyebrow}</p>
-              <h2 className="mt-4 max-w-[12ch] text-balance text-[clamp(2rem,6vw,3.55rem)] font-semibold leading-[1.02] tracking-[-0.055em]">{copy.title}</h2>
-              <p className="mt-4 max-w-[28ch] text-[0.95rem] font-medium leading-relaxed text-slate-200/88 sm:text-[1.05rem]">{copy.sub}</p>
-            </div>
-
-            <div className="flex gap-2 overflow-x-auto px-5 py-4 [scrollbar-width:none] sm:px-7 [&::-webkit-scrollbar]:hidden" role="tablist" aria-label={copy.title}>
+            <div className="flex gap-1.5 overflow-x-auto border-b border-white/[0.08] px-4 py-4 [scrollbar-width:none] sm:gap-2 sm:px-7 [&::-webkit-scrollbar]:hidden" role="tablist" aria-label={copy.title}>
               {APP_PREVIEW_TABS.map((tab) => (
                 <button
                   key={tab}
@@ -277,10 +276,10 @@ function AppPreviewScreenBrowser({
                   aria-selected={activeTab === tab}
                   onClick={() => setActiveTab(tab)}
                   className={[
-                    "shrink-0 rounded-full border px-4 py-2 text-sm font-semibold transition touch-manipulation focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35",
+                    "shrink-0 rounded-full border px-2.5 py-2 text-[0.78rem] font-semibold transition touch-manipulation focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 sm:px-4 sm:text-sm",
                     activeTab === tab
-                      ? "border-sky-200 bg-sky-50 text-sky-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.95)]"
-                      : "border-slate-200 bg-white text-slate-500 hover:border-sky-200 hover:text-slate-900",
+                      ? "border-sky-300/32 bg-sky-300/[0.13] text-sky-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]"
+                      : "border-white/[0.1] bg-white/[0.035] text-slate-400 hover:border-sky-300/24 hover:text-slate-100",
                   ].join(" ")}
                 >
                   {copy.tabs[tab]}
@@ -288,28 +287,46 @@ function AppPreviewScreenBrowser({
               ))}
             </div>
 
-            <div className="grid gap-3 px-5 pb-6 sm:px-7 sm:pb-7">
+            <div className="grid gap-4 px-5 py-5 sm:px-7 sm:py-7 lg:grid-cols-2">
               {visibleCards.map((card) => (
                 <button
                   key={card.id}
                   type="button"
                   onClick={() => handleCardClick(card)}
-                  className="app-preview-tour-card group flex min-h-[7.6rem] w-full touch-manipulation items-start gap-3 rounded-[24px] border border-slate-200 bg-white p-4 text-left shadow-[0_16px_44px_-34px_rgba(15,23,42,0.45),inset_0_1px_0_rgba(255,255,255,0.95)] transition-[transform,border-color,box-shadow] duration-200 hover:-translate-y-0.5 hover:border-sky-200 hover:shadow-[0_20px_54px_-36px_rgba(14,165,233,0.34)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+                  className="app-preview-tour-card group grid min-h-[17rem] w-full touch-manipulation gap-4 rounded-[26px] border border-white/[0.1] bg-white/[0.045] p-4 text-left shadow-[0_18px_54px_-38px_rgba(0,0,0,0.74),inset_0_1px_0_rgba(255,255,255,0.07)] transition-[transform,border-color,background-color,box-shadow] duration-200 hover:-translate-y-0.5 hover:border-sky-300/28 hover:bg-white/[0.065] hover:shadow-[0_24px_64px_-40px_rgba(14,165,233,0.22)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
                   aria-label={`${card.title} · ${card.action}`}
                 >
-                  <span
-                    className={[
-                      "mt-0.5 flex size-11 shrink-0 items-center justify-center rounded-[18px] text-white shadow-[0_12px_28px_-18px_rgba(15,23,42,0.52)]",
-                      card.tone === "customers" ? "bg-sky-500" : card.tone === "ai" ? "bg-violet-500" : card.tone === "followup" ? "bg-emerald-500" : "bg-slate-500",
-                    ].join(" ")}
-                    aria-hidden
-                  >
-                    <IconArrowRightSoft className="size-[1.15rem]" />
+                  <span className="app-preview-virtual-screen block rounded-[22px] border border-white/[0.1] bg-[#0b1220] p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
+                    <span className="flex items-center justify-between border-b border-white/[0.08] pb-2.5">
+                      <span className="text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-slate-500">Sensora</span>
+                      <span
+                        className={[
+                          "rounded-full px-2.5 py-1 text-[0.68rem] font-semibold",
+                          card.tone === "customers" ? "bg-sky-300/[0.12] text-sky-100" : card.tone === "ai" ? "bg-violet-300/[0.14] text-violet-100" : card.tone === "followup" ? "bg-emerald-300/[0.12] text-emerald-100" : "bg-slate-300/[0.12] text-slate-200",
+                        ].join(" ")}
+                      >
+                        {card.title}
+                      </span>
+                    </span>
+                    <span className="mt-3 grid gap-2.5">
+                      {card.points.map((point, index) => (
+                        <span key={`${card.id}-${point}`} className="flex items-center gap-2 rounded-2xl border border-white/[0.07] bg-white/[0.04] px-3 py-2.5">
+                          <span className={["size-2 rounded-full", index === 0 ? "bg-sky-300/75" : "bg-slate-500/80"].join(" ")} aria-hidden />
+                          <span className="text-[0.78rem] font-semibold text-slate-300">{point}</span>
+                          <span className="ml-auto h-1.5 w-16 rounded-full bg-slate-700/80" aria-hidden />
+                        </span>
+                      ))}
+                      <span className="rounded-2xl border border-dashed border-white/[0.09] bg-slate-950/30 px-3 py-3">
+                        <span className="block h-2 w-3/4 rounded-full bg-slate-700/70" aria-hidden />
+                        <span className="mt-2 block h-2 w-1/2 rounded-full bg-slate-800/80" aria-hidden />
+                      </span>
+                    </span>
                   </span>
-                  <span className="min-w-0 flex-1">
-                    <span className="block text-[1.08rem] font-semibold leading-tight tracking-[-0.035em] text-slate-950 sm:text-[1.2rem]">{card.title}</span>
-                    <span className="mt-2 block text-[0.84rem] leading-relaxed text-slate-500">{card.desc}</span>
-                    <span className="mt-3 inline-flex items-center gap-1.5 text-[0.82rem] font-semibold text-sky-700">
+
+                  <span className="min-w-0">
+                    <span className="block text-[1.12rem] font-semibold leading-tight tracking-[-0.035em] text-slate-50 sm:text-[1.24rem]">{card.title}</span>
+                    <span className="mt-2 block text-[0.88rem] leading-relaxed text-slate-400">{card.desc}</span>
+                    <span className="mt-4 inline-flex min-h-10 items-center gap-1.5 rounded-2xl border border-white/[0.1] bg-white/[0.04] px-4 py-2 text-[0.84rem] font-semibold text-sky-100">
                       {card.action}
                       <IconArrowRightSoft className="size-[0.95rem] shrink-0 opacity-80" />
                     </span>
@@ -318,24 +335,6 @@ function AppPreviewScreenBrowser({
               ))}
             </div>
           </section>
-
-          <aside className="hidden lg:block">
-            <div className="sticky top-8 overflow-hidden rounded-[32px] border border-white/[0.12] bg-[#07111f]/86 p-3 shadow-[0_34px_110px_-58px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.08)]">
-              <div className="relative aspect-[9/16] overflow-hidden rounded-[24px] bg-slate-950">
-                <Image src={APP_TOUR_REFERENCE_IMAGE} alt="" fill className="object-cover object-top" sizes="360px" quality={92} priority />
-              </div>
-            </div>
-            <div className="mt-4 grid gap-3 rounded-[24px] border border-white/[0.1] bg-white/[0.045] p-4 text-sm leading-relaxed text-slate-400">
-              <p>{ko ? "기준 이미지의 세로 탐색 구조를 실제 카드 UI로 재구성했습니다." : "The reference tour structure is rebuilt as live cards."}</p>
-              <Link
-                href={JOIN_PATH}
-                prefetch={false}
-                className="inline-flex min-h-11 items-center justify-center rounded-2xl border border-white/[0.14] bg-white/[0.06] px-4 py-2.5 text-sm font-semibold text-slate-100 transition hover:bg-white/[0.09] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35"
-              >
-                {t("cta.joinBeta")}
-              </Link>
-            </div>
-          </aside>
         </div>
       </div>
 
