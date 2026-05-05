@@ -37,6 +37,7 @@ type AppPreviewCard =
       action: string;
       kind: "section";
       section: CrmSection;
+      targetPath: string;
       points: string[];
     }
   | {
@@ -58,6 +59,7 @@ type Props = {
   skipIntro?: boolean;
   onClose: () => void;
   onSelectSection: (section: CrmSection) => void;
+  onOpenTargetPath?: (targetPath: string, section: CrmSection) => void;
   sellerLoading?: boolean;
   className?: string;
 };
@@ -118,9 +120,11 @@ function AppPreviewCardMock({ tone, points }: { tone: AppPreviewCardTone; points
 function AppPreviewScreenBrowser({
   className,
   onSelectSection,
+  onNavigateToAppRoute,
 }: {
   className: string;
   onSelectSection: (section: CrmSection) => void;
+  onNavigateToAppRoute?: (targetPath: string, section: CrmSection) => void;
 }) {
   const { language, t } = useLanguage();
   const [activeTab, setActiveTab] = useState<AppPreviewTab>("all");
@@ -148,6 +152,7 @@ function AppPreviewScreenBrowser({
             action: "업무 화면으로",
             kind: "section",
             section: "customers",
+            targetPath: "/?view=app#customers",
             points: ["상담 메모", "관심 차량"],
           },
           {
@@ -159,6 +164,7 @@ function AppPreviewScreenBrowser({
             action: "업무 화면으로",
             kind: "section",
             section: "ai",
+            targetPath: "/?view=app#crm-ai-assistant",
             points: ["검토용 초안", "니즈 정리"],
           },
           {
@@ -170,6 +176,7 @@ function AppPreviewScreenBrowser({
             action: "업무 화면으로",
             kind: "section",
             section: "followup",
+            targetPath: "/?view=app#follow-up",
             points: ["다음 연락", "일정 관리"],
           },
           {
@@ -205,6 +212,7 @@ function AppPreviewScreenBrowser({
             action: "Open screen",
             kind: "section",
             section: "customers",
+            targetPath: "/?view=app#customers",
             points: ["Notes", "Vehicles"],
           },
           {
@@ -216,6 +224,7 @@ function AppPreviewScreenBrowser({
             action: "Open screen",
             kind: "section",
             section: "ai",
+            targetPath: "/?view=app#crm-ai-assistant",
             points: ["Drafts", "Needs"],
           },
           {
@@ -227,6 +236,7 @@ function AppPreviewScreenBrowser({
             action: "Open screen",
             kind: "section",
             section: "followup",
+            targetPath: "/?view=app#follow-up",
             points: ["Next touch", "Schedule"],
           },
           {
@@ -248,7 +258,7 @@ function AppPreviewScreenBrowser({
       setDeliveryPrepOpen(true);
       return;
     }
-    onSelectSection(card.section);
+    onNavigateToAppRoute?.(card.targetPath, card.section) ?? onSelectSection(card.section);
   };
 
   useEffect(() => {
@@ -368,6 +378,7 @@ export function UnifiedSensoraGuideFlow({
   skipIntro = false,
   onClose,
   onSelectSection,
+  onOpenTargetPath,
   sellerLoading = false,
   className = "",
 }: Props) {
@@ -453,7 +464,7 @@ export function UnifiedSensoraGuideFlow({
   if (!active) return null;
 
   if (skipIntro && variant === "dialog") {
-    return <AppPreviewScreenBrowser className={className} onSelectSection={onSelectSection} />;
+    return <AppPreviewScreenBrowser className={className} onSelectSection={onSelectSection} onNavigateToAppRoute={onOpenTargetPath} />;
   }
 
   return (
