@@ -59,16 +59,17 @@ export function UnifiedSensoraGuideFlow({
   className = "",
 }: Props) {
   const { t } = useLanguage();
-  const [wizardStep, setWizardStep] = useState(0);
+  const minWizardStep = variant === "dialog" ? 1 : 0;
+  const [wizardStep, setWizardStep] = useState(minWizardStep);
   const [activeGuideId, setActiveGuideId] = useState<SensoraGuideId>(DEFAULT_GUIDE_ID);
   const [guideDetailOpen, setGuideDetailOpen] = useState(false);
 
   useEffect(() => {
     if (!active) return;
-    setWizardStep(0);
+    setWizardStep(minWizardStep);
     setActiveGuideId(DEFAULT_GUIDE_ID);
     setGuideDetailOpen(false);
-  }, [active]);
+  }, [active, minWizardStep]);
 
   const goPrevGuide = useCallback(() => {
     const idx = SENSORA_GUIDES.findIndex((g) => g.id === activeGuideId);
@@ -122,7 +123,7 @@ export function UnifiedSensoraGuideFlow({
       ? "text-left text-[0.90625rem] leading-relaxed text-slate-200 sm:text-[0.9375rem] sm:leading-[1.62]"
       : "text-left text-sm leading-relaxed text-slate-300 sm:text-[0.9375rem]";
 
-  const wizardPrev = () => setWizardStep((s) => Math.max(0, s - 1));
+  const wizardPrev = () => setWizardStep((s) => Math.max(minWizardStep, s - 1));
   const wizardNext = () => setWizardStep((s) => Math.min(WIZARD_LAST, s + 1));
 
   const footerSecondaryLabel =

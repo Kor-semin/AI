@@ -1080,7 +1080,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "preview.toc.betaDesc": "실제 저장 기능과 영업 계정은 베타 승인 후 사용할 수 있습니다.",
     "preview.flow.step1.intro":
       "자동차 영업 현장의 상담·고객 기록·다음 연락을 한 흐름에서 정리합니다. 아래는 예시 화면으로, 실제 저장은 베타 승인 후에 가능합니다.",
-    "preview.flow.step1.startCta": "앱 시작하기",
+    "preview.flow.step1.startCta": "업무 화면 둘러보기",
     "preview.flow.step1.registerCta": "영업 계정 등록",
     "preview.flow.step2.headline": "무엇을 도와드릴까요?",
     "preview.flow.step2.sub": "아래 카드 전체를 눌러 해당 업무 미리보기 영역으로 바로 이동합니다.",
@@ -1145,7 +1145,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "guide.sensora-guide-05.bullet2": "텍스트가 중심이 되도록 카드 속도위반을 줄입니다.",
     "guide.sensora-guide-05.bullet3": "고해상 원본 에셋을 그대로 써 디테일이 흐리지 않게 합니다.",
     "guide.unified.pageTitle": "Sensora 안내·온보딩",
-    "guide.unified.header.kicker": "Sensora 안내",
+    "guide.unified.header.kicker": "화면 안내",
     "guide.unified.header.sub": "4단계로 소개 예시 안내 이미지를 이어 확인할 수 있습니다. 마지막에서 업무 화면 또는 계정 안내를 선택합니다.",
     "guide.unified.intro.title": "Sensora Auto CRM",
     "guide.unified.intro.body":
