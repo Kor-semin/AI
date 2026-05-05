@@ -10,7 +10,7 @@ import { SENSORA_GUIDES } from "@/lib/sensoraGuide";
 
 /** 랜딩 보조 이미지 에셋 경로(@/public 기준). README 등에서 참고합니다. */
 export const LANDING_SHOWROOM_IMAGE_PATHS = {
-  hero: "/images/hero-classic-car.jpg",
+  hero: "/images/interior.png",
   interior: "/images/vintage-car-interior.jpg",
   desk: "/images/concierge-desk.jpg",
   workspace: "/images/sales-dashboard-workspace.jpg",
@@ -324,13 +324,13 @@ export function LandingShowroom({
                 </div>
               </div>
 
-              <div className="landing-hero-mock-column flex w-full flex-col items-center gap-4 lg:flex-1 lg:max-w-[min(58%,680px)] xl:max-w-[720px] lg:justify-center">
-                <div className="relative flex w-full max-w-[min(100%,340px)] justify-center lg:max-w-none">
+              <div className="landing-hero-mock-column flex w-full flex-col items-center gap-4 lg:flex-1 lg:max-w-[min(58%,720px)] xl:max-w-[760px] lg:justify-center">
+                <div className="relative flex w-full max-w-[min(100%,360px)] justify-center sm:max-w-[400px] lg:max-w-none">
                   <div
                     aria-hidden
                     className="pointer-events-none absolute inset-[-5%_-2%_-1%_-2%] rounded-[28px] bg-[radial-gradient(ellipse_72%_64%_at_50%_40%,rgba(56,189,248,0.12),transparent_70%)] opacity-75 blur-[22px] lg:opacity-80"
                   />
-                  <div className="landing-hero-mock-frame relative w-full max-w-[340px] overflow-hidden rounded-[14px] border border-white/[0.16] bg-[#050f18]/[0.99] shadow-[0_24px_64px_-24px_rgba(0,0,0,0.72),inset_0_1px_0_rgba(255,255,255,0.1)] ring-1 ring-white/[0.06] lg:max-w-none lg:rounded-[18px] xl:rounded-[20px]">
+                  <div className="landing-hero-mock-frame relative w-full max-w-[360px] overflow-hidden rounded-[14px] border border-white/[0.16] bg-[#050f18]/[0.99] shadow-[0_24px_64px_-24px_rgba(0,0,0,0.72),inset_0_1px_0_rgba(255,255,255,0.1)] ring-1 ring-white/[0.06] sm:max-w-[400px] lg:max-w-none lg:rounded-[18px] xl:rounded-[20px]">
                     <div className="flex items-center gap-1.5 border-b border-white/[0.1] bg-[#051525]/98 px-2 py-1.5 sm:px-2.5 lg:px-3 lg:py-2">
                       <span className="size-2 rounded-full bg-rose-500/45" aria-hidden />
                       <span className="size-2 rounded-full bg-amber-400/45" aria-hidden />
@@ -340,13 +340,13 @@ export function LandingShowroom({
                         {t("landing.showroom.heroMock.previewBadge")}
                       </span>
                     </div>
-                    <div className="relative aspect-[4/3] max-h-[min(38vh,260px)] w-full bg-[#030712] sm:aspect-[5/6] sm:max-h-[min(42vh,300px)] lg:aspect-[5/6] lg:max-h-[min(56vh,520px)] xl:max-h-[min(58vh,560px)]">
+                    <div className="relative aspect-[16/9] max-h-[min(38vh,260px)] w-full bg-[#030712] sm:max-h-[min(42vh,300px)] lg:max-h-[min(58vh,430px)] xl:max-h-[min(60vh,460px)]">
                       <Image
-                        src={GUIDE03}
+                        src={LANDING_SHOWROOM_IMAGE_PATHS.hero}
                         alt=""
                         fill
-                        className="object-cover object-top opacity-100 brightness-[1.02] contrast-[1.02] max-lg:object-contain max-lg:object-top lg:brightness-[1.06] lg:contrast-[1.03]"
-                        sizes="(max-width:640px) 88vw,(max-width:1024px) 42vw, 480px"
+                        className="object-cover object-center opacity-100 brightness-[1.02] contrast-[1.02] lg:brightness-[1.06] lg:contrast-[1.03]"
+                        sizes="(max-width:640px) 88vw,(max-width:1024px) 400px, 720px"
                         quality={100}
                         priority
                       />

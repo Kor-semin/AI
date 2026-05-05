@@ -17,6 +17,7 @@ import type { CrmSection } from "@/app/crm/crmSectionTypes";
 
 const JOIN_PATH = "/join" as const;
 const REGISTER_PATH = "/register" as const;
+const APP_PREVIEW_HERO_IMAGE = "/images/profile-workspace.png";
 
 const WIZARD_LAST = 3;
 const APP_PREVIEW_TABS = ["all", "customers", "ai", "followup", "delivery"] as const;
@@ -282,6 +283,20 @@ function AppPreviewScreenBrowser({
           <div className="max-w-[52rem]">
             <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-sky-300/85 sm:text-xs">{copy.eyebrow}</p>
             <h2 className="mt-3 text-balance text-[clamp(1.9rem,5vw,4.25rem)] font-semibold leading-[1.02] tracking-[-0.055em] text-slate-50">{copy.title}</h2>
+            <div className="relative mt-5 w-full max-w-[min(100%,52rem)] overflow-hidden rounded-[28px] border border-white/[0.13] bg-[#030712] shadow-[0_34px_96px_-40px_rgba(0,0,0,0.82),0_0_54px_-32px_rgba(56,189,248,0.3)] ring-1 ring-white/[0.06] sm:mt-6">
+              <div className="relative aspect-[16/9] w-full">
+                <Image
+                  src={APP_PREVIEW_HERO_IMAGE}
+                  alt=""
+                  fill
+                  className="object-cover object-center brightness-[1.04] contrast-[1.02]"
+                  sizes="(max-width:768px) calc(100vw - 2rem), 832px"
+                  quality={100}
+                  priority
+                />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#020817]/22 via-transparent to-white/[0.04]" aria-hidden />
+              </div>
+            </div>
             <p className="mt-4 max-w-[44rem] text-[0.95rem] leading-relaxed text-slate-300 sm:text-lg">{copy.sub}</p>
           </div>
 
