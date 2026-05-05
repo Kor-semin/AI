@@ -1,7 +1,7 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
+import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
@@ -124,6 +124,18 @@ const LANDING_FIRST_SCREEN_CARDS = [
     desc: "반복되는 안내 문구를 준비 중입니다.",
     tone: "delivery",
   },
+] as const;
+
+const DASHBOARD_SUMMARY_ROWS = [
+  { title: "오늘의 상담", value: "12", meta: "SUV · 하이브리드" },
+  { title: "검토용 초안", value: "4", meta: "사용자 확인 후 저장" },
+  { title: "사후관리", value: "7", meta: "다음 연락 정리" },
+] as const;
+
+const DASHBOARD_TIMELINE_ROWS = [
+  { name: "김민준 고객", note: "GV70 하이브리드 상담 메모 정리", tag: "고객관리" },
+  { name: "박서연 고객", note: "출고 전 안내 문구 준비", tag: "사후관리" },
+  { name: "이도윤 고객", note: "AI가 검토용 메시지 초안 제안", tag: "AI 비서" },
 ] as const;
 
 function IconPlay({ className }: { className?: string }) {
@@ -293,10 +305,13 @@ export function LandingShowroom({
       id="sensora-landing-slide-deck"
       className="sensora-landing-slide-deck relative flex min-h-0 flex-1 flex-col overflow-hidden bg-[#020817]"
     >
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_82%_52%_at_52%_8%,rgba(56,189,248,0.1),transparent_55%),radial-gradient(ellipse_58%_42%_at_96%_18%,rgba(139,92,246,0.08),transparent_52%),linear-gradient(180deg,#050f1e_0%,#020817_45%,#030b16_100%)]"
-      />
+      <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
+        <div className="sensora-guide03-nebula-core" />
+        <div className="sensora-preview-galaxy-stars absolute inset-0 opacity-[0.9]" />
+        <div className="sensora-app-preview-galaxy__milky opacity-[0.18]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_84%_58%_at_72%_2%,rgba(56,189,248,0.17),transparent_55%),radial-gradient(ellipse_68%_50%_at_15%_25%,rgba(88,80,236,0.13),transparent_56%),radial-gradient(ellipse_78%_56%_at_60%_96%,rgba(15,23,42,0.38),transparent_58%),linear-gradient(180deg,#061225_0%,#020817_48%,#020612_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(2,6,23,0.18)_0%,transparent_34%,rgba(2,6,23,0.16)_100%)]" />
+      </div>
 
       {deliveryPrepOpen ? (
         <>
@@ -337,94 +352,123 @@ export function LandingShowroom({
             ].join(" ")}
             aria-hidden={safeSlide !== 0}
           >
-            <div className="landing-slide-hero-app-shell mx-auto grid h-full w-full max-w-[min(100%,420px)] content-start gap-4 sm:max-w-[460px] lg:max-w-[1320px] lg:grid-cols-[minmax(0,0.9fr)_minmax(420px,0.82fr)] lg:items-center lg:gap-7">
-              <div className="landing-first-screen-desktop-panel hidden min-h-[min(620px,calc(100vh-8rem))] grid-cols-[minmax(0,0.98fr)_minmax(360px,0.82fr)] gap-7 rounded-[34px] border border-white/[0.11] bg-[linear-gradient(145deg,rgba(9,22,39,0.94)_0%,rgba(5,13,25,0.96)_54%,rgba(2,8,18,0.98)_100%)] p-7 text-left shadow-[0_46px_128px_-66px_rgba(0,0,0,0.88),inset_0_1px_0_rgba(255,255,255,0.075)] lg:grid xl:p-8">
-                <section className="flex min-w-0 flex-col justify-between">
-                  <div>
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-sky-100/70">{t("product.name")}</p>
-                    <h1 className="mt-5 max-w-[13ch] text-balance text-[clamp(3.25rem,5.25vw,5.75rem)] font-semibold leading-[0.98] tracking-[-0.065em] text-white [word-break:keep-all]">
-                      {t("landing.slides.enterprise.heroDefinition")}
-                    </h1>
-                    <p className="mt-5 max-w-[34rem] text-[1.08rem] font-medium leading-relaxed text-slate-200/88">
+            <div className="landing-slide-hero-app-shell mx-auto grid h-full w-full max-w-[min(100%,420px)] content-start gap-4 sm:max-w-[460px] lg:max-w-[1360px] lg:grid-cols-[minmax(0,0.86fr)_minmax(520px,1fr)] lg:items-center lg:gap-10 xl:gap-12">
+              <div className="landing-first-screen-desktop-panel hidden min-h-[min(640px,calc(100vh-7.4rem))] overflow-hidden rounded-[38px] border border-white/[0.1] bg-[linear-gradient(140deg,rgba(8,22,42,0.72)_0%,rgba(4,11,24,0.78)_50%,rgba(2,6,18,0.86)_100%)] p-7 text-left shadow-[0_52px_150px_-76px_rgba(0,0,0,0.92),inset_0_1px_0_rgba(255,255,255,0.075)] backdrop-blur-md lg:contents">
+                <section className="landing-first-screen-copy-panel relative z-[2] flex min-w-0 flex-col justify-center rounded-[34px] border border-white/[0.09] bg-[linear-gradient(155deg,rgba(5,15,31,0.42),rgba(2,8,23,0.2))] px-8 py-9 shadow-[inset_0_1px_0_rgba(255,255,255,0.055)] xl:px-9">
+                  <p className="inline-flex w-fit items-center gap-2 rounded-full border border-sky-200/18 bg-sky-200/[0.055] px-3.5 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-sky-100/78">
+                    <span className="size-1.5 rounded-full bg-sky-300 shadow-[0_0_14px_rgba(56,189,248,0.7)]" aria-hidden />
+                    {t("product.name")}
+                  </p>
+                  <h1 className="mt-6 max-w-[12.5ch] text-balance text-[clamp(3.35rem,5.35vw,5.85rem)] font-semibold leading-[0.98] tracking-[-0.067em] text-white [word-break:keep-all]">
+                    {t("landing.slides.enterprise.heroDefinition")}
+                  </h1>
+                  <div className="mt-5 max-w-[35rem] space-y-2.5">
+                    <p className="text-[1.08rem] font-medium leading-relaxed text-slate-200/90">
                       {t("landing.slides.enterprise.heroSub")}
                     </p>
-                    <p className="mt-3 max-w-[33rem] text-[0.88rem] font-medium leading-relaxed text-slate-400">
+                    <p className="text-[0.9rem] font-medium leading-relaxed text-slate-400">
                       {t("landing.showroom.hero.trustLine")}
                     </p>
                   </div>
 
-                  <div className="mt-8">
-                    <div className="grid max-w-[40rem] grid-cols-[1.05fr_1fr_1fr] gap-3">
-                      <Link href={JOIN_PATH} prefetch={false} className={`${entPrimaryBtn} landing-hero-app-btn landing-hero-primary-cta min-h-[3.35rem] rounded-2xl px-6 text-[1rem]`}>
-                        {t("cta.joinBeta")}
-                      </Link>
-                      <button type="button" onClick={onOpenAppWorkspace} className={`${entGhostBtn} landing-hero-app-btn min-h-[3.35rem] rounded-2xl px-5 text-[0.96rem]`}>
-                        <IconPlay className="size-[1rem] shrink-0 opacity-95" />
-                        {t("cta.tryAppExperience")}
-                      </button>
-                      <Link href="/register" prefetch={false} className={`${entGhostBtn} landing-hero-app-btn min-h-[3.35rem] rounded-2xl px-5 text-[0.96rem]`}>
-                        {t("auth.salesRegistration")}
-                      </Link>
-                    </div>
+                  <div className="mt-8 grid max-w-[41rem] grid-cols-[1.08fr_1fr_1fr] gap-3">
+                    <Link href={JOIN_PATH} prefetch={false} className={`${entPrimaryBtn} landing-hero-app-btn landing-hero-primary-cta min-h-[3.45rem] rounded-2xl px-6 text-[1rem]`}>
+                      {t("cta.joinBeta")}
+                    </Link>
+                    <button type="button" onClick={onOpenAppWorkspace} className={`${entGhostBtn} landing-hero-app-btn min-h-[3.45rem] rounded-2xl px-5 text-[0.95rem]`}>
+                      <IconPlay className="size-[1rem] shrink-0 opacity-95" />
+                      {t("cta.tryAppExperience")}
+                    </button>
+                    <Link href="/register" prefetch={false} className={`${entGhostBtn} landing-hero-app-btn min-h-[3.45rem] rounded-2xl px-5 text-[0.95rem]`}>
+                      {t("auth.salesRegistration")}
+                    </Link>
+                  </div>
 
-                    <div className="mt-5 grid max-w-[44rem] grid-cols-4 gap-3">
-                      {MENU_ITEMS.map((row) => (
-                        <button
-                          key={`desktop-live-${row.key}`}
-                          type="button"
-                          onClick={() => handleMenuNavigate(row)}
-                          className="landing-first-screen-live-feature group min-h-[9.35rem] rounded-[24px] border border-white/[0.12] bg-white/[0.055] px-4 py-4 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.07),0_18px_42px_-34px_rgba(0,0,0,0.72)] transition hover:-translate-y-0.5 hover:border-sky-300/28 hover:bg-white/[0.075] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/38 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
-                          aria-label={row.target === "delivery" ? `${t(row.titleKey)} · ${t("landing.slides.menu.deliveryPrepAria")}` : `${t(row.titleKey)} · ${t("landing.slides.menu.enterWorkspaceAria")}`}
-                        >
-                          <LandingFeatureIcon tone={row.key as "customers" | "ai" | "followup" | "delivery"} className="size-11" />
-                          <span className="mt-4 block text-[1rem] font-semibold tracking-[-0.035em] text-slate-50">{t(row.titleKey)}</span>
-                          <span className="mt-2 block line-clamp-2 text-[0.78rem] font-medium leading-relaxed text-slate-400">{t(row.descKey)}</span>
-                        </button>
-                      ))}
-                    </div>
+                  <div className="mt-6 grid max-w-[42rem] grid-cols-4 gap-2.5">
+                    {MENU_ITEMS.map((row) => (
+                      <button
+                        key={`desktop-live-${row.key}`}
+                        type="button"
+                        onClick={() => handleMenuNavigate(row)}
+                        className="landing-first-screen-live-feature group min-h-[5.7rem] rounded-[20px] border border-white/[0.1] bg-white/[0.042] px-3 py-3 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_16px_38px_-34px_rgba(0,0,0,0.78)] transition hover:-translate-y-0.5 hover:border-sky-300/28 hover:bg-white/[0.066] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/38 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+                        aria-label={row.target === "delivery" ? `${t(row.titleKey)} · ${t("landing.slides.menu.deliveryPrepAria")}` : `${t(row.titleKey)} · ${t("landing.slides.menu.enterWorkspaceAria")}`}
+                      >
+                        <span className="flex items-center gap-2">
+                          <LandingFeatureIcon tone={row.key as "customers" | "ai" | "followup" | "delivery"} className="size-8 rounded-xl" />
+                          <span className="block text-[0.92rem] font-semibold tracking-[-0.03em] text-slate-50">{t(row.titleKey)}</span>
+                        </span>
+                        <span className="mt-2 block line-clamp-2 text-[0.72rem] font-medium leading-snug text-slate-400">{t(row.descKey)}</span>
+                      </button>
+                    ))}
                   </div>
                 </section>
 
-                <aside className="landing-first-screen-product-area relative flex min-h-0 items-center">
-                  <div className="landing-first-screen-product-card w-full overflow-hidden rounded-[30px] border border-white/[0.12] bg-[#07111f]/92 p-3 shadow-[0_34px_92px_-58px_rgba(0,0,0,0.88),inset_0_1px_0_rgba(255,255,255,0.08)]">
-                    <div className="rounded-[24px] border border-slate-700/70 bg-[linear-gradient(180deg,#111827_0%,#0b1220_100%)] p-4">
+                <aside className="landing-first-screen-product-area relative z-[2] hidden min-h-0 items-center lg:flex">
+                  <div className="landing-first-screen-product-card relative w-full overflow-hidden rounded-[34px] border border-white/[0.13] bg-[#07111f]/90 p-3 shadow-[0_44px_120px_-60px_rgba(0,0,0,0.94),0_0_90px_-42px_rgba(56,189,248,0.32),inset_0_1px_0_rgba(255,255,255,0.09)]">
+                    <div className="landing-product-dashboard-screen overflow-hidden rounded-[28px] border border-slate-700/70 bg-[linear-gradient(180deg,#121c2c_0%,#08111f_52%,#050b15_100%)] p-4">
                       <div className="flex items-center justify-between border-b border-white/[0.08] pb-3">
                         <div>
-                          <p className="text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-slate-500">Workspace</p>
-                          <p className="mt-1 text-[1.05rem] font-semibold tracking-[-0.035em] text-slate-50">{t("product.name")}</p>
+                          <p className="text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-slate-500">Sensora Workspace</p>
+                          <p className="mt-1 text-[1.08rem] font-semibold tracking-[-0.035em] text-slate-50">고객 상담 대시보드</p>
                         </div>
-                        <span className="rounded-full border border-sky-300/18 bg-sky-300/[0.08] px-3 py-1 text-[0.72rem] font-semibold text-sky-100/88">Preview</span>
+                        <span className="rounded-full border border-sky-300/18 bg-sky-300/[0.09] px-3 py-1 text-[0.72rem] font-semibold text-sky-100/88">Live Preview</span>
                       </div>
-                      <div className="mt-4 grid gap-3">
-                        <div className="rounded-[22px] border border-white/[0.08] bg-slate-900/70 p-4">
-                          <div className="flex items-start justify-between gap-4">
-                            <div>
-                              <p className="text-[0.78rem] font-semibold text-slate-400">오늘의 상담</p>
-                              <p className="mt-2 text-[1.65rem] font-semibold tracking-[-0.055em] text-slate-50">12건</p>
-                            </div>
-                            <div className="grid gap-1.5 text-right text-[0.72rem] font-semibold text-slate-400">
-                              <span>관심 차량</span>
-                              <span className="text-sky-200">SUV · 하이브리드</span>
+
+                      <div className="mt-4 grid grid-cols-[0.72fr_1fr] gap-3">
+                        <div className="grid gap-3">
+                          <div className="rounded-[22px] border border-white/[0.08] bg-slate-950/38 p-4">
+                            <p className="text-[0.75rem] font-semibold text-slate-400">{DASHBOARD_SUMMARY_ROWS[0].title}</p>
+                            <p className="mt-2 text-[2rem] font-semibold tracking-[-0.06em] text-slate-50">{DASHBOARD_SUMMARY_ROWS[0].value}건</p>
+                            <div className="mt-4 grid gap-2">
+                              {DASHBOARD_SUMMARY_ROWS.map((row, index) => (
+                                <span key={row.title} className="flex items-center gap-2 rounded-xl border border-white/[0.07] bg-white/[0.045] px-3 py-2 text-[0.72rem] font-semibold text-slate-300">
+                                  <span className={["size-1.5 rounded-full", index === 0 ? "bg-sky-300" : index === 1 ? "bg-violet-300" : "bg-emerald-300"].join(" ")} aria-hidden />
+                                  {row.meta}
+                                </span>
+                              ))}
                             </div>
                           </div>
-                          <div className="mt-4 grid grid-cols-3 gap-2">
-                            {["상담 메모", "검토용 초안", "다음 연락"].map((label) => (
-                              <span key={label} className="rounded-xl border border-white/[0.08] bg-white/[0.045] px-3 py-2 text-center text-[0.72rem] font-semibold text-slate-300">
-                                {label}
-                              </span>
+                          <div className="rounded-[22px] border border-white/[0.08] bg-white/[0.04] p-4">
+                            <p className="text-[0.75rem] font-semibold text-slate-400">사후관리 예정</p>
+                            <div className="mt-3 space-y-2">
+                              <span className="block h-2 rounded-full bg-slate-700/80" />
+                              <span className="block h-2 w-4/5 rounded-full bg-slate-800/90" />
+                              <span className="block h-2 w-2/3 rounded-full bg-slate-800/70" />
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="grid gap-3">
+                          <div className="rounded-[24px] border border-white/[0.09] bg-[radial-gradient(ellipse_90%_80%_at_78%_10%,rgba(56,189,248,0.13),transparent_58%),rgba(15,23,42,0.62)] p-4">
+                            <div className="flex items-start justify-between gap-3">
+                              <div>
+                                <p className="text-[0.78rem] font-semibold text-slate-300">김민준 고객</p>
+                                <p className="mt-1 text-[0.72rem] text-slate-500">SUV · 하이브리드 · 이번 주 상담</p>
+                              </div>
+                              <span className="rounded-full bg-emerald-300/[0.12] px-2.5 py-1 text-[0.68rem] font-semibold text-emerald-100">진행 중</span>
+                            </div>
+                            <div className="mt-4 grid grid-cols-3 gap-2">
+                              {LANDING_FIRST_SCREEN_CARDS.slice(0, 3).map((card) => (
+                                <span key={`metric-${card.key}`} className="rounded-2xl border border-white/[0.08] bg-[#020817]/42 px-3 py-3">
+                                  <span className="block text-[0.72rem] font-semibold text-slate-400">{card.title}</span>
+                                  <span className="mt-2 block h-1.5 rounded-full bg-sky-300/35" aria-hidden />
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                          <div className="grid gap-2">
+                            {DASHBOARD_TIMELINE_ROWS.map((row, index) => (
+                              <div key={`product-${row.name}`} className="flex items-center gap-3 rounded-2xl border border-white/[0.08] bg-white/[0.04] px-3.5 py-3">
+                                <span className={["size-2.5 rounded-full", index === 0 ? "bg-sky-300/75" : index === 1 ? "bg-violet-300/75" : index === 2 ? "bg-emerald-300/75" : "bg-slate-300/65"].join(" ")} aria-hidden />
+                                <div className="min-w-0 flex-1">
+                                  <p className="truncate text-[0.86rem] font-semibold text-slate-100">{row.name}</p>
+                                  <p className="truncate text-[0.72rem] text-slate-500">{row.note}</p>
+                                </div>
+                                <span className="shrink-0 rounded-full border border-white/[0.07] px-2 py-0.5 text-[0.65rem] font-semibold text-slate-400">{row.tag}</span>
+                                <IconChevron className="size-4 shrink-0 text-slate-500" />
+                              </div>
                             ))}
                           </div>
-                        </div>
-                        <div className="grid gap-2">
-                          {LANDING_FIRST_SCREEN_CARDS.slice(0, 3).map((card) => (
-                            <div key={`product-${card.key}`} className="flex items-center gap-3 rounded-2xl border border-white/[0.08] bg-white/[0.04] px-3.5 py-3">
-                              <span className="size-2.5 rounded-full bg-sky-300/70" aria-hidden />
-                              <div className="min-w-0 flex-1">
-                                <p className="truncate text-[0.86rem] font-semibold text-slate-100">{card.title}</p>
-                                <p className="truncate text-[0.72rem] text-slate-500">{card.desc}</p>
-                              </div>
-                            </div>
-                          ))}
                         </div>
                       </div>
                     </div>
