@@ -269,7 +269,7 @@ export function LandingShowroom({
             ].join(" ")}
             aria-hidden={safeSlide !== 0}
           >
-            <div className="landing-slide-hero-app-shell mx-auto flex h-full w-full max-w-[min(100%,400px)] flex-col gap-3 sm:max-w-[420px] lg:max-h-none lg:max-w-[1280px] lg:flex-row lg:items-stretch lg:justify-between lg:gap-8 xl:gap-10">
+            <div className="landing-slide-hero-app-shell mx-auto flex h-full w-full max-w-[min(100%,400px)] flex-col gap-3 sm:max-w-[420px] lg:max-h-none lg:max-w-[1360px] lg:flex-row lg:items-stretch lg:justify-between lg:gap-10 xl:max-w-[1400px] xl:gap-12">
               <div className="flex w-full shrink-0 flex-col items-center text-center lg:max-w-[min(100%,34rem)] lg:items-start lg:justify-center lg:text-left xl:max-w-[36rem]">
                 <div className="landing-hero-start-panel flex w-full flex-col items-center text-center lg:items-start lg:text-left">
                   <h1 className="max-w-[22ch] text-pretty text-[clamp(1.5rem,calc(0.82rem+4.2vw),2.75rem)] font-semibold leading-[1.06] tracking-[-0.04em] text-white [word-break:keep-all] sm:max-w-[24ch] lg:max-w-none lg:text-[clamp(2.2rem,calc(1.18rem+4.7vw),3.25rem)]">
@@ -286,11 +286,11 @@ export function LandingShowroom({
                   </p>
 
                   <div className="landing-hero-app-actions mt-5 flex w-full max-w-[20rem] flex-col items-stretch gap-0 sm:mt-6 sm:max-w-[21rem] lg:mt-0 lg:w-full lg:max-w-none">
-                    <div className="landing-slide-cta-cluster landing-hero-app-cta-row flex w-full flex-col items-stretch gap-2 sm:gap-2.5 lg:flex-row lg:flex-wrap lg:gap-2.5">
+                    <div className="landing-slide-cta-cluster landing-hero-app-cta-row flex w-full flex-col items-stretch gap-2.5 sm:gap-3 lg:flex-col lg:items-start lg:gap-3.5">
                       <Link
                         href={JOIN_PATH}
                         prefetch={false}
-                        className={`${entPrimaryBtn} landing-hero-app-btn landing-hero-primary-cta min-h-[2.6875rem] w-full rounded-lg sm:min-h-[2.875rem] lg:min-h-[3.25rem] lg:text-[1.0625rem] sm:w-auto sm:min-w-[11.25rem]`}
+                        className={`${entPrimaryBtn} landing-hero-app-btn landing-hero-primary-cta min-h-[3.25rem] w-full rounded-2xl px-6 text-[1.05rem] sm:min-h-[3.4rem] sm:text-[1.075rem] lg:min-h-[3.6rem] lg:w-[min(100%,22rem)] lg:text-[1.1rem]`}
                       >
                         {t("cta.joinBeta")}
                       </Link>
@@ -299,14 +299,16 @@ export function LandingShowroom({
                         onClick={() => {
                           onOpenAppWorkspace();
                         }}
-                        className={`${entGhostBtn} landing-hero-app-btn landing-hero-app-secondary-cta min-h-[2.6875rem] w-full rounded-lg sm:min-h-[2.875rem] lg:min-h-[3.25rem] lg:text-[1.03125rem] sm:w-auto sm:min-w-[10.75rem]`}
+                        className={`${entGhostBtn} landing-hero-app-btn landing-hero-app-secondary-cta min-h-[3.25rem] w-full rounded-2xl px-6 text-[1.03rem] sm:min-h-[3.4rem] sm:text-[1.05rem] lg:min-h-[3.6rem] lg:w-[min(100%,22rem)] lg:text-[1.08rem]`}
                       >
                         <IconPlay className="size-[1.02rem] shrink-0 opacity-95" />
                         {t("cta.tryAppExperience")}
                       </button>
-                    </div>
-                    <div className="mt-2 flex w-full justify-center lg:mt-2.5 lg:justify-start">
-                      <Link href="/register" prefetch={false} className={`${tertiaryLink} landing-hero-app-tertiary`}>
+                      <Link
+                        href="/register"
+                        prefetch={false}
+                        className={`${entGhostBtn} landing-hero-app-btn landing-hero-app-tertiary-cta min-h-[3.25rem] w-full justify-center rounded-2xl border border-white/[0.14] bg-white/[0.03] px-6 text-[1.02rem] text-slate-100/90 sm:min-h-[3.4rem] sm:text-[1.04rem] lg:min-h-[3.6rem] lg:w-[min(100%,22rem)] lg:text-[1.06rem]`}
+                      >
                         {t("auth.salesRegistration")}
                       </Link>
                     </div>
