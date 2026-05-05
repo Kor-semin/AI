@@ -2580,7 +2580,23 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   z-index: 2;
   display: block;
   border-radius: 999px;
+  cursor: pointer;
   touch-action: manipulation;
+  transition:
+    background-color 0.16s ease-out,
+    box-shadow 0.16s ease-out,
+    transform 0.16s ease-out;
+}
+
+.landing-guide03-hotspot:hover {
+  background: rgba(125, 211, 252, 0.08);
+  box-shadow:
+    0 0 0 1px rgba(125, 211, 252, 0.22),
+    0 0 24px -8px rgba(99, 102, 241, 0.38);
+}
+
+.landing-guide03-hotspot:active {
+  transform: scale(0.992);
 }
 
 .landing-guide03-hotspot:focus-visible {
@@ -2726,17 +2742,80 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
 }
 
 .app-preview-tour-screen {
-  background-image: linear-gradient(180deg, rgba(15, 23, 42, 0.9) 0%, rgba(10, 17, 30, 0.96) 100%);
+  background-image: linear-gradient(180deg, #f8fafc 0%, #eef4fb 100%);
 }
 
 .app-preview-tour-card {
-  background-image: linear-gradient(180deg, rgba(30, 41, 59, 0.52) 0%, rgba(15, 23, 42, 0.72) 100%);
+  background-image: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
 }
 
 .app-preview-virtual-screen {
   background:
-    linear-gradient(180deg, rgba(15, 23, 42, 0.92) 0%, rgba(8, 14, 26, 0.98) 100%),
-    radial-gradient(ellipse 70% 60% at 80% 0%, rgba(148, 163, 184, 0.12), transparent 58%);
+    linear-gradient(180deg, rgba(15, 23, 42, 0.96) 0%, rgba(8, 14, 26, 0.99) 100%),
+    radial-gradient(ellipse 70% 60% at 80% 0%, rgba(99, 102, 241, 0.15), transparent 58%);
+}
+
+.app-preview-target-shell {
+  background:
+    linear-gradient(115deg, #f8fafc 0%, #eef5ff 52%, #e7eef9 100%);
+}
+
+.app-preview-target-screen {
+  background:
+    radial-gradient(ellipse 80% 70% at 85% 0%, rgba(99, 102, 241, 0.2), transparent 56%),
+    linear-gradient(180deg, #111827 0%, #0b1220 100%);
+}
+
+.app-preview-target-nav-card {
+  box-shadow: 0 18px 42px -30px rgba(15, 23, 42, 0.34);
+}
+
+.crm-app-stage-menu-target {
+  background:
+    radial-gradient(ellipse 80% 55% at 62% -8%, rgba(56, 189, 248, 0.1), transparent 58%),
+    radial-gradient(ellipse 60% 44% at 100% 15%, rgba(99, 102, 241, 0.08), transparent 52%),
+    linear-gradient(180deg, #07111f 0%, #020817 100%);
+}
+
+.crm-menu-target-sidebar {
+  background:
+    linear-gradient(180deg, rgba(11, 18, 32, 0.98) 0%, rgba(6, 13, 26, 0.98) 100%);
+}
+
+.crm-menu-target-item {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+.crm-menu-target-item[aria-current="page"] {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.09),
+    0 16px 38px -24px rgba(99, 102, 241, 0.55);
+}
+
+.crm-section-focus-panel {
+  background:
+    radial-gradient(ellipse 60% 50% at 94% 0%, rgba(99, 102, 241, 0.12), transparent 62%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.9) 0%, rgba(8, 14, 26, 0.96) 100%);
+}
+
+.crm-menu-main-icon {
+  display: grid;
+  width: 2.35rem;
+  height: 2.35rem;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 0.875rem;
+  background: rgba(255, 255, 255, 0.055);
+  color: rgba(203, 213, 225, 0.92);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.055);
+}
+
+.crm-menu-main-item--active .crm-menu-main-icon {
+  background: linear-gradient(135deg, rgba(129, 140, 248, 0.92), rgba(56, 189, 248, 0.7));
+  color: #f8fafc;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 14px 30px -18px rgba(99, 102, 241, 0.85);
 }
 
 .app-preview-tour-screen [role="tablist"] {

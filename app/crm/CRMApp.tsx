@@ -94,6 +94,57 @@ import { SENSORA_GUIDE_IMAGES } from "@/app/components/concierge/sensoraGuideIma
 const CRM_GUIDE_VIEWER_IMAGES = SENSORA_GUIDE_IMAGES.map((s) => ({ src: s.src }));
 const CRM_GUIDE_SLIDE_TITLE_KEYS = SENSORA_GUIDE_IMAGES.map((s) => s.titleKey);
 
+const CRM_SECTION_PANEL_COPY: Record<CrmSection, { eyebrow: string; title: string; body: string; chips: string[] }> = {
+  dashboard: {
+    eyebrow: "Home",
+    title: "오늘의 영업 흐름",
+    body: "연락 대상, 사후관리 항목, 최근 상담을 한 화면에서 확인합니다.",
+    chips: ["오늘 연락", "사후관리", "최근 상담"],
+  },
+  customers: {
+    eyebrow: "Customers",
+    title: "고객관리",
+    body: "고객 목록과 상담 메모, 관심 차량, 다음 행동을 함께 확인합니다.",
+    chips: ["고객 목록", "상담 상태", "상세 패널"],
+  },
+  consulting: {
+    eyebrow: "Consulting",
+    title: "상담",
+    body: "상담 원문을 유지하면서 필요한 메모와 다음 행동을 정리합니다.",
+    chips: ["메모 작성", "원문 보존", "AI 연결"],
+  },
+  ai: {
+    eyebrow: "AI Assistant",
+    title: "AI 도우미",
+    body: "상담 내용을 바탕으로 검토용 초안과 고객 니즈를 정리합니다.",
+    chips: ["검토용 초안", "니즈 정리", "문자 초안"],
+  },
+  pipeline: {
+    eyebrow: "Pipeline",
+    title: "메시지",
+    body: "영업 단계별 고객 흐름과 보낼 메시지 맥락을 정리합니다.",
+    chips: ["단계 관리", "고객 흐름", "전환 확인"],
+  },
+  vehicle: {
+    eyebrow: "Vehicle",
+    title: "통계",
+    body: "관심 조건과 예산을 바탕으로 차량 매칭 판단을 보조합니다.",
+    chips: ["조건 분석", "예산", "모델 적합"],
+  },
+  followup: {
+    eyebrow: "Schedule",
+    title: "일정/알림",
+    body: "다음 연락, 일정, 사후관리 할 일을 놓치지 않게 보여줍니다.",
+    chips: ["다음 연락", "일정", "사후관리"],
+  },
+  settings: {
+    eyebrow: "Settings",
+    title: "설정",
+    body: "내 정보, 템플릿 치환 이름, 소개 화면과 가져오기 안내를 관리합니다.",
+    chips: ["내 정보", "템플릿", "안내"],
+  },
+};
+
 const LEAD_SOURCES = [...DEALER_LEAD_SOURCES] satisfies LeadSource[];
 const STAGES = [...DEALER_PIPELINE_STAGES] satisfies PipelineStage[];
 
@@ -1710,6 +1761,37 @@ export function CRMApp({
               {t(CRM_SECTION_MOBILE_SUBTITLE_KEYS[activeSection])}
             </p>
           </div>
+
+          <section className="crm-section-focus-panel rounded-[24px] border border-white/[0.12] bg-gradient-to-r from-[#101a2b]/92 via-[#0b1220]/92 to-[#070b14]/94 px-5 py-5 shadow-[0_26px_64px_-34px_rgba(0,0,0,0.72),inset_0_1px_0_rgba(255,255,255,0.075)] lg:px-6">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+              <div className="min-w-0">
+                <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-sky-300/80">
+                  {CRM_SECTION_PANEL_COPY[activeSection].eyebrow}
+                </p>
+                <h2 className="mt-2 text-[clamp(1.35rem,2.2vw,2rem)] font-semibold leading-tight tracking-[-0.045em] text-slate-50">
+                  {CRM_SECTION_PANEL_COPY[activeSection].title}
+                </h2>
+                <p className="mt-2 max-w-[48rem] text-[0.92rem] font-medium leading-relaxed text-slate-400">
+                  {CRM_SECTION_PANEL_COPY[activeSection].body}
+                </p>
+              </div>
+              <div className="flex shrink-0 flex-wrap gap-2">
+                {CRM_SECTION_PANEL_COPY[activeSection].chips.map((chip) => (
+                  <span key={chip} className="rounded-full border border-sky-300/16 bg-sky-300/[0.075] px-3 py-1.5 text-[0.74rem] font-semibold text-sky-100/90">
+                    {chip}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <div className="mt-5 grid gap-3 sm:grid-cols-3">
+              {CRM_SECTION_PANEL_COPY[activeSection].chips.map((chip, index) => (
+                <div key={`${activeSection}-${chip}`} className="rounded-2xl border border-white/[0.08] bg-white/[0.035] px-4 py-3">
+                  <p className="text-[0.72rem] font-bold uppercase tracking-[0.12em] text-sky-300/75">0{index + 1}</p>
+                  <p className="mt-1.5 text-[0.86rem] font-semibold text-slate-100">{chip}</p>
+                </div>
+              ))}
+            </div>
+          </section>
 
           {showSellerToolsRow ? (
             <div className="flex flex-wrap items-center gap-2 sm:justify-between">

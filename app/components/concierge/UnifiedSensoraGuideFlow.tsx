@@ -25,6 +25,29 @@ const APP_PREVIEW_TABS = ["all", "customers", "ai", "followup", "delivery"] as c
 const glassInteractive =
   "sensora-glass-surface rounded-2xl transition-[border-color,box-shadow] duration-200 hover:border-sky-400/38 hover:shadow-[0_0_44px_-16px_rgba(56,189,248,0.18)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/38";
 
+const previewToneClass: Record<AppPreviewCardTone, { dot: string; chip: string; glow: string }> = {
+  customers: {
+    dot: "bg-sky-500 text-white",
+    chip: "bg-sky-50 text-sky-700 ring-sky-100",
+    glow: "from-sky-500/16 to-cyan-400/8",
+  },
+  ai: {
+    dot: "bg-violet-500 text-white",
+    chip: "bg-violet-50 text-violet-700 ring-violet-100",
+    glow: "from-violet-500/16 to-indigo-400/8",
+  },
+  followup: {
+    dot: "bg-emerald-500 text-white",
+    chip: "bg-emerald-50 text-emerald-700 ring-emerald-100",
+    glow: "from-emerald-500/15 to-teal-400/8",
+  },
+  delivery: {
+    dot: "bg-slate-600 text-white",
+    chip: "bg-slate-100 text-slate-700 ring-slate-200",
+    glow: "from-slate-500/14 to-slate-300/8",
+  },
+};
+
 export type UnifiedSensoraGuideVariant = "dialog" | "notebook";
 type AppPreviewTab = (typeof APP_PREVIEW_TABS)[number];
 type AppPreviewCardTone = "customers" | "ai" | "followup" | "delivery";
@@ -120,46 +143,46 @@ function AppPreviewScreenBrowser({
             tab: "customers",
             tone: "customers",
             title: "고객관리",
-            desc: "상담 메모와 관심 차량을 고객별로 정리합니다.",
+            desc: "고객별 상담 메모, 관심 차량, 다음 연락을 한 화면에서 확인합니다.",
             action: "업무 화면으로",
             kind: "section",
             section: "customers",
             targetPath: "/?view=app#customers",
-            points: ["상담 메모", "관심 차량"],
+            points: ["상담 메모", "관심 차량", "다음 연락"],
           },
           {
             id: "ai",
             tab: "ai",
             tone: "ai",
             title: "AI 비서",
-            desc: "상담 내용을 바탕으로 검토용 초안을 제안합니다.",
+            desc: "상담 내용을 바탕으로 니즈 요약과 검토용 메시지 초안을 제안합니다.",
             action: "업무 화면으로",
             kind: "section",
             section: "ai",
             targetPath: "/?view=app#crm-ai-assistant",
-            points: ["검토용 초안", "니즈 정리"],
+            points: ["니즈 요약", "검토용 초안", "문자 정리"],
           },
           {
             id: "followup",
             tab: "followup",
             tone: "followup",
             title: "사후관리",
-            desc: "다음 연락과 사후관리 일정을 놓치지 않도록 돕습니다.",
+            desc: "오늘 연락할 고객과 사후관리 일정을 우선순위로 정리합니다.",
             action: "업무 화면으로",
             kind: "section",
             section: "followup",
             targetPath: "/?view=app#follow-up",
-            points: ["다음 연락", "일정 관리"],
+            points: ["오늘 연락", "일정 관리", "미완료 항목"],
           },
           {
             id: "delivery",
             tab: "delivery",
             tone: "delivery",
             title: "출고 안내",
-            desc: "반복되는 안내 문구를 더 정확하게 준비할 수 있도록 구성 중입니다.",
+            desc: "출고 전 안내와 반복되는 전달 문구를 더 정확하게 준비 중입니다.",
             action: "준비 중",
             kind: "delivery",
-            points: ["안내 문구", "준비 항목"],
+            points: ["안내 문구", "체크리스트", "준비 중"],
           },
         ] satisfies AppPreviewCard[],
       }
@@ -180,46 +203,46 @@ function AppPreviewScreenBrowser({
             tab: "customers",
             tone: "customers",
             title: "Customers",
-            desc: "Organize consultation notes and interested vehicles by customer.",
+            desc: "Review each customer's notes, interested vehicles, and next outreach in one screen.",
             action: "Open screen",
             kind: "section",
             section: "customers",
             targetPath: "/?view=app#customers",
-            points: ["Notes", "Vehicles"],
+            points: ["Notes", "Vehicles", "Next touch"],
           },
           {
             id: "ai",
             tab: "ai",
             tone: "ai",
             title: "AI assistant",
-            desc: "Suggest review-ready drafts grounded in consultation notes.",
+            desc: "Summarize needs and suggest review-ready message drafts from consultation notes.",
             action: "Open screen",
             kind: "section",
             section: "ai",
             targetPath: "/?view=app#crm-ai-assistant",
-            points: ["Drafts", "Needs"],
+            points: ["Needs", "Drafts", "Messages"],
           },
           {
             id: "followup",
             tab: "followup",
             tone: "followup",
             title: "Aftercare",
-            desc: "Keep next outreach and aftercare schedules from slipping.",
+            desc: "Prioritize customers to contact today and aftercare schedules.",
             action: "Open screen",
             kind: "section",
             section: "followup",
             targetPath: "/?view=app#follow-up",
-            points: ["Next touch", "Schedule"],
+            points: ["Today", "Schedule", "Open tasks"],
           },
           {
             id: "delivery",
             tab: "delivery",
             tone: "delivery",
             title: "Delivery guidance",
-            desc: "We are preparing clearer recurring delivery guidance templates.",
+            desc: "We are preparing clearer delivery guidance and recurring message templates.",
             action: "In preparation",
             kind: "delivery",
-            points: ["Guidance", "Checklist"],
+            points: ["Guidance", "Checklist", "Preparing"],
           },
         ] satisfies AppPreviewCard[],
       };
@@ -250,24 +273,14 @@ function AppPreviewScreenBrowser({
   return (
     <div className={`flex min-h-0 flex-1 flex-col ${className}`.trim()}>
       <div className="sensora-guide-preview-hide-scroll min-h-0 flex-1 overflow-y-auto overscroll-y-contain [-webkit-overflow-scrolling:touch] pb-[max(2rem,calc(env(safe-area-inset-bottom,0px)+1.5rem))]">
-        <div className="mx-auto flex w-full max-w-[min(1180px,100%)] flex-col gap-5 px-0 pb-4 pt-2 sm:px-2 sm:pt-4 lg:gap-6">
-          <section className="app-preview-tour-screen overflow-hidden rounded-[30px] border border-white/[0.12] bg-slate-900/72 text-slate-100 shadow-[0_36px_104px_-58px_rgba(0,0,0,0.78),inset_0_1px_0_rgba(255,255,255,0.075)]">
-            <div className="grid gap-5 border-b border-white/[0.09] bg-[linear-gradient(135deg,rgba(11,35,64,0.94)_0%,rgba(7,19,35,0.98)_58%,rgba(3,10,20,0.99)_100%)] px-5 py-6 sm:px-7 sm:py-8 lg:grid-cols-[minmax(0,0.72fr)_auto] lg:items-end">
-              <div>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-sky-100/72">{copy.eyebrow}</p>
-                <h2 className="mt-3 max-w-[16ch] text-balance text-[clamp(2rem,5vw,4.1rem)] font-semibold leading-[1.02] tracking-[-0.055em]">{copy.title}</h2>
-                <p className="mt-4 max-w-[40rem] text-[0.95rem] font-medium leading-relaxed text-slate-300 sm:text-[1.05rem]">{copy.sub}</p>
-              </div>
-              <Link
-                href={JOIN_PATH}
-                prefetch={false}
-                className="inline-flex min-h-11 items-center justify-center rounded-2xl border border-white/[0.14] bg-white/[0.055] px-5 py-2.5 text-sm font-semibold text-slate-100 transition hover:bg-white/[0.085] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35"
-              >
-                {t("cta.joinBeta")}
-              </Link>
-            </div>
+        <div className="mx-auto flex w-full max-w-[min(1220px,100%)] flex-col gap-5 px-0 pb-4 pt-2 sm:px-2 sm:pt-4 lg:gap-6">
+          <section className="app-preview-target-screen grid overflow-hidden rounded-[34px] border border-slate-200 bg-slate-50 text-slate-950 shadow-[0_36px_104px_-54px_rgba(2,6,23,0.6)] lg:grid-cols-[minmax(340px,0.86fr)_minmax(440px,1fr)]">
+            <div className="flex min-w-0 flex-col bg-white px-5 py-6 sm:px-7 sm:py-8 lg:min-h-[38rem] lg:px-9 lg:py-10">
+              <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-sky-600">{copy.eyebrow}</p>
+              <h2 className="mt-3 text-balance text-[clamp(2rem,5vw,4rem)] font-semibold leading-[1.02] tracking-[-0.06em] text-slate-950">{copy.title}</h2>
+              <p className="mt-4 max-w-[34rem] text-[0.95rem] font-medium leading-relaxed text-slate-500 sm:text-[1.02rem]">{copy.sub}</p>
 
-            <div className="flex gap-1.5 overflow-x-auto border-b border-white/[0.08] px-4 py-4 [scrollbar-width:none] sm:gap-2 sm:px-7 [&::-webkit-scrollbar]:hidden" role="tablist" aria-label={copy.title}>
+              <div className="mt-6 flex gap-1.5 overflow-x-auto [scrollbar-width:none] sm:gap-2 [&::-webkit-scrollbar]:hidden" role="tablist" aria-label={copy.title}>
               {APP_PREVIEW_TABS.map((tab) => (
                 <button
                   key={tab}
@@ -276,63 +289,99 @@ function AppPreviewScreenBrowser({
                   aria-selected={activeTab === tab}
                   onClick={() => setActiveTab(tab)}
                   className={[
-                    "shrink-0 rounded-full border px-2.5 py-2 text-[0.78rem] font-semibold transition touch-manipulation focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 sm:px-4 sm:text-sm",
+                    "shrink-0 rounded-full border px-3.5 py-2 text-[0.78rem] font-semibold transition touch-manipulation focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 sm:px-4 sm:text-sm",
                     activeTab === tab
-                      ? "border-sky-300/32 bg-sky-300/[0.13] text-sky-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]"
-                      : "border-white/[0.1] bg-white/[0.035] text-slate-400 hover:border-sky-300/24 hover:text-slate-100",
+                      ? "border-sky-200 bg-sky-50 text-sky-700 shadow-[0_8px_22px_-16px_rgba(14,165,233,0.5)]"
+                      : "border-slate-200 bg-white text-slate-500 hover:border-sky-200 hover:bg-sky-50/60 hover:text-slate-900",
                   ].join(" ")}
                 >
                   {copy.tabs[tab]}
                 </button>
               ))}
-            </div>
+              </div>
 
-            <div className="grid gap-4 px-5 py-5 sm:px-7 sm:py-7 lg:grid-cols-2">
+              <div className="mt-6 grid gap-3.5">
               {visibleCards.map((card) => (
                 <button
                   key={card.id}
                   type="button"
                   onClick={() => handleCardClick(card)}
-                  className="app-preview-tour-card group grid min-h-[17rem] w-full touch-manipulation gap-4 rounded-[26px] border border-white/[0.1] bg-white/[0.045] p-4 text-left shadow-[0_18px_54px_-38px_rgba(0,0,0,0.74),inset_0_1px_0_rgba(255,255,255,0.07)] transition-[transform,border-color,background-color,box-shadow] duration-200 hover:-translate-y-0.5 hover:border-sky-300/28 hover:bg-white/[0.065] hover:shadow-[0_24px_64px_-40px_rgba(14,165,233,0.22)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+                    className="group grid w-full grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-[22px] border border-slate-200 bg-white px-4 py-4 text-left shadow-[0_18px_42px_-34px_rgba(15,23,42,0.35)] transition-[transform,border-color,box-shadow,background-color] duration-200 hover:-translate-y-0.5 hover:border-sky-200 hover:bg-sky-50/40 hover:shadow-[0_22px_50px_-34px_rgba(14,165,233,0.32)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/40 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
                   aria-label={`${card.title} · ${card.action}`}
                 >
-                  <span className="app-preview-virtual-screen block rounded-[22px] border border-white/[0.1] bg-[#0b1220] p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
-                    <span className="flex items-center justify-between border-b border-white/[0.08] pb-2.5">
-                      <span className="text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-slate-500">Sensora</span>
-                      <span
-                        className={[
-                          "rounded-full px-2.5 py-1 text-[0.68rem] font-semibold",
-                          card.tone === "customers" ? "bg-sky-300/[0.12] text-sky-100" : card.tone === "ai" ? "bg-violet-300/[0.14] text-violet-100" : card.tone === "followup" ? "bg-emerald-300/[0.12] text-emerald-100" : "bg-slate-300/[0.12] text-slate-200",
-                        ].join(" ")}
-                      >
-                        {card.title}
-                      </span>
+                    <span className={`flex size-11 items-center justify-center rounded-2xl text-sm font-bold shadow-[0_12px_28px_-18px_rgba(15,23,42,0.45)] ${previewToneClass[card.tone].dot}`}>
+                      {card.id === "customers" ? "01" : card.id === "ai" ? "02" : card.id === "followup" ? "03" : "04"}
                     </span>
-                    <span className="mt-3 grid gap-2.5">
-                      {card.points.map((point, index) => (
-                        <span key={`${card.id}-${point}`} className="flex items-center gap-2 rounded-2xl border border-white/[0.07] bg-white/[0.04] px-3 py-2.5">
-                          <span className={["size-2 rounded-full", index === 0 ? "bg-sky-300/75" : "bg-slate-500/80"].join(" ")} aria-hidden />
-                          <span className="text-[0.78rem] font-semibold text-slate-300">{point}</span>
-                          <span className="ml-auto h-1.5 w-16 rounded-full bg-slate-700/80" aria-hidden />
-                        </span>
-                      ))}
-                      <span className="rounded-2xl border border-dashed border-white/[0.09] bg-slate-950/30 px-3 py-3">
-                        <span className="block h-2 w-3/4 rounded-full bg-slate-700/70" aria-hidden />
-                        <span className="mt-2 block h-2 w-1/2 rounded-full bg-slate-800/80" aria-hidden />
-                      </span>
-                    </span>
-                  </span>
-
                   <span className="min-w-0">
-                    <span className="block text-[1.12rem] font-semibold leading-tight tracking-[-0.035em] text-slate-50 sm:text-[1.24rem]">{card.title}</span>
-                    <span className="mt-2 block text-[0.88rem] leading-relaxed text-slate-400">{card.desc}</span>
-                    <span className="mt-4 inline-flex min-h-10 items-center gap-1.5 rounded-2xl border border-white/[0.1] bg-white/[0.04] px-4 py-2 text-[0.84rem] font-semibold text-sky-100">
+                      <span className="block text-[1.05rem] font-semibold leading-tight tracking-[-0.035em] text-slate-950">{card.title}</span>
+                      <span className="mt-1 block text-[0.82rem] leading-relaxed text-slate-500">{card.desc}</span>
+                      <span className="mt-3 flex flex-wrap gap-1.5">
+                        {card.points.map((point) => (
+                          <span key={`${card.id}-${point}`} className={`rounded-full px-2.5 py-1 text-[0.68rem] font-semibold ring-1 ${previewToneClass[card.tone].chip}`}>
+                            {point}
+                          </span>
+                        ))}
+                      </span>
+                    </span>
+                    <span className="hidden min-h-9 shrink-0 items-center gap-1.5 rounded-full bg-slate-950 px-3.5 py-2 text-[0.78rem] font-semibold text-white transition group-hover:bg-sky-600 sm:inline-flex">
                       {card.action}
                       <IconArrowRightSoft className="size-[0.95rem] shrink-0 opacity-80" />
                     </span>
-                  </span>
                 </button>
               ))}
+              </div>
+
+              <Link
+                href={JOIN_PATH}
+                prefetch={false}
+                className="mt-auto hidden min-h-11 w-fit items-center justify-center rounded-2xl border border-slate-200 bg-slate-950 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/40 lg:inline-flex"
+              >
+                {t("cta.joinBeta")}
+              </Link>
+            </div>
+
+            <div className="relative min-h-[26rem] overflow-hidden bg-[#060b16] px-5 py-6 text-slate-100 sm:px-7 sm:py-8 lg:px-8 lg:py-10">
+              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_78%_8%,rgba(79,70,229,0.24),transparent_58%),radial-gradient(ellipse_64%_46%_at_10%_18%,rgba(14,165,233,0.18),transparent_58%),linear-gradient(180deg,#0b1220_0%,#050913_100%)]" aria-hidden />
+              <div className="relative mx-auto flex h-full max-w-[34rem] flex-col justify-center">
+                <div className="rounded-[30px] border border-white/[0.12] bg-white/[0.055] p-4 shadow-[0_34px_94px_-52px_rgba(0,0,0,0.9),inset_0_1px_0_rgba(255,255,255,0.08)]">
+                  <div className="rounded-[24px] border border-white/[0.1] bg-[#0b1220]/96 p-4">
+                    <div className="flex items-center justify-between border-b border-white/[0.08] pb-3">
+                      <div>
+                        <p className="text-[0.7rem] font-bold uppercase tracking-[0.16em] text-slate-500">Sensora Preview</p>
+                        <p className="mt-1 text-[1rem] font-semibold tracking-[-0.035em] text-slate-50">{copy.tabs[activeTab]}</p>
+                      </div>
+                      <span className="rounded-full bg-white/[0.06] px-3 py-1 text-[0.72rem] font-semibold text-slate-300">Live sample</span>
+                    </div>
+                    <div className="mt-4 grid gap-3">
+                      {visibleCards.slice(0, 3).map((card) => (
+                        <button
+                          key={`screen-${card.id}`}
+                          type="button"
+                          onClick={() => handleCardClick(card)}
+                          className="group relative overflow-hidden rounded-2xl border border-white/[0.09] bg-white/[0.045] px-4 py-3 text-left transition hover:border-sky-300/26 hover:bg-white/[0.07] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35"
+                        >
+                          <span className={`pointer-events-none absolute inset-0 bg-gradient-to-br ${previewToneClass[card.tone].glow} opacity-80`} aria-hidden />
+                          <span className="relative flex items-start justify-between gap-3">
+                            <span>
+                              <span className="block text-[0.95rem] font-semibold text-slate-50">{card.title}</span>
+                              <span className="mt-1 block text-[0.76rem] leading-relaxed text-slate-400">{card.points.join(" · ")}</span>
+                            </span>
+                            <span className="mt-0.5 rounded-full border border-white/[0.1] px-2.5 py-1 text-[0.68rem] font-semibold text-sky-100">{card.action}</span>
+                          </span>
+                        </button>
+                      ))}
+                      <div className="rounded-2xl border border-dashed border-white/[0.1] bg-slate-950/35 px-4 py-4">
+                        <p className="text-[0.82rem] font-semibold text-slate-200">{ko ? "선택한 항목의 화면 예시가 오른쪽에서 바로 바뀝니다." : "The selected screen preview updates here."}</p>
+                        <div className="mt-3 grid grid-cols-3 gap-2">
+                          <span className="h-2 rounded-full bg-slate-700/80" />
+                          <span className="h-2 rounded-full bg-slate-800/80" />
+                          <span className="h-2 rounded-full bg-slate-700/60" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </section>
         </div>
