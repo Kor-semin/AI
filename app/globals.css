@@ -2559,7 +2559,7 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
 
 .landing-guide03-hero-shell {
   min-height: 100%;
-  padding: clamp(0.25rem, 1.1vw, 0.9rem);
+  padding: clamp(0.25rem, 1vw, 0.75rem);
 }
 
 .landing-guide03-hero-frame {
@@ -2676,6 +2676,10 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   width: 10.4%;
   height: 18.4%;
   border-radius: 22px;
+}
+
+.landing-slide-nav-dock--guide03 {
+  display: none;
 }
 
 .landing-first-screen-primary-cta.landing-enterprise-btn-primary {

@@ -260,7 +260,7 @@ export function LandingShowroom({
           {/* 0 — 첫 슬라이드 */}
           <div
             className={[
-              "sensora-landing-slide-panel sensora-landing-slide-panel--dock-pad absolute inset-x-4 inset-y-0 flex flex-col overflow-y-auto overflow-x-hidden pb-2 sm:inset-x-6",
+              "sensora-landing-slide-panel absolute inset-0 flex flex-col overflow-y-auto overflow-x-hidden",
               safeSlide === 0 ? "pointer-events-auto z-[2] opacity-100" : "pointer-events-none z-0 opacity-0",
             ].join(" ")}
             aria-hidden={safeSlide !== 0}
@@ -274,6 +274,7 @@ export function LandingShowroom({
                   height={941}
                   priority
                   quality={100}
+                  unoptimized
                   className="landing-guide03-hero-image block h-auto w-full select-none"
                   sizes="(max-width: 1440px) 100vw, 1440px"
                 />
@@ -480,7 +481,7 @@ export function LandingShowroom({
         </div>
 
         <nav
-          className={`landing-slide-nav-dock relative z-[5] shrink-0 border-t border-white/[0.09] bg-[#020817]/94 backdrop-blur-md ${dockSafe}`}
+          className={`landing-slide-nav-dock relative z-[5] shrink-0 border-t border-white/[0.09] bg-[#020817]/94 backdrop-blur-md ${dockSafe} ${safeSlide === 0 ? "hidden" : ""}`}
           aria-label={t("landing.slides.dotNav")}
         >
           <div className="mx-auto flex max-w-lg items-center justify-between gap-3 px-3 sm:px-4">
