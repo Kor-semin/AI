@@ -98,19 +98,31 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
     setAppPreviewTocOpen(true);
   }, []);
 
-  const enterAppFromPreviewToc = useCallback(
-    (section: CrmSection) => {
+  const pushPreviewUrl = useCallback((href: string) => {
+    if (typeof window === "undefined") return;
+    window.history.pushState(null, "", href);
+  }, []);
+
+  const enterExactAppPreviewRoute = useCallback(
+    (href: string, section: CrmSection) => {
       setAppPreviewTocOpen(false);
+      pushPreviewUrl(href);
       setView("app");
       setCrmSection(section);
+    },
+    [pushPreviewUrl],
+  );
+
+  const enterAppFromPreviewToc = useCallback(
+    (section: CrmSection) => {
       const previewRoutes: Partial<Record<CrmSection, string>> = {
         customers: "/?view=app#customers",
         ai: "/?view=app#crm-ai-assistant",
         followup: "/?view=app#follow-up",
       };
-      void router.push(previewRoutes[section] ?? `/?view=app#${crmSectionToHash(section)}`);
+      enterExactAppPreviewRoute(previewRoutes[section] ?? `/?view=app#${crmSectionToHash(section)}`, section);
     },
-    [router],
+    [enterExactAppPreviewRoute],
   );
 
   useEffect(() => {
@@ -332,12 +344,13 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
       <AppPreviewToc
         open={appPreviewTocOpen}
         onClose={() => setAppPreviewTocOpen(false)}
-        onGoLanding={() => {
+        onGoLanding={(targetPath) => {
           setAppPreviewTocOpen(false);
+          pushPreviewUrl(targetPath);
           setLandingSlide(0);
           setView("landing");
-          void router.push("/?view=landing");
         }}
+        onOpenTargetPath={enterExactAppPreviewRoute}
         onSelectSection={enterAppFromPreviewToc}
       />
 
