@@ -16,7 +16,7 @@ import type { CrmSection } from "@/app/crm/crmSectionTypes";
 
 const JOIN_PATH = "/join" as const;
 const REGISTER_PATH = "/register" as const;
-const APP_TOUR_REFERENCE_IMAGE = "/images/Sensora 화면 둘러보기.png";
+const APP_TOUR_REFERENCE_IMAGE = "/images/Sensora2.png";
 const GUIDE_FLOW_GUIDES = SENSORA_GUIDES.filter((guide) => guide.id !== "sensora-guide-03" && guide.id !== "sensora-guide-05");
 const DEFAULT_FLOW_GUIDE_ID: SensoraGuideId = "sensora-guide-01";
 

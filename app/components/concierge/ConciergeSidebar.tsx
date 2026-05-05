@@ -25,9 +25,11 @@ function navButtonClass(active: boolean): string {
 export function ConciergeSidebar({
   activeSection,
   onNavigate,
+  onOpenLanding,
 }: {
   activeSection: CrmSection;
   onNavigate: (s: CrmSection) => void;
+  onOpenLanding: () => void;
 }) {
   const { t } = useLanguage();
 
@@ -120,8 +122,8 @@ export function ConciergeSidebar({
           <button
             type="button"
             className="w-full border-b border-white/[0.08] px-5 pb-5 text-left transition duration-200 hover:bg-white/[0.04] hover:shadow-[inset_0_-1px_0_rgba(56,189,248,0.08)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500/35"
-            onClick={() => onNavigate("dashboard")}
-            aria-label={`${t("header.workspace")} · ${t("product.name")} — 요약으로 이동`}
+            onClick={onOpenLanding}
+            aria-label={`${t("header.workspace")} · ${t("product.name")} — 랜딩으로 이동`}
           >
             <div className="flex justify-start pb-3.5 cursor-default pointer-events-none" aria-hidden>
               <SensoraAnimatedMark size={52} animated={false} />
