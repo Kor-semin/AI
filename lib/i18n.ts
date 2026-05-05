@@ -1083,7 +1083,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "preview.flow.step1.startCta": "업무 화면 둘러보기",
     "preview.flow.step1.registerCta": "영업 계정 등록",
     "preview.flow.step2.headline": "무엇을 도와드릴까요?",
-    "preview.flow.step2.sub": "아래 카드 전체를 눌러 해당 업무 미리보기 영역으로 바로 이동합니다.",
+    "preview.flow.step2.sub": "아래 항목을 누르면 해당 업무 화면으로 이동합니다. (출고 안내는 준비 중입니다.)",
     "preview.flow.step2.card.customersTitle": "고객관리",
     "preview.flow.step2.card.customersDesc": "상담 메모와 관심 차량을 한 흐름으로 정리합니다.",
     "preview.flow.step2.card.aiTitle": "AI 비서",

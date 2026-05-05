@@ -328,6 +328,12 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
       <AppPreviewToc
         open={appPreviewTocOpen}
         onClose={() => setAppPreviewTocOpen(false)}
+        onGoLanding={() => {
+          setAppPreviewTocOpen(false);
+          setLandingSlide(0);
+          setView("landing");
+          void router.push("/?view=landing");
+        }}
         onSelectSection={enterAppFromPreviewToc}
       />
 
