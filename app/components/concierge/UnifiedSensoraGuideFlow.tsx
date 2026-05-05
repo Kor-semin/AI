@@ -29,6 +29,8 @@ type Props = {
   /** 열릴 때 wizard·가이드 상태 초기화 */
   active: boolean;
   variant: UnifiedSensoraGuideVariant;
+  /** 랜딩 등에서 '소개 중복'을 피하려면 true */
+  skipIntro?: boolean;
   onClose: () => void;
   onSelectSection: (section: CrmSection) => void;
   sellerLoading?: boolean;
@@ -53,13 +55,14 @@ function IconChevronNavigate({ className }: { className?: string }) {
 export function UnifiedSensoraGuideFlow({
   active,
   variant,
+  skipIntro = false,
   onClose,
   onSelectSection,
   sellerLoading = false,
   className = "",
 }: Props) {
   const { t } = useLanguage();
-  const minWizardStep = variant === "dialog" ? 1 : 0;
+  const minWizardStep = skipIntro ? 1 : 0;
   const [wizardStep, setWizardStep] = useState(minWizardStep);
   const [activeGuideId, setActiveGuideId] = useState<SensoraGuideId>(DEFAULT_GUIDE_ID);
   const [guideDetailOpen, setGuideDetailOpen] = useState(false);

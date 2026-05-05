@@ -85,7 +85,14 @@ export function AppPreviewToc({ open, onClose, onSelectSection }: Props) {
       </button>
 
       <div className="relative z-[2] flex min-h-0 flex-1 flex-col px-3 pt-[max(2.35rem,calc(env(safe-area-inset-top,0px)+1.85rem))] sm:px-5 sm:pt-10 lg:px-8">
-        <UnifiedSensoraGuideFlow active={open} variant="dialog" onClose={onClose} onSelectSection={onSelectSection} className="min-h-0" />
+        <UnifiedSensoraGuideFlow
+          active={open}
+          variant="dialog"
+          skipIntro
+          onClose={onClose}
+          onSelectSection={onSelectSection}
+          className="min-h-0"
+        />
       </div>
     </div>
   );
