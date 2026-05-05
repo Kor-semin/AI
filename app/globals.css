@@ -2575,8 +2575,117 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   aspect-ratio: 1672 / 941;
 }
 
+.landing-first-screen-reference-cta-row {
+  position: absolute;
+  left: 4%;
+  top: 55.6%;
+  z-index: 4;
+  display: flex;
+  width: 50.4%;
+  gap: 1.2%;
+}
+
+.landing-first-screen-reference-cta {
+  display: inline-flex;
+  min-height: clamp(2.75rem, 5.9vw, 4.25rem);
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 0 1.35rem;
+  font-size: clamp(0.78rem, 1.05vw, 1rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  box-shadow: 0 18px 42px -28px rgba(0, 0, 0, 0.72);
+}
+
+.landing-first-screen-reference-cta--primary {
+  flex: 0 0 31.4%;
+  background: linear-gradient(135deg, #38bdf8 0%, #6366f1 100%);
+  color: #f8fafc;
+}
+
+.landing-first-screen-reference-cta--secondary {
+  flex: 0 0 32.9%;
+  border: 1px solid rgba(226, 232, 240, 0.24);
+  background: rgba(15, 23, 42, 0.56);
+  color: rgba(248, 250, 252, 0.94);
+  backdrop-filter: blur(14px);
+}
+
+.landing-first-screen-reference-feature-row {
+  position: absolute;
+  left: 4%;
+  top: 71.8%;
+  z-index: 4;
+  display: grid;
+  width: 50.85%;
+  height: 11.8%;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 2.6%;
+}
+
+.landing-first-screen-reference-feature-row .landing-first-screen-reference-feature-card {
+  display: flex;
+  min-height: 100%;
+  flex-direction: column;
+  justify-content: flex-end;
+  border: 1px solid rgba(226, 232, 240, 0.72);
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(241, 245, 249, 0.93));
+  padding: clamp(0.8rem, 1.2vw, 1rem);
+  text-align: left;
+  color: #0f172a;
+  box-shadow: 0 18px 36px -30px rgba(15, 23, 42, 0.45);
+}
+
+.landing-first-screen-reference-feature-title {
+  font-size: clamp(0.82rem, 1.08vw, 1rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+}
+
+.landing-first-screen-reference-feature-desc {
+  margin-top: 0.35rem;
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  font-size: clamp(0.64rem, 0.78vw, 0.75rem);
+  font-weight: 600;
+  line-height: 1.35;
+  color: #64748b;
+}
+
+.landing-first-screen-reference-canvas .landing-first-screen-cta-overlay {
+  position: absolute;
+  z-index: 4;
+  top: 55.6%;
+  min-height: 7.7%;
+  border-radius: 999px;
+}
+
+.landing-first-screen-reference-canvas .landing-first-screen-cta-overlay--join {
+  left: 4%;
+  width: 15.8%;
+}
+
+.landing-first-screen-reference-canvas .landing-first-screen-cta-overlay--preview {
+  left: 21.1%;
+  width: 16.7%;
+}
+
+.landing-first-screen-reference-canvas .landing-first-screen-cta-overlay--register {
+  left: 39.1%;
+  width: 15.2%;
+  border-color: rgba(196, 181, 253, 0.34);
+  background: rgba(15, 23, 42, 0.58);
+  color: rgba(248, 250, 252, 0.94);
+}
+
 .landing-first-screen-hotspot {
   position: absolute;
+  display: block;
   z-index: 3;
   border-radius: 999px;
   cursor: pointer;
@@ -2594,47 +2703,74 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
 }
 
 .landing-first-screen-hotspot--join {
-  left: 7.3%;
-  top: 44.1%;
-  width: 10.6%;
-  height: 6.3%;
+  left: 4%;
+  top: 55.6%;
+  width: 15.8%;
+  height: 7.7%;
 }
 
 .landing-first-screen-hotspot--preview {
-  left: 18.6%;
-  top: 44.1%;
-  width: 12.7%;
-  height: 6.3%;
+  left: 21.1%;
+  top: 55.6%;
+  width: 16.7%;
+  height: 7.7%;
 }
 
 .landing-first-screen-hotspot--register {
-  left: 32%;
-  top: 44.1%;
-  width: 11.6%;
-  height: 6.3%;
+  left: 39.1%;
+  top: 55.6%;
+  width: 15.2%;
+  height: 7.7%;
 }
 
 .landing-first-screen-hotspot--feature {
-  top: 69.3%;
-  width: 12.8%;
-  height: 15.7%;
+  top: 71.8%;
+  width: 11.7%;
+  height: 11.8%;
   border-radius: 22px;
 }
 
 .landing-first-screen-hotspot--feature-1 {
-  left: 7.3%;
+  left: 4%;
 }
 
 .landing-first-screen-hotspot--feature-2 {
-  left: 21.05%;
+  left: 17.05%;
 }
 
 .landing-first-screen-hotspot--feature-3 {
-  left: 34.8%;
+  left: 30.1%;
 }
 
 .landing-first-screen-hotspot--feature-4 {
-  left: 48.55%;
+  left: 43.15%;
+}
+
+.landing-first-screen-reference-canvas > .landing-first-screen-reference-feature-card {
+  position: absolute;
+  z-index: 4;
+  top: 71.8%;
+  width: 11.7%;
+  min-height: 11.8%;
+  border-color: rgba(226, 232, 240, 0.82);
+  border-radius: 22px;
+  box-shadow: 0 18px 36px -30px rgba(15, 23, 42, 0.45);
+}
+
+.landing-first-screen-reference-canvas > .landing-first-screen-reference-feature-card:nth-of-type(1) {
+  left: 4%;
+}
+
+.landing-first-screen-reference-canvas > .landing-first-screen-reference-feature-card:nth-of-type(2) {
+  left: 17.05%;
+}
+
+.landing-first-screen-reference-canvas > .landing-first-screen-reference-feature-card:nth-of-type(3) {
+  left: 30.1%;
+}
+
+.landing-first-screen-reference-canvas > .landing-first-screen-reference-feature-card:nth-of-type(4) {
+  left: 43.15%;
 }
 
 .app-preview-tour-screen {

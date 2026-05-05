@@ -344,25 +344,36 @@ export function LandingShowroom({
                   src={LANDING_FIRST_SCREEN_REFERENCE}
                   alt="Sensora 랜딩 첫 화면 시안"
                   fill
-                  className="object-cover object-center"
+                  className="pointer-events-none object-cover object-center"
                   sizes="1320px"
                   quality={100}
                   priority
                 />
-                <Link href={JOIN_PATH} prefetch={false} className="landing-first-screen-hotspot landing-first-screen-hotspot--join" aria-label={t("cta.joinBeta")}>
-                  <span className="sr-only">{t("cta.joinBeta")}</span>
-                </Link>
-                <button
-                  type="button"
-                  onClick={onOpenAppWorkspace}
-                  className="landing-first-screen-hotspot landing-first-screen-hotspot--preview"
-                  aria-label={t("cta.tryAppExperience")}
-                >
-                  <span className="sr-only">{t("cta.tryAppExperience")}</span>
-                </button>
-                <Link href="/register" prefetch={false} className="landing-first-screen-hotspot landing-first-screen-hotspot--register" aria-label={t("auth.salesRegistration")}>
-                  <span className="sr-only">{t("auth.salesRegistration")}</span>
-                </Link>
+                <div className="landing-first-screen-reference-cta-row">
+                  <Link href={JOIN_PATH} prefetch={false} className="landing-first-screen-reference-cta landing-first-screen-reference-cta--primary">
+                    {t("cta.joinBeta")}
+                  </Link>
+                  <button type="button" onClick={onOpenAppWorkspace} className="landing-first-screen-reference-cta landing-first-screen-reference-cta--secondary">
+                    {t("cta.tryAppExperience")}
+                  </button>
+                  <Link href="/register" prefetch={false} className="landing-first-screen-reference-cta landing-first-screen-reference-cta--secondary">
+                    {t("auth.salesRegistration")}
+                  </Link>
+                </div>
+                <div className="landing-first-screen-reference-feature-row">
+                  {MENU_ITEMS.map((row) => (
+                    <button
+                      key={`reference-card-${row.key}`}
+                      type="button"
+                      onClick={() => handleMenuNavigate(row)}
+                      className="landing-first-screen-reference-feature-card"
+                      aria-label={row.target === "delivery" ? `${t(row.titleKey)} · ${t("landing.slides.menu.deliveryPrepAria")}` : `${t(row.titleKey)} · ${t("landing.slides.menu.enterWorkspaceAria")}`}
+                    >
+                      <span className="landing-first-screen-reference-feature-title">{t(row.titleKey)}</span>
+                      <span className="landing-first-screen-reference-feature-desc">{t(row.descKey)}</span>
+                    </button>
+                  ))}
+                </div>
                 {MENU_ITEMS.map((row, index) => (
                   <button
                     key={`reference-${row.key}`}

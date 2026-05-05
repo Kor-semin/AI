@@ -125,6 +125,13 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
     [enterExactAppPreviewRoute],
   );
 
+  const returnToLanding = useCallback(() => {
+    setAppPreviewTocOpen(false);
+    pushPreviewUrl("/?view=landing");
+    setLandingSlide(0);
+    setView("landing");
+  }, [pushPreviewUrl]);
+
   useEffect(() => {
     if (view !== "app") return undefined;
     const prefersReduce =
@@ -286,8 +293,8 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
               <button
                 type="button"
                 className="flex min-w-0 flex-1 cursor-pointer items-start gap-2.5 rounded-xl border border-transparent p-1 text-left outline-none transition duration-[220ms] hover:border-white/[0.12] hover:bg-white/[0.06] focus-visible:ring-2 focus-visible:ring-sky-400/40 sm:items-center sm:gap-3 sm:p-1.5"
-                onClick={() => navigateCrmSection("dashboard")}
-                aria-label={`${t("product.name")} — 요약 화면으로 이동`}
+                onClick={returnToLanding}
+                aria-label={`${t("product.name")} — 랜딩으로 이동`}
               >
                 <SensoraAnimatedMark size={40} animated={false} className="pointer-events-none shrink-0" />
                 <div className="flex min-w-0 flex-1 flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
@@ -344,12 +351,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
       <AppPreviewToc
         open={appPreviewTocOpen}
         onClose={() => setAppPreviewTocOpen(false)}
-        onGoLanding={(targetPath) => {
-          setAppPreviewTocOpen(false);
-          pushPreviewUrl(targetPath);
-          setLandingSlide(0);
-          setView("landing");
-        }}
+        onGoLanding={returnToLanding}
         onOpenTargetPath={enterExactAppPreviewRoute}
         onSelectSection={enterAppFromPreviewToc}
       />
@@ -376,7 +378,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
             className="crm-bg crm-app-stage relative min-h-[calc(100dvh-3.25rem)] scroll-mt-24 px-4 pb-12 pt-6 text-slate-100 max-sm:pb-[max(7rem,calc(4.5rem+env(safe-area-inset-bottom,0px)))] sm:px-6 lg:min-h-[calc(100dvh-3.5rem)]"
           >
             <div className="mx-auto flex w-full max-w-[1520px] flex-col gap-2 lg:flex-row lg:gap-8">
-              <ConciergeSidebar activeSection={crmSection} onNavigate={navigateCrmSection} />
+              <ConciergeSidebar activeSection={crmSection} onNavigate={navigateCrmSection} onOpenLanding={returnToLanding} />
               <div className="relative min-h-[60vh] min-w-0 flex-1 rounded-2xl">
                 {sellerLoading ? (
                   <div className="flex min-h-[40vh] items-center justify-center rounded-2xl border border-white/[0.1] bg-slate-900/45 px-6 py-16 text-base text-slate-400 backdrop-blur-md">
@@ -495,7 +497,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                     }
                     activeSection={crmSection}
                     onActiveSectionChange={navigateCrmSection}
-                    onOpenLandingView={() => setView("landing")}
+                    onOpenLandingView={returnToLanding}
                   />
                 ) : null}
 
