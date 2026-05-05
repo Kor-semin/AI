@@ -2662,7 +2662,7 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   border-radius: 28px;
 }
 
-.landing-guide03-hotspot--card-customers {
+.landing-guide03-hotspot--tip-start {
   left: 17.3%;
   top: 45.1%;
   width: 12.7%;
@@ -2670,7 +2670,7 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   border-radius: 22px;
 }
 
-.landing-guide03-hotspot--card-ai {
+.landing-guide03-hotspot--tip-feature {
   left: 29.4%;
   top: 45.1%;
   width: 12.8%;
@@ -2678,7 +2678,7 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   border-radius: 22px;
 }
 
-.landing-guide03-hotspot--card-followup {
+.landing-guide03-hotspot--tip-flow {
   left: 41.6%;
   top: 45.1%;
   width: 12.8%;
@@ -2686,12 +2686,44 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   border-radius: 22px;
 }
 
-.landing-guide03-hotspot--card-delivery {
+.landing-guide03-hotspot--tip-beta {
   left: 53.8%;
   top: 45.1%;
   width: 13.1%;
   height: 12.6%;
   border-radius: 22px;
+}
+
+.landing-guide03-hotspot--flow-record {
+  left: 4.8%;
+  top: 61.8%;
+  width: 18.2%;
+  height: 9.4%;
+  border-radius: 18px;
+}
+
+.landing-guide03-hotspot--flow-needs {
+  left: 25.9%;
+  top: 61.8%;
+  width: 18.2%;
+  height: 9.4%;
+  border-radius: 18px;
+}
+
+.landing-guide03-hotspot--flow-message {
+  left: 47%;
+  top: 61.8%;
+  width: 18.2%;
+  height: 9.4%;
+  border-radius: 18px;
+}
+
+.landing-guide03-hotspot--flow-next {
+  left: 68.1%;
+  top: 61.8%;
+  width: 18.2%;
+  height: 9.4%;
+  border-radius: 18px;
 }
 
 .landing-slide-nav-dock--guide03 {

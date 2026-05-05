@@ -4,10 +4,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 
-import { SensoraGuideDetailModal } from "@/app/components/concierge/SensoraGuideDetailModal";
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
 import type { CrmSection } from "@/app/crm/crmSectionTypes";
-import { DEFAULT_GUIDE_ID, SENSORA_GUIDES, type SensoraGuideId } from "@/lib/sensoraGuide";
+import { SENSORA_GUIDES } from "@/lib/sensoraGuide";
 
 /** 랜딩 보조 이미지 에셋 경로(@/public 기준). README 등에서 참고합니다. */
 export const LANDING_SHOWROOM_IMAGE_PATHS = {
@@ -97,15 +96,72 @@ const PHILOSOPHY_LINE_KEYS = [
   "landing.slides.philosophy.line4",
 ] as const;
 
-const LANDING_TIP_GUIDE_HOTSPOTS: {
+type LandingGuideCardId =
+  | "start"
+  | "features"
+  | "flow"
+  | "beta"
+  | "consulting"
+  | "needs"
+  | "message"
+  | "next";
+
+const LANDING_GUIDE_CARD_COPY: Record<LandingGuideCardId, { title: string; desc: string; examples: string[] }> = {
+  start: {
+    title: "이용 시작 방법",
+    desc: "베타 신청 후 안내를 확인하고, 승인된 계정으로 Sensora 업무 화면을 시작합니다.",
+    examples: ["베타 신청", "승인 안내 확인", "영업 계정 등록"],
+  },
+  features: {
+    title: "기능 설명",
+    desc: "고객관리, AI 비서, 사후관리, 출고 안내를 한 흐름으로 이해할 수 있게 정리합니다.",
+    examples: ["고객별 메모", "검토용 초안", "다음 연락"],
+  },
+  flow: {
+    title: "실제 사용 흐름",
+    desc: "상담 내용을 기록하고 필요한 항목을 확인한 뒤 다음 행동으로 이어갑니다.",
+    examples: ["상담 기록", "고객 니즈 확인", "사후관리 일정"],
+  },
+  beta: {
+    title: "베타 사용 안내",
+    desc: "베타 기간에는 제공 기능과 안내 문구가 단계적으로 조정될 수 있습니다.",
+    examples: ["사용 가능 기능", "준비 중 항목", "업데이트 안내"],
+  },
+  consulting: {
+    title: "상담 정리 · 기록",
+    desc: "상담 내용을 빠르게 남기고 중요한 요구사항을 고객별 기록으로 보관합니다.",
+    examples: ["상담 메모", "관심 차량", "중요 포인트"],
+  },
+  needs: {
+    title: "고객 니즈 요약",
+    desc: "고객이 말한 조건과 관심사를 요약해 다음 제안에 참고합니다.",
+    examples: ["예산", "차종", "구매 시점"],
+  },
+  message: {
+    title: "발송 문자",
+    desc: "사용자가 확인할 수 있는 메시지 초안을 정리해 연락 준비 시간을 줄입니다.",
+    examples: ["검토용 초안", "후속 안내", "사용자 확인"],
+  },
+  next: {
+    title: "다음 연락",
+    desc: "다음 연락 시점과 해야 할 일을 놓치지 않도록 한 화면에 정리합니다.",
+    examples: ["연락 예정일", "미완료 항목", "사후관리"],
+  },
+};
+
+const LANDING_GUIDE_CARD_HOTSPOTS: {
   className: string;
-  guideId: SensoraGuideId;
+  cardId: LandingGuideCardId;
   label: string;
 }[] = [
-  { className: "landing-guide03-hotspot--card-customers", guideId: "sensora-guide-03", label: "이용 시작 방법" },
-  { className: "landing-guide03-hotspot--card-ai", guideId: "sensora-guide-01", label: "기능 설명" },
-  { className: "landing-guide03-hotspot--card-followup", guideId: "sensora-guide-04", label: "실제 사용 흐름" },
-  { className: "landing-guide03-hotspot--card-delivery", guideId: "sensora-guide-05", label: "베타 사용 안내" },
+  { className: "landing-guide03-hotspot--tip-start", cardId: "start", label: "이용 시작 방법" },
+  { className: "landing-guide03-hotspot--tip-feature", cardId: "features", label: "기능 설명" },
+  { className: "landing-guide03-hotspot--tip-flow", cardId: "flow", label: "실제 사용 흐름" },
+  { className: "landing-guide03-hotspot--tip-beta", cardId: "beta", label: "베타 사용 안내" },
+  { className: "landing-guide03-hotspot--flow-record", cardId: "consulting", label: "상담 정리 · 기록" },
+  { className: "landing-guide03-hotspot--flow-needs", cardId: "needs", label: "고객 니즈 요약" },
+  { className: "landing-guide03-hotspot--flow-message", cardId: "message", label: "발송 문자" },
+  { className: "landing-guide03-hotspot--flow-next", cardId: "next", label: "다음 연락" },
 ];
 
 function IconPlay({ className }: { className?: string }) {
@@ -171,8 +227,7 @@ export function LandingShowroom({
   const { t } = useLanguage();
   const safeSlide = ((slideIndex % SLIDE_COUNT) + SLIDE_COUNT) % SLIDE_COUNT;
   const [deliveryPrepOpen, setDeliveryPrepOpen] = useState(false);
-  const [guideDetailOpen, setGuideDetailOpen] = useState(false);
-  const [activeGuideId, setActiveGuideId] = useState<SensoraGuideId>(DEFAULT_GUIDE_ID);
+  const [activeGuideCard, setActiveGuideCard] = useState<(typeof LANDING_GUIDE_CARD_COPY)[LandingGuideCardId] | null>(null);
 
   const goSlide = useCallback(
     (i: number) => {
@@ -217,6 +272,24 @@ export function LandingShowroom({
     };
   }, [deliveryPrepOpen]);
 
+  useEffect(() => {
+    if (!activeGuideCard || typeof document === "undefined") return undefined;
+    const onEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setActiveGuideCard(null);
+    };
+    window.addEventListener("keydown", onEsc);
+    return () => window.removeEventListener("keydown", onEsc);
+  }, [activeGuideCard]);
+
+  useEffect(() => {
+    if (!activeGuideCard || typeof document === "undefined") return undefined;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [activeGuideCard]);
+
   const handleMenuNavigate = useCallback(
     (row: LandingMenuRow) => {
       if (row.target === "delivery") {
@@ -228,11 +301,6 @@ export function LandingShowroom({
     [onEnterWorkspaceSection],
   );
 
-  const openTipGuide = useCallback((guideId: SensoraGuideId) => {
-    setActiveGuideId(guideId);
-    setGuideDetailOpen(true);
-  }, []);
-
   const dockSafe = "pb-[max(10px,calc(env(safe-area-inset-bottom,0px)+8px))] pt-2";
 
   return (
@@ -240,17 +308,6 @@ export function LandingShowroom({
       id="sensora-landing-slide-deck"
       className="sensora-landing-slide-deck relative flex min-h-0 flex-1 flex-col overflow-hidden bg-[#020817]"
     >
-      <SensoraGuideDetailModal
-        open={guideDetailOpen}
-        onClose={() => setGuideDetailOpen(false)}
-        activeGuideId={activeGuideId}
-        onActiveGuideChange={setActiveGuideId}
-        overlayZClass="z-[472]"
-        onGoToRelated={() => {
-          // 랜딩 첫 화면 TIP 카드는 확대 보기 전용입니다.
-        }}
-      />
-
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_82%_52%_at_52%_8%,rgba(56,189,248,0.1),transparent_55%),radial-gradient(ellipse_58%_42%_at_96%_18%,rgba(139,92,246,0.08),transparent_52%),linear-gradient(180deg,#050f1e_0%,#020817_45%,#030b16_100%)]"
@@ -281,6 +338,53 @@ export function LandingShowroom({
             >
               {t("landing.slides.deliveryPrep.dismiss")}
             </button>
+          </div>
+        </>
+      ) : null}
+
+      {activeGuideCard ? (
+        <>
+          <button
+            type="button"
+            className="fixed inset-0 z-[292] cursor-default bg-black/[0.58] backdrop-blur-md"
+            aria-label="안내 카드 확대 닫기"
+            onClick={() => setActiveGuideCard(null)}
+          />
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="landing-guide-card-title"
+            className="landing-guide03-card-modal fixed left-1/2 top-1/2 z-[294] flex max-h-[min(88dvh,760px)] w-[min(calc(100vw-28px),32rem)] -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-[28px] border border-white/[0.14] bg-gradient-to-b from-[#0b1628]/98 via-[#071120]/98 to-[#030812]/98 p-5 shadow-[0_38px_100px_-28px_rgba(0,0,0,0.78),inset_0_1px_0_rgba(255,255,255,0.075)]"
+          >
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-sky-300/80">Guide preview</p>
+                <h3 id="landing-guide-card-title" className="mt-2 text-[1.35rem] font-semibold tracking-[-0.04em] text-slate-50">
+                  {activeGuideCard.title}
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setActiveGuideCard(null)}
+                className="min-h-10 shrink-0 rounded-xl border border-white/[0.13] bg-white/[0.055] px-3 py-2 text-[12px] font-semibold text-slate-200 transition hover:bg-white/[0.09] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/40"
+              >
+                닫기
+              </button>
+            </div>
+            <div className="mt-4 overflow-y-auto pr-1 [-webkit-overflow-scrolling:touch]">
+              <p className="text-[0.94rem] font-medium leading-relaxed text-slate-300">{activeGuideCard.desc}</p>
+              <div className="mt-5 rounded-2xl border border-white/[0.1] bg-white/[0.045] p-4">
+                <p className="text-[0.78rem] font-bold uppercase tracking-[0.14em] text-slate-500">예시 내용</p>
+                <ul className="mt-3 space-y-2.5">
+                  {activeGuideCard.examples.map((example) => (
+                    <li key={example} className="flex gap-2 rounded-xl bg-slate-950/35 px-3 py-2.5 text-[0.84rem] font-medium leading-relaxed text-slate-300">
+                      <span className="mt-2 size-1.5 shrink-0 rounded-full bg-sky-300" aria-hidden />
+                      <span>{example}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
           </div>
         </>
       ) : null}
@@ -335,11 +439,11 @@ export function LandingShowroom({
                   <span className="sr-only">{t("cta.tryAppExperience")}</span>
                 </button>
 
-                {LANDING_TIP_GUIDE_HOTSPOTS.map((tip) => (
+                {LANDING_GUIDE_CARD_HOTSPOTS.map((tip) => (
                   <button
-                    key={tip.guideId}
+                    key={tip.cardId}
                     type="button"
-                    onClick={() => openTipGuide(tip.guideId)}
+                    onClick={() => setActiveGuideCard(LANDING_GUIDE_CARD_COPY[tip.cardId])}
                     className={`landing-guide03-hotspot ${tip.className}`}
                     aria-label={`${tip.label} 확대 보기`}
                   >
