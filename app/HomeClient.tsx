@@ -25,7 +25,7 @@ import { maskEmailForBetaDisplay, useBetaSheetAccess } from "@/lib/betaAccess";
 
 export function HomeClient({ initialView }: { initialView: "landing" | "app" }) {
   const { auth, authError, signOut } = useAuth();
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
   const firebaseReady = isFirebaseConfigured();
   const googleAuthEnabled = isGoogleAuthEnabled();
   const seller = useSellerProfile(auth.status === "signed-in" ? auth.uid : null);
@@ -185,6 +185,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
       : null;
 
   const showNotebookCover = view === "app";
+  const landingHeaderSubline = language === "ko" ? "자동차 영업의 새로운 기준" : t("landing.showroom.header.subline");
 
   return (
     <div className="relative flex min-h-screen flex-col overflow-x-hidden text-slate-100">
@@ -214,7 +215,12 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
         >
           {view === "landing" ? (
             <>
-              <div className="landing-nav-brand-cluster flex min-w-0 flex-1 items-start gap-2.5 max-lg:gap-2 sm:items-center sm:gap-3 lg:min-w-0 lg:max-w-[min(100%,28rem)] xl:max-w-[32rem]">
+              <Link
+                href="/?view=landing"
+                prefetch={false}
+                className="landing-nav-brand-cluster flex min-w-0 flex-1 items-start gap-2.5 rounded-2xl border border-transparent p-1 text-left outline-none transition hover:border-white/[0.1] hover:bg-white/[0.035] focus-visible:ring-2 focus-visible:ring-sky-400/35 max-lg:gap-2 sm:items-center sm:gap-3 lg:min-w-0 lg:max-w-[min(100%,28rem)] xl:max-w-[32rem]"
+                aria-label={`${t("product.name")} — 랜딩으로 이동`}
+              >
                 <SensoraAnimatedMark
                   size={44}
                   animated={false}
@@ -226,10 +232,10 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                     {t("product.name")}
                   </div>
                   <p className="mt-0.5 text-[11px] font-medium leading-snug text-slate-300/95 max-lg:mt-0 max-lg:line-clamp-2 max-lg:text-[10px] max-lg:leading-snug sm:mt-1 sm:line-clamp-none sm:text-[0.8125rem] sm:text-slate-300 lg:text-sm">
-                    {t("landing.showroom.header.subline")}
+                    {landingHeaderSubline}
                   </p>
                 </div>
-              </div>
+              </Link>
 
               <div className="landing-nav-actions-cluster flex w-full min-w-0 flex-col gap-2 max-lg:gap-1 sm:gap-2.5 lg:w-auto lg:max-w-none lg:flex-none lg:flex-row lg:items-center lg:justify-end lg:gap-4 xl:gap-5">
                 <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1.5 max-lg:gap-x-1.5 max-lg:gap-y-1 sm:gap-x-3 sm:gap-y-2 lg:justify-end">
@@ -254,17 +260,6 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                   ) : null}
                 </div>
                 <div className="landing-nav-header-cta-row max-lg:!hidden lg:flex w-full min-w-0 flex-col gap-2 lg:w-auto lg:max-w-none lg:flex-nowrap lg:flex-row lg:items-center lg:justify-end lg:gap-2.5 xl:gap-3">
-                  <Link
-                    href="/join"
-                    prefetch={false}
-                    className={[
-                      "landing-nav-cta-join landing-nav-cta-join--compact landing-enterprise-btn-primary relative z-[20] inline-flex min-h-10 w-auto shrink-0 items-center justify-center whitespace-nowrap rounded-lg px-4 py-2 text-center text-[0.8125rem] font-semibold tracking-tight text-slate-50",
-                      "touch-manipulation transition duration-[200ms] ease-out active:scale-[0.99]",
-                      "focus-visible:outline-none",
-                    ].join(" ")}
-                  >
-                    {t("cta.joinBeta")}
-                  </Link>
                   <button
                     type="button"
                     onClick={() => {
@@ -285,6 +280,17 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                     </svg>
                     {t("cta.tryAppExperience")}
                   </button>
+                  <Link
+                    href="/join"
+                    prefetch={false}
+                    className={[
+                      "landing-nav-cta-join landing-nav-cta-join--compact landing-enterprise-btn-primary relative z-[20] inline-flex min-h-10 w-auto shrink-0 items-center justify-center whitespace-nowrap rounded-lg px-4 py-2 text-center text-[0.8125rem] font-semibold tracking-tight text-slate-50",
+                      "touch-manipulation transition duration-[200ms] ease-out active:scale-[0.99]",
+                      "focus-visible:outline-none",
+                    ].join(" ")}
+                  >
+                    {t("cta.joinBeta")}
+                  </Link>
                 </div>
               </div>
             </>
