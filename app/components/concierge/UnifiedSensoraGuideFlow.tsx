@@ -283,7 +283,7 @@ function AppPreviewScreenBrowser({
         <div className="mx-auto flex w-full max-w-[min(1180px,100%)] flex-col px-1 pb-4 pt-3 sm:px-2 sm:pt-5 lg:pt-6">
           <div className="text-center">
             <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-sky-300/85 sm:text-xs">{copy.eyebrow}</p>
-            <h2 className="mx-auto mt-3 max-w-[14ch] text-balance text-[clamp(2rem,5vw,4.4rem)] font-semibold leading-[1.02] tracking-[-0.055em] text-slate-50">{copy.title}</h2>
+            <h2 className="mx-auto mt-3 max-w-[18ch] text-balance text-[clamp(1.85rem,4.6vw,4.4rem)] font-semibold leading-[1.02] tracking-[-0.055em] text-slate-50 [word-break:keep-all]">{copy.title}</h2>
             <p className="mx-auto mt-4 max-w-[44rem] text-[0.95rem] leading-relaxed text-slate-300 sm:text-lg">{copy.sub}</p>
           </div>
 
