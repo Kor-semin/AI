@@ -1906,12 +1906,13 @@ export function CRMApp({
           ) : null}
 
           {showWorkspaceTabs && tab === "고객" ? (
-            <CustomersSection>
-            <div className="flex min-w-0 flex-col gap-6 xl:grid xl:grid-cols-[minmax(0,1.06fr)_minmax(336px,0.94fr)] xl:items-start xl:gap-8">
-              <div
-                id="crm-customer-table"
-                className="min-w-0 overflow-hidden rounded-2xl border border-white/[0.11] bg-slate-950/55 shadow-[0_1px_4px_rgba(15,23,42,0.04)] xl:sticky xl:top-4 xl:self-start xl:max-h-[calc(100vh-13rem)] xl:overflow-auto"
-              >
+            <div id="customers" className="scroll-mt-24">
+              <CustomersSection>
+              <div className="flex min-w-0 flex-col gap-6 xl:grid xl:grid-cols-[minmax(0,1.06fr)_minmax(336px,0.94fr)] xl:items-start xl:gap-8">
+                <div
+                  id="crm-customer-table"
+                  className="min-w-0 overflow-hidden rounded-2xl border border-white/[0.11] bg-slate-950/55 shadow-[0_1px_4px_rgba(15,23,42,0.04)] xl:sticky xl:top-4 xl:self-start xl:max-h-[calc(100vh-13rem)] xl:overflow-auto"
+                >
                 <div className="border-b border-white/[0.11] px-5 py-5 sm:px-6">
                   <h2 className="text-[18px] font-semibold text-slate-50">{t("crm.section.customerList")}</h2>
                   <p className="mt-2 text-[15px] leading-relaxed text-slate-400">
@@ -2934,27 +2935,29 @@ export function CRMApp({
 
                 </div>
               </section>
+              </div>
+              </CustomersSection>
             </div>
-            </CustomersSection>
           ) : showWorkspaceTabs && tab === "다음할일" ? (
-            <FollowUpSection>
-              <CrmMiniCalendar
-                customers={state.customers}
-                nextActions={state.nextActions}
-                events={state.events}
-                onPickCustomer={(id) => {
-                  setSelectedCustomerId(id);
-                  onActiveSectionChange("customers");
-                  setTab("고객");
-                  window.setTimeout(() => {
-                    document.getElementById("crm-detail-panel")?.scrollIntoView({
-                      behavior: "smooth",
-                      block: "start",
-                    });
-                  }, 50);
-                }}
-              />
-            <div id="crm-workspace-next" className="space-y-6">
+            <div id="follow-up" className="scroll-mt-24">
+              <FollowUpSection>
+                <CrmMiniCalendar
+                  customers={state.customers}
+                  nextActions={state.nextActions}
+                  events={state.events}
+                  onPickCustomer={(id) => {
+                    setSelectedCustomerId(id);
+                    onActiveSectionChange("customers");
+                    setTab("고객");
+                    window.setTimeout(() => {
+                      document.getElementById("crm-detail-panel")?.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start",
+                      });
+                    }, 50);
+                  }}
+                />
+              <div id="crm-workspace-next" className="space-y-6">
               <p className="text-[15px] leading-relaxed text-slate-400">
                 선택한 고객과 무관하게 <span className="font-semibold text-slate-300">모든 다음 연락</span>을 한눈에
                 봅니다. 행을 눌러 해당 고객으로 이동합니다.
@@ -3071,8 +3074,9 @@ export function CRMApp({
                   </div>
                 </div>
               </div>
+                </div>
+              </FollowUpSection>
             </div>
-            </FollowUpSection>
           ) : showWorkspaceTabs && tab === "일정" ? (
             <div id="crm-workspace-events" className="space-y-4">
               <p className="text-[15px] leading-relaxed text-slate-400">
