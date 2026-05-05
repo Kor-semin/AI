@@ -267,7 +267,7 @@ function AppPreviewScreenBrowser({
               </Link>
             </div>
 
-            <div className="flex gap-2 overflow-x-auto border-b border-white/[0.08] px-5 py-4 [scrollbar-width:none] sm:px-7 [&::-webkit-scrollbar]:hidden" role="tablist" aria-label={copy.title}>
+            <div className="flex gap-1.5 overflow-x-auto border-b border-white/[0.08] px-4 py-4 [scrollbar-width:none] sm:gap-2 sm:px-7 [&::-webkit-scrollbar]:hidden" role="tablist" aria-label={copy.title}>
               {APP_PREVIEW_TABS.map((tab) => (
                 <button
                   key={tab}
@@ -276,7 +276,7 @@ function AppPreviewScreenBrowser({
                   aria-selected={activeTab === tab}
                   onClick={() => setActiveTab(tab)}
                   className={[
-                    "shrink-0 rounded-full border px-4 py-2 text-sm font-semibold transition touch-manipulation focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35",
+                    "shrink-0 rounded-full border px-2.5 py-2 text-[0.78rem] font-semibold transition touch-manipulation focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 sm:px-4 sm:text-sm",
                     activeTab === tab
                       ? "border-sky-300/32 bg-sky-300/[0.13] text-sky-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]"
                       : "border-white/[0.1] bg-white/[0.035] text-slate-400 hover:border-sky-300/24 hover:text-slate-100",
