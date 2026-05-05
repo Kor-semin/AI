@@ -30,6 +30,10 @@ html[data-text-size="large"] {
 }
 
 :root {
+  /* Typography — 윤고딕-310 우선(설치된 환경에서만), 파일 포함/웹폰트 로드 없음 */
+  --sensora-font-sans-stack: "YoonGothic310", "윤고딕 310", "Yoon Gothic 310", "Apple SD Gothic Neo", "Pretendard",
+    "Noto Sans KR", "Malgun Gothic", system-ui, ui-sans-serif, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
   /* Light SaaS shell — 실버 · 그레이 · 블랙 */
   --background: #f4f6f8;
   --foreground: #111827;
@@ -42,8 +46,14 @@ html[data-text-size="large"] {
 
   /* Dark hero / marketing strip */
   --landing-hero-bg: #111318;
-  --landing-hero-text: #f4f6f8;
-  --landing-hero-muted: #cbd5e1;
+  /* Mono gray hierarchy (dark navy background) */
+  --landing-hero-title: #f8fafc;
+  --landing-hero-text: #e5e7eb;
+  --landing-hero-body: #d1d5db;
+  --landing-hero-secondary: #cbd5e1;
+  --landing-hero-muted: #94a3b8;
+  --landing-hero-subtle: #64748b;
+  --landing-hero-border: rgba(148, 163, 184, 0.18);
 
   --accent: #94a3b8;
   /* Legacy aliases — 브라운·골드 제거 후 슬레이트 계열 유지용 */
@@ -61,7 +71,7 @@ html[data-text-size="large"] {
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--sensora-font-sans-stack);
   --font-mono: var(--font-geist-mono);
 }
 
@@ -92,8 +102,7 @@ html[data-text-size="large"] {
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
-    "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", Arial, sans-serif;
+  font-family: var(--sensora-font-sans-stack);
 }
 
 /* 한국어 가독성: 너무 얇은 렌더링/과한 자간 방지 — 글씨 크기 단계별 줄 간격 포함 */
@@ -991,8 +1000,9 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   border-radius: 0;
   border-width: 0 0 1px;
   border-style: solid;
-  border-color: rgba(255, 255, 255, 0.12);
+  border-color: var(--landing-hero-border);
   background: linear-gradient(180deg, rgba(5, 13, 26, 0.96) 0%, rgba(3, 9, 19, 0.92) 100%);
+  color: var(--landing-hero-text);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.075),
     0 0 0 1px rgba(0, 0, 0, 0.22) inset,
@@ -1000,6 +1010,45 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
     0 0 72px -28px rgba(56, 189, 248, 0.1),
     0 0 64px -34px rgba(139, 92, 246, 0.07);
   backdrop-filter: blur(22px);
+}
+
+/* 랜딩(슬라이드 덱) — 순백색 과다 사용 억제 + 모노 그레이 위계 적용 */
+.sensora-landing-slide-deck {
+  color: var(--landing-hero-text);
+}
+.sensora-landing-slide-deck :is(h1, h2, h3) {
+  color: var(--landing-hero-title);
+}
+
+/* 첫 슬라이드: 앱 시작 패널의 본문 위계 */
+.landing-hero-start-panel p {
+  color: var(--landing-hero-body);
+}
+.landing-hero-start-panel p.landing-hero-trust-line {
+  color: var(--landing-hero-muted);
+}
+
+/* 핵심 업무 메뉴(슬라이드 1) 텍스트 위계 */
+.sensora-landing-slide-deck .landing-slide-menu-row {
+  color: var(--landing-hero-text);
+  border-color: rgba(148, 163, 184, 0.14);
+}
+.sensora-landing-slide-deck .landing-slide-menu-row p {
+  color: var(--landing-hero-body);
+}
+.sensora-landing-slide-deck .landing-slide-menu-row p:first-child {
+  color: var(--landing-hero-title);
+}
+
+/* CTA 텍스트 가독성 유지 */
+.landing-enterprise-btn-primary {
+  color: #f8fafc;
+}
+.landing-enterprise-btn-secondary {
+  color: #e5e7eb;
+}
+.landing-hero-app-tertiary {
+  color: #cbd5e1;
 }
 
 /* 랜딩 헤더: 모바일(width < lg)에서는 미리보기·베타 CTA 숨김 — 히어로 CTA만 노출 */
