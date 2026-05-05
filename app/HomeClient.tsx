@@ -103,8 +103,12 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
       setAppPreviewTocOpen(false);
       setView("app");
       setCrmSection(section);
-      const h = crmSectionToHash(section);
-      void router.push(`/?view=app#${h}`);
+      const previewRoutes: Partial<Record<CrmSection, string>> = {
+        customers: "/?view=app#customers",
+        ai: "/?view=app#crm-ai-assistant",
+        followup: "/?view=app#follow-up",
+      };
+      void router.push(previewRoutes[section] ?? `/?view=app#${crmSectionToHash(section)}`);
     },
     [router],
   );
