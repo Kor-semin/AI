@@ -2557,6 +2557,127 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   min-height: 0;
 }
 
+.landing-guide03-hero-shell {
+  min-height: 100%;
+  padding: clamp(0.25rem, 1.1vw, 0.9rem);
+}
+
+.landing-guide03-hero-frame {
+  aspect-ratio: 1672 / 941;
+  border-radius: clamp(18px, 2.35vw, 34px);
+  background: #020817;
+  box-shadow:
+    0 34px 110px -58px rgba(0, 0, 0, 0.86),
+    0 0 0 1px rgba(255, 255, 255, 0.07);
+}
+
+.landing-guide03-hero-image {
+  pointer-events: none;
+}
+
+.landing-guide03-hotspot {
+  position: absolute;
+  z-index: 2;
+  display: block;
+  border-radius: 999px;
+  touch-action: manipulation;
+}
+
+.landing-guide03-hotspot:focus-visible {
+  outline: 2px solid rgba(125, 211, 252, 0.85);
+  outline-offset: 2px;
+  background: rgba(56, 189, 248, 0.08);
+}
+
+.landing-guide03-hotspot--brand {
+  left: 6.2%;
+  top: 5.7%;
+  width: 15.2%;
+  height: 5.8%;
+}
+
+.landing-guide03-hotspot--nav-join {
+  left: 66.5%;
+  top: 5.9%;
+  width: 8.7%;
+  height: 5.4%;
+}
+
+.landing-guide03-hotspot--nav-preview {
+  left: 76%;
+  top: 5.9%;
+  width: 10.2%;
+  height: 5.4%;
+}
+
+.landing-guide03-hotspot--nav-register {
+  left: 87%;
+  top: 5.9%;
+  width: 7.9%;
+  height: 5.4%;
+}
+
+.landing-guide03-hotspot--hero-join {
+  left: 6.6%;
+  top: 47%;
+  width: 11.4%;
+  height: 6.2%;
+}
+
+.landing-guide03-hotspot--hero-preview {
+  left: 18.9%;
+  top: 47%;
+  width: 12.9%;
+  height: 6.2%;
+}
+
+.landing-guide03-hotspot--hero-register {
+  left: 32.7%;
+  top: 47%;
+  width: 11.9%;
+  height: 6.2%;
+}
+
+.landing-guide03-hotspot--preview-panel {
+  left: 61.1%;
+  top: 18.4%;
+  width: 33.7%;
+  height: 60.6%;
+  border-radius: 28px;
+}
+
+.landing-guide03-hotspot--card-customers {
+  left: 6.6%;
+  top: 62.7%;
+  width: 10.4%;
+  height: 18.4%;
+  border-radius: 22px;
+}
+
+.landing-guide03-hotspot--card-ai {
+  left: 18.2%;
+  top: 62.7%;
+  width: 10.4%;
+  height: 18.4%;
+  border-radius: 22px;
+}
+
+.landing-guide03-hotspot--card-followup {
+  left: 29.7%;
+  top: 62.7%;
+  width: 10.4%;
+  height: 18.4%;
+  border-radius: 22px;
+}
+
+.landing-guide03-hotspot--card-delivery {
+  left: 41.3%;
+  top: 62.7%;
+  width: 10.4%;
+  height: 18.4%;
+  border-radius: 22px;
+}
+
 .landing-first-screen-primary-cta.landing-enterprise-btn-primary {
   border-color: rgba(56, 189, 248, 0.36);
   background: linear-gradient(180deg, rgba(32, 50, 72, 0.98) 0%, rgba(15, 25, 42, 0.99) 52%, rgba(10, 16, 30, 0.995) 100%);

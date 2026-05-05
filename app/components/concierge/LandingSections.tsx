@@ -35,9 +35,6 @@ const entPrimaryBtn =
 const entGhostBtn =
   "landing-enterprise-btn-secondary inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-xl px-6 py-2.5 text-[0.8375rem] font-semibold tracking-tight touch-manipulation sm:min-h-[3rem] sm:py-3 sm:text-[0.9625rem] lg:min-h-[3.125rem]";
 
-const tertiaryLink =
-  "inline-flex min-h-9 items-center justify-center rounded-lg border border-white/[0.12] bg-white/[0.03] px-3.5 py-1.5 text-[0.8125rem] font-semibold text-slate-100/93 transition hover:border-white/[0.2] hover:bg-white/[0.055] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 touch-manipulation sm:min-h-10 sm:px-4 sm:text-[0.875rem]";
-
 type LandingMenuWorkspaceRow = {
   key: string;
   target: "workspace";
@@ -99,33 +96,6 @@ const PHILOSOPHY_LINE_KEYS = [
   "landing.slides.philosophy.line4",
 ] as const;
 
-const LANDING_FIRST_SCREEN_CARDS = [
-  {
-    key: "customers",
-    title: "고객관리",
-    desc: "상담 메모와 관심 차량을 고객별로 정리합니다.",
-    tone: "customers",
-  },
-  {
-    key: "ai",
-    title: "AI 비서",
-    desc: "검토용 초안과 고객 니즈를 함께 확인합니다.",
-    tone: "ai",
-  },
-  {
-    key: "followup",
-    title: "사후관리",
-    desc: "다음 연락과 해야 할 일을 놓치지 않게 정리합니다.",
-    tone: "followup",
-  },
-  {
-    key: "delivery",
-    title: "출고 안내",
-    desc: "반복되는 안내 문구를 준비 중입니다.",
-    tone: "delivery",
-  },
-] as const;
-
 function IconPlay({ className }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 20 20" fill="none" aria-hidden>
@@ -170,48 +140,6 @@ function IconDeliveryThumb({ className }: { className?: string }) {
         strokeLinejoin="round"
       />
     </svg>
-  );
-}
-
-function LandingFeatureIcon({ tone, className }: { tone: "customers" | "ai" | "followup" | "delivery"; className?: string }) {
-  const toneClass = {
-    customers: "from-sky-100 to-blue-50 text-sky-600 ring-sky-100",
-    ai: "from-violet-100 to-indigo-50 text-violet-600 ring-violet-100",
-    followup: "from-emerald-100 to-teal-50 text-emerald-600 ring-emerald-100",
-    delivery: "from-slate-100 to-slate-50 text-slate-600 ring-slate-200",
-  }[tone];
-
-  if (tone === "delivery") {
-    return (
-      <span className={`${className ?? ""} inline-flex items-center justify-center rounded-2xl bg-gradient-to-br ${toneClass} ring-1`.trim()}>
-        <IconDeliveryThumb className="size-5" />
-      </span>
-    );
-  }
-
-  return (
-    <span className={`${className ?? ""} inline-flex items-center justify-center rounded-2xl bg-gradient-to-br ${toneClass} ring-1`.trim()}>
-      <svg className="size-5" viewBox="0 0 24 24" fill="none" aria-hidden>
-        {tone === "customers" ? (
-          <>
-            <path d="M7.5 11a3.25 3.25 0 1 1 0-6.5 3.25 3.25 0 0 1 0 6.5Z" stroke="currentColor" strokeWidth="1.65" />
-            <path d="M3.25 19.25c.55-3.05 2.08-4.55 4.25-4.55s3.7 1.5 4.25 4.55" stroke="currentColor" strokeWidth="1.65" strokeLinecap="round" />
-            <path d="M14 6.2h6M14 11.2h5M14 16.2h4" stroke="currentColor" strokeWidth="1.65" strokeLinecap="round" />
-          </>
-        ) : tone === "ai" ? (
-          <>
-            <path d="M12 3.75l1.3 4.05 4.2 1.2-4.2 1.28L12 14.25l-1.3-3.97L6.5 9l4.2-1.2L12 3.75Z" stroke="currentColor" strokeWidth="1.65" strokeLinejoin="round" />
-            <path d="M18.25 14.5l.62 1.86 1.88.64-1.88.62-.62 1.88-.64-1.88-1.86-.62 1.86-.64.64-1.86Z" stroke="currentColor" strokeWidth="1.45" strokeLinejoin="round" />
-            <path d="M5.8 14.1h5.4M5.8 17.5h7.1" stroke="currentColor" strokeWidth="1.65" strokeLinecap="round" />
-          </>
-        ) : (
-          <>
-            <path d="M7 4.75v3.5M17 4.75v3.5M5.75 7.25h12.5a2 2 0 0 1 2 2v8.25a2 2 0 0 1-2 2H5.75a2 2 0 0 1-2-2V9.25a2 2 0 0 1 2-2Z" stroke="currentColor" strokeWidth="1.65" strokeLinecap="round" />
-            <path d="M8 12.25h2.4M8 15.5h5.4" stroke="currentColor" strokeWidth="1.65" strokeLinecap="round" />
-          </>
-        )}
-      </svg>
-    </span>
   );
 }
 
@@ -337,171 +265,56 @@ export function LandingShowroom({
             ].join(" ")}
             aria-hidden={safeSlide !== 0}
           >
-            <div className="landing-slide-hero-app-shell mx-auto grid h-full w-full max-w-[min(100%,420px)] content-start gap-4 sm:max-w-[460px] lg:max-w-[1320px] lg:grid-cols-[minmax(0,0.9fr)_minmax(420px,0.82fr)] lg:items-center lg:gap-7">
-              <div className="landing-first-screen-desktop-panel hidden min-h-[min(620px,calc(100vh-8rem))] grid-cols-[minmax(0,0.98fr)_minmax(360px,0.82fr)] gap-7 rounded-[34px] border border-white/[0.11] bg-[linear-gradient(145deg,rgba(9,22,39,0.94)_0%,rgba(5,13,25,0.96)_54%,rgba(2,8,18,0.98)_100%)] p-7 text-left shadow-[0_46px_128px_-66px_rgba(0,0,0,0.88),inset_0_1px_0_rgba(255,255,255,0.075)] lg:grid xl:p-8">
-                <section className="flex min-w-0 flex-col justify-between">
-                  <div>
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-sky-100/70">{t("product.name")}</p>
-                    <h1 className="mt-5 max-w-[13ch] text-balance text-[clamp(3.25rem,5.25vw,5.75rem)] font-semibold leading-[0.98] tracking-[-0.065em] text-white [word-break:keep-all]">
-                      {t("landing.slides.enterprise.heroDefinition")}
-                    </h1>
-                    <p className="mt-5 max-w-[34rem] text-[1.08rem] font-medium leading-relaxed text-slate-200/88">
-                      {t("landing.slides.enterprise.heroSub")}
-                    </p>
-                    <p className="mt-3 max-w-[33rem] text-[0.88rem] font-medium leading-relaxed text-slate-400">
-                      {t("landing.showroom.hero.trustLine")}
-                    </p>
-                  </div>
+            <div className="landing-guide03-hero-shell mx-auto flex h-full w-full items-center justify-center">
+              <div className="landing-guide03-hero-frame relative w-full max-w-[1440px] overflow-hidden">
+                <Image
+                  src="/images/guides/sensora-guide-03.png"
+                  alt="Sensora Auto CRM 랜딩 첫 화면"
+                  width={1672}
+                  height={941}
+                  priority
+                  quality={100}
+                  className="landing-guide03-hero-image block h-auto w-full select-none"
+                  sizes="(max-width: 1440px) 100vw, 1440px"
+                />
 
-                  <div className="mt-8">
-                    <div className="grid max-w-[40rem] grid-cols-[1.05fr_1fr_1fr] gap-3">
-                      <Link href={JOIN_PATH} prefetch={false} className={`${entPrimaryBtn} landing-hero-app-btn landing-hero-primary-cta min-h-[3.35rem] rounded-2xl px-6 text-[1rem]`}>
-                        {t("cta.joinBeta")}
-                      </Link>
-                      <button type="button" onClick={onOpenAppWorkspace} className={`${entGhostBtn} landing-hero-app-btn min-h-[3.35rem] rounded-2xl px-5 text-[0.96rem]`}>
-                        <IconPlay className="size-[1rem] shrink-0 opacity-95" />
-                        {t("cta.tryAppExperience")}
-                      </button>
-                      <Link href="/register" prefetch={false} className={`${entGhostBtn} landing-hero-app-btn min-h-[3.35rem] rounded-2xl px-5 text-[0.96rem]`}>
-                        {t("auth.salesRegistration")}
-                      </Link>
-                    </div>
+                <Link href="/?view=landing" prefetch={false} className="landing-guide03-hotspot landing-guide03-hotspot--brand" aria-label="Sensora Auto CRM 랜딩으로 이동">
+                  <span className="sr-only">Sensora Auto CRM</span>
+                </Link>
+                <Link href={JOIN_PATH} prefetch={false} className="landing-guide03-hotspot landing-guide03-hotspot--nav-join" aria-label={t("cta.joinBeta")}>
+                  <span className="sr-only">{t("cta.joinBeta")}</span>
+                </Link>
+                <button type="button" onClick={onOpenAppWorkspace} className="landing-guide03-hotspot landing-guide03-hotspot--nav-preview" aria-label={t("cta.tryAppExperience")}>
+                  <span className="sr-only">{t("cta.tryAppExperience")}</span>
+                </button>
+                <Link href="/register" prefetch={false} className="landing-guide03-hotspot landing-guide03-hotspot--nav-register" aria-label={t("auth.salesRegistration")}>
+                  <span className="sr-only">{t("auth.salesRegistration")}</span>
+                </Link>
 
-                    <div className="mt-5 grid max-w-[44rem] grid-cols-4 gap-3">
-                      {MENU_ITEMS.map((row) => (
-                        <button
-                          key={`desktop-live-${row.key}`}
-                          type="button"
-                          onClick={() => handleMenuNavigate(row)}
-                          className="landing-first-screen-live-feature group min-h-[9.35rem] rounded-[24px] border border-white/[0.12] bg-white/[0.055] px-4 py-4 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.07),0_18px_42px_-34px_rgba(0,0,0,0.72)] transition hover:-translate-y-0.5 hover:border-sky-300/28 hover:bg-white/[0.075] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/38 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
-                          aria-label={row.target === "delivery" ? `${t(row.titleKey)} · ${t("landing.slides.menu.deliveryPrepAria")}` : `${t(row.titleKey)} · ${t("landing.slides.menu.enterWorkspaceAria")}`}
-                        >
-                          <LandingFeatureIcon tone={row.key as "customers" | "ai" | "followup" | "delivery"} className="size-11" />
-                          <span className="mt-4 block text-[1rem] font-semibold tracking-[-0.035em] text-slate-50">{t(row.titleKey)}</span>
-                          <span className="mt-2 block line-clamp-2 text-[0.78rem] font-medium leading-relaxed text-slate-400">{t(row.descKey)}</span>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                </section>
+                <Link href={JOIN_PATH} prefetch={false} className="landing-guide03-hotspot landing-guide03-hotspot--hero-join" aria-label={t("cta.joinBeta")}>
+                  <span className="sr-only">{t("cta.joinBeta")}</span>
+                </Link>
+                <button type="button" onClick={onOpenAppWorkspace} className="landing-guide03-hotspot landing-guide03-hotspot--hero-preview" aria-label={t("cta.tryAppExperience")}>
+                  <span className="sr-only">{t("cta.tryAppExperience")}</span>
+                </button>
+                <Link href="/register" prefetch={false} className="landing-guide03-hotspot landing-guide03-hotspot--hero-register" aria-label={t("auth.salesRegistration")}>
+                  <span className="sr-only">{t("auth.salesRegistration")}</span>
+                </Link>
+                <button type="button" onClick={onOpenAppWorkspace} className="landing-guide03-hotspot landing-guide03-hotspot--preview-panel" aria-label={t("cta.tryAppExperience")}>
+                  <span className="sr-only">{t("cta.tryAppExperience")}</span>
+                </button>
 
-                <aside className="landing-first-screen-product-area relative flex min-h-0 items-center">
-                  <div className="landing-first-screen-product-card w-full overflow-hidden rounded-[30px] border border-white/[0.12] bg-[#07111f]/92 p-3 shadow-[0_34px_92px_-58px_rgba(0,0,0,0.88),inset_0_1px_0_rgba(255,255,255,0.08)]">
-                    <div className="rounded-[24px] border border-slate-700/70 bg-[linear-gradient(180deg,#111827_0%,#0b1220_100%)] p-4">
-                      <div className="flex items-center justify-between border-b border-white/[0.08] pb-3">
-                        <div>
-                          <p className="text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-slate-500">Workspace</p>
-                          <p className="mt-1 text-[1.05rem] font-semibold tracking-[-0.035em] text-slate-50">{t("product.name")}</p>
-                        </div>
-                        <span className="rounded-full border border-sky-300/18 bg-sky-300/[0.08] px-3 py-1 text-[0.72rem] font-semibold text-sky-100/88">Preview</span>
-                      </div>
-                      <div className="mt-4 grid gap-3">
-                        <div className="rounded-[22px] border border-white/[0.08] bg-slate-900/70 p-4">
-                          <div className="flex items-start justify-between gap-4">
-                            <div>
-                              <p className="text-[0.78rem] font-semibold text-slate-400">오늘의 상담</p>
-                              <p className="mt-2 text-[1.65rem] font-semibold tracking-[-0.055em] text-slate-50">12건</p>
-                            </div>
-                            <div className="grid gap-1.5 text-right text-[0.72rem] font-semibold text-slate-400">
-                              <span>관심 차량</span>
-                              <span className="text-sky-200">SUV · 하이브리드</span>
-                            </div>
-                          </div>
-                          <div className="mt-4 grid grid-cols-3 gap-2">
-                            {["상담 메모", "검토용 초안", "다음 연락"].map((label) => (
-                              <span key={label} className="rounded-xl border border-white/[0.08] bg-white/[0.045] px-3 py-2 text-center text-[0.72rem] font-semibold text-slate-300">
-                                {label}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                        <div className="grid gap-2">
-                          {LANDING_FIRST_SCREEN_CARDS.slice(0, 3).map((card) => (
-                            <div key={`product-${card.key}`} className="flex items-center gap-3 rounded-2xl border border-white/[0.08] bg-white/[0.04] px-3.5 py-3">
-                              <span className="size-2.5 rounded-full bg-sky-300/70" aria-hidden />
-                              <div className="min-w-0 flex-1">
-                                <p className="truncate text-[0.86rem] font-semibold text-slate-100">{card.title}</p>
-                                <p className="truncate text-[0.72rem] text-slate-500">{card.desc}</p>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </aside>
-              </div>
-
-              <div className="landing-hero-start-panel landing-first-screen-live-panel flex min-w-0 flex-col rounded-[28px] border border-white/[0.11] bg-white/[0.055] p-3 text-left shadow-[0_30px_82px_-46px_rgba(0,0,0,0.72),inset_0_1px_0_rgba(255,255,255,0.07)] backdrop-blur-xl sm:p-4 lg:hidden lg:rounded-[32px] lg:p-5">
-                <div className="rounded-[24px] bg-[linear-gradient(145deg,#0a1b32_0%,#071221_52%,#050a13_100%)] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.09),0_22px_60px_-34px_rgba(56,189,248,0.35)] sm:p-6 lg:p-8">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.17em] text-sky-100/72">{t("product.name")}</p>
-                  <h1 className="mt-4 max-w-[13ch] text-balance text-[clamp(2rem,calc(1.25rem+4vw),3.75rem)] font-semibold leading-[1.02] tracking-[-0.055em] text-white [word-break:keep-all] lg:max-w-[12ch]">
-                    {t("landing.slides.enterprise.heroDefinition")}
-                  </h1>
-                  <p className="mt-4 max-w-[28ch] text-[0.93rem] font-medium leading-relaxed text-slate-200/90 sm:text-[1rem] lg:text-[1.05rem]">
-                    {t("landing.slides.enterprise.heroSub")}
-                  </p>
-                  <p className="landing-hero-trust-line mt-3 max-w-[31ch] text-[0.78rem] font-medium leading-relaxed text-slate-400 sm:text-[0.84rem]">
-                    {t("landing.showroom.hero.trustLine")}
-                  </p>
-                  <div className="landing-hero-app-actions mt-6 grid gap-2.5 sm:mt-7">
-                    <Link
-                      href={JOIN_PATH}
-                      prefetch={false}
-                      className={`${entPrimaryBtn} landing-hero-app-btn landing-hero-primary-cta landing-first-screen-primary-cta min-h-[3.25rem] w-full rounded-2xl px-6 text-[1.02rem] sm:min-h-[3.4rem]`}
-                    >
-                      {t("cta.joinBeta")}
-                    </Link>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        onOpenAppWorkspace();
-                      }}
-                      className={`${entGhostBtn} landing-hero-app-btn landing-hero-app-secondary-cta min-h-[3.12rem] w-full rounded-2xl px-6 text-[0.98rem]`}
-                    >
-                      <IconPlay className="size-[1rem] shrink-0 opacity-95" />
-                      {t("cta.tryAppExperience")}
-                    </button>
-                    <Link
-                      href="/register"
-                      prefetch={false}
-                      className={`${entGhostBtn} landing-hero-app-btn landing-hero-app-tertiary-cta min-h-[3.12rem] w-full justify-center rounded-2xl border border-white/[0.14] bg-white/[0.03] px-6 text-[0.97rem] text-slate-100/90`}
-                    >
-                      {t("auth.salesRegistration")}
-                    </Link>
-                  </div>
-                </div>
-
-                <div className="mt-3 grid grid-cols-2 gap-2.5 sm:gap-3">
-                  {MENU_ITEMS.map((row) => (
-                    <button
-                      key={`hero-${row.key}`}
-                      type="button"
-                      onClick={() => handleMenuNavigate(row)}
-                      className="landing-first-screen-feature-card group min-h-[7.35rem] rounded-[22px] border border-slate-500/24 bg-slate-200/[0.92] px-3.5 py-3 text-left text-slate-950 shadow-[0_16px_34px_-26px_rgba(15,23,42,0.34),inset_0_1px_0_rgba(255,255,255,0.72)] transition hover:-translate-y-0.5 hover:border-slate-300 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 motion-reduce:transition-none motion-reduce:hover:translate-y-0 sm:min-h-[8rem] sm:px-4 sm:py-3.5"
-                      aria-label={row.target === "delivery" ? `${t(row.titleKey)} · ${t("landing.slides.menu.deliveryPrepAria")}` : `${t(row.titleKey)} · ${t("landing.slides.menu.enterWorkspaceAria")}`}
-                    >
-                      <span
-                        className={[
-                          "flex size-9 items-center justify-center rounded-2xl text-white shadow-[0_10px_24px_-14px_rgba(15,23,42,0.5)]",
-                          row.key === "customers" ? "bg-sky-500" : row.key === "ai" ? "bg-violet-500" : row.key === "followup" ? "bg-emerald-500" : "bg-slate-500",
-                        ].join(" ")}
-                        aria-hidden
-                      >
-                        {row.target === "delivery" ? <IconDeliveryThumb className="size-[1.08rem]" /> : <IconChevron className="size-[1rem]" />}
-                      </span>
-                      <span className="mt-3 block text-[0.93rem] font-semibold leading-tight tracking-[-0.03em] sm:text-[1.02rem]">{t(row.titleKey)}</span>
-                      <span className="mt-1.5 block line-clamp-2 text-[0.72rem] font-medium leading-snug text-slate-500 sm:text-[0.78rem]">{t(row.descKey)}</span>
-                    </button>
-                  ))}
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => goSlide(1)}
-                  className="mt-4 inline-flex min-h-10 items-center justify-center rounded-2xl border border-white/[0.12] bg-white/[0.035] px-5 py-2 text-[13px] font-semibold text-slate-100/93 transition hover:border-sky-400/28 hover:bg-white/[0.055] touch-manipulation"
-                >
-                  {t("landing.slides.home.nextCta")}
+                <button type="button" onClick={() => handleMenuNavigate(MENU_ITEMS[0])} className="landing-guide03-hotspot landing-guide03-hotspot--card-customers" aria-label={`${t(MENU_ITEMS[0].titleKey)} · ${t("landing.slides.menu.enterWorkspaceAria")}`}>
+                  <span className="sr-only">{t(MENU_ITEMS[0].titleKey)}</span>
+                </button>
+                <button type="button" onClick={() => handleMenuNavigate(MENU_ITEMS[1])} className="landing-guide03-hotspot landing-guide03-hotspot--card-ai" aria-label={`${t(MENU_ITEMS[1].titleKey)} · ${t("landing.slides.menu.enterWorkspaceAria")}`}>
+                  <span className="sr-only">{t(MENU_ITEMS[1].titleKey)}</span>
+                </button>
+                <button type="button" onClick={() => handleMenuNavigate(MENU_ITEMS[2])} className="landing-guide03-hotspot landing-guide03-hotspot--card-followup" aria-label={`${t(MENU_ITEMS[2].titleKey)} · ${t("landing.slides.menu.enterWorkspaceAria")}`}>
+                  <span className="sr-only">{t(MENU_ITEMS[2].titleKey)}</span>
+                </button>
+                <button type="button" onClick={() => handleMenuNavigate(MENU_ITEMS[3])} className="landing-guide03-hotspot landing-guide03-hotspot--card-delivery" aria-label={`${t(MENU_ITEMS[3].titleKey)} · ${t("landing.slides.menu.deliveryPrepAria")}`}>
+                  <span className="sr-only">{t(MENU_ITEMS[3].titleKey)}</span>
                 </button>
               </div>
             </div>
