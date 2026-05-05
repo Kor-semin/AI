@@ -196,7 +196,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
           "sticky top-0 z-30 isolate backdrop-blur-xl",
           /** iPhone 상태바/notch 안전영역을 반영해 헤더 콘텐츠가 겹치지 않도록 */
             view === "landing"
-            ? "landing-service-nav landing-service-nav--compact pt-[max(6px,calc(env(safe-area-inset-top,0px)+2px))] pb-1 sm:pb-2"
+            ? "hidden landing-service-nav landing-service-nav--compact pt-[max(6px,calc(env(safe-area-inset-top,0px)+2px))] pb-1 sm:pb-2"
             : [
                 "border-b border-white/[0.1]",
                 "px-4 pb-3 pt-[max(14px,calc(env(safe-area-inset-top,0px)+12px))] sm:px-6",
