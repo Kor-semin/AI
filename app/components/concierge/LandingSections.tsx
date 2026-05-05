@@ -336,7 +336,7 @@ export function LandingShowroom({
             ].join(" ")}
             aria-hidden={safeSlide !== 0}
           >
-            <div className="landing-slide-hero-app-shell mx-auto grid h-full w-full max-w-[min(100%,420px)] content-start gap-4 sm:max-w-[460px] lg:max-w-[1320px] lg:grid-cols-[minmax(0,0.92fr)_minmax(420px,1.08fr)] lg:items-center lg:gap-10 xl:gap-12">
+            <div className="landing-slide-hero-app-shell mx-auto grid h-full w-full max-w-[min(100%,420px)] content-start gap-4 sm:max-w-[460px] lg:max-w-[1360px] lg:grid-cols-[minmax(360px,0.78fr)_minmax(560px,1.22fr)] lg:items-center lg:gap-7 xl:gap-8">
               <div className="landing-hero-start-panel landing-first-screen-live-panel flex min-w-0 flex-col rounded-[28px] border border-white/[0.11] bg-white/[0.055] p-3 text-left shadow-[0_30px_82px_-46px_rgba(0,0,0,0.72),inset_0_1px_0_rgba(255,255,255,0.07)] backdrop-blur-xl sm:p-4 lg:rounded-[32px] lg:p-5">
                 <div className="rounded-[24px] bg-[linear-gradient(145deg,#0a1b32_0%,#071221_52%,#050a13_100%)] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.09),0_22px_60px_-34px_rgba(56,189,248,0.35)] sm:p-6 lg:p-8">
                   <p className="text-[11px] font-semibold uppercase tracking-[0.17em] text-sky-100/72">{t("product.name")}</p>
@@ -415,14 +415,14 @@ export function LandingShowroom({
                   aria-hidden
                   className="pointer-events-none absolute inset-[8%_-6%_3%_-6%] rounded-[48px] bg-[radial-gradient(ellipse_72%_64%_at_50%_40%,rgba(56,189,248,0.14),transparent_70%)] opacity-80 blur-[28px]"
                 />
-                <div className="landing-hero-mock-frame landing-hero-primary-visual-frame relative w-full max-w-[720px] overflow-hidden rounded-[32px] border border-white/[0.14] bg-[#07111f]/95 p-3 shadow-[0_34px_110px_-54px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.09)] ring-1 ring-white/[0.05]">
+                <div className="landing-hero-mock-frame landing-hero-primary-visual-frame relative w-full max-w-[840px] overflow-hidden rounded-[32px] border border-white/[0.14] bg-[#07111f]/95 p-3 shadow-[0_34px_110px_-54px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.09)] ring-1 ring-white/[0.05]">
                   <div className="relative aspect-[1672/941] w-full overflow-hidden rounded-[24px] bg-[#020817]">
                     <Image
                       src={LANDING_HERO_PRIMARY_VISUAL}
                       alt="Sensora Auto CRM 첫 화면 대표 이미지"
                       fill
                       className="object-contain"
-                      sizes="(min-width: 1280px) 720px, 52vw"
+                      sizes="(min-width: 1280px) 840px, (min-width: 1024px) 58vw, calc(100vw - 3rem)"
                       quality={100}
                       priority
                     />

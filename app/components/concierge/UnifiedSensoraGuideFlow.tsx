@@ -251,7 +251,7 @@ function AppPreviewScreenBrowser({
   return (
     <div className={`flex min-h-0 flex-1 flex-col ${className}`.trim()}>
       <div className="sensora-guide-preview-hide-scroll min-h-0 flex-1 overflow-y-auto overscroll-y-contain [-webkit-overflow-scrolling:touch] pb-[max(2rem,calc(env(safe-area-inset-bottom,0px)+1.5rem))]">
-        <div className="mx-auto grid w-full max-w-[min(1120px,100%)] grid-cols-1 gap-5 px-0 pb-4 pt-2 sm:px-2 sm:pt-4 lg:grid-cols-[minmax(320px,0.56fr)_minmax(360px,0.44fr)] lg:items-start lg:gap-8">
+        <div className="mx-auto w-full max-w-[min(1120px,100%)] px-0 pb-4 pt-2 sm:px-2 sm:pt-4">
           <section className="app-preview-tour-screen overflow-hidden rounded-[30px] border border-slate-200 bg-slate-50 text-slate-950 shadow-[0_30px_86px_-52px_rgba(15,23,42,0.42),inset_0_1px_0_rgba(255,255,255,0.96)]">
             <div className="flex items-center justify-between border-b border-slate-200/80 bg-white px-5 py-4">
               <span className="text-left text-[1.05rem] font-semibold tracking-[-0.035em] text-slate-950">
@@ -268,14 +268,14 @@ function AppPreviewScreenBrowser({
               <p className="mt-4 max-w-[28ch] text-[0.95rem] font-medium leading-relaxed text-slate-200/88 sm:text-[1.05rem]">{copy.sub}</p>
             </div>
 
-            <div className="app-preview-primary-visual-wrap px-4 pt-4 sm:px-6 sm:pt-5">
-              <div className="relative aspect-[1672/941] w-full overflow-hidden rounded-[24px] border border-slate-200 bg-[#020817] shadow-[0_22px_60px_-36px_rgba(15,23,42,0.56)]">
+            <div className="app-preview-primary-visual-wrap px-3 pt-3 sm:px-5 sm:pt-5 lg:px-6">
+              <div className="relative aspect-[1672/941] w-full overflow-hidden rounded-[22px] border border-slate-200 bg-[#020817] shadow-[0_22px_60px_-36px_rgba(15,23,42,0.56)] sm:rounded-[26px]">
                 <Image
                   src={APP_PREVIEW_PRIMARY_VISUAL}
                   alt={ko ? "Sensora 앱 화면 미리보기 대표 이미지" : "Sensora app preview primary visual"}
                   fill
                   className="object-contain"
-                  sizes="(min-width: 1024px) 620px, calc(100vw - 2rem)"
+                  sizes="(min-width: 1024px) 1040px, calc(100vw - 1.5rem)"
                   quality={100}
                   priority
                 />
@@ -332,32 +332,6 @@ function AppPreviewScreenBrowser({
               ))}
             </div>
           </section>
-
-          <aside className="hidden lg:block">
-            <div className="sticky top-8 overflow-hidden rounded-[32px] border border-white/[0.12] bg-[#07111f]/86 p-3 shadow-[0_34px_110px_-58px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.08)]">
-              <div className="relative aspect-[1672/941] overflow-hidden rounded-[24px] bg-slate-950">
-                <Image
-                  src={APP_PREVIEW_PRIMARY_VISUAL}
-                  alt=""
-                  fill
-                  className="object-contain"
-                  sizes="360px"
-                  quality={100}
-                  priority
-                />
-              </div>
-            </div>
-            <div className="mt-4 grid gap-3 rounded-[24px] border border-white/[0.1] bg-white/[0.045] p-4 text-sm leading-relaxed text-slate-400">
-              <p>{ko ? "대표 이미지와 함께 주요 업무 화면으로 바로 이동할 수 있습니다." : "Use the primary visual with direct links into key workspace screens."}</p>
-              <Link
-                href={JOIN_PATH}
-                prefetch={false}
-                className="inline-flex min-h-11 items-center justify-center rounded-2xl border border-white/[0.14] bg-white/[0.06] px-4 py-2.5 text-sm font-semibold text-slate-100 transition hover:bg-white/[0.09] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35"
-              >
-                {t("cta.joinBeta")}
-              </Link>
-            </div>
-          </aside>
         </div>
       </div>
 
