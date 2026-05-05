@@ -17,7 +17,7 @@ import type { CrmSection } from "@/app/crm/crmSectionTypes";
 
 const JOIN_PATH = "/join" as const;
 const REGISTER_PATH = "/register" as const;
-const APP_PREVIEW_HERO_IMAGE = "/images/profile-workspace.png";
+const APP_PREVIEW_REFERENCE_IMAGE = "/images/guides/sensora-guide-05.png";
 
 const WIZARD_LAST = 3;
 const APP_PREVIEW_TABS = ["all", "customers", "ai", "followup", "delivery"] as const;
@@ -253,6 +253,7 @@ function AppPreviewScreenBrowser({
         ] satisfies AppPreviewCard[],
       };
   const visibleCards = copy.cards.filter((card) => activeTab === "all" || card.tab === activeTab);
+  const orbitCards = copy.cards;
 
   const handleCardClick = (card: AppPreviewCard) => {
     if (card.kind === "delivery") {
@@ -280,27 +281,52 @@ function AppPreviewScreenBrowser({
     <div className={`flex min-h-0 flex-1 flex-col ${className}`.trim()}>
       <div className="sensora-guide-preview-hide-scroll min-h-0 flex-1 overflow-y-auto overscroll-y-contain [-webkit-overflow-scrolling:touch] pb-[max(2rem,calc(env(safe-area-inset-bottom,0px)+1.5rem))]">
         <div className="mx-auto flex w-full max-w-[min(1180px,100%)] flex-col px-1 pb-4 pt-3 sm:px-2 sm:pt-5 lg:pt-6">
-          <div className="max-w-[52rem]">
+          <div className="text-center">
             <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-sky-300/85 sm:text-xs">{copy.eyebrow}</p>
-            <h2 className="mt-3 text-balance text-[clamp(1.9rem,5vw,4.25rem)] font-semibold leading-[1.02] tracking-[-0.055em] text-slate-50">{copy.title}</h2>
-            <div className="relative mt-5 w-full max-w-[min(100%,52rem)] overflow-hidden rounded-[28px] border border-white/[0.13] bg-[#030712] shadow-[0_34px_96px_-40px_rgba(0,0,0,0.82),0_0_54px_-32px_rgba(56,189,248,0.3)] ring-1 ring-white/[0.06] sm:mt-6">
-              <div className="relative aspect-[16/9] w-full">
-                <Image
-                  src={APP_PREVIEW_HERO_IMAGE}
-                  alt=""
-                  fill
-                  className="object-cover object-center brightness-[1.04] contrast-[1.02]"
-                  sizes="(max-width:768px) calc(100vw - 2rem), 832px"
-                  quality={100}
-                  priority
-                />
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#020817]/22 via-transparent to-white/[0.04]" aria-hidden />
-              </div>
-            </div>
-            <p className="mt-4 max-w-[44rem] text-[0.95rem] leading-relaxed text-slate-300 sm:text-lg">{copy.sub}</p>
+            <h2 className="mx-auto mt-3 max-w-[14ch] text-balance text-[clamp(2rem,5vw,4.4rem)] font-semibold leading-[1.02] tracking-[-0.055em] text-slate-50">{copy.title}</h2>
+            <p className="mx-auto mt-4 max-w-[44rem] text-[0.95rem] leading-relaxed text-slate-300 sm:text-lg">{copy.sub}</p>
           </div>
 
-          <div className="mt-6 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] sm:mt-8 [&::-webkit-scrollbar]:hidden" role="tablist" aria-label={copy.title}>
+          <div className="relative mx-auto mt-5 w-full max-w-[min(100%,70rem)] overflow-hidden rounded-[30px] border border-white/[0.13] bg-[#030712] shadow-[0_34px_96px_-42px_rgba(0,0,0,0.82),0_0_64px_-34px_rgba(124,58,237,0.38)] ring-1 ring-white/[0.06] sm:mt-7">
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_48%,rgba(168,85,247,0.2),transparent_28%),radial-gradient(ellipse_65%_48%_at_50%_48%,rgba(56,189,248,0.12),transparent_62%),linear-gradient(180deg,rgba(7,12,24,0.08),rgba(2,6,23,0.38))]" aria-hidden />
+            <div className="relative aspect-[16/9] min-h-[18.5rem] w-full sm:min-h-[27rem] lg:min-h-[34rem]">
+              <Image
+                src={APP_PREVIEW_REFERENCE_IMAGE}
+                alt=""
+                fill
+                className="object-cover object-center opacity-[0.32] brightness-[0.92] contrast-[1.08]"
+                sizes="(max-width:768px) calc(100vw - 2rem), 1120px"
+                quality={100}
+                priority
+              />
+              <div className="absolute left-1/2 top-[45%] flex size-20 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-violet-300/25 bg-violet-300/[0.08] text-violet-100 shadow-[0_0_70px_-10px_rgba(168,85,247,0.72)] sm:size-28">
+                <span className="absolute inset-[-42%] rounded-full border border-sky-300/10" aria-hidden />
+                <span className="absolute inset-[-86%] rounded-full border border-violet-300/10" aria-hidden />
+                <SensoraAnimatedMark size={70} animated label={t("product.name")} />
+              </div>
+              <div className="absolute inset-x-4 bottom-4 top-4 hidden lg:block" aria-hidden>
+                {orbitCards.map((card, idx) => {
+                  const positions = [
+                    "left-[4%] top-[10%] w-[18rem]",
+                    "right-[5%] top-[9%] w-[18rem]",
+                    "left-[6%] bottom-[12%] w-[18rem]",
+                    "left-1/2 bottom-[5%] w-[18rem] -translate-x-1/2",
+                    "right-[6%] bottom-[12%] w-[18rem]",
+                  ];
+                  return (
+                    <div
+                      key={`orbit-${card.id}`}
+                      className={`absolute ${positions[idx] ?? positions[0]} rounded-3xl border border-white/[0.12] bg-[#07111f]/72 p-3 shadow-[0_24px_70px_-34px_rgba(0,0,0,0.78)] backdrop-blur-xl`}
+                    >
+                      <AppPreviewCardMock tone={card.tone} points={card.points} />
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-5 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] sm:mt-7 [&::-webkit-scrollbar]:hidden" role="tablist" aria-label={copy.title}>
             {APP_PREVIEW_TABS.map((tab) => (
               <button
                 key={tab}
@@ -311,7 +337,7 @@ function AppPreviewScreenBrowser({
                 className={[
                   "shrink-0 rounded-full border px-4 py-2 text-sm font-semibold transition touch-manipulation focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35",
                   activeTab === tab
-                    ? "border-sky-300/42 bg-sky-300/14 text-sky-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_0_34px_-18px_rgba(56,189,248,0.34)]"
+                    ? "border-violet-300/48 bg-violet-300/16 text-violet-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.14),0_0_34px_-18px_rgba(168,85,247,0.42)]"
                     : "border-white/[0.12] bg-white/[0.055] text-slate-300 hover:border-sky-300/28 hover:bg-white/[0.075] hover:text-slate-100",
                 ].join(" ")}
               >
@@ -320,20 +346,30 @@ function AppPreviewScreenBrowser({
             ))}
           </div>
 
-          <div className="mt-5 grid grid-cols-1 gap-4 sm:mt-7 md:grid-cols-2 xl:grid-cols-4">
+          <div className="mt-5 grid grid-cols-1 gap-4 sm:mt-6 md:grid-cols-2 xl:grid-cols-4">
             {visibleCards.map((card) => (
               <button
                 key={card.id}
                 type="button"
                 onClick={() => handleCardClick(card)}
-                className="app-preview-browser-card group flex min-h-[24rem] w-full touch-manipulation flex-col overflow-hidden rounded-[26px] border border-white/[0.12] bg-gradient-to-b from-white/[0.075] via-[#07111f]/88 to-[#030712]/96 p-4 text-left shadow-[0_28px_80px_-38px_rgba(0,0,0,0.76),inset_0_1px_0_rgba(255,255,255,0.08)] transition-[transform,border-color,box-shadow] duration-200 hover:-translate-y-1 hover:border-sky-300/32 hover:shadow-[0_34px_92px_-34px_rgba(0,0,0,0.78),0_0_54px_-28px_rgba(56,189,248,0.28)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/38 motion-reduce:transition-none motion-reduce:hover:translate-y-0 sm:min-h-[25rem] sm:p-5"
+                className="app-preview-browser-card group relative flex min-h-[22rem] w-full touch-manipulation flex-col overflow-hidden rounded-[26px] border border-white/[0.12] bg-gradient-to-b from-white/[0.075] via-[#07111f]/88 to-[#030712]/96 p-4 text-left shadow-[0_28px_80px_-38px_rgba(0,0,0,0.76),inset_0_1px_0_rgba(255,255,255,0.08)] transition-[transform,border-color,box-shadow] duration-200 hover:-translate-y-1 hover:border-violet-300/34 hover:shadow-[0_34px_92px_-34px_rgba(0,0,0,0.78),0_0_54px_-28px_rgba(168,85,247,0.26)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/38 motion-reduce:transition-none motion-reduce:hover:translate-y-0 sm:min-h-[23rem] sm:p-5"
                 aria-label={`${card.title} · ${card.action}`}
               >
-                <AppPreviewCardMock tone={card.tone} points={card.points} />
-                <div className="mt-5 flex flex-1 flex-col">
+                <Image
+                  src={APP_PREVIEW_REFERENCE_IMAGE}
+                  alt=""
+                  fill
+                  className="object-cover object-center opacity-[0.12]"
+                  sizes="(max-width:768px) 100vw, 280px"
+                  quality={100}
+                />
+                <div className="relative z-[1]">
+                  <AppPreviewCardMock tone={card.tone} points={card.points} />
+                </div>
+                <div className="relative z-[1] mt-5 flex flex-1 flex-col">
                   <p className="text-[1.45rem] font-semibold leading-tight tracking-[-0.04em] text-slate-50 sm:text-[1.6rem]">{card.title}</p>
                   <p className="mt-3 text-[0.92rem] leading-relaxed text-slate-300/92">{card.desc}</p>
-                  <span className="mt-auto inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl border border-sky-300/24 bg-sky-300/[0.08] px-4 py-2.5 text-sm font-semibold text-sky-50 transition group-hover:border-sky-300/38 group-hover:bg-sky-300/[0.12]">
+                  <span className="mt-auto inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl border border-violet-300/24 bg-violet-300/[0.08] px-4 py-2.5 text-sm font-semibold text-violet-50 transition group-hover:border-violet-300/38 group-hover:bg-violet-300/[0.12]">
                     {card.action}
                     <IconArrowRightSoft className="size-[1.05rem] shrink-0 opacity-90" />
                   </span>
