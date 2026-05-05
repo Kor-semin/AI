@@ -269,16 +269,16 @@ export function LandingShowroom({
             ].join(" ")}
             aria-hidden={safeSlide !== 0}
           >
-            <div className="landing-slide-hero-app-shell mx-auto flex h-full w-full max-w-[min(100%,400px)] flex-col gap-3 sm:max-w-[420px] lg:max-h-none lg:max-w-[1280px] lg:flex-row lg:items-stretch lg:justify-between lg:gap-10 xl:gap-12">
-              <div className="flex w-full shrink-0 flex-col items-center text-center lg:max-w-[min(100%,30rem)] lg:items-start lg:justify-center lg:text-left xl:max-w-[32rem]">
+            <div className="landing-slide-hero-app-shell mx-auto flex h-full w-full max-w-[min(100%,400px)] flex-col gap-3 sm:max-w-[420px] lg:max-h-none lg:max-w-[1280px] lg:flex-row lg:items-stretch lg:justify-between lg:gap-8 xl:gap-10">
+              <div className="flex w-full shrink-0 flex-col items-center text-center lg:max-w-[min(100%,34rem)] lg:items-start lg:justify-center lg:text-left xl:max-w-[36rem]">
                 <div className="landing-hero-start-panel flex w-full flex-col items-center text-center lg:items-start lg:text-left">
-                  <h1 className="max-w-[22ch] text-pretty text-[clamp(1.5rem,calc(0.82rem+4.2vw),2.75rem)] font-semibold leading-[1.08] tracking-[-0.038em] text-white [word-break:keep-all] sm:max-w-[24ch] lg:max-w-none lg:text-[clamp(1.95rem,calc(1rem+4.6vw),2.95rem)]">
+                  <h1 className="max-w-[22ch] text-pretty text-[clamp(1.5rem,calc(0.82rem+4.2vw),2.75rem)] font-semibold leading-[1.06] tracking-[-0.04em] text-white [word-break:keep-all] sm:max-w-[24ch] lg:max-w-none lg:text-[clamp(2.2rem,calc(1.18rem+4.7vw),3.25rem)]">
                     {t("product.name")}
                   </h1>
-                  <p className="mt-2.5 max-w-[30ch] text-[clamp(0.94rem,calc(0.82rem+0.55vw),1.0625rem)] font-semibold leading-snug text-slate-100/[0.96] sm:mt-3 sm:max-w-[34ch] lg:mt-3 lg:max-w-[38ch] lg:text-[1.0625rem]">
+                  <p className="mt-2.5 max-w-[30ch] text-[clamp(0.94rem,calc(0.82rem+0.55vw),1.0625rem)] font-semibold leading-snug text-slate-100/[0.96] sm:mt-3 sm:max-w-[34ch] lg:mt-3 lg:max-w-[40ch] lg:text-[1.125rem]">
                     {t("landing.slides.enterprise.heroDefinition")}
                   </p>
-                  <p className="mt-2 max-w-[32ch] text-[0.9rem] font-medium leading-snug text-slate-200/95 sm:text-[0.9375rem] lg:mt-2.5 lg:max-w-[38ch]">
+                  <p className="mt-2 max-w-[32ch] text-[0.9rem] font-medium leading-snug text-slate-200/95 sm:text-[0.9375rem] lg:mt-2.5 lg:max-w-[40ch] lg:text-[1rem]">
                     {t("landing.slides.enterprise.heroSub")}
                   </p>
                   <p className="landing-hero-trust-line mt-2 max-w-[34ch] font-medium leading-snug text-violet-200/88 sm:mt-2 sm:text-[13px] lg:text-[0.8125rem] lg:text-violet-200/90">
@@ -290,7 +290,7 @@ export function LandingShowroom({
                       <Link
                         href={JOIN_PATH}
                         prefetch={false}
-                        className={`${entPrimaryBtn} landing-hero-app-btn landing-hero-primary-cta min-h-[2.6875rem] w-full rounded-lg sm:min-h-[2.875rem] lg:min-h-[2.875rem] sm:w-auto sm:min-w-[11.25rem]`}
+                        className={`${entPrimaryBtn} landing-hero-app-btn landing-hero-primary-cta min-h-[2.6875rem] w-full rounded-lg sm:min-h-[2.875rem] lg:min-h-[3.25rem] lg:text-[1.0625rem] sm:w-auto sm:min-w-[11.25rem]`}
                       >
                         {t("cta.joinBeta")}
                       </Link>
@@ -299,7 +299,7 @@ export function LandingShowroom({
                         onClick={() => {
                           onOpenAppWorkspace();
                         }}
-                        className={`${entGhostBtn} landing-hero-app-btn landing-hero-app-secondary-cta min-h-[2.6875rem] w-full rounded-lg sm:min-h-[2.875rem] lg:min-h-[2.875rem] sm:w-auto sm:min-w-[10.75rem]`}
+                        className={`${entGhostBtn} landing-hero-app-btn landing-hero-app-secondary-cta min-h-[2.6875rem] w-full rounded-lg sm:min-h-[2.875rem] lg:min-h-[3.25rem] lg:text-[1.03125rem] sm:w-auto sm:min-w-[10.75rem]`}
                       >
                         <IconPlay className="size-[1.02rem] shrink-0 opacity-95" />
                         {t("cta.tryAppExperience")}
@@ -322,7 +322,7 @@ export function LandingShowroom({
                 </div>
               </div>
 
-              <div className="landing-hero-mock-column flex w-full flex-col items-center gap-4 lg:flex-1 lg:max-w-[min(56%,600px)] xl:max-w-[620px] lg:justify-center">
+              <div className="landing-hero-mock-column flex w-full flex-col items-center gap-4 lg:flex-1 lg:max-w-[min(58%,680px)] xl:max-w-[720px] lg:justify-center">
                 <div className="relative flex w-full max-w-[min(100%,340px)] justify-center lg:max-w-none">
                   <div
                     aria-hidden
@@ -338,7 +338,7 @@ export function LandingShowroom({
                         {t("landing.showroom.heroMock.previewBadge")}
                       </span>
                     </div>
-                    <div className="relative aspect-[4/3] max-h-[min(38vh,260px)] w-full bg-[#030712] sm:aspect-[5/6] sm:max-h-[min(42vh,300px)] lg:aspect-[5/6] lg:max-h-[min(52vh,440px)] xl:max-h-[min(54vh,460px)]">
+                    <div className="relative aspect-[4/3] max-h-[min(38vh,260px)] w-full bg-[#030712] sm:aspect-[5/6] sm:max-h-[min(42vh,300px)] lg:aspect-[5/6] lg:max-h-[min(56vh,520px)] xl:max-h-[min(58vh,560px)]">
                       <Image
                         src={GUIDE03}
                         alt=""

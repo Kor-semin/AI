@@ -2571,7 +2571,7 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.05),
       0 18px 54px -30px rgba(0, 0, 0, 0.6);
-    padding: 1.25rem 1.25rem 1.3rem;
+    padding: 1.5rem 1.5rem 1.55rem;
   }
 
   /* 좌/우 패널이 같은 화면의 두 패널처럼 보이도록 중심축을 약하게 부여 */
@@ -2633,7 +2633,7 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
       0 1px 0 rgba(255, 255, 255, 0.03);
     padding: 1.375rem 1.5rem 1.5rem;
     width: 100%;
-    max-width: min(100%, 32rem);
+    max-width: min(100%, 36rem);
   }
 
   .landing-hero-app-actions {
