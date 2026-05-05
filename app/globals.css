@@ -2587,8 +2587,29 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   z-index: -1;
   border-radius: inherit;
   background:
-    radial-gradient(ellipse 62% 46% at 24% 9%, rgba(56, 189, 248, 0.11), transparent 58%),
-    radial-gradient(ellipse 52% 40% at 92% 18%, rgba(99, 102, 241, 0.11), transparent 60%);
+    radial-gradient(ellipse 66% 48% at 22% 6%, rgba(56, 189, 248, 0.13), transparent 58%),
+    radial-gradient(ellipse 58% 42% at 86% 8%, rgba(139, 92, 246, 0.16), transparent 60%),
+    radial-gradient(ellipse 48% 34% at 54% 102%, rgba(15, 23, 42, 0.32), transparent 62%);
+}
+
+.landing-first-screen-desktop-panel::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  opacity: 0.42;
+  background-image:
+    radial-gradient(1px 1px at 12% 18%, rgba(255, 255, 255, 0.36), transparent),
+    radial-gradient(1px 1px at 34% 72%, rgba(186, 230, 253, 0.26), transparent),
+    radial-gradient(1.2px 1.2px at 72% 22%, rgba(255, 255, 255, 0.32), transparent),
+    radial-gradient(0.9px 0.9px at 88% 58%, rgba(196, 181, 253, 0.26), transparent);
+  background-size:
+    190px 190px,
+    230px 230px,
+    170px 170px,
+    210px 210px;
 }
 
 .landing-first-screen-live-feature {
@@ -2756,6 +2777,12 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
         0 8px 24px -12px rgba(139, 92, 246, 0.1);
     }
   }
+}
+
+.landing-guide03-preview-screen {
+  background:
+    radial-gradient(ellipse 68% 38% at 72% 0%, rgba(139, 92, 246, 0.18), transparent 62%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.94) 0%, rgba(9, 16, 30, 0.98) 100%);
 }
 
 /* 랜딩 공지 슬롯 · 앱형 서비스 메뉴(1차 틀) */
