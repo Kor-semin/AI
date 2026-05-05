@@ -24,7 +24,6 @@ export {
 
 const JOIN_PATH = "/join" as const;
 const SLIDE_COUNT = 4;
-const LANDING_FIRST_SCREEN_REFERENCE = "/images/Sensora1.png";
 
 function thumbGuideImage(guideId: "sensora-guide-01" | "sensora-guide-02" | "sensora-guide-04") {
   return SENSORA_GUIDES.find((g) => g.id === guideId)?.image ?? "/images/guides/sensora-guide-01.png";
@@ -338,53 +337,99 @@ export function LandingShowroom({
             ].join(" ")}
             aria-hidden={safeSlide !== 0}
           >
-            <div className="landing-slide-hero-app-shell mx-auto grid h-full w-full max-w-[min(100%,420px)] content-start gap-4 sm:max-w-[460px] lg:block lg:max-w-[1320px]">
-              <div className="landing-first-screen-reference-canvas relative hidden w-full overflow-hidden rounded-[32px] border border-white/[0.12] bg-[#020817] shadow-[0_42px_120px_-58px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.08)] lg:block">
-                <Image
-                  src={LANDING_FIRST_SCREEN_REFERENCE}
-                  alt="Sensora 랜딩 첫 화면 시안"
-                  fill
-                  className="pointer-events-none object-cover object-center"
-                  sizes="1320px"
-                  quality={100}
-                  priority
-                />
-                <div className="landing-first-screen-reference-cta-row">
-                  <Link href={JOIN_PATH} prefetch={false} className="landing-first-screen-reference-cta landing-first-screen-reference-cta--primary">
-                    {t("cta.joinBeta")}
-                  </Link>
-                  <button type="button" onClick={onOpenAppWorkspace} className="landing-first-screen-reference-cta landing-first-screen-reference-cta--secondary">
-                    {t("cta.tryAppExperience")}
-                  </button>
-                  <Link href="/register" prefetch={false} className="landing-first-screen-reference-cta landing-first-screen-reference-cta--secondary">
-                    {t("auth.salesRegistration")}
-                  </Link>
-                </div>
-                <div className="landing-first-screen-reference-feature-row">
-                  {MENU_ITEMS.map((row) => (
-                    <button
-                      key={`reference-card-${row.key}`}
-                      type="button"
-                      onClick={() => handleMenuNavigate(row)}
-                      className="landing-first-screen-reference-feature-card"
-                      aria-label={row.target === "delivery" ? `${t(row.titleKey)} · ${t("landing.slides.menu.deliveryPrepAria")}` : `${t(row.titleKey)} · ${t("landing.slides.menu.enterWorkspaceAria")}`}
-                    >
-                      <span className="landing-first-screen-reference-feature-title">{t(row.titleKey)}</span>
-                      <span className="landing-first-screen-reference-feature-desc">{t(row.descKey)}</span>
-                    </button>
-                  ))}
-                </div>
-                {MENU_ITEMS.map((row, index) => (
-                  <button
-                    key={`reference-${row.key}`}
-                    type="button"
-                    onClick={() => handleMenuNavigate(row)}
-                    className={`landing-first-screen-hotspot landing-first-screen-hotspot--feature landing-first-screen-hotspot--feature-${index + 1}`}
-                    aria-label={row.target === "delivery" ? `${t(row.titleKey)} · ${t("landing.slides.menu.deliveryPrepAria")}` : `${t(row.titleKey)} · ${t("landing.slides.menu.enterWorkspaceAria")}`}
-                  >
-                    <span className="sr-only">{t(row.titleKey)}</span>
-                  </button>
-                ))}
+            <div className="landing-slide-hero-app-shell mx-auto grid h-full w-full max-w-[min(100%,420px)] content-start gap-4 sm:max-w-[460px] lg:max-w-[1320px] lg:grid-cols-[minmax(0,0.9fr)_minmax(420px,0.82fr)] lg:items-center lg:gap-7">
+              <div className="landing-first-screen-desktop-panel hidden min-h-[min(620px,calc(100vh-8rem))] grid-cols-[minmax(0,0.98fr)_minmax(360px,0.82fr)] gap-7 rounded-[34px] border border-white/[0.11] bg-[linear-gradient(145deg,rgba(9,22,39,0.94)_0%,rgba(5,13,25,0.96)_54%,rgba(2,8,18,0.98)_100%)] p-7 text-left shadow-[0_46px_128px_-66px_rgba(0,0,0,0.88),inset_0_1px_0_rgba(255,255,255,0.075)] lg:grid xl:p-8">
+                <section className="flex min-w-0 flex-col justify-between">
+                  <div>
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-sky-100/70">{t("product.name")}</p>
+                    <h1 className="mt-5 max-w-[13ch] text-balance text-[clamp(3.25rem,5.25vw,5.75rem)] font-semibold leading-[0.98] tracking-[-0.065em] text-white [word-break:keep-all]">
+                      {t("landing.slides.enterprise.heroDefinition")}
+                    </h1>
+                    <p className="mt-5 max-w-[34rem] text-[1.08rem] font-medium leading-relaxed text-slate-200/88">
+                      {t("landing.slides.enterprise.heroSub")}
+                    </p>
+                    <p className="mt-3 max-w-[33rem] text-[0.88rem] font-medium leading-relaxed text-slate-400">
+                      {t("landing.showroom.hero.trustLine")}
+                    </p>
+                  </div>
+
+                  <div className="mt-8">
+                    <div className="grid max-w-[40rem] grid-cols-[1.05fr_1fr_1fr] gap-3">
+                      <Link href={JOIN_PATH} prefetch={false} className={`${entPrimaryBtn} landing-hero-app-btn landing-hero-primary-cta min-h-[3.35rem] rounded-2xl px-6 text-[1rem]`}>
+                        {t("cta.joinBeta")}
+                      </Link>
+                      <button type="button" onClick={onOpenAppWorkspace} className={`${entGhostBtn} landing-hero-app-btn min-h-[3.35rem] rounded-2xl px-5 text-[0.96rem]`}>
+                        <IconPlay className="size-[1rem] shrink-0 opacity-95" />
+                        {t("cta.tryAppExperience")}
+                      </button>
+                      <Link href="/register" prefetch={false} className={`${entGhostBtn} landing-hero-app-btn min-h-[3.35rem] rounded-2xl px-5 text-[0.96rem]`}>
+                        {t("auth.salesRegistration")}
+                      </Link>
+                    </div>
+
+                    <div className="mt-5 grid max-w-[44rem] grid-cols-4 gap-3">
+                      {MENU_ITEMS.map((row) => (
+                        <button
+                          key={`desktop-live-${row.key}`}
+                          type="button"
+                          onClick={() => handleMenuNavigate(row)}
+                          className="landing-first-screen-live-feature group min-h-[9.35rem] rounded-[24px] border border-white/[0.12] bg-white/[0.055] px-4 py-4 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.07),0_18px_42px_-34px_rgba(0,0,0,0.72)] transition hover:-translate-y-0.5 hover:border-sky-300/28 hover:bg-white/[0.075] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/38 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+                          aria-label={row.target === "delivery" ? `${t(row.titleKey)} · ${t("landing.slides.menu.deliveryPrepAria")}` : `${t(row.titleKey)} · ${t("landing.slides.menu.enterWorkspaceAria")}`}
+                        >
+                          <LandingFeatureIcon tone={row.key as "customers" | "ai" | "followup" | "delivery"} className="size-11" />
+                          <span className="mt-4 block text-[1rem] font-semibold tracking-[-0.035em] text-slate-50">{t(row.titleKey)}</span>
+                          <span className="mt-2 block line-clamp-2 text-[0.78rem] font-medium leading-relaxed text-slate-400">{t(row.descKey)}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </section>
+
+                <aside className="landing-first-screen-product-area relative flex min-h-0 items-center">
+                  <div className="landing-first-screen-product-card w-full overflow-hidden rounded-[30px] border border-white/[0.12] bg-[#07111f]/92 p-3 shadow-[0_34px_92px_-58px_rgba(0,0,0,0.88),inset_0_1px_0_rgba(255,255,255,0.08)]">
+                    <div className="rounded-[24px] border border-slate-700/70 bg-[linear-gradient(180deg,#111827_0%,#0b1220_100%)] p-4">
+                      <div className="flex items-center justify-between border-b border-white/[0.08] pb-3">
+                        <div>
+                          <p className="text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-slate-500">Workspace</p>
+                          <p className="mt-1 text-[1.05rem] font-semibold tracking-[-0.035em] text-slate-50">{t("product.name")}</p>
+                        </div>
+                        <span className="rounded-full border border-sky-300/18 bg-sky-300/[0.08] px-3 py-1 text-[0.72rem] font-semibold text-sky-100/88">Preview</span>
+                      </div>
+                      <div className="mt-4 grid gap-3">
+                        <div className="rounded-[22px] border border-white/[0.08] bg-slate-900/70 p-4">
+                          <div className="flex items-start justify-between gap-4">
+                            <div>
+                              <p className="text-[0.78rem] font-semibold text-slate-400">오늘의 상담</p>
+                              <p className="mt-2 text-[1.65rem] font-semibold tracking-[-0.055em] text-slate-50">12건</p>
+                            </div>
+                            <div className="grid gap-1.5 text-right text-[0.72rem] font-semibold text-slate-400">
+                              <span>관심 차량</span>
+                              <span className="text-sky-200">SUV · 하이브리드</span>
+                            </div>
+                          </div>
+                          <div className="mt-4 grid grid-cols-3 gap-2">
+                            {["상담 메모", "검토용 초안", "다음 연락"].map((label) => (
+                              <span key={label} className="rounded-xl border border-white/[0.08] bg-white/[0.045] px-3 py-2 text-center text-[0.72rem] font-semibold text-slate-300">
+                                {label}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                        <div className="grid gap-2">
+                          {LANDING_FIRST_SCREEN_CARDS.slice(0, 3).map((card) => (
+                            <div key={`product-${card.key}`} className="flex items-center gap-3 rounded-2xl border border-white/[0.08] bg-white/[0.04] px-3.5 py-3">
+                              <span className="size-2.5 rounded-full bg-sky-300/70" aria-hidden />
+                              <div className="min-w-0 flex-1">
+                                <p className="truncate text-[0.86rem] font-semibold text-slate-100">{card.title}</p>
+                                <p className="truncate text-[0.72rem] text-slate-500">{card.desc}</p>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </aside>
               </div>
 
               <div className="landing-hero-start-panel landing-first-screen-live-panel flex min-w-0 flex-col rounded-[28px] border border-white/[0.11] bg-white/[0.055] p-3 text-left shadow-[0_30px_82px_-46px_rgba(0,0,0,0.72),inset_0_1px_0_rgba(255,255,255,0.07)] backdrop-blur-xl sm:p-4 lg:hidden lg:rounded-[32px] lg:p-5">
@@ -433,7 +478,7 @@ export function LandingShowroom({
                       key={`hero-${row.key}`}
                       type="button"
                       onClick={() => handleMenuNavigate(row)}
-                      className="landing-first-screen-feature-card group min-h-[7.35rem] rounded-[22px] border border-slate-200/85 bg-white px-3.5 py-3 text-left text-slate-950 shadow-[0_16px_34px_-24px_rgba(15,23,42,0.38),inset_0_1px_0_rgba(255,255,255,0.95)] transition hover:-translate-y-0.5 hover:border-sky-200 hover:shadow-[0_18px_44px_-26px_rgba(14,165,233,0.32)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 motion-reduce:transition-none motion-reduce:hover:translate-y-0 sm:min-h-[8rem] sm:px-4 sm:py-3.5"
+                      className="landing-first-screen-feature-card group min-h-[7.35rem] rounded-[22px] border border-slate-500/24 bg-slate-200/[0.92] px-3.5 py-3 text-left text-slate-950 shadow-[0_16px_34px_-26px_rgba(15,23,42,0.34),inset_0_1px_0_rgba(255,255,255,0.72)] transition hover:-translate-y-0.5 hover:border-slate-300 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 motion-reduce:transition-none motion-reduce:hover:translate-y-0 sm:min-h-[8rem] sm:px-4 sm:py-3.5"
                       aria-label={row.target === "delivery" ? `${t(row.titleKey)} · ${t("landing.slides.menu.deliveryPrepAria")}` : `${t(row.titleKey)} · ${t("landing.slides.menu.enterWorkspaceAria")}`}
                     >
                       <span
@@ -458,49 +503,6 @@ export function LandingShowroom({
                 >
                   {t("landing.slides.home.nextCta")}
                 </button>
-              </div>
-
-              <div className="landing-hero-mock-column relative hidden min-w-0 justify-center lg:hidden">
-                <div
-                  aria-hidden
-                  className="pointer-events-none absolute inset-[8%_-6%_3%_-6%] rounded-[48px] bg-[radial-gradient(ellipse_72%_64%_at_50%_40%,rgba(56,189,248,0.14),transparent_70%)] opacity-80 blur-[28px]"
-                />
-                <div className="landing-hero-mock-frame relative w-full max-w-[640px] overflow-hidden rounded-[32px] border border-white/[0.14] bg-[#07111f]/95 p-3 shadow-[0_34px_110px_-54px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.09)] ring-1 ring-white/[0.05]">
-                  <div className="relative overflow-hidden rounded-[24px] bg-slate-50 text-slate-950">
-                    <div className="flex items-center justify-between border-b border-slate-200/80 bg-white px-5 py-4">
-                      <span className="text-lg font-semibold tracking-[-0.035em]">{t("product.name")}</span>
-                      <span className="flex size-9 items-center justify-center rounded-full bg-slate-100 text-slate-400" aria-hidden>
-                        <IconDeliveryThumb className="size-[1.05rem]" />
-                      </span>
-                    </div>
-                    <div className="p-5">
-                      <div className="rounded-[28px] bg-[linear-gradient(145deg,#0c2340,#071323_55%,#050a13)] p-7 text-white shadow-[0_24px_58px_-34px_rgba(2,8,23,0.65)]">
-                        <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-sky-100/70">{t("landing.showroom.heroMock.previewBadge")}</p>
-                        <p className="mt-4 max-w-[12ch] text-[2.35rem] font-semibold leading-[1.02] tracking-[-0.055em]">{t("landing.slides.enterprise.heroDefinition")}</p>
-                        <p className="mt-4 max-w-[27ch] text-[0.9rem] leading-relaxed text-slate-200/88">{t("landing.slides.enterprise.heroSub")}</p>
-                        <button type="button" onClick={onOpenAppWorkspace} className="mt-6 min-h-12 rounded-2xl bg-white px-5 text-sm font-semibold text-slate-950">
-                          {t("cta.tryAppExperience")}
-                        </button>
-                      </div>
-                      <div className="mt-5 grid grid-cols-2 gap-3">
-                        {MENU_ITEMS.map((row) => (
-                          <button
-                            key={`desktop-${row.key}`}
-                            type="button"
-                            onClick={() => handleMenuNavigate(row)}
-                            className="min-h-[8.25rem] rounded-[22px] border border-slate-200 bg-white p-4 text-left shadow-[0_14px_36px_-28px_rgba(15,23,42,0.42)] transition hover:border-sky-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35"
-                          >
-                            <span className="text-[0.98rem] font-semibold tracking-[-0.03em] text-slate-950">{t(row.titleKey)}</span>
-                            <span className="mt-2 block line-clamp-2 text-[0.78rem] leading-snug text-slate-500">{t(row.descKey)}</span>
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="pointer-events-none absolute -right-7 top-8 hidden h-64 w-36 overflow-hidden rounded-[22px] border border-white/[0.18] bg-slate-950/50 opacity-35 shadow-2xl xl:block" aria-hidden>
-                    <Image src={LANDING_FIRST_SCREEN_REFERENCE} alt="" fill className="object-cover object-top" sizes="144px" quality={90} priority />
-                  </div>
-                </div>
               </div>
             </div>
           </div>
