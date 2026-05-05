@@ -4,9 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 
+import { SensoraGuideDetailModal } from "@/app/components/concierge/SensoraGuideDetailModal";
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
 import type { CrmSection } from "@/app/crm/crmSectionTypes";
-import { SENSORA_GUIDES } from "@/lib/sensoraGuide";
+import { DEFAULT_GUIDE_ID, SENSORA_GUIDES, type SensoraGuideId } from "@/lib/sensoraGuide";
 
 /** 랜딩 보조 이미지 에셋 경로(@/public 기준). README 등에서 참고합니다. */
 export const LANDING_SHOWROOM_IMAGE_PATHS = {
@@ -96,6 +97,17 @@ const PHILOSOPHY_LINE_KEYS = [
   "landing.slides.philosophy.line4",
 ] as const;
 
+const LANDING_TIP_GUIDE_HOTSPOTS: {
+  className: string;
+  guideId: SensoraGuideId;
+  label: string;
+}[] = [
+  { className: "landing-guide03-hotspot--card-customers", guideId: "sensora-guide-03", label: "이용 시작 방법" },
+  { className: "landing-guide03-hotspot--card-ai", guideId: "sensora-guide-01", label: "기능 설명" },
+  { className: "landing-guide03-hotspot--card-followup", guideId: "sensora-guide-04", label: "실제 사용 흐름" },
+  { className: "landing-guide03-hotspot--card-delivery", guideId: "sensora-guide-05", label: "베타 사용 안내" },
+];
+
 function IconPlay({ className }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 20 20" fill="none" aria-hidden>
@@ -159,6 +171,8 @@ export function LandingShowroom({
   const { t } = useLanguage();
   const safeSlide = ((slideIndex % SLIDE_COUNT) + SLIDE_COUNT) % SLIDE_COUNT;
   const [deliveryPrepOpen, setDeliveryPrepOpen] = useState(false);
+  const [guideDetailOpen, setGuideDetailOpen] = useState(false);
+  const [activeGuideId, setActiveGuideId] = useState<SensoraGuideId>(DEFAULT_GUIDE_ID);
 
   const goSlide = useCallback(
     (i: number) => {
@@ -214,6 +228,11 @@ export function LandingShowroom({
     [onEnterWorkspaceSection],
   );
 
+  const openTipGuide = useCallback((guideId: SensoraGuideId) => {
+    setActiveGuideId(guideId);
+    setGuideDetailOpen(true);
+  }, []);
+
   const dockSafe = "pb-[max(10px,calc(env(safe-area-inset-bottom,0px)+8px))] pt-2";
 
   return (
@@ -221,6 +240,17 @@ export function LandingShowroom({
       id="sensora-landing-slide-deck"
       className="sensora-landing-slide-deck relative flex min-h-0 flex-1 flex-col overflow-hidden bg-[#020817]"
     >
+      <SensoraGuideDetailModal
+        open={guideDetailOpen}
+        onClose={() => setGuideDetailOpen(false)}
+        activeGuideId={activeGuideId}
+        onActiveGuideChange={setActiveGuideId}
+        overlayZClass="z-[472]"
+        onGoToRelated={() => {
+          // 랜딩 첫 화면 TIP 카드는 확대 보기 전용입니다.
+        }}
+      />
+
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_82%_52%_at_52%_8%,rgba(56,189,248,0.1),transparent_55%),radial-gradient(ellipse_58%_42%_at_96%_18%,rgba(139,92,246,0.08),transparent_52%),linear-gradient(180deg,#050f1e_0%,#020817_45%,#030b16_100%)]"
@@ -305,18 +335,17 @@ export function LandingShowroom({
                   <span className="sr-only">{t("cta.tryAppExperience")}</span>
                 </button>
 
-                <button type="button" onClick={() => handleMenuNavigate(MENU_ITEMS[0])} className="landing-guide03-hotspot landing-guide03-hotspot--card-customers" aria-label={`${t(MENU_ITEMS[0].titleKey)} · ${t("landing.slides.menu.enterWorkspaceAria")}`}>
-                  <span className="sr-only">{t(MENU_ITEMS[0].titleKey)}</span>
-                </button>
-                <button type="button" onClick={() => handleMenuNavigate(MENU_ITEMS[1])} className="landing-guide03-hotspot landing-guide03-hotspot--card-ai" aria-label={`${t(MENU_ITEMS[1].titleKey)} · ${t("landing.slides.menu.enterWorkspaceAria")}`}>
-                  <span className="sr-only">{t(MENU_ITEMS[1].titleKey)}</span>
-                </button>
-                <button type="button" onClick={() => handleMenuNavigate(MENU_ITEMS[2])} className="landing-guide03-hotspot landing-guide03-hotspot--card-followup" aria-label={`${t(MENU_ITEMS[2].titleKey)} · ${t("landing.slides.menu.enterWorkspaceAria")}`}>
-                  <span className="sr-only">{t(MENU_ITEMS[2].titleKey)}</span>
-                </button>
-                <button type="button" onClick={() => handleMenuNavigate(MENU_ITEMS[3])} className="landing-guide03-hotspot landing-guide03-hotspot--card-delivery" aria-label={`${t(MENU_ITEMS[3].titleKey)} · ${t("landing.slides.menu.deliveryPrepAria")}`}>
-                  <span className="sr-only">{t(MENU_ITEMS[3].titleKey)}</span>
-                </button>
+                {LANDING_TIP_GUIDE_HOTSPOTS.map((tip) => (
+                  <button
+                    key={tip.guideId}
+                    type="button"
+                    onClick={() => openTipGuide(tip.guideId)}
+                    className={`landing-guide03-hotspot ${tip.className}`}
+                    aria-label={`${tip.label} 확대 보기`}
+                  >
+                    <span className="sr-only">{tip.label}</span>
+                  </button>
+                ))}
               </div>
             </div>
           </div>

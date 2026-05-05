@@ -2634,17 +2634,17 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
 }
 
 .landing-guide03-hotspot--hero-join {
-  left: 4.9%;
-  top: 28.5%;
-  width: 9.8%;
-  height: 4.9%;
+  left: 4.4%;
+  top: 27.2%;
+  width: 11.4%;
+  height: 6.2%;
 }
 
 .landing-guide03-hotspot--hero-preview {
-  left: 15.9%;
-  top: 28.5%;
-  width: 10.6%;
-  height: 4.9%;
+  left: 15.4%;
+  top: 27.2%;
+  width: 12.4%;
+  height: 6.2%;
 }
 
 .landing-guide03-hotspot--hero-register {
@@ -2663,34 +2663,34 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
 }
 
 .landing-guide03-hotspot--card-customers {
-  left: 18.2%;
-  top: 45.7%;
-  width: 11.3%;
-  height: 11.3%;
+  left: 17.3%;
+  top: 45.1%;
+  width: 12.7%;
+  height: 12.6%;
   border-radius: 22px;
 }
 
 .landing-guide03-hotspot--card-ai {
-  left: 30.3%;
-  top: 45.7%;
-  width: 11.3%;
-  height: 11.3%;
+  left: 29.4%;
+  top: 45.1%;
+  width: 12.8%;
+  height: 12.6%;
   border-radius: 22px;
 }
 
 .landing-guide03-hotspot--card-followup {
-  left: 42.5%;
-  top: 45.7%;
-  width: 11.3%;
-  height: 11.3%;
+  left: 41.6%;
+  top: 45.1%;
+  width: 12.8%;
+  height: 12.6%;
   border-radius: 22px;
 }
 
 .landing-guide03-hotspot--card-delivery {
-  left: 54.8%;
-  top: 45.7%;
-  width: 11.3%;
-  height: 11.3%;
+  left: 53.8%;
+  top: 45.1%;
+  width: 13.1%;
+  height: 12.6%;
   border-radius: 22px;
 }
 
