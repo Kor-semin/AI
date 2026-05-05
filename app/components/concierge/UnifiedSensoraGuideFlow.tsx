@@ -16,7 +16,7 @@ import type { CrmSection } from "@/app/crm/crmSectionTypes";
 
 const JOIN_PATH = "/join" as const;
 const REGISTER_PATH = "/register" as const;
-const APP_TOUR_REFERENCE_IMAGE = "/images/Sensora 화면 둘러보기.png";
+const APP_PREVIEW_REFERENCE_IMAGE = "/images/Sensora2.png";
 const GUIDE_FLOW_GUIDES = SENSORA_GUIDES.filter((guide) => guide.id !== "sensora-guide-03" && guide.id !== "sensora-guide-05");
 const DEFAULT_FLOW_GUIDE_ID: SensoraGuideId = "sensora-guide-01";
 
@@ -322,7 +322,7 @@ function AppPreviewScreenBrowser({
           <aside className="hidden lg:block">
             <div className="sticky top-8 overflow-hidden rounded-[32px] border border-white/[0.12] bg-[#07111f]/86 p-3 shadow-[0_34px_110px_-58px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.08)]">
               <div className="relative aspect-[9/16] overflow-hidden rounded-[24px] bg-slate-950">
-                <Image src={APP_TOUR_REFERENCE_IMAGE} alt="" fill className="object-cover object-top" sizes="360px" quality={92} priority />
+                <Image src={APP_PREVIEW_REFERENCE_IMAGE} alt="" fill className="object-cover object-top" sizes="360px" quality={92} priority />
               </div>
             </div>
             <div className="mt-4 grid gap-3 rounded-[24px] border border-white/[0.1] bg-white/[0.045] p-4 text-sm leading-relaxed text-slate-400">

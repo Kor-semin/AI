@@ -24,7 +24,7 @@ export {
 
 const JOIN_PATH = "/join" as const;
 const SLIDE_COUNT = 4;
-const LANDING_FIRST_SCREEN_REFERENCE = "/images/Sensora 첫 화면.png";
+const LANDING_FIRST_SCREEN_REFERENCE = "/images/Sensora1.png";
 
 function thumbGuideImage(guideId: "sensora-guide-01" | "sensora-guide-02" | "sensora-guide-04") {
   return SENSORA_GUIDES.find((g) => g.id === guideId)?.image ?? "/images/guides/sensora-guide-01.png";
@@ -418,40 +418,26 @@ export function LandingShowroom({
                   className="pointer-events-none absolute inset-[8%_-6%_3%_-6%] rounded-[48px] bg-[radial-gradient(ellipse_72%_64%_at_50%_40%,rgba(56,189,248,0.14),transparent_70%)] opacity-80 blur-[28px]"
                 />
                 <div className="landing-hero-mock-frame relative w-full max-w-[640px] overflow-hidden rounded-[32px] border border-white/[0.14] bg-[#07111f]/95 p-3 shadow-[0_34px_110px_-54px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.09)] ring-1 ring-white/[0.05]">
-                  <div className="relative overflow-hidden rounded-[24px] bg-slate-50 text-slate-950">
-                    <div className="flex items-center justify-between border-b border-slate-200/80 bg-white px-5 py-4">
-                      <span className="text-lg font-semibold tracking-[-0.035em]">{t("product.name")}</span>
-                      <span className="flex size-9 items-center justify-center rounded-full bg-slate-100 text-slate-400" aria-hidden>
-                        <IconDeliveryThumb className="size-[1.05rem]" />
-                      </span>
-                    </div>
-                    <div className="p-5">
-                      <div className="rounded-[28px] bg-[linear-gradient(145deg,#0c2340,#071323_55%,#050a13)] p-7 text-white shadow-[0_24px_58px_-34px_rgba(2,8,23,0.65)]">
-                        <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-sky-100/70">{t("landing.showroom.heroMock.previewBadge")}</p>
-                        <p className="mt-4 max-w-[12ch] text-[2.35rem] font-semibold leading-[1.02] tracking-[-0.055em]">{t("landing.slides.enterprise.heroDefinition")}</p>
-                        <p className="mt-4 max-w-[27ch] text-[0.9rem] leading-relaxed text-slate-200/88">{t("landing.slides.enterprise.heroSub")}</p>
-                        <button type="button" onClick={onOpenAppWorkspace} className="mt-6 min-h-12 rounded-2xl bg-white px-5 text-sm font-semibold text-slate-950">
-                          {t("cta.tryAppExperience")}
-                        </button>
-                      </div>
-                      <div className="mt-5 grid grid-cols-2 gap-3">
-                        {MENU_ITEMS.map((row) => (
-                          <button
-                            key={`desktop-${row.key}`}
-                            type="button"
-                            onClick={() => handleMenuNavigate(row)}
-                            className="min-h-[8.25rem] rounded-[22px] border border-slate-200 bg-white p-4 text-left shadow-[0_14px_36px_-28px_rgba(15,23,42,0.42)] transition hover:border-sky-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35"
-                          >
-                            <span className="text-[0.98rem] font-semibold tracking-[-0.03em] text-slate-950">{t(row.titleKey)}</span>
-                            <span className="mt-2 block line-clamp-2 text-[0.78rem] leading-snug text-slate-500">{t(row.descKey)}</span>
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="pointer-events-none absolute -right-7 top-8 hidden h-64 w-36 overflow-hidden rounded-[22px] border border-white/[0.18] bg-slate-950/50 opacity-35 shadow-2xl xl:block" aria-hidden>
-                    <Image src={LANDING_FIRST_SCREEN_REFERENCE} alt="" fill className="object-cover object-top" sizes="144px" quality={90} priority />
-                  </div>
+                  <button
+                    type="button"
+                    onClick={onOpenAppWorkspace}
+                    className="group relative block aspect-[4/3] w-full overflow-hidden rounded-[24px] bg-slate-950 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/40"
+                    aria-label={t("cta.tryAppExperience")}
+                  >
+                    <Image
+                      src={LANDING_FIRST_SCREEN_REFERENCE}
+                      alt=""
+                      fill
+                      className="object-cover object-top transition duration-500 group-hover:scale-[1.012]"
+                      sizes="(min-width:1024px) 52vw, 100vw"
+                      quality={96}
+                      priority
+                    />
+                    <span className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#020817]/42 via-transparent to-transparent" aria-hidden />
+                    <span className="pointer-events-none absolute bottom-4 left-4 rounded-2xl border border-white/[0.14] bg-[#020817]/72 px-4 py-2 text-sm font-semibold text-slate-50 shadow-[0_16px_40px_-22px_rgba(0,0,0,0.72)] backdrop-blur-md">
+                      {t("cta.tryAppExperience")}
+                    </span>
+                  </button>
                 </div>
               </div>
             </div>
