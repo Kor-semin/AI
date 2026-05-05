@@ -9,7 +9,6 @@ import { useLanguage } from "@/app/components/i18n/LanguageProvider";
 import { SensoraGuideDetailModal } from "@/app/components/concierge/SensoraGuideDetailModal";
 import { SensoraGuideGallery } from "@/app/components/concierge/SensoraGuideGallery";
 import {
-  DEFAULT_GUIDE_ID,
   SENSORA_GUIDES,
   type SensoraGuideId,
 } from "@/lib/sensoraGuide";
@@ -17,6 +16,9 @@ import type { CrmSection } from "@/app/crm/crmSectionTypes";
 
 const JOIN_PATH = "/join" as const;
 const REGISTER_PATH = "/register" as const;
+const APP_TOUR_REFERENCE_IMAGE = "/images/Sensora 화면 둘러보기.png";
+const GUIDE_FLOW_GUIDES = SENSORA_GUIDES.filter((guide) => guide.id !== "sensora-guide-03" && guide.id !== "sensora-guide-05");
+const DEFAULT_FLOW_GUIDE_ID: SensoraGuideId = "sensora-guide-01";
 
 const WIZARD_LAST = 3;
 const APP_PREVIEW_TABS = ["all", "customers", "ai", "followup", "delivery"] as const;
@@ -85,35 +87,6 @@ function IconArrowRightSoft({ className }: { className?: string }) {
       <path d="M4.5 10h10" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
       <path d="M10.8 5.7L15.1 10l-4.3 4.3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
-  );
-}
-
-function AppPreviewCardMock({ tone, points }: { tone: AppPreviewCardTone; points: string[] }) {
-  return (
-    <div className={`app-preview-browser-card-visual app-preview-browser-card-visual--${tone}`} aria-hidden>
-      <div className="flex items-center gap-1.5">
-        <span className="size-2 rounded-full bg-rose-300/55" />
-        <span className="size-2 rounded-full bg-amber-300/45" />
-        <span className="size-2 rounded-full bg-emerald-300/45" />
-        <span className="ml-auto h-2 w-14 rounded-full bg-white/12" />
-      </div>
-      <div className="mt-4 grid grid-cols-[0.72fr_1fr] gap-3">
-        <div className="space-y-2">
-          <span className="block h-3 w-14 rounded-full bg-white/16" />
-          <span className="block h-12 rounded-2xl bg-white/[0.08]" />
-          <span className="block h-12 rounded-2xl bg-white/[0.055]" />
-        </div>
-        <div className="rounded-2xl border border-white/[0.1] bg-[#020817]/58 p-3">
-          {points.map((point, idx) => (
-            <div key={`${tone}-${point}`} className={idx === 0 ? "" : "mt-2.5"}>
-              <span className="block h-2.5 w-16 rounded-full bg-sky-200/20" />
-              <span className="mt-1.5 block h-2.5 rounded-full bg-white/16" />
-              <span className="mt-1 block h-2.5 w-3/4 rounded-full bg-white/10" />
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
   );
 }
 
@@ -278,65 +251,91 @@ function AppPreviewScreenBrowser({
   return (
     <div className={`flex min-h-0 flex-1 flex-col ${className}`.trim()}>
       <div className="sensora-guide-preview-hide-scroll min-h-0 flex-1 overflow-y-auto overscroll-y-contain [-webkit-overflow-scrolling:touch] pb-[max(2rem,calc(env(safe-area-inset-bottom,0px)+1.5rem))]">
-        <div className="mx-auto flex w-full max-w-[min(1180px,100%)] flex-col px-1 pb-4 pt-3 sm:px-2 sm:pt-5 lg:pt-6">
-          <div className="max-w-[52rem]">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-sky-300/85 sm:text-xs">{copy.eyebrow}</p>
-            <h2 className="mt-3 text-balance text-[clamp(1.9rem,5vw,4.25rem)] font-semibold leading-[1.02] tracking-[-0.055em] text-slate-50">{copy.title}</h2>
-            <p className="mt-4 max-w-[44rem] text-[0.95rem] leading-relaxed text-slate-300 sm:text-lg">{copy.sub}</p>
-          </div>
+        <div className="mx-auto grid w-full max-w-[min(1120px,100%)] grid-cols-1 gap-5 px-0 pb-4 pt-2 sm:px-2 sm:pt-4 lg:grid-cols-[minmax(320px,0.56fr)_minmax(360px,0.44fr)] lg:items-start lg:gap-8">
+          <section className="app-preview-tour-screen overflow-hidden rounded-[30px] border border-slate-200 bg-slate-50 text-slate-950 shadow-[0_30px_86px_-52px_rgba(15,23,42,0.42),inset_0_1px_0_rgba(255,255,255,0.96)]">
+            <div className="flex items-center justify-between border-b border-slate-200/80 bg-white px-5 py-4">
+              <span className="text-left text-[1.05rem] font-semibold tracking-[-0.035em] text-slate-950">
+                {t("product.name")}
+              </span>
+              <span className="flex size-9 items-center justify-center rounded-full bg-slate-100 text-slate-400" aria-hidden>
+                <IconChevronNavigate className="size-[1rem]" />
+              </span>
+            </div>
 
-          <div className="mt-6 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] sm:mt-8 [&::-webkit-scrollbar]:hidden" role="tablist" aria-label={copy.title}>
-            {APP_PREVIEW_TABS.map((tab) => (
-              <button
-                key={tab}
-                type="button"
-                role="tab"
-                aria-selected={activeTab === tab}
-                onClick={() => setActiveTab(tab)}
-                className={[
-                  "shrink-0 rounded-full border px-4 py-2 text-sm font-semibold transition touch-manipulation focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35",
-                  activeTab === tab
-                    ? "border-sky-300/42 bg-sky-300/14 text-sky-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_0_34px_-18px_rgba(56,189,248,0.34)]"
-                    : "border-white/[0.12] bg-white/[0.055] text-slate-300 hover:border-sky-300/28 hover:bg-white/[0.075] hover:text-slate-100",
-                ].join(" ")}
-              >
-                {copy.tabs[tab]}
-              </button>
-            ))}
-          </div>
+            <div className="bg-[linear-gradient(145deg,#0b2340_0%,#071323_58%,#050a13_100%)] px-5 py-7 text-white sm:px-7 sm:py-9">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-sky-100/72">{copy.eyebrow}</p>
+              <h2 className="mt-4 max-w-[12ch] text-balance text-[clamp(2rem,6vw,3.55rem)] font-semibold leading-[1.02] tracking-[-0.055em]">{copy.title}</h2>
+              <p className="mt-4 max-w-[28ch] text-[0.95rem] font-medium leading-relaxed text-slate-200/88 sm:text-[1.05rem]">{copy.sub}</p>
+            </div>
 
-          <div className="mt-5 grid grid-cols-1 gap-4 sm:mt-7 md:grid-cols-2 xl:grid-cols-4">
-            {visibleCards.map((card) => (
-              <button
-                key={card.id}
-                type="button"
-                onClick={() => handleCardClick(card)}
-                className="app-preview-browser-card group flex min-h-[24rem] w-full touch-manipulation flex-col overflow-hidden rounded-[26px] border border-white/[0.12] bg-gradient-to-b from-white/[0.075] via-[#07111f]/88 to-[#030712]/96 p-4 text-left shadow-[0_28px_80px_-38px_rgba(0,0,0,0.76),inset_0_1px_0_rgba(255,255,255,0.08)] transition-[transform,border-color,box-shadow] duration-200 hover:-translate-y-1 hover:border-sky-300/32 hover:shadow-[0_34px_92px_-34px_rgba(0,0,0,0.78),0_0_54px_-28px_rgba(56,189,248,0.28)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/38 motion-reduce:transition-none motion-reduce:hover:translate-y-0 sm:min-h-[25rem] sm:p-5"
-                aria-label={`${card.title} · ${card.action}`}
-              >
-                <AppPreviewCardMock tone={card.tone} points={card.points} />
-                <div className="mt-5 flex flex-1 flex-col">
-                  <p className="text-[1.45rem] font-semibold leading-tight tracking-[-0.04em] text-slate-50 sm:text-[1.6rem]">{card.title}</p>
-                  <p className="mt-3 text-[0.92rem] leading-relaxed text-slate-300/92">{card.desc}</p>
-                  <span className="mt-auto inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl border border-sky-300/24 bg-sky-300/[0.08] px-4 py-2.5 text-sm font-semibold text-sky-50 transition group-hover:border-sky-300/38 group-hover:bg-sky-300/[0.12]">
-                    {card.action}
-                    <IconArrowRightSoft className="size-[1.05rem] shrink-0 opacity-90" />
+            <div className="flex gap-2 overflow-x-auto px-5 py-4 [scrollbar-width:none] sm:px-7 [&::-webkit-scrollbar]:hidden" role="tablist" aria-label={copy.title}>
+              {APP_PREVIEW_TABS.map((tab) => (
+                <button
+                  key={tab}
+                  type="button"
+                  role="tab"
+                  aria-selected={activeTab === tab}
+                  onClick={() => setActiveTab(tab)}
+                  className={[
+                    "shrink-0 rounded-full border px-4 py-2 text-sm font-semibold transition touch-manipulation focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35",
+                    activeTab === tab
+                      ? "border-sky-200 bg-sky-50 text-sky-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.95)]"
+                      : "border-slate-200 bg-white text-slate-500 hover:border-sky-200 hover:text-slate-900",
+                  ].join(" ")}
+                >
+                  {copy.tabs[tab]}
+                </button>
+              ))}
+            </div>
+
+            <div className="grid gap-3 px-5 pb-6 sm:px-7 sm:pb-7">
+              {visibleCards.map((card) => (
+                <button
+                  key={card.id}
+                  type="button"
+                  onClick={() => handleCardClick(card)}
+                  className="app-preview-tour-card group flex min-h-[7.6rem] w-full touch-manipulation items-start gap-3 rounded-[24px] border border-slate-200 bg-white p-4 text-left shadow-[0_16px_44px_-34px_rgba(15,23,42,0.45),inset_0_1px_0_rgba(255,255,255,0.95)] transition-[transform,border-color,box-shadow] duration-200 hover:-translate-y-0.5 hover:border-sky-200 hover:shadow-[0_20px_54px_-36px_rgba(14,165,233,0.34)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+                  aria-label={`${card.title} · ${card.action}`}
+                >
+                  <span
+                    className={[
+                      "mt-0.5 flex size-11 shrink-0 items-center justify-center rounded-[18px] text-white shadow-[0_12px_28px_-18px_rgba(15,23,42,0.52)]",
+                      card.tone === "customers" ? "bg-sky-500" : card.tone === "ai" ? "bg-violet-500" : card.tone === "followup" ? "bg-emerald-500" : "bg-slate-500",
+                    ].join(" ")}
+                    aria-hidden
+                  >
+                    <IconArrowRightSoft className="size-[1.15rem]" />
                   </span>
-                </div>
-              </button>
-            ))}
-          </div>
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-[1.08rem] font-semibold leading-tight tracking-[-0.035em] text-slate-950 sm:text-[1.2rem]">{card.title}</span>
+                    <span className="mt-2 block text-[0.84rem] leading-relaxed text-slate-500">{card.desc}</span>
+                    <span className="mt-3 inline-flex items-center gap-1.5 text-[0.82rem] font-semibold text-sky-700">
+                      {card.action}
+                      <IconArrowRightSoft className="size-[0.95rem] shrink-0 opacity-80" />
+                    </span>
+                  </span>
+                </button>
+              ))}
+            </div>
+          </section>
 
-          <div className="mt-5 grid grid-cols-1 gap-3 rounded-[24px] border border-white/[0.1] bg-white/[0.04] p-4 text-sm leading-relaxed text-slate-400 sm:mt-7 sm:grid-cols-[1fr_auto] sm:items-center sm:p-5">
-            <p>{ko ? "이 화면은 기능 설명을 반복하지 않고, 실제 업무 화면을 고르는 탐색 공간입니다." : "This preview is for choosing product screens, not repeating the landing introduction."}</p>
-            <Link
-              href={JOIN_PATH}
-              prefetch={false}
-              className="inline-flex min-h-11 items-center justify-center rounded-2xl border border-white/[0.14] bg-white/[0.06] px-4 py-2.5 text-sm font-semibold text-slate-100 transition hover:bg-white/[0.09] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35"
-            >
-              {t("cta.joinBeta")}
-            </Link>
-          </div>
+          <aside className="hidden lg:block">
+            <div className="sticky top-8 overflow-hidden rounded-[32px] border border-white/[0.12] bg-[#07111f]/86 p-3 shadow-[0_34px_110px_-58px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.08)]">
+              <div className="relative aspect-[9/16] overflow-hidden rounded-[24px] bg-slate-950">
+                <Image src={APP_TOUR_REFERENCE_IMAGE} alt="" fill className="object-cover object-top" sizes="360px" quality={92} priority />
+              </div>
+            </div>
+            <div className="mt-4 grid gap-3 rounded-[24px] border border-white/[0.1] bg-white/[0.045] p-4 text-sm leading-relaxed text-slate-400">
+              <p>{ko ? "기준 이미지의 세로 탐색 구조를 실제 카드 UI로 재구성했습니다." : "The reference tour structure is rebuilt as live cards."}</p>
+              <Link
+                href={JOIN_PATH}
+                prefetch={false}
+                className="inline-flex min-h-11 items-center justify-center rounded-2xl border border-white/[0.14] bg-white/[0.06] px-4 py-2.5 text-sm font-semibold text-slate-100 transition hover:bg-white/[0.09] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35"
+              >
+                {t("cta.joinBeta")}
+              </Link>
+            </div>
+          </aside>
         </div>
       </div>
 
@@ -385,26 +384,26 @@ export function UnifiedSensoraGuideFlow({
   const { t } = useLanguage();
   const minWizardStep = skipIntro ? 1 : 0;
   const [wizardStep, setWizardStep] = useState(minWizardStep);
-  const [activeGuideId, setActiveGuideId] = useState<SensoraGuideId>(DEFAULT_GUIDE_ID);
+  const [activeGuideId, setActiveGuideId] = useState<SensoraGuideId>(DEFAULT_FLOW_GUIDE_ID);
   const [guideDetailOpen, setGuideDetailOpen] = useState(false);
 
   useEffect(() => {
     if (!active) return;
     setWizardStep(minWizardStep);
-    setActiveGuideId(DEFAULT_GUIDE_ID);
+    setActiveGuideId(DEFAULT_FLOW_GUIDE_ID);
     setGuideDetailOpen(false);
   }, [active, minWizardStep]);
 
   const goPrevGuide = useCallback(() => {
-    const idx = SENSORA_GUIDES.findIndex((g) => g.id === activeGuideId);
-    const prev = (idx - 1 + SENSORA_GUIDES.length) % SENSORA_GUIDES.length;
-    setActiveGuideId(SENSORA_GUIDES[prev]?.id ?? DEFAULT_GUIDE_ID);
+    const idx = GUIDE_FLOW_GUIDES.findIndex((g) => g.id === activeGuideId);
+    const prev = (idx - 1 + GUIDE_FLOW_GUIDES.length) % GUIDE_FLOW_GUIDES.length;
+    setActiveGuideId(GUIDE_FLOW_GUIDES[prev]?.id ?? DEFAULT_FLOW_GUIDE_ID);
   }, [activeGuideId]);
 
   const goNextGuide = useCallback(() => {
-    const idx = SENSORA_GUIDES.findIndex((g) => g.id === activeGuideId);
-    const next = (idx + 1) % SENSORA_GUIDES.length;
-    setActiveGuideId(SENSORA_GUIDES[next]?.id ?? DEFAULT_GUIDE_ID);
+    const idx = GUIDE_FLOW_GUIDES.findIndex((g) => g.id === activeGuideId);
+    const next = (idx + 1) % GUIDE_FLOW_GUIDES.length;
+    setActiveGuideId(GUIDE_FLOW_GUIDES[next]?.id ?? DEFAULT_FLOW_GUIDE_ID);
   }, [activeGuideId]);
 
   const pillarEntries = useMemo(
@@ -607,7 +606,7 @@ export function UnifiedSensoraGuideFlow({
                     {t("guide.unified.guideNav.prev")}
                   </button>
                   <div className="flex flex-1 flex-wrap justify-center gap-1 px-0.5" aria-hidden>
-                    {SENSORA_GUIDES.map((g) => (
+                    {GUIDE_FLOW_GUIDES.map((g) => (
                       <span
                         key={g.id}
                         className={`h-1.5 w-1.5 rounded-full sm:h-2 sm:w-2 ${g.id === activeGuideId ? "bg-sky-400 shadow-[0_0_12px_rgba(56,189,248,0.55)]" : "bg-slate-600/70 opacity-65"}`}
@@ -624,7 +623,7 @@ export function UnifiedSensoraGuideFlow({
                 </div>
 
                 <SensoraGuideGallery
-                  guides={SENSORA_GUIDES}
+                  guides={GUIDE_FLOW_GUIDES}
                   activeId={activeGuideId}
                   onSelectGuide={(id) => {
                     setActiveGuideId(id as SensoraGuideId);

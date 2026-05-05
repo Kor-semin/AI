@@ -24,10 +24,10 @@ export {
 
 const JOIN_PATH = "/join" as const;
 const SLIDE_COUNT = 4;
-const GUIDE03 = "/images/guides/sensora-guide-03.png";
+const LANDING_FIRST_SCREEN_REFERENCE = "/images/Sensora 첫 화면.png";
 
 function thumbGuideImage(guideId: "sensora-guide-01" | "sensora-guide-02" | "sensora-guide-04") {
-  return SENSORA_GUIDES.find((g) => g.id === guideId)?.image ?? GUIDE03;
+  return SENSORA_GUIDES.find((g) => g.id === guideId)?.image ?? "/images/guides/sensora-guide-01.png";
 }
 
 const entPrimaryBtn =
@@ -100,6 +100,33 @@ const PHILOSOPHY_LINE_KEYS = [
   "landing.slides.philosophy.line4",
 ] as const;
 
+const LANDING_FIRST_SCREEN_CARDS = [
+  {
+    key: "customers",
+    title: "고객관리",
+    desc: "상담 메모와 관심 차량을 고객별로 정리합니다.",
+    tone: "customers",
+  },
+  {
+    key: "ai",
+    title: "AI 비서",
+    desc: "검토용 초안과 고객 니즈를 함께 확인합니다.",
+    tone: "ai",
+  },
+  {
+    key: "followup",
+    title: "사후관리",
+    desc: "다음 연락과 해야 할 일을 놓치지 않게 정리합니다.",
+    tone: "followup",
+  },
+  {
+    key: "delivery",
+    title: "출고 안내",
+    desc: "반복되는 안내 문구를 준비 중입니다.",
+    tone: "delivery",
+  },
+] as const;
+
 function IconPlay({ className }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 20 20" fill="none" aria-hidden>
@@ -144,6 +171,48 @@ function IconDeliveryThumb({ className }: { className?: string }) {
         strokeLinejoin="round"
       />
     </svg>
+  );
+}
+
+function LandingFeatureIcon({ tone, className }: { tone: "customers" | "ai" | "followup" | "delivery"; className?: string }) {
+  const toneClass = {
+    customers: "from-sky-100 to-blue-50 text-sky-600 ring-sky-100",
+    ai: "from-violet-100 to-indigo-50 text-violet-600 ring-violet-100",
+    followup: "from-emerald-100 to-teal-50 text-emerald-600 ring-emerald-100",
+    delivery: "from-slate-100 to-slate-50 text-slate-600 ring-slate-200",
+  }[tone];
+
+  if (tone === "delivery") {
+    return (
+      <span className={`${className ?? ""} inline-flex items-center justify-center rounded-2xl bg-gradient-to-br ${toneClass} ring-1`.trim()}>
+        <IconDeliveryThumb className="size-5" />
+      </span>
+    );
+  }
+
+  return (
+    <span className={`${className ?? ""} inline-flex items-center justify-center rounded-2xl bg-gradient-to-br ${toneClass} ring-1`.trim()}>
+      <svg className="size-5" viewBox="0 0 24 24" fill="none" aria-hidden>
+        {tone === "customers" ? (
+          <>
+            <path d="M7.5 11a3.25 3.25 0 1 1 0-6.5 3.25 3.25 0 0 1 0 6.5Z" stroke="currentColor" strokeWidth="1.65" />
+            <path d="M3.25 19.25c.55-3.05 2.08-4.55 4.25-4.55s3.7 1.5 4.25 4.55" stroke="currentColor" strokeWidth="1.65" strokeLinecap="round" />
+            <path d="M14 6.2h6M14 11.2h5M14 16.2h4" stroke="currentColor" strokeWidth="1.65" strokeLinecap="round" />
+          </>
+        ) : tone === "ai" ? (
+          <>
+            <path d="M12 3.75l1.3 4.05 4.2 1.2-4.2 1.28L12 14.25l-1.3-3.97L6.5 9l4.2-1.2L12 3.75Z" stroke="currentColor" strokeWidth="1.65" strokeLinejoin="round" />
+            <path d="M18.25 14.5l.62 1.86 1.88.64-1.88.62-.62 1.88-.64-1.88-1.86-.62 1.86-.64.64-1.86Z" stroke="currentColor" strokeWidth="1.45" strokeLinejoin="round" />
+            <path d="M5.8 14.1h5.4M5.8 17.5h7.1" stroke="currentColor" strokeWidth="1.65" strokeLinecap="round" />
+          </>
+        ) : (
+          <>
+            <path d="M7 4.75v3.5M17 4.75v3.5M5.75 7.25h12.5a2 2 0 0 1 2 2v8.25a2 2 0 0 1-2 2H5.75a2 2 0 0 1-2-2V9.25a2 2 0 0 1 2-2Z" stroke="currentColor" strokeWidth="1.65" strokeLinecap="round" />
+            <path d="M8 12.25h2.4M8 15.5h5.4" stroke="currentColor" strokeWidth="1.65" strokeLinecap="round" />
+          </>
+        )}
+      </svg>
+    </span>
   );
 }
 
@@ -269,101 +338,121 @@ export function LandingShowroom({
             ].join(" ")}
             aria-hidden={safeSlide !== 0}
           >
-            <div className="landing-slide-hero-app-shell mx-auto flex h-full w-full max-w-[min(100%,400px)] flex-col gap-3 sm:max-w-[420px] lg:max-h-none lg:max-w-[1360px] lg:flex-row lg:items-stretch lg:justify-between lg:gap-10 xl:max-w-[1400px] xl:gap-12">
-              <div className="flex w-full shrink-0 flex-col items-center text-center lg:max-w-[min(100%,34rem)] lg:items-start lg:justify-center lg:text-left xl:max-w-[36rem]">
-                <div className="landing-hero-start-panel flex w-full flex-col items-center text-center lg:items-start lg:text-left">
-                  <h1 className="max-w-[22ch] text-pretty text-[clamp(1.5rem,calc(0.82rem+4.2vw),2.75rem)] font-semibold leading-[1.06] tracking-[-0.04em] text-white [word-break:keep-all] sm:max-w-[24ch] lg:max-w-none lg:text-[clamp(2.2rem,calc(1.18rem+4.7vw),3.25rem)]">
-                    {t("product.name")}
-                  </h1>
-                  <p className="mt-2.5 max-w-[30ch] text-[clamp(0.94rem,calc(0.82rem+0.55vw),1.0625rem)] font-semibold leading-snug text-slate-100/[0.96] sm:mt-3 sm:max-w-[34ch] lg:mt-3 lg:max-w-[40ch] lg:text-[1.125rem]">
+            <div className="landing-slide-hero-app-shell mx-auto grid h-full w-full max-w-[min(100%,420px)] content-start gap-4 sm:max-w-[460px] lg:max-w-[1320px] lg:grid-cols-[minmax(0,0.92fr)_minmax(420px,1.08fr)] lg:items-center lg:gap-10 xl:gap-12">
+              <div className="landing-hero-start-panel landing-first-screen-live-panel flex min-w-0 flex-col rounded-[28px] border border-white/[0.11] bg-white/[0.055] p-3 text-left shadow-[0_30px_82px_-46px_rgba(0,0,0,0.72),inset_0_1px_0_rgba(255,255,255,0.07)] backdrop-blur-xl sm:p-4 lg:rounded-[32px] lg:p-5">
+                <div className="rounded-[24px] bg-[linear-gradient(145deg,#0a1b32_0%,#071221_52%,#050a13_100%)] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.09),0_22px_60px_-34px_rgba(56,189,248,0.35)] sm:p-6 lg:p-8">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.17em] text-sky-100/72">{t("product.name")}</p>
+                  <h1 className="mt-4 max-w-[13ch] text-balance text-[clamp(2rem,calc(1.25rem+4vw),3.75rem)] font-semibold leading-[1.02] tracking-[-0.055em] text-white [word-break:keep-all] lg:max-w-[12ch]">
                     {t("landing.slides.enterprise.heroDefinition")}
-                  </p>
-                  <p className="mt-2 max-w-[32ch] text-[0.9rem] font-medium leading-snug text-slate-200/95 sm:text-[0.9375rem] lg:mt-2.5 lg:max-w-[40ch] lg:text-[1rem]">
+                  </h1>
+                  <p className="mt-4 max-w-[28ch] text-[0.93rem] font-medium leading-relaxed text-slate-200/90 sm:text-[1rem] lg:text-[1.05rem]">
                     {t("landing.slides.enterprise.heroSub")}
                   </p>
-                  <p className="landing-hero-trust-line mt-2 max-w-[34ch] font-medium leading-snug text-violet-200/88 sm:mt-2 sm:text-[13px] lg:text-[0.8125rem] lg:text-violet-200/90">
+                  <p className="landing-hero-trust-line mt-3 max-w-[31ch] text-[0.78rem] font-medium leading-relaxed text-slate-400 sm:text-[0.84rem]">
                     {t("landing.showroom.hero.trustLine")}
                   </p>
-
-                  <div className="landing-hero-app-actions mt-5 flex w-full max-w-[20rem] flex-col items-stretch gap-0 sm:mt-6 sm:max-w-[21rem] lg:mt-0 lg:w-full lg:max-w-none">
-                    <div className="landing-slide-cta-cluster landing-hero-app-cta-row flex w-full flex-col items-stretch gap-2.5 sm:gap-3 lg:flex-col lg:items-start lg:gap-3.5">
-                      <Link
-                        href={JOIN_PATH}
-                        prefetch={false}
-                        className={`${entPrimaryBtn} landing-hero-app-btn landing-hero-primary-cta min-h-[3.25rem] w-full rounded-2xl px-6 text-[1.05rem] sm:min-h-[3.4rem] sm:text-[1.075rem] lg:min-h-[3.6rem] lg:w-[min(100%,22rem)] lg:text-[1.1rem]`}
-                      >
-                        {t("cta.joinBeta")}
-                      </Link>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          onOpenAppWorkspace();
-                        }}
-                        className={`${entGhostBtn} landing-hero-app-btn landing-hero-app-secondary-cta min-h-[3.25rem] w-full rounded-2xl px-6 text-[1.03rem] sm:min-h-[3.4rem] sm:text-[1.05rem] lg:min-h-[3.6rem] lg:w-[min(100%,22rem)] lg:text-[1.08rem]`}
-                      >
-                        <IconPlay className="size-[1.02rem] shrink-0 opacity-95" />
-                        {t("cta.tryAppExperience")}
-                      </button>
-                      <Link
-                        href="/register"
-                        prefetch={false}
-                        className={`${entGhostBtn} landing-hero-app-btn landing-hero-app-tertiary-cta min-h-[3.25rem] w-full justify-center rounded-2xl border border-white/[0.14] bg-white/[0.03] px-6 text-[1.02rem] text-slate-100/90 sm:min-h-[3.4rem] sm:text-[1.04rem] lg:min-h-[3.6rem] lg:w-[min(100%,22rem)] lg:text-[1.06rem]`}
-                      >
-                        {t("auth.salesRegistration")}
-                      </Link>
-                    </div>
+                  <div className="landing-hero-app-actions mt-6 grid gap-2.5 sm:mt-7">
+                    <Link
+                      href={JOIN_PATH}
+                      prefetch={false}
+                      className={`${entPrimaryBtn} landing-hero-app-btn landing-hero-primary-cta landing-first-screen-primary-cta min-h-[3.25rem] w-full rounded-2xl px-6 text-[1.02rem] sm:min-h-[3.4rem]`}
+                    >
+                      {t("cta.joinBeta")}
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onOpenAppWorkspace();
+                      }}
+                      className={`${entGhostBtn} landing-hero-app-btn landing-hero-app-secondary-cta min-h-[3.12rem] w-full rounded-2xl px-6 text-[0.98rem]`}
+                    >
+                      <IconPlay className="size-[1rem] shrink-0 opacity-95" />
+                      {t("cta.tryAppExperience")}
+                    </button>
+                    <Link
+                      href="/register"
+                      prefetch={false}
+                      className={`${entGhostBtn} landing-hero-app-btn landing-hero-app-tertiary-cta min-h-[3.12rem] w-full justify-center rounded-2xl border border-white/[0.14] bg-white/[0.03] px-6 text-[0.97rem] text-slate-100/90`}
+                    >
+                      {t("auth.salesRegistration")}
+                    </Link>
                   </div>
-
-                  <button
-                    type="button"
-                    onClick={() => goSlide(1)}
-                    className="mt-8 hidden min-h-10 shrink-0 items-center justify-center self-center rounded-lg border border-white/[0.12] bg-white/[0.035] px-5 py-2 text-[13px] font-semibold text-slate-100/93 transition hover:border-sky-400/28 hover:bg-white/[0.055] touch-manipulation lg:mt-9 lg:inline-flex lg:self-stretch"
-                  >
-                    {t("landing.slides.home.nextCta")}
-                  </button>
                 </div>
-              </div>
 
-              <div className="landing-hero-mock-column flex w-full flex-col items-center gap-4 lg:flex-1 lg:max-w-[min(58%,680px)] xl:max-w-[720px] lg:justify-center">
-                <div className="relative flex w-full max-w-[min(100%,340px)] justify-center lg:max-w-none">
-                  <div
-                    aria-hidden
-                    className="pointer-events-none absolute inset-[-5%_-2%_-1%_-2%] rounded-[28px] bg-[radial-gradient(ellipse_72%_64%_at_50%_40%,rgba(56,189,248,0.12),transparent_70%)] opacity-75 blur-[22px] lg:opacity-80"
-                  />
-                  <div className="landing-hero-mock-frame relative w-full max-w-[340px] overflow-hidden rounded-[14px] border border-white/[0.16] bg-[#050f18]/[0.99] shadow-[0_24px_64px_-24px_rgba(0,0,0,0.72),inset_0_1px_0_rgba(255,255,255,0.1)] ring-1 ring-white/[0.06] lg:max-w-none lg:rounded-[18px] xl:rounded-[20px]">
-                    <div className="flex items-center gap-1.5 border-b border-white/[0.1] bg-[#051525]/98 px-2 py-1.5 sm:px-2.5 lg:px-3 lg:py-2">
-                      <span className="size-2 rounded-full bg-rose-500/45" aria-hidden />
-                      <span className="size-2 rounded-full bg-amber-400/45" aria-hidden />
-                      <span className="size-2 rounded-full bg-emerald-400/42" aria-hidden />
-                      <span className="ml-1 truncate text-[10px] font-semibold text-slate-400 lg:text-[11px]">{t("product.name")}</span>
-                      <span className="ml-auto rounded border border-sky-400/28 bg-sky-500/[0.12] px-1.5 py-px text-[9px] font-semibold uppercase tracking-[0.08em] text-sky-100/92 sm:text-[10px]">
-                        {t("landing.showroom.heroMock.previewBadge")}
-                      </span>
-                    </div>
-                    <div className="relative aspect-[4/3] max-h-[min(38vh,260px)] w-full bg-[#030712] sm:aspect-[5/6] sm:max-h-[min(42vh,300px)] lg:aspect-[5/6] lg:max-h-[min(56vh,520px)] xl:max-h-[min(58vh,560px)]">
-                      <Image
-                        src={GUIDE03}
-                        alt=""
-                        fill
-                        className="object-cover object-top opacity-100 brightness-[1.02] contrast-[1.02] max-lg:object-contain max-lg:object-top lg:brightness-[1.06] lg:contrast-[1.03]"
-                        sizes="(max-width:640px) 88vw,(max-width:1024px) 42vw, 480px"
-                        quality={100}
-                        priority
-                      />
-                      <div
-                        className="landing-hero-mock-scrim pointer-events-none absolute inset-0 bg-gradient-to-t from-[#020817]/42 via-transparent to-[#030a14]/04 max-lg:from-[#020817]/38 lg:from-[#020817]/28"
+                <div className="mt-3 grid grid-cols-2 gap-2.5 sm:gap-3">
+                  {MENU_ITEMS.map((row) => (
+                    <button
+                      key={`hero-${row.key}`}
+                      type="button"
+                      onClick={() => handleMenuNavigate(row)}
+                      className="landing-first-screen-feature-card group min-h-[7.35rem] rounded-[22px] border border-slate-200/85 bg-white px-3.5 py-3 text-left text-slate-950 shadow-[0_16px_34px_-24px_rgba(15,23,42,0.38),inset_0_1px_0_rgba(255,255,255,0.95)] transition hover:-translate-y-0.5 hover:border-sky-200 hover:shadow-[0_18px_44px_-26px_rgba(14,165,233,0.32)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 motion-reduce:transition-none motion-reduce:hover:translate-y-0 sm:min-h-[8rem] sm:px-4 sm:py-3.5"
+                      aria-label={row.target === "delivery" ? `${t(row.titleKey)} · ${t("landing.slides.menu.deliveryPrepAria")}` : `${t(row.titleKey)} · ${t("landing.slides.menu.enterWorkspaceAria")}`}
+                    >
+                      <span
+                        className={[
+                          "flex size-9 items-center justify-center rounded-2xl text-white shadow-[0_10px_24px_-14px_rgba(15,23,42,0.5)]",
+                          row.key === "customers" ? "bg-sky-500" : row.key === "ai" ? "bg-violet-500" : row.key === "followup" ? "bg-emerald-500" : "bg-slate-500",
+                        ].join(" ")}
                         aria-hidden
-                      />
-                    </div>
-                  </div>
+                      >
+                        {row.target === "delivery" ? <IconDeliveryThumb className="size-[1.08rem]" /> : <IconChevron className="size-[1rem]" />}
+                      </span>
+                      <span className="mt-3 block text-[0.93rem] font-semibold leading-tight tracking-[-0.03em] sm:text-[1.02rem]">{t(row.titleKey)}</span>
+                      <span className="mt-1.5 block line-clamp-2 text-[0.72rem] font-medium leading-snug text-slate-500 sm:text-[0.78rem]">{t(row.descKey)}</span>
+                    </button>
+                  ))}
                 </div>
+
                 <button
                   type="button"
                   onClick={() => goSlide(1)}
-                  className="mt-2 inline-flex min-h-9 shrink-0 items-center justify-center rounded-lg border border-white/[0.12] bg-white/[0.035] px-4 py-2 text-[12px] font-semibold text-slate-100/93 transition hover:border-sky-400/28 hover:bg-white/[0.06] touch-manipulation sm:min-h-10 sm:px-5 sm:text-[13px] lg:hidden"
+                  className="mt-4 inline-flex min-h-10 items-center justify-center rounded-2xl border border-white/[0.12] bg-white/[0.035] px-5 py-2 text-[13px] font-semibold text-slate-100/93 transition hover:border-sky-400/28 hover:bg-white/[0.055] touch-manipulation"
                 >
                   {t("landing.slides.home.nextCta")}
                 </button>
+              </div>
+
+              <div className="landing-hero-mock-column relative hidden min-w-0 justify-center lg:flex">
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute inset-[8%_-6%_3%_-6%] rounded-[48px] bg-[radial-gradient(ellipse_72%_64%_at_50%_40%,rgba(56,189,248,0.14),transparent_70%)] opacity-80 blur-[28px]"
+                />
+                <div className="landing-hero-mock-frame relative w-full max-w-[640px] overflow-hidden rounded-[32px] border border-white/[0.14] bg-[#07111f]/95 p-3 shadow-[0_34px_110px_-54px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.09)] ring-1 ring-white/[0.05]">
+                  <div className="relative overflow-hidden rounded-[24px] bg-slate-50 text-slate-950">
+                    <div className="flex items-center justify-between border-b border-slate-200/80 bg-white px-5 py-4">
+                      <span className="text-lg font-semibold tracking-[-0.035em]">{t("product.name")}</span>
+                      <span className="flex size-9 items-center justify-center rounded-full bg-slate-100 text-slate-400" aria-hidden>
+                        <IconDeliveryThumb className="size-[1.05rem]" />
+                      </span>
+                    </div>
+                    <div className="p-5">
+                      <div className="rounded-[28px] bg-[linear-gradient(145deg,#0c2340,#071323_55%,#050a13)] p-7 text-white shadow-[0_24px_58px_-34px_rgba(2,8,23,0.65)]">
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-sky-100/70">{t("landing.showroom.heroMock.previewBadge")}</p>
+                        <p className="mt-4 max-w-[12ch] text-[2.35rem] font-semibold leading-[1.02] tracking-[-0.055em]">{t("landing.slides.enterprise.heroDefinition")}</p>
+                        <p className="mt-4 max-w-[27ch] text-[0.9rem] leading-relaxed text-slate-200/88">{t("landing.slides.enterprise.heroSub")}</p>
+                        <button type="button" onClick={onOpenAppWorkspace} className="mt-6 min-h-12 rounded-2xl bg-white px-5 text-sm font-semibold text-slate-950">
+                          {t("cta.tryAppExperience")}
+                        </button>
+                      </div>
+                      <div className="mt-5 grid grid-cols-2 gap-3">
+                        {MENU_ITEMS.map((row) => (
+                          <button
+                            key={`desktop-${row.key}`}
+                            type="button"
+                            onClick={() => handleMenuNavigate(row)}
+                            className="min-h-[8.25rem] rounded-[22px] border border-slate-200 bg-white p-4 text-left shadow-[0_14px_36px_-28px_rgba(15,23,42,0.42)] transition hover:border-sky-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35"
+                          >
+                            <span className="text-[0.98rem] font-semibold tracking-[-0.03em] text-slate-950">{t(row.titleKey)}</span>
+                            <span className="mt-2 block line-clamp-2 text-[0.78rem] leading-snug text-slate-500">{t(row.descKey)}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="pointer-events-none absolute -right-7 top-8 hidden h-64 w-36 overflow-hidden rounded-[22px] border border-white/[0.18] bg-slate-950/50 opacity-35 shadow-2xl xl:block" aria-hidden>
+                    <Image src={LANDING_FIRST_SCREEN_REFERENCE} alt="" fill className="object-cover object-top" sizes="144px" quality={90} priority />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
