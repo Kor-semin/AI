@@ -11,13 +11,13 @@ import { useLanguage } from "@/app/components/i18n/LanguageProvider";
 
 function navButtonClass(active: boolean): string {
   return [
-    "group relative flex min-h-[52px] shrink-0 touch-manipulation items-center justify-between gap-3 rounded-xl py-3 text-[16.5px] font-bold outline-none ring-offset-2 ring-offset-[#020817] focus-visible:ring-2 focus-visible:ring-sky-500/40",
+    "group relative flex min-h-[56px] shrink-0 touch-manipulation items-center justify-between gap-3 rounded-[16px] py-3.5 text-[16px] font-bold outline-none ring-offset-2 ring-offset-[#020817] focus-visible:ring-2 focus-visible:ring-sky-500/40",
     "motion-safe:transition-[background,box-shadow,transform,color,border-color] motion-safe:duration-[220ms] motion-safe:ease-out",
     active
-      ? "border border-sky-400/22 bg-gradient-to-r from-sky-500/[0.14] via-white/[0.04] to-transparent pl-[calc(12px+0.375rem)] pr-3 text-[#F8FAFC] shadow-[inset_0_1px_0_rgba(255,255,255,0.07),0_0_40px_-12px_rgba(56,189,248,0.14),0_0_48px_-18px_rgba(139,92,246,0.06)] before:absolute before:left-[3px] before:top-2 before:bottom-2 before:w-[3px] before:rounded-full before:bg-gradient-to-b before:from-sky-300/95 before:to-indigo-400/75"
+      ? "border border-sky-300/26 bg-gradient-to-r from-sky-400/[0.16] via-white/[0.055] to-transparent pl-[calc(12px+0.375rem)] pr-3 text-[#F8FAFC] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_16px_34px_-24px_rgba(56,189,248,0.32),0_0_44px_-20px_rgba(139,92,246,0.12)] before:absolute before:left-[3px] before:top-2 before:bottom-2 before:w-[3px] before:rounded-full before:bg-gradient-to-b before:from-sky-200/95 before:to-indigo-300/78"
       : [
-          "border border-transparent px-3.5 text-[#E5E7EB]",
-          "hover:-translate-y-px hover:border-white/[0.1] hover:bg-white/[0.08] hover:text-white hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_0_32px_-12px_rgba(56,189,248,0.08)] motion-reduce:hover:translate-y-0 active:translate-y-0",
+          "border border-transparent px-3.5 text-[#CBD5E1]",
+          "hover:-translate-y-px hover:border-white/[0.12] hover:bg-white/[0.075] hover:text-white hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_0_30px_-16px_rgba(56,189,248,0.12)] motion-reduce:hover:translate-y-0 active:translate-y-0",
         ].join(" "),
   ].join(" ");
 }
@@ -117,8 +117,8 @@ export function ConciergeSidebar({
       </nav>
 
       {/* 데스크톱 사이드바 */}
-      <aside className="hidden w-[274px] shrink-0 lg:block">
-        <div className="sticky top-24 flex min-h-[calc(100vh-8rem)] flex-col rounded-[22px] border border-white/[0.13] bg-gradient-to-b from-[#0a1524]/96 via-[#07111f]/95 to-[#020817]/94 pb-6 pt-5 shadow-[0_32px_72px_-26px_rgba(0,0,0,0.58),inset_0_1px_0_rgba(255,255,255,0.055),0_0_64px_-28px_rgba(56,189,248,0.07)] backdrop-blur-xl ring-1 ring-inset ring-white/[0.04]">
+      <aside className="hidden w-[292px] shrink-0 lg:block">
+        <div className="sticky top-24 flex min-h-[calc(100vh-8rem)] flex-col rounded-[28px] border border-white/[0.14] bg-gradient-to-b from-[#0b1728]/97 via-[#07111f]/96 to-[#020817]/95 pb-6 pt-5 shadow-[0_34px_86px_-32px_rgba(0,0,0,0.68),inset_0_1px_0_rgba(255,255,255,0.07),0_0_72px_-34px_rgba(56,189,248,0.1)] backdrop-blur-xl ring-1 ring-inset ring-white/[0.045]">
           <button
             type="button"
             className="w-full border-b border-white/[0.08] px-5 pb-5 text-left transition duration-200 hover:bg-white/[0.04] hover:shadow-[inset_0_-1px_0_rgba(56,189,248,0.08)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500/35"
@@ -135,7 +135,7 @@ export function ConciergeSidebar({
             <div className="mt-1.5 text-sm font-semibold leading-snug text-[#94A3B8]">{t("brand.subline")}</div>
           </button>
 
-          <nav className="mt-4 flex flex-1 flex-col gap-1.5 px-3" aria-label="업무 영역 메뉴 (데스크톱)">
+          <nav className="mt-4 flex flex-1 flex-col gap-2 px-3.5" aria-label="업무 영역 메뉴 (데스크톱)">
             {desktopNavLinks}
           </nav>
         </div>
