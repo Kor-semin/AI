@@ -260,7 +260,7 @@ export function LandingShowroom({
       ) : null}
 
       <div className="relative z-[1] flex min-h-0 flex-1 flex-col overflow-hidden">
-        <div className="relative min-h-0 flex-1 overflow-hidden px-4 pt-2 sm:px-6 sm:pt-3 lg:pt-4">
+        <div className="relative min-h-0 flex-1 overflow-hidden px-4 pt-2 sm:px-6 sm:pt-3 lg:pt-2 xl:pt-3">
           {/* 0 — 첫 슬라이드 */}
           <div
             className={[
