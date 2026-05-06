@@ -66,7 +66,7 @@ export function ConciergeSidebar({
     <>
       {/* 모바일 · 태블릿: 가로 스크롤 메뉴 */}
       <nav
-        className="landing-mobile-nav-shell relative lg:hidden -mx-1 mb-4 max-[1023px]:mb-5"
+        className="landing-mobile-nav-shell relative xl:hidden -mx-1 mb-4 max-[1279px]:mb-5"
         aria-label="업무 영역 메뉴"
       >
         <div className="rounded-[22px] border border-white/[0.13] bg-gradient-to-b from-slate-950/65 to-[#07111f]/78 px-1.5 py-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_16px_44px_-22px_rgba(0,0,0,0.48),0_0_48px_-22px_rgba(56,189,248,0.06)] backdrop-blur-xl ring-1 ring-inset ring-white/[0.035]">
@@ -117,7 +117,7 @@ export function ConciergeSidebar({
       </nav>
 
       {/* 데스크톱 사이드바 */}
-      <aside className="hidden w-[274px] shrink-0 lg:block">
+      <aside className="hidden w-[258px] shrink-0 xl:block 2xl:w-[274px]">
         <div className="sticky top-24 flex min-h-[calc(100vh-8rem)] flex-col rounded-[22px] border border-white/[0.13] bg-gradient-to-b from-[#0a1524]/96 via-[#07111f]/95 to-[#020817]/94 pb-6 pt-5 shadow-[0_32px_72px_-26px_rgba(0,0,0,0.58),inset_0_1px_0_rgba(255,255,255,0.055),0_0_64px_-28px_rgba(56,189,248,0.07)] backdrop-blur-xl ring-1 ring-inset ring-white/[0.04]">
           <button
             type="button"

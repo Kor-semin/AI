@@ -377,7 +377,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
             id="app"
             className="crm-bg crm-app-stage relative min-h-[calc(100dvh-3.25rem)] scroll-mt-24 px-4 pb-12 pt-6 text-slate-100 max-sm:pb-[max(7rem,calc(4.5rem+env(safe-area-inset-bottom,0px)))] sm:px-6 lg:min-h-[calc(100dvh-3.5rem)]"
           >
-            <div className="mx-auto flex w-full max-w-[1520px] flex-col gap-2 lg:flex-row lg:gap-8">
+            <div className="mx-auto flex w-full max-w-[1520px] flex-col gap-2 xl:flex-row xl:gap-6 2xl:gap-8">
               <ConciergeSidebar activeSection={crmSection} onNavigate={navigateCrmSection} onOpenLanding={returnToLanding} />
               <div className="relative min-h-[60vh] min-w-0 flex-1 rounded-2xl">
                 {sellerLoading ? (
