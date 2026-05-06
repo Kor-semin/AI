@@ -1541,7 +1541,7 @@ export function CRMApp({
   return (
     <>
       <div id="crm-main" className="w-full min-w-0 pb-8 text-slate-100 lg:pb-10">
-        <div className="mx-auto flex w-full max-w-[1580px] flex-col gap-7 px-2 sm:gap-8 sm:px-4 xl:px-0">
+        <div className="mx-auto flex w-full max-w-[min(1580px,100%)] flex-col gap-6 px-1 sm:gap-8 sm:px-4 xl:px-0">
           {!uid ? (
             <div
               className="sensora-premium-card rounded-[18px] px-5 py-4 text-left text-[14px] leading-[1.65] text-slate-400 max-[390px]:px-[1.125rem]"
@@ -1919,8 +1919,8 @@ export function CRMApp({
                     고객 행을 눌러 선택합니다. 선택 시 오른쪽에서 상세·상담·다음 연락까지 이어서 다룹니다.
                   </p>
                 </div>
-                <div className="overflow-x-auto xl:overflow-y-auto xl:[max-height:calc(100vh-20rem)]">
-                  <table className="min-w-[880px] w-full border-collapse text-left">
+                <div className="overflow-x-auto overscroll-x-contain xl:overflow-y-auto xl:[max-height:calc(100vh-20rem)]">
+                  <table className="w-full min-w-[720px] border-collapse text-left lg:min-w-[820px] 2xl:min-w-[880px]">
                     <thead className="sticky top-0 z-[2] backdrop-blur-sm">
                       <tr className="border-b border-white/[0.11] bg-slate-900/92 shadow-[inset_0_-1px_0_0_rgba(255,255,255,0.08)]">
                         <th className="px-5 py-4 text-[12px] font-semibold tracking-[-0.01em] text-slate-400 sm:px-6">
