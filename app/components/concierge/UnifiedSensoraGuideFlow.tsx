@@ -51,7 +51,7 @@ const APP_PREVIEW_COPY = {
     title: "Sensora 화면 둘러보기",
     sub: "아래 안내 카드를 누르면 URL 이동 없이 확대 모달로 자세히 확인할 수 있습니다.",
     eyebrow: "앱 화면 미리보기",
-    heroTitle: "상담부터 사후관리까지 한 흐름",
+    heroTitle: "상담부터 다음 연락까지 한 흐름",
     heroDesc: "실제 고객 데이터는 저장하지 않는 미리보기입니다. 카드별 안내는 사용자가 직접 열어 확인합니다.",
     modalKicker: "확대 안내",
     openLabel: "자세히 보기",
@@ -70,7 +70,7 @@ const APP_PREVIEW_COPY = {
         id: "feature",
         tone: "feature",
         title: "기능 설명",
-        desc: "상담 메모, 고객관리, 사후관리, 출고 안내의 역할을 한 번에 봅니다.",
+        desc: "핵심 업무 영역이 어떤 역할을 하는지 한 번에 봅니다.",
         detail:
           "기능 설명은 메뉴를 반복해서 보여주기보다 각 업무가 무엇을 돕는지 정리합니다. AI는 검토용 초안을 돕고, 최종 판단과 저장은 영업사원이 직접 합니다.",
         image: "/images/guides/sensora-app-menu-target.png",
@@ -129,8 +129,8 @@ const APP_PREVIEW_COPY = {
       {
         id: "next",
         tone: "next",
-        title: "사후관리",
-        desc: "다음 연락 시점과 사후관리 흐름을 놓치지 않게 정리합니다.",
+        title: "다음 연락",
+        desc: "상담 이후 확인할 연락 시점과 실행 내용을 정리합니다.",
         detail:
           "다음 연락은 상담 이후 사용자가 확인해야 할 행동을 정리하는 영역입니다. AI가 알아서 연락한다는 의미가 아니라, 영업사원이 직접 판단하고 실행할 내용을 보기 쉽게 둡니다.",
         image: "/images/guides/sensora-current-app-screen.png",
@@ -220,7 +220,7 @@ const APP_PREVIEW_COPY = {
       {
         id: "next",
         tone: "next",
-        title: "Aftercare",
+        title: "Next outreach",
         desc: "Keep next outreach and aftercare work visible.",
         detail:
           "Next outreach keeps user-reviewed actions visible after the consultation. It does not mean AI contacts customers automatically; the salesperson decides and acts.",
