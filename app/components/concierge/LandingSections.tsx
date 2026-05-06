@@ -89,6 +89,105 @@ const MENU_ITEMS: LandingMenuRow[] = [
   },
 ];
 
+type LandingGuideCard = {
+  id: string;
+  title: string;
+  desc: string;
+  detail: string;
+  image: string;
+  points: string[];
+  style: {
+    left: string;
+    top: string;
+    width: string;
+    height: string;
+    borderRadius: string;
+  };
+};
+
+const LANDING_GUIDE_CARDS: LandingGuideCard[] = [
+  {
+    id: "tip-start",
+    title: "이용 시작 방법",
+    desc: "베타 신청부터 승인, 계정 등록 후 사용까지의 흐름을 확인합니다.",
+    detail:
+      "Sensora는 베타 신청, 내부 확인, 영업 계정 등록을 거쳐 사용할 수 있도록 안내합니다. 실제 저장 기능은 승인된 사용 경로에서만 열리며, 고객 정보는 사용자가 확인한 뒤 다룹니다.",
+    image: "/images/guides/sensora-guide-03.png",
+    points: ["베타 신청", "승인 확인", "계정 등록"],
+    style: { left: "27.1%", top: "65.9%", width: "15.5%", height: "15.1%", borderRadius: "16px" },
+  },
+  {
+    id: "tip-feature",
+    title: "기능 설명",
+    desc: "핵심 업무 영역이 어떤 역할을 하는지 한 번에 봅니다.",
+    detail:
+      "기능 설명은 메뉴를 반복해서 보여주기보다 각 업무가 무엇을 돕는지 정리합니다. AI는 검토용 초안을 돕고, 최종 판단과 저장은 영업사원이 직접 합니다.",
+    image: "/images/guides/sensora-app-menu-target.png",
+    points: ["업무 역할", "검토용 초안", "사용자 확인"],
+    style: { left: "43.9%", top: "65.9%", width: "15.5%", height: "15.1%", borderRadius: "16px" },
+  },
+  {
+    id: "tip-flow",
+    title: "실제 사용 흐름",
+    desc: "상담 기록부터 고객 요약, 메시지, 일정까지 이어지는 흐름입니다.",
+    detail:
+      "상담 내용을 기록하면 니즈와 다음 행동을 다시 확인하기 쉬운 구조로 이어집니다. 이 미리보기는 흐름 안내이며, 고객 정보가 자동 저장되거나 자동 수집되는 동작은 포함하지 않습니다.",
+    image: "/images/guides/sensora-preview-target.png",
+    points: ["상담 기록", "요약 확인", "다음 행동"],
+    style: { left: "60.8%", top: "65.9%", width: "15.5%", height: "15.1%", borderRadius: "16px" },
+  },
+  {
+    id: "tip-beta",
+    title: "베타 사용 안내",
+    desc: "실제 저장과 계정 기능은 베타 승인 후 사용할 수 있습니다.",
+    detail:
+      "베타 기간에는 화면과 문구가 조정될 수 있습니다. 민감한 고객 정보는 승인된 경로와 사용자의 확인 흐름을 기준으로 다룹니다.",
+    image: "/images/guides/sensora-current-app-screen.png",
+    points: ["예시 화면", "승인 후 사용", "사용자 확인"],
+    style: { left: "77.6%", top: "65.9%", width: "15.5%", height: "15.1%", borderRadius: "16px" },
+  },
+  {
+    id: "flow-memo",
+    title: "상담 정리 · 기록",
+    desc: "고객과 나눈 대화와 관심 차량을 업무 화면에서 다시 확인합니다.",
+    detail:
+      "상담 메모는 고객 상황, 관심 차량, 예산, 구매 시점처럼 나중에 다시 볼 근거를 남기는 영역입니다. 기록은 사용자의 선택과 확인을 전제로 합니다.",
+    image: "/images/guides/sensora-current-app-screen.png",
+    points: ["상담 메모", "관심 차량", "기록 확인"],
+    style: { left: "10.3%", top: "88.3%", width: "17.4%", height: "9.7%", borderRadius: "15px" },
+  },
+  {
+    id: "flow-needs",
+    title: "고객 니즈 요약",
+    desc: "상담 메모를 바탕으로 고객이 중요하게 본 조건을 정리합니다.",
+    detail:
+      "고객 니즈 요약은 상담 내용을 더 쉽게 다시 읽기 위한 검토 보조입니다. 자동 판단으로 확정하지 않고, 영업사원이 내용을 확인하고 수정할 수 있는 흐름을 우선합니다.",
+    image: "/images/guides/sensora-preview-target.png",
+    points: ["조건 정리", "검토 보조", "수정 가능"],
+    style: { left: "31%", top: "88.3%", width: "17.4%", height: "9.7%", borderRadius: "15px" },
+  },
+  {
+    id: "flow-sms",
+    title: "발송 문자",
+    desc: "상담 맥락을 바탕으로 사용할 수 있는 문자 초안을 확인합니다.",
+    detail:
+      "발송 문자는 바로 전송되는 자동화가 아니라 검토용 초안입니다. 고객에게 보내기 전 표현과 사실관계는 영업사원이 직접 확인합니다.",
+    image: "/images/guides/sensora-preview-target.png",
+    points: ["문자 초안", "직접 확인", "복사 전 검토"],
+    style: { left: "51.6%", top: "88.3%", width: "17.4%", height: "9.7%", borderRadius: "15px" },
+  },
+  {
+    id: "flow-next",
+    title: "다음 연락",
+    desc: "상담 이후 확인할 연락 시점과 실행 내용을 정리합니다.",
+    detail:
+      "다음 연락은 상담 이후 사용자가 확인해야 할 행동을 정리하는 영역입니다. AI가 알아서 연락한다는 의미가 아니라, 영업사원이 직접 판단하고 실행할 내용을 보기 쉽게 둡니다.",
+    image: "/images/guides/sensora-current-app-screen.png",
+    points: ["다음 연락", "일정 확인", "직접 실행"],
+    style: { left: "72.3%", top: "88.3%", width: "19%", height: "9.7%", borderRadius: "15px" },
+  },
+];
+
 const PHILOSOPHY_LINE_KEYS = [
   "landing.slides.philosophy.line1",
   "landing.slides.philosophy.line2",
@@ -159,6 +258,7 @@ export function LandingShowroom({
   const { t } = useLanguage();
   const safeSlide = ((slideIndex % SLIDE_COUNT) + SLIDE_COUNT) % SLIDE_COUNT;
   const [deliveryPrepOpen, setDeliveryPrepOpen] = useState(false);
+  const [activeGuideCard, setActiveGuideCard] = useState<LandingGuideCard | null>(null);
 
   const goSlide = useCallback(
     (i: number) => {
@@ -171,7 +271,7 @@ export function LandingShowroom({
     const el = typeof document !== "undefined" ? document.getElementById("sensora-landing-slide-deck") : null;
     if (!el) return undefined;
     const onKey = (e: KeyboardEvent) => {
-      if (deliveryPrepOpen) return;
+      if (deliveryPrepOpen || activeGuideCard) return;
       if (e.key === "ArrowRight" && safeSlide < SLIDE_COUNT - 1) {
         e.preventDefault();
         goSlide(safeSlide + 1);
@@ -183,25 +283,26 @@ export function LandingShowroom({
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [deliveryPrepOpen, goSlide, safeSlide]);
+  }, [activeGuideCard, deliveryPrepOpen, goSlide, safeSlide]);
 
   useEffect(() => {
-    if (!deliveryPrepOpen || typeof document === "undefined") return undefined;
+    if ((!deliveryPrepOpen && !activeGuideCard) || typeof document === "undefined") return undefined;
     const onEsc = (e: KeyboardEvent) => {
       if (e.key === "Escape") setDeliveryPrepOpen(false);
+      if (e.key === "Escape") setActiveGuideCard(null);
     };
     window.addEventListener("keydown", onEsc);
     return () => window.removeEventListener("keydown", onEsc);
-  }, [deliveryPrepOpen]);
+  }, [activeGuideCard, deliveryPrepOpen]);
 
   useEffect(() => {
-    if (!deliveryPrepOpen || typeof document === "undefined") return undefined;
+    if ((!deliveryPrepOpen && !activeGuideCard) || typeof document === "undefined") return undefined;
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = prev;
     };
-  }, [deliveryPrepOpen]);
+  }, [activeGuideCard, deliveryPrepOpen]);
 
   const handleMenuNavigate = useCallback(
     (row: LandingMenuRow) => {
@@ -255,6 +356,58 @@ export function LandingShowroom({
         </>
       ) : null}
 
+      {activeGuideCard ? (
+        <>
+          <button
+            type="button"
+            className="fixed inset-0 z-[282] cursor-default bg-black/[0.58] backdrop-blur-md"
+            aria-label={t("landing.showroom.tip.closeOverlay")}
+            onClick={() => setActiveGuideCard(null)}
+          />
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="landing-guide03-card-title"
+            className="fixed left-1/2 top-1/2 z-[284] flex max-h-[min(92dvh,calc(100svh-1rem))] w-[min(calc(100vw-28px),58rem)] -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-3xl border border-white/[0.13] bg-gradient-to-b from-[#0a1628]/99 to-[#050f18]/97 shadow-[0_36px_90px_-28px_rgba(0,0,0,0.78)]"
+          >
+            <div className="flex shrink-0 items-start justify-between gap-3 border-b border-white/[0.08] px-4 py-3 sm:px-5">
+              <div className="min-w-0">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-sky-300/76">확대 안내</p>
+                <h3 id="landing-guide03-card-title" className="mt-1 text-lg font-semibold tracking-tight text-slate-50 sm:text-xl">
+                  {activeGuideCard.title}
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setActiveGuideCard(null)}
+                className="min-h-10 shrink-0 cursor-pointer rounded-xl border border-white/[0.12] bg-white/[0.05] px-3 py-2 text-xs font-semibold text-slate-100 transition hover:border-sky-300/28 hover:bg-white/[0.09] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 touch-manipulation"
+              >
+                {t("preview.toc.close")}
+              </button>
+            </div>
+            <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4 sm:px-5 sm:py-5">
+              <div className="grid gap-5 lg:grid-cols-[minmax(0,1.25fr)_minmax(18rem,0.75fr)] lg:items-start">
+                <div className="relative min-h-[min(48dvh,360px)] overflow-hidden rounded-2xl border border-white/[0.11] bg-[#020817]">
+                  <Image src={activeGuideCard.image} alt="" fill className="object-contain object-center" sizes="(max-width: 1024px) calc(100vw - 56px), 560px" quality={100} />
+                </div>
+                <div>
+                  <p className="text-[0.94rem] font-semibold leading-relaxed text-sky-50">{activeGuideCard.desc}</p>
+                  <p className="mt-4 text-[0.9rem] leading-relaxed text-slate-300">{activeGuideCard.detail}</p>
+                  <ul className="mt-5 grid gap-2">
+                    {activeGuideCard.points.map((point) => (
+                      <li key={`${activeGuideCard.id}-${point}`} className="flex items-center gap-2 rounded-2xl border border-white/[0.09] bg-white/[0.04] px-3 py-2.5 text-[0.84rem] font-semibold text-slate-200">
+                        <span className="size-2 rounded-full bg-sky-300/78" aria-hidden />
+                        {point}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      ) : null}
+
       <div className="relative z-[1] flex min-h-0 flex-1 flex-col overflow-hidden">
         <div className="relative min-h-0 flex-1 overflow-hidden px-4 pt-2 sm:px-6 sm:pt-3 lg:pt-2 xl:pt-3">
           {/* 0 — 첫 슬라이드 */}
@@ -300,10 +453,19 @@ export function LandingShowroom({
                 <Link href="/register" prefetch={false} className="landing-guide03-hotspot landing-guide03-hotspot--hero-register" aria-label={t("auth.salesRegistration")}>
                   <span className="sr-only">{t("auth.salesRegistration")}</span>
                 </Link>
-                <button type="button" onClick={onOpenAppWorkspace} className="landing-guide03-hotspot landing-guide03-hotspot--preview-panel" aria-label={t("cta.tryAppExperience")}>
-                  <span className="sr-only">{t("cta.tryAppExperience")}</span>
-                </button>
 
+                {LANDING_GUIDE_CARDS.map((card) => (
+                  <button
+                    key={card.id}
+                    type="button"
+                    onClick={() => setActiveGuideCard(card)}
+                    style={card.style}
+                    className="landing-guide03-hotspot landing-guide03-hotspot--guide-card"
+                    aria-label={`${card.title} · ${t("landing.showroom.concept.tapToExpand")}`}
+                  >
+                    <span className="sr-only">{card.title}</span>
+                  </button>
+                ))}
               </div>
             </div>
           </div>
