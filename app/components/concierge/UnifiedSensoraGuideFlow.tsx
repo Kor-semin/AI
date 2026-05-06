@@ -20,6 +20,7 @@ const GUIDE_FLOW_GUIDES = SENSORA_GUIDES.filter((guide) => guide.id !== "sensora
 const DEFAULT_FLOW_GUIDE_ID: SensoraGuideId = "sensora-guide-01";
 
 const WIZARD_LAST = 3;
+const APP_PREVIEW_TABS = ["all", "customers", "ai", "followup", "delivery"] as const;
 
 const glassInteractive =
   "sensora-glass-surface rounded-2xl transition-[border-color,box-shadow] duration-200 hover:border-sky-400/38 hover:shadow-[0_0_44px_-16px_rgba(56,189,248,0.18)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/38";
@@ -39,22 +40,37 @@ type AppPreviewCopy = {
   title: string;
   sub: string;
   eyebrow: string;
-  heroTitle: string;
-  heroDesc: string;
-  modalKicker: string;
-  openLabel: string;
   cards: AppPreviewGuideCard[];
 };
+type AppPreviewTab = (typeof APP_PREVIEW_TABS)[number];
+type AppPreviewCardTone = "customers" | "ai" | "followup" | "delivery";
+type AppPreviewCard =
+  | {
+      id: AppPreviewCardTone;
+      tone: AppPreviewCardTone;
+      title: string;
+      desc: string;
+      action: string;
+      kind: "section";
+      section: CrmSection;
+      targetPath: string;
+      points: string[];
+    }
+  | {
+      id: "delivery";
+      tone: "delivery";
+      title: string;
+      desc: string;
+      action: string;
+      kind: "delivery";
+      points: string[];
+    };
 
 const APP_PREVIEW_COPY = {
   ko: {
     title: "Sensora 화면 둘러보기",
-    sub: "아래 안내 카드를 누르면 URL 이동 없이 확대 모달로 자세히 확인할 수 있습니다.",
+    sub: "고객관리, AI 비서, 사후관리, 출고 안내를 선택해 확인해보세요.",
     eyebrow: "앱 화면 미리보기",
-    heroTitle: "상담부터 다음 연락까지 한 흐름",
-    heroDesc: "실제 고객 데이터는 저장하지 않는 미리보기입니다. 카드별 안내는 사용자가 직접 열어 확인합니다.",
-    modalKicker: "확대 안내",
-    openLabel: "자세히 보기",
     cards: [
       {
         id: "start",
@@ -140,12 +156,8 @@ const APP_PREVIEW_COPY = {
   },
   en: {
     title: "Browse Sensora screens",
-    sub: "Open each guide card in an in-place modal without leaving this preview.",
+    sub: "Choose customer management, AI assistant, aftercare, or delivery guidance screens.",
     eyebrow: "App preview",
-    heroTitle: "From consultation to aftercare",
-    heroDesc: "This preview does not store real customer data. Each card opens only when selected.",
-    modalKicker: "Expanded guide",
-    openLabel: "View details",
     cards: [
       {
         id: "start",
@@ -268,27 +280,139 @@ function IconArrowRightSoft({ className }: { className?: string }) {
   );
 }
 
-function AppPreviewScreenBrowser({ className }: { className: string }) {
+function AppPreviewScreenBrowser({
+  className,
+  onSelectSection,
+  onNavigateToAppRoute,
+}: {
+  className: string;
+  onSelectSection: (section: CrmSection) => void;
+  onNavigateToAppRoute?: (targetPath: string, section: CrmSection) => void;
+}) {
   const { language, t } = useLanguage();
-  const [activeCardId, setActiveCardId] = useState<AppPreviewGuideTone | null>(null);
+  const [deliveryPrepOpen, setDeliveryPrepOpen] = useState(false);
   const ko = language === "ko";
-  const copy = APP_PREVIEW_COPY[ko ? "ko" : "en"];
+  const copy = ko
+    ? {
+        title: "Sensora 화면 둘러보기",
+        sub: "고객관리, AI 비서, 사후관리, 출고 안내를 선택해 확인해보세요.",
+        eyebrow: "앱 화면 미리보기",
+        cards: [
+          {
+            id: "customers",
+            tone: "customers",
+            title: "고객관리",
+            desc: "상담 메모와 관심 차량을 고객별로 정리합니다.",
+            action: "고객관리 열기",
+            kind: "section",
+            section: "customers",
+            targetPath: "/?view=app#customers",
+            points: ["상담 메모", "관심 차량"],
+          },
+          {
+            id: "ai",
+            tone: "ai",
+            title: "AI 비서",
+            desc: "상담 내용을 바탕으로 검토용 초안을 제안합니다.",
+            action: "AI 비서 열기",
+            kind: "section",
+            section: "ai",
+            targetPath: "/?view=app#crm-ai-assistant",
+            points: ["검토용 초안", "니즈 정리"],
+          },
+          {
+            id: "followup",
+            tone: "followup",
+            title: "사후관리",
+            desc: "다음 연락과 사후관리 일정을 놓치지 않도록 돕습니다.",
+            action: "사후관리 열기",
+            kind: "section",
+            section: "followup",
+            targetPath: "/?view=app#follow-up",
+            points: ["다음 연락", "일정 관리"],
+          },
+          {
+            id: "delivery",
+            tone: "delivery",
+            title: "출고 안내",
+            desc: "반복되는 안내 문구를 더 정확하게 준비할 수 있도록 구성 중입니다.",
+            action: "준비 중",
+            kind: "delivery",
+            points: ["안내 문구", "준비 항목"],
+          },
+        ] satisfies AppPreviewCard[],
+      }
+    : {
+        title: "Browse Sensora screens",
+        sub: "Choose customer management, AI assistant, aftercare, or delivery guidance screens.",
+        eyebrow: "App preview",
+        cards: [
+          {
+            id: "customers",
+            tone: "customers",
+            title: "Customers",
+            desc: "Organize consultation notes and interested vehicles by customer.",
+            action: "Open customers",
+            kind: "section",
+            section: "customers",
+            targetPath: "/?view=app#customers",
+            points: ["Notes", "Vehicles"],
+          },
+          {
+            id: "ai",
+            tone: "ai",
+            title: "AI assistant",
+            desc: "Suggest review-ready drafts grounded in consultation notes.",
+            action: "Open AI assistant",
+            kind: "section",
+            section: "ai",
+            targetPath: "/?view=app#crm-ai-assistant",
+            points: ["Drafts", "Needs"],
+          },
+          {
+            id: "followup",
+            tone: "followup",
+            title: "Aftercare",
+            desc: "Keep next outreach and aftercare schedules from slipping.",
+            action: "Open aftercare",
+            kind: "section",
+            section: "followup",
+            targetPath: "/?view=app#follow-up",
+            points: ["Next touch", "Schedule"],
+          },
+          {
+            id: "delivery",
+            tone: "delivery",
+            title: "Delivery guidance",
+            desc: "We are preparing clearer recurring delivery guidance templates.",
+            action: "In preparation",
+            kind: "delivery",
+            points: ["Guidance", "Checklist"],
+          },
+        ] satisfies AppPreviewCard[],
+      };
 
-  const activeCard = copy.cards.find((card) => card.id === activeCardId) ?? null;
+  const handleCardClick = (card: AppPreviewCard) => {
+    if (card.kind === "delivery") {
+      setDeliveryPrepOpen(true);
+      return;
+    }
+    onNavigateToAppRoute?.(card.targetPath, card.section) ?? onSelectSection(card.section);
+  };
 
   useEffect(() => {
-    if (!activeCardId || typeof document === "undefined") return undefined;
+    if (!deliveryPrepOpen || typeof document === "undefined") return undefined;
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     const onEsc = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setActiveCardId(null);
+      if (e.key === "Escape") setDeliveryPrepOpen(false);
     };
     window.addEventListener("keydown", onEsc);
     return () => {
       document.body.style.overflow = prev;
       window.removeEventListener("keydown", onEsc);
     };
-  }, [activeCardId]);
+  }, [deliveryPrepOpen]);
 
   return (
     <div className={`flex min-h-0 flex-1 flex-col ${className}`.trim()}>
@@ -298,38 +422,16 @@ function AppPreviewScreenBrowser({ className }: { className: string }) {
             <div className="grid gap-5 border-b border-white/[0.09] bg-[linear-gradient(135deg,rgba(11,35,64,0.94)_0%,rgba(7,19,35,0.98)_58%,rgba(3,10,20,0.99)_100%)] px-5 py-6 sm:px-7 sm:py-8 lg:grid-cols-[minmax(0,0.72fr)_auto] lg:items-end">
               <div>
                 <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-sky-100/72">{copy.eyebrow}</p>
-                <h2 className="mt-3 max-w-[16ch] text-balance text-[clamp(2rem,5vw,4.1rem)] font-semibold leading-[1.02] tracking-[-0.055em]">{copy.title}</h2>
+                <h2 className="mt-3 max-w-[18ch] text-balance text-[clamp(2rem,5vw,4.1rem)] font-semibold leading-[1.02] tracking-[-0.055em]">{copy.title}</h2>
                 <p className="mt-4 max-w-[40rem] text-[0.95rem] font-medium leading-relaxed text-slate-300 sm:text-[1.05rem]">{copy.sub}</p>
               </div>
               <Link
                 href={JOIN_PATH}
                 prefetch={false}
-                className="inline-flex min-h-11 items-center justify-center rounded-2xl border border-white/[0.14] bg-white/[0.055] px-5 py-2.5 text-sm font-semibold text-slate-100 transition hover:bg-white/[0.085] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35"
+                className="inline-flex min-h-11 cursor-pointer items-center justify-center rounded-2xl border border-white/[0.14] bg-white/[0.055] px-5 py-2.5 text-sm font-semibold text-slate-100 transition hover:bg-white/[0.085] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35"
               >
                 {t("cta.joinBeta")}
               </Link>
-            </div>
-
-            <div className="grid gap-5 border-b border-white/[0.08] px-5 py-5 sm:px-7 lg:grid-cols-[minmax(0,1.1fr)_minmax(18rem,0.9fr)] lg:items-center">
-              <div className="relative overflow-hidden rounded-[26px] border border-white/[0.11] bg-[#07111f] shadow-[0_24px_72px_-42px_rgba(0,0,0,0.78)]">
-                <Image
-                  src="/images/guides/sensora-preview-target.png"
-                  alt=""
-                  width={1440}
-                  height={900}
-                  className="block h-auto w-full object-cover"
-                  sizes="(max-width: 1024px) calc(100vw - 40px), 650px"
-                  quality={100}
-                />
-              </div>
-              <div className="rounded-[24px] border border-white/[0.1] bg-white/[0.045] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.065)]">
-                <p className="text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-sky-200/74">{copy.eyebrow}</p>
-                <h3 className="mt-3 text-[clamp(1.35rem,3.4vw,2.2rem)] font-semibold leading-tight tracking-[-0.04em] text-slate-50">{copy.heroTitle}</h3>
-                <p className="mt-3 text-[0.9rem] leading-relaxed text-slate-300">{copy.heroDesc}</p>
-                <p className="mt-5 rounded-2xl border border-sky-400/18 bg-sky-500/[0.07] px-4 py-3 text-[0.82rem] font-medium leading-relaxed text-sky-100/92">
-                  {ko ? "카드는 새 페이지로 이동하지 않고 이 화면 위에서 확대됩니다." : "Cards expand on this screen without opening a new page."}
-                </p>
-              </div>
             </div>
 
             <div className="grid gap-4 px-5 py-5 sm:px-7 sm:py-7 lg:grid-cols-2">
@@ -337,15 +439,19 @@ function AppPreviewScreenBrowser({ className }: { className: string }) {
                 <button
                   key={card.id}
                   type="button"
-                  onClick={() => setActiveCardId(card.id)}
-                  className="app-preview-guide-card group grid min-h-[15.5rem] w-full cursor-pointer touch-manipulation gap-4 rounded-[26px] border border-white/[0.1] bg-white/[0.045] p-4 text-left shadow-[0_18px_54px_-38px_rgba(0,0,0,0.74),inset_0_1px_0_rgba(255,255,255,0.07)] transition-[transform,border-color,background-color,box-shadow] duration-200 hover:-translate-y-0.5 hover:border-sky-300/28 hover:bg-white/[0.065] hover:shadow-[0_24px_64px_-40px_rgba(14,165,233,0.22)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 motion-reduce:transition-none motion-reduce:hover:translate-y-0 sm:grid-cols-[minmax(8.5rem,0.82fr)_minmax(0,1fr)]"
-                  aria-label={`${card.title} · ${copy.openLabel}`}
+                  onClick={() => handleCardClick(card)}
+                  className="app-preview-guide-card group grid min-h-[14.5rem] w-full cursor-pointer touch-manipulation gap-4 rounded-[26px] border border-white/[0.1] bg-white/[0.045] p-4 text-left shadow-[0_18px_54px_-38px_rgba(0,0,0,0.74),inset_0_1px_0_rgba(255,255,255,0.07)] transition-[transform,border-color,background-color,box-shadow] duration-200 hover:-translate-y-0.5 hover:border-sky-300/28 hover:bg-white/[0.065] hover:shadow-[0_24px_64px_-40px_rgba(14,165,233,0.22)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+                  aria-label={`${card.title} · ${card.action}`}
                 >
-                  <span className="relative block min-h-[9.5rem] overflow-hidden rounded-[22px] border border-white/[0.1] bg-[#0b1220] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
-                    <Image src={card.image} alt="" fill className="object-cover object-center opacity-[0.9] transition duration-300 group-hover:scale-[1.025]" sizes="(max-width: 640px) calc(100vw - 72px), 260px" quality={96} />
-                    <span className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#020817]/76 via-[#020817]/16 to-transparent" aria-hidden />
-                    <span className="absolute bottom-3 left-3 rounded-full border border-white/[0.12] bg-[#020817]/72 px-3 py-1 text-[0.72rem] font-semibold text-sky-100 backdrop-blur-md">
-                      {copy.openLabel}
+                  <span className="flex items-center justify-between border-b border-white/[0.08] pb-3">
+                    <span className="text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-slate-500">Sensora</span>
+                    <span
+                      className={[
+                        "rounded-full px-2.5 py-1 text-[0.68rem] font-semibold",
+                        card.tone === "customers" ? "bg-sky-300/[0.12] text-sky-100" : card.tone === "ai" ? "bg-violet-300/[0.14] text-violet-100" : card.tone === "followup" ? "bg-emerald-300/[0.12] text-emerald-100" : "bg-slate-300/[0.12] text-slate-200",
+                      ].join(" ")}
+                    >
+                      {card.title}
                     </span>
                   </span>
 
@@ -359,8 +465,8 @@ function AppPreviewScreenBrowser({ className }: { className: string }) {
                         </span>
                       ))}
                     </span>
-                    <span className="mt-4 inline-flex min-h-10 items-center gap-1.5 rounded-2xl border border-white/[0.1] bg-white/[0.04] px-4 py-2 text-[0.84rem] font-semibold text-sky-100 transition group-hover:border-sky-300/22 group-hover:bg-sky-300/[0.07]">
-                      {copy.openLabel}
+                    <span className="mt-5 inline-flex min-h-10 items-center gap-1.5 rounded-2xl border border-white/[0.1] bg-white/[0.04] px-4 py-2 text-[0.84rem] font-semibold text-sky-100 transition group-hover:border-sky-300/22 group-hover:bg-sky-300/[0.07]">
+                      {card.action}
                       <IconArrowRightSoft className="size-[0.95rem] shrink-0 opacity-80" />
                     </span>
                   </span>
@@ -371,54 +477,31 @@ function AppPreviewScreenBrowser({ className }: { className: string }) {
         </div>
       </div>
 
-      {activeCard ? (
+      {deliveryPrepOpen ? (
         <>
           <button
             type="button"
-            className="fixed inset-0 z-[478] cursor-default bg-black/[0.58] backdrop-blur-md"
-            aria-label={t("landing.showroom.tip.closeOverlay")}
-            onClick={() => setActiveCardId(null)}
+            className="fixed inset-0 z-[478] cursor-default bg-black/[0.55] backdrop-blur-md"
+            aria-label={t("landing.slides.deliveryPrep.dismiss")}
+            onClick={() => setDeliveryPrepOpen(false)}
           />
           <div
             role="dialog"
             aria-modal="true"
-            aria-labelledby="app-preview-guide-detail-title"
-            className="fixed left-1/2 top-1/2 z-[479] flex max-h-[min(92dvh,calc(100svh-1rem))] w-[min(calc(100vw-28px),58rem)] -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-3xl border border-white/[0.13] bg-gradient-to-b from-[#0a1628]/99 to-[#050f18]/97 shadow-[0_36px_90px_-28px_rgba(0,0,0,0.78)]"
+            aria-labelledby="app-preview-delivery-prep-title"
+            className="fixed left-1/2 top-1/2 z-[479] w-[min(calc(100vw-28px),24rem)] -translate-x-1/2 -translate-y-1/2 rounded-3xl border border-white/[0.13] bg-gradient-to-b from-[#0a1628]/99 to-[#050f18]/97 p-5 shadow-[0_36px_90px_-28px_rgba(0,0,0,0.78)]"
           >
-            <div className="flex shrink-0 items-start justify-between gap-3 border-b border-white/[0.08] px-4 py-3 sm:px-5">
-              <div className="min-w-0">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-sky-300/76">{copy.modalKicker}</p>
-                <h3 id="app-preview-guide-detail-title" className="mt-1 text-lg font-semibold tracking-tight text-slate-50 sm:text-xl">
-                  {activeCard.title}
-                </h3>
-              </div>
-              <button
-                type="button"
-                onClick={() => setActiveCardId(null)}
-                className="min-h-10 shrink-0 cursor-pointer rounded-xl border border-white/[0.12] bg-white/[0.05] px-3 py-2 text-xs font-semibold text-slate-100 transition hover:border-sky-300/28 hover:bg-white/[0.09] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 touch-manipulation"
-              >
-                {t("preview.toc.close")}
-              </button>
-            </div>
-            <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4 sm:px-5 sm:py-5">
-              <div className="grid gap-5 lg:grid-cols-[minmax(0,1.25fr)_minmax(18rem,0.75fr)] lg:items-start">
-                <div className="relative min-h-[min(48dvh,360px)] overflow-hidden rounded-2xl border border-white/[0.11] bg-[#020817]">
-                  <Image src={activeCard.image} alt="" fill className="object-contain object-center" sizes="(max-width: 1024px) calc(100vw - 56px), 560px" quality={100} />
-                </div>
-                <div>
-                  <p className="text-[0.94rem] font-semibold leading-relaxed text-sky-50">{activeCard.desc}</p>
-                  <p className="mt-4 text-[0.9rem] leading-relaxed text-slate-300">{activeCard.detail}</p>
-                  <ul className="mt-5 grid gap-2">
-                    {activeCard.points.map((point) => (
-                      <li key={`modal-${activeCard.id}-${point}`} className="flex items-center gap-2 rounded-2xl border border-white/[0.09] bg-white/[0.04] px-3 py-2.5 text-[0.84rem] font-semibold text-slate-200">
-                        <span className="size-2 rounded-full bg-sky-300/78" aria-hidden />
-                        {point}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </div>
+            <h3 id="app-preview-delivery-prep-title" className="text-lg font-semibold tracking-tight text-slate-50">
+              {t("landing.slides.deliveryPrep.title")}
+            </h3>
+            <p className="mt-3 text-[0.92rem] leading-relaxed text-slate-300/[0.94]">{t("landing.slides.deliveryPrep.body")}</p>
+            <button
+              type="button"
+              onClick={() => setDeliveryPrepOpen(false)}
+              className="sensora-premium-primary-workspace mt-6 inline-flex min-h-12 w-full cursor-pointer items-center justify-center rounded-2xl px-5 py-3 text-sm font-semibold"
+            >
+              {t("landing.slides.deliveryPrep.dismiss")}
+            </button>
           </div>
         </>
       ) : null}
@@ -517,7 +600,9 @@ export function UnifiedSensoraGuideFlow({
 
   if (!active) return null;
 
-  if (skipIntro && variant === "dialog") return <AppPreviewScreenBrowser className={className} />;
+  if (skipIntro && variant === "dialog") {
+    return <AppPreviewScreenBrowser className={className} onSelectSection={onSelectSection} onNavigateToAppRoute={onOpenTargetPath} />;
+  }
 
   return (
     <>
