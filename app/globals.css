@@ -2581,6 +2581,7 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   display: block;
   border-radius: 999px;
   cursor: pointer;
+  pointer-events: auto;
   touch-action: manipulation;
   transition:
     background-color 160ms ease,
@@ -2613,17 +2614,19 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
 }
 
 .landing-guide03-hotspot--nav-join {
-  left: 66.5%;
-  top: 5.9%;
-  width: 8.7%;
-  height: 5.4%;
+  left: 65.9%;
+  top: 5.45%;
+  z-index: 4;
+  width: 9.6%;
+  height: 6.2%;
 }
 
 .landing-guide03-hotspot--nav-preview {
-  left: 76%;
-  top: 5.9%;
-  width: 10.2%;
-  height: 5.4%;
+  left: 75.4%;
+  top: 5.45%;
+  z-index: 4;
+  width: 11.2%;
+  height: 6.2%;
 }
 
 .landing-guide03-hotspot--nav-register {
@@ -2634,17 +2637,19 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
 }
 
 .landing-guide03-hotspot--hero-join {
-  left: 6.6%;
-  top: 47%;
-  width: 11.4%;
-  height: 6.2%;
+  left: 7%;
+  top: 39.75%;
+  z-index: 4;
+  width: 14%;
+  height: 7.35%;
 }
 
 .landing-guide03-hotspot--hero-preview {
-  left: 18.9%;
-  top: 47%;
-  width: 12.9%;
-  height: 6.2%;
+  left: 22%;
+  top: 39.75%;
+  z-index: 4;
+  width: 15.4%;
+  height: 7.35%;
 }
 
 .landing-guide03-hotspot--hero-register {
@@ -2692,70 +2697,6 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   width: 10.4%;
   height: 18.4%;
   border-radius: 22px;
-}
-
-.landing-guide03-hotspot--tip-start {
-  left: 27.1%;
-  top: 65.9%;
-  width: 15.5%;
-  height: 15.1%;
-  border-radius: 16px;
-}
-
-.landing-guide03-hotspot--tip-feature {
-  left: 43.9%;
-  top: 65.9%;
-  width: 15.5%;
-  height: 15.1%;
-  border-radius: 16px;
-}
-
-.landing-guide03-hotspot--tip-flow {
-  left: 60.8%;
-  top: 65.9%;
-  width: 15.5%;
-  height: 15.1%;
-  border-radius: 16px;
-}
-
-.landing-guide03-hotspot--tip-beta {
-  left: 77.6%;
-  top: 65.9%;
-  width: 15.5%;
-  height: 15.1%;
-  border-radius: 16px;
-}
-
-.landing-guide03-hotspot--flow-memo {
-  left: 10.3%;
-  top: 88.3%;
-  width: 17.4%;
-  height: 9.7%;
-  border-radius: 15px;
-}
-
-.landing-guide03-hotspot--flow-needs {
-  left: 31%;
-  top: 88.3%;
-  width: 17.4%;
-  height: 9.7%;
-  border-radius: 15px;
-}
-
-.landing-guide03-hotspot--flow-sms {
-  left: 51.6%;
-  top: 88.3%;
-  width: 17.4%;
-  height: 9.7%;
-  border-radius: 15px;
-}
-
-.landing-guide03-hotspot--flow-next {
-  left: 72.3%;
-  top: 88.3%;
-  width: 19%;
-  height: 9.7%;
-  border-radius: 15px;
 }
 
 .landing-first-screen-primary-cta.landing-enterprise-btn-primary {
