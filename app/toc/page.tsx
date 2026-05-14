@@ -1,24 +1,11 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect } from "react";
 
-const STORAGE_KEY = "crm.notebookCoverDismissed";
+import { FINANCE_TOC_STEP_TARGETS, financeTocAppHref } from "@/app/toc/financeTocMap";
 
-const TOC_ENTRIES: ReadonlyArray<{
-  step: string;
-  label: string;
-  href: string;
-}> = [
-  { step: "01", label: "리드 목록 · 검색", href: "/#crm-aside" },
-  { step: "02", label: "상담 고객 요약", href: "/#crm-detail-header" },
-  { step: "03", label: "고객·차량 정보", href: "/#crm-block-profile" },
-  { step: "04", label: "금융 조건·메모", href: "/#crm-block-budget" },
-  { step: "05", label: "금융 안내 문구", href: "/#crm-block-quick-tpl" },
-  { step: "06", label: "금융 다음 안내", href: "/#crm-block-next" },
-  { step: "07", label: "상담 · 출고 일정", href: "/#crm-block-events" },
-  { step: "08", label: "템플릿 관리", href: "/?tab=templates#crm-block-templates" },
-  { step: "09", label: "실적 요약 · 백업", href: "/#crm-block-global" },
-];
+const STORAGE_KEY = "crm.notebookCoverDismissed";
 
 export default function TocPage() {
   useEffect(() => {
@@ -62,11 +49,13 @@ export default function TocPage() {
         </header>
 
         <div className="grid w-full flex-1 grid-cols-1 gap-3.5 sm:grid-cols-2 sm:gap-4 lg:max-w-none lg:gap-4">
-          {TOC_ENTRIES.map((item, idx) => (
-            <a
-              key={item.href + item.step}
-              href={item.href}
-              className="toc-grid-item-animate group relative flex min-h-[5.85rem] w-full flex-col items-center justify-center overflow-hidden rounded-2xl border border-[#d1c6ba]/92 bg-[linear-gradient(170deg,#fffcf9f8_0%,#f7f2ecee_54%,#efe9e2fb_100%)] px-[1.25rem] py-[1.25rem] text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.92),0_14px_36px_-18px_rgba(90,78,62,0.14)] backdrop-blur-[8px] transition-[transform,box-shadow,border-color,background-image] hover:-translate-y-0.5 hover:border-[#c8b098]/95 hover:bg-[linear-gradient(170deg,#fffffffb_0%,#faf7f4f9_54%,#f4ece5ff_100%)] hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.98),0_22px_44px_-16px_rgba(90,78,62,0.18)] active:translate-y-0"
+          {FINANCE_TOC_STEP_TARGETS.map((item, idx) => (
+            <Link
+              key={item.step}
+              href={financeTocAppHref(item.section)}
+              prefetch={false}
+              aria-label={item.ariaLabel}
+              className="toc-grid-item-animate group relative flex min-h-[5.85rem] w-full flex-col items-center justify-center overflow-hidden rounded-2xl border border-[#d1c6ba]/92 bg-[linear-gradient(170deg,#fffcf9f8_0%,#f7f2ecee_54%,#efe9e2fb_100%)] px-[1.25rem] py-[1.25rem] text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.92),0_14px_36px_-18px_rgba(90,78,62,0.14)] backdrop-blur-[8px] transition-[transform,box-shadow,border-color,background-image] hover:-translate-y-0.5 hover:border-[#c8b098]/95 hover:bg-[linear-gradient(170deg,#fffffffb_0%,#faf7f4f9_54%,#f4ece5ff_100%)] hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.98),0_22px_44px_-16px_rgba(90,78,62,0.18)] active:scale-[0.99] active:translate-y-0 touch-manipulation"
               style={{ animationDelay: `${0.035 + idx * 0.05}s` }}
             >
               <div className="absolute inset-x-3 top-0 h-px bg-gradient-to-r from-transparent via-[#d4baa2]/42 to-transparent opacity-95" aria-hidden />
@@ -80,7 +69,7 @@ export default function TocPage() {
               <span className="mt-2 inline-block translate-x-0 text-[15px] font-semibold text-[#9a8674]/70 opacity-90 transition-colors group-hover:text-[#6b5844]" aria-hidden>
                 →
               </span>
-            </a>
+            </Link>
           ))}
         </div>
 
@@ -108,12 +97,14 @@ export default function TocPage() {
 
         <div className="mt-auto flex w-full max-w-xl shrink-0 flex-col items-center gap-4 px-2 pt-[3.75rem]">
           <span className="text-[11px] font-semibold tracking-[0.24em] text-[#83756a]">업무 시작</span>
-          <a
-            href="/#crm-main"
-            className="flex min-h-[3.95rem] w-full cursor-pointer items-center justify-center rounded-2xl bg-[linear-gradient(165deg,#fffffd_0%,#ebe2d8_42%,#d4baa2_118%)] px-10 py-[1rem] text-center text-[clamp(1.1rem,2.85vw,1.42rem)] font-black tracking-[-0.03em] text-[#17120f] shadow-[0_22px_48px_-10px_rgba(90,78,62,0.22)] ring-1 ring-[#dcd0c6]/92 transition-[transform,box-shadow] hover:-translate-y-0.5 hover:shadow-[0_28px_56px_-8px_rgba(90,78,62,0.28)] active:translate-y-0"
+          <Link
+            href={financeTocAppHref("dashboard")}
+            prefetch={false}
+            aria-label="업무 요약 대시보드로 이동"
+            className="flex min-h-[3.95rem] w-full cursor-pointer items-center justify-center rounded-2xl bg-[linear-gradient(165deg,#fffffd_0%,#ebe2d8_42%,#d4baa2_118%)] px-10 py-[1rem] text-center text-[clamp(1.1rem,2.85vw,1.42rem)] font-black tracking-[-0.03em] text-[#17120f] shadow-[0_22px_48px_-10px_rgba(90,78,62,0.22)] ring-1 ring-[#dcd0c6]/92 transition-[transform,box-shadow] hover:-translate-y-0.5 hover:shadow-[0_28px_56px_-8px_rgba(90,78,62,0.28)] active:scale-[0.99] active:translate-y-0 touch-manipulation"
           >
             업무 대시보드 열기
-          </a>
+          </Link>
         </div>
       </div>
     </main>
