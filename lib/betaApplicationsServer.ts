@@ -1,3 +1,5 @@
+import type { Firestore } from "firebase-admin/firestore";
+
 import type { BetaSignupWireBody } from "@/lib/betaSignupSubmit";
 import { normalizeEmailForBetaAccess } from "@/lib/betaEmailNormalize";
 
@@ -86,9 +88,8 @@ export async function upsertBetaApplicationFromJoin(body: BetaSignupWireBody): P
   return true;
 }
 
-export async function listBetaApplications(): Promise<BetaApplicationRecord[]> {
-  const db = getAdminFirestore();
-  if (!db) return [];
+/** Firestore 인스턴스가 준비된 경우 `betaApplications` 컬렉션을 조회합니다(빈 컬렉션은 []). */
+export async function listBetaApplicationsFromDb(db: Firestore): Promise<BetaApplicationRecord[]> {
   const snap = await db.collection(COLLECTION).limit(400).get();
   const out: BetaApplicationRecord[] = [];
   for (const d of snap.docs) {
@@ -111,6 +112,12 @@ export async function listBetaApplications(): Promise<BetaApplicationRecord[]> {
   }
   out.sort((a, b) => (b.submittedAt || "").localeCompare(a.submittedAt || ""));
   return out;
+}
+
+export async function listBetaApplications(): Promise<BetaApplicationRecord[]> {
+  const db = getAdminFirestore();
+  if (!db) return [];
+  return listBetaApplicationsFromDb(db);
 }
 
 export async function setBetaApplicationStatus(
