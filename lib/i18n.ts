@@ -62,6 +62,20 @@ export type TranslationKey =
   | "join.formLegend"
   | "join.fillAllFields"
   | "join.invalidEmail"
+  | "join.emailHint"
+  | "landing.mobileHome.mainTitle"
+  | "landing.mobileHome.subline"
+  | "landing.mobileHome.blurb"
+  | "cta.emailLogin"
+  | "cta.startCustomerCare"
+  | "auth.loginTitle"
+  | "auth.loginSubtitle"
+  | "auth.loginPostButtonNote"
+  | "auth.loginBetaPrompt"
+  | "auth.loginFirebaseEnvHint"
+  | "auth.switchAccount"
+  | "register.sellerGate.defaultLine"
+  | "register.sellerGate.changeAccount"
   | "form.name"
   | "form.contact"
   | "form.email"
@@ -656,7 +670,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "hero.description":
       "고객 상담과 일정까지 한 화면에 모읍니다. AI는 검토용 요약과 문자 초안을 정리하고, 저장·판단은 항상 영업사원이 합니다.",
     "cta.joinBeta": "베타 신청하기",
-    "cta.tryAppExperience": "앱 화면 미리보기",
+    "cta.tryAppExperience": "앱 화면 둘러보기",
     "cta.openAppWorkspace": "앱 워크스페이스 열기",
     "cta.viewDemo": "데모 보기",
     "cta.tryAIDemo": "AI 비서 체험하기",
@@ -669,12 +683,28 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "auth.salesRegistration": "영업 계정 등록",
     "join.title": "베타 신청",
     "join.intro":
-      "Sensora Auto CRM 베타 신청을 받고 있습니다.\n신청 내용을 검토한 뒤 순차적으로 연락드리겠습니다.",
+      "Sensora Auto CRM 베타 신청을 받고 있습니다.\n신청 내용을 검토한 뒤 순차적으로 연락드립니다.\n사용 중인 회사·포털·개인 이메일 모두 남기실 수 있습니다(형식만 맞으면 됩니다).",
     "join.backHome": "홈으로 돌아가기",
     "join.loading": "불러오는 중…",
     "join.formLegend": "Sensora Auto CRM 베타 신청 폼",
     "join.fillAllFields": "모든 항목을 입력해 주세요.",
     "join.invalidEmail": "이메일 형식을 확인해 주세요.",
+    "join.emailHint":
+      "회사·팀 메일, 포털(naver, daum, kakao 등), 개인 도메인 등 자주 쓰는 이메일을 적어 주세요. 특정 서비스만 허용되지는 않습니다.",
+    "landing.mobileHome.mainTitle": "SENSORA",
+    "landing.mobileHome.subline": "자동차 영업사원을 위한 AI 고객관리 워크스페이스",
+    "landing.mobileHome.blurb": "상담부터 사후관리까지,\n고객관리 흐름을 한곳에서 정리합니다.",
+    "cta.emailLogin": "이메일로 로그인",
+    "cta.startCustomerCare": "고객관리 시작하기",
+    "auth.loginTitle": "Sensora Auto CRM 로그인",
+    "auth.loginSubtitle": "베타 승인을 받은 이메일로 로그인해 주세요.",
+    "auth.loginPostButtonNote": "베타 승인 후 고객관리 기능을 사용할 수 있습니다.",
+    "auth.loginBetaPrompt": "아직 베타 신청 전이라면 먼저 신청서를 제출해 주세요.",
+    "auth.loginFirebaseEnvHint":
+      "로그인을 위해 Firebase 연결이 필요합니다(.env.local의 NEXT_PUBLIC_FIREBASE_* 항목, .env.example 참고). 서버를 재시작한 뒤 다시 시도해 주세요. 베타 이용은 /join 에서 신청 후 승인된 이메일로 진행됩니다.",
+    "auth.switchAccount": "다른 이메일로 로그인",
+    "register.sellerGate.defaultLine": "로그인한 뒤 명함 이미지를 제출하면 승인 요청이 접수됩니다.",
+    "register.sellerGate.changeAccount": "다른 이메일로 로그인",
     "form.name": "이름",
     "form.contact": "연락처",
     "form.email": "이메일",
@@ -693,24 +723,24 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "join.devBetaEndpointHint":
       "개발 전용: 베타 폼을 시트·웹훅으로 보내려면 NEXT_PUBLIC_BETA_SIGNUP_ENDPOINT(예: Google Apps Script URL)를 설정하세요. 비어 있으면 원격 저장 없이 제출만 확인할 수 있습니다.",
     "register.title": "영업 계정 등록",
-    "register.continueWithGoogle": "Google로 시작하기",
+    "register.continueWithGoogle": "이메일로 로그인",
     "register.intro":
       "Sensora Auto CRM 사용을 위한 영업 계정 정보를 등록합니다.\n입력한 정보는 계정 확인과 베타 승인 상태 안내에 사용됩니다.",
     "register.flowLeadGoogleOn":
-      "Google 계정으로 로그인한 뒤, 직접 촬영·선택한 명함 이미지를 올리면 운영 검토가 시작됩니다.",
+      "로그인한 뒤, 직접 촬영·선택한 명함 이미지를 올리면 운영 검토가 시작됩니다.",
     "register.flowLeadGoogleOff":
-      "현재 Google 로그인은 준비 중입니다. 메인 화면에서 로컬 저장(MVP) 모드로 먼저 이용해 주세요.",
+      "현재 로그인 연동은 준비 중입니다. 홈에서 로컬 저장 모드로 먼저 이용해 주세요.",
     "register.trustNoticeLine1":
       "입력하신 정보는 영업 계정 확인과 베타 승인 안내를 위해서만 사용됩니다.",
     "register.trustNoticeLine2": "Sensora는 고객 연락처나 고객 정보를 자동으로 수집하지 않습니다.",
-    "register.stepIdentify": "Google 로그인으로 계정을 확인합니다(SMS 없음).",
+    "register.stepIdentify": "로그인으로 계정을 확인합니다(SMS 없음).",
     "register.stepCard": "명함 이미지는 사용자가 직접 촬영·파일 선택해 업로드합니다.",
     "register.stepInfrastructure":
       "Firestore·Storage는 무료 한도(Spark) 안에서 쓰시는 것을 권장합니다.",
-    "register.errorGoogleDisabled": "현재 Google 로그인은 잠시 꺼져 있습니다(준비중).",
+    "register.errorGoogleDisabled": "현재 로그인은 일시적으로 비활성화되어 있습니다(준비 중).",
     "register.errorFirebaseEnv": "지금은 이 화면에서 계정 등록을 이어 갈 수 없습니다. 베타 신청을 통해 남겨 주세요.",
     "register.errorPickCard": "명함 이미지를 선택해 주세요.",
-    "register.errorLoginFirst": "먼저 Google 계정으로 로그인해 주세요.",
+    "register.errorLoginFirst": "먼저 로그인해 주세요.",
     "register.errorUploadFailed": "업로드 실패.",
     "register.loadingProfile": "계정 상태를 불러오는 중…",
     "register.pendingTitle": "명함 접수 후 검토 중입니다.",
@@ -718,7 +748,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "register.linkMain": "메인으로",
     "register.doneTitle": "명함을 접수했습니다.",
     "register.doneBody":
-      "승인 전까지 같은 Google 계정으로 로그인해 두시면, 승인 직후 워크스페이스가 열립니다.",
+      "승인 전까지 같은 이메일(로그인)로 유지해 주시면, 승인이 완료된 뒤 바로 이어서 이용할 수 있습니다.",
     "register.linkWorkspace": "시작 화면으로",
     "register.uploadLead": "명함 한 장이 또렷하게 보이도록 촬영한 이미지를 직접 선택해 올려 주세요.",
     "register.uploadLeadRetry": "다시 접수합니다. 업로드를 완료해 주세요.",
@@ -748,7 +778,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "register.access.goHome": "홈으로 돌아가기",
     "register.access.betaCheckEmailLabel": "현재 확인 중인 이메일",
     "register.access.betaCheckEmailGoogleNote":
-      "위 주소는 지금 브라우저에 로그인된 Google 계정 이메일입니다. 베타 신청 시 남긴 이메일과 같아야 승인 완료로 표시됩니다.",
+      "현재 확인 중인 이메일은 로그인에 사용한 이메일입니다.\n베타 신청 시 남긴 이메일과 같아야 승인 완료로 표시됩니다.",
     "crm.stat.todayFollowups": "오늘 연락",
     "crm.stat.dealProbability": "계약 가능성",
     "crm.stat.followupNeeded": "예정된 할 일",
@@ -1330,7 +1360,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "hero.description":
       "Sensora organizes customer conversations, vehicle interests, follow-ups, message drafts, and sales pipelines with AI.",
     "cta.joinBeta": "Join the Beta",
-    "cta.tryAppExperience": "Preview app screens",
+    "cta.tryAppExperience": "Browse app screens",
     "cta.openAppWorkspace": "Open the Workspace",
     "cta.viewDemo": "View Demo",
     "cta.tryAIDemo": "Try the AI Assistant",
@@ -1343,12 +1373,28 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "auth.salesRegistration": "Sales registration",
     "join.title": "Join the Beta",
     "join.intro":
-      "We’re inviting applications for Sensora Auto CRM beta access.\nWe’ll review what you submit and follow up with you in order.",
+      "We’re reviewing Sensora Auto CRM beta requests.\nWe’ll follow up in order after each review.\nYou can use your work, portal, or personal email—as long as the format is valid.",
     "join.backHome": "Back to home",
     "join.loading": "Loading…",
     "join.formLegend": "Sensora Auto CRM beta request form",
     "join.fillAllFields": "Please fill in all fields.",
     "join.invalidEmail": "Please check your email format.",
+    "join.emailHint":
+      "Use your work email, a portal address (Naver, Daum, Kakao, etc.), or any personal domain you rely on—only the format is validated.",
+    "landing.mobileHome.mainTitle": "SENSORA",
+    "landing.mobileHome.subline": "AI customer-management workspace built for automotive sales reps",
+    "landing.mobileHome.blurb": "From consultation notes to aftercare,\nkeep your customer flow in one place.",
+    "cta.emailLogin": "Sign in with email",
+    "cta.startCustomerCare": "Start customer care",
+    "auth.loginTitle": "Sensora Auto CRM sign-in",
+    "auth.loginSubtitle": "Sign in with the email address that was approved for beta access.",
+    "auth.loginPostButtonNote": "After approval, you can use Sensora’s customer-management features.",
+    "auth.loginBetaPrompt": "If you haven’t applied for beta access yet, submit the signup form first.",
+    "auth.loginFirebaseEnvHint":
+      "Sign-in requires Firebase client configuration (NEXT_PUBLIC_FIREBASE_* in .env.local—see .env.example). Restart the dev server and try again. Beta access still requires signup at /join and approval for the same email.",
+    "auth.switchAccount": "Use a different email",
+    "register.sellerGate.defaultLine": "After you sign in, submit a business-card image to start the approval request.",
+    "register.sellerGate.changeAccount": "Use a different email",
     "form.name": "Name",
     "form.contact": "Contact Number",
     "form.email": "Email",
@@ -1368,26 +1414,26 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "join.devBetaEndpointHint":
       "Dev only: set NEXT_PUBLIC_BETA_SIGNUP_ENDPOINT (e.g. a Google Apps Script web app URL) to POST submissions to a sheet/webhook. If unset, submit actions are not sent remotely.",
     "register.title": "Sales Account Registration",
-    "register.continueWithGoogle": "Continue with Google",
+    "register.continueWithGoogle": "Sign in with email",
     "register.intro":
       "Register the sales account details we need for Sensora Auto CRM.\nWhat you enter is used only to verify your account and communicate beta approval status.",
     "register.flowLeadGoogleOn":
-      "After you sign in with Google, upload a business-card photo you chose or took—then our team can review it.",
+      "After you sign in, upload a business-card photo you chose or took—then our team can review it.",
     "register.flowLeadGoogleOff":
-      "Google sign-in for registration is temporarily unavailable. From the home screen you can still try local-save (MVP) mode.",
+      "Sign-in for registration is temporarily unavailable. From the home screen you can still try local-save (MVP) mode.",
     "register.trustNoticeLine1":
       "Information you submit is used only to verify your sales account and send beta approval updates.",
     "register.trustNoticeLine2":
       "Sensora does not automatically collect your customers’ contacts or CRM data.",
-    "register.stepIdentify": "Confirm your account with Google sign-in (no SMS codes).",
+    "register.stepIdentify": "Confirm your account with sign-in (no SMS codes).",
     "register.stepCard":
       "You photograph or pick the card image file yourself, then upload it—we don’t pull contacts automatically.",
     "register.stepInfrastructure":
       "Firestore and Storage are easiest to stay within the free Spark quotas.",
-    "register.errorGoogleDisabled": "Google sign-in is temporarily disabled.",
+    "register.errorGoogleDisabled": "Sign-in is temporarily disabled.",
     "register.errorFirebaseEnv": "Registration can’t continue on this screen right now. Please use the beta signup form.",
     "register.errorPickCard": "Please choose a business-card image.",
-    "register.errorLoginFirst": "Please sign in with Google first.",
+    "register.errorLoginFirst": "Please sign in first.",
     "register.errorUploadFailed": "Upload failed.",
     "register.loadingProfile": "Loading account status…",
     "register.pendingTitle": "Your card is submitted and under review.",
@@ -1396,7 +1442,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "register.linkMain": "Go to home",
     "register.doneTitle": "We received your card.",
     "register.doneBody":
-      "Stay signed in with the same Google account until approval—the workspace unlocks right after.",
+      "Keep using the same signed-in email until approval—then you can continue immediately after you’re approved.",
     "register.linkWorkspace": "Back to start",
     "register.uploadLead":
       "Choose a clear photo of one card—something you captured or selected yourself.",
@@ -1427,7 +1473,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "register.access.goHome": "Back to home",
     "register.access.betaCheckEmailLabel": "Email being checked",
     "register.access.betaCheckEmailGoogleNote":
-      "This is the Google account email signed into this browser. It must match the email on your beta signup to show as approved.",
+      "This is the email address used for sign-in.\nIt must match the email on your beta signup to show as approved.",
     "crm.stat.todayFollowups": "Today’s Follow-ups",
     "crm.stat.dealProbability": "Deal Probability",
     "crm.stat.followupNeeded": "Follow-up Needed",

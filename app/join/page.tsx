@@ -138,6 +138,7 @@ function BetaJoinForm() {
                   className={fieldClass}
                   placeholder="you@company.com"
                 />
+                <p className="mt-1.5 text-[11px] leading-snug text-slate-500 [word-break:keep-all]">{t("join.emailHint")}</p>
               </div>
 
               <div>

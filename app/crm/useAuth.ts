@@ -16,11 +16,11 @@ import { getFirebaseAuth, isFirebaseConfigured, isGoogleAuthEnabled } from "@/ap
 const REDIRECT_PENDING_KEY = "customer-manager.auth.redirectPending";
 
 function mapPopupClosedError(): Error {
-  return new Error("Google 로그인이 취소되었습니다. 다시 시도해 주세요.");
+  return new Error("로그인이 취소되었습니다. 다시 시도해 주세요.");
 }
 
 function mapPopupBlockedError(): Error {
-  return new Error("브라우저에서 Google 로그인 팝업이 차단되었습니다. 팝업 허용 후 다시 시도해 주세요.");
+  return new Error("브라우저에서 로그인 창이 차단되었습니다. 팝업을 허용한 뒤 다시 시도해 주세요.");
 }
 
 export type AuthState =
@@ -133,7 +133,7 @@ export function useAuth(): {
           throw new Error("Firebase 설정(.env.local)이 아직 없습니다. 설정 후 서버를 재시작하세요.");
         }
         if (!isGoogleAuthEnabled()) {
-          throw new Error("현재 Google 로그인은 잠시 꺼져 있습니다(준비중).");
+          throw new Error("현재 로그인은 일시적으로 비활성화되어 있습니다(준비 중).");
         }
         setAuthError(null);
         setAuth({ status: "loading" });

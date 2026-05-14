@@ -176,7 +176,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
 
   const sellerSignedIn = firebaseReady && auth.status === "signed-in";
 
-  /** Google 등 로그인 후 베타 시트 승인 + 명함 검토까지 CRM(클라우드 경로) 접근 제한 */
+  /** 로그인 후 베타 시트 승인 + 명함 검토까지 CRM(클라우드 경로) 접근 제한 */
   const sellerApproved = sellerCanUseApp(seller.profile);
   const sellerLoading = sellerSignedIn && (seller.loading || betaAccess.loading);
   const betaBlocksCrm = sellerSignedIn && betaAccess.resolved && !betaAccess.approved;
@@ -482,7 +482,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                             : "등록 정보를 다시 확인한 뒤 다시 접수할 수 있습니다."
                           : seller.profile?.approvalStatus === "pending"
                             ? "제출해 주신 명함을 확인 중입니다. 승인이 완료되면 자동으로 열립니다."
-                            : "Google 로그인 후 명함 이미지를 제출하면 승인 요청이 접수됩니다."}
+                            : t("register.sellerGate.defaultLine")}
                       </p>
                     </div>
                     <div className="flex flex-wrap items-center justify-center gap-3">
@@ -497,7 +497,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                         className="sensora-dark-ghost-btn inline-flex min-h-[48px] items-center rounded-xl px-6 py-3 text-sm font-semibold transition touch-manipulation"
                         onClick={() => signOut()}
                       >
-                        다른 Google 계정으로
+                        {t("register.sellerGate.changeAccount")}
                       </button>
                     </div>
                     <Link href="/toc" className="text-sm font-medium text-slate-400 underline underline-offset-4 hover:text-slate-200">

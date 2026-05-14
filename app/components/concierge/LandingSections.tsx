@@ -198,13 +198,42 @@ export function LandingShowroom({ onOpenAppWorkspace, onMobileOpenWorkspace }: P
       <div id="sensora-landing-mobile-root" className="relative z-[1] lg:hidden">
         <div className={`${sectionShell} pt-2 pb-1.5`}>
           <div className="mx-auto flex w-full max-w-lg flex-col gap-2.5">
-            <div className="flex items-start gap-2.5 rounded-2xl border border-white/[0.1] bg-[#050f1a]/75 px-3.5 py-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-md">
-              <SensoraAnimatedMark size={36} animated={false} className="shrink-0 drop-shadow-[0_0_16px_-4px_rgba(56,189,248,0.35)]" aria-hidden />
-              <div className="min-w-0 flex-1">
-                <h2 className="text-[0.9375rem] font-semibold leading-snug tracking-tight text-slate-50">{t("product.name")}</h2>
-                <p className="mt-0.5 line-clamp-2 text-[10.5px] leading-snug text-slate-400 [word-break:keep-all]">
-                  자동차 영업사원 전용 AI 고객관리 워크스페이스
-                </p>
+            <div className="flex flex-col gap-3 rounded-2xl border border-white/[0.1] bg-[#050f1a]/75 px-3.5 py-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-md">
+              <div className="flex flex-col items-center text-center">
+                <SensoraAnimatedMark size={40} animated={false} className="shrink-0 drop-shadow-[0_0_16px_-4px_rgba(56,189,248,0.35)]" aria-hidden />
+                <p className="mt-3 text-[10px] font-semibold uppercase tracking-[0.26em] text-slate-500">{t("landing.mobileHome.mainTitle")}</p>
+                <p className="mt-1.5 text-[0.8125rem] font-semibold leading-snug tracking-tight text-slate-50 [word-break:keep-all]">{t("landing.mobileHome.subline")}</p>
+                <p className="mt-2 max-w-[28ch] whitespace-pre-line text-[11px] leading-relaxed text-slate-400 [word-break:keep-all]">{t("landing.mobileHome.blurb")}</p>
+              </div>
+              <div className="mt-1 flex flex-col gap-2">
+                <button
+                  type="button"
+                  onClick={onOpenAppWorkspace}
+                  className={`${entPrimaryBtn} w-full justify-center py-3 text-[0.8125rem]`}
+                >
+                  {t("cta.startCustomerCare")}
+                </button>
+                <Link
+                  href="/login"
+                  prefetch={false}
+                  className="landing-enterprise-btn-secondary inline-flex w-full min-h-[48px] items-center justify-center rounded-xl border border-white/[0.14] bg-white/[0.05] px-4 py-3 text-center text-[0.8125rem] font-semibold text-slate-100 transition hover:border-sky-400/28 hover:bg-white/[0.08] touch-manipulation"
+                >
+                  {t("cta.emailLogin")}
+                </Link>
+                <Link
+                  href={JOIN_PATH}
+                  prefetch={false}
+                  className="inline-flex w-full min-h-[48px] items-center justify-center rounded-xl border border-white/[0.1] bg-transparent px-4 py-3 text-center text-[0.8125rem] font-semibold text-slate-300 transition hover:border-white/[0.16] hover:bg-white/[0.04] touch-manipulation"
+                >
+                  {t("cta.joinBeta")}
+                </Link>
+                <button
+                  type="button"
+                  onClick={onOpenAppWorkspace}
+                  className="mx-auto mt-0.5 min-h-10 px-2 text-[11px] font-semibold text-sky-300/90 underline decoration-sky-400/35 underline-offset-4 touch-manipulation"
+                >
+                  {t("cta.tryAppExperience")}
+                </button>
               </div>
             </div>
 

@@ -46,9 +46,7 @@ function LoginPageInner() {
     }
 
     if (!firebaseReady) {
-      setLocalError(
-        "Google 로그인을 사용하려면 Firebase 연결 설정이 필요합니다(.env.local의 NEXT_PUBLIC_FIREBASE_* 항목, .env.example 참고). 서버를 재시작한 뒤 다시 시도해 주세요. 베타 이용은 /join 신청 후 승인된 계정으로 진행됩니다.",
-      );
+      setLocalError(t("auth.loginFirebaseEnvHint"));
       return;
     }
 
@@ -88,11 +86,8 @@ function LoginPageInner() {
           <div className="mb-6 flex flex-col items-center text-center">
             <SensoraAnimatedMark size={52} animated={false} className="shrink-0 drop-shadow-[0_0_24px_-4px_rgba(56,189,248,0.35)]" aria-hidden />
             <p className="mt-4 text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">Sensora · Auto CRM</p>
-            <h1 className="mt-2 text-balance text-2xl font-semibold tracking-tight text-slate-50 sm:text-[1.75rem]">Sensora Auto CRM 로그인</h1>
-            <p className="mt-3 max-w-md text-pretty text-sm leading-relaxed text-slate-400 sm:text-base">
-              베타 승인을 받은 자동차 영업사원이 Sensora Auto CRM에 접속하는 화면입니다.
-            </p>
-            <p className="mt-2 text-sm font-medium text-slate-300">{t("landing.slides.enterprise.heroDefinition")}</p>
+            <h1 className="mt-2 text-balance text-2xl font-semibold tracking-tight text-slate-50 sm:text-[1.75rem]">{t("auth.loginTitle")}</h1>
+            <p className="mt-3 max-w-md text-pretty text-sm leading-relaxed text-slate-400 sm:text-base">{t("auth.loginSubtitle")}</p>
           </div>
 
           <div className="sensora-premium-card relative rounded-[24px] border border-white/[0.1] bg-[#050f1a]/75 px-6 py-8 shadow-[0_24px_64px_-32px_rgba(0,0,0,0.65)] backdrop-blur-md sm:px-10 sm:py-10">
@@ -106,14 +101,11 @@ function LoginPageInner() {
                   onClick={() => void onGoogleClick()}
                   className="sensora-premium-primary-workspace flex w-full min-h-[52px] items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold transition enabled:touch-manipulation enabled:active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  {busy ? "연결 중…" : "Google 계정으로 로그인"}
+                  {busy ? "연결 중…" : t("cta.emailLogin")}
                 </button>
 
-                <p className="mt-6 text-center text-sm leading-relaxed text-slate-400">
-                  베타 승인 후 고객관리 워크스페이스를 사용할 수 있습니다.
-                  <br />
-                  아직 베타 신청 전이라면 먼저 신청서를 제출해 주세요.
-                </p>
+                <p className="mt-6 text-center text-sm leading-relaxed text-slate-400">{t("auth.loginPostButtonNote")}</p>
+                <p className="mt-3 text-center text-sm leading-relaxed text-slate-500">{t("auth.loginBetaPrompt")}</p>
 
                 {displayError ? (
                   <p className="mt-4 rounded-lg border border-red-500/25 bg-red-950/40 px-3 py-2 text-center text-xs leading-relaxed text-red-200" role="alert">
@@ -124,7 +116,7 @@ function LoginPageInner() {
                 <div className="mt-8 border-t border-white/[0.08] pt-6 text-center">
                   <p className="text-sm text-slate-500">아직 베타 신청 전이라면?</p>
                   <Link href="/join" prefetch={false} className="mt-3 inline-flex min-h-11 items-center justify-center text-sm font-semibold text-sky-300 underline decoration-sky-400/40 underline-offset-4 hover:text-sky-200">
-                    베타 신청하러 가기
+                    {t("register.access.goJoin")}
                   </Link>
                 </div>
               </>
