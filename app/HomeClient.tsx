@@ -372,7 +372,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
         }
       >
         {view === "landing" ? (
-          <LandingShowroom onOpenAppWorkspace={openAppPreviewToc} onEnterWorkspaceSection={enterAppFromPreviewToc} />
+          <LandingShowroom onOpenAppWorkspace={openAppPreviewToc} />
         ) : null}
 
         {view === "app" ? (
