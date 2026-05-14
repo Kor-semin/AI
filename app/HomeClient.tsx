@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
 import { InspirationalBackdrop } from "@/app/components/InspirationalBackdrop";
@@ -36,8 +35,6 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
   const [view, setView] = useState<"landing" | "app">(initialView);
   const [crmSection, setCrmSection] = useState<CrmSection>("dashboard");
   const [appPreviewTocOpen, setAppPreviewTocOpen] = useState(false);
-  const [landingSlide, setLandingSlide] = useState(0);
-  const router = useRouter();
 
   const navigateCrmSection = useCallback(
     (s: CrmSection) => {
@@ -60,11 +57,6 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
   useEffect(() => {
     setView(initialView);
   }, [initialView]);
-
-  /** 랜딩 ↔ 앱 전환 시 슬라이드는 첫 화면으로 초기화 */
-  useEffect(() => {
-    if (view === "landing") setLandingSlide(0);
-  }, [view]);
 
   /** 앱 진입 시·해시 변경 시 섹션 동기화 */
   useEffect(() => {
@@ -128,7 +120,6 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
   const returnToLanding = useCallback(() => {
     setAppPreviewTocOpen(false);
     pushPreviewUrl("/?view=landing");
-    setLandingSlide(0);
     setView("landing");
   }, [pushPreviewUrl]);
 
@@ -196,7 +187,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
           "sticky top-0 z-30 isolate backdrop-blur-xl",
           /** iPhone 상태바/notch 안전영역을 반영해 헤더 콘텐츠가 겹치지 않도록 */
             view === "landing"
-            ? "hidden landing-service-nav landing-service-nav--compact pt-[max(6px,calc(env(safe-area-inset-top,0px)+2px))] pb-1 sm:pb-2"
+            ? "flex flex-col border-b border-white/[0.09] bg-[#050a14]/94 shadow-[inset_0_-1px_0_rgba(255,255,255,0.04)] landing-service-nav landing-service-nav--compact pt-[max(10px,calc(env(safe-area-inset-top,0px)+6px))] pb-2 sm:pb-2.5"
             : [
                 "border-b border-white/[0.1]",
                 "px-4 pb-3 pt-[max(14px,calc(env(safe-area-inset-top,0px)+12px))] sm:px-6",
@@ -253,25 +244,14 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                     </span>
                   ) : null}
                 </div>
-                <div className="landing-nav-header-cta-row max-lg:!hidden lg:flex w-full min-w-0 flex-col gap-2 lg:w-auto lg:max-w-none lg:flex-nowrap lg:flex-row lg:items-center lg:justify-end lg:gap-2.5 xl:gap-3">
-                  <Link
-                    href="/join"
-                    prefetch={false}
-                    className={[
-                      "landing-nav-cta-join landing-nav-cta-join--compact landing-enterprise-btn-primary relative z-[20] inline-flex min-h-10 w-auto shrink-0 items-center justify-center whitespace-nowrap rounded-lg px-4 py-2 text-center text-[0.8125rem] font-semibold tracking-tight text-slate-50",
-                      "touch-manipulation transition duration-[200ms] ease-out active:scale-[0.99]",
-                      "focus-visible:outline-none",
-                    ].join(" ")}
-                  >
-                    {t("cta.joinBeta")}
-                  </Link>
+                <div className="landing-nav-header-cta-row flex w-full min-w-0 flex-wrap items-stretch justify-end gap-x-2 gap-y-2 sm:gap-x-2.5 lg:w-auto lg:max-w-none">
                   <button
                     type="button"
                     onClick={() => {
                       openAppPreviewToc();
                     }}
                     className={[
-                      "landing-nav-cta-preview landing-nav-cta-preview--compact landing-enterprise-btn-secondary relative z-[20] inline-flex min-h-10 w-auto shrink-0 cursor-pointer items-center justify-center gap-1 rounded-lg whitespace-nowrap px-3.5 py-2 text-center text-[0.8125rem] font-semibold text-slate-100/95 backdrop-blur-sm",
+                      "landing-nav-cta-preview landing-nav-cta-preview--compact landing-enterprise-btn-secondary relative z-[20] inline-flex min-h-10 min-w-0 flex-1 cursor-pointer items-center justify-center gap-1 rounded-lg px-3 py-2 text-center text-[0.8125rem] font-semibold text-slate-100/95 backdrop-blur-sm sm:flex-none sm:whitespace-nowrap sm:px-3.5",
                       "transition duration-[180ms] ease-out focus-visible:outline-none active:scale-[0.99]",
                       "touch-manipulation",
                     ].join(" ")}
@@ -285,6 +265,34 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                     </svg>
                     {t("cta.tryAppExperience")}
                   </button>
+                  {auth.status === "signed-in" ? (
+                    <Link
+                      href="/?view=app"
+                      prefetch={false}
+                      className="landing-enterprise-btn-secondary relative z-[20] inline-flex min-h-10 min-w-0 flex-1 items-center justify-center whitespace-nowrap rounded-lg px-3.5 py-2 text-center text-[0.8125rem] font-semibold text-slate-100/95 backdrop-blur-sm transition duration-[180ms] ease-out focus-visible:outline-none active:scale-[0.99] touch-manipulation sm:flex-none"
+                    >
+                      {t("header.workspace")}
+                    </Link>
+                  ) : (
+                    <Link
+                      href="/login"
+                      prefetch={false}
+                      className="landing-enterprise-btn-secondary relative z-[20] inline-flex min-h-10 min-w-0 flex-1 items-center justify-center whitespace-nowrap rounded-lg px-3.5 py-2 text-center text-[0.8125rem] font-semibold text-slate-100/95 backdrop-blur-sm transition duration-[180ms] ease-out focus-visible:outline-none active:scale-[0.99] touch-manipulation sm:flex-none"
+                    >
+                      로그인
+                    </Link>
+                  )}
+                  <Link
+                    href="/join"
+                    prefetch={false}
+                    className={[
+                      "landing-nav-cta-join landing-nav-cta-join--compact landing-enterprise-btn-primary relative z-[20] inline-flex min-h-10 min-w-0 flex-1 items-center justify-center whitespace-nowrap rounded-lg px-4 py-2 text-center text-[0.8125rem] font-semibold tracking-tight text-slate-50 sm:flex-none",
+                      "touch-manipulation transition duration-[200ms] ease-out active:scale-[0.99]",
+                      "focus-visible:outline-none",
+                    ].join(" ")}
+                  >
+                    {t("cta.joinBeta")}
+                  </Link>
                 </div>
               </div>
             </>
@@ -364,12 +372,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
         }
       >
         {view === "landing" ? (
-          <LandingShowroom
-            slideIndex={landingSlide}
-            onSlideChange={setLandingSlide}
-            onOpenAppWorkspace={openAppPreviewToc}
-            onEnterWorkspaceSection={enterAppFromPreviewToc}
-          />
+          <LandingShowroom onOpenAppWorkspace={openAppPreviewToc} onEnterWorkspaceSection={enterAppFromPreviewToc} />
         ) : null}
 
         {view === "app" ? (
@@ -377,7 +380,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
             id="app"
             className="crm-bg crm-app-stage relative min-h-[calc(100dvh-3.25rem)] scroll-mt-24 px-4 pb-12 pt-6 text-slate-100 max-sm:pb-[max(7rem,calc(4.5rem+env(safe-area-inset-bottom,0px)))] sm:px-6 lg:min-h-[calc(100dvh-3.5rem)]"
           >
-            <div className="mx-auto flex w-full max-w-[1520px] flex-col gap-2 xl:flex-row xl:gap-6 2xl:gap-8">
+            <div className="mx-auto flex w-full max-w-[1520px] flex-col gap-2 lg:flex-row lg:gap-8">
               <ConciergeSidebar activeSection={crmSection} onNavigate={navigateCrmSection} onOpenLanding={returnToLanding} />
               <div className="relative min-h-[60vh] min-w-0 flex-1 rounded-2xl">
                 {sellerLoading ? (
@@ -514,4 +517,3 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
     </div>
   );
 }
-
