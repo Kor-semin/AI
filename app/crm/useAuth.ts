@@ -6,6 +6,7 @@ import {
   getRedirectResult,
   onAuthStateChanged,
   setPersistence,
+  signInWithPopup,
   signInWithRedirect,
   signOut,
 } from "firebase/auth";
@@ -13,6 +14,14 @@ import { useEffect, useMemo, useState } from "react";
 import { getFirebaseAuth, isFirebaseConfigured, isGoogleAuthEnabled } from "@/app/firebase/client";
 
 const REDIRECT_PENDING_KEY = "customer-manager.auth.redirectPending";
+
+function mapPopupClosedError(): Error {
+  return new Error("Google 로그인이 취소되었습니다. 다시 시도해 주세요.");
+}
+
+function mapPopupBlockedError(): Error {
+  return new Error("브라우저에서 Google 로그인 팝업이 차단되었습니다. 팝업 허용 후 다시 시도해 주세요.");
+}
 
 export type AuthState =
   | { status: "loading" }
@@ -79,7 +88,7 @@ export function useAuth(): {
           });
           setAuthError(null);
         } else if (wasPending) {
-          // Sometimes the redirect result is null but the user is still restored shortly after.
+          // 팝업 차단 등으로 redirect 폴백만 쓴 경우: 짧은 대기 후 currentUser 복원 시도
           await new Promise((r) => window.setTimeout(r, 1500));
           const u = a.currentUser;
           if (u) {
@@ -125,14 +134,57 @@ export function useAuth(): {
         }
         setAuthError(null);
         setAuth({ status: "loading" });
-        if (typeof window !== "undefined") {
-          window.sessionStorage.setItem(REDIRECT_PENDING_KEY, "1");
-        }
+
         const a = getFirebaseAuth();
         await setPersistence(a, browserLocalPersistence);
         const provider = new GoogleAuthProvider();
-        // Use redirect-only: avoids popup/handler misroutes and works more consistently.
-        await signInWithRedirect(a, provider);
+
+        if (typeof window !== "undefined") {
+          window.sessionStorage.removeItem(REDIRECT_PENDING_KEY);
+        }
+
+        try {
+          const cred = await signInWithPopup(a, provider);
+          if (cred.user) {
+            setAuth({
+              status: "signed-in",
+              uid: cred.user.uid,
+              email: cred.user.email,
+              name: cred.user.displayName,
+              phoneNumber: cred.user.phoneNumber,
+            });
+            setAuthError(null);
+          }
+        } catch (e) {
+          const code = typeof e === "object" && e !== null && "code" in e ? String((e as { code: string }).code) : "";
+
+          if (code === "auth/popup-blocked") {
+            if (typeof window !== "undefined") {
+              try {
+                setAuthError(mapPopupBlockedError().message);
+                window.sessionStorage.setItem(REDIRECT_PENDING_KEY, "1");
+                await signInWithRedirect(a, provider);
+                return;
+              } catch (e2) {
+                window.sessionStorage.removeItem(REDIRECT_PENDING_KEY);
+                setAuth({ status: "signed-out" });
+                if (e2 instanceof Error) throw e2;
+                throw new Error(String(e2));
+              }
+            }
+            setAuth({ status: "signed-out" });
+            throw mapPopupBlockedError();
+          }
+
+          if (code === "auth/popup-closed-by-user" || code === "auth/cancelled-popup-request") {
+            setAuth({ status: "signed-out" });
+            throw mapPopupClosedError();
+          }
+
+          setAuth({ status: "signed-out" });
+          if (e instanceof Error) throw e;
+          throw new Error(String(e));
+        }
       },
       signOut: async () => {
         if (!isFirebaseConfigured()) return;
@@ -143,4 +195,3 @@ export function useAuth(): {
     };
   }, [auth, authError]);
 }
-
