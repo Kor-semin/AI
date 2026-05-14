@@ -66,6 +66,7 @@ export type TranslationKey =
   | "landing.mobileHome.mainTitle"
   | "landing.mobileHome.subline"
   | "landing.mobileHome.blurb"
+  | "landing.mobileStart.topTagline"
   | "cta.emailLogin"
   | "cta.startCustomerCare"
   | "auth.loginTitle"
@@ -710,6 +711,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.mobileHome.mainTitle": "SENSORA",
     "landing.mobileHome.subline": "자동차 영업사원을 위한 AI 고객관리 워크스페이스",
     "landing.mobileHome.blurb": "상담부터 사후관리까지,\n고객관리 흐름을 한곳에서 정리합니다.",
+    "landing.mobileStart.topTagline": "자동차 영업용 AI 고객관리 워크스페이스",
     "cta.emailLogin": "이메일로 로그인",
     "cta.startCustomerCare": "고객관리 시작하기",
     "auth.loginTitle": "Sensora Auto CRM 로그인",
@@ -1416,6 +1418,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.mobileHome.mainTitle": "SENSORA",
     "landing.mobileHome.subline": "AI customer-management workspace built for automotive sales reps",
     "landing.mobileHome.blurb": "From consultation notes to aftercare,\nkeep your customer flow in one place.",
+    "landing.mobileStart.topTagline": "AI customer-management workspace for automotive sales",
     "cta.emailLogin": "Sign in with email",
     "cta.startCustomerCare": "Start customer care",
     "auth.loginTitle": "Sensora Auto CRM sign-in",

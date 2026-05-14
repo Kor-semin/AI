@@ -36,6 +36,8 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
     uid: auth.status === "signed-in" ? auth.uid : null,
   });
   const [view, setView] = useState<"landing" | "app">(initialView);
+  /** 모바일 랜딩: 업무 메뉴(둘러보기) — 시작 화면과 분리 */
+  const [mobileLandingBrowseOpen, setMobileLandingBrowseOpen] = useState(false);
   const [crmSection, setCrmSection] = useState<CrmSection>("dashboard");
   const navigateCrmSection = useCallback(
     (s: CrmSection) => {
@@ -59,6 +61,10 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
     setView(initialView);
   }, [initialView]);
 
+  useEffect(() => {
+    if (view !== "landing") setMobileLandingBrowseOpen(false);
+  }, [view]);
+
   /** 앱 진입 시·해시 변경 시 섹션 동기화 */
   useEffect(() => {
     if (view !== "app" || typeof window === "undefined") return;
@@ -78,7 +84,9 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
     const onPop = () => {
       try {
         const qs = new URLSearchParams(window.location.search);
-        setView(qs.get("view") === "app" ? "app" : "landing");
+        const next = qs.get("view") === "app" ? "app" : "landing";
+        setView(next);
+        if (next === "landing") setMobileLandingBrowseOpen(false);
       } catch {
         /* ignore */
       }
@@ -128,6 +136,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
   const returnToLanding = useCallback(() => {
     pushPreviewUrl("/?view=landing");
     setView("landing");
+    setMobileLandingBrowseOpen(false);
   }, [pushPreviewUrl]);
 
   const scrollLandingToTop = useCallback(() => {
@@ -139,6 +148,24 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
     if (typeof document === "undefined") return;
     document.getElementById("sensora-landing-cta")?.scrollIntoView({ behavior: "smooth", block: "start" });
   }, []);
+
+  /** 모바일: 헤더 「앱 체험」은 업무 메뉴(둘러보기)로, 데스크톱은 기존 워크스페이스 진입 유지 */
+  const onHeaderTryAppExperience = useCallback(() => {
+    if (typeof window !== "undefined" && window.innerWidth < 1024) {
+      setMobileLandingBrowseOpen(true);
+      scrollLandingToTop();
+      return;
+    }
+    openWorkspaceFromLanding();
+  }, [openWorkspaceFromLanding, scrollLandingToTop]);
+
+  const onMobileStartCustomerCare = useCallback(() => {
+    if (auth.status === "signed-in") {
+      enterAppFromPreviewToc("customers");
+    } else {
+      router.push("/login");
+    }
+  }, [auth.status, enterAppFromPreviewToc, router]);
 
   useEffect(() => {
     if (view !== "app") return undefined;
@@ -211,6 +238,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                 "px-4 pb-3 pt-[max(14px,calc(env(safe-area-inset-top,0px)+12px))] sm:px-6",
                 "bg-[#07111f]/88 shadow-[inset_0_-1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl",
               ].join(" "),
+          view === "landing" && !mobileLandingBrowseOpen ? "max-lg:hidden" : "",
         ].join(" ")}
       >
         <div
@@ -269,7 +297,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                 <div className="landing-nav-header-cta-row flex w-full min-w-0 flex-wrap items-stretch justify-end gap-x-2 gap-y-2 sm:gap-x-2.5 lg:w-auto lg:max-w-none">
                   <button
                     type="button"
-                    onClick={openWorkspaceFromLanding}
+                    onClick={onHeaderTryAppExperience}
                     className={[
                       "landing-nav-cta-preview landing-nav-cta-preview--compact landing-enterprise-btn-secondary relative z-[20] inline-flex min-h-10 min-w-0 flex-1 cursor-pointer items-center justify-center gap-1 rounded-lg px-3 py-2 text-center text-[0.8125rem] font-semibold text-slate-100/95 backdrop-blur-sm sm:flex-none sm:whitespace-nowrap sm:px-3.5",
                       "transition duration-[180ms] ease-out focus-visible:outline-none active:scale-[0.99]",
@@ -384,7 +412,13 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
         }
       >
         {view === "landing" ? (
-          <LandingShowroom onOpenAppWorkspace={openWorkspaceFromLanding} onMobileOpenWorkspace={goMobileWorkspace} />
+          <LandingShowroom
+            onOpenAppWorkspace={openWorkspaceFromLanding}
+            onMobileOpenWorkspace={goMobileWorkspace}
+            mobileLandingBrowseOpen={mobileLandingBrowseOpen}
+            onMobileLandingBrowseOpen={() => setMobileLandingBrowseOpen(true)}
+            onMobileStartCustomerCare={onMobileStartCustomerCare}
+          />
         ) : null}
 
         {view === "app" ? (
@@ -529,7 +563,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
         ) : null}
       </main>
 
-      {view === "landing" ? (
+      {view === "landing" && mobileLandingBrowseOpen ? (
         <MobileLandingDock
           onScrollLandingTop={scrollLandingToTop}
           onOpenCustomers={() => enterAppFromPreviewToc("customers")}

@@ -18,14 +18,17 @@ export const SPLASH_QUOTES = [
   "작은 메모가 다음 계약의 방향을 만듭니다.",
 ] as const;
 
-const STORAGE_KEY = "sensora.session.splash.v2";
+const STORAGE_KEY = "sensora.session.splash.v3";
 
-/** 본문 체류 + 페이드 인·아웃 포함 전체가 ~1.35s 내(1.4s 미만). */
-const TOTAL_BEFORE_FADE_MS = 920;
-const FADE_OUT_MS = 380;
-const BRAND_REVEAL_MS = 480;
-const QUOTE_DELAY_MS = 200;
-const QUOTE_FADE_MS = 420;
+const TOTAL_MS = 1200;
+const FADE_OUT_MS = 250;
+const FADE_OUT_START_MS = TOTAL_MS - FADE_OUT_MS;
+const BG_BRIGHTEN_MS = 200;
+const LOGO_ANIM_MS = 420;
+/** SENSORA 노출(~120ms) 이후 약 0.2초 늦춤 */
+const QUOTE_DELAY_AFTER_MOUNT_MS = 320;
+const QUOTE_FADE_MS = 380;
+const LOGO_MARK_PX = 80;
 
 function pickQuote(): string {
   const i = Math.floor(Math.random() * SPLASH_QUOTES.length);
@@ -38,9 +41,11 @@ function pickQuote(): string {
  */
 export function MobileAppSplash() {
   const [live, setLive] = useState(false);
-  const [fadeOut, setFadeOut] = useState(false);
+  const [outerFadeOut, setOuterFadeOut] = useState(false);
   const [quote, setQuote] = useState("");
-  const [showBrand, setShowBrand] = useState(false);
+  const [bgBright, setBgBright] = useState(false);
+  const [showLogo, setShowLogo] = useState(false);
+  const [showSensora, setShowSensora] = useState(false);
   const [showQuote, setShowQuote] = useState(false);
   const timersRef = useRef<number[]>([]);
 
@@ -92,9 +97,11 @@ export function MobileAppSplash() {
     setQuote(pickQuote());
     setLive(true);
 
-    const tBrand = window.setTimeout(() => setShowBrand(true), 36);
-    const tQuote = window.setTimeout(() => setShowQuote(true), QUOTE_DELAY_MS + 36);
-    const tFade = window.setTimeout(() => setFadeOut(true), TOTAL_BEFORE_FADE_MS);
+    const tBg = window.setTimeout(() => setBgBright(true), 32);
+    const tLogo = window.setTimeout(() => setShowLogo(true), 48);
+    const tSensora = window.setTimeout(() => setShowSensora(true), 120);
+    const tQuote = window.setTimeout(() => setShowQuote(true), QUOTE_DELAY_AFTER_MOUNT_MS);
+    const tFade = window.setTimeout(() => setOuterFadeOut(true), FADE_OUT_START_MS);
     const tDone = window.setTimeout(() => {
       try {
         sessionStorage.setItem(STORAGE_KEY, "1");
@@ -102,75 +109,98 @@ export function MobileAppSplash() {
         /* ignore */
       }
       setLive(false);
-      setFadeOut(false);
-      setShowBrand(false);
+      setOuterFadeOut(false);
+      setBgBright(false);
+      setShowLogo(false);
+      setShowSensora(false);
       setShowQuote(false);
-    }, TOTAL_BEFORE_FADE_MS + FADE_OUT_MS);
+    }, TOTAL_MS);
 
-    timersRef.current = [tBrand, tQuote, tFade, tDone];
+    timersRef.current = [tBg, tLogo, tSensora, tQuote, tFade, tDone];
     return () => {
       clearTimers();
     };
   }, []);
 
-  if (!live && !fadeOut) return null;
+  if (!live) return null;
 
   return (
     <div
-      className="sensora-mobile-splash fixed inset-0 z-[100] flex flex-col items-center justify-center overflow-hidden px-7"
+      className="fixed inset-0 z-[120] flex flex-col items-center justify-center overflow-hidden px-7"
       style={{
-        opacity: fadeOut ? 0 : 1,
+        opacity: outerFadeOut ? 0 : 1,
         transition: `opacity ${FADE_OUT_MS}ms ease-out`,
-        pointerEvents: fadeOut ? "none" : "auto",
+        pointerEvents: outerFadeOut ? "none" : "auto",
       }}
       aria-hidden
     >
+      <div className="pointer-events-none absolute inset-0 bg-[#020713]" aria-hidden />
       <div
-        className="sensora-mobile-splash__bg pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_92%_64%_at_50%_22%,rgba(56,189,248,0.11),transparent_58%),radial-gradient(ellipse_72%_52%_at_88%_78%,rgba(139,92,246,0.08),transparent_52%),linear-gradient(185deg,#040a14_0%,#020617_46%,#030712_100%)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_42%,rgba(88,80,236,0.20),transparent_32%),radial-gradient(circle_at_50%_60%,rgba(14,165,233,0.10),transparent_38%)] transition-opacity ease-out"
+        style={{ opacity: bgBright ? 1 : 0.82, transitionDuration: `${BG_BRIGHTEN_MS}ms` }}
         aria-hidden
       />
       <div
-        className="sensora-mobile-splash__scrim pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_48%_at_50%_42%,rgba(148,163,184,0.055),transparent_62%),linear-gradient(180deg,transparent_0%,rgba(15,23,42,0.22)_100%)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_90%_70%_at_50%_38%,rgba(15,23,42,0.5),transparent_55%)] opacity-90"
         aria-hidden
       />
+      {/* 아주 약한 별 점 — 정적, 낮은 대비 */}
+      <div className="pointer-events-none absolute inset-0 opacity-[0.14]" aria-hidden>
+        <span className="absolute left-[12%] top-[18%] size-0.5 rounded-full bg-slate-200/80" />
+        <span className="absolute right-[16%] top-[22%] size-px rounded-full bg-cyan-100/70" />
+        <span className="absolute left-[22%] bottom-[28%] size-px rounded-full bg-violet-100/60" />
+        <span className="absolute right-[24%] bottom-[20%] size-0.5 rounded-full bg-slate-300/70" />
+        <span className="absolute left-[48%] top-[12%] size-px rounded-full bg-slate-200/50" />
+      </div>
 
-      <div className="relative z-[1] flex max-w-[min(20rem,calc(100vw-2.5rem))] flex-col items-center text-center">
-        <div
-          className="relative flex items-center justify-center"
-          style={{
-            opacity: showBrand ? 1 : 0,
-            transform: showBrand ? "translateY(0) scale(1)" : "translateY(10px) scale(0.97)",
-            transition: `opacity ${BRAND_REVEAL_MS}ms ease-out, transform ${BRAND_REVEAL_MS}ms cubic-bezier(0.22, 1, 0.36, 1)`,
-          }}
-        >
+      <div className="relative z-[1] -mt-[min(8vh,3.5rem)] flex max-w-[min(20rem,calc(100vw-2.5rem))] flex-col items-center text-center">
+        <div className="relative mb-7 flex items-center justify-center">
           <div
-            className="sensora-mobile-splash__glow pointer-events-none absolute inset-[-28%] rounded-full blur-2xl"
+            className="pointer-events-none absolute inset-[-22px] rounded-full bg-cyan-400/10 blur-2xl transition-[opacity,transform] duration-[900ms] ease-out"
             style={{
-              background:
-                "radial-gradient(circle at 50% 50%, rgba(56,189,248,0.2), rgba(139,92,246,0.1) 42%, transparent 72%)",
+              opacity: showLogo ? 1 : 0.55,
+              transform: showLogo ? "scale(1.04)" : "scale(0.96)",
             }}
             aria-hidden
           />
-          <SensoraAnimatedMark size={52} animated={false} className="relative z-[1] drop-shadow-[0_0_32px_-8px_rgba(56,189,248,0.35)]" aria-hidden />
+          <div
+            className="pointer-events-none absolute inset-[-18px] rounded-full bg-violet-500/8 blur-3xl transition-opacity duration-[700ms] ease-out"
+            style={{ opacity: showLogo ? 1 : 0.4 }}
+            aria-hidden
+          />
+          <div
+            style={{
+              opacity: showLogo ? 1 : 0,
+              transform: showLogo ? "scale(1)" : "scale(0.96)",
+              transition: `opacity ${LOGO_ANIM_MS}ms ease-out, transform ${LOGO_ANIM_MS}ms cubic-bezier(0.22, 1, 0.36, 1)`,
+            }}
+          >
+            <SensoraAnimatedMark
+              size={LOGO_MARK_PX}
+              animated={false}
+              className="relative z-[1] drop-shadow-[0_0_36px_-10px_rgba(56,189,248,0.32)]"
+              aria-hidden
+            />
+          </div>
         </div>
 
         <p
-          className="relative z-[1] mt-6 text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-400/95"
+          className="mb-4 text-[13px] font-semibold tracking-[0.42em] text-cyan-200/80"
           style={{
-            opacity: showBrand ? 1 : 0,
-            transform: showBrand ? "translateY(0)" : "translateY(6px)",
-            transition: `opacity ${BRAND_REVEAL_MS}ms ease-out 32ms, transform ${BRAND_REVEAL_MS}ms cubic-bezier(0.22, 1, 0.36, 1) 32ms`,
+            opacity: showSensora ? 1 : 0,
+            transform: showSensora ? "translateY(0)" : "translateY(6px)",
+            transition: `opacity ${LOGO_ANIM_MS}ms ease-out 40ms, transform ${LOGO_ANIM_MS}ms cubic-bezier(0.22, 1, 0.36, 1) 40ms`,
           }}
         >
           SENSORA
         </p>
 
         <p
-          className="relative z-[1] mt-4 text-[0.8125rem] font-medium leading-snug tracking-[-0.02em] text-slate-300/95 [word-break:keep-all] sm:text-[0.84375rem]"
+          className="max-w-[280px] text-[18px] font-semibold leading-relaxed tracking-[-0.02em] text-white [word-break:keep-all] sm:text-[19px]"
           style={{
             opacity: showQuote ? 1 : 0,
             transform: showQuote ? "translateY(0)" : "translateY(8px)",
-            transition: `opacity ${QUOTE_FADE_MS}ms ease-out, transform ${BRAND_REVEAL_MS}ms cubic-bezier(0.22, 1, 0.36, 1)`,
+            transition: `opacity ${QUOTE_FADE_MS}ms ease-out, transform ${LOGO_ANIM_MS}ms cubic-bezier(0.22, 1, 0.36, 1)`,
           }}
         >
           {quote}
