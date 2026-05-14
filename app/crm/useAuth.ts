@@ -70,6 +70,9 @@ export function useAuth(): {
     void (async () => {
       try {
         await setPersistence(a, browserLocalPersistence);
+        if (typeof a.authStateReady === "function") {
+          await a.authStateReady();
+        }
 
         const res = await getRedirectResult(a);
         const wasPending =
