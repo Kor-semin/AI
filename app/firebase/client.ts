@@ -14,10 +14,17 @@ export function isFirebaseConfigured() {
   );
 }
 
-/** MVP 단계: 필요 시 Google 로그인 기능을 잠시 끌 수 있음 */
+/** Google OAuth — 필요 시 비활성화 가능 */
 export function isGoogleAuthEnabled() {
   const v =
     process.env.NEXT_PUBLIC_ENABLE_GOOGLE_AUTH ?? process.env.NEXT_PUBLIC_GOOGLE_AUTH_ENABLED;
+  if (v == null) return true;
+  return String(v).trim().toLowerCase() !== "false";
+}
+
+/** 이메일/비밀번호 로그인 — Firebase Console에서 Provider 활성화 필요 */
+export function isEmailPasswordAuthEnabled() {
+  const v = process.env.NEXT_PUBLIC_ENABLE_EMAIL_PASSWORD_AUTH;
   if (v == null) return true;
   return String(v).trim().toLowerCase() !== "false";
 }

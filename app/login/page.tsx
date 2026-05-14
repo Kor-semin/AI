@@ -8,7 +8,7 @@ import { InspirationalBackdrop } from "@/app/components/InspirationalBackdrop";
 import { SensoraAnimatedMark } from "@/app/components/SensoraAnimatedMark";
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
 import { useAuth } from "@/app/crm/useAuth";
-import { isFirebaseConfigured, isGoogleAuthEnabled } from "@/app/firebase/client";
+import { isEmailPasswordAuthEnabled, isFirebaseConfigured, isGoogleAuthEnabled } from "@/app/firebase/client";
 
 function safePostLoginPath(raw: string | null): string | null {
   if (raw == null) return null;
@@ -19,17 +19,26 @@ function safePostLoginPath(raw: string | null): string | null {
   return s;
 }
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 function LoginPageInner() {
   const { t } = useLanguage();
   const router = useRouter();
   const searchParams = useSearchParams();
   const nextPath = useMemo(() => safePostLoginPath(searchParams.get("next")), [searchParams]);
 
-  const { auth, authError, signIn } = useAuth();
+  const { auth, authError, signInWithGoogle, signInWithEmailPassword, signUpWithEmailPassword, requestPasswordReset } =
+    useAuth();
+  const [mode, setMode] = useState<"signin" | "signup">("signin");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [password2, setPassword2] = useState("");
   const [busy, setBusy] = useState(false);
   const [localError, setLocalError] = useState<string | null>(null);
+  const [infoMessage, setInfoMessage] = useState<string | null>(null);
   const firebaseReady = isFirebaseConfigured();
   const googleAuthEnabled = isGoogleAuthEnabled();
+  const emailPasswordEnabled = isEmailPasswordAuthEnabled();
 
   useEffect(() => {
     if (auth.status === "signed-in") {
@@ -37,8 +46,14 @@ function LoginPageInner() {
     }
   }, [auth.status, router, nextPath]);
 
+  useEffect(() => {
+    setLocalError(null);
+    setInfoMessage(null);
+  }, [mode]);
+
   const onGoogleClick = async () => {
     setLocalError(null);
+    setInfoMessage(null);
 
     if (!googleAuthEnabled) {
       setLocalError(t("register.errorGoogleDisabled"));
@@ -52,7 +67,7 @@ function LoginPageInner() {
 
     setBusy(true);
     try {
-      await signIn();
+      await signInWithGoogle();
     } catch (e) {
       setLocalError(e instanceof Error ? e.message : String(e));
     } finally {
@@ -60,7 +75,89 @@ function LoginPageInner() {
     }
   };
 
+  const onEmailSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLocalError(null);
+    setInfoMessage(null);
+
+    if (!firebaseReady) {
+      setLocalError(t("auth.loginFirebaseEnvHint"));
+      return;
+    }
+    if (!emailPasswordEnabled) {
+      setLocalError(t("auth.loginEmailPasswordDisabled"));
+      return;
+    }
+
+    const em = email.trim();
+    if (!EMAIL_RE.test(em)) {
+      setLocalError(t("join.invalidEmail"));
+      return;
+    }
+
+    if (mode === "signup") {
+      if (password.length < 6) {
+        setLocalError(t("auth.passwordTooShort"));
+        return;
+      }
+      if (password !== password2) {
+        setLocalError(t("auth.loginPasswordMismatch"));
+        return;
+      }
+    } else if (password.length < 1) {
+      setLocalError(t("auth.passwordRequired"));
+      return;
+    }
+
+    setBusy(true);
+    try {
+      if (mode === "signin") {
+        await signInWithEmailPassword(em, password);
+      } else {
+        await signUpWithEmailPassword(em, password);
+      }
+    } catch (err) {
+      setLocalError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const onForgotPassword = async () => {
+    setLocalError(null);
+    setInfoMessage(null);
+    const em = email.trim();
+    if (!em) {
+      setLocalError(t("auth.loginEnterEmailFirst"));
+      return;
+    }
+    if (!EMAIL_RE.test(em)) {
+      setLocalError(t("join.invalidEmail"));
+      return;
+    }
+    if (!firebaseReady) {
+      setLocalError(t("auth.loginFirebaseEnvHint"));
+      return;
+    }
+    if (!emailPasswordEnabled) {
+      setLocalError(t("auth.loginEmailPasswordDisabled"));
+      return;
+    }
+    setBusy(true);
+    try {
+      await requestPasswordReset(em);
+      setInfoMessage(t("auth.loginResetSent"));
+    } catch (err) {
+      setLocalError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setBusy(false);
+    }
+  };
+
   const displayError = localError ?? authError;
+
+  const inputClass =
+    "sensora-premium-input mt-2 w-full min-h-[48px] rounded-xl border border-white/[0.12] bg-[#030b14]/80 px-3 py-3 text-[15px] text-slate-100 outline-none placeholder:text-slate-600";
 
   return (
     <div className="relative flex min-h-[100dvh] min-h-[100svh] flex-col overflow-x-hidden text-slate-100">
@@ -95,17 +192,109 @@ function LoginPageInner() {
               <p className="text-center text-sm text-slate-400">{t("auth.checkingLogin")}</p>
             ) : (
               <>
-                <button
-                  type="button"
-                  disabled={busy || auth.status === "signed-in"}
-                  onClick={() => void onGoogleClick()}
-                  className="sensora-premium-primary-workspace flex w-full min-h-[52px] items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold transition enabled:touch-manipulation enabled:active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  {busy ? "연결 중…" : t("cta.emailLogin")}
-                </button>
+                <div className="flex rounded-xl border border-white/[0.1] bg-[#030b14]/60 p-1">
+                  <button
+                    type="button"
+                    className={`min-h-10 flex-1 rounded-lg text-sm font-semibold transition touch-manipulation ${mode === "signin" ? "bg-white/[0.1] text-slate-50 shadow-sm" : "text-slate-500 hover:text-slate-300"}`}
+                    onClick={() => setMode("signin")}
+                  >
+                    {t("auth.loginModeSignIn")}
+                  </button>
+                  <button
+                    type="button"
+                    className={`min-h-10 flex-1 rounded-lg text-sm font-semibold transition touch-manipulation ${mode === "signup" ? "bg-white/[0.1] text-slate-50 shadow-sm" : "text-slate-500 hover:text-slate-300"}`}
+                    onClick={() => setMode("signup")}
+                  >
+                    {t("auth.loginModeSignUp")}
+                  </button>
+                </div>
+
+                {mode === "signup" ? (
+                  <p className="mt-4 text-center text-[13px] leading-relaxed text-slate-400">{t("auth.loginCreateLead")}</p>
+                ) : null}
+                {mode === "signup" ? (
+                  <p className="mt-2 text-center text-[11px] leading-relaxed text-slate-500">{t("auth.loginCreateNote")}</p>
+                ) : null}
+
+                <form className="mt-6 space-y-4" onSubmit={(ev) => void onEmailSubmit(ev)} noValidate>
+                  <div>
+                    <label htmlFor="login-email" className="text-sm font-semibold text-slate-200">
+                      {t("form.email")}
+                    </label>
+                    <input
+                      id="login-email"
+                      name="email"
+                      type="email"
+                      autoComplete="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className={inputClass}
+                      placeholder="name@company.com"
+                      disabled={busy}
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="login-password" className="text-sm font-semibold text-slate-200">
+                      {t("auth.password")}
+                    </label>
+                    <input
+                      id="login-password"
+                      name="password"
+                      type="password"
+                      autoComplete={mode === "signup" ? "new-password" : "current-password"}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className={inputClass}
+                      disabled={busy}
+                    />
+                  </div>
+                  {mode === "signup" ? (
+                    <div>
+                      <label htmlFor="login-password2" className="text-sm font-semibold text-slate-200">
+                        {t("auth.passwordConfirm")}
+                      </label>
+                      <input
+                        id="login-password2"
+                        name="password2"
+                        type="password"
+                        autoComplete="new-password"
+                        value={password2}
+                        onChange={(e) => setPassword2(e.target.value)}
+                        className={inputClass}
+                        disabled={busy}
+                      />
+                    </div>
+                  ) : null}
+
+                  <button
+                    type="submit"
+                    disabled={busy || auth.status === "signed-in"}
+                    className="sensora-premium-primary-workspace mt-2 flex w-full min-h-[52px] items-center justify-center rounded-xl px-4 text-sm font-semibold transition enabled:touch-manipulation enabled:active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    {busy ? t("join.submitting") : mode === "signin" ? t("auth.loginEmailSubmit") : t("auth.loginCreateSubmit")}
+                  </button>
+                </form>
+
+                {mode === "signin" ? (
+                  <div className="mt-3 text-center">
+                    <button
+                      type="button"
+                      disabled={busy}
+                      onClick={() => void onForgotPassword()}
+                      className="text-[13px] font-semibold text-sky-300/95 underline decoration-sky-400/35 underline-offset-4 hover:text-sky-200 disabled:opacity-50 touch-manipulation"
+                    >
+                      {t("auth.loginForgotPassword")}
+                    </button>
+                  </div>
+                ) : null}
 
                 <p className="mt-6 text-center text-sm leading-relaxed text-slate-400">{t("auth.loginPostButtonNote")}</p>
-                <p className="mt-3 text-center text-sm leading-relaxed text-slate-500">{t("auth.loginBetaPrompt")}</p>
+
+                {infoMessage ? (
+                  <p className="mt-4 rounded-lg border border-emerald-500/25 bg-emerald-950/35 px-3 py-2 text-center text-xs leading-relaxed text-emerald-100" role="status">
+                    {infoMessage}
+                  </p>
+                ) : null}
 
                 {displayError ? (
                   <p className="mt-4 rounded-lg border border-red-500/25 bg-red-950/40 px-3 py-2 text-center text-xs leading-relaxed text-red-200" role="alert">
@@ -114,11 +303,28 @@ function LoginPageInner() {
                 ) : null}
 
                 <div className="mt-8 border-t border-white/[0.08] pt-6 text-center">
-                  <p className="text-sm text-slate-500">아직 베타 신청 전이라면?</p>
-                  <Link href="/join" prefetch={false} className="mt-3 inline-flex min-h-11 items-center justify-center text-sm font-semibold text-sky-300 underline decoration-sky-400/40 underline-offset-4 hover:text-sky-200">
+                  <p className="text-sm text-slate-500">{t("auth.loginBetaPrompt")}</p>
+                  <Link
+                    href="/join"
+                    prefetch={false}
+                    className="mt-3 inline-flex min-h-11 items-center justify-center text-sm font-semibold text-sky-300 underline decoration-sky-400/40 underline-offset-4 hover:text-sky-200"
+                  >
                     {t("register.access.goJoin")}
                   </Link>
                 </div>
+
+                {googleAuthEnabled ? (
+                  <div className="mt-8 border-t border-white/[0.06] pt-6">
+                    <button
+                      type="button"
+                      disabled={busy || auth.status === "signed-in"}
+                      onClick={() => void onGoogleClick()}
+                      className="flex w-full min-h-11 items-center justify-center rounded-xl border border-white/[0.1] bg-transparent px-4 text-[13px] font-medium text-slate-400 transition hover:border-white/[0.14] hover:bg-white/[0.04] hover:text-slate-300 disabled:opacity-50 touch-manipulation"
+                    >
+                      {t("auth.loginGoogleSecondary")}
+                    </button>
+                  </div>
+                ) : null}
               </>
             )}
           </div>

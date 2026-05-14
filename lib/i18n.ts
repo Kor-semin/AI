@@ -73,6 +73,22 @@ export type TranslationKey =
   | "auth.loginPostButtonNote"
   | "auth.loginBetaPrompt"
   | "auth.loginFirebaseEnvHint"
+  | "auth.password"
+  | "auth.passwordConfirm"
+  | "auth.loginModeSignIn"
+  | "auth.loginModeSignUp"
+  | "auth.loginEmailSubmit"
+  | "auth.loginCreateSubmit"
+  | "auth.loginCreateLead"
+  | "auth.loginCreateNote"
+  | "auth.loginPasswordMismatch"
+  | "auth.loginForgotPassword"
+  | "auth.loginEnterEmailFirst"
+  | "auth.loginResetSent"
+  | "auth.loginGoogleSecondary"
+  | "auth.loginEmailPasswordDisabled"
+  | "auth.passwordRequired"
+  | "auth.passwordTooShort"
   | "auth.switchAccount"
   | "register.sellerGate.defaultLine"
   | "register.sellerGate.changeAccount"
@@ -702,6 +718,22 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "auth.loginBetaPrompt": "아직 베타 신청 전이라면 먼저 신청서를 제출해 주세요.",
     "auth.loginFirebaseEnvHint":
       "로그인을 위해 Firebase 연결이 필요합니다(.env.local의 NEXT_PUBLIC_FIREBASE_* 항목, .env.example 참고). 서버를 재시작한 뒤 다시 시도해 주세요. 베타 이용은 /join 에서 신청 후 승인된 이메일로 진행됩니다.",
+    "auth.password": "비밀번호",
+    "auth.passwordConfirm": "비밀번호 확인",
+    "auth.loginModeSignIn": "로그인",
+    "auth.loginModeSignUp": "계정 만들기",
+    "auth.loginEmailSubmit": "이메일로 로그인",
+    "auth.loginCreateSubmit": "계정 만들기",
+    "auth.loginCreateLead": "베타 승인 받은 이메일로 계정을 만들어 주세요.",
+    "auth.loginCreateNote": "계정을 만들더라도 베타 승인 이메일과 일치해야 워크스페이스를 사용할 수 있습니다.",
+    "auth.loginPasswordMismatch": "비밀번호가 서로 다릅니다.",
+    "auth.loginForgotPassword": "비밀번호를 잊으셨나요?",
+    "auth.loginEnterEmailFirst": "비밀번호 재설정을 위해 이메일을 입력해 주세요.",
+    "auth.loginResetSent": "비밀번호 재설정 메일을 보냈습니다. 받은 편지함을 확인해 주세요.",
+    "auth.loginGoogleSecondary": "Google로 계속하기",
+    "auth.loginEmailPasswordDisabled": "이메일 로그인이 비활성화되어 있습니다. 설정을 확인해 주세요.",
+    "auth.passwordRequired": "비밀번호를 입력해 주세요.",
+    "auth.passwordTooShort": "비밀번호는 6자 이상으로 입력해 주세요.",
     "auth.switchAccount": "다른 이메일로 로그인",
     "register.sellerGate.defaultLine": "로그인한 뒤 명함 이미지를 제출하면 승인 요청이 접수됩니다.",
     "register.sellerGate.changeAccount": "다른 이메일로 로그인",
@@ -1392,6 +1424,23 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "auth.loginBetaPrompt": "If you haven’t applied for beta access yet, submit the signup form first.",
     "auth.loginFirebaseEnvHint":
       "Sign-in requires Firebase client configuration (NEXT_PUBLIC_FIREBASE_* in .env.local—see .env.example). Restart the dev server and try again. Beta access still requires signup at /join and approval for the same email.",
+    "auth.password": "Password",
+    "auth.passwordConfirm": "Confirm password",
+    "auth.loginModeSignIn": "Sign in",
+    "auth.loginModeSignUp": "Create account",
+    "auth.loginEmailSubmit": "Sign in with email",
+    "auth.loginCreateSubmit": "Create account",
+    "auth.loginCreateLead": "Create your account with the email that was approved for beta access.",
+    "auth.loginCreateNote":
+      "Creating an account does not grant beta access by itself—the signed-in email must match your approved beta email.",
+    "auth.loginPasswordMismatch": "Passwords do not match.",
+    "auth.loginForgotPassword": "Forgot password?",
+    "auth.loginEnterEmailFirst": "Enter your email to receive a password reset link.",
+    "auth.loginResetSent": "We sent a password reset email. Please check your inbox.",
+    "auth.loginGoogleSecondary": "Continue with Google",
+    "auth.loginEmailPasswordDisabled": "Email sign-in is disabled in this build. Please check configuration.",
+    "auth.passwordRequired": "Please enter your password.",
+    "auth.passwordTooShort": "Password must be at least 6 characters.",
     "auth.switchAccount": "Use a different email",
     "register.sellerGate.defaultLine": "After you sign in, submit a business-card image to start the approval request.",
     "register.sellerGate.changeAccount": "Use a different email",
