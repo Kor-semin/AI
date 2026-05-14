@@ -17,7 +17,7 @@ export function MobileLandingDock({ onScrollLandingTop, onOpenCustomers, onOpenM
 
   return (
     <nav
-      className="fixed inset-x-0 bottom-0 z-[55] border-t border-white/[0.1] bg-[#050a14]/94 px-1 pb-[max(0.35rem,env(safe-area-inset-bottom,0px))] pt-1.5 backdrop-blur-xl lg:hidden"
+      className="fixed inset-x-0 bottom-0 z-[60] border-t border-white/[0.1] bg-[#050a14]/96 px-1 pb-[max(0.35rem,env(safe-area-inset-bottom,0px))] pt-1.5 shadow-[0_-10px_28px_rgba(0,0,0,0.38)] backdrop-blur-xl lg:hidden"
       aria-label="빠른 이동"
     >
       <div className="mx-auto flex max-w-lg items-stretch justify-between gap-0.5">

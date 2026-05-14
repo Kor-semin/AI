@@ -5,8 +5,7 @@ import Link from "next/link";
 
 import { SensoraAnimatedMark } from "@/app/components/SensoraAnimatedMark";
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
-import { CRM_SECTION_LABELS, type CrmSection } from "@/app/crm/crmSectionTypes";
-import type { TranslationKey } from "@/lib/i18n";
+import type { CrmSection } from "@/app/crm/crmSectionTypes";
 
 /** 랜딩 보조 이미지 에셋 경로(@/public 기준). README 등에서 참고합니다. */
 export const LANDING_SHOWROOM_IMAGE_PATHS = {
@@ -37,53 +36,132 @@ const PHILOSOPHY_LINE_KEYS = [
   "landing.slides.philosophy.line4",
 ] as const;
 
-type MobileFeatureCard = {
+type MobileWorkCardDef = {
   key: string;
   section?: CrmSection;
   href?: string;
-  accent: string;
   title: string;
   desc: string;
+  icon: "customers" | "memo" | "followup" | "delivery" | "ai";
 };
 
-function mobileFeatureCards(t: (k: TranslationKey) => string): MobileFeatureCard[] {
-  return [
-    {
-      key: "customers",
-      section: "customers",
-      title: CRM_SECTION_LABELS.customers.title,
-      desc: CRM_SECTION_LABELS.customers.subtitle,
-      accent: "from-sky-500/25 to-cyan-500/10",
-    },
-    {
-      key: "consulting",
-      section: "consulting",
-      title: CRM_SECTION_LABELS.consulting.title,
-      desc: CRM_SECTION_LABELS.consulting.subtitle,
-      accent: "from-violet-500/22 to-fuchsia-500/10",
-    },
-    {
-      key: "followup",
-      section: "followup",
-      title: CRM_SECTION_LABELS.followup.title,
-      desc: CRM_SECTION_LABELS.followup.subtitle,
-      accent: "from-emerald-500/20 to-teal-500/10",
-    },
-    {
-      key: "delivery",
-      href: "/delivery",
-      title: t("landing.showroom.serviceMenu.deliveryTitle"),
-      desc: t("landing.showroom.serviceMenu.deliveryDesc"),
-      accent: "from-amber-500/22 to-orange-500/10",
-    },
-    {
-      key: "ai",
-      section: "ai",
-      title: CRM_SECTION_LABELS.ai.title,
-      desc: CRM_SECTION_LABELS.ai.subtitle,
-      accent: "from-indigo-500/25 to-violet-500/12",
-    },
-  ];
+const MOBILE_WORK_CARDS: MobileWorkCardDef[] = [
+  {
+    key: "customers",
+    section: "customers",
+    title: "고객관리",
+    desc: "고객별 상담 내용과 관심 차량을 정리합니다.",
+    icon: "customers",
+  },
+  {
+    key: "consulting",
+    section: "consulting",
+    title: "상담 메모",
+    desc: "상담 중 남긴 내용을 다시 확인합니다.",
+    icon: "memo",
+  },
+  {
+    key: "followup",
+    section: "followup",
+    title: "사후관리",
+    desc: "다음 연락과 출고 전 안내를 놓치지 않게 돕습니다.",
+    icon: "followup",
+  },
+  {
+    key: "delivery",
+    href: "/delivery",
+    title: "출고 안내",
+    desc: "반복되는 안내 문구를 더 정확하게 준비합니다.",
+    icon: "delivery",
+  },
+  {
+    key: "ai",
+    section: "ai",
+    title: "AI 비서",
+    desc: "상담 내용을 바탕으로 검토용 초안을 제안합니다.",
+    icon: "ai",
+  },
+];
+
+function CardGlyph({ icon }: { icon: MobileWorkCardDef["icon"] }) {
+  const common = "size-[18px] shrink-0 text-slate-50/95";
+  switch (icon) {
+    case "customers":
+      return (
+        <svg className={common} viewBox="0 0 24 24" fill="none" aria-hidden>
+          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+          <circle cx="9" cy="7" r="4" stroke="currentColor" strokeWidth="1.5" />
+          <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+        </svg>
+      );
+    case "memo":
+      return (
+        <svg className={common} viewBox="0 0 24 24" fill="none" aria-hidden>
+          <path
+            d="M7 4h10a2 2 0 012 2v14l-4-3H7a2 2 0 01-2-2V6a2 2 0 012-2z"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinejoin="round"
+          />
+          <path d="M9 9h6M9 12h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+        </svg>
+      );
+    case "followup":
+      return (
+        <svg className={common} viewBox="0 0 24 24" fill="none" aria-hidden>
+          <path
+            d="M7 4h10v4H7V4zm0 6h10v10a2 2 0 01-2 2H9a2 2 0 01-2-2V10z"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinejoin="round"
+          />
+          <path d="M10 14h4M10 17h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+        </svg>
+      );
+    case "delivery":
+      return (
+        <svg className={common} viewBox="0 0 24 24" fill="none" aria-hidden>
+          <path
+            d="M4 16h2l1-5h9v5h2M6 16v2m10-2v2M9 11l2-4h6v4"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      );
+    case "ai":
+      return (
+        <svg className={common} viewBox="0 0 24 24" fill="none" aria-hidden>
+          <path
+            d="M9.5 4.5 6 12l3.5 2.5L16 20l3.5-7.5L16 10 9.5 4.5z"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinejoin="round"
+          />
+          <path d="M6 12h7M12.5 7.5 16 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+        </svg>
+      );
+    default:
+      return null;
+  }
+}
+
+function cardIconGradient(icon: MobileWorkCardDef["icon"]) {
+  switch (icon) {
+    case "customers":
+      return "from-sky-500/38 to-cyan-600/22";
+    case "memo":
+      return "from-violet-500/38 to-fuchsia-600/24";
+    case "followup":
+      return "from-emerald-500/35 to-teal-600/22";
+    case "delivery":
+      return "from-amber-500/38 to-orange-600/22";
+    case "ai":
+      return "from-indigo-500/40 to-violet-600/26";
+    default:
+      return "from-slate-500/35 to-slate-700/22";
+  }
 }
 
 function IconPlay({ className }: { className?: string }) {
@@ -122,12 +200,12 @@ export function LandingShowroom({ onOpenAppWorkspace, onEnterWorkspaceSection }:
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  const featureCards = mobileFeatureCards(t);
+  const featureCards = MOBILE_WORK_CARDS;
 
   return (
     <div
       id="sensora-landing-scroll"
-      className="sensora-landing-scroll relative flex min-h-0 flex-1 flex-col overflow-y-auto overflow-x-hidden bg-[#020817]"
+      className="sensora-landing-scroll relative flex min-h-0 flex-1 flex-col overflow-y-auto overflow-x-hidden bg-[#020817] max-lg:scroll-pb-[calc(5.25rem+env(safe-area-inset-bottom,0px))]"
     >
       <div
         aria-hidden
@@ -136,14 +214,13 @@ export function LandingShowroom({ onOpenAppWorkspace, onEnterWorkspaceSection }:
 
       {/* 모바일: 앱형 홈(헤더 · 진입 카드 · 빠른 실행) */}
       <div id="sensora-landing-mobile-root" className="relative z-[1] lg:hidden">
-        <div className={`${sectionShell} pt-3 pb-2`}>
-          <div className="mx-auto flex w-full max-w-lg flex-col gap-3">
-            <div className="flex items-start gap-3 rounded-2xl border border-white/[0.1] bg-[#050f1a]/75 px-4 py-3.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-md">
-              <SensoraAnimatedMark size={40} animated={false} className="shrink-0 drop-shadow-[0_0_18px_-4px_rgba(56,189,248,0.35)]" aria-hidden />
+        <div className={`${sectionShell} pt-2 pb-1.5`}>
+          <div className="mx-auto flex w-full max-w-lg flex-col gap-2.5">
+            <div className="flex items-start gap-2.5 rounded-2xl border border-white/[0.1] bg-[#050f1a]/75 px-3.5 py-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-md">
+              <SensoraAnimatedMark size={36} animated={false} className="shrink-0 drop-shadow-[0_0_16px_-4px_rgba(56,189,248,0.35)]" aria-hidden />
               <div className="min-w-0 flex-1">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-sky-400/85">Sensora Auto CRM</p>
-                <h2 className="mt-0.5 text-base font-semibold leading-snug tracking-tight text-slate-50">{t("product.name")}</h2>
-                <p className="mt-1 line-clamp-2 text-[11px] leading-snug text-slate-400 [word-break:keep-all]">
+                <h2 className="text-[0.9375rem] font-semibold leading-snug tracking-tight text-slate-50">{t("product.name")}</h2>
+                <p className="mt-0.5 line-clamp-2 text-[10.5px] leading-snug text-slate-400 [word-break:keep-all]">
                   자동차 영업사원 전용 AI 고객관리 워크스페이스
                 </p>
               </div>
@@ -151,24 +228,29 @@ export function LandingShowroom({ onOpenAppWorkspace, onEnterWorkspaceSection }:
 
             <div>
               <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-500">업무로 바로가기</p>
-              <div className="mt-2 grid grid-cols-2 gap-2.5">
+              <div className="mt-1.5 grid grid-cols-2 gap-2">
                 {featureCards.map((c) => {
+                  const grad = cardIconGradient(c.icon);
                   const inner = (
                     <>
-                      <div
-                        className={`relative mb-2.5 h-10 w-full overflow-hidden rounded-lg bg-gradient-to-br ${c.accent} ring-1 ring-white/[0.08]`}
-                        aria-hidden
-                      />
-                      <p className="line-clamp-2 text-[0.8125rem] font-semibold leading-tight text-slate-50">{c.title}</p>
-                      <p className="mt-1 line-clamp-2 text-[10px] leading-snug text-slate-500">{c.desc}</p>
-                      <span className="mt-2.5 inline-flex items-center gap-1 text-[10px] font-semibold text-sky-200/90">
+                      <div className="mb-1.5 flex items-start gap-2">
+                        <span
+                          className={`flex size-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br ${grad} text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.15)] ring-1 ring-white/[0.12]`}
+                          aria-hidden
+                        >
+                          <CardGlyph icon={c.icon} />
+                        </span>
+                        <span className="min-w-0 flex-1 pt-0.5 text-[0.8125rem] font-semibold leading-snug text-slate-50 [word-break:keep-all]">{c.title}</span>
+                      </div>
+                      <p className="line-clamp-3 text-[11px] leading-snug text-slate-500 [word-break:keep-all]">{c.desc}</p>
+                      <span className="mt-2 inline-flex items-center gap-1 text-[10px] font-semibold text-sky-200/90">
                         열기
                         <IconChevronRight className="size-3 opacity-90" />
                       </span>
                     </>
                   );
                   const cardClass =
-                    "flex flex-col rounded-2xl border border-white/[0.1] bg-[#050f1a]/78 p-3.5 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transition active:scale-[0.99] touch-manipulation min-h-[7.5rem]";
+                    "flex flex-col rounded-2xl border border-white/[0.1] bg-[#050f1a]/78 p-3 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transition active:scale-[0.99] touch-manipulation min-h-[7.75rem]";
                   if (c.href) {
                     return (
                       <Link key={c.key} href={c.href} prefetch={false} className={cardClass}>
@@ -293,7 +375,7 @@ export function LandingShowroom({ onOpenAppWorkspace, onEnterWorkspaceSection }:
 
       <section
         id="sensora-landing-cta"
-        className={`${sectionShell} border-t border-white/[0.06] py-9 sm:py-14 max-lg:pb-[max(5.5rem,calc(3.5rem+env(safe-area-inset-bottom,0px)))] sm:max-lg:pb-[max(6rem,calc(4rem+env(safe-area-inset-bottom,0px)))] lg:pb-[max(3rem,calc(2.5rem+env(safe-area-inset-bottom,0px)))]`}
+        className={`${sectionShell} border-t border-white/[0.06] py-9 sm:py-14 max-lg:scroll-mb-[calc(5.25rem+env(safe-area-inset-bottom,0px))] max-lg:pb-[max(9.5rem,calc(6.25rem+env(safe-area-inset-bottom,0px)))] lg:pb-[max(3rem,calc(2.5rem+env(safe-area-inset-bottom,0px)))]`}
       >
         <div className={`${innerMax} max-w-[440px] sm:max-w-[460px]`}>
           <div className="mx-auto flex w-full flex-col items-center text-center">
