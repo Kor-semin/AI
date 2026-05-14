@@ -4,8 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { SensoraAnimatedMark } from "@/app/components/SensoraAnimatedMark";
+import type { MobileLandingFeatureKey } from "@/app/components/MobileFeaturePreview";
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
-import type { CrmSection } from "@/app/crm/crmSectionTypes";
 
 /** 랜딩 보조 이미지 에셋 경로(@/public 기준). README 등에서 참고합니다. */
 export const LANDING_SHOWROOM_IMAGE_PATHS = {
@@ -26,9 +26,6 @@ const JOIN_PATH = "/join" as const;
 const entPrimaryBtn =
   "landing-enterprise-btn-primary inline-flex shrink-0 items-center justify-center rounded-xl px-6 py-2.5 text-[0.8625rem] font-semibold tracking-tight touch-manipulation sm:min-h-[3rem] sm:py-3 sm:text-[0.9375rem] lg:min-h-[3.125rem] lg:text-[1rem]";
 
-const entGhostBtn =
-  "landing-enterprise-btn-secondary inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-xl px-6 py-2.5 text-[0.8375rem] font-semibold tracking-tight touch-manipulation sm:min-h-[3rem] sm:py-3 sm:text-[0.9625rem] lg:min-h-[3.125rem]";
-
 const PHILOSOPHY_LINE_KEYS = [
   "landing.slides.philosophy.line1",
   "landing.slides.philosophy.line2",
@@ -38,8 +35,7 @@ const PHILOSOPHY_LINE_KEYS = [
 
 type MobileWorkCardDef = {
   key: string;
-  section?: CrmSection;
-  href?: string;
+  preview: MobileLandingFeatureKey;
   title: string;
   desc: string;
   icon: "customers" | "memo" | "followup" | "delivery" | "ai";
@@ -48,35 +44,35 @@ type MobileWorkCardDef = {
 const MOBILE_WORK_CARDS: MobileWorkCardDef[] = [
   {
     key: "customers",
-    section: "customers",
+    preview: "customers",
     title: "고객관리",
     desc: "고객별 상담 내용과 관심 차량을 정리합니다.",
     icon: "customers",
   },
   {
     key: "consulting",
-    section: "consulting",
+    preview: "consulting",
     title: "상담 메모",
     desc: "상담 중 남긴 내용을 다시 확인합니다.",
     icon: "memo",
   },
   {
     key: "followup",
-    section: "followup",
+    preview: "followup",
     title: "사후관리",
     desc: "다음 연락과 출고 전 안내를 놓치지 않게 돕습니다.",
     icon: "followup",
   },
   {
     key: "delivery",
-    href: "/delivery",
+    preview: "delivery",
     title: "출고 안내",
     desc: "반복되는 안내 문구를 더 정확하게 준비합니다.",
     icon: "delivery",
   },
   {
     key: "ai",
-    section: "ai",
+    preview: "ai",
     title: "AI 비서",
     desc: "상담 내용을 바탕으로 검토용 초안을 제안합니다.",
     icon: "ai",
@@ -164,18 +160,6 @@ function cardIconGradient(icon: MobileWorkCardDef["icon"]) {
   }
 }
 
-function IconPlay({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 20 20" fill="none" aria-hidden>
-      <path
-        d="M6.75 11.08V9.92c0-.6.323-1.15.839-1.424l5.62-3.068a1.583 1.583 0 012.541 1.424v8.088a1.584 1.584 0 01-2.541 1.424l-5.62-3.069a1.583 1.583 0 01-.839-1.423z"
-        fill="currentColor"
-        opacity="0.9"
-      />
-    </svg>
-  );
-}
-
 function IconChevronRight({ className }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 20 20" fill="none" aria-hidden>
@@ -186,10 +170,10 @@ function IconChevronRight({ className }: { className?: string }) {
 
 type Props = {
   onOpenAppWorkspace: () => void;
-  onEnterWorkspaceSection: (section: CrmSection) => void;
+  onOpenMobileFeaturePreview: (key: MobileLandingFeatureKey) => void;
 };
 
-export function LandingShowroom({ onOpenAppWorkspace, onEnterWorkspaceSection }: Props) {
+export function LandingShowroom({ onOpenAppWorkspace, onOpenMobileFeaturePreview }: Props) {
   const { t } = useLanguage();
 
   const sectionShell = "relative z-[1] w-full px-4 sm:px-6";
@@ -251,21 +235,11 @@ export function LandingShowroom({ onOpenAppWorkspace, onEnterWorkspaceSection }:
                   );
                   const cardClass =
                     "flex flex-col rounded-2xl border border-white/[0.1] bg-[#050f1a]/78 p-3 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transition active:scale-[0.99] touch-manipulation min-h-[7.75rem]";
-                  if (c.href) {
-                    return (
-                      <Link key={c.key} href={c.href} prefetch={false} className={cardClass}>
-                        {inner}
-                      </Link>
-                    );
-                  }
-                  if (c.section) {
-                    return (
-                      <button key={c.key} type="button" className={cardClass} onClick={() => onEnterWorkspaceSection(c.section!)}>
-                        {inner}
-                      </button>
-                    );
-                  }
-                  return null;
+                  return (
+                    <button key={c.key} type="button" className={cardClass} onClick={() => onOpenMobileFeaturePreview(c.preview)}>
+                      {inner}
+                    </button>
+                  );
                 })}
               </div>
             </div>
@@ -275,11 +249,30 @@ export function LandingShowroom({ onOpenAppWorkspace, onEnterWorkspaceSection }:
               <p className="mt-1 text-[10px] text-slate-600">예시 화면 · 실제 일정은 워크스페이스에서 확인합니다</p>
               <ul className="mt-3 divide-y divide-white/[0.06]">
                 {[
-                  { k: "today", label: "오늘 할 일", sub: "연락·일정 한눈에", on: () => scrollToId("sensora-landing-cta") },
-                  { k: "next", label: "다음 연락 예정", sub: "워크스페이스 캘린더", on: () => onEnterWorkspaceSection("customers") },
-                  { k: "memo", label: "최근 상담 메모", sub: "상담 메모 화면", on: () => onEnterWorkspaceSection("consulting") },
-                  { k: "ai", label: "AI 초안 보기", sub: "AI 비서", on: () => onEnterWorkspaceSection("ai") },
-                  { k: "del", label: "출고 안내 준비", sub: "출고 체크리스트", on: () => scrollToId("sensora-landing-cta") },
+                  {
+                    k: "today",
+                    label: "오늘 할 일",
+                    sub: "연락과 일정을 한눈에 확인합니다.",
+                    on: () => scrollToId("sensora-landing-cta"),
+                  },
+                  {
+                    k: "next",
+                    label: "다음 연락 예정",
+                    sub: "놓치기 쉬운 고객 연락을 정리합니다.",
+                    on: () => onOpenMobileFeaturePreview("followup"),
+                  },
+                  {
+                    k: "memo",
+                    label: "최근 상담 메모",
+                    sub: "최근 남긴 상담 내용을 다시 확인합니다.",
+                    on: () => onOpenMobileFeaturePreview("consulting"),
+                  },
+                  {
+                    k: "del",
+                    label: "출고 안내 준비",
+                    sub: "반복되는 안내 문구를 미리 준비합니다.",
+                    on: () => onOpenMobileFeaturePreview("delivery"),
+                  },
                 ].map((row) => (
                   <li key={row.k}>
                     <button
@@ -289,7 +282,7 @@ export function LandingShowroom({ onOpenAppWorkspace, onEnterWorkspaceSection }:
                     >
                       <span className="min-w-0">
                         <span className="block text-[12px] font-semibold text-slate-200">{row.label}</span>
-                        <span className="mt-0.5 block truncate text-[10px] text-slate-500">{row.sub}</span>
+                        <span className="mt-0.5 block text-[10px] leading-snug text-slate-500 [word-break:keep-all]">{row.sub}</span>
                       </span>
                       <IconChevronRight className="size-4 shrink-0 text-slate-600" />
                     </button>
@@ -365,11 +358,6 @@ export function LandingShowroom({ onOpenAppWorkspace, onEnterWorkspaceSection }:
               </li>
             ))}
           </ul>
-          <div className="mt-6 flex justify-center sm:mt-8">
-            <a href="#sensora-landing-cta" className={`${entPrimaryBtn} min-h-[2.875rem] px-7 text-center text-[0.8125rem] sm:min-h-[3rem] sm:px-8`}>
-              {t("landing.slides.philosophy.nextCta")}
-            </a>
-          </div>
         </div>
       </section>
 
@@ -379,25 +367,12 @@ export function LandingShowroom({ onOpenAppWorkspace, onEnterWorkspaceSection }:
       >
         <div className={`${innerMax} max-w-[440px] sm:max-w-[460px]`}>
           <div className="mx-auto flex w-full flex-col items-center text-center">
-            <h2 className="max-w-[24ch] text-[clamp(1.15rem,calc(0.8rem+1.75vw),1.6rem)] font-semibold leading-[1.2] tracking-[-0.03em] text-slate-50 [word-break:keep-all] sm:max-w-[26ch]">
-              {t("landing.slides.actions.closingHeadline")}
+            <h2 className="max-w-[28ch] text-[clamp(1.05rem,calc(0.78rem+1.6vw),1.55rem)] font-semibold leading-[1.35] tracking-[-0.028em] text-slate-50 [word-break:keep-all] sm:max-w-[32ch]">
+              자동차 영업 업무를 더 정확하게 정리하고 싶다면, 지금 시작하세요.
             </h2>
             <div className="landing-slide-actions-cta-cluster mx-auto mt-7 flex w-full max-w-[22rem] flex-col items-stretch gap-2.5 sm:mt-9 sm:max-w-[24rem]">
               <Link href={JOIN_PATH} prefetch={false} className={`${entPrimaryBtn} w-full justify-center`}>
-                {t("cta.joinBeta")}
-              </Link>
-              <button
-                type="button"
-                onClick={() => {
-                  onOpenAppWorkspace();
-                }}
-                className={`${entGhostBtn} w-full justify-center gap-2 border border-white/[0.12]`}
-              >
-                <IconPlay className="size-[1.05rem] shrink-0 opacity-95" />
-                {t("landing.slides.actions.browseAppCta")}
-              </button>
-              <Link href="/register" prefetch={false} className={`${entGhostBtn} w-full justify-center border border-violet-300/[0.2]`}>
-                {t("auth.salesRegistration")}
+                베타 신청하기
               </Link>
             </div>
             <a

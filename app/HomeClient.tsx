@@ -7,6 +7,7 @@ import { InspirationalBackdrop } from "@/app/components/InspirationalBackdrop";
 import { NotebookCover } from "@/app/components/NotebookCover";
 import { SensoraAnimatedMark } from "@/app/components/SensoraAnimatedMark";
 import { MobileAppSplash } from "@/app/components/MobileAppSplash";
+import { MobileFeaturePreview, type MobileLandingFeatureKey } from "@/app/components/MobileFeaturePreview";
 import { MobileLandingDock } from "@/app/components/MobileLandingDock";
 import { LanguageSelect } from "@/app/components/i18n/LanguageSelect";
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
@@ -37,6 +38,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
   const [view, setView] = useState<"landing" | "app">(initialView);
   const [crmSection, setCrmSection] = useState<CrmSection>("dashboard");
   const [appPreviewTocOpen, setAppPreviewTocOpen] = useState(false);
+  const [mobileLandingPreview, setMobileLandingPreview] = useState<MobileLandingFeatureKey | null>(null);
 
   const navigateCrmSection = useCallback(
     (s: CrmSection) => {
@@ -59,6 +61,10 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
   useEffect(() => {
     setView(initialView);
   }, [initialView]);
+
+  useEffect(() => {
+    if (view !== "landing") setMobileLandingPreview(null);
+  }, [view]);
 
   /** 앱 진입 시·해시 변경 시 섹션 동기화 */
   useEffect(() => {
@@ -385,7 +391,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
         }
       >
         {view === "landing" ? (
-          <LandingShowroom onOpenAppWorkspace={openAppPreviewToc} onEnterWorkspaceSection={enterAppFromPreviewToc} />
+          <LandingShowroom onOpenAppWorkspace={openAppPreviewToc} onOpenMobileFeaturePreview={setMobileLandingPreview} />
         ) : null}
 
         {view === "app" ? (
@@ -528,15 +534,21 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
         ) : null}
       </main>
 
-      {view === "landing" ? (
+      {view === "landing" && !mobileLandingPreview ? (
         <MobileLandingDock
           onScrollLandingTop={scrollLandingToTop}
-          onOpenCustomers={() => enterAppFromPreviewToc("customers")}
-          onOpenMemo={() => enterAppFromPreviewToc("consulting")}
-          onOpenAi={() => enterAppFromPreviewToc("ai")}
+          onOpenCustomers={() => setMobileLandingPreview("customers")}
+          onOpenMemo={() => setMobileLandingPreview("consulting")}
+          onOpenAi={() => setMobileLandingPreview("ai")}
           onOpenMore={scrollLandingToCta}
         />
       ) : null}
+
+      <MobileFeaturePreview
+        feature={mobileLandingPreview}
+        onClose={() => setMobileLandingPreview(null)}
+        onEnterWorkspace={enterAppFromPreviewToc}
+      />
     </div>
   );
 }
