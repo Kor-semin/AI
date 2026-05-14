@@ -30,7 +30,7 @@ async function authorizationHeader(): Promise<string | null> {
   const u = a.currentUser;
   if (!u) return null;
   try {
-    const token = await u.getIdToken();
+    const token = await u.getIdToken(true);
     if (!token) return null;
     return `Bearer ${token}`;
   } catch {
