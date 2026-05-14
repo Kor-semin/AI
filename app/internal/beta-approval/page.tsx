@@ -20,8 +20,12 @@ type BetaAppRow = {
   status: "pending" | "approved" | "rejected";
 };
 
-const MSG_LIST_500 = "신청자 목록을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.";
+const MSG_LIST_FAILED = "신청자 목록을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.";
 const MSG_TOKEN = "관리자 인증 토큰을 확인하지 못했습니다. 다시 로그인해 주세요.";
+const MSG_SERVER_MISCONFIGURED =
+  "Firebase 서버 설정이 아직 완료되지 않았습니다. FIREBASE_SERVICE_ACCOUNT_JSON 환경변수를 확인해 주세요.";
+const MSG_FIRESTORE_PERMISSION =
+  "관리자 인증은 통과했지만 Firestore 신청자 목록을 읽을 권한이 없습니다. Firebase 서비스 계정 권한과 Firestore Database 생성 여부를 확인해 주세요.";
 
 async function authorizationHeader(): Promise<string | null> {
   const a = getFirebaseAuth();
@@ -55,6 +59,7 @@ type Screen =
   | "token_error"
   | "admin_loading"
   | "forbidden"
+  | "firestore_denied"
   | "misconfigured"
   | "list_error"
   | "ready";
@@ -75,15 +80,12 @@ export default function InternalBetaApprovalPage() {
   const [flash, setFlash] = useState<string | null>(null);
   const [rowBusy, setRowBusy] = useState<string | null>(null);
   const loadGen = useRef(0);
-  /** 목록 API가 403을 반환했는지(관리자 진단 통과 vs Firestore 403 구분용). */
-  const list403FromBetaApiRef = useRef(false);
   const [adminDiag, setAdminDiag] = useState<AdminDiagPayload | null>(null);
   const [adminDiagLoading, setAdminDiagLoading] = useState(false);
   const [adminDiagError, setAdminDiagError] = useState<string | null>(null);
 
   const load = useCallback(async (kind: "initial" | "reload") => {
     const gen = ++loadGen.current;
-    list403FromBetaApiRef.current = false;
 
     if (kind === "initial") {
       setLoadErr(null);
@@ -109,6 +111,16 @@ export default function InternalBetaApprovalPage() {
     });
     if (gen !== loadGen.current) return;
 
+    type BetaListPayload = { ok?: boolean; error?: string; items?: unknown };
+    let payload: BetaListPayload | null = null;
+    try {
+      const text = await res.text();
+      if (text) payload = JSON.parse(text) as BetaListPayload;
+    } catch {
+      payload = null;
+    }
+    if (gen !== loadGen.current) return;
+
     if (res.status === 401) {
       setRows([]);
       setLoadErr(null);
@@ -116,59 +128,54 @@ export default function InternalBetaApprovalPage() {
       if (kind === "reload") setListLoading(false);
       return;
     }
+
     if (res.status === 403) {
-      list403FromBetaApiRef.current = true;
       setRows([]);
       setLoadErr(null);
       setScreen("forbidden");
       if (kind === "reload") setListLoading(false);
       return;
     }
+
     if (res.status === 503) {
       setRows([]);
       setLoadErr(null);
-      setScreen("misconfigured");
+      if (payload?.error === "firestore_permission_denied") {
+        setScreen("firestore_denied");
+      } else {
+        setScreen("misconfigured");
+      }
       if (kind === "reload") setListLoading(false);
       return;
     }
+
     if (res.status === 500) {
-      setLoadErr(MSG_LIST_500);
       setRows([]);
+      setLoadErr(MSG_LIST_FAILED);
       setScreen("list_error");
       if (kind === "reload") setListLoading(false);
       return;
     }
+
     if (!res.ok) {
-      setLoadErr(MSG_LIST_500);
       setRows([]);
+      setLoadErr(MSG_LIST_FAILED);
       setScreen("list_error");
       if (kind === "reload") setListLoading(false);
       return;
     }
 
-    let data: unknown;
-    try {
-      data = await res.json();
-    } catch {
-      setLoadErr(MSG_LIST_500);
-      setRows([]);
-      setScreen("list_error");
+    if (payload?.ok === true && Array.isArray(payload.items)) {
+      setRows(payload.items as BetaAppRow[]);
+      setLoadErr(null);
+      setScreen("ready");
       if (kind === "reload") setListLoading(false);
       return;
     }
-    if (gen !== loadGen.current) return;
 
-    const rec = data as { ok?: unknown; items?: unknown };
-    if (rec.ok !== true || !Array.isArray(rec.items)) {
-      setLoadErr(MSG_LIST_500);
-      setRows([]);
-      setScreen("list_error");
-      if (kind === "reload") setListLoading(false);
-      return;
-    }
-    setRows(rec.items as BetaAppRow[]);
-    setLoadErr(null);
-    setScreen("ready");
+    setRows([]);
+    setLoadErr(MSG_LIST_FAILED);
+    setScreen("list_error");
     if (kind === "reload") setListLoading(false);
   }, []);
 
@@ -178,7 +185,6 @@ export default function InternalBetaApprovalPage() {
     }
     if (auth.status === "signed-out") {
       loadGen.current += 1;
-      list403FromBetaApiRef.current = false;
       setRows([]);
       setLoadErr(null);
       setListLoading(false);
@@ -284,6 +290,7 @@ export default function InternalBetaApprovalPage() {
   const showAdminLoading = auth.status === "signed-in" && screen === "admin_loading";
   const showForbidden = auth.status === "signed-in" && screen === "forbidden";
   const showMisconfigured = auth.status === "signed-in" && screen === "misconfigured";
+  const showFirestoreDenied = auth.status === "signed-in" && screen === "firestore_denied";
   const showListError = auth.status === "signed-in" && screen === "list_error";
   const showReady = auth.status === "signed-in" && screen === "ready";
 
@@ -296,10 +303,6 @@ export default function InternalBetaApprovalPage() {
       ) : adminDiag.adminAllowlistSize > 0 && !adminDiag.isAdmin ? (
         <p className="mt-4 rounded-xl border border-sky-500/20 bg-sky-950/25 px-4 py-3 text-sm leading-relaxed text-sky-100">
           ADMIN_EMAILS는 감지되었지만 현재 로그인 이메일과 일치하지 않습니다.
-        </p>
-      ) : adminDiag.isAdmin && list403FromBetaApiRef.current ? (
-        <p className="mt-4 rounded-xl border border-violet-500/20 bg-violet-950/25 px-4 py-3 text-sm leading-relaxed text-violet-100">
-          관리자 진단은 통과했지만 신청자 목록 API 권한 확인에서 차단되었습니다.
         </p>
       ) : null
     ) : null;
@@ -434,9 +437,14 @@ export default function InternalBetaApprovalPage() {
           ) : null}
 
           {showMisconfigured ? (
-            <div className="rounded-2xl border border-amber-500/25 bg-amber-950/30 px-6 py-8 text-sm text-amber-100">
-              서버에 Firestore 관리자 설정(<code className="rounded bg-black/30 px-1.5 py-0.5 font-mono text-xs">FIREBASE_SERVICE_ACCOUNT_JSON</code>)이
-              없어 목록을 불러올 수 없습니다. 배포 환경 변수를 확인해 주세요.
+            <div className="rounded-2xl border border-amber-500/25 bg-amber-950/30 px-6 py-8 text-sm leading-relaxed text-amber-100">
+              {MSG_SERVER_MISCONFIGURED}
+            </div>
+          ) : null}
+
+          {showFirestoreDenied ? (
+            <div className="rounded-2xl border border-rose-500/25 bg-rose-950/30 px-6 py-8 text-sm leading-relaxed text-rose-100">
+              {MSG_FIRESTORE_PERMISSION}
             </div>
           ) : null}
 

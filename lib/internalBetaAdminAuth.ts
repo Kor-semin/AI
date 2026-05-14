@@ -31,7 +31,7 @@ export async function requireBetaOpsAdmin(req: Request): Promise<BetaOpsAdminSes
   const admins = getAdminEmailSet();
   if (!email || !isAdminEmail(email, admins)) {
     logBetaOpsAdminDenied(email, admins.size, hasAdminEmailsEnv());
-    return NextResponse.json({ ok: false, error: "forbidden" }, { status: 403 });
+    return NextResponse.json({ ok: false, error: "admin_forbidden" }, { status: 403 });
   }
 
   return { uid, email };

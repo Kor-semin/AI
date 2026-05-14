@@ -15,6 +15,14 @@ function isFirestorePermissionDenied(error: unknown): boolean {
   return /PERMISSION_DENIED|permission-denied|insufficient permissions/i.test(msg);
 }
 
+function firestoreErrorLogFields(error: unknown): { code: unknown; message: string | undefined } {
+  const e = error as { code?: unknown; message?: unknown };
+  return {
+    code: e?.code,
+    message: typeof e?.message === "string" ? e.message : undefined,
+  };
+}
+
 export async function GET(req: Request): Promise<NextResponse> {
   const gate = await requireBetaOpsAdmin(req);
   if (gate instanceof NextResponse) return gate;
@@ -32,8 +40,9 @@ export async function GET(req: Request): Promise<NextResponse> {
     return NextResponse.json({ ok: true, items, applications: items });
   } catch (error) {
     if (isFirestorePermissionDenied(error)) {
-      console.error("[internal/beta-applications] firestore permission denied", error);
-      return NextResponse.json({ ok: false, error: "forbidden" }, { status: 403 });
+      const { code, message } = firestoreErrorLogFields(error);
+      console.error("[internal/beta-applications] firestore permission denied", { code, message });
+      return NextResponse.json({ ok: false, error: "firestore_permission_denied" }, { status: 503 });
     }
     console.error("[internal/beta-applications] failed", error);
     return NextResponse.json({ ok: false, error: "list_failed" }, { status: 500 });
