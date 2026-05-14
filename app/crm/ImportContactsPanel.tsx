@@ -437,11 +437,14 @@ export function ImportContactsPanel({
         </div>
 
         <div
-          className="mt-4 rounded-xl border border-[#FDE68A] bg-[#FFFBEB] px-3.5 py-3 text-[13px] leading-relaxed text-[#78350F] sm:px-4"
+          className="mt-4 rounded-xl border border-[#BFDBFE] bg-[#EFF6FF] px-3.5 py-3.5 text-[13px] leading-relaxed text-[#1E3A5F] sm:px-4"
           role="status"
         >
-          <p className="font-semibold text-[#92400E]">{t("crm.import.trustNoSync")}</p>
-          <p className="mt-1.5 text-[12px] leading-relaxed sm:text-[13px]">{t("crm.import.trustUserChoice")}</p>
+          <p className="font-semibold text-[#0C4A6E]">{t("contactImport.trustTitle")}</p>
+          <p className="mt-2 text-[12px] leading-relaxed sm:text-[13px]">{t("contactImport.noAutoImport")}</p>
+          <p className="mt-2 text-[12px] leading-relaxed sm:text-[13px]">{t("contactImport.previewBeforeSave")}</p>
+          <p className="mt-2 text-[12px] leading-relaxed sm:text-[13px]">{t("contactImport.selectedOnly")}</p>
+          <p className="mt-2 text-[12px] leading-relaxed sm:text-[13px]">{t("contactImport.notResold")}</p>
         </div>
 
         <ol className="mt-4 grid list-none grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-3">
@@ -476,7 +479,7 @@ export function ImportContactsPanel({
               openContactFilePicker();
             }}
           >
-            {t("crm.import.ctaUpload")}
+            {t("contactImport.chooseFileButton")}
           </button>
           {onOpenFileGuide ? (
             <button
@@ -602,7 +605,7 @@ export function ImportContactsPanel({
                 className="min-h-[48px] rounded-xl bg-[#111827] px-5 py-2.5 text-[14px] font-semibold text-white touch-manipulation sm:min-h-[44px]"
                 onClick={() => fileInputRef.current?.click()}
               >
-                {t("crm.import.ctaUpload")}
+                {t("contactImport.chooseFileButton")}
               </button>
               <input
                 ref={fileInputRef}
@@ -682,7 +685,7 @@ export function ImportContactsPanel({
                   openContactFilePicker();
                 }}
               >
-                {t("crm.import.ctaUpload")}
+                {t("contactImport.chooseFileButton")}
               </button>
             </div>
           ) : null}
@@ -829,7 +832,7 @@ export function ImportContactsPanel({
             onClick={() => commit()}
             disabled={!previewRows?.length}
           >
-            최종 확인 후 저장
+            {t("contactImport.saveAfterPreview")}
           </button>
         </div>
       </div>

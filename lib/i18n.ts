@@ -108,6 +108,30 @@ export type TranslationKey =
   | "join.alert.betaNotPersisted"
   | "join.alert.betaSaveFailed"
   | "join.devBetaEndpointHint"
+  | "privacy.title"
+  | "privacy.intro"
+  | "privacy.backHome"
+  | "terms.title"
+  | "terms.intro"
+  | "terms.backHome"
+  | "consent.collectPurposeNote"
+  | "consent.fieldsetLegend"
+  | "consent.badgeRequired"
+  | "consent.badgeOptional"
+  | "consent.privacyRequired"
+  | "consent.termsRequired"
+  | "consent.marketingOptional"
+  | "consent.requiredMissing"
+  | "trust.customerDbNotCollected"
+  | "trust.userConfirmsAndSaves"
+  | "trust.aiDraftOnly"
+  | "contactImport.trustTitle"
+  | "contactImport.noAutoImport"
+  | "contactImport.previewBeforeSave"
+  | "contactImport.selectedOnly"
+  | "contactImport.notResold"
+  | "contactImport.chooseFileButton"
+  | "contactImport.saveAfterPreview"
   | "register.title"
   | "register.continueWithGoogle"
   | "register.intro"
@@ -754,6 +778,37 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "join.alert.betaNotPersisted":
       "테스트 제출이 완료되었습니다.\n현재는 저장 기능이 연결되지 않은 상태입니다.",
     "join.alert.betaSaveFailed": "제출 중 문제가 발생했습니다. 잠시 후 다시 시도해 주세요.",
+    "privacy.title": "개인정보처리방침",
+    "privacy.intro":
+      "본 문서는 베타 운영 단계를 위한 안내 초안입니다. 법적 확정 문구는 전문가 검토를 거칠 수 있으며, 그 전까지도 수집·이용·저장 원칙을 투명하게 안내합니다.",
+    "privacy.backHome": "홈으로",
+    "terms.title": "이용약관",
+    "terms.intro":
+      "본 약관은 베타 서비스 이용에 관한 기본 안내입니다. 운영 정책은 단계적으로 보완될 수 있으며, 중요한 변경 시 별도로 안내하는 것을 목표로 합니다.",
+    "terms.backHome": "홈으로",
+    "consent.collectPurposeNote":
+      "Sensora는 자동차 영업사원의 고객관리 업무를 돕기 위해 필요한 최소한의 정보만 수집합니다.",
+    "consent.fieldsetLegend": "약관 및 수신 동의",
+    "consent.badgeRequired": "[필수]",
+    "consent.badgeOptional": "[선택]",
+    "consent.privacyRequired": "을 확인하였으며, 개인정보 수집 및 이용에 동의합니다.",
+    "consent.termsRequired": "에 동의합니다.",
+    "consent.marketingOptional": "Sensora 소식 및 베타 안내 수신에 동의합니다.",
+    "consent.requiredMissing": "개인정보 수집 및 이용 동의와 이용약관 동의가 필요합니다.",
+    "trust.customerDbNotCollected":
+      "Sensora는 사용자의 고객 DB를 자동으로 수집하지 않으며, 고객정보를 판매하거나 광고 목적으로 공유하지 않습니다.",
+    "trust.userConfirmsAndSaves": "고객정보는 사용자가 직접 입력하거나 선택한 경우에만 저장됩니다.",
+    "trust.aiDraftOnly":
+      "AI는 상담 정리와 초안 작성을 돕는 기능이며, 최종 확인과 저장은 사용자가 직접 합니다.",
+    "contactImport.trustTitle": "연락처 업로드 안내",
+    "contactImport.noAutoImport": "Sensora는 사용자의 연락처를 자동으로 가져오지 않습니다. 사용자가 직접 선택한 파일만 업로드할 수 있습니다.",
+    "contactImport.previewBeforeSave":
+      "업로드한 연락처는 바로 저장되지 않으며, 미리보기 화면에서 사용자가 선택하고 확인한 항목만 고객관리 목록에 저장됩니다.",
+    "contactImport.selectedOnly": "선택하지 않은 연락처는 고객관리 목록에 저장되지 않습니다.",
+    "contactImport.notResold":
+      "저장된 고객정보는 사용자의 고객관리 목적 외로 판매·공유·광고 활용하지 않습니다.",
+    "contactImport.chooseFileButton": "연락처 파일 선택하기",
+    "contactImport.saveAfterPreview": "미리보기 후 선택 저장",
     "join.devBetaEndpointHint":
       "개발 전용: 베타 폼을 시트·웹훅으로 보내려면 NEXT_PUBLIC_BETA_SIGNUP_ENDPOINT(예: Google Apps Script URL)를 설정하세요. 비어 있으면 원격 저장 없이 제출만 확인할 수 있습니다.",
     "register.title": "영업 계정 등록",
@@ -1465,6 +1520,38 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "join.alert.betaSaveFailed": "Something went wrong while submitting. Please try again in a moment.",
     "join.devBetaEndpointHint":
       "Dev only: set NEXT_PUBLIC_BETA_SIGNUP_ENDPOINT (e.g. a Google Apps Script web app URL) to POST submissions to a sheet/webhook. If unset, submit actions are not sent remotely.",
+    "privacy.title": "Privacy Policy",
+    "privacy.intro":
+      "This page is a beta-stage draft for transparency. Final legal wording may be reviewed by counsel; until then, we still explain how we handle data clearly.",
+    "privacy.backHome": "Back to home",
+    "terms.title": "Terms of Service",
+    "terms.intro":
+      "These terms explain beta usage in plain language. Policies may evolve as the product matures, and meaningful changes should be communicated separately.",
+    "terms.backHome": "Back to home",
+    "consent.collectPurposeNote":
+      "Sensora collects only the minimum information needed to support automotive sales customer-management work.",
+    "consent.fieldsetLegend": "Consent",
+    "consent.badgeRequired": "[Required]",
+    "consent.badgeOptional": "[Optional]",
+    "consent.privacyRequired": " — I have read it and agree to the collection and use of my personal information.",
+    "consent.termsRequired": " — I agree.",
+    "consent.marketingOptional": "I agree to receive Sensora news and beta updates (optional).",
+    "consent.requiredMissing": "Please agree to the Privacy Policy terms (collection/use) and the Terms of Service.",
+    "trust.customerDbNotCollected":
+      "Sensora does not automatically harvest your customer database, and we do not sell or use customer data for advertising.",
+    "trust.userConfirmsAndSaves": "Customer information is stored only when you enter it or explicitly choose to save it.",
+    "trust.aiDraftOnly":
+      "AI helps organize notes and draft messages; you review, edit, and save—nothing is finalized automatically.",
+    "contactImport.trustTitle": "Contact upload notice",
+    "contactImport.noAutoImport":
+      "Sensora does not automatically pull your contacts. Only a file you explicitly select can be uploaded.",
+    "contactImport.previewBeforeSave":
+      "Uploaded contacts are not saved immediately. Only rows you select and confirm in the preview are added to your customer list.",
+    "contactImport.selectedOnly": "Contacts you do not select are not saved to your customer list.",
+    "contactImport.notResold":
+      "Saved customer data is not sold, shared for ads, or repurposed outside your customer-management use.",
+    "contactImport.chooseFileButton": "Choose contacts file",
+    "contactImport.saveAfterPreview": "Save selected after preview",
     "register.title": "Sales Account Registration",
     "register.continueWithGoogle": "Sign in with email",
     "register.intro":

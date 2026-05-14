@@ -7,9 +7,18 @@ import { useSearchParams } from "next/navigation";
 import type { BetaSignupPayload } from "@/lib/betaSignupSubmit";
 import { submitBetaSignup } from "@/lib/betaSignupSubmit";
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
+import {
+  RegistrationConsentBlock,
+  type RegistrationConsentValue,
+} from "@/app/components/legal/RegistrationConsentBlock";
 
 function BetaJoinForm() {
   const [pending, setPending] = useState(false);
+  const [consent, setConsent] = useState<RegistrationConsentValue>({
+    privacy: false,
+    terms: false,
+    marketing: false,
+  });
   const formRef = useRef<HTMLFormElement>(null);
   const { t } = useLanguage();
   const searchParams = useSearchParams();
@@ -48,6 +57,11 @@ function BetaJoinForm() {
       return;
     }
 
+    if (!consent.privacy || !consent.terms) {
+      window.alert(t("consent.requiredMissing"));
+      return;
+    }
+
     setPending(true);
     try {
       const res = await submitBetaSignup(payload);
@@ -65,6 +79,7 @@ function BetaJoinForm() {
       if (mounted?.isConnected) {
         mounted.reset();
       }
+      setConsent({ privacy: false, terms: false, marketing: false });
     } finally {
       setPending(false);
     }
@@ -185,17 +200,10 @@ function BetaJoinForm() {
             </fieldset>
 
             <div className="mt-8 flex flex-col gap-5 border-t border-white/[0.1] pt-8">
-              <div
-                className="space-y-2.5 rounded-xl border border-white/[0.12] bg-[#020817]/62 px-4 py-[1.125rem] text-left text-sm leading-[1.65] text-slate-400 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-md max-[389px]:px-3.5 max-[389px]:py-3.5 max-[389px]:text-[0.8125rem]"
-                role="note"
-              >
-                <p className="font-semibold text-slate-100">{t("join.trustNoticeLine1")}</p>
-                <p>{t("join.trustNoticeLine2")}</p>
-                <p>{t("join.trustNoticeLine3")}</p>
-              </div>
+              <RegistrationConsentBlock idPrefix="join-beta" theme="dark" value={consent} onChange={setConsent} />
               <button
                 type="submit"
-                disabled={pending}
+                disabled={pending || !consent.privacy || !consent.terms}
                 className="sensora-premium-primary-workspace min-h-[3.25rem] w-full rounded-2xl py-3.5 text-base font-semibold touch-manipulation disabled:cursor-not-allowed disabled:opacity-55"
               >
                 {pending ? t("join.submitting") : t("join.submit")}

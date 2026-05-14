@@ -20,6 +20,10 @@ import { sellerCanUseApp, useSellerProfile } from "@/app/crm/useSellerProfile";
 import { getFirebaseAuth, getFirebaseStorageBucket, isFirebaseConfigured, isGoogleAuthEnabled } from "@/app/firebase/client";
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
 import {
+  RegistrationConsentBlock,
+  type RegistrationConsentValue,
+} from "@/app/components/legal/RegistrationConsentBlock";
+import {
   maskEmailForBetaDisplay,
   normalizeEmailForBetaAccess,
   postBetaAccessCheck,
@@ -40,6 +44,16 @@ export default function RegisterPage() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
+  const [consentIntro, setConsentIntro] = useState<RegistrationConsentValue>({
+    privacy: false,
+    terms: false,
+    marketing: false,
+  });
+  const [consentUpload, setConsentUpload] = useState<RegistrationConsentValue>({
+    privacy: false,
+    terms: false,
+    marketing: false,
+  });
   const googleAuthEnabled = isGoogleAuthEnabled();
   const { t } = useLanguage();
 
@@ -151,6 +165,10 @@ export default function RegisterPage() {
 
   const signInWithGoogle = async () => {
     setError(null);
+    if (!consentIntro.privacy || !consentIntro.terms) {
+      setError(t("consent.requiredMissing"));
+      return;
+    }
     if (!googleAuthEnabled) {
       setError(t("register.errorGoogleDisabled"));
       return;
@@ -175,6 +193,10 @@ export default function RegisterPage() {
 
   const uploadCard = async () => {
     setError(null);
+    if (!consentUpload.privacy || !consentUpload.terms) {
+      setError(t("consent.requiredMissing"));
+      return;
+    }
     if (betaGate !== "approved") {
       setError(t("register.access.errorTitle"));
       return;
@@ -269,8 +291,9 @@ export default function RegisterPage() {
       className="space-y-2 rounded-xl border border-black/10 bg-[#faf7f3] px-4 py-3.5 text-left text-[12px] leading-[1.65] text-[#4c433a] max-sm:py-3"
       role="note"
     >
-      <p className="font-medium text-[#312a24]">{t("register.trustNoticeLine1")}</p>
-      <p>{t("register.trustNoticeLine2")}</p>
+      <p className="font-medium text-[#312a24]">{t("consent.collectPurposeNote")}</p>
+      <p>{t("trust.customerDbNotCollected")}</p>
+      <p>{t("trust.aiDraftOnly")}</p>
     </div>
   );
 
@@ -426,9 +449,15 @@ export default function RegisterPage() {
                 <li>{t("register.stepInfrastructure")}</li>
               </ul>
               {error ? <p className="text-[13px] text-red-800">{error}</p> : null}
+              <RegistrationConsentBlock
+                idPrefix="register-google"
+                theme="warm"
+                value={consentIntro}
+                onChange={setConsentIntro}
+              />
               <button
                 type="button"
-                disabled={busy}
+                disabled={busy || !consentIntro.privacy || !consentIntro.terms}
                 className="min-h-[48px] w-full touch-manipulation rounded-xl bg-[#2f2720] px-4 py-3 text-sm font-semibold text-[#fcf9f3] hover:opacity-95 disabled:opacity-55"
                 onClick={() => void signInWithGoogle()}
               >
@@ -460,9 +489,15 @@ export default function RegisterPage() {
                 onChange={(ev) => setFile(ev.target.files?.[0] ?? null)}
               />
               {error ? <p className="text-[13px] text-red-800">{error}</p> : null}
+              <RegistrationConsentBlock
+                idPrefix="register-card"
+                theme="warm"
+                value={consentUpload}
+                onChange={setConsentUpload}
+              />
               <button
                 type="button"
-                disabled={busy}
+                disabled={busy || !consentUpload.privacy || !consentUpload.terms}
                 className="min-h-[48px] w-full touch-manipulation rounded-xl bg-[#2f2720] px-4 py-3 text-sm font-semibold text-[#fcf9f3] disabled:opacity-55"
                 onClick={() => void uploadCard()}
               >

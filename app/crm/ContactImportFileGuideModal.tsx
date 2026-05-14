@@ -1,6 +1,9 @@
 "use client";
 
+import Link from "next/link";
+
 import { ContactExportLinksModal, type ContactExportLinksVariant } from "@/app/crm/ContactExportLinksModal";
+import { useLanguage } from "@/app/components/i18n/LanguageProvider";
 import { useEffect, useState } from "react";
 
 const PRIVACY_PRINCIPLES = [
@@ -32,6 +35,7 @@ export function ContactImportFileGuideModal({
   /** 가져오기 패널을 추가로 열어야 할 때(설정 등). 미지정이면 모달만 닫습니다. */
   onProceedToImport?: () => void;
 }) {
+  const { t } = useLanguage();
   /** 모달을 열 때마다 details를 리마운트해 브라우저/OS에 따라 남을 수 있는 펼침 상태를 초기화합니다. */
   const [accordionMountKey, setAccordionMountKey] = useState(0);
   const [exportLinksVariant, setExportLinksVariant] = useState<ContactExportLinksVariant | null>(null);
@@ -83,6 +87,22 @@ export function ContactImportFileGuideModal({
         </div>
 
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 pb-2 pt-3 sm:px-6 sm:pb-3 sm:pt-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+          <div className="mb-3 rounded-xl border border-[#BFDBFE] bg-[#EFF6FF] px-3 py-2.5 text-[12px] leading-relaxed text-[#1E3A5F] sm:mb-4 sm:px-3.5 sm:py-3 sm:text-[13px]">
+            <p className="font-semibold text-[#0C4A6E]">{t("contactImport.trustTitle")}</p>
+            <p className="mt-1.5">{t("contactImport.noAutoImport")}</p>
+            <p className="mt-1.5">{t("contactImport.previewBeforeSave")}</p>
+            <p className="mt-1.5">{t("contactImport.selectedOnly")}</p>
+            <p className="mt-1.5">{t("contactImport.notResold")}</p>
+            <p className="mt-2 text-[11px] text-[#475569]">
+              <Link href="/privacy" className="font-semibold text-sky-800 underline-offset-2 hover:underline">
+                {t("privacy.title")}
+              </Link>
+              {" · "}
+              <Link href="/terms" className="font-semibold text-sky-800 underline-offset-2 hover:underline">
+                {t("terms.title")}
+              </Link>
+            </p>
+          </div>
           <p className="scroll-mt-2 text-[13px] leading-relaxed text-[#475569]">
             휴대폰 기종과 OS 버전에 따라 연락처 앱의 메뉴 이름은 조금씩 다를 수 있습니다. 내보내기로 만든 파일을 Sensora에
             올린 뒤, 미리보기에서 내용을 확인하고 저장하면 됩니다.
