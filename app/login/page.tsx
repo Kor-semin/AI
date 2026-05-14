@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -27,14 +27,19 @@ export default function LoginPage() {
 
   const onGoogleClick = async () => {
     setLocalError(null);
+
     if (!googleAuthEnabled) {
       setLocalError(t("register.errorGoogleDisabled"));
       return;
     }
+
     if (!firebaseReady) {
-      setLocalError("현재 Sensora Auto CRM은 베타 승인 계정만 사용할 수 있습니다. 아직 신청 전이라면 먼저 베타 신청을 진행해 주세요.");
+      setLocalError(
+        "현재 Sensora Auto CRM은 베타 승인 계정만 사용할 수 있습니다. 아직 신청 전이라면 먼저 베타 신청을 진행해 주세요.",
+      );
       return;
     }
+
     setBusy(true);
     try {
       await signIn();
@@ -61,7 +66,8 @@ export default function LoginPage() {
             href="/?view=landing"
             className="inline-flex touch-manipulation items-center gap-2 rounded-xl border border-white/[0.12] bg-white/[0.04] px-3.5 py-2 text-sm font-semibold text-slate-300 transition hover:border-sky-400/28 hover:bg-white/[0.08] hover:text-slate-100"
           >
-            <span aria-hidden>??/span> ??          </Link>
+            <span aria-hidden>←</span> 홈
+          </Link>
         </div>
       </header>
 
@@ -69,10 +75,10 @@ export default function LoginPage() {
         <div className="mx-auto w-full max-w-[min(36rem,calc(100vw-28px))]">
           <div className="mb-6 flex flex-col items-center text-center">
             <SensoraAnimatedMark size={52} animated={false} className="shrink-0 drop-shadow-[0_0_24px_-4px_rgba(56,189,248,0.35)]" aria-hidden />
-            <p className="mt-4 text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">Sensora 쨌 Auto CRM</p>
-            <h1 className="mt-2 text-balance text-2xl font-semibold tracking-tight text-slate-50 sm:text-[1.75rem]">Sensora Auto CRM 濡쒓렇??/h1>
+            <p className="mt-4 text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">Sensora · Auto CRM</p>
+            <h1 className="mt-2 text-balance text-2xl font-semibold tracking-tight text-slate-50 sm:text-[1.75rem]">Sensora Auto CRM 로그인</h1>
             <p className="mt-3 max-w-md text-pretty text-sm leading-relaxed text-slate-400 sm:text-base">
-              踰좏? ?뱀씤??諛쏆? ?먮룞李??곸뾽?ъ썝??Sensora Auto CRM???묒냽?섎뒗 ?붾㈃?낅땲??
+              베타 승인을 받은 자동차 영업사원이 Sensora Auto CRM에 접속하는 화면입니다.
             </p>
             <p className="mt-2 text-sm font-medium text-slate-300">{t("landing.slides.enterprise.heroDefinition")}</p>
           </div>
@@ -88,13 +94,13 @@ export default function LoginPage() {
                   onClick={() => void onGoogleClick()}
                   className="sensora-premium-primary-workspace flex w-full min-h-[52px] items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold transition enabled:touch-manipulation enabled:active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  {busy ? "?곌껐 以묅? : "Google 怨꾩젙?쇰줈 濡쒓렇??}
+                  {busy ? "연결 중…" : "Google 계정으로 로그인"}
                 </button>
 
                 <p className="mt-6 text-center text-sm leading-relaxed text-slate-400">
-                  踰좏? ?뱀씤 ??怨좉컼愿由??뚰겕?ㅽ럹?댁뒪瑜??ъ슜?????덉뒿?덈떎.
+                  베타 승인 후 고객관리 워크스페이스를 사용할 수 있습니다.
                   <br />
-                  ?꾩쭅 踰좏? ?좎껌 ?꾩씠?쇰㈃ 癒쇱? ?좎껌?쒕? ?쒖텧??二쇱꽭??
+                  아직 베타 신청 전이라면 먼저 신청서를 제출해 주세요.
                 </p>
 
                 {displayError ? (
@@ -104,9 +110,10 @@ export default function LoginPage() {
                 ) : null}
 
                 <div className="mt-8 border-t border-white/[0.08] pt-6 text-center">
-                  <p className="text-sm text-slate-500">?꾩쭅 踰좏? ?좎껌 ?꾩씠?쇰㈃?</p>
+                  <p className="text-sm text-slate-500">아직 베타 신청 전이라면?</p>
                   <Link href="/join" prefetch={false} className="mt-3 inline-flex min-h-11 items-center justify-center text-sm font-semibold text-sky-300 underline decoration-sky-400/40 underline-offset-4 hover:text-sky-200">
-                    踰좏? ?좎껌?섎윭 媛湲?                  </Link>
+                    베타 신청하러 가기
+                  </Link>
                 </div>
               </>
             )}
@@ -116,4 +123,3 @@ export default function LoginPage() {
     </div>
   );
 }
-
