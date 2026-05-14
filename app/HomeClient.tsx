@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
 import { InspirationalBackdrop } from "@/app/components/InspirationalBackdrop";
+import { MobileAppSplash } from "@/app/components/MobileAppSplash";
 import { NotebookCover } from "@/app/components/NotebookCover";
 import { SensoraAnimatedMark } from "@/app/components/SensoraAnimatedMark";
 import { MobileLandingDock } from "@/app/components/MobileLandingDock";
@@ -195,6 +196,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
 
   return (
     <div className="relative flex min-h-screen flex-col overflow-x-hidden text-slate-100">
+      <MobileAppSplash />
       <InspirationalBackdrop />
       {showNotebookCover ? <NotebookCover /> : null}
 

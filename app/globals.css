@@ -3033,3 +3033,60 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   z-index: 1;
 }
 
+/* 모바일 랜딩 스플래시 — 은은한 배경·글로우만 (회전·네온 플래시 없음) */
+@keyframes sensora-splash-bg-soft {
+  from {
+    opacity: 0.84;
+    filter: brightness(0.93);
+  }
+  to {
+    opacity: 1;
+    filter: brightness(1.04);
+  }
+}
+
+@keyframes sensora-splash-scrim {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes sensora-splash-glow-soft {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.sensora-mobile-splash__bg {
+  animation: sensora-splash-bg-soft 1.12s ease-out forwards;
+}
+
+.sensora-mobile-splash__scrim {
+  animation: sensora-splash-scrim 1.02s ease-out 0.1s forwards;
+  opacity: 0;
+}
+
+.sensora-mobile-splash__glow {
+  animation: sensora-splash-glow-soft 1.08s ease-out forwards;
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sensora-mobile-splash__bg,
+  .sensora-mobile-splash__scrim,
+  .sensora-mobile-splash__glow {
+    animation: none;
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
