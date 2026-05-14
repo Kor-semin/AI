@@ -1,13 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
 import { InspirationalBackdrop } from "@/app/components/InspirationalBackdrop";
 import { NotebookCover } from "@/app/components/NotebookCover";
 import { SensoraAnimatedMark } from "@/app/components/SensoraAnimatedMark";
 import { MobileAppSplash } from "@/app/components/MobileAppSplash";
-import { MobileFeaturePreview, type MobileLandingFeatureKey } from "@/app/components/MobileFeaturePreview";
 import { MobileLandingDock } from "@/app/components/MobileLandingDock";
 import { LanguageSelect } from "@/app/components/i18n/LanguageSelect";
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
@@ -18,7 +18,7 @@ import {
   type CrmSection,
 } from "@/app/crm/crmSectionTypes";
 import { AppPreviewToc } from "@/app/components/concierge/AppPreviewToc";
-import { LandingShowroom } from "@/app/components/concierge/LandingSections";
+import { LandingShowroom, type MobileLandingWorkspaceTarget } from "@/app/components/concierge/LandingSections";
 import { CRMApp } from "@/app/crm/CRMApp";
 import { useAuth } from "@/app/crm/useAuth";
 import { sellerCanUseApp, useSellerProfile } from "@/app/crm/useSellerProfile";
@@ -26,6 +26,7 @@ import { isFirebaseConfigured, isGoogleAuthEnabled } from "@/app/firebase/client
 import { maskEmailForBetaDisplay, useBetaSheetAccess } from "@/lib/betaAccess";
 
 export function HomeClient({ initialView }: { initialView: "landing" | "app" }) {
+  const router = useRouter();
   const { auth, authError, signOut } = useAuth();
   const { t } = useLanguage();
   const firebaseReady = isFirebaseConfigured();
@@ -38,7 +39,6 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
   const [view, setView] = useState<"landing" | "app">(initialView);
   const [crmSection, setCrmSection] = useState<CrmSection>("dashboard");
   const [appPreviewTocOpen, setAppPreviewTocOpen] = useState(false);
-  const [mobileLandingPreview, setMobileLandingPreview] = useState<MobileLandingFeatureKey | null>(null);
 
   const navigateCrmSection = useCallback(
     (s: CrmSection) => {
@@ -61,10 +61,6 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
   useEffect(() => {
     setView(initialView);
   }, [initialView]);
-
-  useEffect(() => {
-    if (view !== "landing") setMobileLandingPreview(null);
-  }, [view]);
 
   /** 앱 진입 시·해시 변경 시 섹션 동기화 */
   useEffect(() => {
@@ -119,6 +115,17 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
       enterExactAppPreviewRoute(`/?view=app#${h}`, section);
     },
     [enterExactAppPreviewRoute],
+  );
+
+  const goMobileWorkspace = useCallback(
+    (target: MobileLandingWorkspaceTarget) => {
+      if (target === "delivery") {
+        router.push("/delivery");
+        return;
+      }
+      enterAppFromPreviewToc(target);
+    },
+    [enterAppFromPreviewToc, router],
   );
 
   const returnToLanding = useCallback(() => {
@@ -391,7 +398,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
         }
       >
         {view === "landing" ? (
-          <LandingShowroom onOpenAppWorkspace={openAppPreviewToc} onOpenMobileFeaturePreview={setMobileLandingPreview} />
+          <LandingShowroom onOpenAppWorkspace={openAppPreviewToc} onMobileOpenWorkspace={goMobileWorkspace} />
         ) : null}
 
         {view === "app" ? (
@@ -536,21 +543,15 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
         ) : null}
       </main>
 
-      {view === "landing" && !mobileLandingPreview ? (
+      {view === "landing" ? (
         <MobileLandingDock
           onScrollLandingTop={scrollLandingToTop}
-          onOpenCustomers={() => setMobileLandingPreview("customers")}
-          onOpenMemo={() => setMobileLandingPreview("consulting")}
-          onOpenAi={() => setMobileLandingPreview("ai")}
+          onOpenCustomers={() => enterAppFromPreviewToc("customers")}
+          onOpenMemo={() => enterAppFromPreviewToc("consulting")}
+          onOpenAi={() => enterAppFromPreviewToc("ai")}
           onOpenMore={scrollLandingToCta}
         />
       ) : null}
-
-      <MobileFeaturePreview
-        feature={mobileLandingPreview}
-        onClose={() => setMobileLandingPreview(null)}
-        onEnterWorkspace={enterAppFromPreviewToc}
-      />
     </div>
   );
 }

@@ -4,8 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { SensoraAnimatedMark } from "@/app/components/SensoraAnimatedMark";
-import type { MobileLandingFeatureKey } from "@/app/components/MobileFeaturePreview";
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
+import type { CrmSection } from "@/app/crm/crmSectionTypes";
+
+/** 모바일 랜딩에서 워크스페이스로 보낼 대상(CRM 섹션 또는 출고 페이지). */
+export type MobileLandingWorkspaceTarget = CrmSection | "delivery";
 
 /** 랜딩 보조 이미지 에셋 경로(@/public 기준). README 등에서 참고합니다. */
 export const LANDING_SHOWROOM_IMAGE_PATHS = {
@@ -35,7 +38,7 @@ const PHILOSOPHY_LINE_KEYS = [
 
 type MobileWorkCardDef = {
   key: string;
-  preview: MobileLandingFeatureKey;
+  workspace: MobileLandingWorkspaceTarget;
   title: string;
   desc: string;
   icon: "customers" | "memo" | "followup" | "delivery" | "ai";
@@ -44,35 +47,35 @@ type MobileWorkCardDef = {
 const MOBILE_WORK_CARDS: MobileWorkCardDef[] = [
   {
     key: "customers",
-    preview: "customers",
+    workspace: "customers",
     title: "고객관리",
     desc: "고객별 상담 내용과 관심 차량을 정리합니다.",
     icon: "customers",
   },
   {
     key: "consulting",
-    preview: "consulting",
+    workspace: "consulting",
     title: "상담 메모",
     desc: "상담 중 남긴 내용을 다시 확인합니다.",
     icon: "memo",
   },
   {
     key: "followup",
-    preview: "followup",
+    workspace: "followup",
     title: "사후관리",
     desc: "다음 연락과 출고 전 안내를 놓치지 않게 돕습니다.",
     icon: "followup",
   },
   {
     key: "delivery",
-    preview: "delivery",
+    workspace: "delivery",
     title: "출고 안내",
     desc: "반복되는 안내 문구를 더 정확하게 준비합니다.",
     icon: "delivery",
   },
   {
     key: "ai",
-    preview: "ai",
+    workspace: "ai",
     title: "AI 비서",
     desc: "상담 내용을 바탕으로 검토용 초안을 제안합니다.",
     icon: "ai",
@@ -170,19 +173,14 @@ function IconChevronRight({ className }: { className?: string }) {
 
 type Props = {
   onOpenAppWorkspace: () => void;
-  onOpenMobileFeaturePreview: (key: MobileLandingFeatureKey) => void;
+  onMobileOpenWorkspace: (target: MobileLandingWorkspaceTarget) => void;
 };
 
-export function LandingShowroom({ onOpenAppWorkspace, onOpenMobileFeaturePreview }: Props) {
+export function LandingShowroom({ onOpenAppWorkspace, onMobileOpenWorkspace }: Props) {
   const { t } = useLanguage();
 
   const sectionShell = "relative z-[1] w-full px-4 sm:px-6";
   const innerMax = "mx-auto w-full max-w-[1440px]";
-
-  const scrollToId = (id: string) => {
-    if (typeof document === "undefined") return;
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
 
   const featureCards = MOBILE_WORK_CARDS;
 
@@ -228,7 +226,7 @@ export function LandingShowroom({ onOpenAppWorkspace, onOpenMobileFeaturePreview
                       </div>
                       <p className="line-clamp-3 text-[11px] leading-snug text-slate-500 [word-break:keep-all]">{c.desc}</p>
                       <span className="mt-2 inline-flex items-center gap-1 text-[10px] font-semibold text-sky-200/90">
-                        열기
+                        바로 가기
                         <IconChevronRight className="size-3 opacity-90" />
                       </span>
                     </>
@@ -236,7 +234,7 @@ export function LandingShowroom({ onOpenAppWorkspace, onOpenMobileFeaturePreview
                   const cardClass =
                     "flex flex-col rounded-2xl border border-white/[0.1] bg-[#050f1a]/78 p-3 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transition active:scale-[0.99] touch-manipulation min-h-[7.75rem]";
                   return (
-                    <button key={c.key} type="button" className={cardClass} onClick={() => onOpenMobileFeaturePreview(c.preview)}>
+                    <button key={c.key} type="button" className={cardClass} onClick={() => onMobileOpenWorkspace(c.workspace)}>
                       {inner}
                     </button>
                   );
@@ -246,32 +244,32 @@ export function LandingShowroom({ onOpenAppWorkspace, onOpenMobileFeaturePreview
 
             <div id="sensora-landing-quick" className="rounded-2xl border border-white/[0.08] bg-[#030b14]/85 p-3.5 backdrop-blur-sm">
               <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-500">빠른 확인</p>
-              <p className="mt-1 text-[10px] text-slate-600">예시 화면 · 실제 일정은 워크스페이스에서 확인합니다</p>
+              <p className="mt-1 text-[10px] text-slate-600">항목을 누르면 해당 업무 화면으로 바로 이동합니다.</p>
               <ul className="mt-3 divide-y divide-white/[0.06]">
                 {[
                   {
                     k: "today",
                     label: "오늘 할 일",
                     sub: "연락과 일정을 한눈에 확인합니다.",
-                    on: () => scrollToId("sensora-landing-cta"),
+                    on: () => onMobileOpenWorkspace("followup"),
                   },
                   {
                     k: "next",
                     label: "다음 연락 예정",
                     sub: "놓치기 쉬운 고객 연락을 정리합니다.",
-                    on: () => onOpenMobileFeaturePreview("followup"),
+                    on: () => onMobileOpenWorkspace("followup"),
                   },
                   {
                     k: "memo",
                     label: "최근 상담 메모",
                     sub: "최근 남긴 상담 내용을 다시 확인합니다.",
-                    on: () => onOpenMobileFeaturePreview("consulting"),
+                    on: () => onMobileOpenWorkspace("consulting"),
                   },
                   {
                     k: "del",
                     label: "출고 안내 준비",
                     sub: "반복되는 안내 문구를 미리 준비합니다.",
-                    on: () => onOpenMobileFeaturePreview("delivery"),
+                    on: () => onMobileOpenWorkspace("delivery"),
                   },
                 ].map((row) => (
                   <li key={row.k}>
