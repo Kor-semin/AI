@@ -35,7 +35,7 @@ export default function LoginPage() {
 
     if (!firebaseReady) {
       setLocalError(
-        "현재 Sensora Auto CRM은 베타 승인 계정만 사용할 수 있습니다. 아직 신청 전이라면 먼저 베타 신청을 진행해 주세요.",
+        "Google 로그인을 사용하려면 Firebase 연결 설정이 필요합니다(.env.local의 NEXT_PUBLIC_FIREBASE_* 항목, .env.example 참고). 서버를 재시작한 뒤 다시 시도해 주세요. 베타 이용은 /join 신청 후 승인된 계정으로 진행됩니다.",
       );
       return;
     }

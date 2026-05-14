@@ -16,7 +16,8 @@ export function isFirebaseConfigured() {
 
 /** MVP 단계: 필요 시 Google 로그인 기능을 잠시 끌 수 있음 */
 export function isGoogleAuthEnabled() {
-  const v = process.env.NEXT_PUBLIC_ENABLE_GOOGLE_AUTH;
+  const v =
+    process.env.NEXT_PUBLIC_ENABLE_GOOGLE_AUTH ?? process.env.NEXT_PUBLIC_GOOGLE_AUTH_ENABLED;
   if (v == null) return true;
   return String(v).trim().toLowerCase() !== "false";
 }
