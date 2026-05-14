@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { getAdminEmailSet, isAdminEmail, logBetaOpsAdminDenied } from "@/lib/adminEmails";
+import { getAdminEmailSet, hasAdminEmailsEnv, isAdminEmail, logBetaOpsAdminDenied } from "@/lib/adminEmails";
 import { verifyFirebaseIdToken } from "@/lib/firebaseIdTokenVerify";
 import { isFirebaseAdminConfigured } from "@/lib/firebaseAdminApp";
 
@@ -30,7 +30,7 @@ export async function requireBetaOpsAdmin(req: Request): Promise<BetaOpsAdminSes
 
   const admins = getAdminEmailSet();
   if (!email || !isAdminEmail(email, admins)) {
-    logBetaOpsAdminDenied(email, admins.size);
+    logBetaOpsAdminDenied(email, admins.size, hasAdminEmailsEnv());
     return NextResponse.json({ ok: false, error: "forbidden" }, { status: 403 });
   }
 

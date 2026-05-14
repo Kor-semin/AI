@@ -59,6 +59,13 @@ type Screen =
   | "list_error"
   | "ready";
 
+type AdminDiagPayload = {
+  tokenEmailMasked: string;
+  hasAdminEmailsEnv: boolean;
+  adminAllowlistSize: number;
+  isAdmin: boolean;
+};
+
 export default function InternalBetaApprovalPage() {
   const { auth, signOut } = useAuth();
   const [rows, setRows] = useState<BetaAppRow[]>([]);
@@ -68,9 +75,15 @@ export default function InternalBetaApprovalPage() {
   const [flash, setFlash] = useState<string | null>(null);
   const [rowBusy, setRowBusy] = useState<string | null>(null);
   const loadGen = useRef(0);
+  /** 목록 API가 403을 반환했는지(관리자 진단 통과 vs Firestore 403 구분용). */
+  const list403FromBetaApiRef = useRef(false);
+  const [adminDiag, setAdminDiag] = useState<AdminDiagPayload | null>(null);
+  const [adminDiagLoading, setAdminDiagLoading] = useState(false);
+  const [adminDiagError, setAdminDiagError] = useState<string | null>(null);
 
   const load = useCallback(async (kind: "initial" | "reload") => {
     const gen = ++loadGen.current;
+    list403FromBetaApiRef.current = false;
 
     if (kind === "initial") {
       setLoadErr(null);
@@ -104,6 +117,7 @@ export default function InternalBetaApprovalPage() {
       return;
     }
     if (res.status === 403) {
+      list403FromBetaApiRef.current = true;
       setRows([]);
       setLoadErr(null);
       setScreen("forbidden");
@@ -164,6 +178,7 @@ export default function InternalBetaApprovalPage() {
     }
     if (auth.status === "signed-out") {
       loadGen.current += 1;
+      list403FromBetaApiRef.current = false;
       setRows([]);
       setLoadErr(null);
       setListLoading(false);
@@ -175,6 +190,66 @@ export default function InternalBetaApprovalPage() {
       void load("initial");
     }
   }, [auth.status, auth.status === "signed-in" ? auth.uid : null, load]);
+
+  useEffect(() => {
+    if (auth.status !== "signed-in" || screen !== "forbidden") {
+      return;
+    }
+    let cancelled = false;
+    setAdminDiag(null);
+    setAdminDiagError(null);
+    setAdminDiagLoading(true);
+    void (async () => {
+      const authz = await authorizationHeader();
+      if (cancelled) return;
+      if (!authz) {
+        setAdminDiagLoading(false);
+        setAdminDiagError("인증 헤더를 만들 수 없습니다.");
+        return;
+      }
+      try {
+        const r = await fetch("/api/internal/admin-diagnostics", {
+          headers: { Authorization: authz },
+          cache: "no-store",
+        });
+        if (cancelled) return;
+        if (r.status === 503) {
+          setAdminDiagError("서버 설정(Firebase 서비스 계정)을 확인할 수 없습니다.");
+          setAdminDiagLoading(false);
+          return;
+        }
+        if (r.status === 401) {
+          setAdminDiagError("토큰 검증에 실패했습니다. 다시 로그인해 주세요.");
+          setAdminDiagLoading(false);
+          return;
+        }
+        if (!r.ok) {
+          setAdminDiagError("진단 정보를 불러오지 못했습니다.");
+          setAdminDiagLoading(false);
+          return;
+        }
+        const json = (await r.json()) as Partial<AdminDiagPayload> & { ok?: boolean };
+        if (!json.ok || typeof json.tokenEmailMasked !== "string") {
+          setAdminDiagError("진단 응답 형식이 올바르지 않습니다.");
+          setAdminDiagLoading(false);
+          return;
+        }
+        setAdminDiag({
+          tokenEmailMasked: json.tokenEmailMasked,
+          hasAdminEmailsEnv: Boolean(json.hasAdminEmailsEnv),
+          adminAllowlistSize: typeof json.adminAllowlistSize === "number" ? json.adminAllowlistSize : 0,
+          isAdmin: Boolean(json.isAdmin),
+        });
+      } catch {
+        if (!cancelled) setAdminDiagError("진단 요청 중 오류가 발생했습니다.");
+      } finally {
+        if (!cancelled) setAdminDiagLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [screen, auth.status]);
 
   const runAction = useCallback(
     async (subpath: "approve" | "reject" | "pending", email: string) => {
@@ -211,6 +286,23 @@ export default function InternalBetaApprovalPage() {
   const showMisconfigured = auth.status === "signed-in" && screen === "misconfigured";
   const showListError = auth.status === "signed-in" && screen === "list_error";
   const showReady = auth.status === "signed-in" && screen === "ready";
+
+  const forbiddenSituationHint =
+    adminDiag && !adminDiagLoading ? (
+      !adminDiag.hasAdminEmailsEnv || adminDiag.adminAllowlistSize === 0 ? (
+        <p className="mt-4 rounded-xl border border-amber-500/20 bg-amber-950/25 px-4 py-3 text-sm leading-relaxed text-amber-100">
+          Vercel Production 환경에 ADMIN_EMAILS 값이 비어 있거나 아직 재배포에 반영되지 않았습니다.
+        </p>
+      ) : adminDiag.adminAllowlistSize > 0 && !adminDiag.isAdmin ? (
+        <p className="mt-4 rounded-xl border border-sky-500/20 bg-sky-950/25 px-4 py-3 text-sm leading-relaxed text-sky-100">
+          ADMIN_EMAILS는 감지되었지만 현재 로그인 이메일과 일치하지 않습니다.
+        </p>
+      ) : adminDiag.isAdmin && list403FromBetaApiRef.current ? (
+        <p className="mt-4 rounded-xl border border-violet-500/20 bg-violet-950/25 px-4 py-3 text-sm leading-relaxed text-violet-100">
+          관리자 진단은 통과했지만 신청자 목록 API 권한 확인에서 차단되었습니다.
+        </p>
+      ) : null
+    ) : null;
 
   return (
     <div className="relative flex min-h-[100dvh] min-h-[100svh] flex-col overflow-x-hidden text-slate-100">
@@ -300,17 +392,44 @@ export default function InternalBetaApprovalPage() {
             <div className="sensora-premium-card rounded-2xl border border-white/[0.1] bg-[#050f1a]/75 px-6 py-10 text-center backdrop-blur-md sm:px-10">
               <p className="text-base leading-relaxed text-slate-200">이 페이지는 Sensora 내부 운영자만 접근할 수 있습니다.</p>
               <p className="mt-3 text-sm leading-relaxed text-slate-500">
-                현재 로그인된 Google 계정이 관리자 목록에 포함되어 있는지 확인해 주세요.
-              </p>
-              <p className="mt-3 text-sm leading-relaxed text-slate-500">
                 Vercel의 ADMIN_EMAILS 값과 현재 로그인 이메일이 정확히 일치해야 합니다.
               </p>
-              <p className="mt-5 rounded-xl border border-white/[0.08] bg-slate-950/40 px-4 py-3 text-sm text-slate-300">
-                현재 로그인된 Google 계정:{" "}
-                <span className="font-mono font-medium text-slate-100">
-                  {maskEmailForBetaDisplay(auth.status === "signed-in" ? auth.email : null)}
-                </span>
-              </p>
+              {adminDiagLoading ? (
+                <p className="mt-5 text-sm text-slate-500">진단 정보를 불러오는 중…</p>
+              ) : null}
+              {adminDiagError ? (
+                <p className="mt-5 rounded-xl border border-amber-500/25 bg-amber-950/30 px-4 py-3 text-sm text-amber-100" role="status">
+                  {adminDiagError}
+                </p>
+              ) : null}
+              {adminDiag ? (
+                <div className="mt-5 space-y-2 rounded-xl border border-white/[0.08] bg-slate-950/40 px-4 py-4 text-left text-sm text-slate-300">
+                  <p>
+                    현재 로그인된 Google 계정:{" "}
+                    <span className="font-mono font-medium text-slate-100">{adminDiag.tokenEmailMasked}</span>
+                  </p>
+                  <p>
+                    ADMIN_EMAILS 환경변수 감지:{" "}
+                    <span className="font-medium text-slate-100">{adminDiag.hasAdminEmailsEnv ? "예" : "아니오"}</span>
+                  </p>
+                  <p>
+                    관리자 목록 수:{" "}
+                    <span className="font-medium text-slate-100">{adminDiag.adminAllowlistSize}명</span>
+                  </p>
+                  <p>
+                    관리자 일치 여부:{" "}
+                    <span className="font-medium text-slate-100">{adminDiag.isAdmin ? "예" : "아니오"}</span>
+                  </p>
+                </div>
+              ) : !adminDiagLoading && !adminDiagError ? (
+                <p className="mt-5 rounded-xl border border-white/[0.08] bg-slate-950/40 px-4 py-3 text-sm text-slate-300">
+                  현재 로그인된 Google 계정:{" "}
+                  <span className="font-mono font-medium text-slate-100">
+                    {maskEmailForBetaDisplay(auth.status === "signed-in" ? auth.email : null)}
+                  </span>
+                </p>
+              ) : null}
+              {forbiddenSituationHint}
             </div>
           ) : null}
 
