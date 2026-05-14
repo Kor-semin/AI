@@ -7,7 +7,6 @@ import { useCallback, useEffect, useState } from "react";
 import { InspirationalBackdrop } from "@/app/components/InspirationalBackdrop";
 import { NotebookCover } from "@/app/components/NotebookCover";
 import { SensoraAnimatedMark } from "@/app/components/SensoraAnimatedMark";
-import { MobileAppSplash } from "@/app/components/MobileAppSplash";
 import { MobileLandingDock } from "@/app/components/MobileLandingDock";
 import { LanguageSelect } from "@/app/components/i18n/LanguageSelect";
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
@@ -17,7 +16,6 @@ import {
   hashToCrmSection,
   type CrmSection,
 } from "@/app/crm/crmSectionTypes";
-import { AppPreviewToc } from "@/app/components/concierge/AppPreviewToc";
 import { LandingShowroom, type MobileLandingWorkspaceTarget } from "@/app/components/concierge/LandingSections";
 import { CRMApp } from "@/app/crm/CRMApp";
 import { useAuth } from "@/app/crm/useAuth";
@@ -38,8 +36,6 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
   });
   const [view, setView] = useState<"landing" | "app">(initialView);
   const [crmSection, setCrmSection] = useState<CrmSection>("dashboard");
-  const [appPreviewTocOpen, setAppPreviewTocOpen] = useState(false);
-
   const navigateCrmSection = useCallback(
     (s: CrmSection) => {
       setCrmSection(s);
@@ -90,10 +86,6 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
     return () => window.removeEventListener("popstate", onPop);
   }, []);
 
-  const openAppPreviewToc = useCallback(() => {
-    setAppPreviewTocOpen(true);
-  }, []);
-
   const pushPreviewUrl = useCallback((href: string) => {
     if (typeof window === "undefined") return;
     window.history.pushState(null, "", href);
@@ -101,7 +93,6 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
 
   const enterExactAppPreviewRoute = useCallback(
     (href: string, section: CrmSection) => {
-      setAppPreviewTocOpen(false);
       pushPreviewUrl(href);
       setView("app");
       setCrmSection(section);
@@ -128,8 +119,12 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
     [enterAppFromPreviewToc, router],
   );
 
+  /** 랜딩·헤더의 「워크스페이스 체험」은 미리보기 모달 없이 요약 화면으로 바로 진입 */
+  const openWorkspaceFromLanding = useCallback(() => {
+    enterAppFromPreviewToc("dashboard");
+  }, [enterAppFromPreviewToc]);
+
   const returnToLanding = useCallback(() => {
-    setAppPreviewTocOpen(false);
     pushPreviewUrl("/?view=landing");
     setView("landing");
   }, [pushPreviewUrl]);
@@ -200,7 +195,6 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
 
   return (
     <div className="relative flex min-h-screen flex-col overflow-x-hidden text-slate-100">
-      <MobileAppSplash />
       <InspirationalBackdrop />
       {showNotebookCover ? <NotebookCover /> : null}
 
@@ -273,9 +267,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                 <div className="landing-nav-header-cta-row flex w-full min-w-0 flex-wrap items-stretch justify-end gap-x-2 gap-y-2 sm:gap-x-2.5 lg:w-auto lg:max-w-none">
                   <button
                     type="button"
-                    onClick={() => {
-                      openAppPreviewToc();
-                    }}
+                    onClick={openWorkspaceFromLanding}
                     className={[
                       "landing-nav-cta-preview landing-nav-cta-preview--compact landing-enterprise-btn-secondary relative z-[20] inline-flex min-h-10 min-w-0 flex-1 cursor-pointer items-center justify-center gap-1 rounded-lg px-3 py-2 text-center text-[0.8125rem] font-semibold text-slate-100/95 backdrop-blur-sm sm:flex-none sm:whitespace-nowrap sm:px-3.5",
                       "transition duration-[180ms] ease-out focus-visible:outline-none active:scale-[0.99]",
@@ -382,14 +374,6 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
         </div>
       </header>
 
-      <AppPreviewToc
-        open={appPreviewTocOpen}
-        onClose={() => setAppPreviewTocOpen(false)}
-        onGoLanding={returnToLanding}
-        onOpenTargetPath={enterExactAppPreviewRoute}
-        onSelectSection={enterAppFromPreviewToc}
-      />
-
       <main
         className={
           view === "landing"
@@ -398,7 +382,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
         }
       >
         {view === "landing" ? (
-          <LandingShowroom onOpenAppWorkspace={openAppPreviewToc} onMobileOpenWorkspace={goMobileWorkspace} />
+          <LandingShowroom onOpenAppWorkspace={openWorkspaceFromLanding} onMobileOpenWorkspace={goMobileWorkspace} />
         ) : null}
 
         {view === "app" ? (

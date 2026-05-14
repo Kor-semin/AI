@@ -17,34 +17,14 @@ import { crmSectionToHash, type CrmSection } from "@/app/crm/crmSectionTypes";
 
 const STORAGE_KEY = "crm.notebookCoverDismissed";
 
-/** 브라우저 탭(일반 웹)에서는 표지를 자동으로 띄우지 않고, PWA/홈 화면 추가 등 standalone 에서만 노출합니다. */
-function isPwaStandaloneWindow(): boolean {
-  if (typeof window === "undefined") return false;
-  try {
-    if (window.matchMedia("(display-mode: standalone)").matches) return true;
-  } catch {
-    /* ignore */
-  }
-  const nav = navigator as Navigator & { standalone?: boolean };
-  return Boolean(nav.standalone);
-}
-
 const WORKSPACE_VIEW = "/?view=app" as const;
-
-function readDismissed(): boolean {
-  try {
-    return sessionStorage.getItem(STORAGE_KEY) === "1";
-  } catch {
-    return false;
-  }
-}
 
 const onboardCloseBtn =
   "inline-flex touch-manipulation items-center justify-center rounded-lg border border-transparent px-2.5 py-1.5 text-xs font-medium tracking-[-0.01em] text-[#94A3B8] transition motion-reduce:transition-none hover:bg-white/[0.06] hover:text-[#E2E8F0] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#94A3B8]/65";
 
 /**
- * PWA 첫 진입 등 — 앱 미리보기(AppPreviewToc)와 동일한 Sensora 통합 가이드 흐름을 재사용합니다.
- * 표지 레이아웃·톤(자연광·모노) 래퍼는 유지하고, 안내 단계 중복만 제거합니다.
+ * 노트북 표지·통합 가이드(PWA 첫 진입 등에 쓰이던 흐름).
+ * 기본은 비활성화 — `?cover=1` / `openCover=1` 또는 `crm-show-notebook-cover` 이벤트로만 노출합니다.
  */
 export function NotebookCover() {
   const router = useRouter();
@@ -82,7 +62,7 @@ export function NotebookCover() {
     } catch {
       /* ignore */
     }
-    setDismissed(isPwaStandaloneWindow() ? readDismissed() : true);
+    setDismissed(true);
     setCoverHydrated(true);
   }, []);
 
