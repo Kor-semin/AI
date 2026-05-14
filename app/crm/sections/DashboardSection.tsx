@@ -101,7 +101,7 @@ export function DashboardSection({
           className="sensora-dark-ghost-btn mt-4 min-h-[46px] rounded-xl px-5 py-2.5 text-[13px] font-semibold touch-manipulation"
           onClick={() => onGoSection("followup")}
         >
-          사후관리 화면으로 →
+          사후관리에서 확인
         </button>
       </section>
 

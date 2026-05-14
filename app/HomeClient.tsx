@@ -6,6 +6,8 @@ import { useCallback, useEffect, useState } from "react";
 import { InspirationalBackdrop } from "@/app/components/InspirationalBackdrop";
 import { NotebookCover } from "@/app/components/NotebookCover";
 import { SensoraAnimatedMark } from "@/app/components/SensoraAnimatedMark";
+import { MobileAppSplash } from "@/app/components/MobileAppSplash";
+import { MobileLandingDock } from "@/app/components/MobileLandingDock";
 import { LanguageSelect } from "@/app/components/i18n/LanguageSelect";
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
 import { ConciergeSidebar } from "@/app/components/concierge/ConciergeSidebar";
@@ -107,12 +109,8 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
 
   const enterAppFromPreviewToc = useCallback(
     (section: CrmSection) => {
-      const previewRoutes: Partial<Record<CrmSection, string>> = {
-        customers: "/?view=app#customers",
-        ai: "/?view=app#crm-ai-assistant",
-        followup: "/?view=app#follow-up",
-      };
-      enterExactAppPreviewRoute(previewRoutes[section] ?? `/?view=app#${crmSectionToHash(section)}`, section);
+      const h = crmSectionToHash(section);
+      enterExactAppPreviewRoute(`/?view=app#${h}`, section);
     },
     [enterExactAppPreviewRoute],
   );
@@ -122,6 +120,16 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
     pushPreviewUrl("/?view=landing");
     setView("landing");
   }, [pushPreviewUrl]);
+
+  const scrollLandingToTop = useCallback(() => {
+    if (typeof document === "undefined") return;
+    document.getElementById("sensora-landing-scroll")?.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
+  const scrollLandingToCta = useCallback(() => {
+    if (typeof document === "undefined") return;
+    document.getElementById("sensora-landing-cta")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, []);
 
   useEffect(() => {
     if (view !== "app") return undefined;
@@ -179,6 +187,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
 
   return (
     <div className="relative flex min-h-screen flex-col overflow-x-hidden text-slate-100">
+      <MobileAppSplash />
       <InspirationalBackdrop />
       {showNotebookCover ? <NotebookCover /> : null}
 
@@ -223,7 +232,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
               </div>
 
               <div className="landing-nav-actions-cluster flex w-full min-w-0 flex-col gap-2 max-lg:gap-1 sm:gap-2.5 lg:w-auto lg:max-w-none lg:flex-none lg:flex-row lg:items-center lg:justify-end lg:gap-4 xl:gap-5">
-                <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1.5 max-lg:gap-x-1.5 max-lg:gap-y-1 sm:gap-x-3 sm:gap-y-2 lg:justify-end">
+                <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1.5 max-lg:gap-x-1.5 max-lg:gap-y-1 sm:gap-x-3 sm:gap-y-2 lg:justify-end max-lg:[&_select]:h-7 max-lg:[&_select]:max-w-[5rem] max-lg:[&_select]:px-1.5 max-lg:[&_select]:py-1 max-lg:[&_select]:text-[10px]">
                   <LanguageSelect dense />
                   {auth.status === "loading" ? (
                     <span className="text-xs text-slate-400">{t("auth.checkingLogin")}</span>
@@ -372,7 +381,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
         }
       >
         {view === "landing" ? (
-          <LandingShowroom onOpenAppWorkspace={openAppPreviewToc} />
+          <LandingShowroom onOpenAppWorkspace={openAppPreviewToc} onEnterWorkspaceSection={enterAppFromPreviewToc} />
         ) : null}
 
         {view === "app" ? (
@@ -514,6 +523,16 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
           </div>
         ) : null}
       </main>
+
+      {view === "landing" ? (
+        <MobileLandingDock
+          onScrollLandingTop={scrollLandingToTop}
+          onOpenCustomers={() => enterAppFromPreviewToc("customers")}
+          onOpenMemo={() => enterAppFromPreviewToc("consulting")}
+          onOpenAi={() => enterAppFromPreviewToc("ai")}
+          onOpenMore={scrollLandingToCta}
+        />
+      ) : null}
     </div>
   );
 }
