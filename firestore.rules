@@ -8,6 +8,42 @@ service cloud.firestore {
     match /betaApplications/{id} {
       allow read, write: if false;
     }
+
+    /**
+     * sellerProfiles: 로그인 사용자는 본인 uid 문서만 읽기/쓰기.
+     * 클라이언트가 approvalStatus 를 "approved" 로 올리는 우회를 막기 위해
+     * 생성·갱신 시 허용되는 상태값만 제한합니다(승인 반영은 Admin SDK).
+     */
+    match /sellerProfiles/{uid} {
+      function isSellerOwner() {
+        return request.auth != null && request.auth.uid == uid;
+      }
+
+      /** 문서에 필드가 없으면 needs_card 로 간주(레거시 호환). */
+      function effApproval(data) {
+        return ("approvalStatus" in data) ? data.approvalStatus : "needs_card";
+      }
+
+      function clientWritableApproval(st) {
+        return st == "needs_card" || st == "pending" || st == "rejected";
+      }
+
+      allow read: if isSellerOwner();
+
+      allow create: if isSellerOwner()
+        && clientWritableApproval(effApproval(request.resource.data));
+
+      allow update: if isSellerOwner()
+        && (
+          effApproval(request.resource.data) == effApproval(resource.data)
+          || (
+            clientWritableApproval(effApproval(resource.data))
+            && clientWritableApproval(effApproval(request.resource.data))
+          )
+        );
+
+      allow delete: if false;
+    }
   }
 }
 

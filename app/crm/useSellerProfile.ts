@@ -6,6 +6,14 @@ import { isFirebaseConfigured } from "@/app/firebase/client";
 import type { SellerProfileDoc } from "@/app/crm/sellerProfile";
 import { subscribeSellerProfile } from "@/app/crm/sellerProfile";
 
+function mapSellerProfileSubscribeError(e: unknown): string {
+  const raw = e instanceof Error ? e.message : String(e);
+  if (/permission|insufficient permissions|missing or insufficient permissions/i.test(raw)) {
+    return "permission_denied";
+  }
+  return raw;
+}
+
 /** Firebase 로그인 후 영업 프로필 검토 상태 */
 export function useSellerProfile(uid: string | null | undefined): {
   loading: boolean;
@@ -43,15 +51,21 @@ export function useSellerProfile(uid: string | null | undefined): {
           },
           (e) => {
             if (!cancelled) {
+              if (typeof console !== "undefined" && typeof console.error === "function") {
+                console.error("[sellerProfiles] snapshot error", e);
+              }
               setProfile(null);
-              setError(e instanceof Error ? e.message : String(e));
+              setError(mapSellerProfileSubscribeError(e));
               setLoading(false);
             }
           },
         );
       } catch (e) {
         if (!cancelled) {
-          setError(e instanceof Error ? e.message : String(e));
+          if (typeof console !== "undefined" && typeof console.error === "function") {
+            console.error("[sellerProfiles] subscribe setup error", e);
+          }
+          setError(mapSellerProfileSubscribeError(e));
           setLoading(false);
         }
       }

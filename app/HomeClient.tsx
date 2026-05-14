@@ -410,13 +410,15 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
 
                 {!sellerLoading && seller.error ? (
                   <div className="rounded-2xl border border-red-200 bg-red-50 px-6 py-5 text-sm leading-relaxed text-red-900">
-                    <p className="font-semibold">판매자 프로필 불러오기 실패</p>
-                    <p className="mt-1">{seller.error}</p>
-                    <p className="mt-3 text-xs text-red-800/90">
-                      Firestore{" "}
-                      <code className="rounded bg-red-100 px-1.5 py-0.5 font-mono text-[11px]">sellerProfiles/{`{uid}`}</code>
-                      에 대한 읽기 권한이 있는지 확인해 주세요.
+                    <p className="font-semibold">판매자 프로필을 불러오지 못했습니다.</p>
+                    <p className="mt-2 text-[13px] leading-relaxed text-red-800/95">
+                      {seller.error === "permission_denied"
+                        ? "베타 승인 정보와 계정 설정을 확인하고 있습니다. 잠시 후 다시 시도해 보시고, 문제가 계속되면 관리자에게 문의해 주세요."
+                        : "일시적으로 프로필을 불러오지 못했습니다. 네트워크를 확인한 뒤 다시 시도해 주세요."}
                     </p>
+                    {process.env.NODE_ENV === "development" ? (
+                      <p className="mt-3 font-mono text-[11px] leading-snug text-red-900/80">개발용: {seller.error}</p>
+                    ) : null}
                   </div>
                 ) : null}
 

@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 
-import { attachApprovedUidIfEmpty, getBetaAccessFromFirestore } from "@/lib/betaApplicationsServer";
+import {
+  attachApprovedUidIfEmpty,
+  getBetaAccessFromFirestore,
+  upsertSellerProfileWhenBetaApproved,
+} from "@/lib/betaApplicationsServer";
 import { isFirebaseAdminConfigured } from "@/lib/firebaseAdminApp";
 import { mapUpstreamBetaStatusToCanonical } from "@/lib/betaAccessStatusMap";
 
@@ -40,6 +44,7 @@ export async function POST(req: Request): Promise<NextResponse> {
       if (st === "approved") {
         if (uid) {
           await attachApprovedUidIfEmpty(emailNorm, uid);
+          await upsertSellerProfileWhenBetaApproved(emailNorm, uid);
         }
         return NextResponse.json({ ok: true, approved: true, status: "approved" });
       }

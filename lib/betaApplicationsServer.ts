@@ -165,6 +165,28 @@ export async function attachApprovedUidIfEmpty(emailNorm: string, uid: string): 
   await ref.set({ approvedUid: uid, updatedAt: new Date().toISOString() }, { merge: true });
 }
 
+const SELLER_PROFILES = "sellerProfiles";
+
+/**
+ * 베타 신청이 Firestore 상 approved 일 때만, 해당 로그인 uid 의 sellerProfiles 를 Admin 으로 맞춥니다.
+ * 클라이언트가 임의로 approved 를 쓰는 우회를 막고, 베타 승인과 영업 프로필 상태를 일치시킵니다.
+ */
+export async function upsertSellerProfileWhenBetaApproved(emailNorm: string, uid: string): Promise<void> {
+  const db = getAdminFirestore();
+  if (!db || !emailNorm || !uid) return;
+  const st = await getBetaAccessFromFirestore(emailNorm);
+  if (st !== "approved") return;
+  await db.collection(SELLER_PROFILES).doc(uid).set(
+    {
+      approvalStatus: "approved" as const,
+      signupEmail: emailNorm,
+      updatedAtMs: Date.now(),
+      authProviderHint: "oauth",
+    },
+    { merge: true },
+  );
+}
+
 export async function getBetaAccessFromFirestore(emailNorm: string): Promise<BetaApplicationStatus | "not_found" | null> {
   const db = getAdminFirestore();
   if (!db) return null;
