@@ -6,6 +6,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { InspirationalBackdrop } from "@/app/components/InspirationalBackdrop";
 import { useAuth } from "@/app/crm/useAuth";
 import { getFirebaseAuth } from "@/app/firebase/client";
+import { maskEmailForBetaDisplay } from "@/lib/betaAccess";
 
 type BetaAppRow = {
   fullName: string;
@@ -298,7 +299,18 @@ export default function InternalBetaApprovalPage() {
           {showForbidden ? (
             <div className="sensora-premium-card rounded-2xl border border-white/[0.1] bg-[#050f1a]/75 px-6 py-10 text-center backdrop-blur-md sm:px-10">
               <p className="text-base leading-relaxed text-slate-200">이 페이지는 Sensora 내부 운영자만 접근할 수 있습니다.</p>
-              <p className="mt-3 text-sm text-slate-500">접속 중인 Google 계정이 관리자 목록에 포함되어 있는지 확인해 주세요.</p>
+              <p className="mt-3 text-sm leading-relaxed text-slate-500">
+                현재 로그인된 Google 계정이 관리자 목록에 포함되어 있는지 확인해 주세요.
+              </p>
+              <p className="mt-3 text-sm leading-relaxed text-slate-500">
+                Vercel의 ADMIN_EMAILS 값과 현재 로그인 이메일이 정확히 일치해야 합니다.
+              </p>
+              <p className="mt-5 rounded-xl border border-white/[0.08] bg-slate-950/40 px-4 py-3 text-sm text-slate-300">
+                현재 로그인된 Google 계정:{" "}
+                <span className="font-mono font-medium text-slate-100">
+                  {maskEmailForBetaDisplay(auth.status === "signed-in" ? auth.email : null)}
+                </span>
+              </p>
             </div>
           ) : null}
 
