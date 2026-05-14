@@ -17,7 +17,7 @@ export type BetaSignupWireBody = BetaSignupPayload & {
   source: string;
 };
 
-/** 제출 성공 시 `savedToBackend`: 엔드포인트로 POST 됐는지 여부. 알림 문구는 호출 측(i18n)에서 처리합니다. */
+/** 제출 성공 시 `savedToBackend`: 서버(Firestore) 또는 웹훅으로 저장됐는지 여부. 알림 문구는 호출 측(i18n)에서 처리합니다. */
 export type BetaSignupResult =
   | { ok: true; savedToBackend: boolean }
   | { ok: false; error: string };
@@ -37,12 +37,28 @@ function buildWireBody(payload: BetaSignupPayload): BetaSignupWireBody {
   };
 }
 
+async function persistBetaSignupToServer(payloadWithMeta: BetaSignupWireBody): Promise<boolean> {
+  try {
+    const res = await fetch("/api/beta-signup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payloadWithMeta),
+    });
+    const data: unknown = await res.json().catch(() => null);
+    if (!res.ok || !data || typeof data !== "object") {
+      return false;
+    }
+    return (data as { persisted?: unknown }).persisted === true;
+  } catch {
+    return false;
+  }
+}
+
 /**
  * 베타 신청 제출 (클라이언트 전용).
  *
- * - 엔드포인트 비어 있음: 원격 저장 없음 — `{ ok: true, savedToBackend: false }`
- * - 엔드포인트 있음: `no-cors` + `text/plain` 로 JSON 문자열 POST (Google Apps Script 웹 앱 호환).
- *   `no-cors`에서는 응답 상태를 읽을 수 없으므로 **fetch 가 reject 되지 않으면** 접수 성공으로 봅니다.
+ * - `/api/beta-signup`: 서버에 `FIREBASE_SERVICE_ACCOUNT_JSON` 이 있으면 Firestore `betaApplications` 에 저장(기본 pending).
+ * - `NEXT_PUBLIC_BETA_SIGNUP_ENDPOINT` 가 있으면 기존 웹훅(Google Apps Script 등)으로도 전송합니다.
  *
  * body에는 폼 필드 + `submittedAt`(ISO) + `source` 포함. 개인정보는 로그하지 않습니다.
  */
@@ -54,22 +70,30 @@ export async function submitBetaSignup(payload: BetaSignupPayload): Promise<Beta
       return { ok: false, error: "submitBetaSignup is client-only" };
     }
 
-    if (!endpoint) {
-      return { ok: true, savedToBackend: false };
+    const payloadWithMeta = buildWireBody(payload);
+    const serverPersisted = await persistBetaSignupToServer(payloadWithMeta);
+
+    if (endpoint) {
+      try {
+        await fetch(endpoint, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(payloadWithMeta),
+        });
+        return { ok: true, savedToBackend: true };
+      } catch {
+        console.warn("[beta signup] webhook request failed");
+        if (serverPersisted) {
+          return { ok: true, savedToBackend: true };
+        }
+        return { ok: false, error: "network" };
+      }
     }
 
-    const payloadWithMeta = buildWireBody(payload);
-
-    await fetch(endpoint, {
-      method: "POST",
-      mode: "no-cors",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify(payloadWithMeta),
-    });
-
-    return { ok: true, savedToBackend: true };
+    return { ok: true, savedToBackend: serverPersisted };
   } catch {
-    console.warn("[beta signup] webhook request failed");
+    console.warn("[beta signup] submit failed");
     return { ok: false, error: "network" };
   }
 }

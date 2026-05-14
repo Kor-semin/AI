@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useMemo, useState } from "react";
 
 import { InspirationalBackdrop } from "@/app/components/InspirationalBackdrop";
 import { SensoraAnimatedMark } from "@/app/components/SensoraAnimatedMark";
@@ -10,9 +10,21 @@ import { useLanguage } from "@/app/components/i18n/LanguageProvider";
 import { useAuth } from "@/app/crm/useAuth";
 import { isFirebaseConfigured, isGoogleAuthEnabled } from "@/app/firebase/client";
 
-export default function LoginPage() {
+function safePostLoginPath(raw: string | null): string | null {
+  if (raw == null) return null;
+  const s = raw.trim();
+  if (!s.startsWith("/") || s.startsWith("//")) return null;
+  if (!s.startsWith("/internal/")) return null;
+  if (s.includes("..")) return null;
+  return s;
+}
+
+function LoginPageInner() {
   const { t } = useLanguage();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const nextPath = useMemo(() => safePostLoginPath(searchParams.get("next")), [searchParams]);
+
   const { auth, authError, signIn } = useAuth();
   const [busy, setBusy] = useState(false);
   const [localError, setLocalError] = useState<string | null>(null);
@@ -21,9 +33,9 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (auth.status === "signed-in") {
-      router.replace("/?view=app");
+      router.replace(nextPath ?? "/?view=app");
     }
-  }, [auth.status, router]);
+  }, [auth.status, router, nextPath]);
 
   const onGoogleClick = async () => {
     setLocalError(null);
@@ -121,5 +133,20 @@ export default function LoginPage() {
         </div>
       </main>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  const { t } = useLanguage();
+  return (
+    <Suspense
+      fallback={
+        <div className="relative flex min-h-[100dvh] flex-col items-center justify-center bg-[#050a14] px-4 text-slate-400">
+          <p className="text-sm">{t("auth.checkingLogin")}</p>
+        </div>
+      }
+    >
+      <LoginPageInner />
+    </Suspense>
   );
 }

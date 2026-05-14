@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "firebase": "^12.12.1",
+    "firebase-admin": "^13.9.0",
     "google-auth-library": "^10.6.2",
     "next": "16.2.4",
     "nodemailer": "^8.0.7",
@@ -28,9 +29,9 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.4",
     "playwright": "^1.49.1",
-    "tsx": "^4.19.2",
     "sharp": "^0.34.5",
     "tailwindcss": "^4",
+    "tsx": "^4.19.2",
     "typescript": "^5"
   }
 }

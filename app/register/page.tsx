@@ -108,7 +108,7 @@ export default function RegisterPage() {
     setBetaGate("checking");
 
     void (async () => {
-      const access = await postBetaAccessCheck(emailNorm);
+      const access = await postBetaAccessCheck(emailNorm, uid);
       if (cancelled) return;
 
       if (!access.ok) {

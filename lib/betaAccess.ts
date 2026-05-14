@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 
+import { normalizeEmailForBetaAccess as normalizeEmail } from "@/lib/betaEmailNormalize";
+
 /** Values returned by `/api/beta-access/check` and Apps Script lookup (minimal). */
 export type BetaAccessSheetStatus =
   | "approved"
@@ -18,7 +20,7 @@ export type BetaAccessCheckResponse = {
 
 /** Normalize email the same way as the API route (trim + lowercase). */
 export function normalizeEmailForBetaAccess(email: string): string {
-  return email.trim().toLowerCase();
+  return normalizeEmail(email);
 }
 
 /**
@@ -52,16 +54,20 @@ export function maskEmailForBetaDisplay(raw: string | null | undefined): string 
   return `${maskedLocal}@${domain}`;
 }
 
-export async function postBetaAccessCheck(rawEmail: string): Promise<BetaAccessCheckResponse> {
+export async function postBetaAccessCheck(
+  rawEmail: string,
+  firebaseUid?: string | null,
+): Promise<BetaAccessCheckResponse> {
   const email = normalizeEmailForBetaAccess(rawEmail);
   if (!email) {
     return { ok: false, approved: false, status: "error" };
   }
   try {
+    const uid = typeof firebaseUid === "string" && firebaseUid.trim() ? firebaseUid.trim() : undefined;
     const res = await fetch("/api/beta-access/check", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email }),
+      body: JSON.stringify(uid ? { email, uid } : { email }),
     });
     if (!res.ok) {
       return { ok: false, approved: false, status: "error" };
@@ -95,6 +101,8 @@ export async function postBetaAccessCheck(rawEmail: string): Promise<BetaAccessC
 export type UseBetaSheetAccessOptions = {
   /** When true (e.g. signed out), do not call the API and treat as allowed so local CRM preview stays available. */
   skip?: boolean;
+  /** 승인된 신청에 Firebase UID를 보강하기 위해 전달(선택). */
+  uid?: string | null;
 };
 
 /**
@@ -111,6 +119,7 @@ export function useBetaSheetAccess(
   status: BetaAccessSheetStatus | null;
 } {
   const skip = options?.skip === true;
+  const uidOpt = options?.uid;
   const [loading, setLoading] = useState(false);
   const [resolved, setResolved] = useState(false);
   const [approved, setApproved] = useState(true);
@@ -149,7 +158,7 @@ export function useBetaSheetAccess(
         }
         return;
       }
-      const r = await postBetaAccessCheck(emailNorm);
+      const r = await postBetaAccessCheck(emailNorm, uidOpt);
       if (cancelled) return;
       setLoading(false);
       setResolved(true);
@@ -161,7 +170,7 @@ export function useBetaSheetAccess(
     return () => {
       cancelled = true;
     };
-  }, [email, skip]);
+  }, [email, skip, uidOpt]);
 
   return { loading, resolved, approved, status };
 }

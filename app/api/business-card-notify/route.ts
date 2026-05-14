@@ -1,12 +1,10 @@
-import { OAuth2Client } from "google-auth-library";
 import { type NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
+import { verifyFirebaseIdToken } from "@/lib/firebaseIdTokenVerify";
 import { MissingEnvError } from "@/lib/notify-errors";
 
 export const runtime = "nodejs";
-
-const oauth2 = new OAuth2Client();
 
 const DEFAULT_NOTIFY_TO = "tadow420@naver.com";
 
@@ -15,27 +13,6 @@ function storagePathMatchesSeller(storagePath: string, uid: string): boolean {
   const prefix = `seller-cards/${uid}/`;
   if (!storagePath.startsWith(prefix)) return false;
   return storagePath.slice(prefix.length).trim().length > 0;
-}
-
-async function verifyFirebaseIdToken(idToken: string): Promise<{ uid: string; email?: string }> {
-  const projectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID?.trim();
-  if (!projectId) {
-    throw new MissingEnvError("NEXT_PUBLIC_FIREBASE_PROJECT_ID (서버에서 ID 토큰 검증용)");
-  }
-
-  const ticket = await oauth2.verifyIdToken({
-    idToken,
-    audience: projectId,
-  });
-  const payload = ticket.getPayload();
-  if (!payload?.sub) throw new Error("Invalid identity token payload");
-
-  const issuer = `https://securetoken.google.com/${projectId}`;
-  if (payload.iss !== issuer) {
-    throw new Error("Token issuer mismatch");
-  }
-
-  return { uid: payload.sub, email: payload.email ?? undefined };
 }
 
 function buildTransporter() {

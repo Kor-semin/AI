@@ -736,14 +736,14 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "register.access.checking": "베타 신청 승인 여부를 확인하는 중입니다…",
     "register.access.pendingTitle": "베타 승인 대기 중입니다.",
     "register.access.pendingBody":
-      "신청 내용을 확인한 뒤 순차적으로 안내드리겠습니다.",
+      "아직 베타 승인 전입니다. 신청 정보를 확인한 뒤 순차적으로 승인해드리겠습니다.",
     "register.access.notFoundTitle": "베타 신청 내역을 찾을 수 없습니다.",
     "register.access.notFoundBody": "먼저 베타 신청을 남겨주세요.",
     "register.access.rejectedTitle": "베타 사용 승인이 완료되지 않았습니다.",
     "register.access.rejectedBody": "현재 계정은 베타 사용 대상에 포함되지 않았습니다.",
     "register.access.errorTitle": "베타 승인 여부를 확인하지 못했습니다.",
     "register.access.errorBody":
-      "네트워크 또는 설정 문제일 수 있습니다. 잠시 후 다시 시도해 주세요. 문제가 이어지면 베타 신청 경로를 통해 문의해 주세요.",
+      "베타 승인 정보를 확인하지 못했습니다. 잠시 후 다시 시도해 주세요.",
     "register.access.goJoin": "베타 신청하러 가기",
     "register.access.goHome": "홈으로 돌아가기",
     "register.access.betaCheckEmailLabel": "현재 확인 중인 이메일",
@@ -1415,14 +1415,14 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "register.access.checking": "Checking your beta approval status…",
     "register.access.pendingTitle": "Your beta signup is awaiting approval.",
     "register.access.pendingBody":
-      "We’ll review your request and reach out in turn.",
+      "Beta approval is still pending. We review submissions in order and will grant access when your request is approved.",
     "register.access.notFoundTitle": "We couldn’t find a beta signup for this email.",
     "register.access.notFoundBody": "Please submit a beta request first.",
     "register.access.rejectedTitle": "Beta approval wasn’t granted for this account.",
     "register.access.rejectedBody": "This account isn’t included in the current Sensora beta.",
     "register.access.errorTitle": "We couldn’t verify beta approval.",
     "register.access.errorBody":
-      "This may be a network or setup issue. Try again shortly, or contact us via the beta signup flow if it keeps happening.",
+      "We couldn’t load beta approval information. Please try again in a moment.",
     "register.access.goJoin": "Go to beta signup",
     "register.access.goHome": "Back to home",
     "register.access.betaCheckEmailLabel": "Email being checked",

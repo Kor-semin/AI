@@ -28,10 +28,10 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
   const firebaseReady = isFirebaseConfigured();
   const googleAuthEnabled = isGoogleAuthEnabled();
   const seller = useSellerProfile(auth.status === "signed-in" ? auth.uid : null);
-  const betaAccess = useBetaSheetAccess(
-    auth.status === "signed-in" ? auth.email : undefined,
-    { skip: auth.status !== "signed-in" },
-  );
+  const betaAccess = useBetaSheetAccess(auth.status === "signed-in" ? auth.email : undefined, {
+    skip: auth.status !== "signed-in",
+    uid: auth.status === "signed-in" ? auth.uid : null,
+  });
   const [view, setView] = useState<"landing" | "app">(initialView);
   const [crmSection, setCrmSection] = useState<CrmSection>("dashboard");
   const [appPreviewTocOpen, setAppPreviewTocOpen] = useState(false);
