@@ -1,4 +1,5 @@
-import type { Customer, EstimateDocumentExtraction, EstimateFinanceTypeKey, FinanceConditionDraft } from "./types";
+import type { Customer, FinanceConditionDraft } from "./types";
+import type { TranslationKey } from "@/lib/i18n";
 import { buildUsedCarSearchQuery } from "./recommendations";
 
 /** 고객 니즈 선택지(한글 라벨 — Firestore·상태에 그대로 저장) */
@@ -32,53 +33,23 @@ function fmt(v?: string): string {
   return v && String(v).trim() ? String(v).trim() : "";
 }
 
-/** API/AI JSON financeType → CRM 금융 방식 */
-export function estimateFinanceTypeKeyToProductMode(k: EstimateFinanceTypeKey | string): FinanceConditionDraft["productMode"] {
-  switch (k) {
-    case "lease":
-      return "리스";
-    case "loan":
-      return "할부";
-    case "cash":
-      return "현금";
-    case "long_rent":
-      return "장기렌트";
-    default:
-      return "알 수 없음";
-  }
+/** 등록일 기준 최신 견적서가 앞 */
+export function sortedEstimateAttachments(c: Customer) {
+  return [...(c.estimateAttachments ?? [])].sort((a, b) => b.createdAt.localeCompare(a.createdAt));
 }
 
-/** 「이 조건 반영하기」 시에만 호출 — AI 추출값을 기존 초안에 병합(빈 추출 필드는 기존값 유지) */
-export function mergeExtractionIntoFinanceDraft(
-  prev: FinanceConditionDraft,
-  ex: EstimateDocumentExtraction,
-): FinanceConditionDraft {
-  const pick = (incoming: string, prior?: string) => {
-    const t = (incoming ?? "").trim();
-    return t.length > 0 ? t : (prior ?? "");
-  };
-  const noteParts = [ex.memo?.trim(), ex.needsReview ? "AI 추출 초안·원본 견적서와 대조 필요" : ""].filter(Boolean);
-  const nextNote = noteParts.length > 0 ? noteParts.join("\n") : (prev.customerConditionNote ?? "");
-
-  return {
-    ...prev,
-    productMode: estimateFinanceTypeKeyToProductMode(ex.financeType),
-    vehicleName: pick(ex.vehicleName, prev.vehicleName),
-    vehicleTrim: pick(ex.trim, prev.vehicleTrim),
-    totalVehiclePrice: pick(ex.totalVehiclePrice, prev.totalVehiclePrice),
-    promotionOrDiscount: pick(ex.promotion, prev.promotionOrDiscount),
-    downPayment: pick(ex.prepayment, prev.downPayment),
-    deposit: pick(ex.deposit, prev.deposit),
-    contractMonths: pick(ex.termMonths, prev.contractMonths),
-    residualValue: pick(ex.residualValue, prev.residualValue),
-    monthlyPayment: pick(ex.monthlyPayment, prev.monthlyPayment),
-    maturityOptions: pick(ex.endOption, prev.maturityOptions),
-    customerConditionNote: nextNote,
-  };
+/** 문자 초안·빠른 열기에 쓸 선택 견적서(null이면 해당 없음) */
+export function resolveSmsDraftEstimateAttachment(c: Customer) {
+  const list = sortedEstimateAttachments(c);
+  if (!list.length) return null;
+  const sid = c.smsDraftEstimateAttachmentId;
+  if (sid === "__none__") return null;
+  if (sid) return list.find((x) => x.id === sid) ?? list[0] ?? null;
+  return list[0] ?? null;
 }
 
-/** 금융 조건·니즈가 있을 때만 채워지는 검토용 신차 문자 초안(자동 OCR 없음) */
-export function buildNewCarFinanceSmsPreview(c: Customer): string {
+/** 금융 조건·니즈·(선택 시) 견적서 첨부 안내 문구가 포함된 검토용 신차 문자 초안 */
+export function buildNewCarFinanceSmsPreview(c: Customer, t: (key: TranslationKey) => string): string {
   const fd = c.financeConditionDraft;
   if (!fd?.productMode) return "";
 
@@ -139,11 +110,19 @@ export function buildNewCarFinanceSmsPreview(c: Customer): string {
     );
   }
 
-  chunks.push(
-    `최종 조건은 견적서와 금융 승인 기준에 따라 다시 확인드리겠습니다.\n` +
-      `출고 가능 시점과 프로모션은 상담 시점에 따라 변동될 수 있습니다.\n` +
-      `아래 문구는 검토용 초안이며, 발송 전에 꼭 내용을 확인해 주세요.`,
-  );
+  if (c.smsDraftIncludeEstimateWording) {
+    chunks.push(t("crm.newCar.smsAttachCommonIntro"));
+    if (fd.productMode === "리스") {
+      chunks.push(t("crm.newCar.smsAttachLeaseNote"));
+    } else if (fd.productMode === "할부") {
+      chunks.push(t("crm.newCar.smsAttachLoanNote"));
+    } else {
+      chunks.push(t("crm.newCar.smsAttachGenericNote"));
+    }
+    chunks.push(t("crm.newCar.smsAttachClosing"));
+  }
+
+  chunks.push(t("crm.newCar.smsPreviewClosingDisclaimer"));
 
   return chunks.join("\n\n");
 }

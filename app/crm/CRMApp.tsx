@@ -916,8 +916,8 @@ export function CRMApp({
 
   const newCarFinanceSmsPreview = useMemo(() => {
     if (!selectedCustomer?.financeConditionDraft?.productMode) return "";
-    return buildNewCarFinanceSmsPreview(selectedCustomer);
-  }, [selectedCustomer]);
+    return buildNewCarFinanceSmsPreview(selectedCustomer, t);
+  }, [selectedCustomer, t]);
 
   useEffect(() => {
     setWorkspaceAiBusy(false);
@@ -1983,6 +1983,11 @@ export function CRMApp({
                     else showToast(t("crm.seasonCare.copyFail"));
                   });
                 }}
+                selectedCustomer={selectedCustomer}
+                onPatchSelectedCustomer={(patch) => {
+                  if (!selectedCustomerId) return;
+                  upsertCustomer({ id: selectedCustomerId, ...patch });
+                }}
               />
             </AiSecretarySection>
           ) : null}
@@ -2268,8 +2273,10 @@ export function CRMApp({
               </details>
 
               <NewCarEstimateFinanceCard
+                uid={uid}
                 customer={selectedCustomer}
                 onPatch={(patch) => upsertCustomer({ id: selectedCustomer.id, ...patch })}
+                onRequireLogin={openPreviewGate}
                 t={t}
               />
 

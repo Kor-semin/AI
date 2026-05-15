@@ -1,25 +1,22 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 import type { TranslationKey } from "@/lib/i18n";
-import type {
-  Customer,
-  EstimateDocumentExtraction,
-  FinanceConditionDraft,
-  FinanceProductMode,
-  QuoteEstimateAttachmentMeta,
-} from "@/app/crm/types";
+import type { Customer, CustomerEstimateAttachment, FinanceConditionDraft, FinanceProductMode } from "@/app/crm/types";
 import {
-  CUSTOMER_PRIORITY_OPTIONS,
-  defaultFinanceDraft,
-  mergeExtractionIntoFinanceDraft,
-} from "@/app/crm/newCarEstimateDraft";
+  deleteCustomerEstimateStorageObject,
+  refreshCustomerEstimateDownloadUrl,
+  uploadCustomerEstimateFile,
+} from "@/app/crm/storage";
+import { makeId } from "@/app/crm/seed";
+import { CUSTOMER_PRIORITY_OPTIONS, defaultFinanceDraft, sortedEstimateAttachments } from "@/app/crm/newCarEstimateDraft";
 
 const FINANCE_MODES: FinanceProductMode[] = ["리스", "할부", "현금", "장기렌트", "알 수 없음"];
 
 const ACCEPT_MIME = new Set(["application/pdf", "image/png", "image/jpeg"]);
 const ACCEPT_EXT = /\.(pdf|png|jpg|jpeg)$/i;
+const MAX_FILE_BYTES = 15 * 1024 * 1024;
 
 function formatMimeLabel(mime: string): string {
   if (mime === "application/pdf") return "PDF";
@@ -28,43 +25,28 @@ function formatMimeLabel(mime: string): string {
   return mime;
 }
 
-function ftLabelKey(ft: EstimateDocumentExtraction["financeType"]): TranslationKey {
-  const m: Record<EstimateDocumentExtraction["financeType"], TranslationKey> = {
-    lease: "crm.newCar.ft.lease",
-    loan: "crm.newCar.ft.loan",
-    cash: "crm.newCar.ft.cash",
-    long_rent: "crm.newCar.ft.long_rent",
-    unknown: "crm.newCar.ft.unknown",
-  };
-  return m[ft] ?? "crm.newCar.ft.unknown";
+function formatBytes(n: number): string {
+  if (n == null || n <= 0) return "—";
+  if (n < 1024) return `${n} B`;
+  if (n < 1024 * 1024) return `${(n / 1024).toFixed(1)} KB`;
+  return `${(n / (1024 * 1024)).toFixed(1)} MB`;
 }
-
-function isPdfFile(file: File): boolean {
-  return file.type === "application/pdf" || /\.pdf$/i.test(file.name);
-}
-
-function isImageFile(file: File): boolean {
-  if (file.type === "image/png" || file.type === "image/jpeg") return true;
-  return /\.(png|jpg|jpeg)$/i.test(file.name);
-}
-
-type AnalyzePhase = "idle" | "loading" | "success" | "error";
 
 type Props = {
+  uid?: string | null;
   customer: Customer;
   onPatch: (patch: Partial<Customer>) => void;
+  onRequireLogin: () => void;
   t: (key: TranslationKey) => string;
 };
 
-export function NewCarEstimateFinanceCard({ customer, onPatch, t }: Props) {
+export function NewCarEstimateFinanceCard({ uid, customer, onPatch, onRequireLogin, t }: Props) {
   const fileRef = useRef<HTMLInputElement | null>(null);
-  const draft = customer.financeConditionDraft ?? defaultFinanceDraft();
-  const att = customer.quoteEstimateAttachment;
+  const [replaceId, setReplaceId] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
 
-  const [pendingFile, setPendingFile] = useState<File | null>(null);
-  const [analyzePhase, setAnalyzePhase] = useState<AnalyzePhase>("idle");
-  const [analyzeCode, setAnalyzeCode] = useState<string | null>(null);
-  const [extractionPreview, setExtractionPreview] = useState<EstimateDocumentExtraction | null>(null);
+  const draft = customer.financeConditionDraft ?? defaultFinanceDraft();
+  const list = sortedEstimateAttachments(customer);
 
   const setDraft = (patch: Partial<FinanceConditionDraft>) => {
     onPatch({ financeConditionDraft: { ...draft, ...patch } });
@@ -77,117 +59,131 @@ export function NewCarEstimateFinanceCard({ customer, onPatch, t }: Props) {
     onPatch({ customerPriorityNeeds: Array.from(cur) });
   };
 
-  const resetAnalysisUi = useCallback(() => {
-    setAnalyzePhase("idle");
-    setAnalyzeCode(null);
-    setExtractionPreview(null);
-  }, []);
-
-  const onPickFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const mime = file.type || "application/octet-stream";
-    const okMime = ACCEPT_MIME.has(mime) || ACCEPT_EXT.test(file.name);
-    if (!okMime) {
-      window.alert(t("crm.newCar.estimateFileTypeError"));
-      e.target.value = "";
-      return;
+  const resolveUrl = async (att: CustomerEstimateAttachment): Promise<string | null> => {
+    if (att.downloadUrl) return att.downloadUrl;
+    if (!att.storagePath) return null;
+    try {
+      return await refreshCustomerEstimateDownloadUrl(att.storagePath);
+    } catch {
+      return null;
     }
-    const meta: QuoteEstimateAttachmentMeta = {
-      fileName: file.name,
-      mimeType: ACCEPT_MIME.has(mime) ? mime : mime || "application/octet-stream",
-      uploadedAt: new Date().toISOString(),
-    };
-    setPendingFile(file);
-    resetAnalysisUi();
-    onPatch({ quoteEstimateAttachment: meta });
-    e.target.value = "";
   };
 
-  const analyzeWithAi = useCallback(async () => {
-    if (!pendingFile) return;
-    if (isPdfFile(pendingFile)) {
-      setAnalyzePhase("error");
-      setAnalyzeCode("PDF_NOT_SUPPORTED");
-      setExtractionPreview(null);
+  const openAttachment = async (att: CustomerEstimateAttachment) => {
+    const u = await resolveUrl(att);
+    if (u) window.open(u, "_blank", "noopener,noreferrer");
+    else window.alert(t("crm.newCar.uploadFailed"));
+  };
+
+  const downloadAttachment = async (att: CustomerEstimateAttachment) => {
+    const u = await resolveUrl(att);
+    if (!u) {
+      window.alert(t("crm.newCar.uploadFailed"));
       return;
     }
-    if (!isImageFile(pendingFile)) {
-      setAnalyzePhase("error");
-      setAnalyzeCode("UNSUPPORTED_TYPE");
-      setExtractionPreview(null);
+    const a = document.createElement("a");
+    a.href = u;
+    a.download = att.fileName || "estimate";
+    a.rel = "noopener noreferrer";
+    a.target = "_blank";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  };
+
+  const shareAttachment = async (att: CustomerEstimateAttachment) => {
+    const u = await resolveUrl(att);
+    if (!u) {
+      window.alert(t("crm.newCar.shareUnavailable"));
       return;
     }
-
-    setAnalyzePhase("loading");
-    setAnalyzeCode(null);
-    setExtractionPreview(null);
-
     try {
-      const fd = new FormData();
-      fd.append("file", pendingFile);
-      const res = await fetch("/api/estimate/analyze", { method: "POST", body: fd });
-      const data = (await res.json()) as {
-        ok?: boolean;
-        code?: string;
-        extraction?: EstimateDocumentExtraction;
+      if (navigator.share) {
+        await navigator.share({ title: att.fileName, text: att.fileName, url: u });
+        return;
+      }
+    } catch {
+      /* user cancel or unsupported */
+    }
+    window.alert(t("crm.newCar.shareUnavailable"));
+  };
+
+  const removeAttachment = async (att: CustomerEstimateAttachment) => {
+    if (att.storagePath) {
+      try {
+        await deleteCustomerEstimateStorageObject(att.storagePath);
+      } catch {
+        /* Storage rules or network — still remove from CRM list */
+      }
+    }
+    const next = (customer.estimateAttachments ?? []).filter((a) => a.id !== att.id);
+    const patch: Partial<Customer> = { estimateAttachments: next };
+    if (customer.smsDraftEstimateAttachmentId === att.id) {
+      patch.smsDraftEstimateAttachmentId = null;
+    }
+    onPatch(patch);
+  };
+
+  const pickAddOrReplace = () => {
+    if (!uid) {
+      onRequireLogin();
+      return;
+    }
+    fileRef.current?.click();
+  };
+
+  const onFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    if (!uid) {
+      onRequireLogin();
+      return;
+    }
+    const mime = file.type || "application/octet-stream";
+    if (!ACCEPT_MIME.has(mime) && !ACCEPT_EXT.test(file.name)) {
+      window.alert(t("crm.newCar.estimateFileTypeError"));
+      return;
+    }
+    if (file.size > MAX_FILE_BYTES) {
+      window.alert(t("crm.newCar.uploadFailed"));
+      return;
+    }
+
+    setBusy(true);
+    try {
+      const id = makeId("est");
+      const { storagePath, downloadUrl } = await uploadCustomerEstimateFile(uid, customer.id, file, id);
+      const rec: CustomerEstimateAttachment = {
+        id,
+        fileName: file.name,
+        contentType: ACCEPT_MIME.has(mime) ? mime : mime || "application/octet-stream",
+        size: file.size,
+        storagePath,
+        downloadUrl,
+        createdAt: new Date().toISOString(),
       };
 
-      if (!data.ok) {
-        setAnalyzePhase("error");
-        setAnalyzeCode(data.code ?? "UNKNOWN");
-        return;
+      let base = [...(customer.estimateAttachments ?? [])];
+      if (replaceId) {
+        const old = base.find((a) => a.id === replaceId);
+        if (old?.storagePath) {
+          try {
+            await deleteCustomerEstimateStorageObject(old.storagePath);
+          } catch {
+            /* ignore */
+          }
+        }
+        base = base.filter((a) => a.id !== replaceId);
+        setReplaceId(null);
       }
-      if (!data.extraction) {
-        setAnalyzePhase("error");
-        setAnalyzeCode("PARSE_ERROR");
-        return;
-      }
-      setExtractionPreview(data.extraction);
-      setAnalyzePhase("success");
+      onPatch({ estimateAttachments: [...base, rec], quoteEstimateAttachment: null });
     } catch {
-      setAnalyzePhase("error");
-      setAnalyzeCode("NETWORK");
+      window.alert(t("crm.newCar.uploadFailed"));
+    } finally {
+      setBusy(false);
     }
-  }, [pendingFile]);
-
-  const applyExtraction = () => {
-    if (!extractionPreview) return;
-    onPatch({
-      financeConditionDraft: mergeExtractionIntoFinanceDraft(draft, extractionPreview),
-    });
-    setExtractionPreview(null);
-    setAnalyzePhase("idle");
-    setAnalyzeCode(null);
   };
-
-  const dismissExtraction = () => {
-    setExtractionPreview(null);
-    setAnalyzePhase("idle");
-    setAnalyzeCode(null);
-  };
-
-  const removeAttachment = () => {
-    setPendingFile(null);
-    resetAnalysisUi();
-    onPatch({ quoteEstimateAttachment: null });
-  };
-
-  const errorMessage = (() => {
-    if (analyzePhase !== "error" || !analyzeCode) return null;
-    switch (analyzeCode) {
-      case "MISSING_AI_CONFIG":
-        return t("crm.newCar.aiConfigIncomplete");
-      case "PDF_NOT_SUPPORTED":
-        return t("crm.newCar.pdfReadNotSupported");
-      case "FILE_TOO_LARGE":
-        return t("crm.newCar.fileTooLarge");
-      default:
-        return t("crm.newCar.aiReadFail");
-    }
-  })();
-
-  const showAiButton = Boolean(pendingFile && att && isImageFile(pendingFile) && !isPdfFile(pendingFile));
 
   return (
     <details
@@ -206,169 +202,109 @@ export function NewCarEstimateFinanceCard({ customer, onPatch, t }: Props) {
 
       <div className="mt-4 space-y-6 border-t border-white/[0.08] pt-5">
         <section className="space-y-3">
-          <h3 className="text-[14px] font-semibold text-slate-100">{t("crm.newCar.estimateTitle")}</h3>
-          <p className="text-[13px] leading-relaxed text-slate-400">{t("crm.newCar.estimateDesc")}</p>
-          <input
-            ref={fileRef}
-            type="file"
-            accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/png,image/jpeg"
-            className="hidden"
-            onChange={onPickFile}
-          />
+          <h3 className="text-[14px] font-semibold text-slate-100">{t("crm.newCar.vaultTitle")}</h3>
+          <p className="text-[13px] leading-relaxed text-slate-400">{t("crm.newCar.vaultDesc")}</p>
+
+          <input ref={fileRef} type="file" accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/png,image/jpeg" className="hidden" onChange={(e) => void onFileChange(e)} />
+
           <button
             type="button"
-            className="sensora-premium-primary-workspace min-h-[44px] rounded-xl px-4 py-2.5 text-[13px] font-semibold touch-manipulation"
-            onClick={() => fileRef.current?.click()}
+            disabled={busy}
+            className="sensora-premium-primary-workspace min-h-[44px] rounded-xl px-4 py-2.5 text-[13px] font-semibold touch-manipulation disabled:opacity-50"
+            onClick={() => {
+              setReplaceId(null);
+              pickAddOrReplace();
+            }}
           >
-            {t("crm.newCar.estimatePickFile")}
+            {t("crm.newCar.vaultAddButton")}
           </button>
-          {att ? (
-            <div className="rounded-xl border border-white/[0.11] bg-slate-950/55 px-4 py-3 text-[13px] text-slate-300">
-              <div className="font-medium text-slate-100">{att.fileName}</div>
-              <div className="mt-1 text-[12px] text-slate-400">
-                {t("crm.newCar.estimateMetaFormat")}: {formatMimeLabel(att.mimeType)} · {t("crm.newCar.estimateMetaUploaded")}:{" "}
-                {new Date(att.uploadedAt).toLocaleString("ko-KR")}
-              </div>
-              <div className="mt-3 flex flex-wrap gap-2">
-                <button
-                  type="button"
-                  className="rounded-lg border border-white/[0.12] bg-slate-950/55 px-3 py-1.5 text-[12px] font-semibold text-slate-200 hover:bg-white/[0.06]"
-                  onClick={() => fileRef.current?.click()}
-                >
-                  {t("crm.newCar.estimateReplace")}
-                </button>
-                <button
-                  type="button"
-                  className="rounded-lg border border-red-400/25 bg-red-950/25 px-3 py-1.5 text-[12px] font-semibold text-red-100/95 hover:bg-red-950/40"
-                  onClick={removeAttachment}
-                >
-                  {t("crm.newCar.estimateRemove")}
-                </button>
-              </div>
-            </div>
-          ) : null}
 
           <div className="space-y-2 rounded-xl border border-amber-400/22 bg-amber-950/15 px-3 py-3 text-[12px] leading-relaxed text-amber-100/90">
             <p>{t("crm.newCar.disclaimerSensitive")}</p>
-            <p>{t("crm.newCar.disclaimerAiReview")}</p>
             <p>{t("crm.newCar.disclaimerNoAutoSend")}</p>
           </div>
+          <div className="space-y-1 rounded-xl border border-white/[0.08] bg-slate-950/35 px-3 py-2 text-[11px] leading-relaxed text-slate-500">
+            <p>{t("crm.newCar.disclaimerVault")}</p>
+            <p>{t("crm.newCar.disclaimerVaultSecondary")}</p>
+          </div>
 
-          {pendingFile && isPdfFile(pendingFile) ? (
-            <p className="rounded-xl border border-sky-400/20 bg-sky-950/20 px-3 py-2 text-[12px] leading-relaxed text-sky-100/90">
-              {t("crm.newCar.pdfReadNotSupported")}
-            </p>
-          ) : null}
+          {!uid ? <p className="text-[12px] text-slate-500">{t("crm.newCar.uploadNeedsLogin")}</p> : null}
 
-          {showAiButton ? (
-            <div className="space-y-3">
-              <p className="rounded-xl border border-amber-400/22 bg-amber-950/15 px-3 py-2 text-[12px] leading-relaxed text-amber-100/90">
-                {t("crm.newCar.extractAccuracyWarning")}
-              </p>
-              <button
-                type="button"
-                disabled={analyzePhase === "loading"}
-                className="sensora-premium-primary-workspace min-h-[44px] rounded-xl px-4 py-2.5 text-[13px] font-semibold touch-manipulation disabled:cursor-not-allowed disabled:opacity-50"
-                onClick={() => void analyzeWithAi()}
-              >
-                {t("crm.newCar.aiReadButton")}
-              </button>
-            </div>
-          ) : null}
-
-          {analyzePhase === "loading" ? (
-            <p className="text-[13px] font-medium text-slate-300">{t("crm.newCar.aiReading")}</p>
-          ) : null}
-
-          {analyzePhase === "error" && errorMessage ? (
-            <p className="rounded-xl border border-red-400/25 bg-red-950/20 px-3 py-2 text-[12px] leading-relaxed text-red-100/95">{errorMessage}</p>
-          ) : null}
-
-          {analyzePhase === "success" && extractionPreview ? (
-            <div className="rounded-[16px] border border-emerald-400/25 bg-emerald-950/15 px-4 py-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
-              <h4 className="text-[14px] font-semibold text-emerald-50">{t("crm.newCar.extractPreviewTitle")}</h4>
-              <p className="mt-2 text-[12px] leading-relaxed text-emerald-100/85">{t("crm.newCar.extractPreviewLead")}</p>
-              <p className="mt-2 text-[12px] leading-relaxed text-amber-100/90">{t("crm.newCar.extractAccuracyWarning")}</p>
-
-              <dl className="mt-4 space-y-2 divide-y divide-white/[0.06] text-[13px]">
-                <div className="flex flex-wrap justify-between gap-2 py-2">
-                  <dt className="text-slate-400">{t("crm.newCar.extractLabel.vehicleName")}</dt>
-                  <dd className="text-right text-slate-100">{extractionPreview.vehicleName.trim() || "—"}</dd>
-                </div>
-                <div className="flex flex-wrap justify-between gap-2 py-2">
-                  <dt className="text-slate-400">{t("crm.newCar.extractLabel.trim")}</dt>
-                  <dd className="text-right text-slate-100">{extractionPreview.trim.trim() || "—"}</dd>
-                </div>
-                <div className="flex flex-wrap justify-between gap-2 py-2">
-                  <dt className="text-slate-400">{t("crm.newCar.extractLabel.financeType")}</dt>
-                  <dd className="text-right text-slate-100">{t(ftLabelKey(extractionPreview.financeType))}</dd>
-                </div>
-                <div className="flex flex-wrap justify-between gap-2 py-2">
-                  <dt className="text-slate-400">{t("crm.newCar.extractLabel.totalVehiclePrice")}</dt>
-                  <dd className="text-right text-slate-100">{extractionPreview.totalVehiclePrice.trim() || "—"}</dd>
-                </div>
-                <div className="flex flex-wrap justify-between gap-2 py-2">
-                  <dt className="text-slate-400">{t("crm.newCar.extractLabel.promotion")}</dt>
-                  <dd className="text-right text-slate-100">{extractionPreview.promotion.trim() || "—"}</dd>
-                </div>
-                <div className="flex flex-wrap justify-between gap-2 py-2">
-                  <dt className="text-slate-400">{t("crm.newCar.extractLabel.prepayment")}</dt>
-                  <dd className="text-right text-slate-100">{extractionPreview.prepayment.trim() || "—"}</dd>
-                </div>
-                <div className="flex flex-wrap justify-between gap-2 py-2">
-                  <dt className="text-slate-400">{t("crm.newCar.extractLabel.deposit")}</dt>
-                  <dd className="text-right text-slate-100">{extractionPreview.deposit.trim() || "—"}</dd>
-                </div>
-                <div className="flex flex-wrap justify-between gap-2 py-2">
-                  <dt className="text-slate-400">{t("crm.newCar.extractLabel.termMonths")}</dt>
-                  <dd className="text-right text-slate-100">{extractionPreview.termMonths.trim() || "—"}</dd>
-                </div>
-                <div className="flex flex-wrap justify-between gap-2 py-2">
-                  <dt className="text-slate-400">{t("crm.newCar.extractLabel.residualValue")}</dt>
-                  <dd className="text-right text-slate-100">{extractionPreview.residualValue.trim() || "—"}</dd>
-                </div>
-                <div className="flex flex-wrap justify-between gap-2 py-2">
-                  <dt className="text-slate-400">{t("crm.newCar.extractLabel.monthlyPayment")}</dt>
-                  <dd className="text-right text-slate-100">{extractionPreview.monthlyPayment.trim() || "—"}</dd>
-                </div>
-                <div className="flex flex-wrap justify-between gap-2 py-2">
-                  <dt className="text-slate-400">{t("crm.newCar.extractLabel.endOption")}</dt>
-                  <dd className="text-right text-slate-100">{extractionPreview.endOption.trim() || "—"}</dd>
-                </div>
-                <div className="flex flex-wrap justify-between gap-2 py-2">
-                  <dt className="text-slate-400">{t("crm.newCar.extractLabel.memo")}</dt>
-                  <dd className="text-right text-slate-100">{extractionPreview.memo.trim() || "—"}</dd>
-                </div>
-                <div className="flex flex-wrap justify-between gap-2 py-2">
-                  <dt className="text-slate-400">{t("crm.newCar.extractLabel.reviewFlag")}</dt>
-                  <dd className="text-right text-slate-100">
-                    {extractionPreview.needsReview ? t("crm.newCar.extractNeedsReviewYes") : t("crm.newCar.extractNeedsReviewNo")}
-                  </dd>
-                </div>
-              </dl>
-
-              <div className="mt-4 flex flex-wrap gap-2">
-                <button
-                  type="button"
-                  className="sensora-premium-primary-workspace min-h-[44px] rounded-xl px-4 py-2.5 text-[13px] font-semibold touch-manipulation"
-                  onClick={applyExtraction}
+          <div className="space-y-3">
+            {list.length === 0 ? (
+              <p className="text-[13px] text-slate-500">—</p>
+            ) : (
+              list.map((att) => (
+                <div
+                  key={att.id}
+                  className="rounded-xl border border-white/[0.11] bg-slate-950/55 px-4 py-3 text-[13px] text-slate-300"
                 >
-                  {t("crm.newCar.applyExtracted")}
-                </button>
-                <button
-                  type="button"
-                  className="sensora-dark-ghost-btn min-h-[44px] rounded-xl px-4 py-2.5 text-[13px] font-semibold touch-manipulation"
-                  onClick={dismissExtraction}
-                >
-                  {t("crm.newCar.dismissExtracted")}
-                </button>
-              </div>
-            </div>
-          ) : null}
+                  <div className="font-medium text-slate-100">{att.fileName}</div>
+                  <div className="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-[12px] text-slate-400">
+                    <span>
+                      {t("crm.newCar.estimateMetaFormat")}: {formatMimeLabel(att.contentType)}
+                    </span>
+                    <span>
+                      {t("crm.newCar.estimateMetaUploaded")}: {new Date(att.createdAt).toLocaleString("ko-KR")}
+                    </span>
+                    <span>
+                      {t("crm.newCar.vaultFileSize")}: {formatBytes(att.size)}
+                    </span>
+                    {!att.storagePath ? (
+                      <span className="text-amber-200/90">({t("crm.newCar.uploadNeedsLogin")})</span>
+                    ) : null}
+                  </div>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      className="rounded-lg border border-white/[0.12] bg-slate-950/55 px-3 py-1.5 text-[12px] font-semibold text-slate-200 hover:bg-white/[0.06]"
+                      onClick={() => void openAttachment(att)}
+                    >
+                      {t("crm.newCar.vaultOpen")}
+                    </button>
+                    <button
+                      type="button"
+                      className="rounded-lg border border-white/[0.12] bg-slate-950/55 px-3 py-1.5 text-[12px] font-semibold text-slate-200 hover:bg-white/[0.06]"
+                      onClick={() => void downloadAttachment(att)}
+                    >
+                      {t("crm.newCar.vaultDownload")}
+                    </button>
+                    <button
+                      type="button"
+                      className="rounded-lg border border-white/[0.12] bg-slate-950/55 px-3 py-1.5 text-[12px] font-semibold text-slate-200 hover:bg-white/[0.06]"
+                      onClick={() => void shareAttachment(att)}
+                    >
+                      {t("crm.newCar.vaultShare")}
+                    </button>
+                    <button
+                      type="button"
+                      disabled={!uid || busy}
+                      className="rounded-lg border border-white/[0.12] bg-slate-950/55 px-3 py-1.5 text-[12px] font-semibold text-slate-200 hover:bg-white/[0.06] disabled:opacity-45"
+                      onClick={() => {
+                        setReplaceId(att.id);
+                        pickAddOrReplace();
+                      }}
+                    >
+                      {t("crm.newCar.estimateReplace")}
+                    </button>
+                    <button
+                      type="button"
+                      disabled={busy}
+                      className="rounded-lg border border-red-400/25 bg-red-950/25 px-3 py-1.5 text-[12px] font-semibold text-red-100/95 hover:bg-red-950/40"
+                      onClick={() => void removeAttachment(att)}
+                    >
+                      {t("crm.newCar.estimateRemove")}
+                    </button>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
         </section>
 
         <section className="space-y-4">
           <h3 className="text-[14px] font-semibold text-slate-100">{t("crm.newCar.financeFormTitle")}</h3>
+          <p className="text-[12px] leading-relaxed text-slate-500">{t("crm.newCar.disclaimerAiReview")}</p>
           <div>
             <div className="text-[12px] font-semibold text-slate-300">{t("crm.newCar.financeModeLabel")}</div>
             <div className="mt-2 flex flex-wrap gap-2">

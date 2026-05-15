@@ -1,6 +1,44 @@
 import type { CalendarEvent, CRMState, Customer, MessageTemplate, NextAction } from "./types";
 import { migrateCRMState } from "./migrate";
 
+export function customerEstimateStoragePath(uid: string, customerId: string, estimateId: string, fileName: string): string {
+  const base =
+    fileName
+      .replace(/^.*[/\\]/, "")
+      .replace(/[^\w.-]+/g, "_")
+      .slice(0, 100) || "file";
+  return `users/${uid}/customers/${customerId}/estimates/${estimateId}_${base}`;
+}
+
+export async function uploadCustomerEstimateFile(
+  uid: string,
+  customerId: string,
+  file: File,
+  estimateId: string,
+): Promise<{ storagePath: string; downloadUrl: string }> {
+  const { getDownloadURL, ref, uploadBytes } = await import("firebase/storage");
+  const { getFirebaseStorageBucket } = await import("@/app/firebase/client");
+  const storage = getFirebaseStorageBucket();
+  const path = customerEstimateStoragePath(uid, customerId, estimateId, file.name);
+  const r = ref(storage, path);
+  const ct = file.type && file.type.length > 0 ? file.type : "application/octet-stream";
+  await uploadBytes(r, file, { contentType: ct });
+  const downloadUrl = await getDownloadURL(r);
+  return { storagePath: path, downloadUrl };
+}
+
+export async function deleteCustomerEstimateStorageObject(storagePath: string): Promise<void> {
+  const { deleteObject, ref } = await import("firebase/storage");
+  const { getFirebaseStorageBucket } = await import("@/app/firebase/client");
+  await deleteObject(ref(getFirebaseStorageBucket(), storagePath));
+}
+
+export async function refreshCustomerEstimateDownloadUrl(storagePath: string): Promise<string> {
+  const { getDownloadURL, ref } = await import("firebase/storage");
+  const { getFirebaseStorageBucket } = await import("@/app/firebase/client");
+  return getDownloadURL(ref(getFirebaseStorageBucket(), storagePath));
+}
+
 const STORAGE_KEY = "customer-manager.crm.v1";
 
 export function loadState(): CRMState | null {

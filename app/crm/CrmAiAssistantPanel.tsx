@@ -1,8 +1,12 @@
 "use client";
 
+import { useMemo } from "react";
+
 import type { DemoConsultingResponse, DemoSalesStyle } from "@/app/components/concierge/aiDemoResponse";
 import type { TranslationKey } from "@/lib/i18n";
-import type { Customer } from "@/app/crm/types";
+import type { Customer, CustomerEstimateAttachment } from "@/app/crm/types";
+import { refreshCustomerEstimateDownloadUrl } from "@/app/crm/storage";
+import { resolveSmsDraftEstimateAttachment, sortedEstimateAttachments } from "@/app/crm/newCarEstimateDraft";
 
 const WORKSPACE_AI_STYLE_KEYS: Record<DemoSalesStyle, TranslationKey> = {
   polite: "landing.aiDemo.salesStyle.polite",
@@ -38,6 +42,8 @@ export type CrmAiAssistantPanelProps = {
   onCreateFollowUpFromInsights: () => void;
   newCarFinanceSmsPreview: string;
   onCopyNewCarFinanceSms: () => void;
+  selectedCustomer: Customer | null;
+  onPatchSelectedCustomer: (patch: Partial<Customer>) => void;
 };
 
 export function CrmAiAssistantPanel({
@@ -62,10 +68,31 @@ export function CrmAiAssistantPanel({
   onCreateFollowUpFromInsights,
   newCarFinanceSmsPreview,
   onCopyNewCarFinanceSms,
+  selectedCustomer,
+  onPatchSelectedCustomer,
 }: CrmAiAssistantPanelProps) {
   const ft = flowDraftMemo.trim();
   const rewriteDisabled =
     !selectedCustomerId || !(ft.length > 0 ? true : workspaceAiMemoDraft.trim().length > 0);
+
+  const estimateList = useMemo(
+    () => (selectedCustomer ? sortedEstimateAttachments(selectedCustomer) : []),
+    [selectedCustomer],
+  );
+  const pickedEstimate = useMemo(
+    () => (selectedCustomer ? resolveSmsDraftEstimateAttachment(selectedCustomer) : null),
+    [selectedCustomer],
+  );
+
+  const resolveEstimateUrl = async (att: CustomerEstimateAttachment) => {
+    if (att.downloadUrl) return att.downloadUrl;
+    if (!att.storagePath) return null;
+    try {
+      return await refreshCustomerEstimateDownloadUrl(att.storagePath);
+    } catch {
+      return null;
+    }
+  };
 
   const inputCls =
     "sensora-premium-input min-h-[46px] w-full rounded-[14px] px-3.5 py-3 text-[15px] font-medium";
@@ -244,7 +271,119 @@ export function CrmAiAssistantPanel({
           <div className="mt-3 max-h-[min(260px,48vh)] min-h-[88px] flex-1 overflow-y-auto break-words whitespace-pre-line text-[14px] leading-relaxed text-slate-100">
             {newCarFinanceSmsPreview.trim() ? newCarFinanceSmsPreview : t("crm.workspaceAi.newCarFinanceEmpty")}
           </div>
+          <p className="mt-3 text-[11px] leading-relaxed text-slate-500">{t("crm.workspaceAi.estimateAttachShortNote")}</p>
         </div>
+
+        {selectedCustomerId && selectedCustomer ? (
+          <div className={`${insightTileCls} sm:col-span-2 border-white/[0.08] bg-slate-950/35`}>
+            <h3 className="text-[11px] font-extrabold uppercase tracking-[0.1em] text-slate-500">
+              {t("crm.workspaceAi.estimateSmsOptionsTitle")}
+            </h3>
+            <label className="mt-3 flex cursor-pointer items-start gap-2 text-[13px] text-slate-200">
+              <input
+                type="checkbox"
+                className="mt-1"
+                checked={Boolean(selectedCustomer.smsDraftIncludeEstimateWording)}
+                onChange={(e) => onPatchSelectedCustomer({ smsDraftIncludeEstimateWording: e.target.checked })}
+              />
+              <span>{t("crm.newCar.smsAttachIncludeLabel")}</span>
+            </label>
+            <label className="mt-3 grid gap-1.5">
+              <span className="text-[12px] font-semibold text-slate-400">{t("crm.newCar.smsAttachPickLabel")}</span>
+              <select
+                disabled={!selectedCustomer.smsDraftIncludeEstimateWording}
+                className={`${inputCls} cursor-pointer disabled:cursor-not-allowed disabled:opacity-45`}
+                value={
+                  selectedCustomer.smsDraftEstimateAttachmentId === "__none__"
+                    ? "__none__"
+                    : selectedCustomer.smsDraftEstimateAttachmentId ?? ""
+                }
+                onChange={(e) => {
+                  const v = e.target.value;
+                  onPatchSelectedCustomer({
+                    smsDraftEstimateAttachmentId: v === "" ? null : v,
+                  });
+                }}
+              >
+                <option value="">{t("crm.newCar.smsAttachOptionLatest")}</option>
+                {estimateList.map((a) => (
+                  <option key={a.id} value={a.id}>
+                    {a.fileName}
+                  </option>
+                ))}
+                <option value="__none__">{t("crm.newCar.smsAttachOptionNone")}</option>
+              </select>
+            </label>
+            <div className="mt-4 flex flex-wrap gap-2">
+              <button
+                type="button"
+                disabled={!pickedEstimate || (!pickedEstimate.downloadUrl && !pickedEstimate.storagePath)}
+                className="sensora-dark-ghost-btn min-h-[40px] rounded-xl px-3 text-[12px] font-semibold disabled:cursor-not-allowed disabled:opacity-45"
+                onClick={() => {
+                  if (!pickedEstimate) return;
+                  void (async () => {
+                    const u = await resolveEstimateUrl(pickedEstimate);
+                    if (u) window.open(u, "_blank", "noopener,noreferrer");
+                    else window.alert(t("crm.newCar.shareUnavailable"));
+                  })();
+                }}
+              >
+                {t("crm.workspaceAi.estimateOpen")}
+              </button>
+              <button
+                type="button"
+                disabled={!pickedEstimate || (!pickedEstimate.downloadUrl && !pickedEstimate.storagePath)}
+                className="sensora-dark-ghost-btn min-h-[40px] rounded-xl px-3 text-[12px] font-semibold disabled:cursor-not-allowed disabled:opacity-45"
+                onClick={() => {
+                  if (!pickedEstimate) return;
+                  void (async () => {
+                    const u = await resolveEstimateUrl(pickedEstimate);
+                    if (!u) {
+                      window.alert(t("crm.newCar.shareUnavailable"));
+                      return;
+                    }
+                    const a = document.createElement("a");
+                    a.href = u;
+                    a.download = pickedEstimate.fileName || "estimate";
+                    a.rel = "noopener noreferrer";
+                    a.target = "_blank";
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                  })();
+                }}
+              >
+                {t("crm.workspaceAi.estimateDownload")}
+              </button>
+              <button
+                type="button"
+                disabled={!pickedEstimate || (!pickedEstimate.downloadUrl && !pickedEstimate.storagePath)}
+                className="sensora-dark-ghost-btn min-h-[40px] rounded-xl px-3 text-[12px] font-semibold disabled:cursor-not-allowed disabled:opacity-45"
+                onClick={() => {
+                  if (!pickedEstimate) return;
+                  void (async () => {
+                    const u = await resolveEstimateUrl(pickedEstimate);
+                    if (!u) {
+                      window.alert(t("crm.newCar.shareUnavailable"));
+                      return;
+                    }
+                    try {
+                      if (navigator.share) {
+                        await navigator.share({ title: pickedEstimate.fileName, url: u });
+                        return;
+                      }
+                    } catch {
+                      /* cancelled */
+                    }
+                    window.alert(t("crm.newCar.shareUnavailable"));
+                  })();
+                }}
+              >
+                {t("crm.workspaceAi.estimateShare")}
+              </button>
+            </div>
+          </div>
+        ) : null}
       </div>
 
       {selectedCustomerId && !flowDraftInsights ? (

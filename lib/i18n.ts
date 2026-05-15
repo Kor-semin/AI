@@ -268,19 +268,43 @@ export type TranslationKey =
   | "crm.workspaceAi.newCarFinanceEmpty"
   | "crm.workspaceAi.copyNewCarFinance"
   | "crm.workspaceAi.newCarFinanceCopyToast"
+  | "crm.workspaceAi.estimateSmsOptionsTitle"
+  | "crm.workspaceAi.estimateAttachShortNote"
+  | "crm.workspaceAi.estimateOpen"
+  | "crm.workspaceAi.estimateDownload"
+  | "crm.workspaceAi.estimateShare"
   | "crm.newCar.cardTitle"
   | "crm.newCar.cardLead"
-  | "crm.newCar.estimateTitle"
-  | "crm.newCar.estimateDesc"
-  | "crm.newCar.estimatePickFile"
+  | "crm.newCar.vaultTitle"
+  | "crm.newCar.vaultDesc"
+  | "crm.newCar.vaultAddButton"
   | "crm.newCar.estimateMetaFormat"
   | "crm.newCar.estimateMetaUploaded"
+  | "crm.newCar.vaultFileSize"
+  | "crm.newCar.vaultOpen"
+  | "crm.newCar.vaultDownload"
+  | "crm.newCar.vaultShare"
+  | "crm.newCar.shareUnavailable"
   | "crm.newCar.estimateReplace"
   | "crm.newCar.estimateRemove"
   | "crm.newCar.estimateFileTypeError"
   | "crm.newCar.disclaimerSensitive"
   | "crm.newCar.disclaimerAiReview"
   | "crm.newCar.disclaimerNoAutoSend"
+  | "crm.newCar.disclaimerVault"
+  | "crm.newCar.disclaimerVaultSecondary"
+  | "crm.newCar.uploadNeedsLogin"
+  | "crm.newCar.uploadFailed"
+  | "crm.newCar.smsAttachIncludeLabel"
+  | "crm.newCar.smsAttachPickLabel"
+  | "crm.newCar.smsAttachOptionLatest"
+  | "crm.newCar.smsAttachOptionNone"
+  | "crm.newCar.smsAttachCommonIntro"
+  | "crm.newCar.smsAttachLeaseNote"
+  | "crm.newCar.smsAttachLoanNote"
+  | "crm.newCar.smsAttachGenericNote"
+  | "crm.newCar.smsAttachClosing"
+  | "crm.newCar.smsPreviewClosingDisclaimer"
   | "crm.newCar.financeFormTitle"
   | "crm.newCar.financeModeLabel"
   | "crm.newCar.leaseHintBullets"
@@ -289,37 +313,6 @@ export type TranslationKey =
   | "crm.newCar.unknownModeHint"
   | "crm.newCar.prioritySectionTitle"
   | "crm.newCar.detailsToggle"
-  | "crm.newCar.aiReadButton"
-  | "crm.newCar.aiReading"
-  | "crm.newCar.aiReadFail"
-  | "crm.newCar.fileTooLarge"
-  | "crm.newCar.pdfReadNotSupported"
-  | "crm.newCar.aiConfigIncomplete"
-  | "crm.newCar.extractPreviewTitle"
-  | "crm.newCar.extractPreviewLead"
-  | "crm.newCar.extractAccuracyWarning"
-  | "crm.newCar.applyExtracted"
-  | "crm.newCar.dismissExtracted"
-  | "crm.newCar.extractNeedsReviewYes"
-  | "crm.newCar.extractNeedsReviewNo"
-  | "crm.newCar.extractLabel.vehicleName"
-  | "crm.newCar.extractLabel.trim"
-  | "crm.newCar.extractLabel.financeType"
-  | "crm.newCar.extractLabel.totalVehiclePrice"
-  | "crm.newCar.extractLabel.promotion"
-  | "crm.newCar.extractLabel.prepayment"
-  | "crm.newCar.extractLabel.deposit"
-  | "crm.newCar.extractLabel.termMonths"
-  | "crm.newCar.extractLabel.residualValue"
-  | "crm.newCar.extractLabel.monthlyPayment"
-  | "crm.newCar.extractLabel.endOption"
-  | "crm.newCar.extractLabel.memo"
-  | "crm.newCar.extractLabel.reviewFlag"
-  | "crm.newCar.ft.lease"
-  | "crm.newCar.ft.loan"
-  | "crm.newCar.ft.cash"
-  | "crm.newCar.ft.long_rent"
-  | "crm.newCar.ft.unknown"
   | "crm.sensoraFlow.banner"
   | "crm.sensoraFlow.memoUserEditableHint"
   | "crm.sensoraFlow.memoStaleHint"
@@ -1030,28 +1023,61 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.workspaceAi.analyzing": "정리 중…",
     "crm.workspaceAi.newCarFinanceHeading": "신차 견적·금융 기준 검토용 문자 초안",
     "crm.workspaceAi.newCarFinanceLead":
-      "고객 상세의 「금융 조건 정리」와 니즈 선택을 반영합니다. OCR·자동 판독 없이, 영업사원이 확인한 조건을 바탕으로 한 초안입니다.",
+      "고객 상세의 「금융 조건 정리」·「견적서 보관함」·니즈 선택을 반영합니다. 실제 견적서 파일은 문자에 자동 첨부되지 않습니다.",
     "crm.workspaceAi.newCarFinanceEmpty": "고객 상세에서 금융 방식(리스·할부 등)과 조건을 입력하면 이곳에 초안이 표시됩니다.",
     "crm.workspaceAi.copyNewCarFinance": "견적·금융 초안 복사",
     "crm.workspaceAi.newCarFinanceCopyToast": "견적·금융 검토용 초안을 복사했습니다.",
-    "crm.newCar.cardTitle": "금융 조건 정리 · 견적서",
+    "crm.workspaceAi.estimateSmsOptionsTitle": "견적서 · 문자 초안 옵션",
+    "crm.workspaceAi.estimateAttachShortNote":
+      "견적서 첨부 여부와 발송은 영업사원이 직접 확인해야 합니다. 문자에는 안내 문구만 들어가며, 실제 파일은 아래에서 열거나 다운로드해 첨부해 주세요.",
+    "crm.workspaceAi.estimateOpen": "견적서 열기",
+    "crm.workspaceAi.estimateDownload": "견적서 다운로드",
+    "crm.workspaceAi.estimateShare": "견적서 공유",
+    "crm.newCar.cardTitle": "금융 조건 정리 · 견적서 보관함",
     "crm.newCar.cardLead":
-      "신차 견적·금융 조건을 정리하고, 견적서 파일 메타만 남깁니다. 원본 파일은 서버에 저장하지 않습니다.",
-    "crm.newCar.estimateTitle": "견적서 업로드",
-    "crm.newCar.estimateDesc":
-      "신차 견적서 PDF 또는 이미지를 업로드하면, AI가 견적서 내용을 읽고 금융 조건 초안을 정리합니다. 추출된 내용은 바로 저장되지 않으며, 영업사원이 확인한 뒤 반영할 수 있습니다.",
-    "crm.newCar.estimatePickFile": "견적서 파일 선택하기",
+      "금융 조건은 텍스트로 정리하고, 견적서 원본은 Firebase Storage에 고객별로 보관합니다. 문자 초안에서는 첨부 안내 문구만 넣습니다.",
+    "crm.newCar.vaultTitle": "견적서 보관함",
+    "crm.newCar.vaultDesc":
+      "고객별 신차 견적서 PDF 또는 이미지를 저장해두면, 문자 초안을 만들 때 바로 첨부 여부를 선택할 수 있습니다.",
+    "crm.newCar.vaultAddButton": "견적서 파일 추가",
     "crm.newCar.estimateMetaFormat": "파일 형식",
-    "crm.newCar.estimateMetaUploaded": "선택 시각",
+    "crm.newCar.estimateMetaUploaded": "등록 시각",
+    "crm.newCar.vaultFileSize": "파일 크기",
+    "crm.newCar.vaultOpen": "열기",
+    "crm.newCar.vaultDownload": "다운로드",
+    "crm.newCar.vaultShare": "공유",
+    "crm.newCar.shareUnavailable": "이 환경에서는 공유를 바로 열 수 없습니다. 견적서를 열어 직접 첨부해 주세요.",
     "crm.newCar.estimateReplace": "교체",
     "crm.newCar.estimateRemove": "삭제",
     "crm.newCar.estimateFileTypeError": "PDF, PNG, JPG, JPEG 파일만 선택할 수 있습니다.",
     "crm.newCar.disclaimerSensitive":
-      "견적서에는 고객명, 차량 가격, 금융 조건 등 민감한 정보가 포함될 수 있습니다.",
+      "견적서에는 고객명, 차량 가격, 금융 조건 등 민감한 정보가 포함될 수 있습니다. 저장 및 공유 전 파일 내용을 반드시 확인해 주세요.",
     "crm.newCar.disclaimerAiReview":
-      "AI 분석은 검토용 초안을 만들기 위한 보조 기능이며, 최종 안내와 저장은 영업사원이 직접 확인해야 합니다.",
+      "문자 초안의 문구는 검토용이며, 최종 발송과 첨부는 영업사원이 직접 확인해야 합니다.",
     "crm.newCar.disclaimerNoAutoSend":
-      "Sensora는 견적서를 자동으로 고객에게 전송하지 않습니다. 영업사원이 확인한 내용만 고객 안내에 활용됩니다.",
+      "Sensora는 견적서를 자동으로 고객에게 전송하지 않습니다. 영업사원이 직접 확인한 뒤 문자나 메신저에 첨부해야 합니다.",
+    "crm.newCar.disclaimerVault":
+      "Storage에 저장되는 파일은 로그인한 계정 경로 아래에만 올라갑니다. Firebase Storage 보안 규칙이 프로젝트에 맞게 설정되어 있는지 운영 환경에서 확인해 주세요.",
+    "crm.newCar.disclaimerVaultSecondary":
+      "삭제 시 목록에서 제거되며, Storage에 올라간 원본 파일도 함께 삭제를 시도합니다. 실패하면 콘솔에서 Storage를 확인해 주세요.",
+    "crm.newCar.uploadNeedsLogin": "파일을 저장하려면 로그인된 베타 계정이 필요합니다.",
+    "crm.newCar.uploadFailed": "파일을 저장하지 못했습니다. 네트워크와 Storage 설정을 확인해 주세요.",
+    "crm.newCar.smsAttachIncludeLabel": "견적서 첨부 문구 포함",
+    "crm.newCar.smsAttachPickLabel": "문구에 참고할 견적서",
+    "crm.newCar.smsAttachOptionLatest": "가장 최근 등록 견적서",
+    "crm.newCar.smsAttachOptionNone": "선택 안 함(문구만)",
+    "crm.newCar.smsAttachCommonIntro":
+      "고객님, 문의주신 신차 견적 기준으로 정리드립니다.\n자세한 금액과 조건은 함께 첨부드리는 견적서를 확인해 주세요.",
+    "crm.newCar.smsAttachLeaseNote":
+      "리스 조건은 월 납입금, 잔존가치, 보증금, 계약기간에 따라 달라질 수 있습니다.\n첨부드린 견적서를 기준으로 다시 한번 확인 부탁드립니다.",
+    "crm.newCar.smsAttachLoanNote":
+      "할부 조건은 선수금, 할부 기간, 월 납입금에 따라 달라질 수 있습니다.\n첨부드린 견적서를 기준으로 다시 한번 확인 부탁드립니다.",
+    "crm.newCar.smsAttachGenericNote":
+      "조건은 상품·시점에 따라 달라질 수 있으니, 첨부드린 견적서와 함께 확인 부탁드립니다.",
+    "crm.newCar.smsAttachClosing":
+      "최종 조건은 상담 시점의 프로모션과 금융 승인 기준에 따라 변동될 수 있어, 진행 전 다시 확인드리겠습니다.",
+    "crm.newCar.smsPreviewClosingDisclaimer":
+      "최종 조건은 견적서와 금융 승인 기준에 따라 다시 확인드리겠습니다.\n출고 가능 시점과 프로모션은 상담 시점에 따라 변동될 수 있습니다.\n아래 문구는 검토용 초안이며, 발송 전에 꼭 내용을 확인해 주세요.",
     "crm.newCar.financeFormTitle": "금융 조건 정리",
     "crm.newCar.financeModeLabel": "금융 방식",
     "crm.newCar.leaseHintBullets":
@@ -1062,39 +1088,6 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.newCar.unknownModeHint": "금융 방식이 견적서만으로 불명확할 수 있습니다. 리스·할부 각각의 월 납입·잔존·기간을 원본과 대조해 확인해 주세요.",
     "crm.newCar.prioritySectionTitle": "고객이 중요하게 보는 조건",
     "crm.newCar.detailsToggle": "펼치기",
-    "crm.newCar.aiReadButton": "AI로 견적서 내용 읽기",
-    "crm.newCar.aiReading": "견적서 내용을 읽는 중입니다…",
-    "crm.newCar.aiReadFail": "견적서 내용을 읽지 못했습니다. 직접 입력해 주세요.",
-    "crm.newCar.fileTooLarge": "파일이 너무 큽니다. 더 작은 이미지로 다시 시도해 주세요.",
-    "crm.newCar.pdfReadNotSupported": "PDF 자동 판독은 아직 지원하지 않습니다. 이미지 견적서를 사용하거나 금융 조건을 직접 입력해 주세요.",
-    "crm.newCar.aiConfigIncomplete": "AI 견적서 분석 설정이 아직 완료되지 않았습니다. 직접 금융 조건을 입력해 주세요.",
-    "crm.newCar.extractPreviewTitle": "AI가 읽은 견적 조건",
-    "crm.newCar.extractPreviewLead":
-      "아래 내용은 AI가 견적서에서 읽은 검토용 초안입니다. 영업사원이 원본 견적서와 비교한 뒤 반영해 주세요.",
-    "crm.newCar.extractAccuracyWarning":
-      "AI가 읽은 견적 정보는 검토용 초안입니다. 월 납입금, 잔존가치, 선납금, 보증금, 계약기간 등은 반드시 견적서 원본과 다시 확인해 주세요.",
-    "crm.newCar.applyExtracted": "이 조건 반영하기",
-    "crm.newCar.dismissExtracted": "직접 입력하기",
-    "crm.newCar.extractNeedsReviewYes": "확인 필요",
-    "crm.newCar.extractNeedsReviewNo": "추가 확인 표시 없음",
-    "crm.newCar.extractLabel.vehicleName": "차량명",
-    "crm.newCar.extractLabel.trim": "트림",
-    "crm.newCar.extractLabel.financeType": "금융 방식",
-    "crm.newCar.extractLabel.totalVehiclePrice": "총 차량가",
-    "crm.newCar.extractLabel.promotion": "프로모션/할인",
-    "crm.newCar.extractLabel.prepayment": "선납금",
-    "crm.newCar.extractLabel.deposit": "보증금",
-    "crm.newCar.extractLabel.termMonths": "계약기간",
-    "crm.newCar.extractLabel.residualValue": "잔존가치",
-    "crm.newCar.extractLabel.monthlyPayment": "월 납입금",
-    "crm.newCar.extractLabel.endOption": "만기 선택지",
-    "crm.newCar.extractLabel.memo": "확인 필요 메모",
-    "crm.newCar.extractLabel.reviewFlag": "확인 필요 여부",
-    "crm.newCar.ft.lease": "리스",
-    "crm.newCar.ft.loan": "할부",
-    "crm.newCar.ft.cash": "현금",
-    "crm.newCar.ft.long_rent": "장기렌트",
-    "crm.newCar.ft.unknown": "알 수 없음",
     "crm.sensoraFlow.banner":
       "Sensora Flow · AI 제안은 미리보기일 뿐이며 저장된 CRM 데이터와 분리되어 있습니다. AI는 명시 버튼(다시 분석·문자 다시 작성)을 눌렀을 때만 새 제안을 만듭니다. 메모 수정 중에는 자동 재분석·자동 덮어쓰기를 하지 않습니다.",
     "crm.sensoraFlow.memoUserEditableHint": "저장 후 고객 상세에서 언제든 직접 수정 가능합니다.",
@@ -1849,28 +1842,61 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.workspaceAi.analyzing": "Working…",
     "crm.workspaceAi.newCarFinanceHeading": "New-car quote & finance draft (for review)",
     "crm.workspaceAi.newCarFinanceLead":
-      "Reflects finance details and priority needs from the customer record. No OCR—drafts assume you verified the numbers.",
+      "Uses finance fields, the quote vault, and priority needs from the customer record. Quote files are not auto-attached to SMS.",
     "crm.workspaceAi.newCarFinanceEmpty": "Enter finance mode and fields on the customer detail card to see a draft here.",
     "crm.workspaceAi.copyNewCarFinance": "Copy quote/finance draft",
     "crm.workspaceAi.newCarFinanceCopyToast": "Quote/finance review draft copied.",
-    "crm.newCar.cardTitle": "Finance summary · quote file",
+    "crm.workspaceAi.estimateSmsOptionsTitle": "Quote · SMS draft options",
+    "crm.workspaceAi.estimateAttachShortNote":
+      "You must verify attachment and sending yourself. The SMS text only includes guidance; open or download the quote file to attach it manually.",
+    "crm.workspaceAi.estimateOpen": "Open quote",
+    "crm.workspaceAi.estimateDownload": "Download quote",
+    "crm.workspaceAi.estimateShare": "Share quote",
+    "crm.newCar.cardTitle": "Finance summary · quote vault",
     "crm.newCar.cardLead":
-      "Capture new-car finance notes and quote file metadata only. Original files are not uploaded to the server.",
-    "crm.newCar.estimateTitle": "Quote file (metadata)",
-    "crm.newCar.estimateDesc":
-      "Upload a new-car quote PDF or image and AI will read it to prepare a finance-condition draft. Extracted values are not saved until you review and apply them.",
-    "crm.newCar.estimatePickFile": "Choose quote file",
+      "Keep finance terms as text and store quote originals per customer in Firebase Storage. SMS drafts only add wording about attaching a quote—not the binary file.",
+    "crm.newCar.vaultTitle": "Quote vault",
+    "crm.newCar.vaultDesc":
+      "Save each customer’s new-car quote PDF or image so you can toggle attachment wording when drafting messages.",
+    "crm.newCar.vaultAddButton": "Add quote file",
     "crm.newCar.estimateMetaFormat": "File type",
-    "crm.newCar.estimateMetaUploaded": "Selected at",
+    "crm.newCar.estimateMetaUploaded": "Uploaded at",
+    "crm.newCar.vaultFileSize": "File size",
+    "crm.newCar.vaultOpen": "Open",
+    "crm.newCar.vaultDownload": "Download",
+    "crm.newCar.vaultShare": "Share",
+    "crm.newCar.shareUnavailable": "Sharing isn’t available here. Open the quote and attach it manually.",
     "crm.newCar.estimateReplace": "Replace",
     "crm.newCar.estimateRemove": "Remove",
     "crm.newCar.estimateFileTypeError": "Only PDF, PNG, JPG, or JPEG files are allowed.",
     "crm.newCar.disclaimerSensitive":
-      "Quotes may include customer names, prices, and finance terms.",
+      "Quotes may include customer names, prices, and finance terms. Review the file before you save or share it.",
     "crm.newCar.disclaimerAiReview":
-      "AI analysis is only a helper to draft text for review. You must confirm before saving or sending anything to the customer.",
+      "Draft wording is for review only—you decide what to send and what to attach.",
     "crm.newCar.disclaimerNoAutoSend":
-      "Sensora does not automatically send quote files to customers. Only information you confirm is used for guidance.",
+      "Sensora does not automatically send quotes to customers. Attach them yourself after you verify the contents.",
+    "crm.newCar.disclaimerVault":
+      "Files upload under your signed-in account path. Confirm Firebase Storage rules match your security model.",
+    "crm.newCar.disclaimerVaultSecondary":
+      "Removing an item deletes it from the list and attempts to delete the Storage object. If that fails, clean up in the Firebase console.",
+    "crm.newCar.uploadNeedsLogin": "Sign in to save files to your account storage.",
+    "crm.newCar.uploadFailed": "Could not save the file. Check the network and Storage configuration.",
+    "crm.newCar.smsAttachIncludeLabel": "Include quote-attachment wording",
+    "crm.newCar.smsAttachPickLabel": "Quote referenced in wording",
+    "crm.newCar.smsAttachOptionLatest": "Most recently uploaded quote",
+    "crm.newCar.smsAttachOptionNone": "None (wording only)",
+    "crm.newCar.smsAttachCommonIntro":
+      "Here is a recap based on the new-car quote you asked about.\nPlease review the detailed amounts and terms in the attached quote.",
+    "crm.newCar.smsAttachLeaseNote":
+      "Lease figures can change with monthly payment, residual, deposit, and term.\nPlease double-check using the attached quote.",
+    "crm.newCar.smsAttachLoanNote":
+      "Installment figures can change with down payment, term, and monthly payment.\nPlease double-check using the attached quote.",
+    "crm.newCar.smsAttachGenericNote":
+      "Terms can vary by product and timing—please review alongside the attached quote.",
+    "crm.newCar.smsAttachClosing":
+      "Final terms may change with promotions and finance approval at the time you proceed—we will reconfirm before moving forward.",
+    "crm.newCar.smsPreviewClosingDisclaimer":
+      "We will reconfirm final terms against the quote and finance approval.\nDelivery timing and promotions may change with the consultation date.\nThis draft is for review—please verify before sending.",
     "crm.newCar.financeFormTitle": "Finance condition summary",
     "crm.newCar.financeModeLabel": "Product",
     "crm.newCar.leaseHintBullets":
@@ -1881,39 +1907,6 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.newCar.unknownModeHint": "The product type may be unclear from the quote alone. Compare lease vs installment monthly payment, residual, and term with the original document.",
     "crm.newCar.prioritySectionTitle": "What the customer cares about most",
     "crm.newCar.detailsToggle": "Expand",
-    "crm.newCar.aiReadButton": "Read quote with AI",
-    "crm.newCar.aiReading": "Reading the quote…",
-    "crm.newCar.aiReadFail": "Could not read the quote. Please enter finance fields manually.",
-    "crm.newCar.fileTooLarge": "File is too large. Try a smaller image.",
-    "crm.newCar.pdfReadNotSupported": "Automatic PDF reading is not available yet. Use an image quote or enter finance details manually.",
-    "crm.newCar.aiConfigIncomplete": "AI quote analysis is not configured yet. Please enter finance fields manually.",
-    "crm.newCar.extractPreviewTitle": "AI-extracted quote fields",
-    "crm.newCar.extractPreviewLead":
-      "Draft only—compare every value with the original quote before you apply it to the customer record.",
-    "crm.newCar.extractAccuracyWarning":
-      "These values are a draft. Re-check monthly payment, residual, down payment, deposit, and term against the original quote.",
-    "crm.newCar.applyExtracted": "Apply these fields",
-    "crm.newCar.dismissExtracted": "Enter manually",
-    "crm.newCar.extractNeedsReviewYes": "Needs review",
-    "crm.newCar.extractNeedsReviewNo": "No extra review flag",
-    "crm.newCar.extractLabel.vehicleName": "Vehicle",
-    "crm.newCar.extractLabel.trim": "Trim",
-    "crm.newCar.extractLabel.financeType": "Finance type",
-    "crm.newCar.extractLabel.totalVehiclePrice": "Total vehicle price",
-    "crm.newCar.extractLabel.promotion": "Promotion / discount",
-    "crm.newCar.extractLabel.prepayment": "Down payment",
-    "crm.newCar.extractLabel.deposit": "Deposit",
-    "crm.newCar.extractLabel.termMonths": "Term",
-    "crm.newCar.extractLabel.residualValue": "Residual",
-    "crm.newCar.extractLabel.monthlyPayment": "Monthly payment",
-    "crm.newCar.extractLabel.endOption": "End-of-term options",
-    "crm.newCar.extractLabel.memo": "Review notes",
-    "crm.newCar.extractLabel.reviewFlag": "Needs manual review",
-    "crm.newCar.ft.lease": "Lease",
-    "crm.newCar.ft.loan": "Installment",
-    "crm.newCar.ft.cash": "Cash",
-    "crm.newCar.ft.long_rent": "Long-term rent",
-    "crm.newCar.ft.unknown": "Unknown",
     "crm.sensoraFlow.banner":
       "Sensora Flow · AI output is preview-only—separate from stored CRM rows. Sensora proposes again only after explicit actions (analyze again · rewrite SMS). While you edit memo text there is no auto re‑analysis or auto‑overwrite.",
     "crm.sensoraFlow.memoUserEditableHint": "After saving, edit anytime in customer details.",

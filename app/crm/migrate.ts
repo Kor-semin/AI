@@ -59,12 +59,27 @@ function migrateCustomer(c: Customer): Customer {
     usedCar = { ...usedCar, brand: "폭스바겐" };
   }
 
+  let estimateAttachments = c.estimateAttachments;
+  if (c.quoteEstimateAttachment && (!estimateAttachments || estimateAttachments.length === 0)) {
+    const q = c.quoteEstimateAttachment;
+    estimateAttachments = [
+      {
+        id: `legacy_${q.uploadedAt.replace(/[:.]/g, "-")}`,
+        fileName: q.fileName,
+        contentType: q.mimeType,
+        size: 0,
+        createdAt: q.uploadedAt,
+      },
+    ];
+  }
+
   const next: Customer = {
     ...c,
     stage: migrateStage(String(c.stage)),
     leadSource: migrateLead(String(c.leadSource)),
     usedCar,
     ...(String(c.vehicleBrand ?? "") === "폭스바겠" ? { vehicleBrand: "폭스바겐" } : {}),
+    ...(estimateAttachments ? { estimateAttachments } : {}),
   };
   delete next.paymentType;
   if (typeof c.paymentType === "string" && canonPayment.has(c.paymentType)) {

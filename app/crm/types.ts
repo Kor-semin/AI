@@ -10,30 +10,23 @@ export type PaymentType = "현금" | "할부" | "리스" | "장기렌트";
 /** 신차 견적·금융 조건 정리(영업사원 입력, 검토용 문자 초안에 반영) */
 export type FinanceProductMode = "리스" | "할부" | "현금" | "장기렌트" | "알 수 없음";
 
-/** 견적서 AI 추출 API(JSON). Firestore에 그대로 저장하지 않고 클라이언트 미리보기용. */
-export type EstimateFinanceTypeKey = "lease" | "loan" | "cash" | "long_rent" | "unknown";
-
-export type EstimateDocumentExtraction = {
-  vehicleName: string;
-  trim: string;
-  financeType: EstimateFinanceTypeKey;
-  totalVehiclePrice: string;
-  promotion: string;
-  prepayment: string;
-  deposit: string;
-  termMonths: string;
-  residualValue: string;
-  monthlyPayment: string;
-  endOption: string;
-  memo: string;
-  needsReview: boolean;
-};
-
-/** 견적서 파일은 메타데이터만 저장(원본은 Storage 등 별도 검토 후 연동) */
+/** @deprecated 하위 호환: 단일 견적 메타. estimateAttachments 로 이전 권장 */
 export type QuoteEstimateAttachmentMeta = {
   fileName: string;
   mimeType: string;
   uploadedAt: string;
+};
+
+/** 고객별 견적서 보관함 항목(원본은 Firebase Storage, Firestore에는 메타만) */
+export type CustomerEstimateAttachment = {
+  id: string;
+  fileName: string;
+  contentType: string;
+  size: number;
+  storagePath?: string;
+  downloadUrl?: string;
+  createdAt: string;
+  updatedAt?: string;
 };
 
 export type FinanceConditionDraft = {
@@ -173,12 +166,18 @@ export type Customer = {
   /** AI 출고 안내서(미리보기 단계). */
   deliveryGuide?: DeliveryGuide;
 
-  /** 견적서 업로드 메타(PDF/이미지 원본은 저장하지 않음) */
+  /** @deprecated estimateAttachments 사용 권장 */
   quoteEstimateAttachment?: QuoteEstimateAttachmentMeta | null;
+  /** 고객별 견적서 보관함(Storage 경로·다운로드 URL 메타) */
+  estimateAttachments?: CustomerEstimateAttachment[];
   /** 신차 견적·금융 조건 정리(검토용 문자 초안에 사용) */
   financeConditionDraft?: FinanceConditionDraft;
   /** 고객 니즈(다중 선택, 한글 라벨 그대로 저장) */
   customerPriorityNeeds?: string[];
+  /** 문자 초안(금융)에 견적서 첨부 안내 문구 포함 */
+  smsDraftIncludeEstimateWording?: boolean;
+  /** 첨부 안내에 쓸 견적서. null/미설정=가장 최근, "__none__"=특정 파일 없음 */
+  smsDraftEstimateAttachmentId?: string | null;
 };
 
 export type NextAction = {
