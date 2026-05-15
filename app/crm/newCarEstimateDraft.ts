@@ -1,4 +1,4 @@
-import type { Customer, FinanceConditionDraft } from "./types";
+import type { Customer, EstimateDocumentExtraction, EstimateFinanceTypeKey, FinanceConditionDraft } from "./types";
 import { buildUsedCarSearchQuery } from "./recommendations";
 
 /** 고객 니즈 선택지(한글 라벨 — Firestore·상태에 그대로 저장) */
@@ -32,6 +32,51 @@ function fmt(v?: string): string {
   return v && String(v).trim() ? String(v).trim() : "";
 }
 
+/** API/AI JSON financeType → CRM 금융 방식 */
+export function estimateFinanceTypeKeyToProductMode(k: EstimateFinanceTypeKey | string): FinanceConditionDraft["productMode"] {
+  switch (k) {
+    case "lease":
+      return "리스";
+    case "loan":
+      return "할부";
+    case "cash":
+      return "현금";
+    case "long_rent":
+      return "장기렌트";
+    default:
+      return "알 수 없음";
+  }
+}
+
+/** 「이 조건 반영하기」 시에만 호출 — AI 추출값을 기존 초안에 병합(빈 추출 필드는 기존값 유지) */
+export function mergeExtractionIntoFinanceDraft(
+  prev: FinanceConditionDraft,
+  ex: EstimateDocumentExtraction,
+): FinanceConditionDraft {
+  const pick = (incoming: string, prior?: string) => {
+    const t = (incoming ?? "").trim();
+    return t.length > 0 ? t : (prior ?? "");
+  };
+  const noteParts = [ex.memo?.trim(), ex.needsReview ? "AI 추출 초안·원본 견적서와 대조 필요" : ""].filter(Boolean);
+  const nextNote = noteParts.length > 0 ? noteParts.join("\n") : (prev.customerConditionNote ?? "");
+
+  return {
+    ...prev,
+    productMode: estimateFinanceTypeKeyToProductMode(ex.financeType),
+    vehicleName: pick(ex.vehicleName, prev.vehicleName),
+    vehicleTrim: pick(ex.trim, prev.vehicleTrim),
+    totalVehiclePrice: pick(ex.totalVehiclePrice, prev.totalVehiclePrice),
+    promotionOrDiscount: pick(ex.promotion, prev.promotionOrDiscount),
+    downPayment: pick(ex.prepayment, prev.downPayment),
+    deposit: pick(ex.deposit, prev.deposit),
+    contractMonths: pick(ex.termMonths, prev.contractMonths),
+    residualValue: pick(ex.residualValue, prev.residualValue),
+    monthlyPayment: pick(ex.monthlyPayment, prev.monthlyPayment),
+    maturityOptions: pick(ex.endOption, prev.maturityOptions),
+    customerConditionNote: nextNote,
+  };
+}
+
 /** 금융 조건·니즈가 있을 때만 채워지는 검토용 신차 문자 초안(자동 OCR 없음) */
 export function buildNewCarFinanceSmsPreview(c: Customer): string {
   const fd = c.financeConditionDraft;
@@ -52,6 +97,11 @@ export function buildNewCarFinanceSmsPreview(c: Customer): string {
       `${name} 고객님, 문의주신 차량 할부 조건을 기준으로 정리드립니다.\n` +
         `선수금과 할부 기간에 따라 월 납입금이 달라질 수 있으며, 장기 보유를 고려하신다면 총 납입 부담과 월 부담을 함께 비교해보시는 것이 좋습니다.\n` +
         `고객님께서 중요하게 보신 월 납입 기준에 맞춰 리스 조건과도 함께 비교해드리겠습니다.`,
+    );
+  } else if (fd.productMode === "알 수 없음") {
+    chunks.push(
+      `${name} 고객님, 문의 주신 견적 내용을 기준으로 금융 방식과 조건을 함께 확인하며 정리드립니다.\n` +
+        `견적서상 표기만으로는 리스·할부 등이 명확하지 않을 수 있어, 월 납입 부담·초기 비용·잔존가치·계약기간을 상담 시점 기준으로 다시 확인드리겠습니다.`,
     );
   } else if (fd.productMode === "현금") {
     chunks.push(

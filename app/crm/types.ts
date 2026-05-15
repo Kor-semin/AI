@@ -8,7 +8,26 @@ export type LeadSource = (typeof DEALER_LEAD_SOURCES)[number];
 export type PaymentType = "현금" | "할부" | "리스" | "장기렌트";
 
 /** 신차 견적·금융 조건 정리(영업사원 입력, 검토용 문자 초안에 반영) */
-export type FinanceProductMode = "리스" | "할부" | "현금" | "장기렌트";
+export type FinanceProductMode = "리스" | "할부" | "현금" | "장기렌트" | "알 수 없음";
+
+/** 견적서 AI 추출 API(JSON). Firestore에 그대로 저장하지 않고 클라이언트 미리보기용. */
+export type EstimateFinanceTypeKey = "lease" | "loan" | "cash" | "long_rent" | "unknown";
+
+export type EstimateDocumentExtraction = {
+  vehicleName: string;
+  trim: string;
+  financeType: EstimateFinanceTypeKey;
+  totalVehiclePrice: string;
+  promotion: string;
+  prepayment: string;
+  deposit: string;
+  termMonths: string;
+  residualValue: string;
+  monthlyPayment: string;
+  endOption: string;
+  memo: string;
+  needsReview: boolean;
+};
 
 /** 견적서 파일은 메타데이터만 저장(원본은 Storage 등 별도 검토 후 연동) */
 export type QuoteEstimateAttachmentMeta = {

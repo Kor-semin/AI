@@ -1,12 +1,22 @@
 "use client";
 
-import { useRef } from "react";
+import { useCallback, useRef, useState } from "react";
 
 import type { TranslationKey } from "@/lib/i18n";
-import type { Customer, FinanceConditionDraft, FinanceProductMode, QuoteEstimateAttachmentMeta } from "@/app/crm/types";
-import { CUSTOMER_PRIORITY_OPTIONS, defaultFinanceDraft } from "@/app/crm/newCarEstimateDraft";
+import type {
+  Customer,
+  EstimateDocumentExtraction,
+  FinanceConditionDraft,
+  FinanceProductMode,
+  QuoteEstimateAttachmentMeta,
+} from "@/app/crm/types";
+import {
+  CUSTOMER_PRIORITY_OPTIONS,
+  defaultFinanceDraft,
+  mergeExtractionIntoFinanceDraft,
+} from "@/app/crm/newCarEstimateDraft";
 
-const FINANCE_MODES: FinanceProductMode[] = ["리스", "할부", "현금", "장기렌트"];
+const FINANCE_MODES: FinanceProductMode[] = ["리스", "할부", "현금", "장기렌트", "알 수 없음"];
 
 const ACCEPT_MIME = new Set(["application/pdf", "image/png", "image/jpeg"]);
 const ACCEPT_EXT = /\.(pdf|png|jpg|jpeg)$/i;
@@ -17,6 +27,28 @@ function formatMimeLabel(mime: string): string {
   if (mime === "image/jpeg") return "JPG";
   return mime;
 }
+
+function ftLabelKey(ft: EstimateDocumentExtraction["financeType"]): TranslationKey {
+  const m: Record<EstimateDocumentExtraction["financeType"], TranslationKey> = {
+    lease: "crm.newCar.ft.lease",
+    loan: "crm.newCar.ft.loan",
+    cash: "crm.newCar.ft.cash",
+    long_rent: "crm.newCar.ft.long_rent",
+    unknown: "crm.newCar.ft.unknown",
+  };
+  return m[ft] ?? "crm.newCar.ft.unknown";
+}
+
+function isPdfFile(file: File): boolean {
+  return file.type === "application/pdf" || /\.pdf$/i.test(file.name);
+}
+
+function isImageFile(file: File): boolean {
+  if (file.type === "image/png" || file.type === "image/jpeg") return true;
+  return /\.(png|jpg|jpeg)$/i.test(file.name);
+}
+
+type AnalyzePhase = "idle" | "loading" | "success" | "error";
 
 type Props = {
   customer: Customer;
@@ -29,6 +61,11 @@ export function NewCarEstimateFinanceCard({ customer, onPatch, t }: Props) {
   const draft = customer.financeConditionDraft ?? defaultFinanceDraft();
   const att = customer.quoteEstimateAttachment;
 
+  const [pendingFile, setPendingFile] = useState<File | null>(null);
+  const [analyzePhase, setAnalyzePhase] = useState<AnalyzePhase>("idle");
+  const [analyzeCode, setAnalyzeCode] = useState<string | null>(null);
+  const [extractionPreview, setExtractionPreview] = useState<EstimateDocumentExtraction | null>(null);
+
   const setDraft = (patch: Partial<FinanceConditionDraft>) => {
     onPatch({ financeConditionDraft: { ...draft, ...patch } });
   };
@@ -39,6 +76,12 @@ export function NewCarEstimateFinanceCard({ customer, onPatch, t }: Props) {
     else cur.add(label);
     onPatch({ customerPriorityNeeds: Array.from(cur) });
   };
+
+  const resetAnalysisUi = useCallback(() => {
+    setAnalyzePhase("idle");
+    setAnalyzeCode(null);
+    setExtractionPreview(null);
+  }, []);
 
   const onPickFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -55,9 +98,96 @@ export function NewCarEstimateFinanceCard({ customer, onPatch, t }: Props) {
       mimeType: ACCEPT_MIME.has(mime) ? mime : mime || "application/octet-stream",
       uploadedAt: new Date().toISOString(),
     };
+    setPendingFile(file);
+    resetAnalysisUi();
     onPatch({ quoteEstimateAttachment: meta });
     e.target.value = "";
   };
+
+  const analyzeWithAi = useCallback(async () => {
+    if (!pendingFile) return;
+    if (isPdfFile(pendingFile)) {
+      setAnalyzePhase("error");
+      setAnalyzeCode("PDF_NOT_SUPPORTED");
+      setExtractionPreview(null);
+      return;
+    }
+    if (!isImageFile(pendingFile)) {
+      setAnalyzePhase("error");
+      setAnalyzeCode("UNSUPPORTED_TYPE");
+      setExtractionPreview(null);
+      return;
+    }
+
+    setAnalyzePhase("loading");
+    setAnalyzeCode(null);
+    setExtractionPreview(null);
+
+    try {
+      const fd = new FormData();
+      fd.append("file", pendingFile);
+      const res = await fetch("/api/estimate/analyze", { method: "POST", body: fd });
+      const data = (await res.json()) as {
+        ok?: boolean;
+        code?: string;
+        extraction?: EstimateDocumentExtraction;
+      };
+
+      if (!data.ok) {
+        setAnalyzePhase("error");
+        setAnalyzeCode(data.code ?? "UNKNOWN");
+        return;
+      }
+      if (!data.extraction) {
+        setAnalyzePhase("error");
+        setAnalyzeCode("PARSE_ERROR");
+        return;
+      }
+      setExtractionPreview(data.extraction);
+      setAnalyzePhase("success");
+    } catch {
+      setAnalyzePhase("error");
+      setAnalyzeCode("NETWORK");
+    }
+  }, [pendingFile]);
+
+  const applyExtraction = () => {
+    if (!extractionPreview) return;
+    onPatch({
+      financeConditionDraft: mergeExtractionIntoFinanceDraft(draft, extractionPreview),
+    });
+    setExtractionPreview(null);
+    setAnalyzePhase("idle");
+    setAnalyzeCode(null);
+  };
+
+  const dismissExtraction = () => {
+    setExtractionPreview(null);
+    setAnalyzePhase("idle");
+    setAnalyzeCode(null);
+  };
+
+  const removeAttachment = () => {
+    setPendingFile(null);
+    resetAnalysisUi();
+    onPatch({ quoteEstimateAttachment: null });
+  };
+
+  const errorMessage = (() => {
+    if (analyzePhase !== "error" || !analyzeCode) return null;
+    switch (analyzeCode) {
+      case "MISSING_AI_CONFIG":
+        return t("crm.newCar.aiConfigIncomplete");
+      case "PDF_NOT_SUPPORTED":
+        return t("crm.newCar.pdfReadNotSupported");
+      case "FILE_TOO_LARGE":
+        return t("crm.newCar.fileTooLarge");
+      default:
+        return t("crm.newCar.aiReadFail");
+    }
+  })();
+
+  const showAiButton = Boolean(pendingFile && att && isImageFile(pendingFile) && !isPdfFile(pendingFile));
 
   return (
     <details
@@ -78,7 +208,13 @@ export function NewCarEstimateFinanceCard({ customer, onPatch, t }: Props) {
         <section className="space-y-3">
           <h3 className="text-[14px] font-semibold text-slate-100">{t("crm.newCar.estimateTitle")}</h3>
           <p className="text-[13px] leading-relaxed text-slate-400">{t("crm.newCar.estimateDesc")}</p>
-          <input ref={fileRef} type="file" accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/png,image/jpeg" className="hidden" onChange={onPickFile} />
+          <input
+            ref={fileRef}
+            type="file"
+            accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/png,image/jpeg"
+            className="hidden"
+            onChange={onPickFile}
+          />
           <button
             type="button"
             className="sensora-premium-primary-workspace min-h-[44px] rounded-xl px-4 py-2.5 text-[13px] font-semibold touch-manipulation"
@@ -104,18 +240,131 @@ export function NewCarEstimateFinanceCard({ customer, onPatch, t }: Props) {
                 <button
                   type="button"
                   className="rounded-lg border border-red-400/25 bg-red-950/25 px-3 py-1.5 text-[12px] font-semibold text-red-100/95 hover:bg-red-950/40"
-                  onClick={() => onPatch({ quoteEstimateAttachment: null })}
+                  onClick={removeAttachment}
                 >
                   {t("crm.newCar.estimateRemove")}
                 </button>
               </div>
             </div>
           ) : null}
+
           <div className="space-y-2 rounded-xl border border-amber-400/22 bg-amber-950/15 px-3 py-3 text-[12px] leading-relaxed text-amber-100/90">
             <p>{t("crm.newCar.disclaimerSensitive")}</p>
             <p>{t("crm.newCar.disclaimerAiReview")}</p>
             <p>{t("crm.newCar.disclaimerNoAutoSend")}</p>
           </div>
+
+          {pendingFile && isPdfFile(pendingFile) ? (
+            <p className="rounded-xl border border-sky-400/20 bg-sky-950/20 px-3 py-2 text-[12px] leading-relaxed text-sky-100/90">
+              {t("crm.newCar.pdfReadNotSupported")}
+            </p>
+          ) : null}
+
+          {showAiButton ? (
+            <div className="space-y-3">
+              <p className="rounded-xl border border-amber-400/22 bg-amber-950/15 px-3 py-2 text-[12px] leading-relaxed text-amber-100/90">
+                {t("crm.newCar.extractAccuracyWarning")}
+              </p>
+              <button
+                type="button"
+                disabled={analyzePhase === "loading"}
+                className="sensora-premium-primary-workspace min-h-[44px] rounded-xl px-4 py-2.5 text-[13px] font-semibold touch-manipulation disabled:cursor-not-allowed disabled:opacity-50"
+                onClick={() => void analyzeWithAi()}
+              >
+                {t("crm.newCar.aiReadButton")}
+              </button>
+            </div>
+          ) : null}
+
+          {analyzePhase === "loading" ? (
+            <p className="text-[13px] font-medium text-slate-300">{t("crm.newCar.aiReading")}</p>
+          ) : null}
+
+          {analyzePhase === "error" && errorMessage ? (
+            <p className="rounded-xl border border-red-400/25 bg-red-950/20 px-3 py-2 text-[12px] leading-relaxed text-red-100/95">{errorMessage}</p>
+          ) : null}
+
+          {analyzePhase === "success" && extractionPreview ? (
+            <div className="rounded-[16px] border border-emerald-400/25 bg-emerald-950/15 px-4 py-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+              <h4 className="text-[14px] font-semibold text-emerald-50">{t("crm.newCar.extractPreviewTitle")}</h4>
+              <p className="mt-2 text-[12px] leading-relaxed text-emerald-100/85">{t("crm.newCar.extractPreviewLead")}</p>
+              <p className="mt-2 text-[12px] leading-relaxed text-amber-100/90">{t("crm.newCar.extractAccuracyWarning")}</p>
+
+              <dl className="mt-4 space-y-2 divide-y divide-white/[0.06] text-[13px]">
+                <div className="flex flex-wrap justify-between gap-2 py-2">
+                  <dt className="text-slate-400">{t("crm.newCar.extractLabel.vehicleName")}</dt>
+                  <dd className="text-right text-slate-100">{extractionPreview.vehicleName.trim() || "—"}</dd>
+                </div>
+                <div className="flex flex-wrap justify-between gap-2 py-2">
+                  <dt className="text-slate-400">{t("crm.newCar.extractLabel.trim")}</dt>
+                  <dd className="text-right text-slate-100">{extractionPreview.trim.trim() || "—"}</dd>
+                </div>
+                <div className="flex flex-wrap justify-between gap-2 py-2">
+                  <dt className="text-slate-400">{t("crm.newCar.extractLabel.financeType")}</dt>
+                  <dd className="text-right text-slate-100">{t(ftLabelKey(extractionPreview.financeType))}</dd>
+                </div>
+                <div className="flex flex-wrap justify-between gap-2 py-2">
+                  <dt className="text-slate-400">{t("crm.newCar.extractLabel.totalVehiclePrice")}</dt>
+                  <dd className="text-right text-slate-100">{extractionPreview.totalVehiclePrice.trim() || "—"}</dd>
+                </div>
+                <div className="flex flex-wrap justify-between gap-2 py-2">
+                  <dt className="text-slate-400">{t("crm.newCar.extractLabel.promotion")}</dt>
+                  <dd className="text-right text-slate-100">{extractionPreview.promotion.trim() || "—"}</dd>
+                </div>
+                <div className="flex flex-wrap justify-between gap-2 py-2">
+                  <dt className="text-slate-400">{t("crm.newCar.extractLabel.prepayment")}</dt>
+                  <dd className="text-right text-slate-100">{extractionPreview.prepayment.trim() || "—"}</dd>
+                </div>
+                <div className="flex flex-wrap justify-between gap-2 py-2">
+                  <dt className="text-slate-400">{t("crm.newCar.extractLabel.deposit")}</dt>
+                  <dd className="text-right text-slate-100">{extractionPreview.deposit.trim() || "—"}</dd>
+                </div>
+                <div className="flex flex-wrap justify-between gap-2 py-2">
+                  <dt className="text-slate-400">{t("crm.newCar.extractLabel.termMonths")}</dt>
+                  <dd className="text-right text-slate-100">{extractionPreview.termMonths.trim() || "—"}</dd>
+                </div>
+                <div className="flex flex-wrap justify-between gap-2 py-2">
+                  <dt className="text-slate-400">{t("crm.newCar.extractLabel.residualValue")}</dt>
+                  <dd className="text-right text-slate-100">{extractionPreview.residualValue.trim() || "—"}</dd>
+                </div>
+                <div className="flex flex-wrap justify-between gap-2 py-2">
+                  <dt className="text-slate-400">{t("crm.newCar.extractLabel.monthlyPayment")}</dt>
+                  <dd className="text-right text-slate-100">{extractionPreview.monthlyPayment.trim() || "—"}</dd>
+                </div>
+                <div className="flex flex-wrap justify-between gap-2 py-2">
+                  <dt className="text-slate-400">{t("crm.newCar.extractLabel.endOption")}</dt>
+                  <dd className="text-right text-slate-100">{extractionPreview.endOption.trim() || "—"}</dd>
+                </div>
+                <div className="flex flex-wrap justify-between gap-2 py-2">
+                  <dt className="text-slate-400">{t("crm.newCar.extractLabel.memo")}</dt>
+                  <dd className="text-right text-slate-100">{extractionPreview.memo.trim() || "—"}</dd>
+                </div>
+                <div className="flex flex-wrap justify-between gap-2 py-2">
+                  <dt className="text-slate-400">{t("crm.newCar.extractLabel.reviewFlag")}</dt>
+                  <dd className="text-right text-slate-100">
+                    {extractionPreview.needsReview ? t("crm.newCar.extractNeedsReviewYes") : t("crm.newCar.extractNeedsReviewNo")}
+                  </dd>
+                </div>
+              </dl>
+
+              <div className="mt-4 flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  className="sensora-premium-primary-workspace min-h-[44px] rounded-xl px-4 py-2.5 text-[13px] font-semibold touch-manipulation"
+                  onClick={applyExtraction}
+                >
+                  {t("crm.newCar.applyExtracted")}
+                </button>
+                <button
+                  type="button"
+                  className="sensora-dark-ghost-btn min-h-[44px] rounded-xl px-4 py-2.5 text-[13px] font-semibold touch-manipulation"
+                  onClick={dismissExtraction}
+                >
+                  {t("crm.newCar.dismissExtracted")}
+                </button>
+              </div>
+            </div>
+          ) : null}
         </section>
 
         <section className="space-y-4">
@@ -146,6 +395,8 @@ export function NewCarEstimateFinanceCard({ customer, onPatch, t }: Props) {
               <p className="whitespace-pre-line">{t("crm.newCar.leaseHintBullets")}</p>
             ) : draft.productMode === "할부" ? (
               <p className="whitespace-pre-line">{t("crm.newCar.loanHintBullets")}</p>
+            ) : draft.productMode === "알 수 없음" ? (
+              <p className="whitespace-pre-line">{t("crm.newCar.unknownModeHint")}</p>
             ) : (
               <p>{t("crm.newCar.otherModeHint")}</p>
             )}
