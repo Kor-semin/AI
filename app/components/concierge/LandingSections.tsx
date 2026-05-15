@@ -365,25 +365,26 @@ export function LandingShowroom({
             <div className="landing-guide03-hero-frame relative w-full max-w-[1440px] overflow-hidden">
               <Image
                 src="/images/guides/sensora-guide-03.png"
-                alt="Sensora Auto CRM 랜딩 첫 화면"
+                alt=""
                 width={1672}
                 height={941}
+                fill
                 priority
                 quality={100}
-                className="landing-guide03-hero-image block h-auto w-full cursor-default select-none"
+                className="landing-guide03-hero-image pointer-events-none select-none"
                 sizes="(max-width: 1440px) 100vw, 1440px"
               />
               <Link
                 href={JOIN_PATH}
                 prefetch={false}
                 aria-label="베타 신청하기"
-                className="landing-guide03-hero-hit landing-guide03-hero-hit--join"
+                className="landing-guide03-hero-hit landing-guide03-hero-hit-beta"
               />
               <button
                 type="button"
-                onClick={onOpenAppWorkspace}
                 aria-label="앱 화면 미리보기"
-                className="landing-guide03-hero-hit landing-guide03-hero-hit--preview"
+                className="landing-guide03-hero-hit landing-guide03-hero-hit-preview"
+                onClick={() => onOpenAppWorkspace()}
               />
             </div>
           </div>

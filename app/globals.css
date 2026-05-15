@@ -2563,6 +2563,7 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
 }
 
 .landing-guide03-hero-frame {
+  position: relative;
   aspect-ratio: 1672 / 941;
   width: min(100%, calc((100dvh - 7rem) * 1672 / 941));
   border-radius: clamp(18px, 2.35vw, 34px);
@@ -2572,45 +2573,49 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
     0 0 0 1px rgba(255, 255, 255, 0.07);
 }
 
-/* Next/Image 래퍼(span)가 핫스팟 위를 덮지 않도록 */
-.landing-guide03-hero-frame > span {
-  pointer-events: none;
-  display: block;
-  line-height: 0;
+/* Next/Image fill 래퍼 — 클릭은 핫스팟만 받음 */
+.landing-guide03-hero-frame > span:has(.landing-guide03-hero-image) {
+  pointer-events: none !important;
+  z-index: 0 !important;
 }
 
 .landing-guide03-hero-image {
   pointer-events: none;
+  object-fit: cover;
 }
 
-/* sensora-guide-03.png(1672×941) — 왼쪽 하단 그래픽 CTA만 히트 */
+/* sensora-guide-03.png(1672×941) — 제목 아래 왼쪽 CTA 그래픽 */
 .landing-guide03-hero-hit {
   position: absolute;
-  z-index: 30;
+  z-index: 50;
   display: block;
   margin: 0;
   border: 0;
   padding: 0;
+  pointer-events: auto;
   cursor: pointer;
+  touch-action: manipulation;
   background: transparent;
   box-shadow: none;
   appearance: none;
   -webkit-appearance: none;
   border-radius: 0.625rem;
+  min-width: 3rem;
+  min-height: 2rem;
 }
 
-.landing-guide03-hero-hit--join {
-  left: 5%;
-  top: 53.5%;
-  width: 14.5%;
-  height: 8%;
+.landing-guide03-hero-hit-beta {
+  left: 7%;
+  top: 47%;
+  width: 15%;
+  height: 7.2%;
 }
 
-.landing-guide03-hero-hit--preview {
-  left: 19%;
-  top: 53.5%;
+.landing-guide03-hero-hit-preview {
+  left: 23%;
+  top: 47%;
   width: 17%;
-  height: 8%;
+  height: 7.2%;
 }
 
 .landing-guide03-hero-hit:focus-visible {
