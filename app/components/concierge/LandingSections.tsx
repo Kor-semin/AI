@@ -373,20 +373,18 @@ export function LandingShowroom({
                 className="landing-guide03-hero-image block h-auto w-full cursor-default select-none"
                 sizes="(max-width: 1440px) 100vw, 1440px"
               />
-              <div className="landing-guide03-hero-hotspots">
-                <Link
-                  href={JOIN_PATH}
-                  prefetch={false}
-                  aria-label="베타 신청하기"
-                  className="landing-guide03-hero-hit absolute left-[5.5%] top-[56%] h-[6.5%] w-[13%]"
-                />
-                <button
-                  type="button"
-                  onClick={onOpenAppWorkspace}
-                  aria-label="앱 화면 미리보기"
-                  className="landing-guide03-hero-hit absolute left-[19.5%] top-[56%] h-[6.5%] w-[15.5%]"
-                />
-              </div>
+              <Link
+                href={JOIN_PATH}
+                prefetch={false}
+                aria-label="베타 신청하기"
+                className="landing-guide03-hero-hit landing-guide03-hero-hit--join"
+              />
+              <button
+                type="button"
+                onClick={onOpenAppWorkspace}
+                aria-label="앱 화면 미리보기"
+                className="landing-guide03-hero-hit landing-guide03-hero-hit--preview"
+              />
             </div>
           </div>
         </div>

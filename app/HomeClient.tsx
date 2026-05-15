@@ -252,7 +252,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
           {view === "landing" ? (
             <>
               <div
-                className="landing-nav-brand-cluster flex min-w-0 flex-1 items-start gap-2.5 max-lg:gap-2 sm:items-center sm:gap-3 lg:min-w-0 lg:max-w-none lg:items-center xl:max-w-[min(100%,20rem)]"
+                className="landing-nav-brand-cluster flex min-w-0 flex-1 items-start gap-2.5 max-lg:gap-2 sm:items-center sm:gap-3 lg:min-w-0 lg:max-w-none lg:items-center xl:max-w-[min(100%,28rem)]"
                 aria-label={`${t("product.name")}. ${t("landing.showroom.header.subline")}`}
               >
                 <SensoraAnimatedMark
@@ -261,8 +261,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                   className="pointer-events-none hidden shrink-0 sm:block drop-shadow-[0_0_24px_-4px_rgba(56,189,248,0.35)]"
                   aria-hidden
                 />
-                {/* lg+: 히어로 가이드 이미지와 제목이 겹쳐 보이지 않도록 텍스트 블록 숨김(마크만 유지) */}
-                <div className="min-w-0 max-lg:block lg:hidden">
+                <div className="min-w-0 hidden lg:block">
                   <div className="text-balance text-base font-semibold leading-[1.15] tracking-[-0.022em] text-white max-lg:text-[0.94rem] max-lg:leading-[1.12] max-sm:text-[0.97rem] sm:text-[1.12rem] lg:text-[1.22rem]">
                     {t("product.name")}
                   </div>
