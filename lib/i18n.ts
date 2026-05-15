@@ -67,6 +67,21 @@ export type TranslationKey =
   | "landing.mobileHome.subline"
   | "landing.mobileHome.blurb"
   | "landing.mobileStart.topTagline"
+  | "landing.hero.ctaBarHint"
+  | "landing.hero.ctaPreview"
+  | "crm.customerDetail.customerSmsTitle"
+  | "crm.customerDetail.smsDisclaimer"
+  | "crm.customerDetail.nextContactSectionTitle"
+  | "crm.customerDetail.listIntro"
+  | "crm.customerDetail.aiSummaryHint"
+  | "crm.customerDetail.openAiForSms"
+  | "crm.customerDetail.followUpTabHint"
+  | "crm.customerDetail.openFollowUpTab"
+  | "crm.customerDetail.quickActionMemo"
+  | "crm.customerDetail.quickActionSms"
+  | "crm.customerDetail.quickActionEstimate"
+  | "crm.customerDetail.quickActionSave"
+  | "crm.newCar.financeCardTitle"
   | "cta.emailLogin"
   | "cta.startCustomerCare"
   | "auth.loginTitle"
@@ -790,6 +805,22 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.mobileHome.subline": "자동차 영업사원을 위한 AI 고객관리 워크스페이스",
     "landing.mobileHome.blurb": "상담부터 사후관리까지,\n고객관리 흐름을 한곳에서 정리합니다.",
     "landing.mobileStart.topTagline": "자동차 영업용 AI 고객관리 워크스페이스",
+    "landing.hero.ctaBarHint": "아래 버튼에서만 이동합니다. 이미지·빈 영역은 눌러도 이동하지 않습니다.",
+    "landing.hero.ctaPreview": "앱 화면 미리보기",
+    "crm.customerDetail.customerSmsTitle": "고객에게 보낼 문자",
+    "crm.customerDetail.smsDisclaimer":
+      "AI가 제안하는 문구는 검토용 초안입니다. 최종 안내와 발송은 영업사원이 직접 확인해야 합니다.",
+    "crm.customerDetail.nextContactSectionTitle": "다음 연락 관리",
+    "crm.customerDetail.listIntro": "카드를 눌러 선택합니다. 오른쪽에서 상세와 다음 연락을 이어서 다룹니다.",
+    "crm.customerDetail.aiSummaryHint": "AI 비서에서 메모를 분석하면 아래에 요약이 표시됩니다.",
+    "crm.customerDetail.openAiForSms": "AI 비서에서 문자 초안 다시 작성",
+    "crm.customerDetail.followUpTabHint": "사후관리 탭에서 일정·할 일을 더 넓게 볼 수 있습니다.",
+    "crm.customerDetail.openFollowUpTab": "사후관리 탭 열기",
+    "crm.customerDetail.quickActionMemo": "상담 메모",
+    "crm.customerDetail.quickActionSms": "문자 초안",
+    "crm.customerDetail.quickActionEstimate": "견적서",
+    "crm.customerDetail.quickActionSave": "저장",
+    "crm.newCar.financeCardTitle": "금융 조건 정리",
     "cta.emailLogin": "이메일로 로그인",
     "cta.startCustomerCare": "고객관리 시작하기",
     "auth.loginTitle": "Sensora Auto CRM 로그인",
@@ -1602,6 +1633,22 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.mobileHome.subline": "AI customer-management workspace built for automotive sales reps",
     "landing.mobileHome.blurb": "From consultation notes to aftercare,\nkeep your customer flow in one place.",
     "landing.mobileStart.topTagline": "AI customer-management workspace for automotive sales",
+    "landing.hero.ctaBarHint": "Use the buttons below to navigate. The hero image and empty areas are not clickable.",
+    "landing.hero.ctaPreview": "App screen preview",
+    "crm.customerDetail.customerSmsTitle": "Message draft for the customer",
+    "crm.customerDetail.smsDisclaimer":
+      "AI-suggested wording is a review draft. Final guidance and sending must be confirmed by the salesperson.",
+    "crm.customerDetail.nextContactSectionTitle": "Next contact",
+    "crm.customerDetail.listIntro": "Tap a card to select. Use the right panel for details and follow-ups.",
+    "crm.customerDetail.aiSummaryHint": "Run analysis in the AI assistant to show a summary here.",
+    "crm.customerDetail.openAiForSms": "Rewrite SMS draft in AI assistant",
+    "crm.customerDetail.followUpTabHint": "Open the follow-up tab for a wider schedule and task view.",
+    "crm.customerDetail.openFollowUpTab": "Open follow-up tab",
+    "crm.customerDetail.quickActionMemo": "Consultation notes",
+    "crm.customerDetail.quickActionSms": "SMS draft",
+    "crm.customerDetail.quickActionEstimate": "Quotes",
+    "crm.customerDetail.quickActionSave": "Save",
+    "crm.newCar.financeCardTitle": "Finance conditions",
     "cta.emailLogin": "Sign in with email",
     "cta.startCustomerCare": "Start customer care",
     "auth.loginTitle": "Sensora Auto CRM sign-in",

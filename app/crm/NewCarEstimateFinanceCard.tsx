@@ -186,25 +186,22 @@ export function NewCarEstimateFinanceCard({ uid, customer, onPatch, onRequireLog
   };
 
   return (
-    <details
-      open
-      className="scroll-mt-24 rounded-[22px] border border-sky-400/18 bg-gradient-to-b from-slate-950/75 to-[#07111f]/80 px-5 py-4 shadow-[0_22px_48px_-26px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-sm sm:p-5"
-    >
-      <summary className="flex cursor-pointer list-none items-center justify-between gap-3 rounded-xl px-1 py-2 outline-none transition hover:bg-slate-950/40 focus-visible:ring-2 focus-visible:ring-sky-400/35 [&::-webkit-details-marker]:hidden">
-        <div className="min-w-0">
-          <div className="text-[15px] font-semibold tracking-tight text-slate-50">{t("crm.newCar.cardTitle")}</div>
-          <div className="mt-1 text-[13px] leading-relaxed text-slate-400">{t("crm.newCar.cardLead")}</div>
-        </div>
-        <span className="shrink-0 rounded-full border border-white/[0.11] bg-white/[0.07] px-3 py-1 text-[12px] font-semibold text-slate-300">
-          {t("crm.newCar.detailsToggle")}
-        </span>
-      </summary>
+    <div className="flex flex-col gap-5">
+      <details
+        id="crm-estimate-vault-section"
+        className="scroll-mt-24 rounded-[22px] border border-white/[0.1] bg-slate-950/45 px-5 py-4 sm:p-5"
+      >
+        <summary className="flex cursor-pointer list-none items-center justify-between gap-3 rounded-xl px-1 py-2 outline-none transition hover:bg-slate-950/40 focus-visible:ring-2 focus-visible:ring-sky-400/35 [&::-webkit-details-marker]:hidden">
+          <div className="min-w-0">
+            <div className="text-[15px] font-semibold tracking-tight text-slate-50">{t("crm.newCar.vaultTitle")}</div>
+            <div className="mt-1 text-[13px] leading-relaxed text-slate-500">{t("crm.newCar.vaultDesc")}</div>
+          </div>
+          <span className="shrink-0 rounded-full border border-white/[0.1] bg-white/[0.06] px-3 py-1 text-[12px] font-semibold text-slate-400">
+            {t("crm.newCar.detailsToggle")}
+          </span>
+        </summary>
 
-      <div className="mt-4 space-y-6 border-t border-white/[0.08] pt-5">
-        <section className="space-y-3">
-          <h3 className="text-[14px] font-semibold text-slate-100">{t("crm.newCar.vaultTitle")}</h3>
-          <p className="text-[13px] leading-relaxed text-slate-400">{t("crm.newCar.vaultDesc")}</p>
-
+        <div className="mt-4 space-y-4 border-t border-white/[0.07] pt-4">
           <input ref={fileRef} type="file" accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/png,image/jpeg" className="hidden" onChange={(e) => void onFileChange(e)} />
 
           <button
@@ -219,28 +216,24 @@ export function NewCarEstimateFinanceCard({ uid, customer, onPatch, onRequireLog
             {t("crm.newCar.vaultAddButton")}
           </button>
 
-          <div className="space-y-2 rounded-xl border border-amber-400/22 bg-amber-950/15 px-3 py-3 text-[12px] leading-relaxed text-amber-100/90">
+          <div className="rounded-xl border border-amber-400/14 bg-amber-950/10 px-3 py-2.5 text-[12px] leading-relaxed text-amber-50/88">
             <p>{t("crm.newCar.disclaimerSensitive")}</p>
-            <p>{t("crm.newCar.disclaimerNoAutoSend")}</p>
-          </div>
-          <div className="space-y-1 rounded-xl border border-white/[0.08] bg-slate-950/35 px-3 py-2 text-[11px] leading-relaxed text-slate-500">
-            <p>{t("crm.newCar.disclaimerVault")}</p>
-            <p>{t("crm.newCar.disclaimerVaultSecondary")}</p>
+            <p className="mt-1.5 text-[11px] text-slate-500">{t("crm.newCar.disclaimerNoAutoSend")}</p>
           </div>
 
           {!uid ? <p className="text-[12px] text-slate-500">{t("crm.newCar.uploadNeedsLogin")}</p> : null}
 
           <div className="space-y-3">
             {list.length === 0 ? (
-              <p className="text-[13px] text-slate-500">—</p>
+              <p className="text-[14px] text-slate-500">등록된 견적서 파일이 없습니다. 필요할 때 PDF·이미지를 추가해 주세요.</p>
             ) : (
               list.map((att) => (
                 <div
                   key={att.id}
-                  className="rounded-xl border border-white/[0.11] bg-slate-950/55 px-4 py-3 text-[13px] text-slate-300"
+                  className="rounded-xl border border-white/[0.1] bg-slate-950/50 px-4 py-3 text-[13px] text-slate-300"
                 >
                   <div className="font-medium text-slate-100">{att.fileName}</div>
-                  <div className="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-[12px] text-slate-400">
+                  <div className="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-[12px] text-slate-500">
                     <span>
                       {t("crm.newCar.estimateMetaFormat")}: {formatMimeLabel(att.contentType)}
                     </span>
@@ -251,27 +244,27 @@ export function NewCarEstimateFinanceCard({ uid, customer, onPatch, onRequireLog
                       {t("crm.newCar.vaultFileSize")}: {formatBytes(att.size)}
                     </span>
                     {!att.storagePath ? (
-                      <span className="text-amber-200/90">({t("crm.newCar.uploadNeedsLogin")})</span>
+                      <span className="text-amber-200/80">({t("crm.newCar.uploadNeedsLogin")})</span>
                     ) : null}
                   </div>
                   <div className="mt-3 flex flex-wrap gap-2">
                     <button
                       type="button"
-                      className="rounded-lg border border-white/[0.12] bg-slate-950/55 px-3 py-1.5 text-[12px] font-semibold text-slate-200 hover:bg-white/[0.06]"
+                      className="rounded-lg border border-white/[0.1] bg-slate-950/55 px-3 py-1.5 text-[12px] font-semibold text-slate-200 hover:bg-white/[0.06]"
                       onClick={() => void openAttachment(att)}
                     >
                       {t("crm.newCar.vaultOpen")}
                     </button>
                     <button
                       type="button"
-                      className="rounded-lg border border-white/[0.12] bg-slate-950/55 px-3 py-1.5 text-[12px] font-semibold text-slate-200 hover:bg-white/[0.06]"
+                      className="rounded-lg border border-white/[0.1] bg-slate-950/55 px-3 py-1.5 text-[12px] font-semibold text-slate-200 hover:bg-white/[0.06]"
                       onClick={() => void downloadAttachment(att)}
                     >
                       {t("crm.newCar.vaultDownload")}
                     </button>
                     <button
                       type="button"
-                      className="rounded-lg border border-white/[0.12] bg-slate-950/55 px-3 py-1.5 text-[12px] font-semibold text-slate-200 hover:bg-white/[0.06]"
+                      className="rounded-lg border border-white/[0.1] bg-slate-950/55 px-3 py-1.5 text-[12px] font-semibold text-slate-200 hover:bg-white/[0.06]"
                       onClick={() => void shareAttachment(att)}
                     >
                       {t("crm.newCar.vaultShare")}
@@ -279,7 +272,7 @@ export function NewCarEstimateFinanceCard({ uid, customer, onPatch, onRequireLog
                     <button
                       type="button"
                       disabled={!uid || busy}
-                      className="rounded-lg border border-white/[0.12] bg-slate-950/55 px-3 py-1.5 text-[12px] font-semibold text-slate-200 hover:bg-white/[0.06] disabled:opacity-45"
+                      className="rounded-lg border border-white/[0.1] bg-slate-950/55 px-3 py-1.5 text-[12px] font-semibold text-slate-200 hover:bg-white/[0.06] disabled:opacity-45"
                       onClick={() => {
                         setReplaceId(att.id);
                         pickAddOrReplace();
@@ -290,7 +283,7 @@ export function NewCarEstimateFinanceCard({ uid, customer, onPatch, onRequireLog
                     <button
                       type="button"
                       disabled={busy}
-                      className="rounded-lg border border-red-400/25 bg-red-950/25 px-3 py-1.5 text-[12px] font-semibold text-red-100/95 hover:bg-red-950/40"
+                      className="rounded-lg border border-red-400/22 bg-red-950/22 px-3 py-1.5 text-[12px] font-semibold text-red-100/95 hover:bg-red-950/35"
                       onClick={() => void removeAttachment(att)}
                     >
                       {t("crm.newCar.estimateRemove")}
@@ -300,11 +293,29 @@ export function NewCarEstimateFinanceCard({ uid, customer, onPatch, onRequireLog
               ))
             )}
           </div>
-        </section>
 
-        <section className="space-y-4">
-          <h3 className="text-[14px] font-semibold text-slate-100">{t("crm.newCar.financeFormTitle")}</h3>
+          <details className="rounded-lg border border-white/[0.06] bg-slate-950/30 px-3 py-2">
+            <summary className="cursor-pointer text-[11px] font-semibold text-slate-500">저장·삭제 안내</summary>
+            <p className="mt-2 text-[11px] leading-relaxed text-slate-500">{t("crm.newCar.disclaimerVault")}</p>
+            <p className="mt-1 text-[11px] leading-relaxed text-slate-600">{t("crm.newCar.disclaimerVaultSecondary")}</p>
+          </details>
+        </div>
+      </details>
+
+      <details className="scroll-mt-24 rounded-[22px] border border-white/[0.1] bg-slate-950/45 px-5 py-4 sm:p-5">
+        <summary className="flex cursor-pointer list-none items-center justify-between gap-3 rounded-xl px-1 py-2 outline-none transition hover:bg-slate-950/40 focus-visible:ring-2 focus-visible:ring-sky-400/35 [&::-webkit-details-marker]:hidden">
+          <div className="min-w-0">
+            <div className="text-[15px] font-semibold tracking-tight text-slate-50">{t("crm.newCar.financeCardTitle")}</div>
+            <div className="mt-1 text-[13px] leading-relaxed text-slate-500">{t("crm.newCar.cardLead")}</div>
+          </div>
+          <span className="shrink-0 rounded-full border border-white/[0.1] bg-white/[0.06] px-3 py-1 text-[12px] font-semibold text-slate-400">
+            {t("crm.newCar.detailsToggle")}
+          </span>
+        </summary>
+
+        <div className="mt-4 space-y-6 border-t border-white/[0.07] pt-5">
           <p className="text-[12px] leading-relaxed text-slate-500">{t("crm.newCar.disclaimerAiReview")}</p>
+
           <div>
             <div className="text-[12px] font-semibold text-slate-300">{t("crm.newCar.financeModeLabel")}</div>
             <div className="mt-2 flex flex-wrap gap-2">
@@ -326,7 +337,7 @@ export function NewCarEstimateFinanceCard({ uid, customer, onPatch, onRequireLog
             </div>
           </div>
 
-          <div className="rounded-xl border border-white/[0.1] bg-slate-950/45 px-3 py-3 text-[12px] leading-relaxed text-slate-400">
+          <div className="rounded-xl border border-white/[0.08] bg-slate-950/40 px-3 py-3 text-[12px] leading-relaxed text-slate-400">
             {draft.productMode === "리스" ? (
               <p className="whitespace-pre-line">{t("crm.newCar.leaseHintBullets")}</p>
             ) : draft.productMode === "할부" ? (
@@ -437,26 +448,26 @@ export function NewCarEstimateFinanceCard({ uid, customer, onPatch, onRequireLog
               />
             </label>
           </div>
-        </section>
 
-        <section className="space-y-3">
-          <h3 className="text-[14px] font-semibold text-slate-100">{t("crm.newCar.prioritySectionTitle")}</h3>
-          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-            {CUSTOMER_PRIORITY_OPTIONS.map((opt) => {
-              const on = (customer.customerPriorityNeeds ?? []).includes(opt);
-              return (
-                <label
-                  key={opt}
-                  className="flex cursor-pointer items-start gap-2 rounded-xl border border-white/[0.1] bg-slate-950/45 px-3 py-2.5 text-[13px] text-slate-200 hover:bg-white/[0.04]"
-                >
-                  <input type="checkbox" checked={on} onChange={() => toggleNeed(opt)} className="mt-0.5" />
-                  <span>{opt}</span>
-                </label>
-              );
-            })}
-          </div>
-        </section>
-      </div>
-    </details>
+          <section className="space-y-3">
+            <h3 className="text-[14px] font-semibold text-slate-100">{t("crm.newCar.prioritySectionTitle")}</h3>
+            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+              {CUSTOMER_PRIORITY_OPTIONS.map((opt) => {
+                const on = (customer.customerPriorityNeeds ?? []).includes(opt);
+                return (
+                  <label
+                    key={opt}
+                    className="flex cursor-pointer items-start gap-2 rounded-xl border border-white/[0.08] bg-slate-950/40 px-3 py-2.5 text-[13px] text-slate-200 hover:bg-white/[0.04]"
+                  >
+                    <input type="checkbox" checked={on} onChange={() => toggleNeed(opt)} className="mt-0.5" />
+                    <span>{opt}</span>
+                  </label>
+                );
+              })}
+            </div>
+          </section>
+        </div>
+      </details>
+    </div>
   );
 }

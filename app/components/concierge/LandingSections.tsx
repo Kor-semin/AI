@@ -361,7 +361,7 @@ export function LandingShowroom({
       {/* 데스크톱: 기존 히어로 가이드 이미지 */}
       <section id="sensora-landing-hero" className={`${sectionShell} hidden pb-6 pt-2 lg:block sm:pb-8 sm:pt-3 lg:pt-4`}>
         <div className={innerMax}>
-          <div className="landing-guide03-hero-shell mx-auto flex w-full items-center justify-center">
+          <div className="landing-guide03-hero-shell mx-auto flex w-full flex-col items-center justify-center">
             <div className="landing-guide03-hero-frame relative w-full max-w-[1440px] overflow-hidden">
               <Image
                 src="/images/guides/sensora-guide-03.png"
@@ -370,35 +370,29 @@ export function LandingShowroom({
                 height={941}
                 priority
                 quality={100}
-                className="landing-guide03-hero-image block h-auto w-full select-none"
+                className="landing-guide03-hero-image block h-auto w-full cursor-default select-none"
                 sizes="(max-width: 1440px) 100vw, 1440px"
               />
-
-              <Link href="/?view=landing" prefetch={false} className="landing-guide03-hotspot landing-guide03-hotspot--brand" aria-label="Sensora Auto CRM 랜딩으로 이동">
-                <span className="sr-only">Sensora Auto CRM</span>
+            </div>
+            <p className="mt-4 text-center text-[12px] leading-relaxed text-slate-500">{t("landing.hero.ctaBarHint")}</p>
+            <div className="landing-guide03-hero-cta-bar mt-4 flex flex-wrap items-center justify-center gap-2.5 sm:gap-3">
+              <Link href={JOIN_PATH} prefetch={false} className={`${entPrimaryBtn} cursor-pointer`}>
+                {t("cta.joinBeta")}
               </Link>
-              <Link href={JOIN_PATH} prefetch={false} className="landing-guide03-hotspot landing-guide03-hotspot--nav-join" aria-label={t("cta.joinBeta")}>
-                <span className="sr-only">{t("cta.joinBeta")}</span>
-              </Link>
-              <button type="button" onClick={onOpenAppWorkspace} className="landing-guide03-hotspot landing-guide03-hotspot--nav-preview" aria-label={t("cta.tryAppExperience")}>
-                <span className="sr-only">{t("cta.tryAppExperience")}</span>
+              <button
+                type="button"
+                onClick={onOpenAppWorkspace}
+                className="landing-enterprise-btn-secondary inline-flex min-h-[48px] cursor-pointer items-center justify-center rounded-xl border border-white/[0.14] bg-white/[0.05] px-5 py-2.5 text-center text-[0.8125rem] font-semibold text-slate-100 transition hover:border-sky-400/28 hover:bg-white/[0.08] touch-manipulation"
+              >
+                {t("landing.hero.ctaPreview")}
               </button>
-              <Link href="/register" prefetch={false} className="landing-guide03-hotspot landing-guide03-hotspot--nav-register" aria-label={t("auth.salesRegistration")}>
-                <span className="sr-only">{t("auth.salesRegistration")}</span>
+              <Link
+                href="/?view=app#dashboard"
+                prefetch={false}
+                className="landing-enterprise-btn-secondary inline-flex min-h-[48px] cursor-pointer items-center justify-center rounded-xl border border-white/[0.14] bg-white/[0.05] px-5 py-2.5 text-center text-[0.8125rem] font-semibold text-slate-100 transition hover:border-sky-400/28 hover:bg-white/[0.08] touch-manipulation"
+              >
+                {t("header.workspace")}
               </Link>
-
-              <Link href={JOIN_PATH} prefetch={false} className="landing-guide03-hotspot landing-guide03-hotspot--hero-join" aria-label={t("cta.joinBeta")}>
-                <span className="sr-only">{t("cta.joinBeta")}</span>
-              </Link>
-              <button type="button" onClick={onOpenAppWorkspace} className="landing-guide03-hotspot landing-guide03-hotspot--hero-preview" aria-label={t("cta.tryAppExperience")}>
-                <span className="sr-only">{t("cta.tryAppExperience")}</span>
-              </button>
-              <Link href="/register" prefetch={false} className="landing-guide03-hotspot landing-guide03-hotspot--hero-register" aria-label={t("auth.salesRegistration")}>
-                <span className="sr-only">{t("auth.salesRegistration")}</span>
-              </Link>
-              <button type="button" onClick={onOpenAppWorkspace} className="landing-guide03-hotspot landing-guide03-hotspot--preview-panel" aria-label={t("cta.tryAppExperience")}>
-                <span className="sr-only">{t("cta.tryAppExperience")}</span>
-              </button>
             </div>
           </div>
         </div>

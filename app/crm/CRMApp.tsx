@@ -893,6 +893,13 @@ export function CRMApp({
       .sort((a, b) => a.startAt.localeCompare(b.startAt));
   }, [selectedCustomerId, state.events]);
 
+  const openEstimateVaultSection = useCallback(() => {
+    if (typeof document === "undefined") return;
+    const el = document.getElementById("crm-estimate-vault-section");
+    if (el instanceof HTMLDetailsElement) el.open = true;
+    el?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, []);
+
   const budgetWonSelected = useMemo(
     () => parseMoneyToKrw(selectedCustomer?.budget),
     [selectedCustomer?.budget],
@@ -1995,97 +2002,87 @@ export function CRMApp({
           {showWorkspaceTabs && tab === "고객" ? (
             <div id="customers" className="scroll-mt-24">
               <CustomersSection>
-              <div className="flex min-w-0 flex-col gap-6 xl:grid xl:grid-cols-[minmax(0,1.06fr)_minmax(336px,0.94fr)] xl:items-start xl:gap-8">
+              <div className="flex min-w-0 flex-col gap-8 xl:grid xl:grid-cols-[minmax(0,1fr)_minmax(380px,1.08fr)] xl:items-start xl:gap-10">
                 <div
                   id="crm-customer-table"
-                  className="min-w-0 overflow-hidden rounded-2xl border border-white/[0.11] bg-slate-950/55 shadow-[0_1px_4px_rgba(15,23,42,0.04)] xl:sticky xl:top-4 xl:self-start xl:max-h-[calc(100vh-13rem)] xl:overflow-auto"
+                  className="min-w-0 overflow-hidden rounded-2xl border border-white/[0.09] bg-slate-950/50 shadow-[0_1px_4px_rgba(15,23,42,0.04)] xl:sticky xl:top-4 xl:self-start xl:max-h-[calc(100vh-12rem)] xl:overflow-auto"
                 >
-                <div className="border-b border-white/[0.11] px-5 py-5 sm:px-6">
-                  <h2 className="text-[18px] font-semibold text-slate-50">{t("crm.section.customerList")}</h2>
+                <div className="border-b border-white/[0.09] px-5 py-5 sm:px-6">
+                  <h2 className="text-[19px] font-semibold tracking-tight text-slate-50">{t("crm.section.customerList")}</h2>
                   <p className="mt-2 text-[15px] leading-relaxed text-slate-400">
-                    고객 행을 눌러 선택합니다. 선택 시 오른쪽에서 상세·상담·다음 연락까지 이어서 다룹니다.
+                    {t("crm.customerDetail.listIntro")}
                   </p>
                 </div>
-                <div className="overflow-x-auto overscroll-x-contain xl:overflow-y-auto xl:[max-height:calc(100vh-20rem)]">
-                  <table className="w-full min-w-[720px] border-collapse text-left lg:min-w-[820px] 2xl:min-w-[880px]">
-                    <thead className="sticky top-0 z-[2] backdrop-blur-sm">
-                      <tr className="border-b border-white/[0.11] bg-slate-900/92 shadow-[inset_0_-1px_0_0_rgba(255,255,255,0.08)]">
-                        <th className="px-5 py-4 text-[12px] font-semibold tracking-[-0.01em] text-slate-400 sm:px-6">
-                          고객명
-                        </th>
-                        <th className="px-5 py-4 text-[12px] font-semibold tracking-[-0.01em] text-slate-400 sm:px-6">
-                          {t("common.interestedVehicle")}
-                        </th>
-                        <th className="px-5 py-4 text-[12px] font-semibold tracking-[-0.01em] text-slate-400 sm:px-6">
-                          {t("common.status")}
-                        </th>
-                        <th className="px-5 py-4 text-[12px] font-semibold tracking-[-0.01em] text-slate-400 sm:px-6">
-                          {t("crm.section.nextAction")}
-                        </th>
-                        <th className="px-5 py-4 text-[12px] font-semibold tracking-[-0.01em] text-slate-400 sm:px-6">
-                          {t("common.potential")}
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-white/[0.09]">
-                      {customersFiltered.map((c) => {
-                        const na = state.nextActions.find((a) => a.customerId === c.id && !a.doneAt);
-                        const nextLbl = na?.title?.trim()
-                          ? na.title
-                          : c.nextContactAt
-                            ? formatDateTime(c.nextContactAt)
-                            : "—";
-                        const sx = scorePurchaseIntent(c);
-                        const showScore = shouldShowPurchaseIntentScore(c);
-                        return (
-                          <tr
-                            key={c.id}
-                            className={
-                              selectedCustomerId === c.id
-                                ? "bg-sky-950/20"
-                                : "bg-slate-950/55 hover:bg-white/[0.04]"
-                            }
-                          >
-                            <td className="px-5 py-4 align-top sm:px-6">
-                              <button
-                                type="button"
-                                className="text-left font-semibold text-slate-50 text-[16px] leading-snug hover:underline"
-                                onClick={() => setSelectedCustomerId(c.id)}
-                              >
-                                {c.name}
-                              </button>
-                              <div className="mt-1 text-[14px] font-medium text-slate-400">
-                                {c.phone?.trim() || "연락처 없음"}
+                <div className="xl:max-h-[calc(100vh-16rem)] xl:overflow-y-auto">
+                  <div className="divide-y divide-white/[0.07]">
+                    {customersFiltered.map((c) => {
+                      const na = state.nextActions.find((a) => a.customerId === c.id && !a.doneAt);
+                      const nextLbl = na?.title?.trim()
+                        ? na.title
+                        : c.nextContactAt
+                          ? formatDateTime(c.nextContactAt)
+                          : "—";
+                      const sx = scorePurchaseIntent(c);
+                      const showScore = shouldShowPurchaseIntentScore(c);
+                      const vehicleLine = [c.vehicleBrand, c.interestedModel].filter(Boolean).join(" ") || "—";
+                      const selected = selectedCustomerId === c.id;
+                      return (
+                        <div key={c.id} className={`relative px-5 py-4 sm:px-6 ${selected ? "bg-sky-950/22 ring-1 ring-inset ring-sky-400/35" : "bg-slate-950/40"}`}>
+                          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+                            <div className="min-w-0 flex-1">
+                              <div className="flex flex-wrap items-center gap-2">
+                                <span className="text-[17px] font-semibold leading-snug text-slate-50">{c.name}</span>
+                                {selected ? (
+                                  <span className="rounded-full border border-sky-400/35 bg-sky-500/15 px-2 py-0.5 text-[11px] font-semibold text-sky-100/95">
+                                    선택됨
+                                  </span>
+                                ) : null}
                               </div>
-                            </td>
-                            <td className="max-w-[220px] px-5 py-4 align-top text-[15px] text-slate-300 sm:px-6">
-                              {[c.vehicleBrand, c.interestedModel].filter(Boolean).join(" ") || "—"}
-                            </td>
-                            <td className="px-5 py-4 align-top text-[15px] font-semibold text-slate-50 sm:px-6">
-                              {c.stage}
-                            </td>
-                            <td className="max-w-[260px] px-5 py-4 align-top text-[14px] leading-snug text-slate-400 sm:px-6">
-                              {clampText(nextLbl, 90)}
-                            </td>
-                            <td className="px-5 py-4 align-top sm:px-6">
-                              {showScore ? (
-                                <button
-                                  type="button"
-                                  title="산정 기준"
-                                  className="text-[15px] font-semibold text-slate-300 underline decoration-white/25 underline-offset-[5px] hover:text-slate-50"
-                                  onClick={() => setLeadExplainForId(c.id)}
-                                >
-                                  {sx.percent}% · {sx.grade}
-                                </button>
-                              ) : (
-                                <span className="text-[15px] font-medium text-slate-400">분석 전 · —</span>
-                              )}
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
+                              <p className="mt-1.5 text-[14px] text-slate-400">{c.phone?.trim() || "연락처 없음"}</p>
+                              <p className="mt-2 text-[15px] text-slate-200/95">
+                                <span className="text-slate-500">{t("common.interestedVehicle")}: </span>
+                                {vehicleLine}
+                              </p>
+                              <div className="mt-2 flex flex-wrap items-center gap-2">
+                                <span className="inline-flex max-w-full items-center rounded-full border border-white/[0.1] bg-white/[0.05] px-2.5 py-1 text-[12px] font-semibold text-slate-100">
+                                  {c.stage}
+                                </span>
+                                {showScore ? (
+                                  <button
+                                    type="button"
+                                    title="산정 기준"
+                                    className="text-[13px] font-semibold text-slate-400 underline decoration-white/20 underline-offset-4 hover:text-slate-200"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setLeadExplainForId(c.id);
+                                    }}
+                                  >
+                                    {sx.percent}% · {sx.grade}
+                                  </button>
+                                ) : (
+                                  <span className="text-[13px] font-medium text-slate-500">분석 전 · —</span>
+                                )}
+                              </div>
+                              <p className="mt-2 text-[14px] leading-snug text-slate-400">
+                                <span className="font-medium text-slate-500">{t("crm.section.nextAction")}: </span>
+                                {clampText(nextLbl, 120)}
+                              </p>
+                              <p className="mt-1.5 text-[13px] text-slate-500">
+                                최근 상담일 {formatDateTime(c.updatedAt)}
+                              </p>
+                            </div>
+                            <button
+                              type="button"
+                              className="sensora-dark-ghost-btn inline-flex min-h-[44px] shrink-0 items-center justify-center self-start rounded-xl px-4 py-2 text-[13px] font-semibold touch-manipulation sm:self-center"
+                              onClick={() => setSelectedCustomerId(c.id)}
+                            >
+                              상세 보기
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
                 {customersFiltered.length === 0 ? (
                   <div className="sensora-crm-empty-nexus relative border-t border-white/[0.11] px-8 py-14 text-center">
@@ -2107,168 +2104,240 @@ export function CRMApp({
               <section
                 id="crm-detail-panel"
                 tabIndex={-1}
-                className="flex min-h-[48vh] min-w-0 flex-col gap-4 xl:max-h-[calc(100vh-13rem)] xl:overflow-y-auto"
+                className="flex min-h-[48vh] min-w-0 flex-col gap-6 xl:max-h-[calc(100vh-12rem)] xl:overflow-y-auto"
               >
-                <header id="crm-detail-header" className="scroll-mt-28 rounded-[22px] border border-white/[0.11] bg-slate-950/55 px-5 py-4 shadow-[0_2px_8px_-4px_rgba(15,23,42,0.06)] sm:px-6">
-                  <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-                    <div className="min-w-0 flex-1">
+                <header id="crm-detail-header" className="scroll-mt-28 rounded-[22px] border border-white/[0.09] bg-slate-950/50 px-5 py-5 shadow-[0_2px_8px_-4px_rgba(15,23,42,0.06)] sm:px-6">
+                  <div className="flex flex-col gap-4">
+                    <div className="min-w-0">
                       <div className="truncate text-[22px] font-semibold tracking-tight text-slate-50">
                         {selectedCustomer ? selectedCustomer.name : t("crm.section.customerDetails")}
                       </div>
-                      <div className="mt-2 text-[15px] text-slate-400">
-                        {selectedCustomer
-                          ? `${selectedCustomer.phone?.trim() || "연락처 미입력"} · 마지막 기록 ${formatDateTime(selectedCustomer.updatedAt)}`
-                          : "목록에서 고객을 선택하거나 새로 추가합니다."}
-                      </div>
-                      {selectedCustomer?.phone?.trim() ? (
-                        <button
-                          type="button"
-                          className="mt-3 rounded-lg bg-white/[0.07] px-4 py-2 text-[13px] font-semibold text-slate-300 ring-1 ring-inset ring-white/[0.12] hover:bg-white/[0.1]"
-                          onClick={() =>
-                            void copyToClipboard(selectedCustomer.phone!.trim()).then((ok) =>
-                              ok ? showToast("전화번호를 복사했습니다.") : alert(selectedCustomer.phone),
-                            )
-                          }
-                        >
-                          {t("common.copy")}
-                        </button>
-                      ) : null}
+                      {selectedCustomer ? (
+                        <>
+                          <p className="mt-2 text-[15px] leading-relaxed text-slate-300">
+                            {selectedCustomer.phone?.trim() || "연락처 미입력"}
+                          </p>
+                          <p className="mt-1 text-[15px] text-slate-400">
+                            <span className="font-medium text-slate-500">{t("common.interestedVehicle")}: </span>
+                            {[selectedCustomer.vehicleBrand, selectedCustomer.interestedModel].filter(Boolean).join(" ") || "—"}
+                          </p>
+                          <div className="mt-3 flex flex-wrap items-center gap-2 text-[14px] text-slate-300">
+                            <span className="rounded-full border border-white/[0.1] bg-white/[0.06] px-2.5 py-1 text-[12px] font-semibold text-slate-100">
+                              {selectedCustomer.stage}
+                            </span>
+                            <span className="text-slate-500">·</span>
+                            <span>
+                              {(() => {
+                                const na = state.nextActions.find((a) => a.customerId === selectedCustomer.id && !a.doneAt);
+                                const nextLbl = na?.title?.trim()
+                                  ? na.title
+                                  : selectedCustomer.nextContactAt
+                                    ? formatDateTime(selectedCustomer.nextContactAt)
+                                    : "다음 연락 미정";
+                                return (
+                                  <>
+                                    <span className="font-medium text-slate-500">다음 행동: </span>
+                                    {clampText(nextLbl, 140)}
+                                  </>
+                                );
+                              })()}
+                            </span>
+                          </div>
+                          <p className="mt-2 text-[13px] text-slate-500">마지막 기록 {formatDateTime(selectedCustomer.updatedAt)}</p>
+                        </>
+                      ) : (
+                        <p className="mt-2 text-[15px] text-slate-400">목록에서 고객을 선택하거나 새로 추가합니다.</p>
+                      )}
                     </div>
+
+                    {selectedCustomer?.phone?.trim() ? (
+                      <button
+                        type="button"
+                        className="w-fit rounded-lg bg-white/[0.07] px-4 py-2 text-[13px] font-semibold text-slate-300 ring-1 ring-inset ring-white/[0.12] hover:bg-white/[0.1]"
+                        onClick={() =>
+                          void copyToClipboard(selectedCustomer.phone!.trim()).then((ok) =>
+                            ok ? showToast("전화번호를 복사했습니다.") : alert(selectedCustomer.phone),
+                          )
+                        }
+                      >
+                        {t("common.copy")}
+                      </button>
+                    ) : null}
+
                     {selectedCustomer ? (
-                      <div className="flex flex-shrink-0 flex-wrap gap-2">
-                        <button
-                          type="button"
-                          onClick={() => setDeliveryGuideOpen(true)}
-                          className="rounded-xl border border-white/[0.11] bg-slate-950/55 px-4 py-2.5 text-[13px] font-semibold text-slate-50 hover:bg-slate-950/45"
-                        >
-                          출고 안내
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => addNextAction(selectedCustomer.id)}
-                          className="min-h-[44px] rounded-xl border border-white/[0.11] bg-slate-950/55 px-4 py-2.5 text-[13px] font-semibold hover:bg-white/[0.08] touch-manipulation"
-                        >
-                          + 연락
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => addEvent(selectedCustomer.id)}
-                          className="min-h-[44px] rounded-xl border border-white/[0.11] bg-slate-950/55 px-4 py-2.5 text-[13px] font-semibold hover:bg-white/[0.08] touch-manipulation"
-                        >
-                          + 일정
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => exportCustomerSummary(selectedCustomer)}
-                          className="sensora-premium-primary-workspace min-h-[44px] rounded-xl px-4 py-2.5 text-[13px] font-semibold touch-manipulation"
-                        >
-                          요약
-                        </button>
-                      </div>
+                      <>
+                        <div className="flex flex-wrap gap-2">
+                          <button
+                            type="button"
+                            onClick={() => onActiveSectionChange("consulting")}
+                            className="sensora-premium-primary-workspace min-h-[44px] rounded-xl px-4 py-2.5 text-[13px] font-semibold touch-manipulation"
+                          >
+                            {t("crm.customerDetail.quickActionMemo")}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => onActiveSectionChange("ai")}
+                            className="sensora-dark-ghost-btn min-h-[44px] rounded-xl px-4 py-2.5 text-[13px] font-semibold touch-manipulation"
+                          >
+                            {t("crm.customerDetail.quickActionSms")}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={openEstimateVaultSection}
+                            className="sensora-dark-ghost-btn min-h-[44px] rounded-xl px-4 py-2.5 text-[13px] font-semibold touch-manipulation"
+                          >
+                            {t("crm.customerDetail.quickActionEstimate")}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => scheduleCustomerSavedToast()}
+                            className="sensora-dark-ghost-btn min-h-[44px] rounded-xl px-4 py-2.5 text-[13px] font-semibold touch-manipulation"
+                          >
+                            {t("crm.customerDetail.quickActionSave")}
+                          </button>
+                        </div>
+                        <div className="flex flex-wrap gap-2 border-t border-white/[0.06] pt-3">
+                          <button
+                            type="button"
+                            onClick={() => setDeliveryGuideOpen(true)}
+                            className="rounded-xl border border-white/[0.1] bg-slate-950/45 px-4 py-2.5 text-[13px] font-semibold text-slate-200 hover:bg-white/[0.06]"
+                          >
+                            출고 안내
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => addNextAction(selectedCustomer.id)}
+                            className="min-h-[44px] rounded-xl border border-white/[0.1] bg-slate-950/45 px-4 py-2.5 text-[13px] font-semibold text-slate-200 hover:bg-white/[0.06] touch-manipulation"
+                          >
+                            + 연락
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => addEvent(selectedCustomer.id)}
+                            className="min-h-[44px] rounded-xl border border-white/[0.1] bg-slate-950/45 px-4 py-2.5 text-[13px] font-semibold text-slate-200 hover:bg-white/[0.06] touch-manipulation"
+                          >
+                            + 일정
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => exportCustomerSummary(selectedCustomer)}
+                            className="rounded-xl border border-white/[0.1] bg-slate-950/45 px-4 py-2.5 text-[13px] font-semibold text-slate-200 hover:bg-white/[0.06] touch-manipulation"
+                          >
+                            요약보내기
+                          </button>
+                        </div>
+                      </>
                     ) : null}
                   </div>
                 </header>
 
-                <div className="rounded-[18px] border border-white/[0.11] bg-slate-950/38 px-4 py-3 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)]">
-                  <p className="text-[12px] font-medium leading-relaxed text-slate-400">
-                    상담 메모 분석과 발송 문자 초안은 <span className="font-semibold text-slate-300">Sensora AI 비서</span> 화면에서
-                    진행합니다. 메모는 고객 카드 또는 상담 메뉴에서 직접 수정합니다.
-                  </p>
+                <div className="rounded-[16px] border border-white/[0.08] bg-slate-950/35 px-4 py-3 text-[12px] leading-relaxed text-slate-400">
+                  문자·상담 요약 초안은 <span className="font-semibold text-slate-300">AI 비서</span>에서 갱신합니다.{" "}
                   <button
                     type="button"
-                    className="sensora-premium-primary-workspace mt-3 min-h-[44px] rounded-xl px-4 py-2 text-[13px] font-semibold touch-manipulation"
+                    className="font-semibold text-sky-300/95 underline decoration-sky-500/30 underline-offset-4 hover:text-sky-200"
                     onClick={() => onActiveSectionChange("ai")}
                   >
-                    AI 비서 열기
+                    AI 비서로 이동
                   </button>
                 </div>
 
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-6">
           {selectedCustomer ? (
             <>
-              {memoFeedback ? (
-                <div className="rounded-[22px] border border-white/[0.11] bg-gradient-to-b from-slate-950/70 to-[#07111f]/72 px-5 py-4 shadow-[0_22px_48px_-26px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-sm sm:p-5">
-                  <div className="flex flex-wrap items-start justify-between gap-3">
-                    <div className="text-[12px] font-semibold tracking-[-0.01em] text-slate-300">
-                      {t("crm.section.aiRecommendation")}
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => setDeliveryGuideOpen(true)}
-                      className="sensora-premium-primary-workspace rounded-lg px-3 py-1.5 text-[12px] font-semibold touch-manipulation"
-                    >
-                      출고 안내
-                    </button>
-                  </div>
-                  <ul className="mt-4 space-y-3 text-[16px] leading-relaxed text-slate-50">
-                    {memoFeedback.bullets.slice(0, 5).map((b) => (
-                      <li key={b}>· {b}</li>
-                    ))}
-                  </ul>
-                  {memoFeedback.risks.length ? (
-                    <div className="mt-4 rounded-xl bg-sky-950/20 px-4 py-3 text-[13px] text-slate-400">
-                      <span className="font-semibold text-slate-300">점검: </span>
-                      {memoFeedback.risks.slice(0, 3).join(" · ")}
+              <details
+                open
+                className="scroll-mt-24 rounded-[22px] border border-white/[0.09] bg-slate-950/50 px-5 py-4 sm:p-5"
+              >
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-3 rounded-xl px-1 py-2 outline-none transition hover:bg-slate-950/40 focus-visible:ring-2 focus-visible:ring-sky-400/35 [&::-webkit-details-marker]:hidden">
+                  <span className="text-[15px] font-semibold text-slate-100">{t("crm.section.consultationSummary")}</span>
+                  <span className="text-[12px] font-semibold text-slate-500">펼치기 · 접기</span>
+                </summary>
+                <div className="border-t border-white/[0.07] pt-4">
+                  {memoFeedback ? (
+                    <div className="rounded-[18px] border border-white/[0.08] bg-slate-950/40 px-4 py-4">
+                      <div className="text-[12px] font-semibold text-slate-400">{t("crm.section.aiRecommendation")}</div>
+                      <ul className="mt-3 space-y-2.5 text-[15px] leading-relaxed text-slate-100">
+                        {memoFeedback.bullets.slice(0, 5).map((b) => (
+                          <li key={b}>· {b}</li>
+                        ))}
+                      </ul>
+                      {memoFeedback.risks.length ? (
+                        <div className="mt-4 rounded-xl border border-white/[0.08] bg-slate-950/55 px-3 py-2.5 text-[13px] text-slate-400">
+                          <span className="font-semibold text-slate-300">점검: </span>
+                          {memoFeedback.risks.slice(0, 3).join(" · ")}
+                        </div>
+                      ) : null}
+                      {memoFeedback.nextQuestions[0] ? (
+                        <div className="mt-4 rounded-xl border border-white/[0.08] bg-slate-950/40 px-3 py-3">
+                          <p className="text-[12px] font-semibold text-slate-400">다음 연락 때 질문</p>
+                          <p className="mt-2 text-[14px] leading-relaxed text-slate-300">{memoFeedback.nextQuestions[0]}</p>
+                        </div>
+                      ) : null}
                     </div>
                   ) : null}
-                  {memoFeedback.nextQuestions[0] ? (
-                    <>
-                      <p className="mt-5 text-[13px] font-semibold text-slate-300">다음 연락 때 질문</p>
-                      <p className="mt-2 text-[15px] leading-relaxed text-slate-400">
-                        {memoFeedback.nextQuestions[0]}
-                      </p>
-                    </>
-                  ) : null}
+
+                  {flowDraftInsights?.summary?.trim() ? (
+                    <div className={`${memoFeedback ? "mt-4" : ""} rounded-[18px] border border-white/[0.08] bg-slate-950/40 px-4 py-4`}>
+                      <div className="text-[12px] font-semibold text-slate-400">AI 요약</div>
+                      <p className="mt-2 whitespace-pre-line text-[15px] leading-relaxed text-slate-100">{flowDraftInsights.summary}</p>
+                    </div>
+                  ) : (
+                    <p className={`${memoFeedback ? "mt-4" : ""} text-[14px] leading-relaxed text-slate-500`}>{t("crm.customerDetail.aiSummaryHint")}</p>
+                  )}
                 </div>
-              ) : null}
+              </details>
 
               <details
                 open
-                className="scroll-mt-24 rounded-[22px] border border-white/[0.11] bg-slate-950/55 px-5 py-4 shadow-[0_2px_8px_-4px_rgba(15,23,42,0.06)] sm:p-5"
+                className="scroll-mt-24 rounded-[22px] border border-white/[0.09] bg-slate-950/50 px-5 py-4 sm:p-5"
               >
-                <summary className="list-none rounded-xl px-1 py-2 outline-none transition hover:bg-slate-950/38 focus-visible:ring-2 focus-visible:ring-sky-400/35 [&::-webkit-details-marker]:hidden">
-                  <div className="min-w-0">
-                    <div className="text-[13px] font-semibold tracking-[-0.01em] text-slate-300">
-                      {t("crm.section.consultationSummary")} · 고객 메시지
-                    </div>
-                    <div className="mt-2 text-[14px] leading-relaxed text-slate-400">
-                      상담/예산/차량 메모를 바탕으로 자동으로 정리됩니다. 필요하면 문장을 수정해도 됩니다.
-                    </div>
-                  </div>
-                  <span className="sr-only">드래프트 문자 영역 접기 또는 펼치기</span>
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-3 rounded-xl px-1 py-2 outline-none transition hover:bg-slate-950/40 focus-visible:ring-2 focus-visible:ring-sky-400/35 [&::-webkit-details-marker]:hidden">
+                  <span className="text-[15px] font-semibold text-slate-100">{t("crm.customerDetail.customerSmsTitle")}</span>
+                  <span className="text-[12px] font-semibold text-slate-500">펼치기 · 접기</span>
                 </summary>
-                <div className="border-t border-white/[0.08] pt-4">
+                <div className="border-t border-white/[0.07] pt-4">
+                  <p className="text-[13px] leading-relaxed text-slate-400">{t("crm.customerDetail.smsDisclaimer")}</p>
                   {(() => {
-                    const text = buildConsultationQuickDraft(selectedCustomer, myName);
+                    const primary = flowDraftInsights?.message?.trim() ?? "";
+                    const text = primary || buildConsultationQuickDraft(selectedCustomer, myName);
                     return (
-                    <>
-                      <textarea
-                        rows={7}
-                        className="mt-4 w-full min-h-[144px] resize-y rounded-xl border border-white/[0.11] bg-slate-950/55 px-4 py-3 text-[14px] text-slate-300 outline-none focus:border-sky-400/45"
-                        value={text}
-                        readOnly
-                        autoComplete="off"
-                        autoCorrect="off"
-                        autoCapitalize="off"
-                        spellCheck={false}
-                      />
-                      <div className="mt-3 flex flex-wrap gap-2">
-                        <button
-                          type="button"
-                          className="sensora-premium-primary-workspace min-h-[44px] rounded-xl px-4 py-2.5 text-[13px] font-semibold touch-manipulation"
-                          onClick={() => {
-                            void copyToClipboard(text).then((ok) => {
-                              if (ok) showToast("문자 내용 복사 완료");
-                              else alert(text);
-                            });
-                          }}
-                        >
-                          {t("common.copy")}
-                        </button>
-                      </div>
-                    </>
-                  );
-                })()}
+                      <>
+                        {!primary ? (
+                          <p className="mt-2 text-[12px] text-slate-500">AI 분석 전에는 메모 기반 빠른 문장을 표시합니다.</p>
+                        ) : null}
+                        <textarea
+                          rows={8}
+                          readOnly
+                          value={text}
+                          className="mt-3 w-full resize-y rounded-xl border border-white/[0.1] bg-[#050b14]/85 px-4 py-3 text-[15px] leading-[1.65] text-slate-100 outline-none focus:border-sky-400/35"
+                          spellCheck={false}
+                          autoComplete="off"
+                        />
+                        <div className="mt-3 flex flex-wrap gap-2">
+                          <button
+                            type="button"
+                            className="sensora-premium-primary-workspace min-h-[44px] rounded-xl px-4 py-2.5 text-[13px] font-semibold touch-manipulation"
+                            onClick={() => {
+                              void copyToClipboard(text).then((ok) => {
+                                if (ok) showToast("문자 내용 복사 완료");
+                                else alert(text);
+                              });
+                            }}
+                          >
+                            {t("common.copy")}
+                          </button>
+                          <button
+                            type="button"
+                            className="sensora-dark-ghost-btn min-h-[44px] rounded-xl px-4 py-2.5 text-[13px] font-semibold touch-manipulation"
+                            onClick={() => onActiveSectionChange("ai")}
+                          >
+                            {t("crm.customerDetail.openAiForSms")}
+                          </button>
+                        </div>
+                      </>
+                    );
+                  })()}
                 </div>
               </details>
 
@@ -2481,6 +2550,63 @@ export function CRMApp({
                     >
                       고객 삭제
                     </button>
+                  </div>
+                </details>
+
+                <details className="scroll-mt-24 rounded-2xl border border-white/[0.09] bg-slate-950/50 p-5">
+                  <summary className="flex cursor-pointer list-none items-center justify-between gap-3 rounded-xl px-1 py-1.5 outline-none transition hover:bg-slate-950/40 [&::-webkit-details-marker]:hidden">
+                    <div>
+                      <div className="text-[16px] font-semibold text-slate-50">{t("crm.customerDetail.nextContactSectionTitle")}</div>
+                      <div className="mt-1 text-[13px] text-slate-500">다음 연락 예정과 할 일만 간단히 확인합니다.</div>
+                    </div>
+                    <span className="rounded-full border border-white/[0.1] bg-white/[0.06] px-3 py-1 text-[12px] font-semibold text-slate-400">
+                      펼치기
+                    </span>
+                  </summary>
+                  <div className="mt-4 space-y-4">
+                    {selectedCustomer ? (
+                      <>
+                        <div className="rounded-xl border border-white/[0.08] bg-slate-950/40 px-4 py-3 text-[14px] text-slate-300">
+                          <span className="font-semibold text-slate-400">다음 연락 예정: </span>
+                          {selectedCustomer.nextContactAt ? formatDateTime(selectedCustomer.nextContactAt) : "미정"}
+                        </div>
+                        {selectedNextActions.filter((a) => !a.doneAt).length ? (
+                          <ul className="space-y-2">
+                            {selectedNextActions
+                              .filter((a) => !a.doneAt)
+                              .map((a) => (
+                              <li
+                                key={a.id}
+                                className="flex items-start justify-between gap-2 rounded-xl border border-white/[0.08] bg-slate-950/40 px-3 py-2.5 text-[14px] text-slate-200"
+                              >
+                                <span className="min-w-0">{a.title}</span>
+                                {a.dueAt ? (
+                                  <span className="shrink-0 text-[12px] text-slate-500">{formatDateTime(a.dueAt)}</span>
+                                ) : null}
+                              </li>
+                            ))}
+                          </ul>
+                        ) : (
+                          <p className="text-[14px] text-slate-500">등록된 다음 할 일이 없습니다.</p>
+                        )}
+                        <div className="flex flex-wrap gap-2">
+                          <button
+                            type="button"
+                            className="sensora-dark-ghost-btn min-h-[44px] rounded-xl px-4 py-2 text-[13px] font-semibold touch-manipulation"
+                            onClick={() => addNextAction(selectedCustomer.id)}
+                          >
+                            + 연락
+                          </button>
+                          <button
+                            type="button"
+                            className="sensora-dark-ghost-btn min-h-[44px] rounded-xl px-4 py-2 text-[13px] font-semibold touch-manipulation"
+                            onClick={() => onActiveSectionChange("followup")}
+                          >
+                            {t("crm.customerDetail.openFollowUpTab")}
+                          </button>
+                        </div>
+                      </>
+                    ) : null}
                   </div>
                 </details>
 

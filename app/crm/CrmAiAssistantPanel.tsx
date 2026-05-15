@@ -253,7 +253,7 @@ export function CrmAiAssistantPanel({
             <span className={SENSORA_FLOW_AI_BADGE}>{t("crm.sensoraFlow.aiSuggestionBadge")}</span>
           </div>
           <p className="mt-1 text-[10px] font-medium leading-snug text-slate-500">{t("crm.workspaceAi.smsDraftLead")}</p>
-          <div className="mt-3 max-h-[min(220px,42vh)] min-h-[88px] flex-1 overflow-y-auto break-words whitespace-pre-line text-[14px] leading-relaxed text-slate-100">
+          <div className="mt-3 max-h-[min(220px,42vh)] min-h-[88px] flex-1 overflow-y-auto break-words whitespace-pre-line text-[15px] leading-[1.65] text-slate-100">
             {flowDraftInsights ? flowDraftInsights.message : "—"}
           </div>
         </div>
@@ -268,7 +268,7 @@ export function CrmAiAssistantPanel({
             </span>
           </div>
           <p className="mt-1 text-[10px] font-medium leading-snug text-slate-500">{t("crm.workspaceAi.newCarFinanceLead")}</p>
-          <div className="mt-3 max-h-[min(260px,48vh)] min-h-[88px] flex-1 overflow-y-auto break-words whitespace-pre-line text-[14px] leading-relaxed text-slate-100">
+          <div className="mt-3 max-h-[min(260px,48vh)] min-h-[88px] flex-1 overflow-y-auto break-words whitespace-pre-line text-[15px] leading-[1.65] text-slate-100">
             {newCarFinanceSmsPreview.trim() ? newCarFinanceSmsPreview : t("crm.workspaceAi.newCarFinanceEmpty")}
           </div>
           <p className="mt-3 text-[11px] leading-relaxed text-slate-500">{t("crm.workspaceAi.estimateAttachShortNote")}</p>
