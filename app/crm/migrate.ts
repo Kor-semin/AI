@@ -55,12 +55,16 @@ function migrateCustomer(c: Customer): Customer {
       : "미상";
     usedCar = { ...usedCar, accident };
   }
+  if (usedCar?.brand && String(usedCar.brand).trim() === "폭스바겠") {
+    usedCar = { ...usedCar, brand: "폭스바겐" };
+  }
 
   const next: Customer = {
     ...c,
     stage: migrateStage(String(c.stage)),
     leadSource: migrateLead(String(c.leadSource)),
     usedCar,
+    ...(String(c.vehicleBrand ?? "") === "폭스바겠" ? { vehicleBrand: "폭스바겐" } : {}),
   };
   delete next.paymentType;
   if (typeof c.paymentType === "string" && canonPayment.has(c.paymentType)) {

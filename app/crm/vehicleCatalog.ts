@@ -12,7 +12,7 @@ export const VEHICLE_BRANDS = [
   "BMW",
   "Mercedes-Benz",
   "Audi",
-  "폭스바겠",
+  "폭스바겐",
   "렉서스",
   "토요타",
   "테슬라",
@@ -65,7 +65,7 @@ export const MODELS_BY_BRAND: Record<VehicleBrandId, readonly string[]> = {
   BMW: ["X1 · X3 · iX · X5 라인업", "3시리즈 · i4 · 5시리즈", "기타(직접비고)"],
   "Mercedes-Benz": ["CLA · GLA · GLB", "C · E · S 클래스 상담", "GLE · EQE SUV", "기타(직접비고)"],
   Audi: ["A3 · Q3", "A4 · A6 · Q5", "e-tron · Q4 라인 등", "기타(직접비고)"],
-  폭스바겠: ["티록 · Tiguan", "아테온 등", "ID. 라인업", "기타(직접비고)"],
+  폭스바겐: ["티록 · Tiguan", "아테온 등", "ID. 라인업", "기타(직접비고)"],
   렉서스: ["UX · NX · RX", "ES 등 세단 라인업", "기타(직접비고)"],
   토요타: ["캠리 · 크라운", "RAV4 · 프리우스", "하이랜더 · 라인업별 상담", "픽업 라인 알트만 문의 가능", "기타(직접비고)"],
   테슬라: ["Model 3", "Model Y", "Model S · X 등", "기타(직접비고)"],
@@ -77,6 +77,7 @@ export const MODELS_BY_BRAND: Record<VehicleBrandId, readonly string[]> = {
 
 export function vehicleModelsFor(brand?: string): readonly string[] {
   if (!brand) return [];
-  const b = brand as VehicleBrandId;
+  const normalized = brand === "폭스바겠" ? "폭스바겐" : brand;
+  const b = normalized as VehicleBrandId;
   return MODELS_BY_BRAND[b] ?? [];
 }
