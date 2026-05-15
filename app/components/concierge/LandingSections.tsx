@@ -358,7 +358,7 @@ export function LandingShowroom({
         )}
       </div>
 
-      {/* 데스크톱: 큰 통합 히어로 이미지(CTA는 상단 헤더만 — 오버레이·중복 버튼 없음) */}
+      {/* 데스크톱: 큰 통합 히어로 이미지 — CTA 2곳(베타·미리보기)만 클릭 가능 */}
       <section id="sensora-landing-hero" className={`${sectionShell} hidden pb-6 pt-2 lg:block sm:pb-8 sm:pt-3 lg:pt-4`}>
         <div className={innerMax}>
           <div className="landing-guide03-hero-shell mx-auto flex w-full flex-col items-center justify-center">
@@ -366,14 +366,28 @@ export function LandingShowroom({
               <Image
                 src="/images/guides/sensora-guide-03.png"
                 alt="Sensora Auto CRM 랜딩 첫 화면"
-                width={1672}
-                height={941}
                 fill
                 priority
                 quality={100}
                 className="landing-guide03-hero-image pointer-events-none cursor-default select-none"
                 sizes="(max-width: 1440px) 100vw, 1440px"
               />
+              <Link
+                href={JOIN_PATH}
+                prefetch={false}
+                className="landing-guide03-hotspot landing-guide03-hotspot--hero-join"
+                aria-label={t("cta.joinBeta")}
+              >
+                <span className="sr-only">{t("cta.joinBeta")}</span>
+              </Link>
+              <button
+                type="button"
+                onClick={onOpenAppWorkspace}
+                className="landing-guide03-hotspot landing-guide03-hotspot--hero-preview"
+                aria-label={t("cta.tryAppExperience")}
+              >
+                <span className="sr-only">{t("cta.tryAppExperience")}</span>
+              </button>
             </div>
           </div>
         </div>

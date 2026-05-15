@@ -2557,7 +2557,7 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   min-height: 0;
 }
 
-/* 데스크톱 히어로 — 큰 통합 이미지(CTA는 상단 헤더, 오버레이·중복 버튼 없음) */
+/* 데스크톱 히어로 — 큰 통합 이미지, CTA 2곳만 클릭 가능 */
 .landing-guide03-hero-shell {
   min-height: 100%;
   padding: clamp(0.25rem, 1.1vw, 0.9rem);
@@ -2580,7 +2580,40 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
 
 .landing-guide03-hero-image {
   pointer-events: none;
+  user-select: none;
   object-fit: cover;
+}
+
+.landing-guide03-hotspot {
+  position: absolute;
+  z-index: 30;
+  display: block;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  touch-action: manipulation;
+}
+
+.landing-guide03-hotspot:focus-visible {
+  outline: 2px solid rgba(56, 189, 248, 0.75);
+  outline-offset: 3px;
+  border-radius: 14px;
+}
+
+.landing-guide03-hotspot--hero-join {
+  left: 7%;
+  top: 39.5%;
+  width: 15%;
+  height: 6.5%;
+}
+
+.landing-guide03-hotspot--hero-preview {
+  left: 23%;
+  top: 39.5%;
+  width: 17%;
+  height: 6.5%;
 }
 
 .landing-first-screen-primary-cta.landing-enterprise-btn-primary {
