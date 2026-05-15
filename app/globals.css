@@ -2584,27 +2584,29 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   object-fit: cover;
 }
 
-/* sensora-guide-03.png — 제목 아래 왼쪽, 그래픽 버튼 위에 실제 CTA */
+/* sensora-guide-03.png — 그래픽 CTA와 동일 위치에 실제 버튼 겹침 */
 .landing-guide03-hero-real-ctas {
   position: absolute;
   z-index: 40;
-  left: 6.5%;
-  top: 46%;
+  left: 6.8%;
+  top: 40%;
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: row nowrap;
   align-items: center;
-  gap: clamp(0.65rem, 1.35vw, 1.35rem);
-  max-width: min(42%, 28rem);
+  gap: clamp(16px, 1.5vw, 26px);
+  max-width: min(44%, 30rem);
   pointer-events: auto;
 }
 
 .landing-guide03-hero-real-beta {
+  box-sizing: border-box;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.35rem;
-  min-height: 2.5rem;
-  padding: 0.5rem 1.125rem;
+  min-width: clamp(160px, 12.8vw, 190px);
+  height: clamp(44px, 3.6vw, 54px);
+  padding: 0 1.25rem;
   border-radius: 0.625rem;
   border: 1px solid rgba(129, 140, 248, 0.35);
   background: linear-gradient(95deg, #5b4fd4 0%, #4f6fd8 42%, #38a5e8 100%);
@@ -2633,13 +2635,15 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
 }
 
 .landing-guide03-hero-real-preview {
+  box-sizing: border-box;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.4rem;
-  min-height: 2.5rem;
+  min-width: clamp(175px, 14vw, 210px);
+  height: clamp(44px, 3.6vw, 54px);
   margin: 0;
-  padding: 0.5rem 1rem;
+  padding: 0 1rem;
   border-radius: 0.625rem;
   border: 1px solid rgba(148, 163, 184, 0.42);
   background: rgba(6, 12, 24, 0.78);
