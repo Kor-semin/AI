@@ -358,30 +358,26 @@ export function LandingShowroom({
         )}
       </div>
 
-      {/* 데스크톱: 기존 히어로 가이드 이미지 */}
+      {/* 데스크톱: 좌 텍스트+실제 CTA · 우 목업(오버레이/핫스팟 없음) */}
       <section id="sensora-landing-hero" className={`${sectionShell} hidden pb-6 pt-2 lg:block sm:pb-8 sm:pt-3 lg:pt-4`}>
         <div className={innerMax}>
-          <div className="landing-guide03-hero-shell mx-auto flex w-full flex-col items-center justify-center">
-            <div className="landing-guide03-hero-frame relative w-full max-w-[1440px] overflow-hidden">
-              <Image
-                src="/images/guides/sensora-guide-03.png"
-                alt="Sensora Auto CRM 랜딩 첫 화면"
-                width={1672}
-                height={941}
-                fill
-                priority
-                quality={100}
-                className="landing-guide03-hero-image pointer-events-none select-none"
-                sizes="(max-width: 1440px) 100vw, 1440px"
-              />
-              <div className="landing-guide03-hero-real-ctas">
-                <Link href={JOIN_PATH} prefetch={false} className="landing-guide03-hero-real-beta">
+          <div className="landing-guide03-hero-split mx-auto w-full max-w-[1440px]">
+            <div className="landing-guide03-hero-split__copy">
+              <p className="landing-guide03-hero-split__kicker">{t("landing.showroom.hero.kickerBadge")}</p>
+              <h1 className="landing-guide03-hero-split__title">
+                <span className="block">{t("landing.showroom.hero.headlineLine1")}</span>
+                <span className="block">{t("landing.showroom.hero.headlineLine2")}</span>
+              </h1>
+              <p className="landing-guide03-hero-split__sub">{t("landing.showroom.hero.sub")}</p>
+              <p className="landing-guide03-hero-split__trust">{t("landing.showroom.hero.trustLine")}</p>
+              <div className="landing-guide03-hero-split__ctas">
+                <Link href={JOIN_PATH} prefetch={false} className="landing-guide03-hero-split-beta">
                   {t("cta.joinBeta")}
                   <span aria-hidden>→</span>
                 </Link>
                 <button
                   type="button"
-                  className="landing-guide03-hero-real-preview"
+                  className="landing-guide03-hero-split-preview"
                   onClick={() => onOpenAppWorkspace()}
                 >
                   <svg className="size-[0.95rem] shrink-0 opacity-90" viewBox="0 0 20 20" fill="none" aria-hidden>
@@ -393,6 +389,19 @@ export function LandingShowroom({
                   {t("landing.hero.ctaPreview")}
                 </button>
               </div>
+            </div>
+            <div className="landing-guide03-hero-split__visual" aria-hidden>
+              <Image
+                src="/images/guides/sensora-guide-03.png"
+                alt=""
+                width={1672}
+                height={941}
+                fill
+                priority
+                quality={100}
+                className="landing-guide03-hero-split-mockup select-none"
+                sizes="(max-width: 1024px) 0vw, 52vw"
+              />
             </div>
           </div>
         </div>
