@@ -374,25 +374,26 @@ export function LandingShowroom({
                 sizes="(max-width: 1440px) 100vw, 1440px"
               />
             </div>
-            <p className="mt-4 text-center text-[12px] leading-relaxed text-slate-500">{t("landing.hero.ctaBarHint")}</p>
-            <div className="landing-guide03-hero-cta-bar mt-4 flex flex-wrap items-center justify-center gap-2.5 sm:gap-3">
-              <Link href={JOIN_PATH} prefetch={false} className={`${entPrimaryBtn} cursor-pointer`}>
-                {t("cta.joinBeta")}
-              </Link>
-              <button
-                type="button"
-                onClick={onOpenAppWorkspace}
-                className="landing-enterprise-btn-secondary inline-flex min-h-[48px] cursor-pointer items-center justify-center rounded-xl border border-white/[0.14] bg-white/[0.05] px-5 py-2.5 text-center text-[0.8125rem] font-semibold text-slate-100 transition hover:border-sky-400/28 hover:bg-white/[0.08] touch-manipulation"
-              >
-                {t("landing.hero.ctaPreview")}
-              </button>
-              <Link
-                href="/?view=app#dashboard"
-                prefetch={false}
-                className="landing-enterprise-btn-secondary inline-flex min-h-[48px] cursor-pointer items-center justify-center rounded-xl border border-white/[0.14] bg-white/[0.05] px-5 py-2.5 text-center text-[0.8125rem] font-semibold text-slate-100 transition hover:border-sky-400/28 hover:bg-white/[0.08] touch-manipulation"
-              >
-                {t("header.workspace")}
-              </Link>
+            <div className="landing-guide03-hero-cta-wrap mt-4 flex w-full max-w-[1440px] flex-col items-center">
+              <p className="pointer-events-none select-none text-center text-[12px] leading-relaxed text-slate-500">
+                {t("landing.hero.ctaBarHint")}
+              </p>
+              <div className="landing-guide03-hero-cta-bar mt-4 flex flex-wrap items-center justify-center gap-2.5 sm:gap-3">
+                <Link
+                  href={JOIN_PATH}
+                  prefetch={false}
+                  className={`${entPrimaryBtn} relative z-[1] cursor-pointer`}
+                >
+                  {t("cta.joinBeta")}
+                </Link>
+                <button
+                  type="button"
+                  onClick={onOpenAppWorkspace}
+                  className="landing-enterprise-btn-secondary relative z-[1] inline-flex min-h-[48px] cursor-pointer items-center justify-center rounded-xl border border-white/[0.14] bg-white/[0.05] px-5 py-2.5 text-center text-[0.8125rem] font-semibold text-slate-100 transition hover:border-sky-400/28 hover:bg-white/[0.08] touch-manipulation"
+                >
+                  {t("landing.hero.ctaPreview")}
+                </button>
+              </div>
             </div>
           </div>
         </div>
