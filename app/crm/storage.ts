@@ -25,6 +25,30 @@ function nowIso() {
   return new Date().toISOString();
 }
 
+/** Firestore 쓰기에 `undefined` 가 포함되면 실패할 수 있어 제거합니다(일반 객체·배열만 재귀). */
+function stripUndefinedDeep(value: unknown): unknown {
+  if (value === undefined) return undefined;
+  if (value === null || typeof value !== "object") return value;
+  if (Array.isArray(value)) {
+    return value.map(stripUndefinedDeep).filter((v) => v !== undefined);
+  }
+  const tag = Object.prototype.toString.call(value);
+  if (tag === "[object Timestamp]" || typeof (value as { toMillis?: unknown }).toMillis === "function") {
+    return value;
+  }
+  const proto = Object.getPrototypeOf(value);
+  if (proto !== Object.prototype && proto !== null) {
+    return value;
+  }
+  const out: Record<string, unknown> = {};
+  for (const [k, v] of Object.entries(value as Record<string, unknown>)) {
+    if (v === undefined) continue;
+    const next = stripUndefinedDeep(v);
+    if (next !== undefined) out[k] = next;
+  }
+  return out;
+}
+
 type Unsubscribe = () => void;
 type OnError = (e: unknown) => void;
 
@@ -118,7 +142,7 @@ export async function upsertCustomerCloud(uid: string, patch: Partial<Customer> 
   if ("paymentType" in patch && patch.paymentType === undefined) {
     payload.paymentType = deleteField();
   }
-  await setDoc(ref, payload, { merge: true });
+  await setDoc(ref, stripUndefinedDeep(payload) as Record<string, unknown>, { merge: true });
 }
 
 export async function createCustomerCloud(uid: string, customer: Customer): Promise<void> {
@@ -128,7 +152,11 @@ export async function createCustomerCloud(uid: string, customer: Customer): Prom
   const ref = doc(db, "users", uid, "customers", customer.id);
   await setDoc(
     ref,
-    { ...customer, createdAtServer: serverTimestamp(), updatedAtServer: serverTimestamp() },
+    stripUndefinedDeep({
+      ...customer,
+      createdAtServer: serverTimestamp(),
+      updatedAtServer: serverTimestamp(),
+    }) as Record<string, unknown>,
     { merge: true },
   );
 }
@@ -225,7 +253,15 @@ export async function seedCloudFromState(uid: string, state: CRMState): Promise<
   const batch = writeBatch(db);
 
   for (const c of state.customers) {
-    batch.set(doc(db, "users", uid, "customers", c.id), { ...c, createdAtServer: serverTimestamp(), updatedAtServer: serverTimestamp() }, { merge: true });
+    batch.set(
+      doc(db, "users", uid, "customers", c.id),
+      stripUndefinedDeep({
+        ...c,
+        createdAtServer: serverTimestamp(),
+        updatedAtServer: serverTimestamp(),
+      }) as Record<string, unknown>,
+      { merge: true },
+    );
   }
   for (const a of state.nextActions) {
     batch.set(doc(db, "users", uid, "nextActions", a.id), { ...a, createdAtServer: serverTimestamp(), updatedAtServer: serverTimestamp() }, { merge: true });

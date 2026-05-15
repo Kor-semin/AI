@@ -363,6 +363,25 @@ function emptyState(): CRMState {
   return { version: 1, customers: [], nextActions: [], events: [], templates: [] };
 }
 
+/** 스냅샷이 낙관적 저장보다 늦게 도착할 때 로컬의 더 새로운 행을 유지합니다. */
+function mergeCustomerRowsForCloud(prevList: Customer[], cloudList: Customer[]): Customer[] {
+  const mergedById = new Map<string, Customer>(cloudList.map((c) => [c.id, c]));
+  for (const c of prevList) {
+    const fromCloud = mergedById.get(c.id);
+    if (!fromCloud) continue;
+    mergedById.set(c.id, c.updatedAt > fromCloud.updatedAt ? c : fromCloud);
+  }
+  return Array.from(mergedById.values());
+}
+
+function formatCustomerCloudSaveError(e: unknown): string {
+  const raw = e instanceof Error ? e.message : String(e);
+  if (/permission|insufficient permissions|missing or insufficient permissions/i.test(raw)) {
+    return "고객 정보를 저장하지 못했습니다. 로그인 및 승인 상태를 확인한 뒤 다시 시도해 주세요.";
+  }
+  return "고객 정보를 저장하지 못했습니다. 잠시 후 다시 시도해 주세요.";
+}
+
 export function CRMApp({
   uid,
   sellerDisplayName,
@@ -388,6 +407,8 @@ export function CRMApp({
   const didHydrateRef = useRef(false);
   const [sync, setSync] = useState<SyncStatus>({ mode: uid ? "cloud" : "local", status: "idle" });
   const cloudPartsRef = useRef<Partial<CRMState>>({});
+  /** Firestore 저장 성공 알림(필드 자동 저장 연속 호출을 묶기 위한 디바운스) */
+  const customerSavedToastTimerRef = useRef<number | undefined>(undefined);
   /** Firestore 에코 전 onSnapshot 덮어쓰기에 낙관적으로 추가된 고객 행 유지 */
   const pendingCustomerCreatesRef = useRef<Set<string>>(new Set());
 
@@ -417,6 +438,7 @@ export function CRMApp({
   const [toast, setToast] = useState<string | null>(null);
   const [deliveryGuideOpen, setDeliveryGuideOpen] = useState(false);
   const [createCustomerOpen, setCreateCustomerOpen] = useState(false);
+  const [createCustomerBusy, setCreateCustomerBusy] = useState(false);
   const [createCustomerDraft, setCreateCustomerDraft] = useState({ ...CREATE_CUSTOMER_INITIAL });
   const createCustomerDraftRef = useRef(createCustomerDraft);
   createCustomerDraftRef.current = createCustomerDraft;
@@ -468,6 +490,19 @@ export function CRMApp({
       setToast((prev) => (prev === msg ? null : prev));
     }, 1500);
   }
+
+  function scheduleCustomerSavedToast() {
+    window.clearTimeout(customerSavedToastTimerRef.current);
+    customerSavedToastTimerRef.current = window.setTimeout(() => {
+      showToast("고객 정보가 저장되었습니다.");
+    }, 550);
+  }
+
+  useEffect(() => {
+    return () => {
+      window.clearTimeout(customerSavedToastTimerRef.current);
+    };
+  }, []);
 
   /** Sensora Flow: 명시적 분석 클릭 시에만 flowDraft 업데이트 (입력 중 자동 재분석 없음) */
   function runSensoraFlowAnalyzeOrRefresh() {
@@ -674,6 +709,8 @@ export function CRMApp({
         return;
       }
 
+      didHydrateRef.current = false;
+
       try {
         const hasData = await hasAnyCloudData(uid);
         if (!hasData) {
@@ -698,11 +735,12 @@ export function CRMApp({
             for (const c of migrated.customers) {
               pendingCustomerCreatesRef.current.delete(c.id);
             }
-            const cloudIds = new Set(migrated.customers.map((c) => c.id));
+            const cloudById = new Map(migrated.customers.map((c) => [c.id, c]));
             const pendingLocals = prev.customers.filter(
-              (c) => pendingCustomerCreatesRef.current.has(c.id) && !cloudIds.has(c.id),
+              (c) => pendingCustomerCreatesRef.current.has(c.id) && !cloudById.has(c.id),
             );
-            const mergedCustomers = [...pendingLocals, ...migrated.customers].sort((a, b) =>
+            const mergedCore = mergeCustomerRowsForCloud(prev.customers, migrated.customers);
+            const mergedCustomers = [...pendingLocals, ...mergedCore].sort((a, b) =>
               b.updatedAt.localeCompare(a.updatedAt),
             );
             return { ...migrated, customers: mergedCustomers };
@@ -1055,10 +1093,17 @@ export function CRMApp({
     if (uid) {
       setSync({ mode: "cloud", status: "syncing" });
       void upsertCustomerCloud(uid, patch)
-        .then(() => setSync({ mode: "cloud", status: "idle" }))
+        .then(() => {
+          setSync({ mode: "cloud", status: "idle" });
+          scheduleCustomerSavedToast();
+        })
         .catch((e) => {
+          if (process.env.NODE_ENV === "development") {
+            const code = typeof e === "object" && e && "code" in e ? String((e as { code: unknown }).code) : "";
+            console.error("[crm] upsertCustomerCloud failed", code || e);
+          }
           setSync({ mode: "cloud", status: "error", message: String(e) });
-          showToast(`고객 정보를 저장하지 못했습니다: ${String(e)}`);
+          showToast(formatCustomerCloudSaveError(e));
         });
     }
   }
@@ -1179,6 +1224,7 @@ export function CRMApp({
       openPreviewGate();
       return;
     }
+    if (createCustomerBusy) return;
     const d = createCustomerDraftRef.current;
     const nameTrim = d.name.trim();
     if (!nameTrim) {
@@ -1214,23 +1260,31 @@ export function CRMApp({
       setTab("고객");
       setCreateCustomerOpen(false);
       setCreateCustomerDraft({ ...CREATE_CUSTOMER_INITIAL });
-      showToast("고객이 추가되었습니다.");
       if (nextLine) addNextAction(id, nextLine, { skipTabSwitch: true });
     };
 
     if (uid) {
+      setCreateCustomerBusy(true);
       setSync({ mode: "cloud", status: "syncing" });
       try {
         await createCustomerCloud(uid, customer);
         setSync({ mode: "cloud", status: "idle" });
         finishSuccess();
+        showToast("고객 정보가 저장되었습니다.");
       } catch (e) {
         const msg = e instanceof Error ? e.message : String(e);
+        if (process.env.NODE_ENV === "development") {
+          const code = typeof e === "object" && e && "code" in e ? String((e as { code: unknown }).code) : "";
+          console.error("[crm] createCustomerCloud failed", code || e);
+        }
         setSync({ mode: "cloud", status: "error", message: msg });
-        showToast(`저장하지 못했습니다. 다시 시도해 주세요. (${msg})`);
+        showToast(formatCustomerCloudSaveError(e));
+      } finally {
+        setCreateCustomerBusy(false);
       }
     } else {
       finishSuccess();
+      showToast("고객 정보가 저장되었습니다.");
     }
   }
 
@@ -1276,8 +1330,12 @@ export function CRMApp({
           ])
             .then(() => setSync({ mode: "cloud", status: "idle" }))
             .catch((e) => {
+              if (process.env.NODE_ENV === "development") {
+                const code = typeof e === "object" && e && "code" in e ? String((e as { code: unknown }).code) : "";
+                console.error("[crm] import customers cloud sync failed", code || e);
+              }
               setSync({ mode: "cloud", status: "error", message: String(e) });
-              showToast(`클라우드 동기화에 실패했을 수 있습니다. (${String(e)})`);
+              showToast(formatCustomerCloudSaveError(e));
             });
         });
       }
@@ -1317,7 +1375,14 @@ export function CRMApp({
       setSync({ mode: "cloud", status: "syncing" });
       void deleteCustomerCloud(uid, id)
         .then(() => setSync({ mode: "cloud", status: "idle" }))
-        .catch((e) => setSync({ mode: "cloud", status: "error", message: String(e) }));
+        .catch((e) => {
+          if (process.env.NODE_ENV === "development") {
+            const code = typeof e === "object" && e && "code" in e ? String((e as { code: unknown }).code) : "";
+            console.error("[crm] deleteCustomerCloud failed", code || e);
+          }
+          setSync({ mode: "cloud", status: "error", message: String(e) });
+          showToast(formatCustomerCloudSaveError(e));
+        });
     }
   }
 
@@ -1813,7 +1878,6 @@ export function CRMApp({
               onSaveMemo={() => {
                 if (!selectedCustomerId) return;
                 upsertCustomer({ id: selectedCustomerId, memo: workspaceAiMemoDraft });
-                showToast("상담 메모를 저장했습니다.");
               }}
               onGoAi={() => onActiveSectionChange("ai")}
               disabledSave={
@@ -1888,7 +1952,6 @@ export function CRMApp({
                   const trimmed = workspaceAiMemoDraft.trim();
                   setFlowDraftMemo(trimmed);
                   setFlowDraftInsights(null);
-                  showToast(t("crm.workspaceAi.saveToast"));
                 }}
                 onCreateFollowUpFromInsights={() => {
                   if (!selectedCustomerId || !flowDraftInsights) return;
@@ -3583,9 +3646,10 @@ export function CRMApp({
               <button
                 type="submit"
                 form="crm-create-customer-form"
-                className="sensora-premium-primary-workspace min-h-[44px] shrink-0 rounded-xl px-6 py-2.5 text-[14px] font-semibold touch-manipulation"
+                disabled={createCustomerBusy}
+                className="sensora-premium-primary-workspace min-h-[44px] shrink-0 rounded-xl px-6 py-2.5 text-[14px] font-semibold touch-manipulation disabled:cursor-not-allowed disabled:opacity-50"
               >
-                저장
+                {createCustomerBusy ? "저장 중…" : "저장"}
               </button>
             </div>
           </div>
