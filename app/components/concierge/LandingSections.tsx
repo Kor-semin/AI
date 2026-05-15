@@ -365,7 +365,7 @@ export function LandingShowroom({
             <div className="landing-guide03-hero-frame relative w-full max-w-[1440px] overflow-hidden">
               <Image
                 src="/images/guides/sensora-guide-03.png"
-                alt=""
+                alt="Sensora Auto CRM 랜딩 첫 화면"
                 width={1672}
                 height={941}
                 fill
@@ -374,18 +374,25 @@ export function LandingShowroom({
                 className="landing-guide03-hero-image pointer-events-none select-none"
                 sizes="(max-width: 1440px) 100vw, 1440px"
               />
-              <Link
-                href={JOIN_PATH}
-                prefetch={false}
-                aria-label="베타 신청하기"
-                className="landing-guide03-hero-hit landing-guide03-hero-hit-beta"
-              />
-              <button
-                type="button"
-                aria-label="앱 화면 미리보기"
-                className="landing-guide03-hero-hit landing-guide03-hero-hit-preview"
-                onClick={() => onOpenAppWorkspace()}
-              />
+              <div className="landing-guide03-hero-real-ctas">
+                <Link href={JOIN_PATH} prefetch={false} className="landing-guide03-hero-real-beta">
+                  {t("cta.joinBeta")}
+                  <span aria-hidden>→</span>
+                </Link>
+                <button
+                  type="button"
+                  className="landing-guide03-hero-real-preview"
+                  onClick={() => onOpenAppWorkspace()}
+                >
+                  <svg className="size-[0.95rem] shrink-0 opacity-90" viewBox="0 0 20 20" fill="none" aria-hidden>
+                    <path
+                      d="M6.75 11.08V9.92c0-.6.323-1.15.839-1.424l5.62-3.068a1.583 1.583 0 012.541 1.424v8.088a1.584 1.584 0 01-2.541 1.424l-5.62-3.069a1.583 1.583 0 01-.839-1.423z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  {t("landing.hero.ctaPreview")}
+                </button>
+              </div>
             </div>
           </div>
         </div>

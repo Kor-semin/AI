@@ -2573,7 +2573,7 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
     0 0 0 1px rgba(255, 255, 255, 0.07);
 }
 
-/* Next/Image fill 래퍼 — 클릭은 핫스팟만 받음 */
+/* Next/Image fill 래퍼 — 이미지만 클릭 불가, CTA는 형제 레이어 */
 .landing-guide03-hero-frame > span:has(.landing-guide03-hero-image) {
   pointer-events: none !important;
   z-index: 0 !important;
@@ -2584,41 +2584,91 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   object-fit: cover;
 }
 
-/* sensora-guide-03.png(1672×941) — 제목 아래 왼쪽 CTA 그래픽 */
-.landing-guide03-hero-hit {
+/* sensora-guide-03.png — 제목 아래 왼쪽, 그래픽 버튼 위에 실제 CTA */
+.landing-guide03-hero-real-ctas {
   position: absolute;
-  z-index: 50;
-  display: block;
-  margin: 0;
-  border: 0;
-  padding: 0;
+  z-index: 40;
+  left: 6.5%;
+  top: 46%;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  gap: clamp(0.65rem, 1.35vw, 1.35rem);
+  max-width: min(42%, 28rem);
   pointer-events: auto;
+}
+
+.landing-guide03-hero-real-beta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  min-height: 2.5rem;
+  padding: 0.5rem 1.125rem;
+  border-radius: 0.625rem;
+  border: 1px solid rgba(129, 140, 248, 0.35);
+  background: linear-gradient(95deg, #5b4fd4 0%, #4f6fd8 42%, #38a5e8 100%);
+  color: #fff;
+  font-size: clamp(0.75rem, 1.05vw, 0.9375rem);
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
+  white-space: nowrap;
   cursor: pointer;
   touch-action: manipulation;
-  background: transparent;
-  box-shadow: none;
-  appearance: none;
-  -webkit-appearance: none;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 6px 20px -8px rgba(99, 102, 241, 0.55);
+  transition:
+    filter 0.18s ease-out,
+    transform 0.16s ease-out;
+}
+
+.landing-guide03-hero-real-beta:hover {
+  filter: brightness(1.07);
+}
+
+.landing-guide03-hero-real-beta:active {
+  transform: scale(0.988);
+}
+
+.landing-guide03-hero-real-preview {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-height: 2.5rem;
+  margin: 0;
+  padding: 0.5rem 1rem;
   border-radius: 0.625rem;
-  min-width: 3rem;
-  min-height: 2rem;
+  border: 1px solid rgba(148, 163, 184, 0.42);
+  background: rgba(6, 12, 24, 0.78);
+  color: #f1f5f9;
+  font-size: clamp(0.75rem, 1.05vw, 0.9375rem);
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+  cursor: pointer;
+  touch-action: manipulation;
+  backdrop-filter: blur(8px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  transition:
+    border-color 0.18s ease-out,
+    background 0.18s ease-out,
+    transform 0.16s ease-out;
 }
 
-.landing-guide03-hero-hit-beta {
-  left: 7%;
-  top: 47%;
-  width: 15%;
-  height: 7.2%;
+.landing-guide03-hero-real-preview:hover {
+  border-color: rgba(56, 189, 248, 0.38);
+  background: rgba(10, 18, 34, 0.88);
 }
 
-.landing-guide03-hero-hit-preview {
-  left: 23%;
-  top: 47%;
-  width: 17%;
-  height: 7.2%;
+.landing-guide03-hero-real-preview:active {
+  transform: scale(0.988);
 }
 
-.landing-guide03-hero-hit:focus-visible {
+.landing-guide03-hero-real-beta:focus-visible,
+.landing-guide03-hero-real-preview:focus-visible {
   outline: 2px solid rgba(125, 211, 252, 0.55);
   outline-offset: 2px;
 }
