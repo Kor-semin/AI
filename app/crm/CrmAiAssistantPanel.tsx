@@ -6,7 +6,12 @@ import type { DemoConsultingResponse, DemoSalesStyle } from "@/app/components/co
 import type { TranslationKey } from "@/lib/i18n";
 import type { Customer, CustomerEstimateAttachment } from "@/app/crm/types";
 import { refreshCustomerEstimateDownloadUrl } from "@/app/crm/storage";
-import { resolveSmsDraftEstimateAttachment, sortedEstimateAttachments } from "@/app/crm/newCarEstimateDraft";
+import {
+  buildCustomerContextBulletLines,
+  buildRecommendedNextActionsFromCustomer,
+  resolveSmsDraftEstimateAttachment,
+  sortedEstimateAttachments,
+} from "@/app/crm/newCarEstimateDraft";
 
 const WORKSPACE_AI_STYLE_KEYS: Record<DemoSalesStyle, TranslationKey> = {
   polite: "landing.aiDemo.salesStyle.polite",
@@ -81,6 +86,15 @@ export function CrmAiAssistantPanel({
   );
   const pickedEstimate = useMemo(
     () => (selectedCustomer ? resolveSmsDraftEstimateAttachment(selectedCustomer) : null),
+    [selectedCustomer],
+  );
+
+  const contextBullets = useMemo(
+    () => (selectedCustomer ? buildCustomerContextBulletLines(selectedCustomer, t) : []),
+    [selectedCustomer, t],
+  );
+  const recommendedActions = useMemo(
+    () => (selectedCustomer ? buildRecommendedNextActionsFromCustomer(selectedCustomer) : []),
     [selectedCustomer],
   );
 
@@ -195,6 +209,34 @@ export function CrmAiAssistantPanel({
         </div>
       </div>
 
+      {selectedCustomer ? (
+        <div className="mt-6 rounded-[18px] border border-white/[0.1] bg-slate-950/40 px-4 py-4 sm:px-5">
+          <h3 className="text-[13px] font-semibold text-slate-100">{t("crm.contextSummary.title")}</h3>
+          {contextBullets.length ? (
+            <ul className="mt-3 list-none space-y-1.5 text-[13px] leading-relaxed text-slate-300">
+              {contextBullets.map((line) => (
+                <li key={line}>· {line}</li>
+              ))}
+            </ul>
+          ) : (
+            <p className="mt-2 text-[12px] text-slate-500">{t("crm.contextSummary.empty")}</p>
+          )}
+          <p className="mt-3 text-[11px] leading-relaxed text-slate-500">{t("crm.workspaceAi.contextFeedsFinanceSms")}</p>
+        </div>
+      ) : null}
+
+      {selectedCustomer && recommendedActions.length ? (
+        <div className="mt-4 rounded-[18px] border border-sky-400/14 bg-sky-950/14 px-4 py-4 sm:px-5">
+          <h3 className="text-[13px] font-semibold text-slate-100">{t("crm.recommendedNext.title")}</h3>
+          <ul className="mt-2 list-none space-y-1.5 text-[13px] text-slate-300">
+            {recommendedActions.map((a) => (
+              <li key={a}>· {a}</li>
+            ))}
+          </ul>
+          <p className="mt-3 text-[11px] leading-relaxed text-slate-500">{t("crm.recommendedNext.disclaimer")}</p>
+        </div>
+      ) : null}
+
       <div className="mt-6 grid gap-4 sm:grid-cols-2">
         <div className={`${insightTileCls}`}>
           <div className="flex flex-wrap items-start gap-x-2 gap-y-1">
@@ -274,7 +316,7 @@ export function CrmAiAssistantPanel({
           <p className="mt-3 text-[11px] leading-relaxed text-slate-500">{t("crm.workspaceAi.estimateAttachShortNote")}</p>
         </div>
 
-        {selectedCustomerId && selectedCustomer ? (
+        {selectedCustomerId && selectedCustomer && estimateList.length > 0 ? (
           <div className={`${insightTileCls} sm:col-span-2 border-white/[0.08] bg-slate-950/35`}>
             <h3 className="text-[11px] font-extrabold uppercase tracking-[0.1em] text-slate-500">
               {t("crm.workspaceAi.estimateSmsOptionsTitle")}

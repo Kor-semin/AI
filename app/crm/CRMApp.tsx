@@ -54,7 +54,9 @@ import { getMemoFeedback } from "./memoFeedback";
 import { NewCarEstimateFinanceCard } from "./NewCarEstimateFinanceCard";
 import {
   buildConsultationQuickDraft,
+  buildCustomerContextBulletLines,
   buildNewCarFinanceSmsPreview,
+  buildRecommendedNextActionsFromCustomer,
 } from "./newCarEstimateDraft";
 import {
   formatCareNeedsGuideTopicsUi,
@@ -922,9 +924,10 @@ export function CRMApp({
   );
 
   const newCarFinanceSmsPreview = useMemo(() => {
-    if (!selectedCustomer?.financeConditionDraft?.productMode) return "";
-    return buildNewCarFinanceSmsPreview(selectedCustomer, t);
-  }, [selectedCustomer, t]);
+    if (!selectedCustomer) return "";
+    const pending = selectedNextActions.find((a) => !a.doneAt)?.title?.trim() ?? null;
+    return buildNewCarFinanceSmsPreview(selectedCustomer, t, { pendingNextActionTitle: pending });
+  }, [selectedCustomer, selectedNextActions, t]);
 
   useEffect(() => {
     setWorkspaceAiBusy(false);
@@ -2285,6 +2288,37 @@ export function CRMApp({
                   ) : (
                     <p className={`${memoFeedback ? "mt-4" : ""} text-[14px] leading-relaxed text-slate-500`}>{t("crm.customerDetail.aiSummaryHint")}</p>
                   )}
+                  {(() => {
+                    const ctx = buildCustomerContextBulletLines(selectedCustomer, t);
+                    const rec = buildRecommendedNextActionsFromCustomer(selectedCustomer);
+                    if (!ctx.length && !rec.length) return null;
+                    return (
+                      <div className="mt-4 space-y-4">
+                        {ctx.length ? (
+                          <div className="rounded-[18px] border border-white/[0.08] bg-slate-950/40 px-4 py-3">
+                            <div className="text-[12px] font-semibold text-slate-400">{t("crm.contextSummary.title")}</div>
+                            <ul className="mt-2 space-y-1 text-[13px] text-slate-300">
+                              {ctx.map((line) => (
+                                <li key={line}>· {line}</li>
+                              ))}
+                            </ul>
+                            <p className="mt-2 text-[11px] text-slate-500">{t("crm.workspaceAi.contextFeedsFinanceSms")}</p>
+                          </div>
+                        ) : null}
+                        {rec.length ? (
+                          <div className="rounded-[18px] border border-sky-400/12 bg-sky-950/12 px-4 py-3">
+                            <div className="text-[12px] font-semibold text-slate-400">{t("crm.recommendedNext.title")}</div>
+                            <ul className="mt-2 space-y-1 text-[13px] text-slate-300">
+                              {rec.map((line) => (
+                                <li key={line}>· {line}</li>
+                              ))}
+                            </ul>
+                            <p className="mt-2 text-[11px] text-slate-500">{t("crm.recommendedNext.disclaimer")}</p>
+                          </div>
+                        ) : null}
+                      </div>
+                    );
+                  })()}
                 </div>
               </details>
 
@@ -2338,6 +2372,9 @@ export function CRMApp({
                       </>
                     );
                   })()}
+                  {newCarFinanceSmsPreview.trim() ? (
+                    <p className="mt-4 text-[12px] leading-relaxed text-slate-500">{t("crm.customerDetail.linkedFinanceSmsHint")}</p>
+                  ) : null}
                 </div>
               </details>
 

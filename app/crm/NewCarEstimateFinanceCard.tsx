@@ -451,6 +451,7 @@ export function NewCarEstimateFinanceCard({ uid, customer, onPatch, onRequireLog
 
           <section className="space-y-3">
             <h3 className="text-[14px] font-semibold text-slate-100">{t("crm.newCar.prioritySectionTitle")}</h3>
+            <p className="text-[12px] leading-relaxed text-slate-500">{t("crm.newCar.priorityReflectHint")}</p>
             <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
               {CUSTOMER_PRIORITY_OPTIONS.map((opt) => {
                 const on = (customer.customerPriorityNeeds ?? []).includes(opt);

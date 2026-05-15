@@ -81,6 +81,28 @@ export type TranslationKey =
   | "crm.customerDetail.quickActionSms"
   | "crm.customerDetail.quickActionEstimate"
   | "crm.customerDetail.quickActionSave"
+  | "crm.contextSummary.title"
+  | "crm.contextSummary.vehicle"
+  | "crm.contextSummary.stage"
+  | "crm.contextSummary.needs"
+  | "crm.contextSummary.memoDigest"
+  | "crm.contextSummary.financeMode"
+  | "crm.contextSummary.financeDetails"
+  | "crm.contextSummary.monthly"
+  | "crm.contextSummary.contract"
+  | "crm.contextSummary.residual"
+  | "crm.contextSummary.down"
+  | "crm.contextSummary.deposit"
+  | "crm.contextSummary.estimateLine"
+  | "crm.contextSummary.estimateAttachOn"
+  | "crm.contextSummary.estimateAttachOff"
+  | "crm.contextSummary.nextContact"
+  | "crm.contextSummary.empty"
+  | "crm.workspaceAi.contextFeedsFinanceSms"
+  | "crm.recommendedNext.title"
+  | "crm.recommendedNext.disclaimer"
+  | "crm.newCar.priorityReflectHint"
+  | "crm.customerDetail.linkedFinanceSmsHint"
   | "crm.newCar.financeCardTitle"
   | "cta.emailLogin"
   | "cta.startCustomerCare"
@@ -816,6 +838,30 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.customerDetail.openAiForSms": "AI 비서에서 문자 초안 다시 작성",
     "crm.customerDetail.followUpTabHint": "사후관리 탭에서 일정·할 일을 더 넓게 볼 수 있습니다.",
     "crm.customerDetail.openFollowUpTab": "사후관리 탭 열기",
+    "crm.contextSummary.title": "고객 맥락 요약",
+    "crm.contextSummary.vehicle": "관심 차량",
+    "crm.contextSummary.stage": "상담 상태",
+    "crm.contextSummary.needs": "고객이 중요하게 보는 조건",
+    "crm.contextSummary.memoDigest": "상담 메모에서 반영할 포인트",
+    "crm.contextSummary.financeMode": "금융 방식",
+    "crm.contextSummary.financeDetails": "입력된 금융 조건",
+    "crm.contextSummary.monthly": "월 납입금",
+    "crm.contextSummary.contract": "계약기간",
+    "crm.contextSummary.residual": "잔존가치",
+    "crm.contextSummary.down": "선납금",
+    "crm.contextSummary.deposit": "보증금",
+    "crm.contextSummary.estimateLine": "견적서: {{n}}건 등록됨 · 첨부 안내 문구: {{attach}}",
+    "crm.contextSummary.estimateAttachOn": "포함",
+    "crm.contextSummary.estimateAttachOff": "미포함",
+    "crm.contextSummary.nextContact": "다음 연락 예정",
+    "crm.contextSummary.empty": "관심 차량·니즈·금융 조건을 입력하면 여기에 요약됩니다.",
+    "crm.workspaceAi.contextFeedsFinanceSms": "이 요약은 아래 「신차 견적·금융」 검토용 문자 초안에 함께 반영됩니다.",
+    "crm.recommendedNext.title": "추천 다음 행동(검토)",
+    "crm.recommendedNext.disclaimer": "AI는 다음 행동을 제안할 뿐이며, 최종 판단은 영업사원이 합니다.",
+    "crm.newCar.priorityReflectHint":
+      "선택한 조건은 AI 문자 초안, 다음 행동 제안, 금융 조건 설명에 함께 반영됩니다.",
+    "crm.customerDetail.linkedFinanceSmsHint":
+      "고객 카드에 입력한 조건이 반영된 신차 금융 검토용 문자는 「AI 비서」 화면 하단에서 확인·복사할 수 있습니다.",
     "crm.customerDetail.quickActionMemo": "상담 메모",
     "crm.customerDetail.quickActionSms": "문자 초안",
     "crm.customerDetail.quickActionEstimate": "견적서",
@@ -1644,6 +1690,30 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.customerDetail.openAiForSms": "Rewrite SMS draft in AI assistant",
     "crm.customerDetail.followUpTabHint": "Open the follow-up tab for a wider schedule and task view.",
     "crm.customerDetail.openFollowUpTab": "Open follow-up tab",
+    "crm.contextSummary.title": "Customer context",
+    "crm.contextSummary.vehicle": "Interested vehicle",
+    "crm.contextSummary.stage": "Pipeline stage",
+    "crm.contextSummary.needs": "Customer priorities",
+    "crm.contextSummary.memoDigest": "Memo highlights (safe summary)",
+    "crm.contextSummary.financeMode": "Finance product",
+    "crm.contextSummary.financeDetails": "Entered finance fields",
+    "crm.contextSummary.monthly": "Monthly payment",
+    "crm.contextSummary.contract": "Term",
+    "crm.contextSummary.residual": "Residual",
+    "crm.contextSummary.down": "Down payment",
+    "crm.contextSummary.deposit": "Deposit",
+    "crm.contextSummary.estimateLine": "Quotes: {{n}} on file · attachment wording: {{attach}}",
+    "crm.contextSummary.estimateAttachOn": "On",
+    "crm.contextSummary.estimateAttachOff": "Off",
+    "crm.contextSummary.nextContact": "Next contact",
+    "crm.contextSummary.empty": "Add vehicle, priorities, and finance details to see a summary here.",
+    "crm.workspaceAi.contextFeedsFinanceSms": "This summary feeds the new‑car finance SMS draft below.",
+    "crm.recommendedNext.title": "Suggested next steps (review)",
+    "crm.recommendedNext.disclaimer": "AI suggests next steps only; the salesperson makes the final decision.",
+    "crm.newCar.priorityReflectHint":
+      "Selected priorities are reflected in AI SMS drafts, suggested next steps, and finance explanations.",
+    "crm.customerDetail.linkedFinanceSmsHint":
+      "The new‑car finance review SMS (fed by this card) can be viewed and copied at the bottom of the AI Assistant screen.",
     "crm.customerDetail.quickActionMemo": "Consultation notes",
     "crm.customerDetail.quickActionSms": "SMS draft",
     "crm.customerDetail.quickActionEstimate": "Quotes",
