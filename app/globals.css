@@ -2557,171 +2557,30 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   min-height: 0;
 }
 
-/* 데스크톱 히어로 — 좌 HTML+CTA / 우 목업(오버레이·핫스팟 없음) */
-.landing-guide03-hero-split {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr);
-  gap: clamp(1rem, 2.2vw, 2.25rem);
-  align-items: center;
-  min-height: min(calc((100dvh - 7rem) * 0.52), 520px);
-  padding: clamp(1.25rem, 2.4vw, 2rem) clamp(1.25rem, 2.8vw, 2.5rem);
-  border-radius: clamp(18px, 2.35vw, 34px);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  background:
-    radial-gradient(ellipse 95% 70% at 18% 22%, rgba(99, 102, 241, 0.22), transparent 58%),
-    radial-gradient(ellipse 80% 55% at 72% 18%, rgba(56, 189, 248, 0.12), transparent 55%),
-    linear-gradient(145deg, #07111f 0%, #020817 52%, #030b16 100%);
-  box-shadow: 0 34px 110px -58px rgba(0, 0, 0, 0.86);
+/* 데스크톱 히어로 — 큰 통합 이미지(CTA는 상단 헤더, 오버레이·중복 버튼 없음) */
+.landing-guide03-hero-shell {
+  min-height: 100%;
+  padding: clamp(0.25rem, 1.1vw, 0.9rem);
 }
 
-.landing-guide03-hero-split__copy {
-  position: relative;
-  z-index: 1;
-  min-width: 0;
-}
-
-.landing-guide03-hero-split__kicker {
-  display: inline-flex;
-  margin: 0;
-  padding: 0.35rem 0.75rem;
-  border-radius: 999px;
-  border: 1px solid rgba(129, 140, 248, 0.35);
-  background: rgba(79, 70, 229, 0.22);
-  color: #c4b5fd;
-  font-size: clamp(0.625rem, 0.85vw, 0.75rem);
-  font-weight: 600;
-  letter-spacing: 0.02em;
-}
-
-.landing-guide03-hero-split__title {
-  margin: 0.85rem 0 0;
-  color: #f8fafc;
-  font-size: clamp(1.35rem, 2.35vw, 2.15rem);
-  font-weight: 700;
-  line-height: 1.14;
-  letter-spacing: -0.03em;
-}
-
-.landing-guide03-hero-split__sub {
-  margin: 0.85rem 0 0;
-  max-width: 34ch;
-  color: rgba(203, 213, 225, 0.92);
-  font-size: clamp(0.8125rem, 1.1vw, 0.9375rem);
-  line-height: 1.55;
-}
-
-.landing-guide03-hero-split__trust {
-  margin: 0.65rem 0 0;
-  max-width: 36ch;
-  color: rgba(148, 163, 184, 0.88);
-  font-size: clamp(0.75rem, 0.95vw, 0.8125rem);
-  line-height: 1.5;
-}
-
-.landing-guide03-hero-split__ctas {
-  display: flex;
-  flex-flow: row wrap;
-  align-items: center;
-  gap: clamp(0.75rem, 1.35vw, 1.35rem);
-  margin-top: 1.35rem;
-}
-
-.landing-guide03-hero-split-beta {
-  box-sizing: border-box;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.35rem;
-  min-width: clamp(160px, 12.8vw, 190px);
-  height: clamp(44px, 3.6vw, 54px);
-  padding: 0 1.25rem;
-  border-radius: 0.625rem;
-  border: 1px solid rgba(129, 140, 248, 0.35);
-  background: linear-gradient(95deg, #5b4fd4 0%, #4f6fd8 42%, #38a5e8 100%);
-  color: #fff;
-  font-size: clamp(0.75rem, 1.05vw, 0.9375rem);
-  font-weight: 600;
-  line-height: 1.2;
-  text-decoration: none;
-  white-space: nowrap;
-  cursor: pointer;
-  touch-action: manipulation;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.12),
-    0 6px 20px -8px rgba(99, 102, 241, 0.55);
-  transition:
-    filter 0.18s ease-out,
-    transform 0.16s ease-out;
-}
-
-.landing-guide03-hero-split-beta:hover {
-  filter: brightness(1.07);
-}
-
-.landing-guide03-hero-split-beta:active {
-  transform: scale(0.988);
-}
-
-.landing-guide03-hero-split-preview {
-  box-sizing: border-box;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.4rem;
-  min-width: clamp(175px, 14vw, 210px);
-  height: clamp(44px, 3.6vw, 54px);
-  margin: 0;
-  padding: 0 1rem;
-  border-radius: 0.625rem;
-  border: 1px solid rgba(148, 163, 184, 0.42);
-  background: rgba(6, 12, 24, 0.78);
-  color: #f1f5f9;
-  font-size: clamp(0.75rem, 1.05vw, 0.9375rem);
-  font-weight: 600;
-  line-height: 1.2;
-  white-space: nowrap;
-  cursor: pointer;
-  touch-action: manipulation;
-  backdrop-filter: blur(8px);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
-  transition:
-    border-color 0.18s ease-out,
-    background 0.18s ease-out,
-    transform 0.16s ease-out;
-}
-
-.landing-guide03-hero-split-preview:hover {
-  border-color: rgba(56, 189, 248, 0.38);
-  background: rgba(10, 18, 34, 0.88);
-}
-
-.landing-guide03-hero-split-preview:active {
-  transform: scale(0.988);
-}
-
-.landing-guide03-hero-split-beta:focus-visible,
-.landing-guide03-hero-split-preview:focus-visible {
-  outline: 2px solid rgba(125, 211, 252, 0.55);
-  outline-offset: 2px;
-}
-
-.landing-guide03-hero-split__visual {
+.landing-guide03-hero-frame {
   position: relative;
   aspect-ratio: 1672 / 941;
-  min-height: 240px;
-  overflow: hidden;
-  border-radius: clamp(12px, 1.5vw, 20px);
-  pointer-events: none;
+  width: min(100%, calc((100dvh - 7rem) * 1672 / 941));
+  border-radius: clamp(18px, 2.35vw, 34px);
+  background: #020817;
+  box-shadow:
+    0 34px 110px -58px rgba(0, 0, 0, 0.86),
+    0 0 0 1px rgba(255, 255, 255, 0.07);
 }
 
-.landing-guide03-hero-split__visual > span:has(.landing-guide03-hero-split-mockup) {
+.landing-guide03-hero-frame > span:has(.landing-guide03-hero-image) {
   pointer-events: none !important;
 }
 
-.landing-guide03-hero-split-mockup {
+.landing-guide03-hero-image {
   pointer-events: none;
   object-fit: cover;
-  object-position: 72% center;
 }
 
 .landing-first-screen-primary-cta.landing-enterprise-btn-primary {

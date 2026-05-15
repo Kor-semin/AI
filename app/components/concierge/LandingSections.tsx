@@ -358,49 +358,21 @@ export function LandingShowroom({
         )}
       </div>
 
-      {/* 데스크톱: 좌 텍스트+실제 CTA · 우 목업(오버레이/핫스팟 없음) */}
+      {/* 데스크톱: 큰 통합 히어로 이미지(CTA는 상단 헤더만 — 오버레이·중복 버튼 없음) */}
       <section id="sensora-landing-hero" className={`${sectionShell} hidden pb-6 pt-2 lg:block sm:pb-8 sm:pt-3 lg:pt-4`}>
         <div className={innerMax}>
-          <div className="landing-guide03-hero-split mx-auto w-full max-w-[1440px]">
-            <div className="landing-guide03-hero-split__copy">
-              <p className="landing-guide03-hero-split__kicker">{t("landing.showroom.hero.kickerBadge")}</p>
-              <h1 className="landing-guide03-hero-split__title">
-                <span className="block">{t("landing.showroom.hero.headlineLine1")}</span>
-                <span className="block">{t("landing.showroom.hero.headlineLine2")}</span>
-              </h1>
-              <p className="landing-guide03-hero-split__sub">{t("landing.showroom.hero.sub")}</p>
-              <p className="landing-guide03-hero-split__trust">{t("landing.showroom.hero.trustLine")}</p>
-              <div className="landing-guide03-hero-split__ctas">
-                <Link href={JOIN_PATH} prefetch={false} className="landing-guide03-hero-split-beta">
-                  {t("cta.joinBeta")}
-                  <span aria-hidden>→</span>
-                </Link>
-                <button
-                  type="button"
-                  className="landing-guide03-hero-split-preview"
-                  onClick={() => onOpenAppWorkspace()}
-                >
-                  <svg className="size-[0.95rem] shrink-0 opacity-90" viewBox="0 0 20 20" fill="none" aria-hidden>
-                    <path
-                      d="M6.75 11.08V9.92c0-.6.323-1.15.839-1.424l5.62-3.068a1.583 1.583 0 012.541 1.424v8.088a1.584 1.584 0 01-2.541 1.424l-5.62-3.069a1.583 1.583 0 01-.839-1.423z"
-                      fill="currentColor"
-                    />
-                  </svg>
-                  {t("landing.hero.ctaPreview")}
-                </button>
-              </div>
-            </div>
-            <div className="landing-guide03-hero-split__visual" aria-hidden>
+          <div className="landing-guide03-hero-shell mx-auto flex w-full flex-col items-center justify-center">
+            <div className="landing-guide03-hero-frame relative w-full max-w-[1440px] overflow-hidden">
               <Image
                 src="/images/guides/sensora-guide-03.png"
-                alt=""
+                alt="Sensora Auto CRM 랜딩 첫 화면"
                 width={1672}
                 height={941}
                 fill
                 priority
                 quality={100}
-                className="landing-guide03-hero-split-mockup select-none"
-                sizes="(max-width: 1024px) 0vw, 52vw"
+                className="landing-guide03-hero-image pointer-events-none cursor-default select-none"
+                sizes="(max-width: 1440px) 100vw, 1440px"
               />
             </div>
           </div>
