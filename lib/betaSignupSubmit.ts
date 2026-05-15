@@ -9,6 +9,11 @@ export type BetaSignupPayload = {
   dealership: string;
   currentCrmApproach: string;
   motivation: string;
+  consentPrivacy?: boolean;
+  consentTerms?: boolean;
+  consentMarketing?: boolean;
+  consentedAt?: string;
+  consentVersion?: string;
 };
 
 /** 폼 입력 + 서버/시트로 함께 보내는 메타(클라이언트에서만 조합). */

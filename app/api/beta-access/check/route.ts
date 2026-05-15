@@ -2,11 +2,12 @@ import { NextResponse } from "next/server";
 
 import {
   attachApprovedUidIfEmpty,
-  getBetaAccessFromFirestore,
+  resolveBetaAccessForLogin,
   upsertSellerProfileWhenBetaApproved,
 } from "@/lib/betaApplicationsServer";
 import { isFirebaseAdminConfigured } from "@/lib/firebaseAdminApp";
 import { mapUpstreamBetaStatusToCanonical } from "@/lib/betaAccessStatusMap";
+import { normalizeEmailForBetaAccess } from "@/lib/betaEmailNormalize";
 
 export const runtime = "nodejs";
 
@@ -21,7 +22,7 @@ export async function POST(req: Request): Promise<NextResponse> {
     if (body && typeof body === "object") {
       const rec = body as { email?: unknown; uid?: unknown };
       if (typeof rec.email === "string") {
-        emailNorm = rec.email.trim().toLowerCase();
+        emailNorm = normalizeEmailForBetaAccess(rec.email);
       }
       if (typeof rec.uid === "string" && rec.uid.trim()) {
         uid = rec.uid.trim();
@@ -37,7 +38,7 @@ export async function POST(req: Request): Promise<NextResponse> {
 
   if (isFirebaseAdminConfigured()) {
     try {
-      const st = await getBetaAccessFromFirestore(emailNorm);
+      const st = await resolveBetaAccessForLogin(emailNorm, uid);
       if (st === null) {
         return NextResponse.json({ ok: false, approved: false, status: "error" });
       }
@@ -53,6 +54,9 @@ export async function POST(req: Request): Promise<NextResponse> {
       }
       if (st === "rejected") {
         return NextResponse.json({ ok: true, approved: false, status: "rejected" });
+      }
+      if (st === "email_mismatch") {
+        return NextResponse.json({ ok: true, approved: false, status: "email_mismatch" });
       }
       return NextResponse.json({ ok: true, approved: false, status: "not_found" });
     } catch {

@@ -462,7 +462,9 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                             ? t("register.access.notFoundTitle")
                             : betaAccess.status === "rejected"
                               ? t("register.access.rejectedTitle")
-                              : t("register.access.errorTitle")}
+                              : betaAccess.status === "email_mismatch"
+                                ? t("register.access.emailMismatchTitle")
+                                : t("register.access.errorTitle")}
                       </h2>
                       <p className="mx-auto mt-4 max-w-md whitespace-pre-line text-base leading-relaxed text-slate-400">
                         {betaAccess.status === "pending"
@@ -471,7 +473,9 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                             ? t("register.access.notFoundBody")
                             : betaAccess.status === "rejected"
                               ? t("register.access.rejectedBody")
-                              : t("register.access.errorBody")}
+                              : betaAccess.status === "email_mismatch"
+                                ? t("register.access.emailMismatchBody")
+                                : t("register.access.errorBody")}
                       </p>
                       <p className="mx-auto mt-4 max-w-md text-[11px] leading-relaxed text-slate-500">
                         <span className="font-medium text-slate-400">{t("register.access.betaCheckEmailLabel")}</span>

@@ -121,6 +121,8 @@ export type TranslationKey =
   | "consent.privacyRequired"
   | "consent.termsRequired"
   | "consent.marketingOptional"
+  | "consent.marketingOptionalDetail"
+  | "consent.privacyTermsHint"
   | "consent.requiredMissing"
   | "trust.customerDbNotCollected"
   | "trust.userConfirmsAndSaves"
@@ -177,6 +179,8 @@ export type TranslationKey =
   | "register.access.goHome"
   | "register.access.betaCheckEmailLabel"
   | "register.access.betaCheckEmailGoogleNote"
+  | "register.access.emailMismatchTitle"
+  | "register.access.emailMismatchBody"
   | "crm.stat.todayFollowups"
   | "crm.stat.dealProbability"
   | "crm.stat.followupNeeded"
@@ -791,9 +795,12 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "consent.fieldsetLegend": "약관 및 수신 동의",
     "consent.badgeRequired": "[필수]",
     "consent.badgeOptional": "[선택]",
-    "consent.privacyRequired": "을 확인하였으며, 개인정보 수집 및 이용에 동의합니다.",
+    "consent.privacyRequired": "을(를) 확인하였으며, 개인정보 수집 및 이용에 동의합니다.",
     "consent.termsRequired": "에 동의합니다.",
     "consent.marketingOptional": "Sensora 소식 및 베타 안내 수신에 동의합니다.",
+    "consent.marketingOptionalDetail":
+      "서비스 개선 안내, 베타 운영 소식, 기능 업데이트 안내를 이메일로 받을 수 있습니다. 동의하지 않아도 베타 신청은 가능합니다.",
+    "consent.privacyTermsHint": "개인정보처리방침과 이용약관을 확인한 뒤 동의해 주세요.",
     "consent.requiredMissing": "개인정보 수집 및 이용 동의와 이용약관 동의가 필요합니다.",
     "trust.customerDbNotCollected":
       "Sensora는 사용자의 고객 DB를 자동으로 수집하지 않으며, 고객정보를 판매하거나 광고 목적으로 공유하지 않습니다.",
@@ -853,13 +860,14 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "register.firebaseDevHint":
       "개발 전용: Firebase 클라이언트 설정값이 비어 있습니다. 로컬 .env.local 또는 문서를 확인하세요.",
     "register.access.checking": "베타 신청 승인 여부를 확인하는 중입니다…",
-    "register.access.pendingTitle": "베타 승인 대기 중입니다.",
+    "register.access.pendingTitle": "베타 신청이 접수되었습니다.",
     "register.access.pendingBody":
-      "아직 베타 승인 전입니다. 신청 정보를 확인한 뒤 순차적으로 승인해드리겠습니다.",
+      "현재 내부 검토 중입니다. 승인 완료 후 워크스페이스를 사용할 수 있습니다.",
     "register.access.notFoundTitle": "베타 신청 내역을 찾을 수 없습니다.",
-    "register.access.notFoundBody": "먼저 베타 신청을 남겨주세요.",
-    "register.access.rejectedTitle": "베타 사용 승인이 완료되지 않았습니다.",
-    "register.access.rejectedBody": "현재 계정은 베타 사용 대상에 포함되지 않았습니다.",
+    "register.access.notFoundBody":
+      "현재 로그인한 이메일로 접수된 베타 신청이 없습니다. 먼저 베타 신청을 남겨주세요.",
+    "register.access.rejectedTitle": "베타 신청이 승인되지 않았습니다.",
+    "register.access.rejectedBody": "입력 정보 또는 사용 조건을 다시 확인해 주세요.",
     "register.access.errorTitle": "베타 승인 여부를 확인하지 못했습니다.",
     "register.access.errorBody":
       "베타 승인 정보를 확인하지 못했습니다. 잠시 후 다시 시도해 주세요.",
@@ -868,6 +876,9 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "register.access.betaCheckEmailLabel": "현재 확인 중인 이메일",
     "register.access.betaCheckEmailGoogleNote":
       "현재 확인 중인 이메일은 로그인에 사용한 이메일입니다.\n베타 신청 시 남긴 이메일과 같아야 승인 완료로 표시됩니다.",
+    "register.access.emailMismatchTitle": "신청 이메일과 로그인 이메일이 다릅니다.",
+    "register.access.emailMismatchBody":
+      "베타 신청 시 입력한 이메일과 현재 로그인한 이메일이 같아야 워크스페이스를 사용할 수 있습니다.",
     "crm.stat.todayFollowups": "오늘 연락",
     "crm.stat.dealProbability": "계약 가능성",
     "crm.stat.followupNeeded": "예정된 할 일",
@@ -1535,7 +1546,10 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "consent.badgeOptional": "[Optional]",
     "consent.privacyRequired": " — I have read it and agree to the collection and use of my personal information.",
     "consent.termsRequired": " — I agree.",
-    "consent.marketingOptional": "I agree to receive Sensora news and beta updates (optional).",
+    "consent.marketingOptional": "I agree to receive Sensora news and beta updates.",
+    "consent.marketingOptionalDetail":
+      "You may receive product updates, beta operations notices, and feature announcements by email. You can still submit a beta request without this consent.",
+    "consent.privacyTermsHint": "Please read the Privacy Policy and Terms of Service, then agree below.",
     "consent.requiredMissing": "Please agree to the Privacy Policy terms (collection/use) and the Terms of Service.",
     "trust.customerDbNotCollected":
       "Sensora does not automatically harvest your customer database, and we do not sell or use customer data for advertising.",
@@ -1598,13 +1612,14 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "register.firebaseDevHint":
       "Dev only: Firebase client config is missing. Check .env.local or internal docs.",
     "register.access.checking": "Checking your beta approval status…",
-    "register.access.pendingTitle": "Your beta signup is awaiting approval.",
+    "register.access.pendingTitle": "Your beta signup was received.",
     "register.access.pendingBody":
-      "Beta approval is still pending. We review submissions in order and will grant access when your request is approved.",
+      "We’re reviewing it internally. You can use the workspace after approval is complete.",
     "register.access.notFoundTitle": "We couldn’t find a beta signup for this email.",
-    "register.access.notFoundBody": "Please submit a beta request first.",
-    "register.access.rejectedTitle": "Beta approval wasn’t granted for this account.",
-    "register.access.rejectedBody": "This account isn’t included in the current Sensora beta.",
+    "register.access.notFoundBody":
+      "There is no beta signup on file for the email you’re signed in with. Please submit a beta request first.",
+    "register.access.rejectedTitle": "Your beta signup wasn’t approved.",
+    "register.access.rejectedBody": "Please review the information you submitted and the eligibility requirements.",
     "register.access.errorTitle": "We couldn’t verify beta approval.",
     "register.access.errorBody":
       "We couldn’t load beta approval information. Please try again in a moment.",
@@ -1613,6 +1628,9 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "register.access.betaCheckEmailLabel": "Email being checked",
     "register.access.betaCheckEmailGoogleNote":
       "This is the email address used for sign-in.\nIt must match the email on your beta signup to show as approved.",
+    "register.access.emailMismatchTitle": "Your signup email and sign-in email don’t match.",
+    "register.access.emailMismatchBody":
+      "The email you used for the beta signup must match the email you’re currently signed in with to use the workspace.",
     "crm.stat.todayFollowups": "Today’s Follow-ups",
     "crm.stat.dealProbability": "Deal Probability",
     "crm.stat.followupNeeded": "Follow-up Needed",

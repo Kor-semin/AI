@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { isFirebaseAdminConfigured } from "@/lib/firebaseAdminApp";
 import { setBetaApplicationStatus } from "@/lib/betaApplicationsServer";
 import { requireBetaOpsAdmin } from "@/lib/internalBetaAdminAuth";
+import { normalizeEmailForBetaAccess } from "@/lib/betaEmailNormalize";
 
 export const runtime = "nodejs";
 
@@ -18,7 +19,7 @@ export async function POST(req: Request): Promise<NextResponse> {
   try {
     const body: unknown = await req.json();
     if (body && typeof body === "object" && typeof (body as { email?: unknown }).email === "string") {
-      email = (body as { email: string }).email.trim();
+      email = normalizeEmailForBetaAccess((body as { email: string }).email);
     }
   } catch {
     return NextResponse.json({ ok: false, error: "invalid_json" }, { status: 400 });

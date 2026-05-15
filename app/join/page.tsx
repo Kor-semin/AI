@@ -38,6 +38,11 @@ function BetaJoinForm() {
       dealership: String(fd.get("dealership") ?? "").trim(),
       currentCrmApproach: String(fd.get("currentCrmApproach") ?? "").trim(),
       motivation: String(fd.get("motivation") ?? "").trim(),
+      consentPrivacy: consent.privacy,
+      consentTerms: consent.terms,
+      consentMarketing: consent.marketing,
+      consentedAt: new Date().toISOString(),
+      consentVersion: "2026-05-privacy-v1",
     };
 
     if (

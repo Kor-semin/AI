@@ -40,7 +40,7 @@ export function RegistrationConsentBlock({ value, onChange, theme, idPrefix }: P
   const badgeReq =
     theme === "dark" ? "mr-1 font-semibold text-amber-200/95" : "mr-1 font-semibold text-amber-800/95";
   const badgeOpt =
-    theme === "dark" ? "mr-1 font-semibold text-slate-400" : "mr-1 font-semibold text-[#6b6158]";
+    theme === "dark" ? "mr-1 font-semibold text-sky-200/95" : "mr-1 font-semibold text-[#0f766e]";
 
   const inputCls =
     theme === "dark"
@@ -60,6 +60,15 @@ export function RegistrationConsentBlock({ value, onChange, theme, idPrefix }: P
 
       <fieldset className="space-y-3 border-0 p-0">
         <legend className="sr-only">{t("consent.fieldsetLegend")}</legend>
+        <p
+          className={
+            theme === "dark"
+              ? "text-[13px] font-medium leading-relaxed text-slate-200"
+              : "text-[13px] font-medium leading-relaxed text-[#312a24]"
+          }
+        >
+          {t("consent.privacyTermsHint")}
+        </p>
 
         <label htmlFor={`${idPrefix}-privacy`} className={rowBox}>
           <input
@@ -104,8 +113,21 @@ export function RegistrationConsentBlock({ value, onChange, theme, idPrefix }: P
             className={inputCls}
           />
           <span className="min-w-0 flex-1 text-[13px] leading-snug">
-            <span className={badgeOpt}>{t("consent.badgeOptional")}</span>
-            {t("consent.marketingOptional")}
+            <span className="block">
+              <span className={badgeOpt}>{t("consent.badgeOptional")}</span>
+              <span className={theme === "dark" ? "font-medium text-slate-100" : "font-medium text-[#231d18]"}>
+                {t("consent.marketingOptional")}
+              </span>
+            </span>
+            <span
+              className={
+                theme === "dark"
+                  ? "mt-2 block text-[12px] leading-relaxed text-slate-300"
+                  : "mt-2 block text-[12px] leading-relaxed text-[#4c433a]"
+              }
+            >
+              {t("consent.marketingOptionalDetail")}
+            </span>
           </span>
         </label>
       </fieldset>

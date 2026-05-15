@@ -33,6 +33,11 @@ export async function POST(req: Request): Promise<NextResponse> {
     motivation: isNonEmptyString(b.motivation) ? b.motivation.trim() : "",
     submittedAt: isNonEmptyString(b.submittedAt) ? b.submittedAt.trim() : new Date().toISOString(),
     source: isNonEmptyString(b.source) ? b.source.trim() : "sensora-alpha-join",
+    ...(typeof b.consentPrivacy === "boolean" ? { consentPrivacy: b.consentPrivacy } : {}),
+    ...(typeof b.consentTerms === "boolean" ? { consentTerms: b.consentTerms } : {}),
+    ...(typeof b.consentMarketing === "boolean" ? { consentMarketing: b.consentMarketing } : {}),
+    ...(isNonEmptyString(b.consentedAt) ? { consentedAt: b.consentedAt.trim() } : {}),
+    ...(isNonEmptyString(b.consentVersion) ? { consentVersion: b.consentVersion.trim() } : {}),
   };
 
   if (

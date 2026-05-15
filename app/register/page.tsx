@@ -29,7 +29,15 @@ import {
   postBetaAccessCheck,
 } from "@/lib/betaAccess";
 
-type BetaGate = "idle" | "checking" | "approved" | "pending" | "rejected" | "not_found" | "error";
+type BetaGate =
+  | "idle"
+  | "checking"
+  | "approved"
+  | "pending"
+  | "rejected"
+  | "not_found"
+  | "email_mismatch"
+  | "error";
 
 const JOIN_REDIRECT_PENDING = "customer-manager.join.redirectPending";
 
@@ -272,9 +280,11 @@ export default function RegisterPage() {
         ? t("register.access.notFoundTitle")
         : betaGate === "rejected"
           ? t("register.access.rejectedTitle")
-          : betaGate === "error"
-            ? t("register.access.errorTitle")
-            : "";
+          : betaGate === "email_mismatch"
+            ? t("register.access.emailMismatchTitle")
+            : betaGate === "error"
+              ? t("register.access.errorTitle")
+              : "";
   const betaDenyBody =
     betaGate === "pending"
       ? t("register.access.pendingBody")
@@ -282,9 +292,11 @@ export default function RegisterPage() {
         ? t("register.access.notFoundBody")
         : betaGate === "rejected"
           ? t("register.access.rejectedBody")
-          : betaGate === "error"
-            ? t("register.access.errorBody")
-            : "";
+          : betaGate === "email_mismatch"
+            ? t("register.access.emailMismatchBody")
+            : betaGate === "error"
+              ? t("register.access.errorBody")
+              : "";
 
   const trustBlock = (
     <div
@@ -384,7 +396,11 @@ export default function RegisterPage() {
           ) : null}
 
           {uid &&
-          (betaGate === "pending" || betaGate === "not_found" || betaGate === "rejected" || betaGate === "error") ? (
+          (betaGate === "pending" ||
+            betaGate === "not_found" ||
+            betaGate === "rejected" ||
+            betaGate === "email_mismatch" ||
+            betaGate === "error") ? (
             <div className="space-y-4 text-left text-[#39322c]">
               <p className="font-semibold">{betaDenyTitle}</p>
               <p className="text-sm leading-relaxed text-[#4a433b] whitespace-pre-line">{betaDenyBody}</p>

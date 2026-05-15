@@ -10,6 +10,7 @@ export type BetaAccessSheetStatus =
   | "pending"
   | "rejected"
   | "not_found"
+  | "email_mismatch"
   | "error";
 
 export type BetaAccessCheckResponse = {
@@ -84,7 +85,7 @@ export async function postBetaAccessCheck(
     const rec = data as Record<string, unknown>;
     const okServer = rec.ok === true;
     const stRaw = typeof rec.status === "string" ? rec.status.trim().toLowerCase() : "";
-    const allowedOutcome = new Set(["approved", "pending", "rejected", "not_found"]);
+    const allowedOutcome = new Set(["approved", "pending", "rejected", "not_found", "email_mismatch"]);
     if (!okServer) {
       return { ok: false, approved: false, status: "error" };
     }
