@@ -36,6 +36,8 @@ export type CrmAiAssistantPanelProps = {
   onCopySms: () => void;
   onSaveMemoToCrm: () => void;
   onCreateFollowUpFromInsights: () => void;
+  newCarFinanceSmsPreview: string;
+  onCopyNewCarFinanceSms: () => void;
 };
 
 export function CrmAiAssistantPanel({
@@ -58,6 +60,8 @@ export function CrmAiAssistantPanel({
   onCopySms,
   onSaveMemoToCrm,
   onCreateFollowUpFromInsights,
+  newCarFinanceSmsPreview,
+  onCopyNewCarFinanceSms,
 }: CrmAiAssistantPanelProps) {
   const ft = flowDraftMemo.trim();
   const rewriteDisabled =
@@ -226,6 +230,21 @@ export function CrmAiAssistantPanel({
             {flowDraftInsights ? flowDraftInsights.message : "—"}
           </div>
         </div>
+
+        <div className={`${insightTileCls} sm:col-span-2 border-emerald-400/12 ring-1 ring-inset ring-emerald-400/08`}>
+          <div className="flex flex-wrap items-center gap-2">
+            <h3 className="text-[11px] font-extrabold uppercase tracking-[0.1em] text-slate-500">
+              {t("crm.workspaceAi.newCarFinanceHeading")}
+            </h3>
+            <span className="rounded-full border border-white/[0.1] bg-white/[0.05] px-2 py-0.5 text-[10px] font-semibold text-slate-400">
+              {t("crm.sensoraFlow.aiSuggestionBadge")}
+            </span>
+          </div>
+          <p className="mt-1 text-[10px] font-medium leading-snug text-slate-500">{t("crm.workspaceAi.newCarFinanceLead")}</p>
+          <div className="mt-3 max-h-[min(260px,48vh)] min-h-[88px] flex-1 overflow-y-auto break-words whitespace-pre-line text-[14px] leading-relaxed text-slate-100">
+            {newCarFinanceSmsPreview.trim() ? newCarFinanceSmsPreview : t("crm.workspaceAi.newCarFinanceEmpty")}
+          </div>
+        </div>
       </div>
 
       {selectedCustomerId && !flowDraftInsights ? (
@@ -269,6 +288,14 @@ export function CrmAiAssistantPanel({
           onClick={onCopySms}
         >
           {t("crm.workspaceAi.copySms")}
+        </button>
+        <button
+          type="button"
+          disabled={!selectedCustomerId || !newCarFinanceSmsPreview.trim()}
+          className="sensora-dark-ghost-btn min-h-[44px] w-full min-w-0 shrink-0 touch-manipulation rounded-xl px-4 text-[13px] font-semibold disabled:cursor-not-allowed disabled:opacity-45 sm:w-auto sm:min-w-[9rem] sm:flex-1"
+          onClick={onCopyNewCarFinanceSms}
+        >
+          {t("crm.workspaceAi.copyNewCarFinance")}
         </button>
         <button
           type="button"

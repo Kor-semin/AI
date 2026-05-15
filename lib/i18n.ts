@@ -263,6 +263,31 @@ export type TranslationKey =
   | "crm.workspaceAi.smsCopyToast"
   | "crm.workspaceAi.followUpDefaultTitle"
   | "crm.workspaceAi.analyzing"
+  | "crm.workspaceAi.newCarFinanceHeading"
+  | "crm.workspaceAi.newCarFinanceLead"
+  | "crm.workspaceAi.newCarFinanceEmpty"
+  | "crm.workspaceAi.copyNewCarFinance"
+  | "crm.workspaceAi.newCarFinanceCopyToast"
+  | "crm.newCar.cardTitle"
+  | "crm.newCar.cardLead"
+  | "crm.newCar.estimateTitle"
+  | "crm.newCar.estimateDesc"
+  | "crm.newCar.estimatePickFile"
+  | "crm.newCar.estimateMetaFormat"
+  | "crm.newCar.estimateMetaUploaded"
+  | "crm.newCar.estimateReplace"
+  | "crm.newCar.estimateRemove"
+  | "crm.newCar.estimateFileTypeError"
+  | "crm.newCar.disclaimerSensitive"
+  | "crm.newCar.disclaimerAiReview"
+  | "crm.newCar.disclaimerNoAutoSend"
+  | "crm.newCar.financeFormTitle"
+  | "crm.newCar.financeModeLabel"
+  | "crm.newCar.leaseHintBullets"
+  | "crm.newCar.loanHintBullets"
+  | "crm.newCar.otherModeHint"
+  | "crm.newCar.prioritySectionTitle"
+  | "crm.newCar.detailsToggle"
   | "crm.sensoraFlow.banner"
   | "crm.sensoraFlow.memoUserEditableHint"
   | "crm.sensoraFlow.memoStaleHint"
@@ -947,7 +972,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.nav.mobileSubtitle.settings": "계정·언어",
     "crm.workspaceAi.title": "AI 비서 (작업)",
     "crm.workspaceAi.subtitle":
-      "「다시 분석」 등 버튼을 눌렀을 때만 새 제안이 만들어집니다. 저장·복사·다음 연락 등은 확인 후 원하는 항목만 적용하세요.",
+      "「다시 분석」을 눌렀을 때만 메모 기반 제안이 갱신됩니다. 신차 견적·금융 검토용 초안은 고객 상세의 조건 입력을 반영합니다. 저장·복사·다음 연락은 확인 후 적용하세요.",
     "crm.workspaceAi.customerPickLabel": "고객",
     "crm.workspaceAi.selectPlaceholder": "고객을 선택해 주세요",
     "crm.workspaceAi.pickCustomer": "워크플로를 시작하려면 고객을 선택하거나 새로 추가하세요.",
@@ -971,6 +996,39 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.workspaceAi.smsCopyToast": "문자 초안을 복사했습니다.",
     "crm.workspaceAi.followUpDefaultTitle": "다음 연락",
     "crm.workspaceAi.analyzing": "정리 중…",
+    "crm.workspaceAi.newCarFinanceHeading": "신차 견적·금융 기준 검토용 문자 초안",
+    "crm.workspaceAi.newCarFinanceLead":
+      "고객 상세의 「금융 조건 정리」와 니즈 선택을 반영합니다. OCR·자동 판독 없이, 영업사원이 확인한 조건을 바탕으로 한 초안입니다.",
+    "crm.workspaceAi.newCarFinanceEmpty": "고객 상세에서 금융 방식(리스·할부 등)과 조건을 입력하면 이곳에 초안이 표시됩니다.",
+    "crm.workspaceAi.copyNewCarFinance": "견적·금융 초안 복사",
+    "crm.workspaceAi.newCarFinanceCopyToast": "견적·금융 검토용 초안을 복사했습니다.",
+    "crm.newCar.cardTitle": "금융 조건 정리 · 견적서",
+    "crm.newCar.cardLead":
+      "신차 견적·금융 조건을 정리하고, 견적서 파일 메타만 남깁니다. 원본 파일은 서버에 저장하지 않습니다.",
+    "crm.newCar.estimateTitle": "견적서 업로드",
+    "crm.newCar.estimateDesc":
+      "신차 견적서 PDF 또는 이미지를 선택하면 파일명·형식·업로드 시각만 기록됩니다. 내용 확인은 영업사원이 직접 해 주세요.",
+    "crm.newCar.estimatePickFile": "견적서 파일 선택하기",
+    "crm.newCar.estimateMetaFormat": "파일 형식",
+    "crm.newCar.estimateMetaUploaded": "선택 시각",
+    "crm.newCar.estimateReplace": "교체",
+    "crm.newCar.estimateRemove": "삭제",
+    "crm.newCar.estimateFileTypeError": "PDF, PNG, JPG, JPEG 파일만 선택할 수 있습니다.",
+    "crm.newCar.disclaimerSensitive":
+      "견적서에는 고객명, 차량 가격, 금융 조건 등 민감한 정보가 포함될 수 있습니다. 업로드 전 개인정보가 포함되어 있는지 확인해 주세요.",
+    "crm.newCar.disclaimerAiReview":
+      "AI가 제안하는 문구는 검토용 초안이며, 최종 안내와 발송은 영업사원이 직접 확인해야 합니다.",
+    "crm.newCar.disclaimerNoAutoSend":
+      "Sensora는 견적서를 자동으로 고객에게 전송하지 않습니다. 영업사원이 확인한 내용만 고객 안내에 활용됩니다.",
+    "crm.newCar.financeFormTitle": "금융 조건 정리",
+    "crm.newCar.financeModeLabel": "금융 방식",
+    "crm.newCar.leaseHintBullets":
+      "리스 안내 포인트\n· 월 납입금과 잔존가치·보증금·선납금의 균형\n· 만기 인수·반납·연장 가능성\n· 법인·개인 사용 목적에 따른 검토 차이",
+    "crm.newCar.loanHintBullets":
+      "할부 안내 포인트\n· 월 납입금과 할부 기간·선수금\n· 총 납입 부담\n· 소유권과 장기 보유 계획",
+    "crm.newCar.otherModeHint": "현금·장기렌트는 총 비용·세금·비용 처리 방식을 함께 확인하는 것이 좋습니다.",
+    "crm.newCar.prioritySectionTitle": "고객이 중요하게 보는 조건",
+    "crm.newCar.detailsToggle": "펼치기",
     "crm.sensoraFlow.banner":
       "Sensora Flow · AI 제안은 미리보기일 뿐이며 저장된 CRM 데이터와 분리되어 있습니다. AI는 명시 버튼(다시 분석·문자 다시 작성)을 눌렀을 때만 새 제안을 만듭니다. 메모 수정 중에는 자동 재분석·자동 덮어쓰기를 하지 않습니다.",
     "crm.sensoraFlow.memoUserEditableHint": "저장 후 고객 상세에서 언제든 직접 수정 가능합니다.",
@@ -1699,7 +1757,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.nav.mobileSubtitle.settings": "Account · language",
     "crm.workspaceAi.title": "AI assistant (workspace)",
     "crm.workspaceAi.subtitle":
-      "Sensora Flow: proposals refresh only via explicit buttons. CRM rows stay untouched until you copy, save, or add follow-ups deliberately.",
+      "Memo-based proposals refresh when you tap “Analyze again.” Quote/finance drafts reflect fields on the customer card. Copy, save, and follow-ups stay under your control.",
     "crm.workspaceAi.customerPickLabel": "Customer",
     "crm.workspaceAi.selectPlaceholder": "Select a customer",
     "crm.workspaceAi.pickCustomer": "Select or add a customer to begin.",
@@ -1723,6 +1781,39 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.workspaceAi.smsCopyToast": "Message copied.",
     "crm.workspaceAi.followUpDefaultTitle": "Follow-up",
     "crm.workspaceAi.analyzing": "Working…",
+    "crm.workspaceAi.newCarFinanceHeading": "New-car quote & finance draft (for review)",
+    "crm.workspaceAi.newCarFinanceLead":
+      "Reflects finance details and priority needs from the customer record. No OCR—drafts assume you verified the numbers.",
+    "crm.workspaceAi.newCarFinanceEmpty": "Enter finance mode and fields on the customer detail card to see a draft here.",
+    "crm.workspaceAi.copyNewCarFinance": "Copy quote/finance draft",
+    "crm.workspaceAi.newCarFinanceCopyToast": "Quote/finance review draft copied.",
+    "crm.newCar.cardTitle": "Finance summary · quote file",
+    "crm.newCar.cardLead":
+      "Capture new-car finance notes and quote file metadata only. Original files are not uploaded to the server.",
+    "crm.newCar.estimateTitle": "Quote file (metadata)",
+    "crm.newCar.estimateDesc":
+      "Choose a new-car quote PDF or image to record filename, type, and time only. You still verify contents before any customer message.",
+    "crm.newCar.estimatePickFile": "Choose quote file",
+    "crm.newCar.estimateMetaFormat": "File type",
+    "crm.newCar.estimateMetaUploaded": "Selected at",
+    "crm.newCar.estimateReplace": "Replace",
+    "crm.newCar.estimateRemove": "Remove",
+    "crm.newCar.estimateFileTypeError": "Only PDF, PNG, JPG, or JPEG files are allowed.",
+    "crm.newCar.disclaimerSensitive":
+      "Quotes may include customer names, prices, and finance terms. Check for personal data before attaching metadata.",
+    "crm.newCar.disclaimerAiReview":
+      "AI text is a review draft only; you must verify before sending anything to the customer.",
+    "crm.newCar.disclaimerNoAutoSend":
+      "Sensora does not automatically send quote files to customers. Only information you confirm is used for guidance.",
+    "crm.newCar.financeFormTitle": "Finance condition summary",
+    "crm.newCar.financeModeLabel": "Product",
+    "crm.newCar.leaseHintBullets":
+      "Lease checklist\n· Balance monthly payment with residual, deposit, and down payment\n· End-of-term buy, return, or extension\n· Corporate vs personal use differences",
+    "crm.newCar.loanHintBullets":
+      "Installment checklist\n· Monthly payment vs term and down payment\n· Total cost of financing\n· Ownership and long-term holding plans",
+    "crm.newCar.otherModeHint": "For cash or long-term rent, also confirm taxes and how costs are booked.",
+    "crm.newCar.prioritySectionTitle": "What the customer cares about most",
+    "crm.newCar.detailsToggle": "Expand",
     "crm.sensoraFlow.banner":
       "Sensora Flow · AI output is preview-only—separate from stored CRM rows. Sensora proposes again only after explicit actions (analyze again · rewrite SMS). While you edit memo text there is no auto re‑analysis or auto‑overwrite.",
     "crm.sensoraFlow.memoUserEditableHint": "After saving, edit anytime in customer details.",

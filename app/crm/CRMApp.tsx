@@ -51,6 +51,11 @@ import {
   summarizeMarketVsBudget,
 } from "./recommendations";
 import { getMemoFeedback } from "./memoFeedback";
+import { NewCarEstimateFinanceCard } from "./NewCarEstimateFinanceCard";
+import {
+  buildConsultationQuickDraft,
+  buildNewCarFinanceSmsPreview,
+} from "./newCarEstimateDraft";
 import {
   formatCareNeedsGuideTopicsUi,
   generateDemoConsultingResponse,
@@ -908,6 +913,11 @@ export function CRMApp({
     () => (selectedCustomer ? getMemoFeedback(selectedCustomer) : null),
     [selectedCustomer],
   );
+
+  const newCarFinanceSmsPreview = useMemo(() => {
+    if (!selectedCustomer?.financeConditionDraft?.productMode) return "";
+    return buildNewCarFinanceSmsPreview(selectedCustomer);
+  }, [selectedCustomer]);
 
   useEffect(() => {
     setWorkspaceAiBusy(false);
@@ -1964,6 +1974,15 @@ export function CRMApp({
                   addNextAction(selectedCustomerId, line);
                   showToast(t("crm.workspaceAi.followUpToast"));
                 }}
+                newCarFinanceSmsPreview={newCarFinanceSmsPreview}
+                onCopyNewCarFinanceSms={() => {
+                  const text = newCarFinanceSmsPreview.trim();
+                  if (!text || !selectedCustomerId) return;
+                  void copyToClipboard(text).then((ok) => {
+                    if (ok) showToast(t("crm.workspaceAi.newCarFinanceCopyToast"));
+                    else showToast(t("crm.seasonCare.copyFail"));
+                  });
+                }}
               />
             </AiSecretarySection>
           ) : null}
@@ -2215,40 +2234,8 @@ export function CRMApp({
                 </summary>
                 <div className="border-t border-white/[0.08] pt-4">
                   {(() => {
-                  const q = buildUsedCarSearchQuery(selectedCustomer);
-                  const lines: string[] = [];
-                  lines.push(`안녕하세요 ${selectedCustomer.name}님. ${myName}입니다.`);
-                  if (
-                    selectedCustomer.usedCar?.brand ||
-                    selectedCustomer.usedCar?.model ||
-                    selectedCustomer.interestedModel
-                  ) {
-                    lines.push(`말씀주신 차량: ${q}`);
-                  }
-                  if (selectedCustomer.marketPrice?.encarMin || selectedCustomer.marketPrice?.encarMax) {
-                    const mn = selectedCustomer.marketPrice?.encarMin?.trim();
-                    const mx = selectedCustomer.marketPrice?.encarMax?.trim();
-                    if (mn && mx)
-                      lines.push(
-                        `시세는 대략 ${mn} ~ ${mx} 범위로 확인됩니다(기준: ${selectedCustomer.marketPrice?.asOf ?? "최근"}).`,
-                      );
-                    else if (mn)
-                      lines.push(
-                        `최저 시세는 대략 ${mn}로 확인됩니다(기준: ${selectedCustomer.marketPrice?.asOf ?? "최근"}).`,
-                      );
-                    else if (mx)
-                      lines.push(
-                        `최고 시세는 대략 ${mx}로 확인됩니다(기준: ${selectedCustomer.marketPrice?.asOf ?? "최근"}).`,
-                      );
-                  }
-                  if (selectedCustomer.budget?.trim()) {
-                    lines.push(`예산: ${selectedCustomer.budget.trim()}`);
-                  }
-                  lines.push(
-                    `추가로 사고/보험이력(성능점검)까지 확인해서 안내드릴게요. 편하실 때 통화 가능 시간 부탁드립니다.`,
-                  );
-                  const text = lines.filter(Boolean).join("\n");
-                  return (
+                    const text = buildConsultationQuickDraft(selectedCustomer, myName);
+                    return (
                     <>
                       <textarea
                         rows={7}
@@ -2279,6 +2266,12 @@ export function CRMApp({
                 })()}
                 </div>
               </details>
+
+              <NewCarEstimateFinanceCard
+                customer={selectedCustomer}
+                onPatch={(patch) => upsertCustomer({ id: selectedCustomer.id, ...patch })}
+                t={t}
+              />
 
               <div className="flex flex-col gap-4">
                 <details

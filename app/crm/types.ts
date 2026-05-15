@@ -7,6 +7,32 @@ export type LeadSource = (typeof DEALER_LEAD_SOURCES)[number];
 /** 금융 상품 구분(고객 카드에서 선택) */
 export type PaymentType = "현금" | "할부" | "리스" | "장기렌트";
 
+/** 신차 견적·금융 조건 정리(영업사원 입력, 검토용 문자 초안에 반영) */
+export type FinanceProductMode = "리스" | "할부" | "현금" | "장기렌트";
+
+/** 견적서 파일은 메타데이터만 저장(원본은 Storage 등 별도 검토 후 연동) */
+export type QuoteEstimateAttachmentMeta = {
+  fileName: string;
+  mimeType: string;
+  uploadedAt: string;
+};
+
+export type FinanceConditionDraft = {
+  productMode: FinanceProductMode;
+  vehicleName?: string;
+  vehicleTrim?: string;
+  totalVehiclePrice?: string;
+  promotionOrDiscount?: string;
+  downPayment?: string;
+  deposit?: string;
+  contractMonths?: string;
+  residualValue?: string;
+  monthlyPayment?: string;
+  maturityOptions?: string;
+  /** 고객이 중요하게 본 조건 등 자유 메모 */
+  customerConditionNote?: string;
+};
+
 /** 중고차 정리(연식·키로·사고 등) */
 export type UsedCarAccident = "무사고" | "단순교환" | "사고" | "미상";
 
@@ -127,6 +153,13 @@ export type Customer = {
 
   /** AI 출고 안내서(미리보기 단계). */
   deliveryGuide?: DeliveryGuide;
+
+  /** 견적서 업로드 메타(PDF/이미지 원본은 저장하지 않음) */
+  quoteEstimateAttachment?: QuoteEstimateAttachmentMeta | null;
+  /** 신차 견적·금융 조건 정리(검토용 문자 초안에 사용) */
+  financeConditionDraft?: FinanceConditionDraft;
+  /** 고객 니즈(다중 선택, 한글 라벨 그대로 저장) */
+  customerPriorityNeeds?: string[];
 };
 
 export type NextAction = {
