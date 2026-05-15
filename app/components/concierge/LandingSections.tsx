@@ -373,26 +373,19 @@ export function LandingShowroom({
                 className="landing-guide03-hero-image block h-auto w-full cursor-default select-none"
                 sizes="(max-width: 1440px) 100vw, 1440px"
               />
-            </div>
-            <div className="landing-guide03-hero-cta-wrap mt-4 flex w-full max-w-[1440px] flex-col items-center">
-              <p className="pointer-events-none select-none text-center text-[12px] leading-relaxed text-slate-500">
-                {t("landing.hero.ctaBarHint")}
-              </p>
-              <div className="landing-guide03-hero-cta-bar mt-4 flex flex-wrap items-center justify-center gap-2.5 sm:gap-3">
+              <div className="landing-guide03-hero-hotspots">
                 <Link
                   href={JOIN_PATH}
                   prefetch={false}
-                  className={`${entPrimaryBtn} relative z-[1] cursor-pointer`}
-                >
-                  {t("cta.joinBeta")}
-                </Link>
+                  aria-label="베타 신청하기"
+                  className="landing-guide03-hero-hit absolute left-[5.5%] top-[56%] h-[6.5%] w-[13%]"
+                />
                 <button
                   type="button"
                   onClick={onOpenAppWorkspace}
-                  className="landing-enterprise-btn-secondary relative z-[1] inline-flex min-h-[48px] cursor-pointer items-center justify-center rounded-xl border border-white/[0.14] bg-white/[0.05] px-5 py-2.5 text-center text-[0.8125rem] font-semibold text-slate-100 transition hover:border-sky-400/28 hover:bg-white/[0.08] touch-manipulation"
-                >
-                  {t("landing.hero.ctaPreview")}
-                </button>
+                  aria-label="앱 화면 미리보기"
+                  className="landing-guide03-hero-hit absolute left-[19.5%] top-[56%] h-[6.5%] w-[15.5%]"
+                />
               </div>
             </div>
           </div>

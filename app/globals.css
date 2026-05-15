@@ -2567,7 +2567,7 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   width: min(100%, calc((100dvh - 7rem) * 1672 / 941));
   border-radius: clamp(18px, 2.35vw, 34px);
   background: #020817;
-  /* 히어로 박스·여백은 클릭 대상이 아님(CTA는 형제 래퍼에서 pointer-events 복구) */
+  /* 히어로 박스·이미지는 클릭 대상이 아님(이미지 위 핫스팟만 pointer-events: auto) */
   pointer-events: none;
   box-shadow:
     0 34px 110px -58px rgba(0, 0, 0, 0.86),
@@ -2578,10 +2578,30 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   pointer-events: none;
 }
 
-.landing-guide03-hero-cta-wrap {
-  position: relative;
-  z-index: 20;
+/* sensora-guide-03.png(1672×941) 내 그래픽 버튼 위치 — %는 컨테이너 비율에 맞춤 */
+.landing-guide03-hero-hotspots {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.landing-guide03-hero-hit {
   pointer-events: auto;
+  cursor: pointer;
+  margin: 0;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+  appearance: none;
+  -webkit-appearance: none;
+  border-radius: 0.625rem;
+}
+
+.landing-guide03-hero-hit:focus-visible {
+  outline: 2px solid rgba(125, 211, 252, 0.55);
+  outline-offset: 2px;
 }
 
 .landing-first-screen-primary-cta.landing-enterprise-btn-primary {
