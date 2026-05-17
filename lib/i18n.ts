@@ -69,6 +69,44 @@ export type TranslationKey =
   | "landing.mobileStart.topTagline"
   | "landing.hero.ctaBarHint"
   | "landing.hero.ctaPreview"
+  | "landing.problems.title"
+  | "landing.problems.item1"
+  | "landing.problems.item2"
+  | "landing.problems.item3"
+  | "landing.problems.item4"
+  | "landing.problems.item5"
+  | "landing.solution.title"
+  | "landing.solution.body"
+  | "landing.solution.point1"
+  | "landing.solution.point2"
+  | "landing.solution.point3"
+  | "landing.features.title"
+  | "landing.features.f1.title"
+  | "landing.features.f1.desc"
+  | "landing.features.f2.title"
+  | "landing.features.f2.desc"
+  | "landing.features.f3.title"
+  | "landing.features.f3.desc"
+  | "landing.features.f4.title"
+  | "landing.features.f4.desc"
+  | "landing.features.f5.title"
+  | "landing.features.f5.desc"
+  | "landing.features.f6.title"
+  | "landing.features.f6.desc"
+  | "landing.flow.title"
+  | "landing.flow.step1"
+  | "landing.flow.step2"
+  | "landing.flow.step3"
+  | "landing.flow.step4"
+  | "landing.flow.step5"
+  | "landing.flow.footnote"
+  | "landing.trust.title"
+  | "landing.trust.body"
+  | "landing.trust.point1"
+  | "landing.trust.point2"
+  | "landing.trust.point3"
+  | "landing.trust.point4"
+  | "landing.cta.title"
   | "crm.customerDetail.customerSmsTitle"
   | "crm.customerDetail.smsDisclaimer"
   | "crm.customerDetail.nextContactSectionTitle"
@@ -824,11 +862,55 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "join.emailHint":
       "회사·팀 메일, 포털(naver, daum, kakao 등), 개인 도메인 등 자주 쓰는 이메일을 적어 주세요. 특정 서비스만 허용되지는 않습니다.",
     "landing.mobileHome.mainTitle": "SENSORA",
-    "landing.mobileHome.subline": "자동차 영업사원을 위한 AI 고객관리 워크스페이스",
-    "landing.mobileHome.blurb": "상담부터 사후관리까지,\n고객관리 흐름을 한곳에서 정리합니다.",
-    "landing.mobileStart.topTagline": "자동차 영업용 AI 고객관리 워크스페이스",
+    "landing.mobileHome.subline": "자동차 영업사원을 위한 AI 비서",
+    "landing.mobileHome.blurb":
+      "상담 내용을 정리하고,\n고객에게 보낼 문구와 다음 행동을 준비합니다.",
+    "landing.mobileStart.topTagline": "자동차 영업사원을 위한 AI 비서",
     "landing.hero.ctaBarHint": "아래 버튼에서만 이동합니다. 이미지·빈 영역은 눌러도 이동하지 않습니다.",
     "landing.hero.ctaPreview": "앱 화면 미리보기",
+    "landing.problems.title": "자동차 영업 현장에서는 이런 일이 자주 생깁니다",
+    "landing.problems.item1": "상담 내용이 카카오톡, 메모장, 엑셀에 흩어집니다.",
+    "landing.problems.item2": "고객별 관심 차량과 예산을 다시 찾기 어렵습니다.",
+    "landing.problems.item3": "견적서와 문자 초안을 따로 관리해야 합니다.",
+    "landing.problems.item4": "다음 연락 타이밍을 놓치기 쉽습니다.",
+    "landing.problems.item5": "출고 전후 안내 문구를 매번 새로 써야 합니다.",
+    "landing.solution.title": "Sensora는 상담을 다음 행동으로 정리합니다",
+    "landing.solution.body":
+      "고객의 말을 놓치지 않도록 상담 내용을 정리하고, 문자 초안과 다음 연락 포인트를 제안합니다. 필요한 내용은 고객별로 저장되어 사후관리와 견적 안내까지 이어집니다.",
+    "landing.solution.point1": "상담 내용을 정리합니다.",
+    "landing.solution.point2": "고객에게 보낼 문구를 제안합니다.",
+    "landing.solution.point3": "다음 연락과 사후관리로 이어집니다.",
+    "landing.features.title": "영업사원이 바로 쓰는 기능",
+    "landing.features.f1.title": "상담 정리",
+    "landing.features.f1.desc":
+      "고객이 말한 관심 차량, 예산, 구매 시기, 우려사항을 정리합니다.",
+    "landing.features.f2.title": "AI 문자 초안",
+    "landing.features.f2.desc": "상담 내용을 바탕으로 고객에게 보낼 문구를 제안합니다.",
+    "landing.features.f3.title": "다음 행동 제안",
+    "landing.features.f3.desc":
+      "시승, 견적, 재연락, 출고 안내 등 다음 업무를 놓치지 않게 돕습니다.",
+    "landing.features.f4.title": "견적서 보관",
+    "landing.features.f4.desc": "고객별 견적서를 저장해두고 필요할 때 바로 확인합니다.",
+    "landing.features.f5.title": "사후관리",
+    "landing.features.f5.desc": "출고 전후 안내와 재연락 포인트를 한 흐름으로 관리합니다.",
+    "landing.features.f6.title": "고객관리",
+    "landing.features.f6.desc": "필요한 상담 내용만 고객별로 저장하고 다시 확인할 수 있습니다.",
+    "landing.flow.title": "상담 후 바로 이렇게 사용합니다",
+    "landing.flow.step1": "상담 내용을 입력합니다.",
+    "landing.flow.step2": "AI가 고객 니즈를 정리합니다.",
+    "landing.flow.step3": "문자 초안을 확인합니다.",
+    "landing.flow.step4": "필요한 내용은 고객별로 저장합니다.",
+    "landing.flow.step5": "다음 연락과 사후관리로 이어집니다.",
+    "landing.flow.footnote":
+      "복잡한 CRM을 먼저 배우는 것이 아니라, 상담 내용을 정리하는 작은 행동부터 시작합니다.",
+    "landing.trust.title": "고객 정보는 신뢰가 먼저입니다",
+    "landing.trust.body":
+      "Sensora는 고객 DB를 자동으로 수집하지 않습니다. 고객 정보는 영업사원이 직접 입력하고 확인한 경우에만 저장됩니다. AI가 제안하는 문구는 검토용 초안이며, 최종 안내와 발송은 영업사원이 직접 판단합니다.",
+    "landing.trust.point1": "자동 수집하지 않습니다.",
+    "landing.trust.point2": "직접 확인한 정보만 저장합니다.",
+    "landing.trust.point3": "AI는 초안을 돕습니다.",
+    "landing.trust.point4": "최종 판단은 영업사원이 합니다.",
+    "landing.cta.title": "자동차 영업 업무를 더 정확하게 정리하고 싶다면, 지금 시작하세요.",
     "crm.customerDetail.customerSmsTitle": "고객에게 보낼 문자",
     "crm.customerDetail.smsDisclaimer":
       "AI가 제안하는 문구는 검토용 초안입니다. 최종 안내와 발송은 영업사원이 직접 확인해야 합니다.",
@@ -1251,10 +1333,11 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.showroom.hero.quietFuture": "실무 현장 안내형",
     "landing.showroom.hero.senseAuraTag": "Sense · Aura",
     "landing.showroom.hero.kickerBadge": "자동차 영업사원 업무용",
-    "landing.showroom.hero.headline": "자동차 영업사원을 위한\nAI 고객관리 워크스페이스",
+    "landing.showroom.hero.headline": "자동차 영업사원을 위한\nAI 비서",
     "landing.showroom.hero.headlineLine1": "자동차 영업사원을 위한",
-    "landing.showroom.hero.headlineLine2": "AI 고객관리 워크스페이스",
-    "landing.showroom.hero.sub": "상담 메모, 고객관리, 사후관리, 다음 연락을 한 흐름으로 정리합니다.",
+    "landing.showroom.hero.headlineLine2": "AI 비서",
+    "landing.showroom.hero.sub":
+      "상담 내용을 정리하고,\n고객에게 보낼 문구와 다음 행동을 준비합니다.",
     "landing.showroom.hero.trustLine": "AI는 초안을 돕고, 최종 판단은 영업사원이 합니다.",
     "landing.showroom.announcement.kicker": "베타 사용자 안내",
     "landing.showroom.announcement.body":
@@ -1676,11 +1759,55 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "join.emailHint":
       "Use your work email, a portal address (Naver, Daum, Kakao, etc.), or any personal domain you rely on—only the format is validated.",
     "landing.mobileHome.mainTitle": "SENSORA",
-    "landing.mobileHome.subline": "AI customer-management workspace built for automotive sales reps",
-    "landing.mobileHome.blurb": "From consultation notes to aftercare,\nkeep your customer flow in one place.",
-    "landing.mobileStart.topTagline": "AI customer-management workspace for automotive sales",
+    "landing.mobileHome.subline": "AI assistant for automotive sales reps",
+    "landing.mobileHome.blurb":
+      "Organize consultation notes and\nprepare messages and next actions for customers.",
+    "landing.mobileStart.topTagline": "AI assistant for automotive sales reps",
     "landing.hero.ctaBarHint": "Use the buttons below to navigate. The hero image and empty areas are not clickable.",
     "landing.hero.ctaPreview": "App screen preview",
+    "landing.problems.title": "On the sales floor, this happens often",
+    "landing.problems.item1": "Consultation notes scatter across chat apps, memos, and spreadsheets.",
+    "landing.problems.item2": "It’s hard to find each customer’s preferred model and budget again.",
+    "landing.problems.item3": "Quotes and message drafts live in separate places.",
+    "landing.problems.item4": "It’s easy to miss the right moment for the next call.",
+    "landing.problems.item5": "Pre- and post-delivery messages are rewritten from scratch every time.",
+    "landing.solution.title": "Sensora turns consultations into the next action",
+    "landing.solution.body":
+      "We organize what the customer said, suggest message drafts and follow-up timing, and keep what you save per customer connected through aftercare and quote guidance.",
+    "landing.solution.point1": "Consultation notes, organized.",
+    "landing.solution.point2": "Message drafts you can review before sending.",
+    "landing.solution.point3": "Follow-ups and aftercare in one flow.",
+    "landing.features.title": "What sales reps use every day",
+    "landing.features.f1.title": "Consultation recap",
+    "landing.features.f1.desc":
+      "Capture interest, budget, timing, and concerns the customer mentioned.",
+    "landing.features.f2.title": "AI message drafts",
+    "landing.features.f2.desc": "Suggest customer-facing wording from your consultation notes.",
+    "landing.features.f3.title": "Next-step suggestions",
+    "landing.features.f3.desc":
+      "Help you track test drives, quotes, callbacks, and delivery prep.",
+    "landing.features.f4.title": "Quote archive",
+    "landing.features.f4.desc": "Store quotes per customer and open them when needed.",
+    "landing.features.f5.title": "Aftercare",
+    "landing.features.f5.desc": "Manage pre/post-delivery guidance and follow-up timing together.",
+    "landing.features.f6.title": "Customer records",
+    "landing.features.f6.desc": "Save only the consultation details you need, per customer.",
+    "landing.flow.title": "Right after a consultation",
+    "landing.flow.step1": "Enter what was discussed.",
+    "landing.flow.step2": "AI summarizes customer needs.",
+    "landing.flow.step3": "Review the message draft.",
+    "landing.flow.step4": "Save what matters, per customer.",
+    "landing.flow.step5": "Continue with follow-ups and aftercare.",
+    "landing.flow.footnote":
+      "Start with a small habit—organizing the consultation—not learning a heavy CRM first.",
+    "landing.trust.title": "Customer data starts with trust",
+    "landing.trust.body":
+      "Sensora does not automatically collect a customer database. Information is stored only when you enter and confirm it. AI wording is a review draft; final guidance and sending are your decision.",
+    "landing.trust.point1": "No automatic collection.",
+    "landing.trust.point2": "Only information you confirmed is saved.",
+    "landing.trust.point3": "AI helps with drafts.",
+    "landing.trust.point4": "You make the final call.",
+    "landing.cta.title": "If you want a clearer flow for automotive sales work, start here.",
     "crm.customerDetail.customerSmsTitle": "Message draft for the customer",
     "crm.customerDetail.smsDisclaimer":
       "AI-suggested wording is a review draft. Final guidance and sending must be confirmed by the salesperson.",
@@ -2111,11 +2238,11 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.showroom.hero.quietFuture": "Quiet futurism",
     "landing.showroom.hero.senseAuraTag": "Sense · Aura",
     "landing.showroom.hero.kickerBadge": "For automotive sales reps",
-    "landing.showroom.hero.headline": "AI customer-relationship workspace\nfor automotive sales reps",
+    "landing.showroom.hero.headline": "An AI assistant\nfor automotive sales reps",
     "landing.showroom.hero.headlineLine1": "For automotive sales reps",
-    "landing.showroom.hero.headlineLine2": "AI customer-management workspace",
+    "landing.showroom.hero.headlineLine2": "an AI assistant",
     "landing.showroom.hero.sub":
-      "Consultation notes, customer CRM, aftercare, and next steps—organized in one flow.",
+      "Organize consultation notes and prepare customer messages and next actions.",
     "landing.showroom.hero.trustLine": "AI proposes review drafts—you make the final call.",
     "landing.showroom.announcement.kicker": "Beta users",
     "landing.showroom.announcement.body":

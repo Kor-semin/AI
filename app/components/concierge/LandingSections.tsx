@@ -7,6 +7,7 @@ import { SensoraAnimatedMark } from "@/app/components/SensoraAnimatedMark";
 import { LanguageSelect } from "@/app/components/i18n/LanguageSelect";
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
 import type { CrmSection } from "@/app/crm/crmSectionTypes";
+import type { TranslationKey } from "@/lib/i18n";
 
 /** 모바일 랜딩에서 워크스페이스로 보낼 대상(CRM 섹션 또는 출고 페이지). */
 export type MobileLandingWorkspaceTarget = CrmSection | "delivery";
@@ -30,12 +31,80 @@ const JOIN_PATH = "/join" as const;
 const entPrimaryBtn =
   "landing-enterprise-btn-primary inline-flex shrink-0 items-center justify-center rounded-xl px-6 py-2.5 text-[0.8625rem] font-semibold tracking-tight touch-manipulation sm:min-h-[3rem] sm:py-3 sm:text-[0.9375rem] lg:min-h-[3.125rem] lg:text-[1rem]";
 
-const PHILOSOPHY_LINE_KEYS = [
-  "landing.slides.philosophy.line1",
-  "landing.slides.philosophy.line2",
-  "landing.slides.philosophy.line3",
-  "landing.slides.philosophy.line4",
+const entSecondaryBtn =
+  "landing-enterprise-btn-secondary inline-flex shrink-0 items-center justify-center rounded-xl border border-white/[0.14] bg-white/[0.05] px-6 py-2.5 text-[0.8625rem] font-semibold text-slate-100/95 backdrop-blur-sm transition hover:border-sky-400/28 hover:bg-white/[0.08] touch-manipulation sm:min-h-[3rem] sm:py-3 sm:text-[0.9375rem] lg:min-h-[3.125rem] lg:text-[1rem]";
+
+const PROBLEM_KEYS = [
+  "landing.problems.item1",
+  "landing.problems.item2",
+  "landing.problems.item3",
+  "landing.problems.item4",
+  "landing.problems.item5",
 ] as const;
+
+const SOLUTION_POINT_KEYS = [
+  "landing.solution.point1",
+  "landing.solution.point2",
+  "landing.solution.point3",
+] as const;
+
+const FLOW_STEP_KEYS = [
+  "landing.flow.step1",
+  "landing.flow.step2",
+  "landing.flow.step3",
+  "landing.flow.step4",
+  "landing.flow.step5",
+] as const;
+
+const TRUST_POINT_KEYS = [
+  "landing.trust.point1",
+  "landing.trust.point2",
+  "landing.trust.point3",
+  "landing.trust.point4",
+] as const;
+
+const LANDING_FEATURE_DEFS: ReadonlyArray<{
+  titleKey: TranslationKey;
+  descKey: TranslationKey;
+  icon: MobileWorkCardDef["icon"];
+}> = [
+  { titleKey: "landing.features.f1.title", descKey: "landing.features.f1.desc", icon: "memo" },
+  { titleKey: "landing.features.f2.title", descKey: "landing.features.f2.desc", icon: "ai" },
+  { titleKey: "landing.features.f3.title", descKey: "landing.features.f3.desc", icon: "followup" },
+  { titleKey: "landing.features.f4.title", descKey: "landing.features.f4.desc", icon: "customers" },
+  { titleKey: "landing.features.f5.title", descKey: "landing.features.f5.desc", icon: "followup" },
+  { titleKey: "landing.features.f6.title", descKey: "landing.features.f6.desc", icon: "customers" },
+];
+
+function LandingCtaPair({
+  onOpenAppWorkspace,
+  joinLabel,
+  previewLabel,
+  className = "",
+}: {
+  onOpenAppWorkspace: () => void;
+  joinLabel: string;
+  previewLabel: string;
+  className?: string;
+}) {
+  return (
+    <div className={["landing-cta-pair flex flex-wrap items-center gap-2.5 sm:gap-3", className].join(" ")} role="group">
+      <Link href={JOIN_PATH} prefetch={false} className={`${entPrimaryBtn} min-w-[10.5rem] justify-center`}>
+        {joinLabel}
+      </Link>
+      <button type="button" onClick={onOpenAppWorkspace} className={`${entSecondaryBtn} min-w-[10.5rem] justify-center gap-1.5`}>
+        <svg className="size-[0.95rem] shrink-0 opacity-88" viewBox="0 0 20 20" fill="none" aria-hidden>
+          <path
+            d="M6.75 11.08V9.92c0-.6.323-1.15.839-1.424l5.62-3.068a1.583 1.583 0 012.541 1.424v8.088a1.584 1.584 0 01-2.541 1.424l-5.62-3.069a1.583 1.583 0 01-.839-1.423z"
+            fill="currentColor"
+            opacity="0.9"
+          />
+        </svg>
+        {previewLabel}
+      </button>
+    </div>
+  );
+}
 
 type MobileWorkCardDef = {
   key: string;
@@ -358,56 +427,150 @@ export function LandingShowroom({
         )}
       </div>
 
-      {/* 데스크톱: 큰 통합 히어로 이미지 — CTA 2곳(베타·미리보기)만 클릭 가능 */}
-      <section id="sensora-landing-hero" className={`${sectionShell} hidden pb-6 pt-2 lg:block sm:pb-8 sm:pt-3 lg:pt-4`}>
+      {/* 데스크톱 히어로 — HTML CTA + 참고용 큰 이미지(클릭 없음) */}
+      <section id="sensora-landing-hero" className={`${sectionShell} hidden pb-4 pt-2 lg:block sm:pb-6 sm:pt-3 lg:pt-4`}>
         <div className={innerMax}>
-          <div className="landing-guide03-hero-shell mx-auto flex w-full flex-col items-center justify-center">
-            <div className="landing-guide03-hero-frame relative w-full max-w-[1440px] overflow-hidden">
+          <div className="landing-hero-intro mx-auto max-w-[1440px]">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-violet-300/80 sm:text-[11px]">
+              {t("landing.showroom.hero.kickerBadge")}
+            </p>
+            <h1 className="mt-3 max-w-[16ch] text-[clamp(1.65rem,calc(1rem+2.4vw),2.65rem)] font-semibold leading-[1.1] tracking-[-0.038em] text-slate-50 [word-break:keep-all] sm:max-w-[20ch]">
+              <span className="block">{t("landing.showroom.hero.headlineLine1")}</span>
+              <span className="mt-1 block text-sky-200/95">{t("landing.showroom.hero.headlineLine2")}</span>
+            </h1>
+            <p className="mt-4 max-w-[36ch] whitespace-pre-line text-[0.9375rem] leading-relaxed text-slate-300/92 sm:text-[1.02rem]">
+              {t("landing.showroom.hero.sub")}
+            </p>
+            <p className="mt-3 max-w-[40ch] text-[0.8125rem] leading-relaxed text-slate-400 sm:text-[0.875rem]">
+              {t("landing.showroom.hero.trustLine")}
+            </p>
+            <LandingCtaPair
+              onOpenAppWorkspace={onOpenAppWorkspace}
+              joinLabel={t("cta.joinBeta")}
+              previewLabel={t("landing.hero.ctaPreview")}
+              className="mt-7"
+            />
+            <p className="mt-3 text-[11px] text-slate-500">{t("landing.hero.ctaBarHint")}</p>
+          </div>
+          <div className="landing-guide03-hero-shell mx-auto mt-8 flex w-full flex-col items-center justify-center">
+            <div
+              className="landing-guide03-hero-frame landing-guide03-hero-frame--display relative w-full max-w-[1440px] overflow-hidden"
+              aria-hidden
+            >
               <Image
                 src="/images/guides/sensora-guide-03.png"
-                alt="Sensora Auto CRM 랜딩 첫 화면"
+                alt=""
                 fill
                 priority
                 quality={100}
                 className="landing-guide03-hero-image pointer-events-none cursor-default select-none"
                 sizes="(max-width: 1440px) 100vw, 1440px"
               />
-              <Link
-                href={JOIN_PATH}
-                prefetch={false}
-                className="landing-guide03-hotspot landing-guide03-hotspot--hero-join"
-                aria-label={t("cta.joinBeta")}
-              >
-                <span className="sr-only">{t("cta.joinBeta")}</span>
-              </Link>
-              <button
-                type="button"
-                onClick={onOpenAppWorkspace}
-                className="landing-guide03-hotspot landing-guide03-hotspot--hero-preview"
-                aria-label={t("cta.tryAppExperience")}
-              >
-                <span className="sr-only">{t("cta.tryAppExperience")}</span>
-              </button>
             </div>
           </div>
         </div>
       </section>
 
-      <section id="sensora-landing-philosophy" className={`${sectionShell} border-t border-white/[0.06] py-8 sm:py-12`}>
-        <div className={`${innerMax} max-w-[560px] sm:max-w-[600px] lg:max-w-[640px]`}>
-          <p className="text-center text-[10px] font-semibold uppercase tracking-[0.16em] text-violet-300/78 sm:text-[11px]">{t("landing.slides.philosophy.kicker")}</p>
-          <h2 className="mx-auto mt-3 max-w-[18ch] text-center text-[clamp(1.22rem,calc(0.68rem+2.2vw),1.88rem)] font-semibold leading-[1.12] tracking-[-0.034em] text-slate-50 [word-break:keep-all] sm:mt-4 sm:max-w-[22ch]">
-            {t("landing.slides.philosophy.title")}
-          </h2>
-          <ul className="mt-6 w-full sm:mt-8 max-lg:flex max-lg:flex-col max-lg:gap-2.5 lg:border-t lg:border-white/[0.08]">
-            {PHILOSOPHY_LINE_KEYS.map((lineKey) => (
-              <li
-                key={lineKey}
-                className="max-lg:rounded-xl max-lg:border max-lg:border-white/[0.08] max-lg:bg-[#050f1a]/55 max-lg:px-3.5 max-lg:py-3 max-lg:shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] lg:border-b lg:border-white/[0.08] lg:py-[1.1rem]"
-              >
-                <p className="border-l-[3px] border-sky-400/45 pl-3 text-left text-[0.875rem] font-medium leading-snug text-slate-200/93 max-lg:border-0 max-lg:pl-0 lg:pl-[1.125rem] lg:text-[0.9575rem] lg:leading-[1.42]">
-                  {t(lineKey)}
+      <section id="sensora-landing-problems" className={`${sectionShell} border-t border-white/[0.06] py-10 sm:py-14`}>
+        <div className={`${innerMax} landing-story-section`}>
+          <h2 className="landing-story-title mx-auto max-w-[22ch] text-center [word-break:keep-all]">{t("landing.problems.title")}</h2>
+          <ul className="landing-story-card-grid mt-8 sm:mt-10">
+            {PROBLEM_KEYS.map((key, index) => (
+              <li key={key} className="landing-story-card landing-story-card--problem">
+                <span className="landing-story-card-index" aria-hidden>
+                  {index + 1}
+                </span>
+                <p className="text-[0.875rem] font-medium leading-relaxed text-slate-200/92 [word-break:keep-all] sm:text-[0.9375rem]">
+                  {t(key)}
                 </p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section id="sensora-landing-solution" className={`${sectionShell} border-t border-white/[0.06] py-10 sm:py-14`}>
+        <div className={`${innerMax} landing-story-section max-w-[720px] lg:max-w-[800px]`}>
+          <h2 className="landing-story-title mx-auto max-w-[20ch] text-center [word-break:keep-all]">{t("landing.solution.title")}</h2>
+          <p className="mx-auto mt-5 max-w-[48ch] text-center text-[0.9rem] leading-relaxed text-slate-300/90 sm:text-[0.98rem] [word-break:keep-all]">
+            {t("landing.solution.body")}
+          </p>
+          <ul className="mt-8 flex flex-col gap-3 sm:mt-9">
+            {SOLUTION_POINT_KEYS.map((key) => (
+              <li
+                key={key}
+                className="flex items-start gap-3 rounded-xl border border-white/[0.08] bg-[#050f1a]/55 px-4 py-3.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]"
+              >
+                <span className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-sky-500/20 text-[11px] font-bold text-sky-200" aria-hidden>
+                  ✓
+                </span>
+                <p className="text-[0.875rem] font-medium leading-relaxed text-slate-100/92 [word-break:keep-all] sm:text-[0.9375rem]">{t(key)}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section id="sensora-landing-features" className={`${sectionShell} border-t border-white/[0.06] py-10 sm:py-14`}>
+        <div className={`${innerMax} landing-story-section`}>
+          <h2 className="landing-story-title mx-auto max-w-[18ch] text-center [word-break:keep-all]">{t("landing.features.title")}</h2>
+          <ul className="landing-story-card-grid landing-story-card-grid--features mt-8 sm:mt-10">
+            {LANDING_FEATURE_DEFS.map((feature) => {
+              const grad = cardIconGradient(feature.icon);
+              return (
+                <li key={feature.titleKey} className="landing-story-card landing-story-card--feature">
+                  <span
+                    className={`mb-3 flex size-10 items-center justify-center rounded-lg bg-gradient-to-br ${grad} ring-1 ring-white/[0.12]`}
+                    aria-hidden
+                  >
+                    <CardGlyph icon={feature.icon} />
+                  </span>
+                  <h3 className="text-[0.9375rem] font-semibold text-slate-50 [word-break:keep-all]">{t(feature.titleKey)}</h3>
+                  <p className="mt-2 text-[0.8125rem] leading-relaxed text-slate-400 [word-break:keep-all] sm:text-[0.875rem]">
+                    {t(feature.descKey)}
+                  </p>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </section>
+
+      <section id="sensora-landing-flow" className={`${sectionShell} border-t border-white/[0.06] py-10 sm:py-14`}>
+        <div className={`${innerMax} landing-story-section max-w-[800px] lg:max-w-[900px]`}>
+          <h2 className="landing-story-title mx-auto max-w-[20ch] text-center [word-break:keep-all]">{t("landing.flow.title")}</h2>
+          <ol className="landing-flow-steps mt-8 sm:mt-10">
+            {FLOW_STEP_KEYS.map((key, index) => (
+              <li key={key} className="landing-flow-step">
+                <span className="landing-flow-step-num" aria-hidden>
+                  {index + 1}
+                </span>
+                <p className="text-[0.875rem] font-medium leading-relaxed text-slate-100/92 [word-break:keep-all] sm:text-[0.9375rem]">{t(key)}</p>
+              </li>
+            ))}
+          </ol>
+          <p className="mx-auto mt-8 max-w-[42ch] text-center text-[0.8125rem] leading-relaxed text-slate-400 [word-break:keep-all] sm:text-[0.875rem]">
+            {t("landing.flow.footnote")}
+          </p>
+        </div>
+      </section>
+
+      <section id="sensora-landing-trust" className={`${sectionShell} border-t border-white/[0.06] py-10 sm:py-14`}>
+        <div className={`${innerMax} landing-story-section max-w-[640px] lg:max-w-[720px]`}>
+          <p className="text-center text-[10px] font-semibold uppercase tracking-[0.16em] text-violet-300/78 sm:text-[11px]">
+            {t("landing.slides.philosophy.kicker")}
+          </p>
+          <h2 className="landing-story-title mx-auto mt-3 max-w-[20ch] text-center [word-break:keep-all]">{t("landing.trust.title")}</h2>
+          <p className="mx-auto mt-5 text-center text-[0.9rem] leading-relaxed text-slate-300/90 sm:text-[0.98rem] [word-break:keep-all]">
+            {t("landing.trust.body")}
+          </p>
+          <ul className="mt-8 grid gap-2.5 sm:grid-cols-2 sm:gap-3">
+            {TRUST_POINT_KEYS.map((key) => (
+              <li
+                key={key}
+                className="rounded-xl border border-white/[0.08] bg-[#050f1a]/55 px-3.5 py-3 text-[0.8125rem] font-medium leading-snug text-slate-200/90 [word-break:keep-all] sm:text-[0.875rem]"
+              >
+                {t(key)}
               </li>
             ))}
           </ul>
@@ -423,18 +586,19 @@ export function LandingShowroom({
             : "max-lg:pb-12",
         ].join(" ")}
       >
-        <div className={`${innerMax} max-w-[440px] sm:max-w-[460px]`}>
+        <div className={`${innerMax} max-w-[520px] sm:max-w-[560px]`}>
           <div className="mx-auto flex w-full flex-col items-center text-center">
             <h2 className="max-w-[28ch] text-[clamp(1.05rem,calc(0.78rem+1.6vw),1.55rem)] font-semibold leading-[1.35] tracking-[-0.028em] text-slate-50 [word-break:keep-all] sm:max-w-[32ch]">
-              자동차 영업 업무를 더 정확하게 정리하고 싶다면, 지금 시작하세요.
+              {t("landing.cta.title")}
             </h2>
-            <div className="landing-slide-actions-cta-cluster mx-auto mt-7 flex w-full max-w-[22rem] flex-col items-stretch gap-2.5 sm:mt-9 sm:max-w-[24rem]">
-              <Link href={JOIN_PATH} prefetch={false} className={`${entPrimaryBtn} w-full justify-center`}>
-                베타 신청하기
-              </Link>
-            </div>
+            <LandingCtaPair
+              onOpenAppWorkspace={onOpenAppWorkspace}
+              joinLabel={t("cta.joinBeta")}
+              previewLabel={t("landing.hero.ctaPreview")}
+              className="mx-auto mt-7 justify-center sm:mt-9"
+            />
             <a
-              href="#sensora-landing-philosophy"
+              href="#sensora-landing-trust"
               className="mt-6 text-[12px] font-semibold text-slate-500 underline-offset-[3px] hover:text-slate-300 hover:underline touch-manipulation sm:mt-8 sm:text-[13px]"
             >
               {t("landing.slides.actions.backToPhilosophy")}
