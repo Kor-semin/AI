@@ -63,6 +63,13 @@ const TRUST_POINT_KEYS = [
   "landing.trust.point4",
 ] as const;
 
+const MOBILE_TRUST_LINE_KEYS = [
+  "landing.slides.philosophy.line1",
+  "landing.slides.philosophy.line2",
+  "landing.slides.philosophy.line3",
+  "landing.slides.philosophy.line4",
+] as const;
+
 const LANDING_FEATURE_DEFS: ReadonlyArray<{
   titleKey: TranslationKey;
   descKey: TranslationKey;
@@ -279,64 +286,104 @@ export function LandingShowroom({
       {/* 모바일: 시작 화면(로그인·둘러보기)과 업무 메뉴(둘러보기 진입 후) 분리 */}
       <div id="sensora-landing-mobile-root" className="relative z-[1] lg:hidden">
         {!mobileLandingBrowseOpen ? (
-          <div className={`${sectionShell} pb-3 pt-3`}>
-            <div className="mx-auto flex w-full max-w-lg flex-col gap-4">
-              <div className="flex items-start justify-between gap-3">
-                <div className="flex min-w-0 flex-1 items-start gap-2.5">
-                  <SensoraAnimatedMark
-                    size={36}
-                    animated={false}
-                    className="pointer-events-none shrink-0 drop-shadow-[0_0_16px_-4px_rgba(56,189,248,0.35)]"
-                    aria-hidden
-                  />
-                  <div className="min-w-0">
-                    <div className="text-balance text-[0.94rem] font-semibold leading-tight tracking-[-0.02em] text-white">{t("product.name")}</div>
-                    <p className="mt-1 text-[11px] font-medium leading-snug text-slate-400 [word-break:keep-all]">{t("landing.mobileStart.topTagline")}</p>
+          <div
+            className={`${sectionShell} landing-mobile-start pb-8 pt-[max(14px,calc(env(safe-area-inset-top,0px)+12px))]`}
+          >
+            <div className="mx-auto flex w-full max-w-lg flex-col gap-6">
+              <header className="landing-mobile-start-brand flex flex-col gap-3">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex min-w-0 flex-1 items-start gap-3">
+                    <SensoraAnimatedMark
+                      size={40}
+                      animated={false}
+                      className="pointer-events-none shrink-0 drop-shadow-[0_0_18px_-4px_rgba(56,189,248,0.38)]"
+                      aria-hidden
+                    />
+                    <div className="min-w-0 pt-0.5">
+                      <p className="text-balance text-[1rem] font-semibold leading-tight tracking-[-0.024em] text-white">
+                        {t("product.name")}
+                      </p>
+                      <p className="mt-1.5 text-[12px] font-medium leading-snug text-slate-400 [word-break:keep-all]">
+                        {t("landing.mobileStart.topTagline")}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="landing-mobile-start-lang shrink-0 [&_select]:h-8 [&_select]:max-w-[5.75rem] [&_select]:px-2 [&_select]:py-1.5 [&_select]:text-[11px]">
+                    <LanguageSelect dense />
                   </div>
                 </div>
-                <div className="shrink-0 pt-0.5 [&_select]:h-7 [&_select]:max-w-[5.5rem] [&_select]:px-1.5 [&_select]:py-1 [&_select]:text-[10px]">
-                  <LanguageSelect dense />
-                </div>
+              </header>
+
+              <div className="landing-mobile-intro-card flex flex-col items-center rounded-2xl border border-white/[0.1] bg-[#050f1a]/78 px-5 py-7 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-md sm:px-6 sm:py-8">
+                <SensoraAnimatedMark
+                  size={52}
+                  animated={false}
+                  className="shrink-0 drop-shadow-[0_0_22px_-4px_rgba(56,189,248,0.42)]"
+                  aria-hidden
+                />
+                <h1 className="mt-5 max-w-[16ch] text-[1.125rem] font-semibold leading-[1.2] tracking-[-0.03em] text-slate-50 [word-break:keep-all] sm:text-[1.2rem]">
+                  {t("landing.mobileHome.subline")}
+                </h1>
+                <p className="mt-3 max-w-[26ch] whitespace-pre-line text-[0.8125rem] leading-relaxed text-slate-300/90 [word-break:keep-all] sm:text-[0.875rem]">
+                  {t("landing.mobileHome.blurb")}
+                </p>
+                <p className="mt-3 max-w-[30ch] text-[12px] leading-relaxed text-slate-500 [word-break:keep-all]">
+                  {t("landing.showroom.hero.trustLine")}
+                </p>
               </div>
 
-              <div className="flex flex-col gap-3 rounded-2xl border border-white/[0.1] bg-[#050f1a]/75 px-3.5 py-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-md">
-                <div className="flex flex-col items-center text-center">
-                  <SensoraAnimatedMark size={40} animated={false} className="shrink-0 drop-shadow-[0_0_16px_-4px_rgba(56,189,248,0.35)]" aria-hidden />
-                  <p className="mt-3 text-[10px] font-semibold uppercase tracking-[0.26em] text-slate-500">{t("landing.mobileHome.mainTitle")}</p>
-                  <p className="mt-1.5 text-[0.8125rem] font-semibold leading-snug tracking-tight text-slate-50 [word-break:keep-all]">{t("landing.mobileHome.subline")}</p>
-                  <p className="mt-2 max-w-[28ch] whitespace-pre-line text-[11px] leading-relaxed text-slate-400 [word-break:keep-all]">{t("landing.mobileHome.blurb")}</p>
-                </div>
-                <div className="mt-1 flex flex-col gap-2">
-                  <button
-                    type="button"
-                    onClick={onMobileStartCustomerCare}
-                    className={`${entPrimaryBtn} w-full justify-center py-3 text-[0.8125rem]`}
-                  >
-                    {t("cta.startCustomerCare")}
-                  </button>
-                  <Link
-                    href="/login"
-                    prefetch={false}
-                    className="landing-enterprise-btn-secondary inline-flex w-full min-h-[48px] items-center justify-center rounded-xl border border-white/[0.14] bg-white/[0.05] px-4 py-3 text-center text-[0.8125rem] font-semibold text-slate-100 transition hover:border-sky-400/28 hover:bg-white/[0.08] touch-manipulation"
-                  >
-                    {t("cta.emailLogin")}
-                  </Link>
-                  <Link
-                    href={JOIN_PATH}
-                    prefetch={false}
-                    className="inline-flex w-full min-h-[48px] items-center justify-center rounded-xl border border-white/[0.1] bg-transparent px-4 py-3 text-center text-[0.8125rem] font-semibold text-slate-300 transition hover:border-white/[0.16] hover:bg-white/[0.04] touch-manipulation"
-                  >
-                    {t("cta.joinBeta")}
-                  </Link>
-                  <button
-                    type="button"
-                    onClick={onMobileLandingBrowseOpen}
-                    className="mx-auto mt-0.5 min-h-10 px-2 text-[11px] font-semibold text-sky-300/90 underline decoration-sky-400/35 underline-offset-4 touch-manipulation"
-                  >
-                    {t("cta.tryAppExperience")}
-                  </button>
-                </div>
+              <div className="landing-mobile-cta-primary flex flex-col gap-2.5">
+                <button
+                  type="button"
+                  onClick={onMobileStartCustomerCare}
+                  className={`${entPrimaryBtn} w-full min-h-[52px] justify-center py-3.5 text-[0.875rem]`}
+                >
+                  {t("cta.startCustomerCare")}
+                </button>
+                <Link
+                  href="/login"
+                  prefetch={false}
+                  className={`${entSecondaryBtn} w-full min-h-[52px] justify-center py-3.5 text-[0.875rem]`}
+                >
+                  {t("cta.emailLogin")}
+                </Link>
               </div>
+
+              <div className="landing-mobile-cta-secondary flex flex-wrap items-center justify-center gap-x-5 gap-y-2 border-t border-white/[0.06] pt-4">
+                <Link
+                  href={JOIN_PATH}
+                  prefetch={false}
+                  className="min-h-10 px-1 text-[13px] font-semibold text-slate-400 underline decoration-white/20 underline-offset-[5px] transition hover:text-slate-200 touch-manipulation"
+                >
+                  {t("cta.joinBeta")}
+                </Link>
+                <button
+                  type="button"
+                  onClick={onMobileLandingBrowseOpen}
+                  className="min-h-10 px-1 text-[13px] font-semibold text-sky-300/88 underline decoration-sky-400/35 underline-offset-[5px] transition hover:text-sky-200/95 touch-manipulation"
+                >
+                  {t("cta.tryAppExperience")}
+                </button>
+              </div>
+
+              <section className="landing-mobile-trust" aria-labelledby="landing-mobile-trust-heading">
+                <p
+                  id="landing-mobile-trust-heading"
+                  className="text-[10px] font-semibold uppercase tracking-[0.16em] text-violet-300/75"
+                >
+                  {t("landing.slides.philosophy.kicker")}
+                </p>
+                <ul className="mt-3 flex flex-col gap-2">
+                  {MOBILE_TRUST_LINE_KEYS.map((lineKey) => (
+                    <li
+                      key={lineKey}
+                      className="rounded-xl border border-white/[0.08] bg-[#030b14]/70 px-3.5 py-3 text-[0.8125rem] font-medium leading-snug text-slate-200/88 [word-break:keep-all] sm:text-[0.875rem]"
+                    >
+                      {t(lineKey)}
+                    </li>
+                  ))}
+                </ul>
+              </section>
             </div>
           </div>
         ) : (
@@ -471,7 +518,8 @@ export function LandingShowroom({
         </div>
       </section>
 
-      <section id="sensora-landing-problems" className={`${sectionShell} border-t border-white/[0.06] py-10 sm:py-14`}>
+      <div id="sensora-landing-mobile-more" className="max-lg:border-t max-lg:border-white/[0.08] lg:contents">
+      <section id="sensora-landing-problems" className={`${sectionShell} border-t border-white/[0.06] py-10 sm:py-14 max-lg:border-t-0`}>
         <div className={`${innerMax} landing-story-section`}>
           <h2 className="landing-story-title mx-auto max-w-[22ch] text-center [word-break:keep-all]">{t("landing.problems.title")}</h2>
           <ul className="landing-story-card-grid mt-8 sm:mt-10">
@@ -606,6 +654,7 @@ export function LandingShowroom({
           </div>
         </div>
       </section>
+      </div>
     </div>
   );
 }

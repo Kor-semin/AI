@@ -865,7 +865,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.mobileHome.subline": "자동차 영업사원을 위한 AI 비서",
     "landing.mobileHome.blurb":
       "상담 내용을 정리하고,\n고객에게 보낼 문구와 다음 행동을 준비합니다.",
-    "landing.mobileStart.topTagline": "자동차 영업사원을 위한 AI 비서",
+    "landing.mobileStart.topTagline": "자동차 영업 AI 고객관리 워크스페이스",
     "landing.hero.ctaBarHint": "아래 버튼에서만 이동합니다. 이미지·빈 영역은 눌러도 이동하지 않습니다.",
     "landing.hero.ctaPreview": "앱 화면 미리보기",
     "landing.problems.title": "자동차 영업 현장에서는 이런 일이 자주 생깁니다",
@@ -1762,7 +1762,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.mobileHome.subline": "AI assistant for automotive sales reps",
     "landing.mobileHome.blurb":
       "Organize consultation notes and\nprepare messages and next actions for customers.",
-    "landing.mobileStart.topTagline": "AI assistant for automotive sales reps",
+    "landing.mobileStart.topTagline": "AI customer-management workspace for automotive sales",
     "landing.hero.ctaBarHint": "Use the buttons below to navigate. The hero image and empty areas are not clickable.",
     "landing.hero.ctaPreview": "App screen preview",
     "landing.problems.title": "On the sales floor, this happens often",

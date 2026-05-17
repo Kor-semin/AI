@@ -2557,6 +2557,35 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   min-height: 0;
 }
 
+/* 모바일 시작 화면 — safe area · 여백 · CTA 위계 */
+.landing-mobile-start {
+  padding-left: max(1rem, env(safe-area-inset-left, 0px));
+  padding-right: max(1rem, env(safe-area-inset-right, 0px));
+}
+
+.landing-mobile-start-brand {
+  padding-top: 0.125rem;
+}
+
+.landing-mobile-intro-card {
+  margin-top: 0.125rem;
+}
+
+.landing-mobile-cta-primary .landing-enterprise-btn-primary {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 8px 24px -10px rgba(99, 102, 241, 0.45);
+}
+
+.landing-mobile-trust {
+  padding-top: 0.25rem;
+  padding-bottom: 0.5rem;
+}
+
+#sensora-landing-mobile-more {
+  margin-top: 0.25rem;
+}
+
 /* 데스크톱 히어로 — HTML CTA + 표시용 이미지(클릭 없음) */
 .landing-hero-intro {
   padding: clamp(0.5rem, 1.2vw, 1rem) 0;
