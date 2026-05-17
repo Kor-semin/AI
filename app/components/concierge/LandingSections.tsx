@@ -254,6 +254,8 @@ type Props = {
   mobileLandingBrowseOpen: boolean;
   onMobileLandingBrowseOpen: () => void;
   onMobileStartCustomerCare: () => void;
+  onMobileStartQuickAi: () => void;
+  onMobileViewCustomers: () => void;
 };
 
 export function LandingShowroom({
@@ -262,6 +264,8 @@ export function LandingShowroom({
   mobileLandingBrowseOpen,
   onMobileLandingBrowseOpen,
   onMobileStartCustomerCare,
+  onMobileStartQuickAi,
+  onMobileViewCustomers,
 }: Props) {
   const { t } = useLanguage();
 
@@ -335,18 +339,18 @@ export function LandingShowroom({
               <div className="landing-mobile-cta-primary flex flex-col gap-2.5">
                 <button
                   type="button"
-                  onClick={onMobileStartCustomerCare}
+                  onClick={onMobileStartQuickAi}
                   className={`${entPrimaryBtn} w-full min-h-[52px] justify-center py-3.5 text-[0.875rem]`}
                 >
-                  {t("cta.startCustomerCare")}
+                  {t("cta.quickAiConsult")}
                 </button>
-                <Link
-                  href="/login"
-                  prefetch={false}
+                <button
+                  type="button"
+                  onClick={onMobileViewCustomers}
                   className={`${entSecondaryBtn} w-full min-h-[52px] justify-center py-3.5 text-[0.875rem]`}
                 >
-                  {t("cta.emailLogin")}
-                </Link>
+                  {t("cta.viewCustomers")}
+                </button>
               </div>
 
               <div className="landing-mobile-cta-secondary flex flex-wrap items-center justify-center gap-x-5 gap-y-2 border-t border-white/[0.06] pt-4">

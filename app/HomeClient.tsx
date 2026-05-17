@@ -38,7 +38,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
   const [view, setView] = useState<"landing" | "app">(initialView);
   /** 모바일 랜딩: 업무 메뉴(둘러보기) — 시작 화면과 분리 */
   const [mobileLandingBrowseOpen, setMobileLandingBrowseOpen] = useState(false);
-  const [crmSection, setCrmSection] = useState<CrmSection>("dashboard");
+  const [crmSection, setCrmSection] = useState<CrmSection>("ai");
   const navigateCrmSection = useCallback(
     (s: CrmSection) => {
       setCrmSection(s);
@@ -72,7 +72,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
       const raw = window.location.hash.replace(/^#/, "").trim();
       const mapped = raw ? hashToCrmSection(raw) : null;
       if (mapped) setCrmSection(mapped);
-      else if (!raw) setCrmSection("dashboard");
+      else if (!raw) setCrmSection("ai");
     };
     syncFromHash();
     window.addEventListener("hashchange", syncFromHash);
@@ -130,8 +130,24 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
 
   /** 랜딩·헤더의 「워크스페이스 체험」은 미리보기 모달 없이 요약 화면으로 바로 진입 */
   const openWorkspaceFromLanding = useCallback(() => {
-    enterAppFromPreviewToc("dashboard");
+    enterAppFromPreviewToc("ai");
   }, [enterAppFromPreviewToc]);
+
+  const onMobileStartQuickAi = useCallback(() => {
+    if (auth.status === "signed-in") {
+      enterAppFromPreviewToc("ai");
+    } else {
+      router.push("/login");
+    }
+  }, [auth.status, enterAppFromPreviewToc, router]);
+
+  const onMobileViewCustomers = useCallback(() => {
+    if (auth.status === "signed-in") {
+      enterAppFromPreviewToc("customers");
+    } else {
+      router.push("/login");
+    }
+  }, [auth.status, enterAppFromPreviewToc, router]);
 
   const returnToLanding = useCallback(() => {
     pushPreviewUrl("/?view=landing");
@@ -178,7 +194,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
         typeof window !== "undefined" && window.location.hash.startsWith("#")
           ? window.location.hash.slice(1)
           : "";
-      const id = rawHash.trim() ? rawHash.trim() : "crm-section-dashboard";
+      const id = rawHash.trim() ? rawHash.trim() : "crm-ai-assistant";
       const el = document.getElementById(id);
       if (el) {
         el.scrollIntoView({
@@ -417,6 +433,8 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
             mobileLandingBrowseOpen={mobileLandingBrowseOpen}
             onMobileLandingBrowseOpen={() => setMobileLandingBrowseOpen(true)}
             onMobileStartCustomerCare={onMobileStartCustomerCare}
+            onMobileStartQuickAi={onMobileStartQuickAi}
+            onMobileViewCustomers={onMobileViewCustomers}
           />
         ) : null}
 

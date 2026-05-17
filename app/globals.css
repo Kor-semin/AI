@@ -3132,3 +3132,22 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   }
 }
 
+.quick-ai-entry-hero {
+  max-width: 42rem;
+}
+
+.quick-ai-entry-input-card,
+.quick-ai-entry-result-card {
+  border-color: rgba(255, 255, 255, 0.09);
+}
+
+.quick-ai-entry-results {
+  animation: sensora-splash-bg-soft 0.35s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .quick-ai-entry-results {
+    animation: none;
+  }
+}
+

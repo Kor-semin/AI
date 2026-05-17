@@ -399,6 +399,37 @@ export type TranslationKey =
   | "crm.sensoraFlow.analyzeAgain"
   | "crm.sensoraFlow.newProposal"
   | "crm.sensoraFlow.rewriteSms"
+  | "crm.quickAi.kicker"
+  | "crm.quickAi.title"
+  | "crm.quickAi.sub"
+  | "crm.quickAi.trust"
+  | "crm.quickAi.inputLabel"
+  | "crm.quickAi.inputPlaceholder"
+  | "crm.quickAi.analyzeCta"
+  | "crm.quickAi.analyzing"
+  | "crm.quickAi.goCustomers"
+  | "crm.quickAi.goConsulting"
+  | "crm.quickAi.needsTitle"
+  | "crm.quickAi.needs.vehicle"
+  | "crm.quickAi.needs.budget"
+  | "crm.quickAi.needs.timing"
+  | "crm.quickAi.needs.priorities"
+  | "crm.quickAi.needs.concerns"
+  | "crm.quickAi.needsUnset"
+  | "crm.quickAi.smsTitle"
+  | "crm.quickAi.smsDisclaimer"
+  | "crm.quickAi.copySms"
+  | "crm.quickAi.smsCopySuccess"
+  | "crm.quickAi.nextActionsTitle"
+  | "crm.quickAi.saveCustomer"
+  | "crm.quickAi.saveConfirmTitle"
+  | "crm.quickAi.saveConfirmBody"
+  | "crm.quickAi.saveConfirmYes"
+  | "crm.quickAi.saveConfirmNo"
+  | "crm.quickAi.openAdvanced"
+  | "crm.quickAi.needInput"
+  | "cta.quickAiConsult"
+  | "cta.viewCustomers"
   | "common.copy"
   | "common.save"
   | "common.reset"
@@ -864,7 +895,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.mobileHome.mainTitle": "SENSORA",
     "landing.mobileHome.subline": "자동차 영업사원을 위한 AI 비서",
     "landing.mobileHome.blurb":
-      "상담 내용을 정리하고,\n고객에게 보낼 문구와 다음 행동을 준비합니다.",
+      "상담 내용을 넣으면, 고객에게 보낼 문구와 다음 행동을 준비합니다.",
     "landing.mobileStart.topTagline": "자동차 영업 AI 고객관리 워크스페이스",
     "landing.hero.ctaBarHint": "아래 버튼에서만 이동합니다. 이미지·빈 영역은 눌러도 이동하지 않습니다.",
     "landing.hero.ctaPreview": "앱 화면 미리보기",
@@ -951,6 +982,8 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.newCar.financeCardTitle": "금융 조건 정리",
     "cta.emailLogin": "이메일로 로그인",
     "cta.startCustomerCare": "고객관리 시작하기",
+    "cta.quickAiConsult": "AI 비서로 상담 정리하기",
+    "cta.viewCustomers": "고객관리 보기",
     "auth.loginTitle": "Sensora Auto CRM 로그인",
     "auth.loginSubtitle": "베타 승인을 받은 이메일로 로그인해 주세요.",
     "auth.loginPostButtonNote": "베타 승인 후 고객관리 기능을 사용할 수 있습니다.",
@@ -1260,6 +1293,36 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.sensoraFlow.analyzeAgain": "다시 분석",
     "crm.sensoraFlow.newProposal": "제안 새로 만들기",
     "crm.sensoraFlow.rewriteSms": "문자 다시 작성",
+    "crm.quickAi.kicker": "AI 비서 · 상담 정리",
+    "crm.quickAi.title": "자동차 영업사원을 위한 AI 비서",
+    "crm.quickAi.sub": "상담 내용을 넣으면, 고객에게 보낼 문구와 다음 행동을 준비합니다.",
+    "crm.quickAi.trust": "AI는 검토용 초안을 돕고, 최종 판단은 영업사원이 합니다.",
+    "crm.quickAi.inputLabel": "상담 내용을 입력해 주세요.",
+    "crm.quickAi.inputPlaceholder":
+      "예)\nGLC 하이브리드 관심\n월 80만 원 이하 희망\n빠른 출고 원함\n법인 비용처리 문의\n견적서 보내달라고 함",
+    "crm.quickAi.analyzeCta": "AI 비서로 정리하기",
+    "crm.quickAi.analyzing": "정리하는 중…",
+    "crm.quickAi.goCustomers": "고객관리로 이동",
+    "crm.quickAi.goConsulting": "상담 메모 보기",
+    "crm.quickAi.needsTitle": "고객 니즈 요약",
+    "crm.quickAi.needs.vehicle": "관심 차량",
+    "crm.quickAi.needs.budget": "예산·월 납입",
+    "crm.quickAi.needs.timing": "구매·출고 시기",
+    "crm.quickAi.needs.priorities": "중요 조건",
+    "crm.quickAi.needs.concerns": "우려 사항",
+    "crm.quickAi.needsUnset": "상담 요약에서 확인",
+    "crm.quickAi.smsTitle": "고객에게 보낼 문자 초안",
+    "crm.quickAi.smsDisclaimer": "검토용 초안입니다. 최종 발송 전에 꼭 확인해 주세요.",
+    "crm.quickAi.copySms": "문자 초안 복사하기",
+    "crm.quickAi.smsCopySuccess": "문자 초안이 복사되었습니다.",
+    "crm.quickAi.nextActionsTitle": "추천 다음 행동",
+    "crm.quickAi.saveCustomer": "고객으로 저장하기",
+    "crm.quickAi.saveConfirmTitle": "고객 정보로 저장할까요?",
+    "crm.quickAi.saveConfirmBody": "아래 내용을 고객 정보로 저장하시겠습니까? 자동 저장되지 않으며, 저장 전에 고객명을 확인합니다.",
+    "crm.quickAi.saveConfirmYes": "저장 계속",
+    "crm.quickAi.saveConfirmNo": "취소",
+    "crm.quickAi.openAdvanced": "고객 선택 · 상세 AI 비서",
+    "crm.quickAi.needInput": "상담 내용을 입력한 뒤 정리해 주세요.",
     "common.copy": "복사",
     "common.save": "저장",
     "common.reset": "초기화",
@@ -1337,7 +1400,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.showroom.hero.headlineLine1": "자동차 영업사원을 위한",
     "landing.showroom.hero.headlineLine2": "AI 비서",
     "landing.showroom.hero.sub":
-      "상담 내용을 정리하고,\n고객에게 보낼 문구와 다음 행동을 준비합니다.",
+      "상담 내용을 정리하고,\n고객에게 보낼 문구와 다음 행동을 준비합니다.\n필요한 내용은 고객관리 흐름으로 저장할 수 있습니다.",
     "landing.showroom.hero.trustLine": "AI는 초안을 돕고, 최종 판단은 영업사원이 합니다.",
     "landing.showroom.announcement.kicker": "베타 사용자 안내",
     "landing.showroom.announcement.body":
@@ -1848,6 +1911,8 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.newCar.financeCardTitle": "Finance conditions",
     "cta.emailLogin": "Sign in with email",
     "cta.startCustomerCare": "Start customer care",
+    "cta.quickAiConsult": "Organize consultation with AI",
+    "cta.viewCustomers": "View customers",
     "auth.loginTitle": "Sensora Auto CRM sign-in",
     "auth.loginSubtitle": "Sign in with the email address that was approved for beta access.",
     "auth.loginPostButtonNote": "After approval, you can use Sensora’s customer-management features.",
@@ -2164,6 +2229,37 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.sensoraFlow.analyzeAgain": "Analyze again",
     "crm.sensoraFlow.newProposal": "Fresh proposal",
     "crm.sensoraFlow.rewriteSms": "Rewrite SMS draft",
+    "crm.quickAi.kicker": "AI assistant · consultation",
+    "crm.quickAi.title": "AI assistant for automotive sales reps",
+    "crm.quickAi.sub": "Enter consultation notes to prepare customer messages and next actions.",
+    "crm.quickAi.trust": "AI proposes review drafts—you make the final call.",
+    "crm.quickAi.inputLabel": "Enter consultation notes",
+    "crm.quickAi.inputPlaceholder":
+      "e.g.\nInterested in GLC hybrid\nBudget around 800k KRW/month\nWants fast delivery\nCorporate expense questions\nAsked for a quote",
+    "crm.quickAi.analyzeCta": "Organize with AI assistant",
+    "crm.quickAi.analyzing": "Organizing…",
+    "crm.quickAi.goCustomers": "Open customer list",
+    "crm.quickAi.goConsulting": "View consultation notes",
+    "crm.quickAi.needsTitle": "Customer needs summary",
+    "crm.quickAi.needs.vehicle": "Interested vehicle",
+    "crm.quickAi.needs.budget": "Budget / monthly",
+    "crm.quickAi.needs.timing": "Purchase / delivery timing",
+    "crm.quickAi.needs.priorities": "Key conditions",
+    "crm.quickAi.needs.concerns": "Concerns",
+    "crm.quickAi.needsUnset": "See consultation summary",
+    "crm.quickAi.smsTitle": "Message draft for the customer",
+    "crm.quickAi.smsDisclaimer": "Review draft only. Confirm before sending.",
+    "crm.quickAi.copySms": "Copy message draft",
+    "crm.quickAi.smsCopySuccess": "Message draft copied.",
+    "crm.quickAi.nextActionsTitle": "Suggested next steps",
+    "crm.quickAi.saveCustomer": "Save as customer",
+    "crm.quickAi.saveConfirmTitle": "Save as customer?",
+    "crm.quickAi.saveConfirmBody":
+      "Save the content below as a customer record? Nothing is saved automatically—you will confirm the customer name.",
+    "crm.quickAi.saveConfirmYes": "Continue",
+    "crm.quickAi.saveConfirmNo": "Cancel",
+    "crm.quickAi.openAdvanced": "Select customer · advanced AI assistant",
+    "crm.quickAi.needInput": "Enter consultation notes first.",
     "common.copy": "Copy",
     "common.save": "Save",
     "common.reset": "Reset",

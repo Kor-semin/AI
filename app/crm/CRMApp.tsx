@@ -79,6 +79,11 @@ import { SettingsSection } from "./sections/SettingsSection";
 import { CustomersSection } from "./sections/CustomersSection";
 import { AiSecretarySection } from "./sections/AiSecretarySection";
 import { CrmAiAssistantPanel } from "./CrmAiAssistantPanel";
+import { QuickAiAssistantEntry } from "./QuickAiAssistantEntry";
+import {
+  buildQuickConsultationResult,
+  type QuickConsultationResult,
+} from "./customerContextDraft";
 import { CrmMiniCalendar } from "@/app/crm/CrmMiniCalendar";
 import { DeliveryGuideScreen } from "@/app/crm/deliveryGuide/DeliveryGuideScreen";
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
@@ -471,6 +476,11 @@ export function CRMApp({
   const workspaceSalesStyleRef = useRef(workspaceSalesStyle);
   workspaceSalesStyleRef.current = workspaceSalesStyle;
   const smsRewriteNonceRef = useRef(0);
+  const [quickConsultationDraft, setQuickConsultationDraft] = useState("");
+  const [quickConsultationResult, setQuickConsultationResult] = useState<QuickConsultationResult | null>(null);
+  const [quickAiBusy, setQuickAiBusy] = useState(false);
+  const [quickSaveConfirmOpen, setQuickSaveConfirmOpen] = useState(false);
+  const [quickAiShowAdvanced, setQuickAiShowAdvanced] = useState(false);
 
   const TAB_LABELS: Record<typeof tab, string> = {
     고객: t("crm.tab.customers"),
@@ -510,6 +520,64 @@ export function CRMApp({
       window.clearTimeout(customerSavedToastTimerRef.current);
     };
   }, []);
+
+  function runQuickAiAnalyze() {
+    const snap = quickConsultationDraft.trim();
+    if (!snap) {
+      showToast(t("crm.quickAi.needInput"));
+      return;
+    }
+    setQuickAiBusy(true);
+    setQuickSaveConfirmOpen(false);
+    window.setTimeout(() => {
+      const built = buildQuickConsultationResult(snap, { salesStyle: workspaceSalesStyle });
+      setQuickConsultationResult(built);
+      setWorkspaceAiMemoDraft(snap);
+      window.setTimeout(() => setQuickAiBusy(false), 220);
+    }, 0);
+  }
+
+  function copyQuickConsultationSms() {
+    const text = quickConsultationResult?.message.trim();
+    if (!text) return;
+    void copyToClipboard(text).then((ok) => {
+      if (ok) showToast(t("crm.quickAi.smsCopySuccess"));
+      else showToast(t("crm.seasonCare.copyFail"));
+    });
+  }
+
+  function openQuickSaveConfirm() {
+    if (!quickConsultationResult) return;
+    setQuickSaveConfirmOpen(true);
+  }
+
+  function confirmQuickSaveToCustomer() {
+    if (!quickConsultationResult) return;
+    const snap = quickConsultationDraft.trim();
+    const r = quickConsultationResult;
+    const memoParts = [
+      snap,
+      "",
+      "【AI 니즈 요약】",
+      r.summary,
+      "",
+      "【문자 초안 · 검토용】",
+      r.message,
+    ].filter((line, i, arr) => !(line === "" && arr[i - 1] === ""));
+    const nextLine = r.nextActions[0]?.trim() ?? "";
+    setCreateCustomerDraft({
+      ...CREATE_CUSTOMER_INITIAL,
+      interestedModel: r.needs.vehicle?.trim() ?? "",
+      memo: memoParts.join("\n"),
+      nextActionText: nextLine,
+    });
+    setQuickSaveConfirmOpen(false);
+    if (!uid) {
+      openPreviewGate();
+      return;
+    }
+    setCreateCustomerOpen(true);
+  }
 
   /** Sensora Flow: 명시적 분석 클릭 시에만 flowDraft 업데이트 (입력 중 자동 재분석 없음) */
   function runSensoraFlowAnalyzeOrRefresh() {
@@ -1940,6 +2008,24 @@ export function CRMApp({
 
           {activeSection === "ai" ? (
             <AiSecretarySection>
+              <QuickAiAssistantEntry
+                t={t}
+                consultationDraft={quickConsultationDraft}
+                onConsultationDraftChange={setQuickConsultationDraft}
+                onAnalyze={runQuickAiAnalyze}
+                busy={quickAiBusy}
+                result={quickConsultationResult}
+                onCopySms={copyQuickConsultationSms}
+                onSaveCustomer={openQuickSaveConfirm}
+                saveConfirmOpen={quickSaveConfirmOpen}
+                onSaveConfirm={confirmQuickSaveToCustomer}
+                onSaveCancel={() => setQuickSaveConfirmOpen(false)}
+                onGoCustomers={() => onActiveSectionChange("customers")}
+                onGoConsulting={() => onActiveSectionChange("consulting")}
+                onOpenAdvancedAi={() => setQuickAiShowAdvanced((v) => !v)}
+              />
+              {quickAiShowAdvanced ? (
+              <div className="quick-ai-advanced mt-8 border-t border-white/[0.08] pt-8">
               <CrmAiAssistantPanel
                 t={t}
                 workspaceAiCoachTopics={workspaceAiCoachTopics}
@@ -1999,6 +2085,8 @@ export function CRMApp({
                   upsertCustomer({ id: selectedCustomerId, ...patch });
                 }}
               />
+              </div>
+              ) : null}
             </AiSecretarySection>
           ) : null}
 
