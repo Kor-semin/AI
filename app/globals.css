@@ -2595,7 +2595,33 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   margin-top: 0.25rem;
 }
 
-/* 데스크톱 히어로 — 통합 이미지(1672×941) 전체 표시 + CTA 2곳 핫스팟 */
+/* 랜딩 첫 화면 — 헤드라인·설명·CTA(텍스트 우선) */
+.landing-first-screen-copy--desktop {
+  max-width: 44rem;
+  margin-inline: auto;
+  text-align: center;
+  padding: clamp(0.5rem, 1.2vw, 1rem) 0 clamp(0.25rem, 0.8vw, 0.75rem);
+}
+
+.landing-first-screen-copy--desktop h1 {
+  max-width: 20ch;
+  margin-inline: auto;
+}
+
+.landing-first-screen-copy--desktop p {
+  margin-inline: auto;
+}
+
+.landing-first-screen-copy--mobile {
+  padding: 0.125rem 0 0.25rem;
+}
+
+.landing-first-screen-copy--mobile h1 {
+  max-width: 16ch;
+  margin-inline: auto;
+}
+
+/* 데스크톱 히어로 — 통합 이미지(1672×941) 전체 표시 + 보조 핫스팟(상단 CTA 우선) */
 .landing-guide03-hero-shell {
   min-height: 0;
   padding: clamp(0.25rem, 1.1vw, 0.9rem) 0;
@@ -2653,6 +2679,10 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   top: 39.5%;
   width: 17%;
   height: 6.5%;
+}
+
+.landing-guide03-hero-frame--supplemental .landing-guide03-hotspot {
+  display: none;
 }
 
 /* 랜딩 스토리 섹션(문제 → 해결 → 기능 → 흐름 → 신뢰) */

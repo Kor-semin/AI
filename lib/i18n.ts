@@ -69,6 +69,8 @@ export type TranslationKey =
   | "landing.mobileStart.topTagline"
   | "landing.hero.ctaBarHint"
   | "landing.hero.ctaPreview"
+  | "landing.firstScreen.body"
+  | "landing.firstScreen.trustMicro"
   | "landing.problems.title"
   | "landing.problems.item1"
   | "landing.problems.item2"
@@ -901,6 +903,10 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.mobileStart.topTagline": "자동차 영업 현장용 업무 정리",
     "landing.hero.ctaBarHint": "아래 버튼에서만 이동합니다. 이미지·빈 영역은 눌러도 이동하지 않습니다.",
     "landing.hero.ctaPreview": "AI 비서 화면 보기",
+    "landing.firstScreen.body":
+      "상담 내용을 입력하면 AI가 고객 니즈, 문자 초안, 다음 행동을 정리합니다.\n필요한 내용은 고객 정보로 저장하고, 다음 상담과 사후관리에 이어갈 수 있습니다.",
+    "landing.firstScreen.trustMicro":
+      "고객 정보는 사용자가 확인하고 저장합니다.\nSensora는 고객 정보를 자동으로 수집하지 않습니다.",
     "landing.problems.title": "자동차 영업 현장에서는 이런 일이 자주 생깁니다",
     "landing.problems.item1": "상담 내용이 카카오톡, 메모장, 엑셀에 흩어집니다.",
     "landing.problems.item2": "고객에게 보낼 문구를 매번 새로 정리해야 합니다.",
@@ -1404,7 +1410,8 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.showroom.hero.headlineLine2": "AI 비서",
     "landing.showroom.hero.sub":
       "상담이 끝난 뒤 남겨야 할 내용과\n고객에게 보낼 문구를 깔끔하게 정리합니다.",
-    "landing.showroom.hero.trustLine": "AI는 초안을 돕고,\n최종 판단은 영업사원이 합니다.",
+    "landing.showroom.hero.trustLine":
+      "AI는 검토용 초안을 돕고,\n최종 판단과 발송은 영업사원이 직접 합니다.",
     "landing.showroom.announcement.kicker": "베타 사용자 안내",
     "landing.showroom.announcement.body":
       "현재 Sensora Auto CRM은 자동차 영업사원을 대상으로 베타 사용자를 순차적으로 받고 있습니다.",
@@ -1831,6 +1838,10 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.mobileStart.topTagline": "Practical workflow support for automotive sales",
     "landing.hero.ctaBarHint": "Use the buttons below to navigate. The hero image and empty areas are not clickable.",
     "landing.hero.ctaPreview": "View AI assistant screen",
+    "landing.firstScreen.body":
+      "Enter consultation notes and AI organizes customer needs, message drafts, and next steps.\nSave what you need as customer records and continue into follow-up work.",
+    "landing.firstScreen.trustMicro":
+      "Customer information is saved only after you confirm it.\nSensora does not automatically collect customer information.",
     "landing.problems.title": "On the sales floor, this happens often",
     "landing.problems.item1": "Consultation notes scatter across chat apps, memos, and spreadsheets.",
     "landing.problems.item2": "Customer-facing messages are drafted from scratch each time.",
@@ -2343,7 +2354,8 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.showroom.hero.headlineLine2": "an AI assistant",
     "landing.showroom.hero.sub":
       "After a consultation, organize what to keep\nand the message to send—clearly.",
-    "landing.showroom.hero.trustLine": "AI proposes review drafts—\nyou make the final call.",
+    "landing.showroom.hero.trustLine":
+      "AI proposes review drafts—you confirm and send.",
     "landing.showroom.announcement.kicker": "Beta users",
     "landing.showroom.announcement.body":
       "Sensora Auto CRM is currently onboarding beta sales reps gradually. Spaces may be limited while we stabilize the service.",

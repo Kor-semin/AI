@@ -64,13 +64,6 @@ const TRUST_POINT_KEYS = [
   "landing.trust.point4",
 ] as const;
 
-const MOBILE_TRUST_LINE_KEYS = [
-  "landing.slides.philosophy.line1",
-  "landing.slides.philosophy.line2",
-  "landing.slides.philosophy.line3",
-  "landing.slides.philosophy.line4",
-] as const;
-
 const LANDING_FEATURE_DEFS: ReadonlyArray<{
   titleKey: TranslationKey;
   descKey: TranslationKey;
@@ -83,6 +76,82 @@ const LANDING_FEATURE_DEFS: ReadonlyArray<{
   { titleKey: "landing.features.f5.title", descKey: "landing.features.f5.desc", icon: "followup" },
   { titleKey: "landing.features.f6.title", descKey: "landing.features.f6.desc", icon: "customers" },
 ];
+
+function LandingFirstScreenIntro({
+  t,
+  onOpenAppWorkspace,
+  layout,
+}: {
+  t: (key: TranslationKey) => string;
+  onOpenAppWorkspace: () => void;
+  layout: "desktop" | "mobile";
+}) {
+  const isDesktop = layout === "desktop";
+  return (
+    <div
+      className={[
+        "landing-first-screen-copy",
+        isDesktop ? "landing-first-screen-copy--desktop" : "landing-first-screen-copy--mobile text-center",
+      ].join(" ")}
+    >
+      <h1
+        className={[
+          "font-semibold tracking-[-0.034em] text-slate-50 [word-break:keep-all]",
+          isDesktop
+            ? "text-[clamp(1.65rem,calc(1rem+2.4vw),2.65rem)] leading-[1.1]"
+            : "text-[1.125rem] leading-[1.2] sm:text-[1.2rem]",
+        ].join(" ")}
+      >
+        {isDesktop ? (
+          <>
+            <span className="block">{t("landing.showroom.hero.headlineLine1")}</span>
+            <span className="mt-1 block text-sky-200/95">{t("landing.showroom.hero.headlineLine2")}</span>
+          </>
+        ) : (
+          t("landing.mobileHome.subline")
+        )}
+      </h1>
+      <p
+        className={[
+          "whitespace-pre-line leading-relaxed text-slate-300/92 [word-break:keep-all]",
+          isDesktop ? "mt-4 max-w-[40ch] text-[0.98rem] sm:text-[1.05rem]" : "mt-3 max-w-[28ch] text-[0.8125rem] sm:max-w-[30ch] sm:text-[0.875rem]",
+        ].join(" ")}
+      >
+        {t("landing.showroom.hero.sub")}
+      </p>
+      <p
+        className={[
+          "whitespace-pre-line leading-relaxed text-slate-400/95 [word-break:keep-all]",
+          isDesktop ? "mt-4 max-w-[48ch] text-[0.9rem] sm:text-[0.9375rem]" : "mt-3 max-w-[30ch] text-[0.8125rem] sm:max-w-[32ch] sm:text-[0.875rem]",
+        ].join(" ")}
+      >
+        {t("landing.firstScreen.body")}
+      </p>
+      <p
+        className={[
+          "whitespace-pre-line leading-relaxed text-slate-500 [word-break:keep-all]",
+          isDesktop ? "mt-3 max-w-[42ch] text-[0.8125rem] sm:text-[0.875rem]" : "mt-3 max-w-[28ch] text-[12px] sm:max-w-[32ch]",
+        ].join(" ")}
+      >
+        {t("landing.showroom.hero.trustLine")}
+      </p>
+      <LandingCtaPair
+        onOpenAppWorkspace={onOpenAppWorkspace}
+        joinLabel={t("cta.joinBeta")}
+        previewLabel={t("landing.hero.ctaPreview")}
+        className={isDesktop ? "mt-7 justify-center" : "mt-5 w-full flex-col [&_a]:w-full [&_button]:w-full"}
+      />
+      <p
+        className={[
+          "whitespace-pre-line leading-relaxed text-slate-500 [word-break:keep-all]",
+          isDesktop ? "mx-auto mt-4 max-w-[44ch] text-center text-[0.75rem] sm:text-[0.8125rem]" : "mt-3 text-center text-[11px] leading-relaxed sm:text-[12px]",
+        ].join(" ")}
+      >
+        {t("landing.firstScreen.trustMicro")}
+      </p>
+    </div>
+  );
+}
 
 function LandingCtaPair({
   onOpenAppWorkspace,
@@ -319,49 +388,9 @@ export function LandingShowroom({
                 </div>
               </header>
 
-              <div className="landing-mobile-intro-card flex flex-col items-center rounded-2xl border border-white/[0.1] bg-[#050f1a]/78 px-5 py-7 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-md sm:px-6 sm:py-8">
-                <SensoraAnimatedMark
-                  size={52}
-                  animated={false}
-                  className="shrink-0 drop-shadow-[0_0_22px_-4px_rgba(56,189,248,0.42)]"
-                  aria-hidden
-                />
-                <h1 className="mt-5 max-w-[16ch] text-[1.125rem] font-semibold leading-[1.2] tracking-[-0.03em] text-slate-50 [word-break:keep-all] sm:text-[1.2rem]">
-                  {t("landing.mobileHome.subline")}
-                </h1>
-                <p className="mt-3 max-w-[28ch] whitespace-pre-line text-[0.8125rem] leading-relaxed text-slate-300/90 [word-break:keep-all] sm:max-w-[30ch] sm:text-[0.875rem]">
-                  {t("landing.mobileHome.blurb")}
-                </p>
-                <p className="mt-3 max-w-[28ch] whitespace-pre-line text-[12px] leading-relaxed text-slate-500 [word-break:keep-all] sm:max-w-[32ch]">
-                  {t("landing.showroom.hero.trustLine")}
-                </p>
-              </div>
+              <LandingFirstScreenIntro t={t} onOpenAppWorkspace={onOpenAppWorkspace} layout="mobile" />
 
-              <div className="landing-mobile-cta-primary flex flex-col gap-2.5">
-                <Link
-                  href={JOIN_PATH}
-                  prefetch={false}
-                  className={`${entPrimaryBtn} w-full min-h-[52px] justify-center py-3.5 text-[0.875rem]`}
-                >
-                  {t("cta.joinBeta")}
-                </Link>
-                <button
-                  type="button"
-                  onClick={onOpenAppWorkspace}
-                  className={`${entSecondaryBtn} w-full min-h-[52px] justify-center py-3.5 text-[0.875rem]`}
-                >
-                  {t("landing.hero.ctaPreview")}
-                </button>
-              </div>
-
-              <div className="landing-mobile-cta-secondary flex flex-wrap items-center justify-center gap-x-5 gap-y-2 border-t border-white/[0.06] pt-4">
-                <button
-                  type="button"
-                  onClick={onMobileStartQuickAi}
-                  className="min-h-10 px-1 text-[13px] font-semibold text-slate-400 underline decoration-white/20 underline-offset-[5px] transition hover:text-slate-200 touch-manipulation"
-                >
-                  {t("cta.quickAiConsult")}
-                </button>
+              <div className="landing-mobile-cta-secondary flex flex-wrap items-center justify-center border-t border-white/[0.06] pt-4">
                 <button
                   type="button"
                   onClick={onMobileLandingBrowseOpen}
@@ -370,25 +399,6 @@ export function LandingShowroom({
                   {t("cta.tryAppExperience")}
                 </button>
               </div>
-
-              <section className="landing-mobile-trust" aria-labelledby="landing-mobile-trust-heading">
-                <p
-                  id="landing-mobile-trust-heading"
-                  className="text-[10px] font-semibold uppercase tracking-[0.16em] text-violet-300/75"
-                >
-                  {t("landing.slides.philosophy.kicker")}
-                </p>
-                <ul className="mt-3 flex flex-col gap-2">
-                  {MOBILE_TRUST_LINE_KEYS.map((lineKey) => (
-                    <li
-                      key={lineKey}
-                      className="rounded-xl border border-white/[0.08] bg-[#030b14]/70 px-3.5 py-3 text-[0.8125rem] font-medium leading-snug text-slate-200/88 [word-break:keep-all] sm:text-[0.875rem]"
-                    >
-                      {t(lineKey)}
-                    </li>
-                  ))}
-                </ul>
-              </section>
             </div>
           </div>
         ) : (
@@ -479,11 +489,12 @@ export function LandingShowroom({
         )}
       </div>
 
-      {/* 데스크톱 히어로 — 통합 이미지 1장 + 그래픽 CTA 2곳만 투명 핫스팟 */}
+      {/* 데스크톱 첫 화면 — 헤드라인·설명·CTA 후 통합 이미지(보조) */}
       <section id="sensora-landing-hero" className={`${sectionShell} hidden pb-6 pt-2 lg:block sm:pb-8 sm:pt-3 lg:pt-4`}>
         <div className={innerMax}>
-          <div className="landing-guide03-hero-shell mx-auto flex w-full flex-col items-center justify-center">
-            <div className="landing-guide03-hero-frame relative w-full max-w-[1440px]">
+          <LandingFirstScreenIntro t={t} onOpenAppWorkspace={onOpenAppWorkspace} layout="desktop" />
+          <div className="landing-guide03-hero-shell mx-auto mt-8 flex w-full flex-col items-center justify-center lg:mt-10">
+            <div className="landing-guide03-hero-frame relative w-full max-w-[1440px] landing-guide03-hero-frame--supplemental">
               <Image
                 src="/images/guides/sensora-guide-03.png"
                 alt="Sensora Auto CRM 랜딩 안내"
