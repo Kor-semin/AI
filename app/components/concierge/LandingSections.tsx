@@ -46,6 +46,7 @@ const SOLUTION_POINT_KEYS = [
   "landing.solution.point1",
   "landing.solution.point2",
   "landing.solution.point3",
+  "landing.solution.point4",
 ] as const;
 
 const FLOW_STEP_KEYS = [
@@ -328,39 +329,39 @@ export function LandingShowroom({
                 <h1 className="mt-5 max-w-[16ch] text-[1.125rem] font-semibold leading-[1.2] tracking-[-0.03em] text-slate-50 [word-break:keep-all] sm:text-[1.2rem]">
                   {t("landing.mobileHome.subline")}
                 </h1>
-                <p className="mt-3 max-w-[26ch] whitespace-pre-line text-[0.8125rem] leading-relaxed text-slate-300/90 [word-break:keep-all] sm:text-[0.875rem]">
+                <p className="mt-3 max-w-[28ch] whitespace-pre-line text-[0.8125rem] leading-relaxed text-slate-300/90 [word-break:keep-all] sm:max-w-[30ch] sm:text-[0.875rem]">
                   {t("landing.mobileHome.blurb")}
                 </p>
-                <p className="mt-3 max-w-[30ch] text-[12px] leading-relaxed text-slate-500 [word-break:keep-all]">
+                <p className="mt-3 max-w-[28ch] whitespace-pre-line text-[12px] leading-relaxed text-slate-500 [word-break:keep-all] sm:max-w-[32ch]">
                   {t("landing.showroom.hero.trustLine")}
                 </p>
               </div>
 
               <div className="landing-mobile-cta-primary flex flex-col gap-2.5">
-                <button
-                  type="button"
-                  onClick={onMobileStartQuickAi}
+                <Link
+                  href={JOIN_PATH}
+                  prefetch={false}
                   className={`${entPrimaryBtn} w-full min-h-[52px] justify-center py-3.5 text-[0.875rem]`}
                 >
-                  {t("cta.quickAiConsult")}
-                </button>
+                  {t("cta.joinBeta")}
+                </Link>
                 <button
                   type="button"
-                  onClick={onMobileViewCustomers}
+                  onClick={onOpenAppWorkspace}
                   className={`${entSecondaryBtn} w-full min-h-[52px] justify-center py-3.5 text-[0.875rem]`}
                 >
-                  {t("cta.viewCustomers")}
+                  {t("landing.hero.ctaPreview")}
                 </button>
               </div>
 
               <div className="landing-mobile-cta-secondary flex flex-wrap items-center justify-center gap-x-5 gap-y-2 border-t border-white/[0.06] pt-4">
-                <Link
-                  href={JOIN_PATH}
-                  prefetch={false}
+                <button
+                  type="button"
+                  onClick={onMobileStartQuickAi}
                   className="min-h-10 px-1 text-[13px] font-semibold text-slate-400 underline decoration-white/20 underline-offset-[5px] transition hover:text-slate-200 touch-manipulation"
                 >
-                  {t("cta.joinBeta")}
-                </Link>
+                  {t("cta.quickAiConsult")}
+                </button>
                 <button
                   type="button"
                   onClick={onMobileLandingBrowseOpen}
@@ -492,7 +493,7 @@ export function LandingShowroom({
             <p className="mt-4 max-w-[36ch] whitespace-pre-line text-[0.9375rem] leading-relaxed text-slate-300/92 sm:text-[1.02rem]">
               {t("landing.showroom.hero.sub")}
             </p>
-            <p className="mt-3 max-w-[40ch] text-[0.8125rem] leading-relaxed text-slate-400 sm:text-[0.875rem]">
+            <p className="mt-3 max-w-[40ch] whitespace-pre-line text-[0.8125rem] leading-relaxed text-slate-400 sm:text-[0.875rem]">
               {t("landing.showroom.hero.trustLine")}
             </p>
             <LandingCtaPair
@@ -560,6 +561,9 @@ export function LandingShowroom({
               </li>
             ))}
           </ul>
+          <p className="mx-auto mt-6 max-w-[40ch] whitespace-pre-line text-center text-[0.8125rem] leading-relaxed text-slate-400 [word-break:keep-all] sm:text-[0.875rem]">
+            {t("landing.solution.aux")}
+          </p>
         </div>
       </section>
 

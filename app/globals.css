@@ -2569,6 +2569,15 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
 
 .landing-mobile-intro-card {
   margin-top: 0.125rem;
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .landing-mobile-intro-card {
+    padding-top: 1.75rem;
+    padding-bottom: 1.75rem;
+  }
 }
 
 .landing-mobile-cta-primary .landing-enterprise-btn-primary {
@@ -2589,6 +2598,14 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
 /* 데스크톱 히어로 — HTML CTA + 표시용 이미지(클릭 없음) */
 .landing-hero-intro {
   padding: clamp(0.5rem, 1.2vw, 1rem) 0;
+}
+
+.landing-hero-intro h1 {
+  max-width: 18ch;
+}
+
+.landing-hero-intro p.whitespace-pre-line {
+  max-width: 34ch;
 }
 
 .landing-guide03-hero-shell {
