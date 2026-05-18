@@ -7,6 +7,7 @@ import { SensoraAnimatedMark } from "@/app/components/SensoraAnimatedMark";
 import { LanguageSelect } from "@/app/components/i18n/LanguageSelect";
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
 import type { CrmSection } from "@/app/crm/crmSectionTypes";
+import { useAuth } from "@/app/crm/useAuth";
 import type { TranslationKey } from "@/lib/i18n";
 
 /** 모바일 랜딩에서 워크스페이스로 보낼 대상(CRM 섹션 또는 출고 페이지). */
@@ -64,6 +65,14 @@ const TRUST_POINT_KEYS = [
   "landing.trust.point4",
 ] as const;
 
+const LANDING_SECTION_NAV_LINKS: ReadonlyArray<{ id: string; labelKey: TranslationKey }> = [
+  { id: "sensora-landing-problem", labelKey: "landing.nav.problem" },
+  { id: "sensora-landing-solution", labelKey: "landing.nav.solution" },
+  { id: "sensora-landing-features", labelKey: "landing.nav.features" },
+  { id: "sensora-landing-flow", labelKey: "landing.nav.flow" },
+  { id: "sensora-landing-trust", labelKey: "landing.nav.trust" },
+];
+
 const LANDING_FEATURE_DEFS: ReadonlyArray<{
   titleKey: TranslationKey;
   descKey: TranslationKey;
@@ -76,6 +85,101 @@ const LANDING_FEATURE_DEFS: ReadonlyArray<{
   { titleKey: "landing.features.f5.title", descKey: "landing.features.f5.desc", icon: "followup" },
   { titleKey: "landing.features.f6.title", descKey: "landing.features.f6.desc", icon: "customers" },
 ];
+
+function LandingSectionNav({
+  t,
+  onOpenAppWorkspace,
+}: {
+  t: (key: TranslationKey) => string;
+  onOpenAppWorkspace: () => void;
+}) {
+  const { auth, signOut } = useAuth();
+
+  const scrollToSection = (sectionId: string) => {
+    const el = document.getElementById(sectionId);
+    if (!el) return;
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  return (
+    <nav
+      id="sensora-landing-nav"
+      className="landing-section-nav relative z-[2] hidden w-full lg:block"
+      aria-label={t("landing.nav.brandTagline")}
+    >
+      <div className="landing-section-nav-inner mx-auto flex w-full max-w-[1440px] items-center justify-between gap-4 px-4 sm:px-6">
+        <div className="landing-section-nav-brand min-w-0 shrink-0">
+          <p className="text-[0.9375rem] font-semibold leading-tight tracking-[-0.02em] text-white sm:text-[1rem]">
+            {t("product.name")}
+          </p>
+          <p className="mt-0.5 text-[11px] font-medium leading-snug text-slate-400 [word-break:keep-all] sm:text-[12px]">
+            {t("landing.nav.brandTagline")}
+          </p>
+        </div>
+
+        <ul className="landing-section-nav-menu hidden min-w-0 flex-1 list-none flex-wrap items-center justify-center gap-x-1 gap-y-1 px-2 lg:flex lg:gap-x-1.5">
+          {LANDING_SECTION_NAV_LINKS.map(({ id, labelKey }) => (
+            <li key={id}>
+              <button
+                type="button"
+                onClick={() => scrollToSection(id)}
+                className="landing-section-nav-link min-h-[36px] rounded-lg px-2.5 py-1.5 text-[12px] font-semibold text-slate-400 transition hover:bg-white/[0.06] hover:text-slate-100 touch-manipulation sm:px-3 sm:text-[13px]"
+              >
+                {t(labelKey)}
+              </button>
+            </li>
+          ))}
+        </ul>
+
+        <div className="landing-section-nav-actions flex shrink-0 flex-wrap items-center justify-end gap-2">
+          <div className="hidden shrink-0 lg:block [&_select]:h-8 [&_select]:max-w-[5.75rem]">
+            <LanguageSelect dense />
+          </div>
+          {auth.status === "signed-in" ? (
+            <>
+              <Link
+                href="/?view=app"
+                prefetch={false}
+                className="landing-enterprise-btn-secondary hidden min-h-[40px] items-center justify-center rounded-lg px-3 py-2 text-[12px] font-semibold touch-manipulation lg:inline-flex lg:text-[13px]"
+              >
+                {t("header.workspace")}
+              </Link>
+              <button
+                type="button"
+                onClick={() => void signOut()}
+                className="hidden min-h-[40px] items-center justify-center rounded-lg px-2.5 py-2 text-[12px] font-semibold text-slate-400 transition hover:text-slate-200 touch-manipulation lg:inline-flex"
+              >
+                {t("auth.signOut")}
+              </button>
+            </>
+          ) : auth.status !== "loading" ? (
+            <Link
+              href="/login"
+              prefetch={false}
+              className="hidden min-h-[40px] items-center justify-center rounded-lg px-3 py-2 text-[12px] font-semibold text-slate-300 transition hover:text-white touch-manipulation lg:inline-flex"
+            >
+              로그인
+            </Link>
+          ) : null}
+          <button
+            type="button"
+            onClick={onOpenAppWorkspace}
+            className="landing-enterprise-btn-secondary inline-flex min-h-[40px] items-center justify-center rounded-lg px-3 py-2 text-[12px] font-semibold touch-manipulation sm:text-[13px]"
+          >
+            {t("landing.hero.ctaPreview")}
+          </button>
+          <Link
+            href={JOIN_PATH}
+            prefetch={false}
+            className="landing-enterprise-btn-primary inline-flex min-h-[40px] items-center justify-center rounded-lg px-3.5 py-2 text-[12px] font-semibold touch-manipulation sm:px-4 sm:text-[13px]"
+          >
+            {t("cta.joinBeta")}
+          </Link>
+        </div>
+      </div>
+    </nav>
+  );
+}
 
 function LandingFirstScreenIntro({
   t,
@@ -357,6 +461,8 @@ export function LandingShowroom({
         className="pointer-events-none fixed inset-0 bg-[radial-gradient(ellipse_82%_52%_at_52%_8%,rgba(56,189,248,0.1),transparent_55%),radial-gradient(ellipse_58%_42%_at_96%_18%,rgba(139,92,246,0.08),transparent_52%),linear-gradient(180deg,#050f1e_0%,#020817_45%,#030b16_100%)]"
       />
 
+      <LandingSectionNav t={t} onOpenAppWorkspace={onOpenAppWorkspace} />
+
       {/* 모바일: 시작 화면(로그인·둘러보기)과 업무 메뉴(둘러보기 진입 후) 분리 */}
       <div id="sensora-landing-mobile-root" className="relative z-[1] lg:hidden">
         {!mobileLandingBrowseOpen ? (
@@ -489,45 +595,35 @@ export function LandingShowroom({
         )}
       </div>
 
-      {/* 데스크톱 첫 화면 — 헤드라인·설명·CTA 후 통합 이미지(보조) */}
-      <section id="sensora-landing-hero" className={`${sectionShell} hidden pb-6 pt-2 lg:block sm:pb-8 sm:pt-3 lg:pt-4`}>
+      {/* 데스크톱 Hero — 핵심 가치·CTA 후 통합 이미지(보조) */}
+      <section
+        id="sensora-landing-hero"
+        className={`landing-hero-section ${sectionShell} hidden pb-6 pt-3 lg:block sm:pb-8 sm:pt-4`}
+      >
         <div className={innerMax}>
           <LandingFirstScreenIntro t={t} onOpenAppWorkspace={onOpenAppWorkspace} layout="desktop" />
-          <div className="landing-guide03-hero-shell mx-auto mt-8 flex w-full flex-col items-center justify-center lg:mt-10">
-            <div className="landing-guide03-hero-frame relative w-full max-w-[1440px] landing-guide03-hero-frame--supplemental">
+          <div className="landing-guide03-hero-shell mx-auto mt-6 flex w-full flex-col items-center justify-center sm:mt-8 lg:mt-9">
+            <div className="landing-guide03-hero-frame relative w-full max-w-[min(100%,900px)] landing-guide03-hero-frame--supplemental">
               <Image
                 src="/images/guides/sensora-guide-03.png"
-                alt="Sensora Auto CRM 랜딩 안내"
+                alt=""
                 width={1672}
                 height={941}
                 priority
                 quality={100}
                 className="landing-guide03-hero-image pointer-events-none cursor-default select-none"
-                sizes="(max-width: 1440px) 100vw, 1440px"
+                sizes="(max-width: 900px) 100vw, 900px"
               />
-              <Link
-                href={JOIN_PATH}
-                prefetch={false}
-                className="landing-guide03-hotspot landing-guide03-hotspot--hero-join"
-                aria-label={t("cta.joinBeta")}
-              >
-                <span className="sr-only">{t("cta.joinBeta")}</span>
-              </Link>
-              <button
-                type="button"
-                onClick={onOpenAppWorkspace}
-                className="landing-guide03-hotspot landing-guide03-hotspot--hero-preview"
-                aria-label={t("landing.hero.ctaPreview")}
-              >
-                <span className="sr-only">{t("landing.hero.ctaPreview")}</span>
-              </button>
             </div>
           </div>
         </div>
       </section>
 
       <div id="sensora-landing-mobile-more" className="max-lg:border-t max-lg:border-white/[0.08] lg:contents">
-      <section id="sensora-landing-problems" className={`${sectionShell} border-t border-white/[0.06] py-10 sm:py-14 max-lg:border-t-0`}>
+      <section
+        id="sensora-landing-problem"
+        className={`landing-story-anchor ${sectionShell} border-t border-white/[0.06] py-10 sm:py-14 max-lg:border-t-0`}
+      >
         <div className={`${innerMax} landing-story-section`}>
           <h2 className="landing-story-title mx-auto max-w-[22ch] text-center [word-break:keep-all]">{t("landing.problems.title")}</h2>
           <ul className="landing-story-card-grid mt-8 sm:mt-10">
@@ -545,7 +641,10 @@ export function LandingShowroom({
         </div>
       </section>
 
-      <section id="sensora-landing-solution" className={`${sectionShell} border-t border-white/[0.06] py-10 sm:py-14`}>
+      <section
+        id="sensora-landing-solution"
+        className={`landing-story-anchor ${sectionShell} border-t border-white/[0.06] py-10 sm:py-14`}
+      >
         <div className={`${innerMax} landing-story-section max-w-[720px] lg:max-w-[800px]`}>
           <h2 className="landing-story-title mx-auto max-w-[20ch] text-center [word-break:keep-all]">{t("landing.solution.title")}</h2>
           <p className="mx-auto mt-5 max-w-[48ch] text-center text-[0.9rem] leading-relaxed text-slate-300/90 sm:text-[0.98rem] [word-break:keep-all]">
@@ -570,7 +669,10 @@ export function LandingShowroom({
         </div>
       </section>
 
-      <section id="sensora-landing-features" className={`${sectionShell} border-t border-white/[0.06] py-10 sm:py-14`}>
+      <section
+        id="sensora-landing-features"
+        className={`landing-story-anchor ${sectionShell} border-t border-white/[0.06] py-10 sm:py-14`}
+      >
         <div className={`${innerMax} landing-story-section`}>
           <h2 className="landing-story-title mx-auto max-w-[18ch] text-center [word-break:keep-all]">{t("landing.features.title")}</h2>
           <ul className="landing-story-card-grid landing-story-card-grid--features mt-8 sm:mt-10">
@@ -595,7 +697,10 @@ export function LandingShowroom({
         </div>
       </section>
 
-      <section id="sensora-landing-flow" className={`${sectionShell} border-t border-white/[0.06] py-10 sm:py-14`}>
+      <section
+        id="sensora-landing-flow"
+        className={`landing-story-anchor ${sectionShell} border-t border-white/[0.06] py-10 sm:py-14`}
+      >
         <div className={`${innerMax} landing-story-section max-w-[800px] lg:max-w-[900px]`}>
           <h2 className="landing-story-title mx-auto max-w-[20ch] text-center [word-break:keep-all]">{t("landing.flow.title")}</h2>
           <ol className="landing-flow-steps mt-8 sm:mt-10">
@@ -614,7 +719,10 @@ export function LandingShowroom({
         </div>
       </section>
 
-      <section id="sensora-landing-trust" className={`${sectionShell} border-t border-white/[0.06] py-10 sm:py-14`}>
+      <section
+        id="sensora-landing-trust"
+        className={`landing-story-anchor ${sectionShell} border-t border-white/[0.06] py-10 sm:py-14`}
+      >
         <div className={`${innerMax} landing-story-section max-w-[640px] lg:max-w-[720px]`}>
           <p className="text-center text-[10px] font-semibold uppercase tracking-[0.16em] text-violet-300/78 sm:text-[11px]">
             {t("landing.slides.philosophy.kicker")}
@@ -639,7 +747,7 @@ export function LandingShowroom({
       <section
         id="sensora-landing-cta"
         className={[
-          `${sectionShell} border-t border-white/[0.06] py-9 sm:py-14 lg:pb-[max(3rem,calc(2.5rem+env(safe-area-inset-bottom,0px)))]`,
+          `landing-story-anchor ${sectionShell} border-t border-white/[0.06] py-9 sm:py-14 lg:pb-[max(3rem,calc(2.5rem+env(safe-area-inset-bottom,0px)))]`,
           mobileLandingBrowseOpen
             ? "max-lg:scroll-mb-[calc(5.25rem+env(safe-area-inset-bottom,0px))] max-lg:pb-[max(9.5rem,calc(6.25rem+env(safe-area-inset-bottom,0px)))]"
             : "max-lg:pb-12",

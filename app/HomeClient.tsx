@@ -254,7 +254,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                 "px-4 pb-3 pt-[max(14px,calc(env(safe-area-inset-top,0px)+12px))] sm:px-6",
                 "bg-[#07111f]/88 shadow-[inset_0_-1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl",
               ].join(" "),
-          view === "landing" && !mobileLandingBrowseOpen ? "max-lg:hidden" : "",
+          view === "landing" && !mobileLandingBrowseOpen ? "hidden" : "",
         ].join(" ")}
       >
         <div

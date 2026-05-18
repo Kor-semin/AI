@@ -2595,6 +2595,37 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   margin-top: 0.25rem;
 }
 
+/* 데스크톱 랜딩 — 섹션 네비(Hero와 분리) + 앵커 스크롤 여백 */
+.sensora-landing-scroll {
+  --landing-nav-height: 4.25rem;
+  --landing-section-scroll-mt: calc(var(--landing-nav-height) + 0.75rem);
+}
+
+.landing-section-nav {
+  position: sticky;
+  top: 0;
+  z-index: 25;
+  flex-shrink: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(2, 8, 23, 0.94);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  padding-top: max(0px, env(safe-area-inset-top, 0px));
+}
+
+.landing-section-nav-inner {
+  min-height: var(--landing-nav-height);
+  padding-block: 0.5rem;
+}
+
+.landing-story-anchor {
+  scroll-margin-top: var(--landing-section-scroll-mt);
+}
+
+.landing-hero-section {
+  border-top: 0;
+}
+
 /* 랜딩 첫 화면 — 헤드라인·설명·CTA(텍스트 우선) */
 .landing-first-screen-copy--desktop {
   max-width: 44rem;
