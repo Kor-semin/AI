@@ -479,45 +479,37 @@ export function LandingShowroom({
         )}
       </div>
 
-      {/* 데스크톱 히어로 — HTML CTA + 참고용 큰 이미지(클릭 없음) */}
-      <section id="sensora-landing-hero" className={`${sectionShell} hidden pb-4 pt-2 lg:block sm:pb-6 sm:pt-3 lg:pt-4`}>
+      {/* 데스크톱 히어로 — 통합 이미지 1장 + 그래픽 CTA 2곳만 투명 핫스팟 */}
+      <section id="sensora-landing-hero" className={`${sectionShell} hidden pb-6 pt-2 lg:block sm:pb-8 sm:pt-3 lg:pt-4`}>
         <div className={innerMax}>
-          <div className="landing-hero-intro mx-auto max-w-[1440px]">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-violet-300/80 sm:text-[11px]">
-              {t("landing.showroom.hero.kickerBadge")}
-            </p>
-            <h1 className="mt-3 max-w-[16ch] text-[clamp(1.65rem,calc(1rem+2.4vw),2.65rem)] font-semibold leading-[1.1] tracking-[-0.038em] text-slate-50 [word-break:keep-all] sm:max-w-[20ch]">
-              <span className="block">{t("landing.showroom.hero.headlineLine1")}</span>
-              <span className="mt-1 block text-sky-200/95">{t("landing.showroom.hero.headlineLine2")}</span>
-            </h1>
-            <p className="mt-4 max-w-[36ch] whitespace-pre-line text-[0.9375rem] leading-relaxed text-slate-300/92 sm:text-[1.02rem]">
-              {t("landing.showroom.hero.sub")}
-            </p>
-            <p className="mt-3 max-w-[40ch] whitespace-pre-line text-[0.8125rem] leading-relaxed text-slate-400 sm:text-[0.875rem]">
-              {t("landing.showroom.hero.trustLine")}
-            </p>
-            <LandingCtaPair
-              onOpenAppWorkspace={onOpenAppWorkspace}
-              joinLabel={t("cta.joinBeta")}
-              previewLabel={t("landing.hero.ctaPreview")}
-              className="mt-7"
-            />
-            <p className="mt-3 text-[11px] text-slate-500">{t("landing.hero.ctaBarHint")}</p>
-          </div>
-          <div className="landing-guide03-hero-shell mx-auto mt-8 flex w-full flex-col items-center justify-center">
-            <div
-              className="landing-guide03-hero-frame landing-guide03-hero-frame--display relative w-full max-w-[1440px] overflow-hidden"
-              aria-hidden
-            >
+          <div className="landing-guide03-hero-shell mx-auto flex w-full flex-col items-center justify-center">
+            <div className="landing-guide03-hero-frame relative w-full max-w-[1440px]">
               <Image
                 src="/images/guides/sensora-guide-03.png"
-                alt=""
-                fill
+                alt="Sensora Auto CRM 랜딩 안내"
+                width={1672}
+                height={941}
                 priority
                 quality={100}
                 className="landing-guide03-hero-image pointer-events-none cursor-default select-none"
                 sizes="(max-width: 1440px) 100vw, 1440px"
               />
+              <Link
+                href={JOIN_PATH}
+                prefetch={false}
+                className="landing-guide03-hotspot landing-guide03-hotspot--hero-join"
+                aria-label={t("cta.joinBeta")}
+              >
+                <span className="sr-only">{t("cta.joinBeta")}</span>
+              </Link>
+              <button
+                type="button"
+                onClick={onOpenAppWorkspace}
+                className="landing-guide03-hotspot landing-guide03-hotspot--hero-preview"
+                aria-label={t("landing.hero.ctaPreview")}
+              >
+                <span className="sr-only">{t("landing.hero.ctaPreview")}</span>
+              </button>
             </div>
           </div>
         </div>

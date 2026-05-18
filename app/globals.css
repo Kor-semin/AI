@@ -2595,48 +2595,64 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   margin-top: 0.25rem;
 }
 
-/* 데스크톱 히어로 — HTML CTA + 표시용 이미지(클릭 없음) */
-.landing-hero-intro {
-  padding: clamp(0.5rem, 1.2vw, 1rem) 0;
-}
-
-.landing-hero-intro h1 {
-  max-width: 18ch;
-}
-
-.landing-hero-intro p.whitespace-pre-line {
-  max-width: 34ch;
-}
-
+/* 데스크톱 히어로 — 통합 이미지(1672×941) 전체 표시 + CTA 2곳 핫스팟 */
 .landing-guide03-hero-shell {
   min-height: 0;
-  padding: 0;
+  padding: clamp(0.25rem, 1.1vw, 0.9rem) 0;
 }
 
 .landing-guide03-hero-frame {
   position: relative;
-  aspect-ratio: 1672 / 941;
-  width: min(100%, calc((100dvh - 14rem) * 1672 / 941));
-  max-height: min(52vh, 520px);
+  width: 100%;
+  max-width: 1440px;
+  margin-inline: auto;
   border-radius: clamp(18px, 2.35vw, 34px);
+  overflow: hidden;
   background: #020817;
   box-shadow:
     0 34px 110px -58px rgba(0, 0, 0, 0.86),
     0 0 0 1px rgba(255, 255, 255, 0.07);
 }
 
-.landing-guide03-hero-frame--display {
-  pointer-events: none;
-}
-
-.landing-guide03-hero-frame > span:has(.landing-guide03-hero-image) {
-  pointer-events: none !important;
-}
-
 .landing-guide03-hero-image {
+  display: block;
+  width: 100%;
+  height: auto;
   pointer-events: none;
   user-select: none;
-  object-fit: cover;
+}
+
+.landing-guide03-hotspot {
+  position: absolute;
+  z-index: 30;
+  display: block;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  touch-action: manipulation;
+}
+
+.landing-guide03-hotspot:focus-visible {
+  outline: 2px solid rgba(56, 189, 248, 0.75);
+  outline-offset: 3px;
+  border-radius: 14px;
+}
+
+/* sensora-guide-03.png(1672×941) 내 그래픽 CTA — object-contain 크롭 없음 기준 % */
+.landing-guide03-hotspot--hero-join {
+  left: 7%;
+  top: 39.5%;
+  width: 15%;
+  height: 6.5%;
+}
+
+.landing-guide03-hotspot--hero-preview {
+  left: 23%;
+  top: 39.5%;
+  width: 17%;
+  height: 6.5%;
 }
 
 /* 랜딩 스토리 섹션(문제 → 해결 → 기능 → 흐름 → 신뢰) */
