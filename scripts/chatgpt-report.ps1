@@ -1,15 +1,22 @@
-#requires -Version 5.1
+﻿#requires -Version 5.1
 <#
 .SYNOPSIS
   Sensora 작업 완료 후 빌드·선택적 커밋·push·ChatGPT 보고용 요약 클립보드 복사를 수행합니다.
 
 .EXAMPLE
-  powershell -ExecutionPolicy Bypass -File scripts/chatgpt-report.ps1 `
+  powershell -NoProfile -ExecutionPolicy Bypass -File scripts/chatgpt-report.ps1 `
     -TaskName "랜딩 사용 흐름 신뢰 문구 수정" `
     -Files "lib/i18n.ts" `
     -Summary "landing.flow.footnote 신뢰 문구 반영" `
     -CommitMessage "polish: clarify landing flow trust footnote" `
     -Push
+
+.EXAMPLE
+  npm run report:chatgpt -- -DryRun `
+    -TaskName "앱 AI 비서 첫 진입 CTA 강화" `
+    -Files "app/crm/QuickAiAssistantEntry.tsx" `
+    -Summary "메인 CTA 문구 변경 테스트" `
+    -CommitMessage "test: verify korean report encoding"
 #>
 [CmdletBinding()]
 param(
@@ -25,24 +32,71 @@ param(
     [Parameter(Mandatory = $true)]
     [string] $CommitMessage,
 
-    [switch] $Push
+    [switch] $Push,
+
+    [switch] $DryRun,
+
+    [switch] $RunBuild
 )
 
 $ErrorActionPreference = 'Stop'
 $ExpectedRoot = 'C:\Ai\customer-manager-clean'
 
+function Initialize-ReportEncoding {
+    $utf8 = New-Object System.Text.UTF8Encoding $false
+    try {
+        [Console]::InputEncoding = $utf8
+        [Console]::OutputEncoding = $utf8
+    }
+    catch {
+        # 일부 호스트에서는 InputEncoding 설정이 제한될 수 있음
+        [Console]::OutputEncoding = $utf8
+    }
+    $OutputEncoding = $utf8
+    if ($PSVersionTable.PSVersion.Major -lt 6) {
+        chcp 65001 | Out-Null
+    }
+}
+
 function Write-Step {
     param([string] $Message)
-    Write-Host ""
+    Write-Host ''
     Write-Host "==> $Message" -ForegroundColor Cyan
 }
 
 function Exit-WithError {
     param([string] $Message)
-    Write-Host ""
+    Write-Host ''
     Write-Host "ERROR: $Message" -ForegroundColor Red
     exit 1
 }
+
+function Set-ReportClipboard {
+    param([string] $Text)
+    try {
+        Set-Clipboard -Value $Text
+    }
+    catch {
+        Add-Type -AssemblyName System.Windows.Forms
+        [System.Windows.Forms.Clipboard]::SetText($Text)
+    }
+}
+
+function Get-NormalizedFiles {
+    param([string[]] $RawFiles)
+    @(
+        foreach ($file in $RawFiles) {
+            foreach ($part in ($file -split ',')) {
+                $trimmed = $part.Trim()
+                if (-not [string]::IsNullOrWhiteSpace($trimmed)) {
+                    $trimmed
+                }
+            }
+        }
+    ) | Select-Object -Unique
+}
+
+Initialize-ReportEncoding
 
 # 1. 작업 경로 확인
 $currentRoot = (Resolve-Path -LiteralPath (Get-Location)).Path
@@ -51,83 +105,96 @@ if ($currentRoot -ne $ExpectedRoot) {
 }
 
 Write-Step "작업 경로 확인: $currentRoot"
+if ($DryRun) {
+    Write-Host "[DryRun] git add / commit / push 는 실행하지 않습니다." -ForegroundColor Yellow
+}
 
 # 2. git status
-Write-Step "git status"
+Write-Step 'git status'
 git status
 if ($LASTEXITCODE -ne 0) {
-    Exit-WithError "git status 실행에 실패했습니다."
+    Exit-WithError 'git status 실행에 실패했습니다.'
 }
 
 # 3. npm run build
-Write-Step "npm run build"
-npm run build
-if ($LASTEXITCODE -ne 0) {
-    Exit-WithError "npm run build 실패. 커밋을 중단합니다."
-}
-$buildResult = '성공'
-Write-Host "npm run build: $buildResult" -ForegroundColor Green
+$shouldBuild = (-not $DryRun) -or $RunBuild
+$buildResult = '미실행 (DryRun)'
 
-# 4. 지정 파일만 git add (git add . 금지)
-$normalizedFiles = @(
-    foreach ($file in $Files) {
-        $trimmed = $file.Trim()
-        if ([string]::IsNullOrWhiteSpace($trimmed)) { continue }
-        $trimmed
+if ($shouldBuild) {
+    Write-Step 'npm run build'
+    npm run build
+    if ($LASTEXITCODE -ne 0) {
+        if ($DryRun) {
+            Exit-WithError 'npm run build 실패.'
+        }
+        Exit-WithError 'npm run build 실패. 커밋을 중단합니다.'
     }
-) | Select-Object -Unique
+    $buildResult = '성공'
+    Write-Host "npm run build: $buildResult" -ForegroundColor Green
+}
+else {
+    Write-Step 'npm run build (DryRun 생략, -RunBuild 로 실행 가능)'
+}
 
+$normalizedFiles = Get-NormalizedFiles -RawFiles $Files
 if ($normalizedFiles.Count -eq 0) {
-    Exit-WithError "-Files에 추가할 파일이 없습니다."
+    Exit-WithError '-Files에 추가할 파일이 없습니다.'
 }
 
-Write-Step "git add (지정 파일만)"
-foreach ($file in $normalizedFiles) {
-    if (-not (Test-Path -LiteralPath $file)) {
-        Exit-WithError "파일을 찾을 수 없습니다: $file"
-    }
-    Write-Host "  git add $file"
-    git add -- $file
-    if ($LASTEXITCODE -ne 0) {
-        Exit-WithError "git add 실패: $file"
-    }
-}
-
-# 5. 커밋
-$stagedChanges = git diff --cached --name-only
-if ([string]::IsNullOrWhiteSpace($stagedChanges)) {
-    Write-Host ""
-    Write-Host "커밋할 변경이 없습니다." -ForegroundColor Yellow
-    exit 0
-}
-
-Write-Step "git commit"
-git commit -m $CommitMessage
-if ($LASTEXITCODE -ne 0) {
-    Exit-WithError "git commit 실패."
-}
-
-# 6. push (옵션)
 $pushStatus = '미실행'
-if ($Push) {
-    Write-Step "git push"
-    git push
-    if ($LASTEXITCODE -ne 0) {
-        Exit-WithError "git push 실패."
-    }
-    $pushStatus = '완료'
-}
-
-# 7. 커밋 SHA
 $commitSha = (git rev-parse HEAD).Trim()
 if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($commitSha)) {
-    Exit-WithError "git rev-parse HEAD 실패."
+    Exit-WithError 'git rev-parse HEAD 실패.'
 }
 
-$vercelSha = if ($Push) { $commitSha } else { 'push 후 확인 필요' }
-$filesLine = ($normalizedFiles -join ', ')
+if (-not $DryRun) {
+    Write-Step 'git add (지정 파일만)'
+    foreach ($file in $normalizedFiles) {
+        if (-not (Test-Path -LiteralPath $file)) {
+            Exit-WithError "파일을 찾을 수 없습니다: $file"
+        }
+        Write-Host "  git add $file"
+        git add -- $file
+        if ($LASTEXITCODE -ne 0) {
+            Exit-WithError "git add 실패: $file"
+        }
+    }
 
-# 8–9. ChatGPT 보고용 요약 생성 및 클립보드 복사
+    $stagedChanges = git diff --cached --name-only
+    if ([string]::IsNullOrWhiteSpace($stagedChanges)) {
+        Write-Host ''
+        Write-Host '커밋할 변경이 없습니다.' -ForegroundColor Yellow
+        exit 0
+    }
+
+    Write-Step 'git commit'
+    git commit -m $CommitMessage
+    if ($LASTEXITCODE -ne 0) {
+        Exit-WithError 'git commit 실패.'
+    }
+
+    $commitSha = (git rev-parse HEAD).Trim()
+    if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($commitSha)) {
+        Exit-WithError 'git rev-parse HEAD 실패.'
+    }
+
+    if ($Push) {
+        Write-Step 'git push'
+        git push
+        if ($LASTEXITCODE -ne 0) {
+            Exit-WithError 'git push 실패.'
+        }
+        $pushStatus = '완료'
+    }
+}
+else {
+    $pushStatus = '미실행 (DryRun)'
+}
+
+$vercelSha = if ($Push -and -not $DryRun) { $commitSha } else { 'push 후 확인 필요' }
+$filesLine = ($normalizedFiles -join ', ')
+$dryRunNote = if ($DryRun) { ' (DryRun)' } else { '' }
+
 $report = @"
 [ChatGPT 보고용 요약]
 
@@ -136,7 +203,7 @@ $report = @"
 핵심 변경: $Summary
 npm run build 결과: $buildResult
 커밋 메시지: $CommitMessage
-커밋 SHA: $commitSha
+커밋 SHA: $commitSha$dryRunNote
 push 여부: $pushStatus
 Vercel 확인 SHA: $vercelSha
 대표 확인 필요: Production 화면에서 해당 변경 사항 반영 여부 확인
@@ -144,10 +211,19 @@ Vercel 확인 SHA: $vercelSha
 다음 작업 추천: Production 데스크톱·모바일 QA
 "@
 
-Set-Clipboard -Value $report
+Set-ReportClipboard -Text $report
 
-# 10. 완료 메시지
-Write-Host ""
+Write-Host ''
+Write-Host '--- [ChatGPT 보고용 요약] 미리보기 ---' -ForegroundColor DarkCyan
+$previewLines = $report -split "`r?`n"
+$previewCount = [Math]::Min(6, $previewLines.Count)
+for ($i = 0; $i -lt $previewCount; $i++) {
+    Write-Host $previewLines[$i]
+}
+if ($previewLines.Count -gt $previewCount) {
+    Write-Host '...'
+}
+Write-Host ''
 Write-Host $report
-Write-Host ""
-Write-Host "ChatGPT 보고용 요약을 클립보드에 복사했습니다." -ForegroundColor Green
+Write-Host ''
+Write-Host 'ChatGPT 보고용 요약을 클립보드에 복사했습니다.' -ForegroundColor Green
