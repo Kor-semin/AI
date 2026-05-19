@@ -23,12 +23,12 @@ export const CRM_SECTION_LABELS: Record<CrmSection, { title: string; subtitle: s
 
 export const CRM_SECTION_ORDER: CrmSection[] = [
   "ai",
-  "dashboard",
   "customers",
-  "consulting",
-  "pipeline",
-  "vehicle",
   "followup",
+  "consulting",
+  "vehicle",
+  "pipeline",
+  "dashboard",
   "settings",
 ];
 

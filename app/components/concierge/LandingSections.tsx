@@ -63,6 +63,7 @@ const TRUST_POINT_KEYS = [
   "landing.trust.point2",
   "landing.trust.point3",
   "landing.trust.point4",
+  "landing.trust.point5",
 ] as const;
 
 const LANDING_SECTION_NAV_LINKS: ReadonlyArray<{ id: string; labelKey: TranslationKey }> = [
@@ -82,8 +83,9 @@ const LANDING_FEATURE_DEFS: ReadonlyArray<{
   { titleKey: "landing.features.f2.title", descKey: "landing.features.f2.desc", icon: "ai" },
   { titleKey: "landing.features.f3.title", descKey: "landing.features.f3.desc", icon: "followup" },
   { titleKey: "landing.features.f4.title", descKey: "landing.features.f4.desc", icon: "customers" },
-  { titleKey: "landing.features.f5.title", descKey: "landing.features.f5.desc", icon: "followup" },
-  { titleKey: "landing.features.f6.title", descKey: "landing.features.f6.desc", icon: "customers" },
+  { titleKey: "landing.features.f5.title", descKey: "landing.features.f5.desc", icon: "customers" },
+  { titleKey: "landing.features.f6.title", descKey: "landing.features.f6.desc", icon: "followup" },
+  { titleKey: "landing.features.f7.title", descKey: "landing.features.f7.desc", icon: "customers" },
 ];
 
 function LandingSectionNav({

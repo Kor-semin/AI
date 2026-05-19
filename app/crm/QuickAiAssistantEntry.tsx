@@ -78,28 +78,14 @@ export function QuickAiAssistantEntry({
           className={`${textareaCls} mt-3`}
           rows={7}
         />
-        <div className="mt-4 flex flex-col gap-2.5 sm:flex-row sm:flex-wrap">
+        <div className="mt-4">
           <button
             type="button"
             onClick={onAnalyze}
             disabled={busy || !consultationDraft.trim()}
-            className="landing-enterprise-btn-primary inline-flex min-h-[50px] flex-1 items-center justify-center rounded-xl px-5 py-3 text-[0.9375rem] font-semibold touch-manipulation disabled:opacity-50 sm:min-w-[12rem] sm:flex-none"
+            className="landing-enterprise-btn-primary inline-flex min-h-[50px] w-full items-center justify-center rounded-xl px-5 py-3 text-[0.9375rem] font-semibold touch-manipulation disabled:opacity-50 sm:min-w-[12rem] sm:w-auto"
           >
             {busy ? t("crm.quickAi.analyzing") : t("crm.quickAi.analyzeCta")}
-          </button>
-          <button
-            type="button"
-            onClick={onGoCustomers}
-            className="landing-enterprise-btn-secondary inline-flex min-h-[48px] flex-1 items-center justify-center rounded-xl border border-white/[0.12] px-4 py-2.5 text-[0.875rem] font-semibold touch-manipulation sm:flex-none"
-          >
-            {t("crm.quickAi.goCustomers")}
-          </button>
-          <button
-            type="button"
-            onClick={onGoConsulting}
-            className="landing-enterprise-btn-secondary inline-flex min-h-[48px] flex-1 items-center justify-center rounded-xl border border-white/[0.1] px-4 py-2.5 text-[0.8125rem] font-semibold text-slate-300 touch-manipulation sm:flex-none"
-          >
-            {t("crm.quickAi.goConsulting")}
           </button>
         </div>
       </div>
@@ -201,17 +187,31 @@ export function QuickAiAssistantEntry({
         </div>
       ) : null}
 
-      {onOpenAdvancedAi ? (
-        <p className="mt-5 text-center">
+      <div className="quick-ai-entry-secondary-nav mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 border-t border-white/[0.06] pt-5">
+        <button
+          type="button"
+          onClick={onGoCustomers}
+          className="min-h-9 px-1 text-[12px] font-semibold text-slate-500 underline decoration-white/12 underline-offset-4 transition hover:text-slate-300 touch-manipulation"
+        >
+          {t("crm.quickAi.goCustomers")}
+        </button>
+        <button
+          type="button"
+          onClick={onGoConsulting}
+          className="min-h-9 px-1 text-[12px] font-semibold text-slate-500 underline decoration-white/12 underline-offset-4 transition hover:text-slate-300 touch-manipulation"
+        >
+          {t("crm.quickAi.goConsulting")}
+        </button>
+        {onOpenAdvancedAi ? (
           <button
             type="button"
             onClick={onOpenAdvancedAi}
-            className="text-[12px] font-semibold text-slate-500 underline decoration-white/15 underline-offset-4 hover:text-slate-300 touch-manipulation"
+            className="min-h-9 px-1 text-[12px] font-semibold text-slate-500 underline decoration-white/12 underline-offset-4 transition hover:text-slate-300 touch-manipulation"
           >
             {t("crm.quickAi.openAdvanced")}
           </button>
-        </p>
-      ) : null}
+        ) : null}
+      </div>
     </section>
   );
 }

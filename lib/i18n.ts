@@ -103,6 +103,8 @@ export type TranslationKey =
   | "landing.features.f5.desc"
   | "landing.features.f6.title"
   | "landing.features.f6.desc"
+  | "landing.features.f7.title"
+  | "landing.features.f7.desc"
   | "landing.flow.title"
   | "landing.flow.step1"
   | "landing.flow.step2"
@@ -116,6 +118,7 @@ export type TranslationKey =
   | "landing.trust.point2"
   | "landing.trust.point3"
   | "landing.trust.point4"
+  | "landing.trust.point5"
   | "landing.cta.title"
   | "crm.customerDetail.customerSmsTitle"
   | "crm.customerDetail.smsDisclaimer"
@@ -877,7 +880,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "brand.slogan": "작은 시작에서부터 시작된다",
     "brand.identity": "자동차 영업을 위한 업무 소프트웨어",
     "brand.subline": "차량 영업 · 상담·사후관리 정리",
-    "product.shortDesc": "자동차 영업사원을 위한 고객 상담·일정 정리 도구",
+    "product.shortDesc": "상담 후 고객 응대를 정리해주는 자동차 영업사원용 AI 비서",
     "hero.description":
       "고객 상담과 일정까지 한 화면에 모읍니다. AI는 검토용 요약과 문자 초안을 정리하고, 저장·판단은 항상 영업사원이 합니다.",
     "cta.joinBeta": "베타 신청하기",
@@ -903,23 +906,23 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "join.emailHint":
       "회사·팀 메일, 포털(naver, daum, kakao 등), 개인 도메인 등 자주 쓰는 이메일을 적어 주세요. 특정 서비스만 허용되지는 않습니다.",
     "landing.mobileHome.mainTitle": "SENSORA",
-    "landing.mobileHome.subline": "자동차 영업사원을 위한 AI 비서",
+    "landing.mobileHome.subline": "자동차 영업사원용 AI 비서",
     "landing.mobileHome.blurb":
-      "상담이 끝난 뒤 남겨야 할 내용과\n고객에게 보낼 문구를 깔끔하게 정리합니다.",
-    "landing.mobileStart.topTagline": "자동차 영업용 AI 비서",
+      "상담 후 남겨야 할 내용과\n고객에게 보낼 문구를 정리합니다.",
+    "landing.mobileStart.topTagline": "상담 후 고객 응대 AI 비서",
     "landing.hero.ctaBarHint": "아래 버튼에서만 이동합니다. 이미지·빈 영역은 눌러도 이동하지 않습니다.",
     "landing.hero.ctaPreview": "AI 비서 화면 보기",
     "landing.firstScreen.body":
       "상담 내용을 입력하면 AI가 고객 니즈, 문자 초안, 다음 행동을 정리합니다.\n필요한 내용은 고객 정보로 저장하고, 다음 상담과 사후관리에 이어갈 수 있습니다.",
     "landing.firstScreen.trustMicro":
       "고객 정보는 사용자가 확인하고 저장합니다.\nSensora는 고객 정보를 자동으로 수집하지 않습니다.",
-    "landing.nav.brandTagline": "자동차 영업용 AI 비서",
-    "landing.nav.problem": "문제",
-    "landing.nav.solution": "해결 방식",
-    "landing.nav.features": "기능",
+    "landing.nav.brandTagline": "상담 후 고객 응대 AI 비서",
+    "landing.nav.problem": "현장 문제",
+    "landing.nav.solution": "Sensora 방식",
+    "landing.nav.features": "주요 기능",
     "landing.nav.flow": "사용 흐름",
     "landing.nav.trust": "신뢰 원칙",
-    "landing.problems.title": "자동차 영업 현장에서는 이런 일이 자주 생깁니다",
+    "landing.problems.title": "상담 후 고객 응대는 생각보다 자주 흩어집니다",
     "landing.problems.item1": "상담 내용이 카카오톡, 메모장, 엑셀에 흩어집니다.",
     "landing.problems.item2": "고객에게 보낼 문구를 매번 새로 정리해야 합니다.",
     "landing.problems.item3": "다음 연락 타이밍을 놓치기 쉽습니다.",
@@ -928,25 +931,27 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.solution.title": "Sensora는 상담을 다음 행동으로 정리합니다",
     "landing.solution.body":
       "상담이 끝난 뒤 남겨야 할 내용과 고객에게 보낼 문구를 정리하고, 다음 연락 포인트를 안내합니다.",
-    "landing.solution.point1": "상담 내용을 정리합니다.",
-    "landing.solution.point2": "고객에게 보낼 문구를 제안합니다.",
+    "landing.solution.point1": "상담 내용을 고객 니즈로 정리합니다.",
+    "landing.solution.point2": "고객에게 보낼 문구를 신차 영업 톤으로 제안합니다.",
     "landing.solution.point3": "다음 연락과 사후관리 포인트를 안내합니다.",
     "landing.solution.point4": "필요한 내용만 고객 정보로 저장할 수 있습니다.",
     "landing.solution.aux":
-      "AI는 검토용 초안을 돕고,\n최종 확인과 발송은 영업사원이 직접 합니다.",
-    "landing.features.title": "실무에 맞는 기능",
+      "범용 AI처럼 매번 상황을 설명하지 않아도,\n자동차 영업 상담 흐름에 맞춰 문자 초안과 다음 행동을 정리합니다.",
+    "landing.features.title": "주요 기능",
     "landing.features.f1.title": "상담 정리",
     "landing.features.f1.desc": "상담 내용을 고객 니즈와 핵심 조건으로 정리합니다.",
     "landing.features.f2.title": "AI 문자 초안",
     "landing.features.f2.desc": "고객에게 보낼 문구를 신차 영업 톤으로 제안합니다.",
     "landing.features.f3.title": "다음 행동 제안",
     "landing.features.f3.desc": "다음 연락, 사후관리, 견적 확인 포인트를 안내합니다.",
-    "landing.features.f4.title": "견적서 보관",
-    "landing.features.f4.desc": "고객별 견적서와 상담 자료를 함께 확인할 수 있습니다.",
-    "landing.features.f5.title": "브랜드 / 카탈로그 연결",
-    "landing.features.f5.desc": "브랜드와 모델 기준의 자료를 고객 응대 흐름에 연결합니다.",
-    "landing.features.f6.title": "고객관리",
-    "landing.features.f6.desc": "필요한 내용만 고객별로 저장하고 다시 확인할 수 있습니다.",
+    "landing.features.f4.title": "고객으로 저장",
+    "landing.features.f4.desc": "필요한 내용만 사용자가 확인한 뒤 고객 정보로 저장합니다.",
+    "landing.features.f5.title": "견적서 보관",
+    "landing.features.f5.desc": "고객별 견적서와 상담 자료를 함께 확인할 수 있습니다.",
+    "landing.features.f6.title": "브랜드 / 카탈로그 연결",
+    "landing.features.f6.desc": "브랜드와 모델 기준의 자료를 고객 응대 흐름에 연결합니다.",
+    "landing.features.f7.title": "고객관리",
+    "landing.features.f7.desc": "상담 후 정리된 내용을 고객별로 다시 확인할 수 있습니다.",
     "landing.flow.title": "상담 후 이렇게 이어집니다",
     "landing.flow.step1": "상담 내용을 입력합니다.",
     "landing.flow.step2": "AI가 고객 니즈를 정리합니다.",
@@ -954,7 +959,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.flow.step4": "다음 행동을 확인합니다.",
     "landing.flow.step5": "필요한 내용만 고객 정보로 저장합니다.",
     "landing.flow.footnote":
-      "고객 정보는 자동으로 저장되지 않습니다. 확인한 내용만 저장하는 작은 습관부터 시작할 수 있습니다.",
+      "고객 정보는 자동으로 저장되지 않습니다.\n사용자가 확인한 내용만 저장됩니다.",
     "landing.trust.title": "고객 정보는 신뢰가 먼저입니다",
     "landing.trust.body":
       "Sensora는 고객 정보를 자동으로 수집하지 않습니다. 저장과 발송은 영업사원이 직접 확인하는 흐름을 전제로 합니다.",
@@ -962,6 +967,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.trust.point2": "Sensora는 고객 정보를 자동으로 수집하지 않습니다.",
     "landing.trust.point3": "AI는 검토용 초안을 돕습니다.",
     "landing.trust.point4": "최종 판단과 발송은 영업사원이 직접 합니다.",
+    "landing.trust.point5": "필요한 내용만 고객별로 정리할 수 있습니다.",
     "landing.cta.title": "상담 뒤 남길 내용을 더 정확하게 정리하고 싶다면, 베타를 신청해 보세요.",
     "crm.customerDetail.customerSmsTitle": "고객에게 보낼 문자",
     "crm.customerDetail.smsDisclaimer":
@@ -1314,13 +1320,13 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.sensoraFlow.analyzeAgain": "다시 분석",
     "crm.sensoraFlow.newProposal": "제안 새로 만들기",
     "crm.sensoraFlow.rewriteSms": "문자 다시 작성",
-    "crm.quickAi.kicker": "AI 비서 · 상담 정리",
-    "crm.quickAi.title": "자동차 영업사원을 위한 AI 비서",
-    "crm.quickAi.sub": "상담 내용을 넣으면, 고객에게 보낼 문구와 다음 행동을 준비합니다.",
-    "crm.quickAi.trust": "AI는 검토용 초안을 돕고, 최종 판단은 영업사원이 합니다.",
+    "crm.quickAi.kicker": "AI 비서 · 상담 후 정리",
+    "crm.quickAi.title": "상담 후 고객 응대를 정리해주는 AI 비서",
+    "crm.quickAi.sub": "상담 내용을 입력하면 고객 니즈, 문자 초안, 다음 행동을 정리합니다.",
+    "crm.quickAi.trust": "AI는 검토용 초안을 돕고, 최종 판단과 발송은 영업사원이 직접 합니다.",
     "crm.quickAi.inputLabel": "상담 내용을 입력해 주세요.",
     "crm.quickAi.inputPlaceholder":
-      "예)\nGLC 하이브리드 관심\n월 80만 원 이하 희망\n빠른 출고 원함\n법인 비용처리 문의\n견적서 보내달라고 함",
+      "예)\nGLC 상담\n월 납입 부담 낮추고 싶어함\n빠른 출고 희망\n견적서와 카탈로그 요청\n다음 주 다시 연락 필요",
     "crm.quickAi.analyzeCta": "AI 비서로 정리하기",
     "crm.quickAi.analyzing": "정리하는 중…",
     "crm.quickAi.goCustomers": "고객관리로 이동",
@@ -1417,9 +1423,9 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.showroom.hero.quietFuture": "실무 현장 안내형",
     "landing.showroom.hero.senseAuraTag": "Sense · Aura",
     "landing.showroom.hero.kickerBadge": "자동차 영업사원 업무용",
-    "landing.showroom.hero.headline": "자동차 영업사원을 위한\nAI 비서",
-    "landing.showroom.hero.headlineLine1": "자동차 영업사원을 위한",
-    "landing.showroom.hero.headlineLine2": "AI 비서",
+    "landing.showroom.hero.headline": "상담 후 고객 응대를 정리해주는\n자동차 영업사원용 AI 비서",
+    "landing.showroom.hero.headlineLine1": "상담 후 고객 응대를 정리해주는",
+    "landing.showroom.hero.headlineLine2": "자동차 영업사원용 AI 비서",
     "landing.showroom.hero.sub":
       "상담이 끝난 뒤 남겨야 할 내용과\n고객에게 보낼 문구를 깔끔하게 정리합니다.",
     "landing.showroom.hero.trustLine":
@@ -1450,7 +1456,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.slides.guide.lead": "썸네일을 누르면 이 앱 안에서 설명과 함께 크게 볼 수 있습니다.",
     "landing.slides.guide.thumbHint": "자세히",
     "landing.slides.enterprise.productKicker": "Sensora Auto CRM",
-    "landing.slides.enterprise.heroDefinition": "자동차 영업사원을 위한 AI 고객관리 워크스페이스",
+    "landing.slides.enterprise.heroDefinition": "상담 후 고객 응대를 정리해주는 자동차 영업사원용 AI 비서",
     "landing.slides.enterprise.heroSub": "상담부터 사후관리까지 한 흐름으로 정리합니다.",
     "landing.slides.philosophy.kicker": "신뢰 · 운영 원칙",
     "landing.slides.philosophy.title": "상담은 기록으로, 기록은 다음 행동으로",
@@ -1479,7 +1485,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.showroom.closing.title": "고객관리, 상담 메모, 사후관리를 한 곳에서 시작하세요.",
     "landing.showroom.bridge.line1": "상담은 기록으로,",
     "landing.showroom.bridge.line2": "기록은 다음 행동으로.",
-    "landing.showroom.header.subline": "자동차 영업용 AI 비서",
+    "landing.showroom.header.subline": "상담 후 고객 응대 AI 비서",
     "landing.showroom.heroDash.windowSubline": "오늘의 연락 · 업무 요약",
     "landing.showroom.heroDash.greetingLine": "오늘 진행하면 좋은 일이에요",
     "landing.showroom.heroDash.greetingSub": "연락 우선 확인과 검토용 초안을 한 화면에 모았습니다.",
@@ -1818,7 +1824,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "brand.slogan": "Every great system begins with a small start.",
     "brand.identity": "Work software for automotive sales teams",
     "brand.subline": "Automotive sales workspace",
-    "product.shortDesc": "AI customer management SaaS for automotive sales professionals.",
+    "product.shortDesc": "AI assistant that organizes post-consultation customer follow-up for automotive sales reps.",
     "hero.description":
       "Sensora organizes customer conversations, vehicle interests, follow-ups, message drafts, and sales pipelines with AI.",
     "cta.joinBeta": "Join the Beta",
@@ -1846,21 +1852,21 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.mobileHome.mainTitle": "SENSORA",
     "landing.mobileHome.subline": "AI assistant for automotive sales reps",
     "landing.mobileHome.blurb":
-      "After a consultation, organize what to keep\nand the message to send—clearly.",
-    "landing.mobileStart.topTagline": "AI assistant for automotive sales",
+      "After a consultation, organize what to keep\nand the message to send.",
+    "landing.mobileStart.topTagline": "Post-consultation AI assistant",
     "landing.hero.ctaBarHint": "Use the buttons below to navigate. The hero image and empty areas are not clickable.",
     "landing.hero.ctaPreview": "View AI assistant screen",
     "landing.firstScreen.body":
       "Enter consultation notes and AI organizes customer needs, message drafts, and next steps.\nSave what you need as customer records and continue into follow-up work.",
     "landing.firstScreen.trustMicro":
       "Customer information is saved only after you confirm it.\nSensora does not automatically collect customer information.",
-    "landing.nav.brandTagline": "AI assistant for automotive sales",
-    "landing.nav.problem": "Problems",
-    "landing.nav.solution": "Solution",
+    "landing.nav.brandTagline": "Post-consultation AI assistant",
+    "landing.nav.problem": "On the floor",
+    "landing.nav.solution": "How Sensora helps",
     "landing.nav.features": "Features",
     "landing.nav.flow": "Flow",
     "landing.nav.trust": "Trust",
-    "landing.problems.title": "On the sales floor, this happens often",
+    "landing.problems.title": "Post-consultation follow-up scatters more often than it should",
     "landing.problems.item1": "Consultation notes scatter across chat apps, memos, and spreadsheets.",
     "landing.problems.item2": "Customer-facing messages are drafted from scratch each time.",
     "landing.problems.item3": "It’s easy to miss the right moment for the next call.",
@@ -1869,25 +1875,27 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.solution.title": "Sensora turns consultations into the next action",
     "landing.solution.body":
       "After a consultation, organize what to keep, suggest customer-facing wording, and point to sensible next contact steps.",
-    "landing.solution.point1": "Organize consultation notes.",
-    "landing.solution.point2": "Suggest customer-facing wording.",
+    "landing.solution.point1": "Turn consultation notes into customer needs.",
+    "landing.solution.point2": "Suggest new-car sales tone wording for customers.",
     "landing.solution.point3": "Guide next contact and aftercare points.",
     "landing.solution.point4": "Save only what you need as customer records.",
     "landing.solution.aux":
-      "AI proposes review drafts—you confirm and send.",
-    "landing.features.title": "Built for daily sales work",
+      "Without re-explaining context like a general AI chat,\nSensora follows automotive sales flow for message drafts and next actions.",
+    "landing.features.title": "Key features",
     "landing.features.f1.title": "Consultation recap",
     "landing.features.f1.desc": "Turn notes into customer needs and key conditions.",
     "landing.features.f2.title": "AI message drafts",
     "landing.features.f2.desc": "Suggest new-car sales tone wording for customers.",
     "landing.features.f3.title": "Next-step suggestions",
     "landing.features.f3.desc": "Surface next contact, aftercare, and quote check points.",
-    "landing.features.f4.title": "Quote archive",
-    "landing.features.f4.desc": "Review quotes and consultation materials together per customer.",
-    "landing.features.f5.title": "Brand / catalog links",
-    "landing.features.f5.desc": "Connect brand and model materials to your response flow.",
-    "landing.features.f6.title": "Customer records",
-    "landing.features.f6.desc": "Save only what you need, per customer, and revisit it.",
+    "landing.features.f4.title": "Save as customer",
+    "landing.features.f4.desc": "Save only what you confirm as customer information.",
+    "landing.features.f5.title": "Quote archive",
+    "landing.features.f5.desc": "Review quotes and consultation materials together per customer.",
+    "landing.features.f6.title": "Brand / catalog links",
+    "landing.features.f6.desc": "Connect brand and model materials to your response flow.",
+    "landing.features.f7.title": "Customer records",
+    "landing.features.f7.desc": "Revisit post-consultation summaries per customer.",
     "landing.flow.title": "How it continues after a consultation",
     "landing.flow.step1": "Enter consultation notes.",
     "landing.flow.step2": "AI summarizes customer needs.",
@@ -1895,7 +1903,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.flow.step4": "Review suggested next actions.",
     "landing.flow.step5": "Save only what you need as customer information.",
     "landing.flow.footnote":
-      "Nothing is saved automatically—you can start with confirming only what you choose to keep.",
+      "Customer information is not saved automatically.\nOnly what you confirm is stored.",
     "landing.trust.title": "Customer data starts with trust",
     "landing.trust.body":
       "Sensora does not automatically collect customer information. Saving and sending assume you review and decide.",
@@ -1903,6 +1911,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.trust.point2": "Sensora does not automatically collect customer information.",
     "landing.trust.point3": "AI helps with review drafts.",
     "landing.trust.point4": "You make the final call and send messages.",
+    "landing.trust.point5": "You can organize only what you need, per customer.",
     "landing.cta.title": "If you want clearer notes after each consultation, apply for the beta.",
     "crm.customerDetail.customerSmsTitle": "Message draft for the customer",
     "crm.customerDetail.smsDisclaimer":
@@ -2262,13 +2271,13 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.sensoraFlow.analyzeAgain": "Analyze again",
     "crm.sensoraFlow.newProposal": "Fresh proposal",
     "crm.sensoraFlow.rewriteSms": "Rewrite SMS draft",
-    "crm.quickAi.kicker": "AI assistant · consultation",
-    "crm.quickAi.title": "AI assistant for automotive sales reps",
-    "crm.quickAi.sub": "Enter consultation notes to prepare customer messages and next actions.",
-    "crm.quickAi.trust": "AI proposes review drafts—you make the final call.",
+    "crm.quickAi.kicker": "AI assistant · after consultation",
+    "crm.quickAi.title": "AI assistant for post-consultation follow-up",
+    "crm.quickAi.sub": "Enter consultation notes to organize customer needs, message drafts, and next actions.",
+    "crm.quickAi.trust": "AI proposes review drafts—you confirm and send.",
     "crm.quickAi.inputLabel": "Enter consultation notes",
     "crm.quickAi.inputPlaceholder":
-      "e.g.\nInterested in GLC hybrid\nBudget around 800k KRW/month\nWants fast delivery\nCorporate expense questions\nAsked for a quote",
+      "e.g.\nGLC consultation\nWants lower monthly payment\nHopes for fast delivery\nRequested quote and catalog\nFollow up next week",
     "crm.quickAi.analyzeCta": "Organize with AI assistant",
     "crm.quickAi.analyzing": "Organizing…",
     "crm.quickAi.goCustomers": "Open customer list",
@@ -2367,9 +2376,9 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.showroom.hero.quietFuture": "Quiet futurism",
     "landing.showroom.hero.senseAuraTag": "Sense · Aura",
     "landing.showroom.hero.kickerBadge": "For automotive sales reps",
-    "landing.showroom.hero.headline": "An AI assistant\nfor automotive sales reps",
-    "landing.showroom.hero.headlineLine1": "For automotive sales reps",
-    "landing.showroom.hero.headlineLine2": "an AI assistant",
+    "landing.showroom.hero.headline": "AI assistant that organizes\npost-consultation customer follow-up",
+    "landing.showroom.hero.headlineLine1": "Organizes post-consultation",
+    "landing.showroom.hero.headlineLine2": "customer follow-up for sales reps",
     "landing.showroom.hero.sub":
       "After a consultation, organize what to keep\nand the message to send—clearly.",
     "landing.showroom.hero.trustLine":
@@ -2400,7 +2409,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.slides.guide.lead": "Tap a thumbnail to review it in-app with notes.",
     "landing.slides.guide.thumbHint": "Details",
     "landing.slides.enterprise.productKicker": "Sensora Auto CRM",
-    "landing.slides.enterprise.heroDefinition": "AI customer-management workspace for automotive sales reps",
+    "landing.slides.enterprise.heroDefinition": "AI assistant that organizes post-consultation customer follow-up for automotive sales reps",
     "landing.slides.enterprise.heroSub":
       "From consultation through aftercare—organized in one flow.",
     "landing.slides.philosophy.kicker": "Trust · operating principles",
@@ -2431,7 +2440,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.showroom.closing.title": "Bring customer CRM, consultation notes, and aftercare together in one place.",
     "landing.showroom.bridge.line1": "Consultation settles into notes,",
     "landing.showroom.bridge.line2": "notes guide the disciplined next touch.",
-    "landing.showroom.header.subline": "AI CRM workspace built for showroom sales teams",
+    "landing.showroom.header.subline": "Post-consultation AI assistant",
     "landing.showroom.heroDash.windowSubline": "Today's queue · workspace digest",
     "landing.showroom.heroDash.greetingLine": "Here's a calm starting lane for today.",
     "landing.showroom.heroDash.greetingSub": "Catch priority follow-ups alongside draft snippets in one glance.",

@@ -2635,7 +2635,7 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
 }
 
 .landing-first-screen-copy--desktop h1 {
-  max-width: 20ch;
+  max-width: 24ch;
   margin-inline: auto;
 }
 
