@@ -957,7 +957,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.heroDemo.resultNeedsBody":
       "월 납입 부담을 낮추는 조건과 빠른 출고 가능 여부를 중요하게 보고 있습니다.",
     "landing.heroDemo.resultSmsLabel": "문자 초안",
-    "landing.heroDemo.resultSmsBadge": "검토용 초안",
+    "landing.heroDemo.resultSmsBadge": "검토용 문자 초안",
     "landing.heroDemo.resultSmsBody":
       "안녕하세요. 오늘 상담 도와드린 내용 기준으로 월 납입 부담을 낮출 수 있는 조건과 빠른 출고 가능 여부를 함께 확인해드리겠습니다. 견적서와 카탈로그도 정리해서 안내드리겠습니다.",
     "landing.heroDemo.resultNextLabel": "추천 다음 행동",

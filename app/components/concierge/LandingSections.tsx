@@ -202,7 +202,7 @@ function LandingFirstScreenIntro({
     >
       <h1
         className={[
-          "font-semibold tracking-[-0.034em] text-slate-50 [word-break:keep-all]",
+          "landing-warm-hero-title font-semibold tracking-[-0.034em] [word-break:keep-all]",
           isDesktop
             ? "text-[clamp(1.65rem,calc(1rem+2.4vw),2.65rem)] leading-[1.1]"
             : "text-[1.125rem] leading-[1.2] sm:text-[1.2rem]",
@@ -211,7 +211,7 @@ function LandingFirstScreenIntro({
         {isDesktop ? (
           <>
             <span className="block">{t("landing.showroom.hero.headlineLine1")}</span>
-            <span className="mt-1 block text-sky-200/95">{t("landing.showroom.hero.headlineLine2")}</span>
+            <span className="landing-warm-hero-accent mt-1 block">{t("landing.showroom.hero.headlineLine2")}</span>
           </>
         ) : (
           t("landing.mobileHome.subline")
@@ -454,13 +454,13 @@ export function LandingShowroom({
     <div
       id="sensora-landing-scroll"
       className={[
-        "sensora-landing-scroll relative flex min-h-0 flex-1 flex-col overflow-y-auto overflow-x-hidden bg-[#020817]",
+        "sensora-landing-scroll sensora-landing-warm relative flex min-h-0 flex-1 flex-col overflow-y-auto overflow-x-hidden",
         mobileLandingBrowseOpen ? "max-lg:scroll-pb-[calc(5.25rem+env(safe-area-inset-bottom,0px))]" : "",
       ].join(" ")}
     >
       <div
         aria-hidden
-        className="pointer-events-none fixed inset-0 bg-[radial-gradient(ellipse_82%_52%_at_52%_8%,rgba(56,189,248,0.1),transparent_55%),radial-gradient(ellipse_58%_42%_at_96%_18%,rgba(139,92,246,0.08),transparent_52%),linear-gradient(180deg,#050f1e_0%,#020817_45%,#030b16_100%)]"
+        className="sensora-landing-warm-backdrop pointer-events-none fixed inset-0"
       />
 
       <LandingSectionNav t={t} onOpenAppWorkspace={onOpenAppWorkspace} />
