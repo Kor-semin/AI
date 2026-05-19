@@ -202,7 +202,7 @@ function LandingFirstScreenIntro({
     >
       <h1
         className={[
-          "landing-warm-hero-title font-semibold tracking-[-0.034em] [word-break:keep-all]",
+          "landing-warm-hero-title font-semibold tracking-[-0.034em] text-slate-50 [word-break:keep-all]",
           isDesktop
             ? "text-[clamp(1.65rem,calc(1rem+2.4vw),2.65rem)] leading-[1.1]"
             : "text-[1.125rem] leading-[1.2] sm:text-[1.2rem]",
@@ -454,7 +454,7 @@ export function LandingShowroom({
     <div
       id="sensora-landing-scroll"
       className={[
-        "sensora-landing-scroll sensora-landing-warm relative flex min-h-0 flex-1 flex-col overflow-y-auto overflow-x-hidden",
+        "sensora-landing-scroll sensora-landing-warm relative flex min-h-0 flex-1 flex-col overflow-y-auto overflow-x-hidden bg-[#020817]",
         mobileLandingBrowseOpen ? "max-lg:scroll-pb-[calc(5.25rem+env(safe-area-inset-bottom,0px))]" : "",
       ].join(" ")}
     >

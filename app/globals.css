@@ -2769,175 +2769,63 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   word-break: keep-all;
 }
 
-/* ── 랜딩 웜 베이지 톤 테스트 (앱 내부 CRM/AI 화면 제외) ── */
+/* ── 랜딩: 딥 네이비 배경 + AI 데모 카드만 웜 아이보리 (앱 CRM/AI 화면 제외) ── */
 .sensora-landing-warm {
-  --lw-bg: #f3ebdd;
-  --lw-bg-soft: #efe7da;
-  --lw-card: #fffdf8;
-  --lw-card-cream: #faf6ee;
-  --lw-input: #f5f0e6;
-  --lw-text: #172033;
-  --lw-text-muted: #4b5563;
-  --lw-text-soft: #5c6578;
-  --lw-navy: #17233a;
-  --lw-blue: #345c7c;
-  --lw-violet: #4c6294;
-  --lw-border: rgba(31, 41, 55, 0.12);
-  --lw-shadow: 0 22px 56px -28px rgba(23, 35, 58, 0.16);
-  background-color: var(--lw-bg);
-  color: var(--lw-text);
+  background-color: #020817;
+  color: #e2e8f0;
 }
 
 .sensora-landing-warm-backdrop {
   background:
-    radial-gradient(ellipse 82% 52% at 52% 8%, rgba(52, 92, 124, 0.08), transparent 55%),
-    radial-gradient(ellipse 58% 42% at 96% 18%, rgba(76, 98, 148, 0.06), transparent 52%),
-    linear-gradient(180deg, #f6f0e7 0%, #f3ebdd 45%, #efe7da 100%);
-}
-
-.sensora-landing-warm .landing-section-nav {
-  border-bottom-color: var(--lw-border);
-  background: rgba(255, 253, 248, 0.94);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-}
-
-.sensora-landing-warm .landing-section-nav-brand p:first-child {
-  color: var(--lw-navy);
-}
-
-.sensora-landing-warm .landing-section-nav-brand p:last-child,
-.sensora-landing-warm .landing-section-nav-link {
-  color: var(--lw-text-soft);
-}
-
-.sensora-landing-warm .landing-section-nav-link:hover {
-  color: var(--lw-navy);
-  background: rgba(52, 92, 124, 0.08);
+    radial-gradient(ellipse 82% 52% at 52% 8%, rgba(56, 189, 248, 0.1), transparent 55%),
+    radial-gradient(ellipse 58% 42% at 96% 18%, rgba(139, 92, 246, 0.08), transparent 52%),
+    linear-gradient(180deg, #050f1e 0%, #020817 45%, #030b16 100%);
 }
 
 .sensora-landing-warm .landing-warm-hero-title {
-  color: var(--lw-navy);
+  color: #f8fafc;
 }
 
 .sensora-landing-warm .landing-warm-hero-accent {
-  color: var(--lw-blue);
-}
-
-.sensora-landing-warm .landing-first-screen-copy p {
-  color: var(--lw-text-muted);
-}
-
-.sensora-landing-warm .landing-enterprise-btn-primary {
-  border: 1px solid rgba(23, 35, 58, 0.22);
-  background: linear-gradient(180deg, #243552 0%, #17233a 58%, #121c2e 100%);
-  color: #f8fafc;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.12),
-    0 8px 22px -10px rgba(23, 35, 58, 0.35);
-}
-
-.sensora-landing-warm .landing-enterprise-btn-primary:hover {
-  background: linear-gradient(180deg, #2d4260 0%, #1b2a45 58%, #141f33 100%);
-}
-
-.sensora-landing-warm .landing-enterprise-btn-secondary {
-  border-color: rgba(52, 92, 124, 0.28);
-  background: rgba(255, 253, 248, 0.92);
-  color: var(--lw-navy);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
-}
-
-.sensora-landing-warm .landing-enterprise-btn-secondary:hover {
-  border-color: rgba(52, 92, 124, 0.4);
-  background: #fffdf8;
-}
-
-.sensora-landing-warm .border-white\/\[0\.06\],
-.sensora-landing-warm .border-white\/\[0\.08\],
-.sensora-landing-warm .border-white\/\[0\.1\] {
-  border-color: var(--lw-border) !important;
-}
-
-.sensora-landing-warm .landing-story-title {
-  color: var(--lw-navy);
+  color: rgba(186, 230, 253, 0.95);
 }
 
 .sensora-landing-warm .landing-story-card {
-  border-color: var(--lw-border);
-  background: var(--lw-card);
-  box-shadow: var(--lw-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.7);
-  color: var(--lw-text);
-}
-
-.sensora-landing-warm .landing-story-card-index {
-  background: rgba(52, 92, 124, 0.12);
-  color: var(--lw-blue);
-}
-
-.sensora-landing-warm .landing-story-card p,
-.sensora-landing-warm .landing-story-card h3 {
-  color: var(--lw-text);
-}
-
-.sensora-landing-warm .landing-story-card .text-slate-400,
-.sensora-landing-warm .landing-story-card .text-slate-200,
-.sensora-landing-warm .landing-story-card .text-slate-50 {
-  color: var(--lw-text-muted) !important;
+  border-color: rgba(255, 255, 255, 0.1);
+  background: rgba(5, 15, 26, 0.68);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 12px 40px -24px rgba(0, 0, 0, 0.45);
 }
 
 .sensora-landing-warm .landing-flow-step {
-  border-color: var(--lw-border);
-  background: var(--lw-card);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
+  border-color: rgba(255, 255, 255, 0.09);
+  background: rgba(5, 15, 26, 0.62);
 }
 
-.sensora-landing-warm .landing-flow-step-num {
-  background: rgba(76, 98, 148, 0.14);
-  color: var(--lw-violet);
-}
-
-.sensora-landing-warm .landing-flow-step p,
-.sensora-landing-warm .text-slate-300,
-.sensora-landing-warm .text-slate-400,
-.sensora-landing-warm .text-slate-500,
-.sensora-landing-warm .text-slate-600 {
-  color: var(--lw-text-muted);
-}
-
-.sensora-landing-warm .text-slate-200,
-.sensora-landing-warm .text-slate-100,
-.sensora-landing-warm .text-slate-50 {
-  color: var(--lw-text);
-}
-
-.sensora-landing-warm .text-violet-300,
-.sensora-landing-warm .text-sky-300,
-.sensora-landing-warm .text-sky-200 {
-  color: var(--lw-blue) !important;
-}
-
-.sensora-landing-warm .bg-\[\#030b14\],
-.sensora-landing-warm .bg-\[\#050f1a\],
-.sensora-landing-warm .bg-\[\#030b14\]\/85 {
-  background-color: var(--lw-card-cream) !important;
-}
-
-.sensora-landing-warm .landing-mobile-start-brand .text-white {
-  color: var(--lw-navy) !important;
-}
-
+/* AI 비서 데모 카드 — 웜 아이보리 패널 (랜딩 배경과 분리) */
 .sensora-landing-warm .landing-hero-demo {
+  --demo-bg: #fffdf8;
+  --demo-cream: #faf6ee;
+  --demo-input: #f5f0e6;
+  --demo-text: #172033;
+  --demo-text-muted: #4b5563;
+  --demo-text-soft: #5c6578;
+  --demo-navy: #17233a;
+  --demo-blue: #345c7c;
+  --demo-violet: #4c6294;
+  --demo-border: rgba(31, 41, 55, 0.12);
+  --demo-shadow: 0 24px 64px -20px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.04);
   width: 100%;
   max-width: min(100%, 68rem);
   margin-inline: auto;
   margin-top: clamp(1.25rem, 2.5vw, 2rem);
   padding: clamp(1.25rem, 2.8vw, 2rem);
   border-radius: clamp(20px, 2.2vw, 26px);
-  border: 1px solid var(--lw-border);
-  background: var(--lw-card);
-  box-shadow: var(--lw-shadow);
-  color: var(--lw-text);
+  border: 1px solid var(--demo-border);
+  background: var(--demo-bg);
+  box-shadow: var(--demo-shadow);
+  color: var(--demo-text);
 }
 
 .sensora-landing-warm .landing-hero-demo-kicker {
@@ -2945,7 +2833,7 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   font-weight: 600;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--lw-violet);
+  color: var(--demo-violet);
 }
 
 .sensora-landing-warm .landing-hero-demo-title {
@@ -2953,7 +2841,7 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   font-size: clamp(1.125rem, 1.6vw, 1.375rem);
   font-weight: 600;
   letter-spacing: -0.024em;
-  color: var(--lw-navy);
+  color: var(--demo-navy);
 }
 
 .sensora-landing-warm .landing-hero-demo-headline {
@@ -2962,7 +2850,7 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   font-size: clamp(0.98rem, 1.2vw, 1.0625rem);
   font-weight: 600;
   line-height: 1.45;
-  color: var(--lw-text);
+  color: var(--demo-text);
 }
 
 .sensora-landing-warm .landing-hero-demo-desc {
@@ -2970,7 +2858,7 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   max-width: 46ch;
   font-size: clamp(0.875rem, 1vw, 0.9375rem);
   line-height: 1.55;
-  color: var(--lw-text-muted);
+  color: var(--demo-text-muted);
 }
 
 .sensora-landing-warm .landing-hero-demo-header {
@@ -2981,13 +2869,13 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   margin-bottom: 1.15rem;
   padding: 0.65rem 0.5rem;
   border-color: rgba(52, 92, 124, 0.16);
-  background: var(--lw-input);
+  background: var(--demo-input);
 }
 
 .sensora-landing-warm .landing-hero-demo-flow-bar-pill {
   padding: 0.38rem 0.72rem;
   font-size: clamp(0.75rem, 1vw, 0.8125rem);
-  color: var(--lw-navy);
+  color: var(--demo-navy);
   background: rgba(255, 253, 248, 0.95);
   box-shadow: inset 0 0 0 1px rgba(52, 92, 124, 0.14);
 }
@@ -3010,8 +2898,8 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
 
 .sensora-landing-warm .landing-hero-demo-pane {
   padding: 1.1rem 1.15rem 1.2rem;
-  border-color: var(--lw-border);
-  background: var(--lw-card-cream);
+  border-color: var(--demo-border);
+  background: var(--demo-cream);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
 }
 
@@ -3023,7 +2911,7 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
 .sensora-landing-warm .landing-hero-demo-pane-title {
   margin-bottom: 0.75rem;
   font-size: clamp(0.875rem, 1vw, 0.9375rem);
-  color: var(--lw-navy);
+  color: var(--demo-navy);
 }
 
 .sensora-landing-warm .landing-hero-demo-pane-result-head {
@@ -3037,7 +2925,7 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   min-height: 11rem;
   padding: 1rem 1.05rem;
   border-color: rgba(31, 41, 55, 0.14);
-  background: var(--lw-input);
+  background: var(--demo-input);
 }
 
 .sensora-landing-warm .landing-hero-demo-memo-text {
@@ -3045,7 +2933,7 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   white-space: pre-line;
   font-size: clamp(0.875rem, 1.05vw, 0.9375rem);
   line-height: 1.6;
-  color: var(--lw-text);
+  color: var(--demo-text);
   word-break: keep-all;
 }
 
@@ -3066,8 +2954,8 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
 
 .sensora-landing-warm .landing-hero-demo-result-block {
   padding: 0.85rem 0.95rem;
-  border-color: var(--lw-border);
-  background: var(--lw-card-cream);
+  border-color: var(--demo-border);
+  background: var(--demo-cream);
 }
 
 .sensora-landing-warm .landing-hero-demo-result-block--featured {
@@ -3081,18 +2969,18 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
 
 .sensora-landing-warm .landing-hero-demo-result-label {
   font-size: 0.8125rem;
-  color: var(--lw-text-soft);
+  color: var(--demo-text-soft);
 }
 
 .sensora-landing-warm .landing-hero-demo-result-block--featured .landing-hero-demo-result-label {
-  color: var(--lw-blue);
+  color: var(--demo-blue);
   font-size: 0.875rem;
 }
 
 .sensora-landing-warm .landing-hero-demo-result-badge {
   padding: 0.2rem 0.5rem;
   font-size: 0.6875rem;
-  color: var(--lw-navy);
+  color: var(--demo-navy);
   background: rgba(52, 92, 124, 0.1);
   box-shadow: inset 0 0 0 1px rgba(52, 92, 124, 0.18);
 }
@@ -3109,26 +2997,32 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   background: rgba(52, 92, 124, 0.08);
   font-size: 0.6875rem;
   font-weight: 600;
-  color: var(--lw-blue);
+  color: var(--demo-blue);
 }
 
 .sensora-landing-warm .landing-hero-demo-result-body {
   font-size: 0.875rem;
   line-height: 1.58;
-  color: var(--lw-text);
+  color: var(--demo-text);
 }
 
 .sensora-landing-warm .landing-hero-demo-result-body--featured {
   font-size: clamp(0.9rem, 1.05vw, 0.96875rem);
   line-height: 1.62;
-  color: var(--lw-navy);
+  color: var(--demo-navy);
 }
 
 .sensora-landing-warm .landing-hero-demo-notice {
   margin-top: 1rem;
   font-size: 0.75rem;
   line-height: 1.5;
-  color: var(--lw-text-soft);
+  color: var(--demo-text-soft);
+}
+
+.sensora-landing-warm .landing-hero-demo .landing-enterprise-btn-primary {
+  border: 1px solid rgba(23, 35, 58, 0.22);
+  background: linear-gradient(180deg, #243552 0%, #17233a 58%, #121c2e 100%);
+  color: #f8fafc;
 }
 
 /* 랜딩 첫 화면 — 헤드라인·설명·CTA(텍스트 우선) */
