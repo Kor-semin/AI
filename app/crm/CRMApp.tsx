@@ -1703,9 +1703,6 @@ export function CRMApp({
             >
               <p className="font-semibold text-slate-50">{t("crm.demoContextNotice.primary")}</p>
               <p className="mt-2.5 text-[14px] leading-relaxed text-slate-400">{t("crm.demoContextNotice.secondary")}</p>
-              <p className="mt-2.5 text-[14px] leading-relaxed font-medium text-slate-300">
-                {t("crm.demoContextNotice.accessAfterBeta")}
-              </p>
             </div>
           ) : null}
           <header className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between lg:gap-6">

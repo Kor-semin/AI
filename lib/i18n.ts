@@ -440,6 +440,7 @@ export type TranslationKey =
   | "crm.quickAi.sub"
   | "crm.quickAi.trust"
   | "crm.quickAi.inputLabel"
+  | "crm.quickAi.inputHint"
   | "crm.quickAi.inputPlaceholder"
   | "crm.quickAi.analyzeCta"
   | "crm.quickAi.analyzing"
@@ -1202,11 +1203,10 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.stat.followupNeeded": "예정된 할 일",
     "crm.stat.recentConsultations": "최근 상담",
     "crm.demoContextNotice.primary":
-      "이 화면은 자동차 영업사원이 상담 메모, 관심 차량, 다음 연락, 사후관리를 한 곳에서 정리하는 예시 화면입니다.",
+      "이 화면은 상담 메모를 입력해 문자 초안과 다음 행동을 정리해보는 예시 화면입니다.",
     "crm.demoContextNotice.secondary":
-      "AI는 상담 내용을 정리하고 검토용 초안을 제안하지만, 최종 확인과 저장은 사용자가 직접 합니다.",
-    "crm.demoContextNotice.accessAfterBeta":
       "실제 고객 저장과 영업 계정 기능은 베타 승인 후 사용할 수 있습니다.",
+    "crm.demoContextNotice.accessAfterBeta": "",
     "crm.previewMode.headerSubtitle":
       "예시 미리보기 · 화면을 닫기 전까지는 이 브라우저에만 예시 데이터가 남을 수 있습니다(클라우드·영업 계정 저장 아님).",
     "crm.previewGate.title": "베타 승인 후 사용할 수 있는 기능입니다.",
@@ -1374,9 +1374,11 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.quickAi.sub": "상담 내용을 입력하면 고객 니즈, 문자 초안, 다음 행동을 정리합니다.",
     "crm.quickAi.trust": "AI는 검토용 초안을 돕고, 최종 판단과 발송은 영업사원이 직접 합니다.",
     "crm.quickAi.inputLabel": "상담 내용을 입력해 주세요.",
+    "crm.quickAi.inputHint":
+      "상담 중 기억나는 내용을 짧게 적어도 괜찮습니다.\n차량, 예산, 출고 희망일, 고객 요청사항을 자유롭게 입력해 주세요.",
     "crm.quickAi.inputPlaceholder":
-      "예)\nGLC 상담\n월 납입 부담 낮추고 싶어함\n빠른 출고 희망\n견적서와 카탈로그 요청\n다음 주 다시 연락 필요",
-    "crm.quickAi.analyzeCta": "AI 비서로 정리하기",
+      "예)\nGLC 상담\n월 납입 부담을 낮추고 싶어함\n빠른 출고 가능 여부 문의\n견적서와 카탈로그 요청\n다음 주 다시 연락 필요",
+    "crm.quickAi.analyzeCta": "상담 내용 정리하기",
     "crm.quickAi.analyzing": "정리하는 중…",
     "crm.quickAi.goCustomers": "고객관리로 이동",
     "crm.quickAi.goConsulting": "상담 메모 보기",
@@ -2179,11 +2181,10 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.stat.followupNeeded": "Follow-up Needed",
     "crm.stat.recentConsultations": "Recent Consultations",
     "crm.demoContextNotice.primary":
-      "This is a sample CRM layout for automotive sales reps—consultation notes, interested vehicles, follow-ups, and aftercare in one place.",
+      "Try entering consultation notes to organize a message draft and next steps—this is a sample screen.",
     "crm.demoContextNotice.secondary":
-      "AI summarizes memos and suggests drafts for review; you decide what to confirm and save.",
-    "crm.demoContextNotice.accessAfterBeta":
-      "Saving real customer data and sales-account features are available after beta approval.",
+      "Saving real customers and sales-account features are available after beta approval.",
+    "crm.demoContextNotice.accessAfterBeta": "",
     "crm.previewMode.headerSubtitle":
       "Sample preview · example data may stay in this browser only until you leave (not cloud or sales-account storage).",
     "crm.previewGate.title": "This feature is available after beta approval.",
@@ -2351,9 +2352,11 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.quickAi.sub": "Enter consultation notes to organize customer needs, message drafts, and next actions.",
     "crm.quickAi.trust": "AI proposes review drafts—you confirm and send.",
     "crm.quickAi.inputLabel": "Enter consultation notes",
+    "crm.quickAi.inputHint":
+      "A short note from the consultation is fine.\nEnter vehicle, budget, delivery timing, or customer requests freely.",
     "crm.quickAi.inputPlaceholder":
-      "e.g.\nGLC consultation\nWants lower monthly payment\nHopes for fast delivery\nRequested quote and catalog\nFollow up next week",
-    "crm.quickAi.analyzeCta": "Organize with AI assistant",
+      "e.g.\nGLC consultation\nWants lower monthly payment\nAsked about fast delivery\nQuote and catalog requested\nFollow up next week",
+    "crm.quickAi.analyzeCta": "Organize consultation notes",
     "crm.quickAi.analyzing": "Organizing…",
     "crm.quickAi.goCustomers": "Open customer list",
     "crm.quickAi.goConsulting": "View consultation notes",

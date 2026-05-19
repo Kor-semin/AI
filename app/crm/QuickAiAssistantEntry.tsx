@@ -70,6 +70,9 @@ export function QuickAiAssistantEntry({
         <label htmlFor="crm-quick-ai-memo" className="text-[13px] font-semibold text-slate-200">
           {t("crm.quickAi.inputLabel")}
         </label>
+        <p className="mt-1.5 whitespace-pre-line text-[12px] leading-relaxed text-slate-500 [word-break:keep-all] sm:text-[0.8125rem]">
+          {t("crm.quickAi.inputHint")}
+        </p>
         <textarea
           id="crm-quick-ai-memo"
           value={consultationDraft}
@@ -83,7 +86,7 @@ export function QuickAiAssistantEntry({
             type="button"
             onClick={onAnalyze}
             disabled={busy || !consultationDraft.trim()}
-            className="landing-enterprise-btn-primary inline-flex min-h-[50px] w-full items-center justify-center rounded-xl px-5 py-3 text-[0.9375rem] font-semibold touch-manipulation disabled:opacity-50 sm:min-w-[12rem] sm:w-auto"
+            className="quick-ai-entry-analyze-btn landing-enterprise-btn-primary inline-flex min-h-[50px] w-full items-center justify-center rounded-xl px-5 py-3 text-[0.9375rem] font-semibold touch-manipulation sm:min-w-[12rem] sm:w-auto"
           >
             {busy ? t("crm.quickAi.analyzing") : t("crm.quickAi.analyzeCta")}
           </button>
