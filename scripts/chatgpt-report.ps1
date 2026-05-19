@@ -96,6 +96,54 @@ function Get-NormalizedFiles {
     ) | Select-Object -Unique
 }
 
+function Test-IsToolingOnlyChange {
+    param([string[]] $Paths)
+    if ($Paths.Count -eq 0) {
+        return $false
+    }
+    foreach ($path in $Paths) {
+        $normalized = ($path -replace '\\', '/').Trim().TrimStart('.', '/')
+        $isTooling = $normalized -match '^(scripts/|\.github/|package\.json$|package-lock\.json$|AGENTS\.md$)'
+        if (-not $isTooling) {
+            return $false
+        }
+    }
+    return $true
+}
+
+function Get-ReportFooter {
+    param(
+        [ValidateSet('dryrun', 'tooling', 'ui')]
+        [string] $Kind,
+
+        [string] $CommitSha,
+        [bool] $DidPush
+    )
+
+    if ($Kind -eq 'dryrun') {
+        return @{
+            VercelSha    = '해당 없음 - DryRun'
+            VerifyNeeded = '클립보드에 복사된 한글 보고서 정상 여부 확인'
+            NextStep     = '실제 작업 1건에 report:chatgpt 적용 테스트'
+        }
+    }
+
+    if ($Kind -eq 'tooling') {
+        return @{
+            VercelSha    = '해당 없음 - 스크립트/도구 작업'
+            VerifyNeeded = '스크립트 실행·한글 보고서 인코딩 정상 여부 확인'
+            NextStep     = '실제 UI 작업 1건에 report:chatgpt 적용'
+        }
+    }
+
+    $vercelSha = if ($DidPush) { $CommitSha } else { 'push 후 확인 필요' }
+    return @{
+        VercelSha    = $vercelSha
+        VerifyNeeded = 'Production 화면에서 해당 변경 사항 반영 여부 확인'
+        NextStep     = 'Production 데스크톱·모바일 QA'
+    }
+}
+
 Initialize-ReportEncoding
 
 # 1. 작업 경로 확인
@@ -191,7 +239,18 @@ else {
     $pushStatus = '미실행 (DryRun)'
 }
 
-$vercelSha = if ($Push -and -not $DryRun) { $commitSha } else { 'push 후 확인 필요' }
+$reportKind = if ($DryRun) {
+    'dryrun'
+}
+elseif (Test-IsToolingOnlyChange -Paths $normalizedFiles) {
+    'tooling'
+}
+else {
+    'ui'
+}
+
+$didPush = $Push -and -not $DryRun
+$footer = Get-ReportFooter -Kind $reportKind -CommitSha $commitSha -DidPush $didPush
 $filesLine = ($normalizedFiles -join ', ')
 $dryRunNote = if ($DryRun) { ' (DryRun)' } else { '' }
 
@@ -205,10 +264,10 @@ npm run build 결과: $buildResult
 커밋 메시지: $CommitMessage
 커밋 SHA: $commitSha$dryRunNote
 push 여부: $pushStatus
-Vercel 확인 SHA: $vercelSha
-대표 확인 필요: Production 화면에서 해당 변경 사항 반영 여부 확인
+Vercel 확인 SHA: $($footer.VercelSha)
+대표 확인 필요: $($footer.VerifyNeeded)
 남은 이슈: 워킹트리에 요청 범위 외 변경이 남아 있을 수 있음
-다음 작업 추천: Production 데스크톱·모바일 QA
+다음 작업 추천: $($footer.NextStep)
 "@
 
 Set-ReportClipboard -Text $report
