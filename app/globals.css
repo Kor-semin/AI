@@ -2626,6 +2626,149 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   border-top: 0;
 }
 
+/* Hero 아래 AI 비서 사용 예시 데모 (2단 카드) */
+.landing-hero-demo {
+  border-radius: clamp(18px, 2vw, 24px);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  background: linear-gradient(165deg, rgba(8, 18, 36, 0.94) 0%, rgba(3, 10, 22, 0.98) 100%);
+  box-shadow:
+    0 28px 80px -48px rgba(0, 0, 0, 0.75),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  padding: clamp(1rem, 2.2vw, 1.5rem);
+}
+
+.landing-hero-demo-header {
+  margin-bottom: 0.85rem;
+}
+
+.landing-hero-demo-flow-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem 0.2rem;
+  margin: 0 0 1rem;
+  padding: 0.5rem 0.35rem;
+  border-radius: 12px;
+  border: 1px solid rgba(56, 189, 248, 0.12);
+  background: rgba(3, 12, 26, 0.65);
+}
+
+.landing-hero-demo-flow-bar-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.landing-hero-demo-flow-bar-arrow {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: rgba(56, 189, 248, 0.45);
+  padding-inline: 0.1rem;
+}
+
+.landing-hero-demo-flow-bar-pill {
+  display: inline-block;
+  padding: 0.28rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: rgba(186, 230, 253, 0.92);
+  background: rgba(56, 189, 248, 0.1);
+  box-shadow: inset 0 0 0 1px rgba(56, 189, 248, 0.18);
+  white-space: nowrap;
+}
+
+.landing-hero-demo-split {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.85rem;
+}
+
+@media (min-width: 1024px) {
+  .landing-hero-demo-split {
+    grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+    gap: 1rem;
+    align-items: stretch;
+  }
+}
+
+.landing-hero-demo-pane {
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(3, 11, 22, 0.72);
+  padding: 0.9rem 1rem 1rem;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.landing-hero-demo-pane--result {
+  border-color: rgba(56, 189, 248, 0.14);
+  background: linear-gradient(165deg, rgba(5, 14, 28, 0.88) 0%, rgba(3, 10, 22, 0.94) 100%);
+}
+
+.landing-hero-demo-pane-title {
+  margin: 0 0 0.65rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: rgba(226, 232, 240, 0.96);
+}
+
+.landing-hero-demo-memo {
+  min-height: 9.5rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(2, 8, 18, 0.88);
+  padding: 0.85rem 0.9rem;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.landing-hero-demo-analyze-btn {
+  opacity: 0.94;
+}
+
+.landing-hero-demo-result-block {
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(2, 8, 18, 0.55);
+  padding: 0.7rem 0.8rem;
+}
+
+.landing-hero-demo-result-block-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.5rem;
+  margin-bottom: 0.4rem;
+}
+
+.landing-hero-demo-result-label {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: rgba(148, 163, 184, 0.95);
+}
+
+.landing-hero-demo-result-badge {
+  display: inline-block;
+  padding: 0.15rem 0.45rem;
+  border-radius: 6px;
+  font-size: 0.625rem;
+  font-weight: 600;
+  color: rgba(186, 230, 253, 0.9);
+  background: rgba(56, 189, 248, 0.12);
+  box-shadow: inset 0 0 0 1px rgba(56, 189, 248, 0.2);
+}
+
+.landing-hero-demo-result-body {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: rgba(226, 232, 240, 0.9);
+  word-break: keep-all;
+}
+
 /* 랜딩 첫 화면 — 헤드라인·설명·CTA(텍스트 우선) */
 .landing-first-screen-copy--desktop {
   max-width: 44rem;

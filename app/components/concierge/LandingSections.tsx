@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 
+import { LandingAiAssistantDemo } from "@/app/components/concierge/LandingAiAssistantDemo";
 import { SensoraAnimatedMark } from "@/app/components/SensoraAnimatedMark";
 import { LanguageSelect } from "@/app/components/i18n/LanguageSelect";
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
@@ -498,6 +498,8 @@ export function LandingShowroom({
 
               <LandingFirstScreenIntro t={t} onOpenAppWorkspace={onOpenAppWorkspace} layout="mobile" />
 
+              <LandingAiAssistantDemo />
+
               <div className="landing-mobile-cta-secondary flex flex-wrap items-center justify-center border-t border-white/[0.06] pt-4">
                 <button
                   type="button"
@@ -597,27 +599,14 @@ export function LandingShowroom({
         )}
       </div>
 
-      {/* 데스크톱 Hero — 핵심 가치·CTA 후 통합 이미지(보조) */}
+      {/* 데스크톱 Hero — 핵심 가치·CTA 후 AI 비서 사용 예시 데모 */}
       <section
         id="sensora-landing-hero"
         className={`landing-hero-section ${sectionShell} hidden pb-6 pt-3 lg:block sm:pb-8 sm:pt-4`}
       >
         <div className={innerMax}>
           <LandingFirstScreenIntro t={t} onOpenAppWorkspace={onOpenAppWorkspace} layout="desktop" />
-          <div className="landing-guide03-hero-shell mx-auto mt-6 flex w-full flex-col items-center justify-center sm:mt-8 lg:mt-9">
-            <div className="landing-guide03-hero-frame relative w-full max-w-[min(100%,900px)] landing-guide03-hero-frame--supplemental">
-              <Image
-                src="/images/guides/sensora-guide-03.png"
-                alt=""
-                width={1672}
-                height={941}
-                priority
-                quality={100}
-                className="landing-guide03-hero-image pointer-events-none cursor-default select-none"
-                sizes="(max-width: 900px) 100vw, 900px"
-              />
-            </div>
-          </div>
+          <LandingAiAssistantDemo />
         </div>
       </section>
 

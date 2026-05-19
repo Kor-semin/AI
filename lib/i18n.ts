@@ -71,6 +71,29 @@ export type TranslationKey =
   | "landing.hero.ctaPreview"
   | "landing.firstScreen.body"
   | "landing.firstScreen.trustMicro"
+  | "landing.heroDemo.kicker"
+  | "landing.heroDemo.title"
+  | "landing.heroDemo.headline"
+  | "landing.heroDemo.desc"
+  | "landing.heroDemo.flow.input"
+  | "landing.heroDemo.flow.ai"
+  | "landing.heroDemo.flow.sms"
+  | "landing.heroDemo.flow.next"
+  | "landing.heroDemo.flow.save"
+  | "landing.heroDemo.inputTitle"
+  | "landing.heroDemo.inputSample"
+  | "landing.heroDemo.analyzeCta"
+  | "landing.heroDemo.resultTitle"
+  | "landing.heroDemo.resultNeedsLabel"
+  | "landing.heroDemo.resultNeedsBody"
+  | "landing.heroDemo.resultSmsLabel"
+  | "landing.heroDemo.resultSmsBadge"
+  | "landing.heroDemo.resultSmsBody"
+  | "landing.heroDemo.resultNextLabel"
+  | "landing.heroDemo.resultNextBody"
+  | "landing.heroDemo.resultSaveLabel"
+  | "landing.heroDemo.resultSaveBody"
+  | "landing.heroDemo.notice"
   | "landing.nav.brandTagline"
   | "landing.nav.problem"
   | "landing.nav.solution"
@@ -916,6 +939,32 @@ export const translations: Record<LanguageCode, TranslationDict> = {
       "상담 내용을 입력하면 AI가 고객 니즈, 문자 초안, 다음 행동을 정리합니다.\n필요한 내용은 고객 정보로 저장하고, 다음 상담과 사후관리에 이어갈 수 있습니다.",
     "landing.firstScreen.trustMicro":
       "고객 정보는 사용자가 확인하고 저장합니다.\nSensora는 고객 정보를 자동으로 수집하지 않습니다.",
+    "landing.heroDemo.kicker": "사용 예시",
+    "landing.heroDemo.title": "AI 비서 사용 예시",
+    "landing.heroDemo.headline": "상담 메모가 고객 응대 흐름으로 정리됩니다",
+    "landing.heroDemo.desc": "짧은 상담 내용을 입력하면 AI가 고객 니즈, 문자 초안, 다음 행동을 정리합니다.",
+    "landing.heroDemo.flow.input": "상담 메모 입력",
+    "landing.heroDemo.flow.ai": "AI 결과",
+    "landing.heroDemo.flow.sms": "문자 초안",
+    "landing.heroDemo.flow.next": "다음 행동",
+    "landing.heroDemo.flow.save": "고객으로 저장",
+    "landing.heroDemo.inputTitle": "상담 메모 입력",
+    "landing.heroDemo.inputSample":
+      "GLC 상담\n월 납입 부담을 낮추고 싶어함\n빠른 출고 가능 여부 문의\n견적서와 카탈로그 요청\n다음 주 다시 연락 필요",
+    "landing.heroDemo.analyzeCta": "AI 비서로 정리하기",
+    "landing.heroDemo.resultTitle": "AI 정리 결과",
+    "landing.heroDemo.resultNeedsLabel": "고객 니즈 요약",
+    "landing.heroDemo.resultNeedsBody":
+      "월 납입 부담을 낮추는 조건과 빠른 출고 가능 여부를 중요하게 보고 있습니다.",
+    "landing.heroDemo.resultSmsLabel": "문자 초안",
+    "landing.heroDemo.resultSmsBadge": "검토용 초안",
+    "landing.heroDemo.resultSmsBody":
+      "안녕하세요. 오늘 상담 도와드린 내용 기준으로 월 납입 부담을 낮출 수 있는 조건과 빠른 출고 가능 여부를 함께 확인해드리겠습니다. 견적서와 카탈로그도 정리해서 안내드리겠습니다.",
+    "landing.heroDemo.resultNextLabel": "추천 다음 행동",
+    "landing.heroDemo.resultNextBody": "다음 주 초 견적 조건과 출고 가능 여부를 확인한 뒤 다시 연락합니다.",
+    "landing.heroDemo.resultSaveLabel": "고객으로 저장",
+    "landing.heroDemo.resultSaveBody": "필요한 내용만 확인한 뒤 고객 정보로 저장할 수 있습니다.",
+    "landing.heroDemo.notice": "랜딩 데모 화면입니다. 입력·저장·발송은 실제로 이루어지지 않습니다.",
     "landing.nav.brandTagline": "상담 후 고객 응대 AI 비서",
     "landing.nav.problem": "현장 문제",
     "landing.nav.solution": "Sensora 방식",
@@ -1860,6 +1909,32 @@ export const translations: Record<LanguageCode, TranslationDict> = {
       "Enter consultation notes and AI organizes customer needs, message drafts, and next steps.\nSave what you need as customer records and continue into follow-up work.",
     "landing.firstScreen.trustMicro":
       "Customer information is saved only after you confirm it.\nSensora does not automatically collect customer information.",
+    "landing.heroDemo.kicker": "Example",
+    "landing.heroDemo.title": "AI assistant example",
+    "landing.heroDemo.headline": "Consultation notes become a clear follow-up flow",
+    "landing.heroDemo.desc": "Enter a short consultation note and AI organizes needs, a message draft, and next steps.",
+    "landing.heroDemo.flow.input": "Notes",
+    "landing.heroDemo.flow.ai": "AI result",
+    "landing.heroDemo.flow.sms": "Message draft",
+    "landing.heroDemo.flow.next": "Next steps",
+    "landing.heroDemo.flow.save": "Save customer",
+    "landing.heroDemo.inputTitle": "Consultation notes",
+    "landing.heroDemo.inputSample":
+      "GLC consultation\nWants lower monthly payment\nAsked about fast delivery\nRequested quote and catalog\nFollow up next week",
+    "landing.heroDemo.analyzeCta": "Organize with AI assistant",
+    "landing.heroDemo.resultTitle": "AI-organized result",
+    "landing.heroDemo.resultNeedsLabel": "Customer needs",
+    "landing.heroDemo.resultNeedsBody":
+      "Lower monthly payment and fast delivery availability matter most.",
+    "landing.heroDemo.resultSmsLabel": "Message draft",
+    "landing.heroDemo.resultSmsBadge": "Review draft",
+    "landing.heroDemo.resultSmsBody":
+      "Hello. Based on today’s consultation, I’ll check options to lower the monthly payment and confirm fast delivery, then share the quote and catalog materials.",
+    "landing.heroDemo.resultNextLabel": "Suggested next step",
+    "landing.heroDemo.resultNextBody": "Early next week, confirm quote terms and delivery timing, then follow up.",
+    "landing.heroDemo.resultSaveLabel": "Save as customer",
+    "landing.heroDemo.resultSaveBody": "You can save only what you confirm as customer information.",
+    "landing.heroDemo.notice": "Landing demo only. Nothing is saved or sent from this preview.",
     "landing.nav.brandTagline": "Post-consultation AI assistant",
     "landing.nav.problem": "On the floor",
     "landing.nav.solution": "How Sensora helps",
