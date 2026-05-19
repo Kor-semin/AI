@@ -9,7 +9,8 @@
     "lint": "eslint",
     "qa:responsive-screenshots": "npx tsx scripts/qa-responsive-screenshots.ts",
     "pwa-icons": "node scripts/generate-pwa-icons.mjs",
-    "pwa-icons-v3": "node scripts/generate-pwa-icons-v3-from-source.mjs"
+    "pwa-icons-v3": "node scripts/generate-pwa-icons-v3-from-source.mjs",
+    "report:chatgpt": "powershell -ExecutionPolicy Bypass -File scripts/chatgpt-report.ps1"
   },
   "dependencies": {
     "firebase": "^12.12.1",
