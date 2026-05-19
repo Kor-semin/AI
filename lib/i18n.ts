@@ -959,7 +959,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.heroDemo.resultSmsLabel": "문자 초안",
     "landing.heroDemo.resultSmsBadge": "검토용 문자 초안",
     "landing.heroDemo.resultSmsBody":
-      "안녕하세요. 오늘 상담 도와드린 내용 기준으로 월 납입 부담을 낮출 수 있는 조건과 빠른 출고 가능 여부를 함께 확인해드리겠습니다. 견적서와 카탈로그도 정리해서 안내드리겠습니다.",
+      "안녕하세요, OO님.\n담당 영업사원입니다.\n\n지난 상담 때 말씀 주신 가족 이동 편의성, 견적 조건, 출고 일정 관련해서 다시 연락드렸습니다.\n\n관심 가져주신 GLC 기준으로 승차감, 공간감, 시트 착좌감과 관련 견적 자료를 함께 정리해 두었습니다.\n\n확인해보시고 궁금하신 부분은 편하게 말씀 주세요.\n감사합니다.",
     "landing.heroDemo.resultNextLabel": "추천 다음 행동",
     "landing.heroDemo.resultNextBody": "다음 주 초 견적 조건과 출고 가능 여부를 확인한 뒤 다시 연락합니다.",
     "landing.heroDemo.resultSaveLabel": "고객으로 저장",
@@ -1929,7 +1929,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.heroDemo.resultSmsLabel": "Message draft",
     "landing.heroDemo.resultSmsBadge": "Review draft",
     "landing.heroDemo.resultSmsBody":
-      "Hello. Based on today’s consultation, I’ll check options to lower the monthly payment and confirm fast delivery, then share the quote and catalog materials.",
+      "Hello, [Customer].\nThis is your sales consultant.\n\nFollowing up on family mobility, quote terms, and delivery timing from our last visit.\n\nRegarding the GLC you were interested in, I’ve organized ride comfort, space, seat feel, and related quote materials.\n\nPlease review when convenient, and let me know if you have any questions.\nThank you.",
     "landing.heroDemo.resultNextLabel": "Suggested next step",
     "landing.heroDemo.resultNextBody": "Early next week, confirm quote terms and delivery timing, then follow up.",
     "landing.heroDemo.resultSaveLabel": "Save as customer",

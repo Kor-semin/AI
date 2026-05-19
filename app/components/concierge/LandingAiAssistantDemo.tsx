@@ -42,7 +42,7 @@ function ResultBlock({
       <p
         className={[
           "landing-hero-demo-result-body",
-          featured ? "landing-hero-demo-result-body--featured" : "",
+          featured ? "landing-hero-demo-result-body--featured whitespace-pre-line max-h-[13.5rem] overflow-y-auto sm:max-h-none sm:overflow-visible" : "",
         ].join(" ")}
       >
         {body}
