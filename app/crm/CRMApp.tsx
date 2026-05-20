@@ -85,6 +85,7 @@ import { getDemoAiSummaryLine } from "./customerListDisplay";
 import {
   buildQuickConsultationResult,
   buildQuickCustomerModalMemo,
+  normalizeInterestVehicle,
   parseQuickCustomerIdentity,
   type QuickConsultationResult,
 } from "./customerContextDraft";
@@ -561,10 +562,11 @@ export function CRMApp({
     const r = quickConsultationResult;
     const identity = parseQuickCustomerIdentity(snap);
     const nextLine = r.nextActions[0]?.trim() ?? "";
+    const interestModel = normalizeInterestVehicle(snap, r.needs.vehicle ?? identity.vehicle) ?? "";
     setCreateCustomerDraft({
       ...CREATE_CUSTOMER_INITIAL,
       name: identity.name?.trim() ?? "",
-      interestedModel: (r.needs.vehicle ?? identity.vehicle ?? "").trim(),
+      interestedModel: interestModel,
       memo: buildQuickCustomerModalMemo(snap, r),
       nextActionText: nextLine,
     });
