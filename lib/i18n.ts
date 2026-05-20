@@ -379,6 +379,7 @@ export type TranslationKey =
   | "crm.nav.mobileSubtitle.support"
   | "crm.support.title"
   | "crm.support.lead"
+  | "crm.support.quick.title"
   | "crm.support.email.title"
   | "crm.support.email.body"
   | "crm.support.email.betaNote"
@@ -1364,7 +1365,8 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.nav.mobileSubtitle.support": "문의·FAQ",
     "crm.support.title": "고객센터",
     "crm.support.lead":
-      "Sensora 사용 중 불편한 점이나 오류가 있다면 문의해 주세요.\n베타 기간에는 접수된 의견을 확인해 순차적으로 개선에 반영합니다.",
+      "Sensora 사용 중 불편한 점이나 오류가 있다면 편하게 문의해 주세요.\n베타 기간에는 접수된 의견을 확인해 순차적으로 개선에 반영합니다.",
+    "crm.support.quick.title": "빠른 문의",
     "crm.support.email.title": "이메일 문의",
     "crm.support.email.body": "서비스 이용 중 궁금한 점이나 오류가 있다면 이메일로 문의해 주세요.",
     "crm.support.email.betaNote": "",
@@ -1382,7 +1384,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.support.error.item4": "발생 시간",
     "crm.support.error.item5": "오류 상황 설명",
     "crm.support.error.item6": "가능하다면 스크린샷",
-    "crm.support.error.cta": "오류 신고 이메일 작성",
+    "crm.support.error.cta": "오류 신고하기",
     "crm.support.error.mailBody":
       "[오류 발생 화면]\n\n\n[사용 기기]\n\n\n[브라우저]\n\n\n[발생 시간]\n\n\n[오류 설명]\n\n\n[스크린샷 첨부 여부]",
     "crm.support.faq.title": "자주 묻는 질문",
@@ -2421,7 +2423,8 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.nav.mobileSubtitle.support": "Help · FAQ",
     "crm.support.title": "Customer support",
     "crm.support.lead":
-      "If something feels unclear or broken while using Sensora, let us know.\nDuring beta we review submissions and improve the product step by step.",
+      "If something feels unclear or broken while using Sensora, reach out anytime.\nDuring beta we review submissions and improve the product step by step.",
+    "crm.support.quick.title": "Quick contact",
     "crm.support.email.title": "Email",
     "crm.support.email.body": "Questions or issues during beta? Email us with a short description.",
     "crm.support.email.betaNote": "",
@@ -2439,7 +2442,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.support.error.item4": "Time it happened",
     "crm.support.error.item5": "What you were doing",
     "crm.support.error.item6": "Screenshot if possible",
-    "crm.support.error.cta": "Compose issue report email",
+    "crm.support.error.cta": "Report an issue",
     "crm.support.error.mailBody":
       "[Screen]\n\n\n[Device]\n\n\n[Browser]\n\n\n[Time]\n\n\n[Description]\n\n\n[Screenshot attached?]",
     "crm.support.faq.title": "FAQ",
