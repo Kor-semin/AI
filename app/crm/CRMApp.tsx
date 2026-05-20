@@ -81,12 +81,16 @@ import { CustomersSection } from "./sections/CustomersSection";
 import { AiSecretarySection } from "./sections/AiSecretarySection";
 import { CrmAiAssistantPanel } from "./CrmAiAssistantPanel";
 import { QuickAiAssistantEntry } from "./QuickAiAssistantEntry";
-import { getDemoAiSummaryLine } from "./customerListDisplay";
+import {
+  formatCustomerInterestVehicle,
+  formatCustomerNextActionLabel,
+  getDemoAiSummaryLine,
+} from "./customerListDisplay";
 import {
   buildQuickConsultationResult,
   buildQuickCustomerModalMemo,
-  normalizeInterestVehicle,
   parseQuickCustomerIdentity,
+  resolveCustomerVehicleFields,
   type QuickConsultationResult,
 } from "./customerContextDraft";
 import { CrmMiniCalendar } from "@/app/crm/CrmMiniCalendar";
@@ -562,11 +566,12 @@ export function CRMApp({
     const r = quickConsultationResult;
     const identity = parseQuickCustomerIdentity(snap);
     const nextLine = r.nextActions[0]?.trim() ?? "";
-    const interestModel = normalizeInterestVehicle(snap, r.needs.vehicle ?? identity.vehicle) ?? "";
+    const vehicleFields = resolveCustomerVehicleFields(snap, r.needs.vehicle ?? identity.vehicle);
     setCreateCustomerDraft({
       ...CREATE_CUSTOMER_INITIAL,
       name: identity.name?.trim() ?? "",
-      interestedModel: interestModel,
+      vehicleBrand: vehicleFields.vehicleBrand ?? "",
+      interestedModel: vehicleFields.interestedModel ?? "",
       memo: buildQuickCustomerModalMemo(snap, r),
       nextActionText: nextLine,
     });
@@ -1776,9 +1781,7 @@ export function CRMApp({
                               </div>
                               <ul className="space-y-0.5">
                                 {customerSearchResults.map((c) => {
-                                  const vehicle =
-                                    [c.vehicleBrand, c.interestedModel].filter(Boolean).join(" ").trim() ||
-                                    "—";
+                                  const vehicle = formatCustomerInterestVehicle(c) || "—";
                                   return (
                                     <li key={c.id}>
                                       <button
@@ -2104,14 +2107,15 @@ export function CRMApp({
                   <div className="divide-y divide-white/[0.07]">
                     {customersFiltered.map((c) => {
                       const na = state.nextActions.find((a) => a.customerId === c.id && !a.doneAt);
-                      const nextLbl = na?.title?.trim()
+                      const nextRaw = na?.title?.trim()
                         ? na.title
                         : c.nextContactAt
                           ? formatDateTime(c.nextContactAt)
-                          : "—";
+                          : "";
+                      const nextLbl = nextRaw ? formatCustomerNextActionLabel(nextRaw) : "—";
                       const sx = scorePurchaseIntent(c);
                       const showScore = shouldShowPurchaseIntentScore(c);
-                      const vehicleLine = [c.vehicleBrand, c.interestedModel].filter(Boolean).join(" ") || "—";
+                      const vehicleLine = formatCustomerInterestVehicle(c) || "—";
                       const selected = selectedCustomerId === c.id;
                       return (
                         <div key={c.id} className={`relative px-5 py-4 sm:px-6 ${selected ? "bg-sky-950/22 ring-1 ring-inset ring-sky-400/35" : "bg-slate-950/40"}`}>
@@ -2214,7 +2218,7 @@ export function CRMApp({
                           </p>
                           <p className="mt-1 text-[15px] text-slate-400">
                             <span className="font-medium text-slate-500">{t("common.interestedVehicle")}: </span>
-                            {[selectedCustomer.vehicleBrand, selectedCustomer.interestedModel].filter(Boolean).join(" ") || "—"}
+                            {formatCustomerInterestVehicle(selectedCustomer) || "—"}
                           </p>
                           <div className="mt-3 flex flex-wrap items-center gap-2 text-[14px] text-slate-300">
                             <span className="rounded-full border border-white/[0.1] bg-white/[0.06] px-2.5 py-1 text-[12px] font-semibold text-slate-100">
@@ -2224,15 +2228,18 @@ export function CRMApp({
                             <span>
                               {(() => {
                                 const na = state.nextActions.find((a) => a.customerId === selectedCustomer.id && !a.doneAt);
-                                const nextLbl = na?.title?.trim()
+                                const nextRaw = na?.title?.trim()
                                   ? na.title
                                   : selectedCustomer.nextContactAt
                                     ? formatDateTime(selectedCustomer.nextContactAt)
-                                    : t("crm.customerCard.nextActionUnset");
+                                    : "";
+                                const nextLbl = nextRaw
+                                  ? formatCustomerNextActionLabel(nextRaw)
+                                  : t("crm.customerCard.nextActionUnset");
                                 return (
                                   <>
                                     <span className="font-medium text-slate-500">다음 행동: </span>
-                                    {clampText(nextLbl, 140)}
+                                    {nextLbl}
                                   </>
                                 );
                               })()}

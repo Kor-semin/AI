@@ -67,6 +67,56 @@ export function extractPreferredVehicleModel(memo: string): string | undefined {
   return undefined;
 }
 
+const MODEL_TO_BRAND: Record<string, string> = {
+  GLC: "Mercedes-Benz",
+  GLE: "Mercedes-Benz",
+  GLS: "Mercedes-Benz",
+  GLA: "Mercedes-Benz",
+  GLB: "Mercedes-Benz",
+  CLA: "Mercedes-Benz",
+  "C-CLASS": "Mercedes-Benz",
+  "E-CLASS": "Mercedes-Benz",
+  "S-CLASS": "Mercedes-Benz",
+  EQE: "Mercedes-Benz",
+  EQS: "Mercedes-Benz",
+  X3: "BMW",
+  X5: "BMW",
+  "3시리즈": "BMW",
+  "5시리즈": "BMW",
+  그랜저: "현대",
+  아반떼: "현대",
+  투싼: "현대",
+  쏘렌토: "기아",
+  카니발: "기아",
+  K3: "기아",
+  K5: "기아",
+  K8: "기아",
+  G80: "제네시스",
+  GV70: "제네시스",
+  GV80: "제네시스",
+};
+
+/** 모델 코드에서 브랜드 추론(표시·저장 매핑용). */
+export function inferVehicleBrandForModel(model: string): string | undefined {
+  const key = model.trim();
+  if (!key) return undefined;
+  const upper = key.toUpperCase();
+  return MODEL_TO_BRAND[upper] ?? MODEL_TO_BRAND[key];
+}
+
+/** 고객 저장 시 관심 차량 필드(모델 우선 · 브랜드는 보조). */
+export function resolveCustomerVehicleFields(
+  memo: string,
+  modelCandidate?: string,
+): { vehicleBrand?: string; interestedModel?: string } {
+  const model = normalizeInterestVehicle(memo, modelCandidate);
+  if (!model) return {};
+  return {
+    vehicleBrand: inferVehicleBrandForModel(model),
+    interestedModel: model,
+  };
+}
+
 function firstMatch(text: string, patterns: RegExp[]): string | undefined {
   for (const p of patterns) {
     const m = text.match(p);
@@ -308,9 +358,7 @@ function buildGroundedQuickConsultationResult(
     : "관심 차량 확인이 필요한 고객입니다.\n월 납입 조건과 출고 일정 확인이 필요합니다.";
 
   const message = buildGroundedSmsDraft(name, vehicle, paymentNote, deliveryNote);
-  const nextActions = [
-    "월 납입 조건, 출고 가능 일정, 견적 기준을 확인한 뒤 안내합니다.",
-  ];
+  const nextActions = ["월 납입 조건과 출고 가능 일정 확인 후 안내"];
   const insights: DemoConsultingResponse = {
     summary,
     message,
