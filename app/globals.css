@@ -939,6 +939,48 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   border-radius: 999px;
 }
 
+/* 금융 조건 정리 · 세금·시세 참고 — 폼·textarea 다크 UI 스크롤바 */
+.crm-finance-condition-form,
+.crm-finance-condition-form textarea,
+.crm-finance-tax-market-form,
+.crm-finance-tax-market-form textarea {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.45) rgba(15, 23, 42, 0.6);
+}
+.crm-finance-condition-form::-webkit-scrollbar,
+.crm-finance-condition-form textarea::-webkit-scrollbar,
+.crm-finance-tax-market-form::-webkit-scrollbar,
+.crm-finance-tax-market-form textarea::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.crm-finance-condition-form::-webkit-scrollbar-track,
+.crm-finance-condition-form textarea::-webkit-scrollbar-track,
+.crm-finance-tax-market-form::-webkit-scrollbar-track,
+.crm-finance-tax-market-form textarea::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.6);
+}
+.crm-finance-condition-form::-webkit-scrollbar-thumb,
+.crm-finance-condition-form textarea::-webkit-scrollbar-thumb,
+.crm-finance-tax-market-form::-webkit-scrollbar-thumb,
+.crm-finance-tax-market-form textarea::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.45);
+  border-radius: 999px;
+}
+.crm-finance-condition-form::-webkit-scrollbar-thumb:hover,
+.crm-finance-condition-form textarea::-webkit-scrollbar-thumb:hover,
+.crm-finance-tax-market-form::-webkit-scrollbar-thumb:hover,
+.crm-finance-tax-market-form textarea::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.65);
+}
+
+.crm-finance-detail-details[open] .crm-finance-detail-toggle__expand {
+  display: none;
+}
+.crm-finance-detail-details:not([open]) .crm-finance-detail-toggle__collapse {
+  display: none;
+}
+
 /* 안내 모달 패널 — preview gate · Sensora TIP */
 .sensora-premium-modal-shell {
   border-radius: 1.25rem;

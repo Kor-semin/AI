@@ -329,6 +329,8 @@ export type TranslationKey =
   | "crm.aiRecommendation"
   | "crm.consultationSummary"
   | "crm.financeMarketInfo"
+  | "crm.financeTaxMarketTitle"
+  | "crm.financeTaxMarketLead"
   | "crm.tradeInSummary"
   | "crm.tab.customers"
   | "crm.tab.next"
@@ -440,6 +442,10 @@ export type TranslationKey =
   | "crm.newCar.smsAttachClosing"
   | "crm.newCar.smsPreviewClosingDisclaimer"
   | "crm.newCar.financeFormTitle"
+  | "crm.newCar.financeFormLead"
+  | "crm.newCar.financeDetailSectionTitle"
+  | "crm.newCar.financeDetailExpand"
+  | "crm.newCar.financeDetailCollapse"
   | "crm.newCar.financeModeLabel"
   | "crm.newCar.leaseHintBullets"
   | "crm.newCar.loanHintBullets"
@@ -1265,6 +1271,9 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.aiRecommendation": "AI 추천 메시지",
     "crm.consultationSummary": "상담 요약",
     "crm.financeMarketInfo": "금융·예산·시세 정보",
+    "crm.financeTaxMarketTitle": "세금·시세 참고 정보",
+    "crm.financeTaxMarketLead":
+      "필요한 경우에만 입력하세요. 견적 상담이나 비교 안내에 참고됩니다.",
     "crm.tradeInSummary": "중고차 정리",
     "crm.tab.customers": "고객",
     "crm.tab.next": "다음 행동",
@@ -1393,6 +1402,11 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.newCar.smsPreviewClosingDisclaimer":
       "최종 조건은 견적서와 금융 승인 기준에 따라 다시 확인드리겠습니다.\n출고 가능 시점과 프로모션은 상담 시점에 따라 변동될 수 있습니다.\n아래 문구는 검토용 초안이며, 발송 전에 꼭 내용을 확인해 주세요.",
     "crm.newCar.financeFormTitle": "금융 조건 정리",
+    "crm.newCar.financeFormLead":
+      "상담 중 확인한 조건만 먼저 입력해도 됩니다. 자세한 조건은 나중에 보완할 수 있습니다.",
+    "crm.newCar.financeDetailSectionTitle": "상세 조건",
+    "crm.newCar.financeDetailExpand": "상세 조건 보기",
+    "crm.newCar.financeDetailCollapse": "상세 조건 접기",
     "crm.newCar.financeModeLabel": "금융 방식",
     "crm.newCar.leaseHintBullets":
       "리스 안내 포인트\n· 월 납입금과 잔존가치·보증금·선납금의 균형\n· 만기 인수·반납·연장 가능성\n· 법인·개인 사용 목적에 따른 검토 차이",
@@ -2266,6 +2280,9 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.aiRecommendation": "AI Recommendation",
     "crm.consultationSummary": "Consultation Summary",
     "crm.financeMarketInfo": "Finance, Budget & Market Info",
+    "crm.financeTaxMarketTitle": "Tax & market reference",
+    "crm.financeTaxMarketLead":
+      "Fill in only when needed—for quote discussions or comparison notes. Not tax advice.",
     "crm.tradeInSummary": "Trade-in Vehicle Summary",
     "crm.tab.customers": "Customers",
     "crm.tab.next": "Next steps",
@@ -2394,6 +2411,11 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.newCar.smsPreviewClosingDisclaimer":
       "We will reconfirm final terms against the quote and finance approval.\nDelivery timing and promotions may change with the consultation date.\nThis draft is for review—please verify before sending.",
     "crm.newCar.financeFormTitle": "Finance condition summary",
+    "crm.newCar.financeFormLead":
+      "Enter what you confirmed in the meeting first—you can add detail later.",
+    "crm.newCar.financeDetailSectionTitle": "More detail",
+    "crm.newCar.financeDetailExpand": "Show more detail",
+    "crm.newCar.financeDetailCollapse": "Hide detail",
     "crm.newCar.financeModeLabel": "Product",
     "crm.newCar.leaseHintBullets":
       "Lease checklist\n· Balance monthly payment with residual, deposit, and down payment\n· End-of-term buy, return, or extension\n· Corporate vs personal use differences",

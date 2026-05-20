@@ -2578,18 +2578,18 @@ export function CRMApp({
               <div className="flex flex-col gap-4">
                 <details
                   id="crm-block-budget"
-                  className="scroll-mt-24 rounded-2xl border border-white/[0.11] bg-slate-950/55 p-5"
+                  className="crm-finance-tax-market-form scroll-mt-24 rounded-2xl border border-white/[0.11] bg-slate-950/55 p-5"
                 >
-                  <summary className="flex cursor-pointer list-none items-center justify-between gap-3 rounded-xl px-1 py-1.5 outline-none transition hover:bg-slate-950/45">
-                    <div>
-                      <div className="text-[16px] font-semibold text-slate-50">{t("crm.financeMarketInfo")}</div>
-                      <div className="mt-1 text-[13px] text-slate-400">필요할 때 펼쳐서 입력·확인</div>
+                  <summary className="flex cursor-pointer list-none items-center justify-between gap-3 rounded-xl px-1 py-1.5 outline-none transition hover:bg-slate-950/45 focus-visible:ring-2 focus-visible:ring-sky-400/35 [&::-webkit-details-marker]:hidden">
+                    <div className="min-w-0">
+                      <div className="text-[16px] font-semibold text-slate-50">{t("crm.financeTaxMarketTitle")}</div>
+                      <div className="mt-1 text-[13px] leading-relaxed text-slate-400">{t("crm.financeTaxMarketLead")}</div>
                     </div>
-                    <span className="rounded-full border border-white/[0.11] bg-white/[0.07] px-3 py-1 text-[12px] font-semibold text-slate-300">
-                      펼치기
+                    <span className="shrink-0 rounded-full border border-white/[0.11] bg-white/[0.07] px-3 py-1 text-[12px] font-semibold text-slate-300">
+                      {t("crm.newCar.detailsToggle")}
                     </span>
                   </summary>
-                  <div className="mt-4 grid grid-cols-1 gap-4">
+                  <div className="mt-4 grid grid-cols-1 gap-4 border-t border-white/[0.07] pt-4">
                     <div className="grid gap-2">
                       <div className="text-xs font-semibold text-slate-300">금융 유형</div>
                       <div className="flex flex-wrap gap-2">
