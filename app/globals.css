@@ -900,6 +900,31 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
     0 0 0 3px rgba(56, 189, 248, 0.14);
 }
 
+/* 새 고객 추가 모달 — 다크 UI 스크롤바 */
+.crm-create-customer-modal,
+.crm-create-customer-modal__textarea {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.45) rgba(15, 23, 42, 0.6);
+}
+.crm-create-customer-modal::-webkit-scrollbar,
+.crm-create-customer-modal__textarea::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.crm-create-customer-modal::-webkit-scrollbar-track,
+.crm-create-customer-modal__textarea::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.6);
+}
+.crm-create-customer-modal::-webkit-scrollbar-thumb,
+.crm-create-customer-modal__textarea::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.45);
+  border-radius: 4px;
+}
+.crm-create-customer-modal::-webkit-scrollbar-thumb:hover,
+.crm-create-customer-modal__textarea::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.58);
+}
+
 /* 안내 모달 패널 — preview gate · Sensora TIP */
 .sensora-premium-modal-shell {
   border-radius: 1.25rem;

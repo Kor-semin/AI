@@ -84,6 +84,8 @@ import { QuickAiAssistantEntry } from "./QuickAiAssistantEntry";
 import { getDemoAiSummaryLine } from "./customerListDisplay";
 import {
   buildQuickConsultationResult,
+  buildQuickCustomerModalMemo,
+  parseQuickCustomerIdentity,
   type QuickConsultationResult,
 } from "./customerContextDraft";
 import { CrmMiniCalendar } from "@/app/crm/CrmMiniCalendar";
@@ -557,20 +559,13 @@ export function CRMApp({
     if (!quickConsultationResult) return;
     const snap = quickConsultationDraft.trim();
     const r = quickConsultationResult;
-    const memoParts = [
-      snap,
-      "",
-      "【AI 니즈 요약】",
-      r.summary,
-      "",
-      "【문자 초안 · 검토용】",
-      r.message,
-    ].filter((line, i, arr) => !(line === "" && arr[i - 1] === ""));
+    const identity = parseQuickCustomerIdentity(snap);
     const nextLine = r.nextActions[0]?.trim() ?? "";
     setCreateCustomerDraft({
       ...CREATE_CUSTOMER_INITIAL,
-      interestedModel: r.needs.vehicle?.trim() ?? "",
-      memo: memoParts.join("\n"),
+      name: identity.name?.trim() ?? "",
+      interestedModel: (r.needs.vehicle ?? identity.vehicle ?? "").trim(),
+      memo: buildQuickCustomerModalMemo(snap, r),
       nextActionText: nextLine,
     });
     setQuickSaveConfirmOpen(false);
@@ -3789,7 +3784,7 @@ export function CRMApp({
             role="dialog"
             aria-modal="true"
             aria-labelledby="crm-create-customer-title"
-            className="flex max-h-[92dvh] w-full max-w-[520px] flex-col rounded-t-[22px] border border-white/[0.11] bg-slate-950/55 shadow-2xl sm:rounded-[22px]"
+            className="crm-create-customer-modal flex max-h-[92dvh] w-full max-w-[520px] flex-col rounded-t-[22px] border border-white/[0.11] bg-slate-950/55 shadow-2xl sm:rounded-[22px]"
             onMouseDown={(e) => e.stopPropagation()}
             onClick={(e) => e.stopPropagation()}
           >
@@ -4232,7 +4227,7 @@ function TextArea({
         autoCorrect="off"
         autoCapitalize="off"
         spellCheck={false}
-        className="min-h-[120px] w-full resize-y rounded-xl border border-white/[0.11] bg-slate-950/55 px-3 py-3 text-[15px] text-slate-100 outline-none placeholder:text-slate-500 focus:border-sky-400/45"
+        className="crm-create-customer-modal__textarea min-h-[120px] w-full resize-y rounded-xl border border-white/[0.11] bg-slate-950/55 px-3 py-3 text-[15px] text-slate-100 outline-none placeholder:text-slate-500 focus:border-sky-400/45"
       />
     </label>
   );
