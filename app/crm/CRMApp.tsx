@@ -78,6 +78,7 @@ import { PipelineSection } from "./sections/PipelineSection";
 import { VehicleMatchSection } from "./sections/VehicleMatchSection";
 import { FollowUpSection } from "./sections/FollowUpSection";
 import { SettingsSection } from "./sections/SettingsSection";
+import { CustomerSupportPanel } from "./CustomerSupportPanel";
 import { CustomersSection } from "./sections/CustomersSection";
 import { AiSecretarySection } from "./sections/AiSecretarySection";
 import { CrmAiAssistantPanel } from "./CrmAiAssistantPanel";
@@ -2043,6 +2044,8 @@ export function CRMApp({
               onOpenAddressBookImport={openCustomersImportHub}
             />
           ) : null}
+
+          {activeSection === "support" ? <CustomerSupportPanel /> : null}
 
           {activeSection === "ai" ? (
             <AiSecretarySection>

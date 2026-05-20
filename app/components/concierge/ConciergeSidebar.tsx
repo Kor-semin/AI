@@ -1,13 +1,16 @@
 "use client";
 
 import { SensoraAnimatedMark } from "@/app/components/SensoraAnimatedMark";
-import type { CrmSection } from "@/app/crm/crmSectionTypes";
 import {
   CRM_SECTION_LABELS,
   CRM_SECTION_MOBILE_SUBTITLE_KEYS,
   CRM_SECTION_ORDER,
+  type CrmSection,
 } from "@/app/crm/crmSectionTypes";
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
+
+const CRM_NAV_FOOTER_SECTIONS: CrmSection[] = ["settings", "support"];
+const CRM_NAV_MAIN_SECTIONS = CRM_SECTION_ORDER.filter((s) => !CRM_NAV_FOOTER_SECTIONS.includes(s));
 
 function navButtonClass(active: boolean): string {
   return [
@@ -33,32 +36,36 @@ export function ConciergeSidebar({
 }) {
   const { t } = useLanguage();
 
+  const renderNavButton = (section: CrmSection) => {
+    const active = activeSection === section;
+    const { title, subtitle } = CRM_SECTION_LABELS[section];
+    return (
+      <button
+        key={section}
+        type="button"
+        onClick={() => onNavigate(section)}
+        className={navButtonClass(active)}
+        aria-current={active ? "page" : undefined}
+        aria-label={`${title}, ${subtitle}`}
+      >
+        <span>{title}</span>
+        <span
+          className={[
+            "text-[14.5px] font-semibold tracking-[-0.01em]",
+            active ? "text-[#EDF4FC]" : "text-[#ADB7C9] group-hover:text-[#E9F0FA]",
+          ].join(" ")}
+        >
+          {subtitle}
+        </span>
+      </button>
+    );
+  };
+
   const desktopNavLinks = (
     <>
-      {CRM_SECTION_ORDER.map((section) => {
-        const active = activeSection === section;
-        const { title, subtitle } = CRM_SECTION_LABELS[section];
-        return (
-          <button
-            key={section}
-            type="button"
-            onClick={() => onNavigate(section)}
-            className={navButtonClass(active)}
-            aria-current={active ? "page" : undefined}
-            aria-label={`${title}, ${subtitle}`}
-          >
-            <span>{title}</span>
-            <span
-              className={[
-                "text-[14.5px] font-semibold tracking-[-0.01em]",
-                active ? "text-[#EDF4FC]" : "text-[#ADB7C9] group-hover:text-[#E9F0FA]",
-              ].join(" ")}
-            >
-              {subtitle}
-            </span>
-          </button>
-        );
-      })}
+      {CRM_NAV_MAIN_SECTIONS.map(renderNavButton)}
+      <div className="my-2 border-t border-white/[0.08] pt-2" role="presentation" aria-hidden />
+      {CRM_NAV_FOOTER_SECTIONS.map(renderNavButton)}
     </>
   );
 

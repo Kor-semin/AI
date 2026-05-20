@@ -376,6 +376,42 @@ export type TranslationKey =
   | "crm.nav.mobileSubtitle.vehicle"
   | "crm.nav.mobileSubtitle.followup"
   | "crm.nav.mobileSubtitle.settings"
+  | "crm.nav.mobileSubtitle.support"
+  | "crm.support.title"
+  | "crm.support.lead"
+  | "crm.support.email.title"
+  | "crm.support.email.body"
+  | "crm.support.email.betaNote"
+  | "crm.support.email.cta"
+  | "crm.support.phone.title"
+  | "crm.support.phone.body"
+  | "crm.support.phone.status"
+  | "crm.support.phone.betaNote"
+  | "crm.support.phone.cta"
+  | "crm.support.error.title"
+  | "crm.support.error.intro"
+  | "crm.support.error.item1"
+  | "crm.support.error.item2"
+  | "crm.support.error.item3"
+  | "crm.support.error.item4"
+  | "crm.support.error.item5"
+  | "crm.support.error.item6"
+  | "crm.support.error.cta"
+  | "crm.support.error.mailBody"
+  | "crm.support.faq.title"
+  | "crm.support.faq1.q"
+  | "crm.support.faq1.a"
+  | "crm.support.faq2.q"
+  | "crm.support.faq2.a"
+  | "crm.support.faq3.q"
+  | "crm.support.faq3.a"
+  | "crm.support.faq4.q"
+  | "crm.support.faq4.a"
+  | "crm.support.privacy.title"
+  | "crm.support.privacy.body"
+  | "crm.support.privacy.policyLink"
+  | "crm.support.mail.subjectInquiry"
+  | "crm.support.mail.subjectError"
   | "crm.workspaceAi.title"
   | "crm.workspaceAi.subtitle"
   | "crm.workspaceAi.customerPickLabel"
@@ -1325,6 +1361,48 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.nav.mobileSubtitle.vehicle": "입력 조건·예산",
     "crm.nav.mobileSubtitle.followup": "할 일·일정",
     "crm.nav.mobileSubtitle.settings": "계정·언어",
+    "crm.nav.mobileSubtitle.support": "문의·FAQ",
+    "crm.support.title": "고객센터",
+    "crm.support.lead":
+      "Sensora 사용 중 불편한 점이나 오류가 있다면 문의해 주세요.\n베타 기간에는 접수된 의견을 확인해 순차적으로 개선에 반영합니다.",
+    "crm.support.email.title": "이메일 문의",
+    "crm.support.email.body": "서비스 이용 중 궁금한 점이나 오류가 있다면 이메일로 문의해 주세요.",
+    "crm.support.email.betaNote": "베타 운영 전 공식 문의 이메일로 교체될 수 있습니다.",
+    "crm.support.email.cta": "이메일 문의하기",
+    "crm.support.phone.title": "전화 문의",
+    "crm.support.phone.body": "긴급한 오류나 베타 이용 관련 문의는 전화 상담 채널을 통해 안내드릴 예정입니다.",
+    "crm.support.phone.status": "준비 중",
+    "crm.support.phone.betaNote": "베타 운영 전 전용 문의 번호를 등록할 예정입니다.",
+    "crm.support.phone.cta": "전화 문의하기 (준비 중)",
+    "crm.support.error.title": "오류 신고",
+    "crm.support.error.intro": "오류를 신고할 때는 아래 정보를 함께 보내주시면 더 빠르게 확인할 수 있습니다.",
+    "crm.support.error.item1": "오류가 발생한 화면",
+    "crm.support.error.item2": "사용 중인 기기",
+    "crm.support.error.item3": "브라우저",
+    "crm.support.error.item4": "발생 시간",
+    "crm.support.error.item5": "오류 상황 설명",
+    "crm.support.error.item6": "가능하다면 스크린샷",
+    "crm.support.error.cta": "오류 신고 이메일 작성",
+    "crm.support.error.mailBody":
+      "[오류 발생 화면]\n\n\n[사용 기기]\n\n\n[브라우저]\n\n\n[발생 시간]\n\n\n[오류 설명]\n\n\n[스크린샷 첨부 여부]",
+    "crm.support.faq.title": "자주 묻는 질문",
+    "crm.support.faq1.q": "Sensora가 고객 정보를 자동으로 수집하나요?",
+    "crm.support.faq1.a":
+      "아니요. Sensora는 고객 정보를 자동으로 수집하지 않습니다. 사용자가 직접 입력하고 확인한 내용만 저장하는 구조를 기준으로 합니다.",
+    "crm.support.faq2.q": "AI가 고객에게 문자를 자동으로내나요?",
+    "crm.support.faq2.a":
+      "아니요. AI는 검토용 초안을 제안합니다. 최종 확인과 발송은 영업사원이 직접 합니다.",
+    "crm.support.faq3.q": "베타 기간에는 어떤 기능을 사용할 수 있나요?",
+    "crm.support.faq3.a":
+      "상담 메모 정리, 문자 초안, 다음 행동 정리, 고객관리, 금융 조건 기반 견적 안내 등을 순차적으로 사용할 수 있습니다.",
+    "crm.support.faq4.q": "오류나 개선 의견은 어떻게 전달하나요?",
+    "crm.support.faq4.a": "고객센터의 이메일 문의 또는 오류 신고를 통해 전달할 수 있습니다.",
+    "crm.support.privacy.title": "고객 정보는 신뢰가 먼저입니다",
+    "crm.support.privacy.body":
+      "Sensora는 영업사원의 고객 정보를 자동으로 수집하거나 임의로 저장하지 않습니다.\n고객 정보는 사용자가 직접 입력하고 확인한 뒤 저장하는 구조를 기준으로 합니다.\nAI가 제안하는 문자 초안과 다음 행동은 검토용이며, 최종 판단과 발송은 영업사원이 직접 진행합니다.",
+    "crm.support.privacy.policyLink": "개인정보처리방침 보기",
+    "crm.support.mail.subjectInquiry": "Sensora 문의",
+    "crm.support.mail.subjectError": "Sensora 오류 신고",
     "crm.workspaceAi.title": "AI 비서 (작업)",
     "crm.workspaceAi.subtitle":
       "「다시 분석」을 눌렀을 때만 메모 기반 제안이 갱신됩니다. 견적·금융 조건 검토용 초안은 고객 상세에서 직접 입력한 조건을 반영합니다. 저장·복사·다음 연락은 확인 후 적용하세요.",
@@ -2340,6 +2418,48 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.nav.mobileSubtitle.vehicle": "Entered terms · budget",
     "crm.nav.mobileSubtitle.followup": "Tasks · schedule",
     "crm.nav.mobileSubtitle.settings": "Account · language",
+    "crm.nav.mobileSubtitle.support": "Help · FAQ",
+    "crm.support.title": "Customer support",
+    "crm.support.lead":
+      "If something feels unclear or broken while using Sensora, let us know.\nDuring beta we review submissions and improve the product step by step.",
+    "crm.support.email.title": "Email",
+    "crm.support.email.body": "Questions or issues during beta? Email us with a short description.",
+    "crm.support.email.betaNote": "This address may be replaced with the official support email before full beta operations.",
+    "crm.support.email.cta": "Email support",
+    "crm.support.phone.title": "Phone",
+    "crm.support.phone.body": "Urgent issues and beta onboarding questions will be handled through a phone channel when it is ready.",
+    "crm.support.phone.status": "Coming soon",
+    "crm.support.phone.betaNote": "A dedicated support number will be published before full beta operations.",
+    "crm.support.phone.cta": "Call support (coming soon)",
+    "crm.support.error.title": "Report an issue",
+    "crm.support.error.intro": "Including the details below helps us investigate faster.",
+    "crm.support.error.item1": "Screen where the issue occurred",
+    "crm.support.error.item2": "Device",
+    "crm.support.error.item3": "Browser",
+    "crm.support.error.item4": "Time it happened",
+    "crm.support.error.item5": "What you were doing",
+    "crm.support.error.item6": "Screenshot if possible",
+    "crm.support.error.cta": "Compose issue report email",
+    "crm.support.error.mailBody":
+      "[Screen]\n\n\n[Device]\n\n\n[Browser]\n\n\n[Time]\n\n\n[Description]\n\n\n[Screenshot attached?]",
+    "crm.support.faq.title": "FAQ",
+    "crm.support.faq1.q": "Does Sensora automatically collect customer data?",
+    "crm.support.faq1.a":
+      "No. Sensora does not automatically collect customer information. Only what you enter and confirm is stored.",
+    "crm.support.faq2.q": "Does AI send messages to customers automatically?",
+    "crm.support.faq2.a":
+      "No. AI proposes review drafts. You review and send messages yourself.",
+    "crm.support.faq3.q": "What can I use during beta?",
+    "crm.support.faq3.a":
+      "Consultation notes, message drafts, next-step suggestions, customer records, and quote guidance from finance conditions you enter—rolled out step by step.",
+    "crm.support.faq4.q": "How do I send feedback or report bugs?",
+    "crm.support.faq4.a": "Use email support or the issue report template in Customer support.",
+    "crm.support.privacy.title": "Customer data starts with trust",
+    "crm.support.privacy.body":
+      "Sensora does not automatically collect or arbitrarily store your customers’ information.\nYou enter and confirm what is saved.\nAI drafts and next-step suggestions are for review—you decide what to send.",
+    "crm.support.privacy.policyLink": "View privacy policy",
+    "crm.support.mail.subjectInquiry": "Sensora inquiry",
+    "crm.support.mail.subjectError": "Sensora issue report",
     "crm.workspaceAi.title": "AI assistant (workspace)",
     "crm.workspaceAi.subtitle":
       "Memo-based proposals refresh when you tap “Analyze again.” Quote/finance drafts reflect fields on the customer card. Copy, save, and follow-ups stay under your control.",
