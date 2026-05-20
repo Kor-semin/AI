@@ -25,10 +25,10 @@ export function VehicleMatchSection({ customer, memoForAnalysis, onOpenCustomers
   return (
     <div className="sensora-premium-panel flex max-w-3xl flex-col gap-5 rounded-[22px] border-white/[0.11] px-5 py-6 backdrop-blur-xl sm:px-7">
       <div>
-        <h2 className="text-[20px] font-semibold text-slate-50">차량·조건 매칭</h2>
+        <h2 className="text-[20px] font-semibold text-slate-50">차량·금융 조건</h2>
         <p className="mt-2 text-[14px] leading-relaxed text-slate-400">
-          적합(fit) 보이는 모델과, 메모에 드러난 조건·예산 간격(gap)을 함께 짚는 방향으로 보면 설명이 더 단순해집니다. 관심 모델은
-          존중하되 가족·좌석·예산·금융 방식 같은 실무 조건을 나란히 두고 비교합니다. 아래는 저장된 메모를{" "}
+          상담 중 입력·메모에 남긴 차량명, 트림, 예산, 금융 방식을 한곳에서 다시 확인합니다. 관심 차량은 존중하되
+          가족·좌석·월 납입·출고 일정 같은 실무 조건을 나란히 두고 정리합니다. 아래는 저장된 메모를{" "}
           <strong className="font-semibold text-slate-100">바꾸지 않고</strong> 데모 규칙으로 정리한 참고 요약입니다.
         </p>
       </div>

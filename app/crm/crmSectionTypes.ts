@@ -16,7 +16,7 @@ export const CRM_SECTION_LABELS: Record<CrmSection, { title: string; subtitle: s
   consulting: { title: "상담 메모", subtitle: "직접 수정·원문 보존" },
   ai: { title: "AI 비서", subtitle: "니즈·영업 포인트·문자" },
   pipeline: { title: "영업 단계", subtitle: "단계별 고객" },
-  vehicle: { title: "차량 매칭", subtitle: "조건·예산·모델 적합" },
+  vehicle: { title: "차량·금융 조건", subtitle: "입력 조건·예산 정리" },
   followup: { title: "사후관리", subtitle: "해야 할 일과 일정" },
   settings: { title: "설정", subtitle: "내 정보·안내" },
 };

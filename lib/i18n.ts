@@ -981,7 +981,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.heroDemo.flow.save": "고객으로 저장",
     "landing.heroDemo.inputTitle": "상담 메모 입력",
     "landing.heroDemo.inputSample":
-      "GLC 상담\n월 납입 부담을 낮추고 싶어함\n빠른 출고 가능 여부 문의\n견적서와 카탈로그 요청\n다음 주 다시 연락 필요",
+      "GLC 상담\n월 납입 부담을 낮추고 싶어함\n빠른 출고 가능 여부 문의\n견적 조건과 참고 자료 요청\n다음 주 다시 연락 필요",
     "landing.heroDemo.analyzeCta": "AI 비서로 정리하기",
     "landing.heroDemo.resultTitle": "AI 정리 결과",
     "landing.heroDemo.resultNeedsLabel": "고객 니즈 요약",
@@ -1006,13 +1006,14 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.problems.item1": "상담 내용이 카카오톡, 메모장, 엑셀에 흩어집니다.",
     "landing.problems.item2": "고객에게 보낼 문구를 매번 새로 정리해야 합니다.",
     "landing.problems.item3": "다음 연락 타이밍을 놓치기 쉽습니다.",
-    "landing.problems.item4": "견적서와 카탈로그를 다시 찾는 일도 번거롭습니다.",
+    "landing.problems.item4": "견적 조건과 참고 자료를 다시 찾는 일도 번거롭습니다.",
     "landing.problems.item5": "고객별 상담 흐름을 한눈에 보기 어렵습니다.",
     "landing.solution.title": "Sensora는 상담을 다음 행동으로 정리합니다",
     "landing.solution.body":
       "상담이 끝난 뒤 남겨야 할 내용과 고객에게 보낼 문구를 정리하고, 다음 연락 포인트를 안내합니다.",
     "landing.solution.point1": "상담 내용을 고객 니즈로 정리합니다.",
-    "landing.solution.point2": "고객에게 보낼 문구를 신차 영업 톤으로 제안합니다.",
+    "landing.solution.point2":
+      "상담 중 확인한 차량·금융 조건을 바탕으로 문자 초안과 다음 행동을 정리합니다.",
     "landing.solution.point3": "다음 연락과 사후관리 포인트를 안내합니다.",
     "landing.solution.point4": "필요한 내용만 고객 정보로 저장할 수 있습니다.",
     "landing.solution.aux":
@@ -1021,15 +1022,17 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.features.f1.title": "상담 정리",
     "landing.features.f1.desc": "상담 내용을 고객 니즈와 핵심 조건으로 정리합니다.",
     "landing.features.f2.title": "AI 문자 초안",
-    "landing.features.f2.desc": "고객에게 보낼 문구를 신차 영업 톤으로 제안합니다.",
+    "landing.features.f2.desc":
+      "상담 중 확인한 차량·금융 조건을 반영해 고객에게 보낼 문구 초안을 제안합니다.",
     "landing.features.f3.title": "다음 행동 제안",
     "landing.features.f3.desc": "다음 연락, 사후관리, 견적 확인 포인트를 안내합니다.",
     "landing.features.f4.title": "고객으로 저장",
     "landing.features.f4.desc": "필요한 내용만 사용자가 확인한 뒤 고객 정보로 저장합니다.",
     "landing.features.f5.title": "견적서 보관",
     "landing.features.f5.desc": "고객별 견적서와 상담 자료를 함께 확인할 수 있습니다.",
-    "landing.features.f6.title": "브랜드 / 카탈로그 연결",
-    "landing.features.f6.desc": "브랜드와 모델 기준의 자료를 고객 응대 흐름에 연결합니다.",
+    "landing.features.f6.title": "차량·금융 조건 정리",
+    "landing.features.f6.desc":
+      "차량명, 트림, 금융 방식, 월 납입 등 상담 중 입력한 조건을 바탕으로 응대 문구를 정리합니다.",
     "landing.features.f7.title": "고객관리",
     "landing.features.f7.desc": "상담 후 정리된 내용을 고객별로 다시 확인할 수 있습니다.",
     "landing.flow.title": "상담 후 이렇게 이어집니다",
@@ -1045,7 +1048,8 @@ export const translations: Record<LanguageCode, TranslationDict> = {
       "Sensora는 고객 정보를 자동으로 수집하지 않습니다. 저장과 발송은 영업사원이 직접 확인하는 흐름을 전제로 합니다.",
     "landing.trust.point1": "고객 정보는 사용자가 확인하고 저장합니다.",
     "landing.trust.point2": "Sensora는 고객 정보를 자동으로 수집하지 않습니다.",
-    "landing.trust.point3": "AI는 검토용 초안을 돕습니다.",
+    "landing.trust.point3":
+      "Sensora는 차량 가격이나 프로모션을 자동으로 확정 안내하지 않습니다. 입력한 조건을 바탕으로 검토용 초안을 제안합니다.",
     "landing.trust.point4": "최종 판단과 발송은 영업사원이 직접 합니다.",
     "landing.trust.point5": "필요한 내용만 고객별로 정리할 수 있습니다.",
     "landing.cta.title": "상담 뒤 남길 내용을 더 정확하게 정리하고 싶다면, 베타를 신청해 보세요.",
@@ -1075,13 +1079,13 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.contextSummary.estimateAttachOff": "미포함",
     "crm.contextSummary.nextContact": "다음 연락 예정",
     "crm.contextSummary.empty": "관심 차량·니즈·금융 조건을 입력하면 여기에 요약됩니다.",
-    "crm.workspaceAi.contextFeedsFinanceSms": "이 요약은 아래 「신차 견적·금융」 검토용 문자 초안에 함께 반영됩니다.",
+    "crm.workspaceAi.contextFeedsFinanceSms": "이 요약은 아래 「견적·금융 조건」 검토용 문자 초안에 함께 반영됩니다.",
     "crm.recommendedNext.title": "추천 다음 행동(검토)",
     "crm.recommendedNext.disclaimer": "AI는 다음 행동을 제안할 뿐이며, 최종 판단은 영업사원이 합니다.",
     "crm.newCar.priorityReflectHint":
       "선택한 조건은 AI 문자 초안, 다음 행동 제안, 금융 조건 설명에 함께 반영됩니다.",
     "crm.customerDetail.linkedFinanceSmsHint":
-      "고객 카드에 입력한 조건이 반영된 신차 금융 검토용 문자는 「AI 비서」 화면 하단에서 확인·복사할 수 있습니다.",
+      "고객 카드에 입력한 조건이 반영된 견적·금융 검토용 문자는 「AI 비서」 화면 하단에서 확인·복사할 수 있습니다.",
     "crm.customerDetail.quickActionMemo": "상담 메모",
     "crm.customerDetail.quickActionSms": "문자 초안",
     "crm.customerDetail.quickActionEstimate": "견적서",
@@ -1318,12 +1322,12 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.nav.mobileSubtitle.consulting": "직접 수정",
     "crm.nav.mobileSubtitle.ai": "초안·정리",
     "crm.nav.mobileSubtitle.pipeline": "단계별",
-    "crm.nav.mobileSubtitle.vehicle": "조건·예산",
+    "crm.nav.mobileSubtitle.vehicle": "입력 조건·예산",
     "crm.nav.mobileSubtitle.followup": "할 일·일정",
     "crm.nav.mobileSubtitle.settings": "계정·언어",
     "crm.workspaceAi.title": "AI 비서 (작업)",
     "crm.workspaceAi.subtitle":
-      "「다시 분석」을 눌렀을 때만 메모 기반 제안이 갱신됩니다. 신차 견적·금융 검토용 초안은 고객 상세의 조건 입력을 반영합니다. 저장·복사·다음 연락은 확인 후 적용하세요.",
+      "「다시 분석」을 눌렀을 때만 메모 기반 제안이 갱신됩니다. 견적·금융 조건 검토용 초안은 고객 상세에서 직접 입력한 조건을 반영합니다. 저장·복사·다음 연락은 확인 후 적용하세요.",
     "crm.workspaceAi.customerPickLabel": "고객",
     "crm.workspaceAi.selectPlaceholder": "고객을 선택해 주세요",
     "crm.workspaceAi.pickCustomer": "워크플로를 시작하려면 고객을 선택하거나 새로 추가하세요.",
@@ -1347,7 +1351,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.workspaceAi.smsCopyToast": "문자 초안을 복사했습니다.",
     "crm.workspaceAi.followUpDefaultTitle": "다음 연락",
     "crm.workspaceAi.analyzing": "정리 중…",
-    "crm.workspaceAi.newCarFinanceHeading": "신차 견적·금융 기준 검토용 문자 초안",
+    "crm.workspaceAi.newCarFinanceHeading": "견적·금융 조건 기준 검토용 문자 초안",
     "crm.workspaceAi.newCarFinanceLead":
       "고객 상세의 「금융 조건 정리」·「견적서 보관함」·니즈 선택을 반영합니다. 실제 견적서 파일은 문자에 자동 첨부되지 않습니다.",
     "crm.workspaceAi.newCarFinanceEmpty": "고객 상세에서 금융 방식(리스·할부 등)과 조건을 입력하면 이곳에 초안이 표시됩니다.",
@@ -1364,7 +1368,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
       "금융 조건은 텍스트로 정리하고, 견적서 원본은 Firebase Storage에 고객별로 보관합니다. 문자 초안에서는 첨부 안내 문구만 넣습니다.",
     "crm.newCar.vaultTitle": "견적서 보관함",
     "crm.newCar.vaultDesc":
-      "고객별 신차 견적서 PDF 또는 이미지를 저장해두면, 문자 초안을 만들 때 바로 첨부 여부를 선택할 수 있습니다.",
+      "고객별로 업로드한 견적서 PDF 또는 이미지를 저장해두면, 문자 초안을 만들 때 첨부 안내 문구 포함 여부를 선택할 수 있습니다.",
     "crm.newCar.vaultAddButton": "견적서 파일 추가",
     "crm.newCar.estimateMetaFormat": "파일 형식",
     "crm.newCar.estimateMetaUploaded": "등록 시각",
@@ -1379,7 +1383,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.newCar.disclaimerSensitive":
       "견적서에는 고객명, 차량 가격, 금융 조건 등 민감한 정보가 포함될 수 있습니다. 저장 및 공유 전 파일 내용을 반드시 확인해 주세요.",
     "crm.newCar.disclaimerAiReview":
-      "문자 초안의 문구는 검토용이며, 최종 발송과 첨부는 영업사원이 직접 확인해야 합니다.",
+      "문자 초안의 문구는 검토용이며, 최종 발송과 첨부는 영업사원이 직접 확인해야 합니다. Sensora는 차량 가격이나 프로모션을 자동으로 확정 안내하지 않습니다.",
     "crm.newCar.disclaimerNoAutoSend":
       "Sensora는 견적서를 자동으로 고객에게 전송하지 않습니다. 영업사원이 직접 확인한 뒤 문자나 메신저에 첨부해야 합니다.",
     "crm.newCar.disclaimerVault":
@@ -1393,7 +1397,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.newCar.smsAttachOptionLatest": "가장 최근 등록 견적서",
     "crm.newCar.smsAttachOptionNone": "선택 안 함(문구만)",
     "crm.newCar.smsAttachCommonIntro":
-      "고객님, 문의주신 신차 견적 기준으로 정리드립니다.\n자세한 금액과 조건은 함께 첨부드리는 견적서를 확인해 주세요.",
+      "고객님, 문의주신 차량·견적 조건 기준으로 정리드립니다.\n자세한 금액과 조건은 함께 첨부드리는 견적서를 확인해 주세요.",
     "crm.newCar.smsAttachLeaseNote":
       "리스 조건은 월 납입금, 잔존가치, 보증금, 계약기간에 따라 달라질 수 있습니다.\n첨부드린 견적서를 기준으로 다시 한번 확인 부탁드립니다.",
     "crm.newCar.smsAttachLoanNote":
@@ -1440,7 +1444,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.quickAi.inputHint":
       "상담 중 기억나는 내용을 짧게 적어도 괜찮습니다.\n차량, 예산, 출고 희망일, 고객 요청사항을 자유롭게 입력해 주세요.",
     "crm.quickAi.inputPlaceholder":
-      "예)\nGLC 상담\n월 납입 부담을 낮추고 싶어함\n빠른 출고 가능 여부 문의\n견적서와 카탈로그 요청\n다음 주 다시 연락 필요",
+      "예)\nGLC 상담\n월 납입 부담을 낮추고 싶어함\n빠른 출고 가능 여부 문의\n견적 조건과 참고 자료 요청\n다음 주 다시 연락 필요",
     "crm.quickAi.analyzeCta": "상담 내용 정리하기",
     "crm.quickAi.analyzing": "정리하는 중…",
     "crm.quickAi.goCustomers": "고객관리로 이동",
@@ -1985,7 +1989,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.heroDemo.flow.save": "Save customer",
     "landing.heroDemo.inputTitle": "Consultation notes",
     "landing.heroDemo.inputSample":
-      "GLC consultation\nWants lower monthly payment\nAsked about fast delivery\nRequested quote and catalog\nFollow up next week",
+      "GLC consultation\nWants lower monthly payment\nAsked about fast delivery\nQuote terms and reference materials requested\nFollow up next week",
     "landing.heroDemo.analyzeCta": "Organize with AI assistant",
     "landing.heroDemo.resultTitle": "AI-organized result",
     "landing.heroDemo.resultNeedsLabel": "Customer needs",
@@ -2010,13 +2014,14 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.problems.item1": "Consultation notes scatter across chat apps, memos, and spreadsheets.",
     "landing.problems.item2": "Customer-facing messages are drafted from scratch each time.",
     "landing.problems.item3": "It’s easy to miss the right moment for the next call.",
-    "landing.problems.item4": "Finding quotes and catalog material again takes extra steps.",
+    "landing.problems.item4": "Finding quote terms and reference materials again takes extra steps.",
     "landing.problems.item5": "It’s hard to see each customer’s consultation flow at a glance.",
     "landing.solution.title": "Sensora turns consultations into the next action",
     "landing.solution.body":
       "After a consultation, organize what to keep, suggest customer-facing wording, and point to sensible next contact steps.",
     "landing.solution.point1": "Turn consultation notes into customer needs.",
-    "landing.solution.point2": "Suggest new-car sales tone wording for customers.",
+    "landing.solution.point2":
+      "Organize message drafts and next steps from vehicle and finance conditions you confirmed in the meeting.",
     "landing.solution.point3": "Guide next contact and aftercare points.",
     "landing.solution.point4": "Save only what you need as customer records.",
     "landing.solution.aux":
@@ -2025,15 +2030,17 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.features.f1.title": "Consultation recap",
     "landing.features.f1.desc": "Turn notes into customer needs and key conditions.",
     "landing.features.f2.title": "AI message drafts",
-    "landing.features.f2.desc": "Suggest new-car sales tone wording for customers.",
+    "landing.features.f2.desc":
+      "Suggest customer-facing wording from vehicle and finance conditions entered during the consultation.",
     "landing.features.f3.title": "Next-step suggestions",
     "landing.features.f3.desc": "Surface next contact, aftercare, and quote check points.",
     "landing.features.f4.title": "Save as customer",
     "landing.features.f4.desc": "Save only what you confirm as customer information.",
     "landing.features.f5.title": "Quote archive",
     "landing.features.f5.desc": "Review quotes and consultation materials together per customer.",
-    "landing.features.f6.title": "Brand / catalog links",
-    "landing.features.f6.desc": "Connect brand and model materials to your response flow.",
+    "landing.features.f6.title": "Vehicle & finance conditions",
+    "landing.features.f6.desc":
+      "Organize response wording from vehicle name, trim, finance mode, and monthly payment you enter from the consultation.",
     "landing.features.f7.title": "Customer records",
     "landing.features.f7.desc": "Revisit post-consultation summaries per customer.",
     "landing.flow.title": "How it continues after a consultation",
@@ -2049,7 +2056,8 @@ export const translations: Record<LanguageCode, TranslationDict> = {
       "Sensora does not automatically collect customer information. Saving and sending assume you review and decide.",
     "landing.trust.point1": "You confirm before customer information is saved.",
     "landing.trust.point2": "Sensora does not automatically collect customer information.",
-    "landing.trust.point3": "AI helps with review drafts.",
+    "landing.trust.point3":
+      "Sensora does not automatically confirm vehicle prices or promotions. It proposes review drafts from conditions you enter.",
     "landing.trust.point4": "You make the final call and send messages.",
     "landing.trust.point5": "You can organize only what you need, per customer.",
     "landing.cta.title": "If you want clearer notes after each consultation, apply for the beta.",
@@ -2079,13 +2087,13 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.contextSummary.estimateAttachOff": "Off",
     "crm.contextSummary.nextContact": "Next contact",
     "crm.contextSummary.empty": "Add vehicle, priorities, and finance details to see a summary here.",
-    "crm.workspaceAi.contextFeedsFinanceSms": "This summary feeds the new‑car finance SMS draft below.",
+    "crm.workspaceAi.contextFeedsFinanceSms": "This summary feeds the quote & finance condition SMS draft below.",
     "crm.recommendedNext.title": "Suggested next steps (review)",
     "crm.recommendedNext.disclaimer": "AI suggests next steps only; the salesperson makes the final decision.",
     "crm.newCar.priorityReflectHint":
       "Selected priorities are reflected in AI SMS drafts, suggested next steps, and finance explanations.",
     "crm.customerDetail.linkedFinanceSmsHint":
-      "The new‑car finance review SMS (fed by this card) can be viewed and copied at the bottom of the AI Assistant screen.",
+      "The quote & finance review SMS (fed by this card) can be viewed and copied at the bottom of the AI Assistant screen.",
     "crm.customerDetail.quickActionMemo": "Consultation notes",
     "crm.customerDetail.quickActionSms": "SMS draft",
     "crm.customerDetail.quickActionEstimate": "Quotes",
@@ -2329,7 +2337,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.nav.mobileSubtitle.consulting": "Edit your notes",
     "crm.nav.mobileSubtitle.ai": "Drafts · tidy-ups",
     "crm.nav.mobileSubtitle.pipeline": "By stage",
-    "crm.nav.mobileSubtitle.vehicle": "Match & budget",
+    "crm.nav.mobileSubtitle.vehicle": "Entered terms · budget",
     "crm.nav.mobileSubtitle.followup": "Tasks · schedule",
     "crm.nav.mobileSubtitle.settings": "Account · language",
     "crm.workspaceAi.title": "AI assistant (workspace)",
@@ -2358,7 +2366,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.workspaceAi.smsCopyToast": "Message copied.",
     "crm.workspaceAi.followUpDefaultTitle": "Follow-up",
     "crm.workspaceAi.analyzing": "Working…",
-    "crm.workspaceAi.newCarFinanceHeading": "New-car quote & finance draft (for review)",
+    "crm.workspaceAi.newCarFinanceHeading": "Quote & finance condition draft (for review)",
     "crm.workspaceAi.newCarFinanceLead":
       "Uses finance fields, the quote vault, and priority needs from the customer record. Quote files are not auto-attached to SMS.",
     "crm.workspaceAi.newCarFinanceEmpty": "Enter finance mode and fields on the customer detail card to see a draft here.",
@@ -2375,7 +2383,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
       "Keep finance terms as text and store quote originals per customer in Firebase Storage. SMS drafts only add wording about attaching a quote—not the binary file.",
     "crm.newCar.vaultTitle": "Quote vault",
     "crm.newCar.vaultDesc":
-      "Save each customer’s new-car quote PDF or image so you can toggle attachment wording when drafting messages.",
+      "Save each customer’s uploaded quote PDF or image so you can toggle attachment wording when drafting messages.",
     "crm.newCar.vaultAddButton": "Add quote file",
     "crm.newCar.estimateMetaFormat": "File type",
     "crm.newCar.estimateMetaUploaded": "Uploaded at",
@@ -2390,7 +2398,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.newCar.disclaimerSensitive":
       "Quotes may include customer names, prices, and finance terms. Review the file before you save or share it.",
     "crm.newCar.disclaimerAiReview":
-      "Draft wording is for review only—you decide what to send and what to attach.",
+      "Draft wording is for review only—you decide what to send and what to attach. Sensora does not automatically confirm vehicle prices or promotions.",
     "crm.newCar.disclaimerNoAutoSend":
       "Sensora does not automatically send quotes to customers. Attach them yourself after you verify the contents.",
     "crm.newCar.disclaimerVault":
@@ -2404,7 +2412,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.newCar.smsAttachOptionLatest": "Most recently uploaded quote",
     "crm.newCar.smsAttachOptionNone": "None (wording only)",
     "crm.newCar.smsAttachCommonIntro":
-      "Here is a recap based on the new-car quote you asked about.\nPlease review the detailed amounts and terms in the attached quote.",
+      "Here is a recap based on the vehicle and quote terms you asked about.\nPlease review the detailed amounts and terms in the attached quote.",
     "crm.newCar.smsAttachLeaseNote":
       "Lease figures can change with monthly payment, residual, deposit, and term.\nPlease double-check using the attached quote.",
     "crm.newCar.smsAttachLoanNote":
@@ -2451,7 +2459,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.quickAi.inputHint":
       "A short note from the consultation is fine.\nEnter vehicle, budget, delivery timing, or customer requests freely.",
     "crm.quickAi.inputPlaceholder":
-      "e.g.\nGLC consultation\nWants lower monthly payment\nAsked about fast delivery\nQuote and catalog requested\nFollow up next week",
+      "e.g.\nGLC consultation\nWants lower monthly payment\nAsked about fast delivery\nQuote terms and reference materials requested\nFollow up next week",
     "crm.quickAi.analyzeCta": "Organize consultation notes",
     "crm.quickAi.analyzing": "Organizing…",
     "crm.quickAi.goCustomers": "Open customer list",

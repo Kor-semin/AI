@@ -268,9 +268,9 @@ export function buildNewCarFinanceSmsPreview(
   const chunks: string[] = [];
 
   if (veh) {
-    chunks.push(`${name} 고객님, 문의주신 ${veh} 신차 견적 기준으로 정리드립니다.`);
+    chunks.push(`${name} 고객님, 문의주신 ${veh} 차량·견적 조건 기준으로 정리드립니다.`);
   } else {
-    chunks.push(`${name} 고객님, 문의주신 신차 견적 기준으로 정리드립니다.`);
+    chunks.push(`${name} 고객님, 문의주신 차량·견적 조건 기준으로 정리드립니다.`);
   }
 
   if (c.stage) {
