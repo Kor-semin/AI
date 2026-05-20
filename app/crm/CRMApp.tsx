@@ -3788,22 +3788,14 @@ export function CRMApp({
             onMouseDown={(e) => e.stopPropagation()}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex shrink-0 items-center justify-between gap-2 border-b border-white/[0.11] bg-slate-950/45 px-4 py-3 sm:px-5">
+            <div className="shrink-0 border-b border-white/[0.11] bg-slate-950/45 px-4 py-3 sm:px-5">
               <h2 id="crm-create-customer-title" className="text-[16px] font-extrabold text-slate-50">
                 새 고객 추가
               </h2>
-              <button
-                type="button"
-                className="crm-ghost-btn min-h-[44px] shrink-0 rounded-xl px-3 py-2 text-[13px] font-semibold text-slate-300"
-                aria-label="닫기"
-                onClick={closeCreateCustomerModal}
-              >
-                닫기
-              </button>
             </div>
             <form
               id="crm-create-customer-form"
-              className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto overscroll-contain px-4 py-4 sm:gap-5 sm:px-6 sm:py-5"
+              className="crm-create-customer-modal__body flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto overscroll-contain px-4 py-4 sm:gap-5 sm:px-6 sm:py-5"
               onSubmit={(e) => {
                 e.preventDefault();
                 void submitCreateCustomer();
