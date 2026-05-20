@@ -156,7 +156,9 @@ function appendMaturityLines(lines: string[], fd: FinanceConditionDraft, mode: "
     if (mode === "장기렌트") {
       lines.push("편하실 때 연간 주행거리와 보험·정비 포함 여부를 알려주시면 더 정확하게 정리해드리겠습니다.");
     } else {
-      lines.push("편하실 때 연간 주행거리와 만기 인수 여부를 알려주시면 더 정확하게 정리해드리겠습니다.");
+      lines.push(
+        "편하실 때 연간 주행거리와 선납금 또는 보증금 기준을 알려주시면 더 정확하게 정리해드리겠습니다.",
+      );
     }
   }
 }
@@ -231,7 +233,7 @@ function buildLeaseEstimateMessage(customer: Customer): string | null {
 
   const bits = buildConditionSummaryParts(fd);
   if (bits.length) {
-    lines.push(`현재 입력된 조건 기준으로는 ${bits.join(", ")} 수준으로 확인됩니다.`);
+    lines.push(`현재 확인된 조건으로는 ${bits.join(", ")} 수준으로 확인됩니다.`);
     lines.push("");
   }
 
@@ -242,7 +244,7 @@ function buildLeaseEstimateMessage(customer: Customer): string | null {
   }
 
   lines.push(
-    "리스는 약정거리, 만기 인수 여부, 보증금 조건에 따라 월 납입금이 달라질 수 있어 해당 부분까지 확인 후 안내드리겠습니다.",
+    "리스는 약정거리와 선납금·보증금, 캐피탈 조건에 따라 월 납입금이 조금씩 달라질 수 있어 조건별로 비교해보겠습니다.",
   );
   lines.push("");
 
