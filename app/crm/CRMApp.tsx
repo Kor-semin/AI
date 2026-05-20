@@ -64,6 +64,7 @@ import {
   type DemoConsultingResponse,
   type DemoSalesStyle,
 } from "@/app/components/concierge/aiDemoResponse";
+import { getMessageTemplateCardHint } from "./messageTemplateCardHints";
 import { makeId, seedState } from "./seed";
 import { ContactImportFileGuideModal } from "./ContactImportFileGuideModal";
 import { ImportContactsPanel, type ImportContactsCommitPayload } from "./ImportContactsPanel";
@@ -1673,7 +1674,7 @@ export function CRMApp({
     downloadText(`customer_${customer.name}_${customer.id}.txt`, text);
   }
 
-  const myName = sellerNickname.trim() || sellerDisplayName?.trim() || "영업 담당";
+  const myName = sellerNickname.trim() || sellerDisplayName?.trim() || "";
 
   function renderTemplate(tpl: MessageTemplate, customer?: Customer | null) {
     const cName = customer?.name ?? "고객";
@@ -3086,8 +3087,11 @@ export function CRMApp({
                       + 템플릿
                     </button>
                   </div>
+                  <p className="mt-2 text-[11px] leading-snug text-slate-500">{t("crm.templates.sectionReviewHint")}</p>
                   <div className="mt-4 space-y-2">
-                    {quickTemplates.map((tpl) => (
+                    {quickTemplates.map((tpl) => {
+                      const cardHint = getMessageTemplateCardHint(tpl.title);
+                      return (
                       <button
                         key={tpl.id}
                         className="w-full rounded-xl border border-white/[0.11] bg-slate-950/55 p-3 text-left hover:bg-white/[0.08]"
@@ -3101,10 +3105,13 @@ export function CRMApp({
                           );
                         }}
                       >
-                        <div className="text-xs font-semibold">{tpl.title}</div>
-                        <div className="mt-1 text-xs text-slate-400">{t("crm.templates.quickCopyHint")}</div>
+                        <div className="text-xs font-semibold text-slate-100">{tpl.title}</div>
+                        {cardHint ? (
+                          <div className="mt-1 line-clamp-2 text-[11px] leading-snug text-slate-400">{cardHint}</div>
+                        ) : null}
                       </button>
-                    ))}
+                    );
+                    })}
                     {state.templates.length === 0 ? (
                       <div className="rounded-xl border border-dashed border-slate-500/35 p-4 text-xs text-slate-400">
                         {t("crm.templates.emptyHint")}
@@ -3448,6 +3455,7 @@ export function CRMApp({
                   + 템플릿
                 </button>
               </div>
+              <p className="mt-2 text-[13px] leading-relaxed text-slate-400">{t("crm.templates.sectionReviewHint")}</p>
 
               <section
                 id="season-care"
@@ -3648,7 +3656,9 @@ export function CRMApp({
               </section>
 
               <div className="mt-10 grid grid-cols-1 gap-5 lg:grid-cols-2">
-                {state.templates.map((tpl) => (
+                {state.templates.map((tpl) => {
+                  const cardHint = getMessageTemplateCardHint(tpl.title);
+                  return (
                   <div
                     key={tpl.id}
                     className="rounded-2xl border border-white/[0.11] bg-slate-950/45 p-5"
@@ -3658,6 +3668,9 @@ export function CRMApp({
                       value={tpl.title}
                       onChange={(e) => updateTemplate(tpl.id, { title: e.target.value })}
                     />
+                    {cardHint ? (
+                      <p className="mt-1 line-clamp-2 text-[13px] leading-snug text-slate-400">{cardHint}</p>
+                    ) : null}
                     <textarea
                       className="mt-3 min-h-[130px] w-full resize-y rounded-xl border border-white/[0.11] bg-slate-950/55 px-4 py-3 text-[14px] text-slate-300 outline-none focus:border-sky-400/45"
                       value={tpl.body}
@@ -3686,7 +3699,8 @@ export function CRMApp({
                       <div className="text-[12px] font-medium text-slate-400">업데이트: {formatDateTime(tpl.updatedAt)}</div>
                     </div>
                   </div>
-                ))}
+                );
+                })}
                 {state.templates.length === 0 ? (
                   <div className="rounded-2xl border border-dashed border-slate-500/35 px-8 py-12 text-center text-[15px] text-slate-400">
                     템플릿이 없습니다.

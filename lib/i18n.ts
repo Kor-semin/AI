@@ -338,6 +338,7 @@ export type TranslationKey =
   | "crm.customerCard.nextActionLabel"
   | "crm.customerCard.nextActionUnset"
   | "crm.templates.quickCopyHint"
+  | "crm.templates.sectionReviewHint"
   | "crm.templates.copyFailHint"
   | "crm.templates.emptyHint"
   | "crm.block.nextActionsTitle"
@@ -1258,6 +1259,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.customerCard.nextActionLabel": "다음 행동",
     "crm.customerCard.nextActionUnset": "다음 행동 미정",
     "crm.templates.quickCopyHint": "고객 상황에 맞게 검토 후 복사",
+    "crm.templates.sectionReviewHint": "검토 후 필요한 부분만 수정해 사용하세요.",
     "crm.templates.copyFailHint": "자동 복사가 불가했습니다. 본문을 길게 눌러 복사해 주세요.",
     "crm.templates.emptyHint": "자주 쓰는 문구 초안을 먼저 만들어 두세요.",
     "crm.block.nextActionsTitle": "다음 행동 · 할 일",
@@ -2243,6 +2245,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.customerCard.nextActionLabel": "Next step",
     "crm.customerCard.nextActionUnset": "Next step not set",
     "crm.templates.quickCopyHint": "Review for the customer, then copy",
+    "crm.templates.sectionReviewHint": "Review and edit only what you need before sending.",
     "crm.templates.copyFailHint": "Could not copy automatically. Long-press the body to copy.",
     "crm.templates.emptyHint": "Create drafts for messages you send often.",
     "crm.block.nextActionsTitle": "Next steps · tasks",
