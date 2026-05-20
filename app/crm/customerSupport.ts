@@ -1,5 +1,8 @@
-/** 베타 고객센터 문의 이메일(공식 주소 확정 전 임시 표기) */
-export const SUPPORT_EMAIL = "support@sensora.kr";
+export const SUPPORT_EMAIL = "semin9602@naver.com";
+
+export const SUPPORT_PHONE_DISPLAY = "010-5353-0486";
+
+export const SUPPORT_PHONE_TEL = "tel:+821053530486";
 
 export function buildSupportMailto(subject: string, body?: string): string {
   const params = new URLSearchParams();

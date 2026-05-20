@@ -5,7 +5,12 @@ import type { ReactNode } from "react";
 
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
 import type { TranslationKey } from "@/lib/i18n";
-import { buildSupportMailto, SUPPORT_EMAIL } from "./customerSupport";
+import {
+  buildSupportMailto,
+  SUPPORT_EMAIL,
+  SUPPORT_PHONE_DISPLAY,
+  SUPPORT_PHONE_TEL,
+} from "./customerSupport";
 
 const SECTION_CARD =
   "sensora-premium-panel sensora-premium-panel-interactive rounded-[22px] border-white/[0.11] px-6 py-6 shadow-[0_22px_52px_-28px_rgba(0,0,0,0.5)] backdrop-blur-xl sm:px-7 motion-reduce:transform-none";
@@ -79,7 +84,6 @@ export function CustomerSupportPanel() {
               {SUPPORT_EMAIL}
             </a>
           </p>
-          <p className="mt-2 text-[12px] leading-[1.65] text-slate-500">{t("crm.support.email.betaNote")}</p>
           <div className="mt-5">
             <ActionLink href={inquiryMailto}>{t("crm.support.email.cta")}</ActionLink>
           </div>
@@ -88,10 +92,16 @@ export function CustomerSupportPanel() {
         <section className={SECTION_CARD}>
           <h3 className="text-[16px] font-bold tracking-tight text-slate-50">{t("crm.support.phone.title")}</h3>
           <p className="mt-3 text-[14px] leading-[1.65] text-slate-400">{t("crm.support.phone.body")}</p>
-          <p className="mt-4 text-[15px] font-semibold text-slate-200">{t("crm.support.phone.status")}</p>
-          <p className="mt-2 text-[12px] leading-[1.65] text-slate-500">{t("crm.support.phone.betaNote")}</p>
+          <p className="mt-4 text-[15px] font-semibold text-slate-200">
+            <a
+              href={SUPPORT_PHONE_TEL}
+              className="underline decoration-sky-400/40 underline-offset-2 hover:text-sky-50"
+            >
+              {SUPPORT_PHONE_DISPLAY}
+            </a>
+          </p>
           <div className="mt-5">
-            <ActionLink disabled>{t("crm.support.phone.cta")}</ActionLink>
+            <ActionLink href={SUPPORT_PHONE_TEL}>{t("crm.support.phone.cta")}</ActionLink>
           </div>
         </section>
 
