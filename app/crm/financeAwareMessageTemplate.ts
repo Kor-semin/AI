@@ -1,6 +1,6 @@
 import type { Customer, FinanceConditionDraft, FinanceProductMode, MessageTemplate } from "./types";
 import { vehicleDisplayLine } from "./newCarEstimateDraft";
-import { formatKrwShort, parseMoneyToKrw } from "./recommendations";
+import { parseMoneyToKrw } from "./recommendations";
 
 /** 상황별 문자 초안 — 금융 방식별 견적 안내(통합 카드) */
 export const ESTIMATE_GUIDE_TEMPLATE_TITLE = "견적 안내 문자";
@@ -78,39 +78,41 @@ function vehicleLineWithTrim(c: Customer): string {
   return vehicleDisplayLine(c);
 }
 
-function formatFinanceAmountLabel(text?: string): string {
+/** 차량가·프로모션·보증금·선납금 등 — 고객 문자용 만 원 단위 */
+function formatManwonLabel(text?: string): string {
   const raw = fmt(text);
   if (!raw) return "";
   const won = parseMoneyToKrw(raw);
   if (won != null && won > 0) {
-    if (won >= 1_000_000) {
-      return `${won.toLocaleString("ko-KR")}원`;
-    }
     const man = Math.round(won / 10_000);
     if (man > 0) return `${man.toLocaleString("ko-KR")}만 원`;
   }
   if (/^\d[\d,.\s]*$/.test(raw)) {
     const n = parseInt(raw.replace(/[^\d]/g, ""), 10);
     if (!Number.isFinite(n) || n <= 0) return "";
-    if (n >= 1_000_000) return `${n.toLocaleString("ko-KR")}원`;
+    if (n >= 1_000_000) {
+      const man = Math.round(n / 10_000);
+      return `${man.toLocaleString("ko-KR")}만 원`;
+    }
     return `${n.toLocaleString("ko-KR")}만 원`;
   }
   return raw;
 }
 
-function formatMonthlyPaymentLabel(text?: string): string {
+/** 월 납입금 — 원 단위 콤마(만 원 변환 없음) */
+function formatMonthlyWonLabel(text?: string): string {
   const raw = fmt(text);
   if (!raw) return "";
   const won = parseMoneyToKrw(raw);
   if (won != null && won > 0) {
-    if (won >= 10_000) return `약 ${won.toLocaleString("ko-KR")}원`;
-    return `약 ${formatKrwShort(won)}원`;
+    return `약 ${won.toLocaleString("ko-KR")}원`;
   }
   if (/^\d[\d,.\s]*$/.test(raw)) {
     const n = parseInt(raw.replace(/[^\d]/g, ""), 10);
     if (n > 0) return `약 ${n.toLocaleString("ko-KR")}원`;
   }
-  return `약 ${raw}`;
+  if (raw) return `약 ${raw}`;
+  return "";
 }
 
 function formatContractMonths(text?: string): string {
@@ -122,22 +124,41 @@ function formatContractMonths(text?: string): string {
   return raw;
 }
 
-function buildConditionSummaryParts(fd: FinanceConditionDraft): string[] {
+function buildConditionSummaryParts(fd: FinanceConditionDraft, opts?: { omitDownPayment?: boolean }): string[] {
   const bits: string[] = [];
-  const price = formatFinanceAmountLabel(fd.totalVehiclePrice);
+  const price = formatManwonLabel(fd.totalVehiclePrice);
   if (price) bits.push(`차량가 ${price}`);
-  const promo = formatFinanceAmountLabel(fd.promotionOrDiscount);
+  const promo = formatManwonLabel(fd.promotionOrDiscount);
   if (promo) bits.push(`프로모션 ${promo}`);
   if (fmt(fd.deposit)) {
-    bits.push(`보증금 ${formatFinanceAmountLabel(fd.deposit)}`);
-  } else if (fmt(fd.downPayment)) {
-    bits.push(`선납금 ${formatFinanceAmountLabel(fd.downPayment)}`);
+    bits.push(`보증금 ${formatManwonLabel(fd.deposit)}`);
+  } else if (!opts?.omitDownPayment && fmt(fd.downPayment)) {
+    bits.push(`선납금 ${formatManwonLabel(fd.downPayment)}`);
   }
   const months = formatContractMonths(fd.contractMonths);
-  if (months) bits.push(`계약기간 ${months} 기준`);
-  const monthly = formatMonthlyPaymentLabel(fd.monthlyPayment);
-  if (monthly) bits.push(`월 납입금 ${monthly} 수준`);
+  if (months) bits.push(`계약기간 ${months}`);
+  const monthly = formatMonthlyWonLabel(fd.monthlyPayment);
+  if (monthly) bits.push(`월 납입금은 ${monthly}`);
   return bits;
+}
+
+function appendMaturityLines(lines: string[], fd: FinanceConditionDraft, mode: "리스" | "장기렌트"): void {
+  const mat = fmt(fd.maturityOptions);
+  if (mat) {
+    if (/반납/i.test(mat)) {
+      lines.push("만기 조건은 현재 반납 기준으로 검토하겠습니다.");
+    } else {
+      lines.push(`만기 조건은 ${mat} 기준으로 함께 검토하겠습니다.`);
+    }
+    lines.push("");
+  }
+  if (!mentionsAnnualMileage(fd)) {
+    if (mode === "장기렌트") {
+      lines.push("편하실 때 연간 주행거리와 보험·정비 포함 여부를 알려주시면 더 정확하게 정리해드리겠습니다.");
+    } else {
+      lines.push("편하실 때 연간 주행거리와 만기 인수 여부를 알려주시면 더 정확하게 정리해드리겠습니다.");
+    }
+  }
 }
 
 function buildPriorityFocusSentence(needs: string[]): string | null {
@@ -202,15 +223,15 @@ function buildLeaseEstimateMessage(customer: Customer): string | null {
   lines.push(`${name}님, 안녕하세요.`);
   lines.push("");
   if (veh) {
-    lines.push(`문의 주신 ${veh} 기준으로 리스/장기렌트 조건을 정리해보고 있습니다.`);
+    lines.push(`문의 주신 ${veh} 기준으로 리스 조건을 정리해보고 있습니다.`);
   } else {
-    lines.push("문의 주신 차량 기준으로 리스/장기렌트 조건을 정리해보고 있습니다.");
+    lines.push("문의 주신 차량 기준으로 리스 조건을 정리해보고 있습니다.");
   }
   lines.push("");
 
   const bits = buildConditionSummaryParts(fd);
   if (bits.length) {
-    lines.push(`현재 입력된 조건 기준으로는 ${bits.join(", ")}으로 확인됩니다.`);
+    lines.push(`현재 입력된 조건 기준으로는 ${bits.join(", ")} 수준으로 확인됩니다.`);
     lines.push("");
   }
 
@@ -221,18 +242,51 @@ function buildLeaseEstimateMessage(customer: Customer): string | null {
   }
 
   lines.push(
-    "리스와 장기렌트는 약정거리, 인수 여부, 보험 포함 여부에 따라 조건이 달라질 수 있어 해당 부분까지 확인 후 안내드리겠습니다.",
+    "리스는 약정거리, 만기 인수 여부, 보증금 조건에 따라 월 납입금이 달라질 수 있어 해당 부분까지 확인 후 안내드리겠습니다.",
   );
   lines.push("");
 
-  if (fmt(fd.maturityOptions)) {
-    lines.push(`만기 관련해서는 ${fmt(fd.maturityOptions)} 기준으로 함께 검토하겠습니다.`);
+  appendMaturityLines(lines, fd, "리스");
+
+  return lines.join("\n");
+}
+
+function buildLongRentEstimateMessage(customer: Customer): string | null {
+  const fd = customer.financeConditionDraft;
+  if (!fd) return null;
+
+  const name = customer.name?.trim() || "고객";
+  const veh = vehicleLineWithTrim(customer);
+  const needs = customer.customerPriorityNeeds ?? [];
+  const lines: string[] = [];
+
+  lines.push(`${name}님, 안녕하세요.`);
+  lines.push("");
+  if (veh) {
+    lines.push(`문의 주신 ${veh} 기준으로 장기렌트 조건을 정리해보고 있습니다.`);
+  } else {
+    lines.push("문의 주신 차량 기준으로 장기렌트 조건을 정리해보고 있습니다.");
+  }
+  lines.push("");
+
+  const bits = buildConditionSummaryParts(fd);
+  if (bits.length) {
+    lines.push(`현재 입력된 조건 기준으로는 ${bits.join(", ")} 수준으로 확인됩니다.`);
     lines.push("");
   }
 
-  if (!mentionsAnnualMileage(fd)) {
-    lines.push("편하실 때 연간 주행거리와 만기 인수 여부만 알려주시면 더 정확하게 정리해드리겠습니다.");
+  const focus = buildPriorityFocusSentence(needs);
+  if (focus) {
+    lines.push(focus);
+    lines.push("");
   }
+
+  lines.push(
+    "장기렌트는 약정거리, 보험 포함 여부, 정비 포함 여부, 만기 인수 여부에 따라 월 납입금이 달라질 수 있어 해당 부분까지 확인 후 안내드리겠습니다.",
+  );
+  lines.push("");
+
+  appendMaturityLines(lines, fd, "장기렌트");
 
   return lines.join("\n");
 }
@@ -252,19 +306,23 @@ function buildInstallmentEstimateMessage(customer: Customer): string | null {
   lines.push(`문의 주신 ${veh || vehShort} 기준으로 할부 조건을 정리해보고 있습니다.`);
   lines.push("");
 
-  const bits = buildConditionSummaryParts(fd);
+  const bits = buildConditionSummaryParts(fd, { omitDownPayment: true });
   if (bits.length) {
-    lines.push(`현재 입력된 조건 기준으로 ${bits.join(", ")}으로 확인됩니다.`);
+    lines.push(`현재 입력된 조건 기준으로는 ${bits.join(", ")} 수준으로 확인됩니다.`);
     lines.push("");
   }
 
   const focus = buildPriorityFocusSentence(needs);
   if (focus) {
-    lines.push(focus);
+    const installmentFocus =
+      needs[0] === "월 납입금 부담 최소화"
+        ? "월 납입금 부담을 낮추는 방향을 우선으로 보고 계셔서, 초기 비용과 계약기간을 조정한 조건도 함께 비교해드리겠습니다."
+        : focus;
+    lines.push(installmentFocus);
     lines.push("");
   }
 
-  const missingDown = !fmt(fd.downPayment) && !fmt(fd.deposit);
+  const missingDown = !fmt(fd.downPayment);
   const missingTerm = !fmt(fd.contractMonths);
   const missingMonthly = !fmt(fd.monthlyPayment);
   if (missingDown || missingTerm || missingMonthly) {
@@ -276,7 +334,7 @@ function buildInstallmentEstimateMessage(customer: Customer): string | null {
     lines.push("");
   }
 
-  lines.push("확인 후 부담이 적은 조건과 참고 견적을 함께 안내드리겠습니다.");
+  lines.push("확인 후 월 납입 기준과 총 납입 기준을 함께 안내드리겠습니다.");
 
   return lines.join("\n");
 }
@@ -299,8 +357,8 @@ function buildCashEstimateMessage(customer: Customer): string | null {
   }
   lines.push("");
 
-  const price = formatFinanceAmountLabel(fd.totalVehiclePrice);
-  const promo = formatFinanceAmountLabel(fd.promotionOrDiscount);
+  const price = formatManwonLabel(fd.totalVehiclePrice);
+  const promo = formatManwonLabel(fd.promotionOrDiscount);
   if (price && promo) {
     lines.push(`현재 입력된 조건 기준으로 차량가 ${price}, 프로모션 ${promo} 조건을 기준으로 안내드릴 수 있습니다.`);
   } else if (price) {
@@ -331,42 +389,34 @@ function buildCashEstimateMessage(customer: Customer): string | null {
   return lines.join("\n");
 }
 
-function resolveModeBranch(mode: FinanceProductMode | undefined): "lease" | "installment" | "cash" | "unknown" {
-  if (mode === "리스" || mode === "장기렌트") return "lease";
-  if (mode === "할부") return "installment";
-  if (mode === "현금") return "cash";
+type FinanceModeBranch = "리스" | "장기렌트" | "할부" | "현금" | "unknown";
+
+function resolveFinanceMode(mode: FinanceProductMode | undefined): FinanceModeBranch {
+  if (mode === "리스") return "리스";
+  if (mode === "장기렌트") return "장기렌트";
+  if (mode === "할부") return "할부";
+  if (mode === "현금") return "현금";
   return "unknown";
 }
 
 /** 견적 안내 문자 — 금융 방식·입력 조건에 따른 검토용 문구 */
 export function buildEstimateGuideMessage(customer: Customer): string {
-  const fd = customer.financeConditionDraft;
-  const branch = resolveModeBranch(fd?.productMode);
+  const mode = resolveFinanceMode(customer.financeConditionDraft?.productMode);
 
-  if (branch === "lease") {
+  if (mode === "리스") {
     return buildLeaseEstimateMessage(customer) ?? buildGenericEstimateGuideMessage(customer);
   }
-  if (branch === "installment") {
+  if (mode === "장기렌트") {
+    return buildLongRentEstimateMessage(customer) ?? buildGenericEstimateGuideMessage(customer);
+  }
+  if (mode === "할부") {
     return buildInstallmentEstimateMessage(customer) ?? buildGenericEstimateGuideMessage(customer);
   }
-  if (branch === "cash") {
+  if (mode === "현금") {
     return buildCashEstimateMessage(customer) ?? buildGenericEstimateGuideMessage(customer);
   }
 
-  if (!hasMeaningfulFinanceDraft(customer)) {
-    return buildGenericEstimateGuideMessage(customer);
-  }
-
-  if (fd && fmt(fd.deposit)) {
-    return buildLeaseEstimateMessage(customer) ?? buildGenericEstimateGuideMessage(customer);
-  }
-  if (fd && (fmt(fd.downPayment) || fmt(fd.monthlyPayment))) {
-    return buildInstallmentEstimateMessage(customer) ?? buildGenericEstimateGuideMessage(customer);
-  }
-
-  return buildCashEstimateMessage(customer) ??
-    buildInstallmentEstimateMessage(customer) ??
-    buildGenericEstimateGuideMessage(customer);
+  return buildGenericEstimateGuideMessage(customer);
 }
 
 /** 상황별 문자 초안 본문 — 견적 안내는 금융 방식별 생성, 그 외는 저장 본문 */
