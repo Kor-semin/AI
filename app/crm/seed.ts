@@ -19,7 +19,7 @@ export function seedState(): CRMState {
     name: "김민수",
     phone: "010-1234-5678",
     leadSource: "SNS(유튜브·인스타)",
-    stage: "신규 문의",
+    stage: "상담 진행",
     vehicleBrand: "기아",
     interestedModel: "쏘렌토 · 소렌토 하이브리드",
     budget: "3,800만원까지 협상",
@@ -109,7 +109,7 @@ export function seedState(): CRMState {
         customerId: kim.id,
         createdAt: t0,
         dueAt: new Date(Date.now() + 1000 * 60 * 60 * 2).toISOString(),
-        title: "견적 조건 확인 후 연락",
+        title: "시승·옵션 니즈 정리",
       },
       {
         id: makeId("act"),

@@ -5,6 +5,7 @@ export const DEALER_PIPELINE_STAGES = [
   "연락처 가져옴",
   "미상담",
   "신규 문의",
+  "상담 진행",
   "상담 완료",
   "견적 발송",
   "시승 예정",

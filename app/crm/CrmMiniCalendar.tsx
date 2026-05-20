@@ -1,14 +1,16 @@
 "use client";
 
 import type { CalendarEvent, Customer, DeliveryGuide, NextAction } from "@/app/crm/types";
+import { getCalendarItemPrefix, type CalendarMiniItemKind } from "@/app/crm/calendarItemLabels";
 import { useMemo, useState } from "react";
 
 type MiniItem = {
   id: string;
-  kind: "event" | "next" | "contact" | "delivery";
+  kind: CalendarMiniItemKind;
   at: Date;
   label: string;
   customerId: string | null;
+  prefix: string;
 };
 
 function pad2(n: number) {
@@ -79,12 +81,14 @@ export function CrmMiniCalendar({
       if (!due) continue;
       const key = isoDayKeyLocal(due);
       const c = customerById.get(a.customerId);
+      const label = c ? `${c.name} · ${a.title}` : a.title;
       push(key, {
         id: `na-${a.id}`,
         kind: "next",
         at: due,
-        label: c ? `${c.name} · ${a.title}` : a.title,
+        label,
         customerId: a.customerId,
+        prefix: getCalendarItemPrefix("next", label, c),
       });
     }
 
@@ -95,12 +99,14 @@ export function CrmMiniCalendar({
       const c = e.customerId ? customerById.get(e.customerId) : undefined;
       const title = e.title?.trim() || "일정";
       const time = st.toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit" });
+      const evLabel = c ? `${c.name} · ${time} · ${title}` : `${time} · ${title}`;
       push(key, {
         id: `ev-${e.id}`,
         kind: "event",
         at: st,
-        label: c ? `${c.name} · ${time} · ${title}` : `${time} · ${title}`,
+        label: evLabel,
         customerId: e.customerId ?? null,
+        prefix: getCalendarItemPrefix("event", evLabel, c),
       });
     }
 
@@ -110,12 +116,14 @@ export function CrmMiniCalendar({
         if (d) {
           const key = isoDayKeyLocal(d);
           const time = d.toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit" });
+          const ncLabel = `${c.name} · ${time} · 다음 연락`;
           push(key, {
             id: `nc-${c.id}-${key}`,
             kind: "contact",
             at: d,
-            label: `${c.name} · ${time} · 다음 연락`,
+            label: ncLabel,
             customerId: c.id,
+            prefix: getCalendarItemPrefix("contact", ncLabel, c),
           });
         }
       }
@@ -124,12 +132,14 @@ export function CrmMiniCalendar({
         const d = parseIsoToLocalDate(g.deliveryEtaDate);
         if (d) {
           const key = isoDayKeyLocal(d);
+          const dlLabel = `${c.name} · 출고 예정`;
           push(key, {
             id: `dl-${c.id}-${key}`,
             kind: "delivery",
             at: d,
-            label: `${c.name} · 출고 예정`,
+            label: dlLabel,
             customerId: c.id,
+            prefix: getCalendarItemPrefix("delivery", dlLabel, c),
           });
         }
       }
@@ -259,15 +269,7 @@ export function CrmMiniCalendar({
                   }}
                   disabled={!it.customerId}
                 >
-                  <span className="font-semibold text-sky-200/95">
-                    {it.kind === "event"
-                      ? "[일정]"
-                      : it.kind === "next"
-                        ? "[사후관리]"
-                        : it.kind === "delivery"
-                          ? "[출고]"
-                          : "[다음 연락]"}
-                  </span>{" "}
+                  <span className="font-semibold text-sky-200/95">{it.prefix}</span>{" "}
                   <span className="font-medium text-slate-300">{it.label}</span>
                 </button>
               </li>
