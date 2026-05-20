@@ -80,6 +80,7 @@ import { CustomersSection } from "./sections/CustomersSection";
 import { AiSecretarySection } from "./sections/AiSecretarySection";
 import { CrmAiAssistantPanel } from "./CrmAiAssistantPanel";
 import { QuickAiAssistantEntry } from "./QuickAiAssistantEntry";
+import { getDemoAiSummaryLine } from "./customerListDisplay";
 import {
   buildQuickConsultationResult,
   type QuickConsultationResult,
@@ -2151,8 +2152,16 @@ export function CRMApp({
                                   <span className="text-[13px] font-medium text-slate-500">분석 전 · —</span>
                                 )}
                               </div>
-                              <p className="mt-2 text-[14px] leading-snug text-slate-400">
-                                <span className="font-medium text-slate-500">{t("crm.section.nextAction")}: </span>
+                              <p className="mt-2 line-clamp-2 text-[13px] leading-snug text-slate-400/95 [word-break:keep-all]">
+                                <span className="text-[11px] font-semibold uppercase tracking-wide text-violet-300/75">
+                                  {t("crm.customerCard.aiSummaryLabel")}:{" "}
+                                </span>
+                                {getDemoAiSummaryLine(c)}
+                              </p>
+                              <p className="mt-1.5 text-[14px] leading-snug text-slate-300/90">
+                                <span className="text-[11px] font-semibold text-slate-500">
+                                  {t("crm.customerCard.nextActionLabel")}:{" "}
+                                </span>
                                 {clampText(nextLbl, 120)}
                               </p>
                               <p className="mt-1.5 text-[13px] text-slate-500">
@@ -2221,7 +2230,7 @@ export function CRMApp({
                                   ? na.title
                                   : selectedCustomer.nextContactAt
                                     ? formatDateTime(selectedCustomer.nextContactAt)
-                                    : "다음 연락 미정";
+                                    : t("crm.customerCard.nextActionUnset");
                                 return (
                                   <>
                                     <span className="font-medium text-slate-500">다음 행동: </span>
@@ -3088,19 +3097,17 @@ export function CRMApp({
                           alert(
                             ok
                               ? "클립보드에 복사했습니다."
-                              : "자동 복사가 불가했습니다. ‘문자 템플릿’ 탭에서 본문을 길게 눌러 복사해 주세요.",
+                              : t("crm.templates.copyFailHint"),
                           );
                         }}
                       >
                         <div className="text-xs font-semibold">{tpl.title}</div>
-                        <div className="mt-1 text-xs text-slate-400">
-                          클릭하면 고객명 치환 후 복사
-                        </div>
+                        <div className="mt-1 text-xs text-slate-400">{t("crm.templates.quickCopyHint")}</div>
                       </button>
                     ))}
                     {state.templates.length === 0 ? (
                       <div className="rounded-xl border border-dashed border-slate-500/35 p-4 text-xs text-slate-400">
-                        템플릿이 없습니다. “+ 템플릿”으로 자주 쓰는 문장을 먼저 만들어 두세요.
+                        {t("crm.templates.emptyHint")}
                       </div>
                     ) : null}
                   </div>
@@ -3114,7 +3121,7 @@ export function CRMApp({
                   className="scroll-mt-24 rounded-2xl border border-white/[0.11] bg-slate-950/55 p-5 outline-none"
                 >
                   <div className="flex items-center justify-between gap-3">
-                    <div className="text-sm font-semibold">다음 연락 · 할 일</div>
+                    <div className="text-sm font-semibold">{t("crm.block.nextActionsTitle")}</div>
                     <button
                       onClick={() => addNextAction(selectedCustomer.id)}
                       className="rounded-lg border border-white/[0.11] bg-slate-950/55 px-3 py-2 text-xs font-semibold hover:bg-white/[0.08]"

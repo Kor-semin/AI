@@ -109,7 +109,14 @@ export function seedState(): CRMState {
         customerId: kim.id,
         createdAt: t0,
         dueAt: new Date(Date.now() + 1000 * 60 * 60 * 2).toISOString(),
-        title: "전화: 시승·옵션 니즈 정리",
+        title: "견적 조건 확인 후 연락",
+      },
+      {
+        id: makeId("act"),
+        customerId: lee.id,
+        createdAt: t0,
+        dueAt: new Date(Date.now() + 1000 * 60 * 60 * 20).toISOString(),
+        title: "시승 일정 조율 및 카탈로그 안내",
       },
     ],
     events: [

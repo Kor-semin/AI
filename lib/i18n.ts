@@ -334,6 +334,13 @@ export type TranslationKey =
   | "crm.tab.next"
   | "crm.tab.events"
   | "crm.tab.templates"
+  | "crm.customerCard.aiSummaryLabel"
+  | "crm.customerCard.nextActionLabel"
+  | "crm.customerCard.nextActionUnset"
+  | "crm.templates.quickCopyHint"
+  | "crm.templates.copyFailHint"
+  | "crm.templates.emptyHint"
+  | "crm.block.nextActionsTitle"
   | "crm.section.customerList"
   | "crm.section.customerDetails"
   | "crm.section.aiRecommendation"
@@ -1023,7 +1030,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.customerDetail.smsDisclaimer":
       "AI가 제안하는 문구는 검토용 초안입니다. 최종 안내와 발송은 영업사원이 직접 확인해야 합니다.",
     "crm.customerDetail.nextContactSectionTitle": "다음 연락 관리",
-    "crm.customerDetail.listIntro": "카드를 눌러 선택합니다. 오른쪽에서 상세와 다음 연락을 이어서 다룹니다.",
+    "crm.customerDetail.listIntro": "AI 비서가 정리한 상담 내용이 고객별 다음 행동으로 이어집니다.",
     "crm.customerDetail.aiSummaryHint": "AI 비서에서 메모를 분석하면 아래에 요약이 표시됩니다.",
     "crm.customerDetail.openAiForSms": "AI 비서에서 문자 초안 다시 작성",
     "crm.customerDetail.followUpTabHint": "사후관리 탭에서 일정·할 일을 더 넓게 볼 수 있습니다.",
@@ -1238,23 +1245,30 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.import.iosTabShortcut": "iPhone·iCloud 안내",
     "crm.import.pasteShort": "파일 대신 CSV·vCard 글자를 붙여넣을 수도 있습니다.",
     "crm.addCustomer": "고객 추가",
-    "crm.nextAction": "다음 액션",
+    "crm.nextAction": "다음 행동",
     "crm.aiRecommendation": "AI 추천 메시지",
     "crm.consultationSummary": "상담 요약",
     "crm.financeMarketInfo": "금융·예산·시세 정보",
     "crm.tradeInSummary": "중고차 정리",
     "crm.tab.customers": "고객",
-    "crm.tab.next": "다음 연락",
+    "crm.tab.next": "다음 행동",
     "crm.tab.events": "일정",
-    "crm.tab.templates": "문자 템플릿",
+    "crm.tab.templates": "문자 초안",
+    "crm.customerCard.aiSummaryLabel": "AI 요약",
+    "crm.customerCard.nextActionLabel": "다음 행동",
+    "crm.customerCard.nextActionUnset": "다음 행동 미정",
+    "crm.templates.quickCopyHint": "고객 상황에 맞게 검토 후 복사",
+    "crm.templates.copyFailHint": "자동 복사가 불가했습니다. 본문을 길게 눌러 복사해 주세요.",
+    "crm.templates.emptyHint": "자주 쓰는 문구 초안을 먼저 만들어 두세요.",
+    "crm.block.nextActionsTitle": "다음 행동 · 할 일",
     "crm.section.customerList": "고객 리스트",
     "crm.section.customerDetails": "고객 상세",
     "crm.section.aiRecommendation": "AI 추천 메시지",
     "crm.section.consultationSummary": "상담 요약",
-    "crm.section.nextAction": "다음 액션",
+    "crm.section.nextAction": "다음 행동",
     "crm.section.allNextActions": "전체 다음 할 일",
     "crm.section.eventsPreview": "일정 미리보기",
-    "crm.section.templates": "문자 템플릿",
+    "crm.section.templates": "상황별 문자 초안",
     "crm.nav.mobileSubtitle.dashboard": "오늘의 흐름",
     "crm.nav.mobileSubtitle.customers": "목록·상태",
     "crm.nav.mobileSubtitle.consulting": "직접 수정",
@@ -1994,7 +2008,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.customerDetail.smsDisclaimer":
       "AI-suggested wording is a review draft. Final guidance and sending must be confirmed by the salesperson.",
     "crm.customerDetail.nextContactSectionTitle": "Next contact",
-    "crm.customerDetail.listIntro": "Tap a card to select. Use the right panel for details and follow-ups.",
+    "crm.customerDetail.listIntro": "Consultation notes organized by the AI assistant continue into next actions per customer.",
     "crm.customerDetail.aiSummaryHint": "Run analysis in the AI assistant to show a summary here.",
     "crm.customerDetail.openAiForSms": "Rewrite SMS draft in AI assistant",
     "crm.customerDetail.followUpTabHint": "Open the follow-up tab for a wider schedule and task view.",
@@ -2222,9 +2236,16 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.financeMarketInfo": "Finance, Budget & Market Info",
     "crm.tradeInSummary": "Trade-in Vehicle Summary",
     "crm.tab.customers": "Customers",
-    "crm.tab.next": "Next Contact",
+    "crm.tab.next": "Next steps",
     "crm.tab.events": "Schedule",
-    "crm.tab.templates": "Message Templates",
+    "crm.tab.templates": "Message drafts",
+    "crm.customerCard.aiSummaryLabel": "AI summary",
+    "crm.customerCard.nextActionLabel": "Next step",
+    "crm.customerCard.nextActionUnset": "Next step not set",
+    "crm.templates.quickCopyHint": "Review for the customer, then copy",
+    "crm.templates.copyFailHint": "Could not copy automatically. Long-press the body to copy.",
+    "crm.templates.emptyHint": "Create drafts for messages you send often.",
+    "crm.block.nextActionsTitle": "Next steps · tasks",
     "crm.section.customerList": "Customer List",
     "crm.section.customerDetails": "Customer Details",
     "crm.section.aiRecommendation": "AI Recommendation",
@@ -2232,7 +2253,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.section.nextAction": "Next Action",
     "crm.section.allNextActions": "All Next Actions",
     "crm.section.eventsPreview": "Schedule Preview",
-    "crm.section.templates": "Message Templates",
+    "crm.section.templates": "Situation-based message drafts",
     "crm.nav.mobileSubtitle.dashboard": "Today's flow",
     "crm.nav.mobileSubtitle.customers": "List · status",
     "crm.nav.mobileSubtitle.consulting": "Edit your notes",
