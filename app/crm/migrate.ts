@@ -1,4 +1,5 @@
 import { DEALER_LEAD_SOURCES, DEALER_PIPELINE_STAGES } from "./constants";
+import { consolidateMessageTemplates } from "./financeAwareMessageTemplate";
 import type { CRMState, Customer, LeadSource, PaymentType, PipelineStage, UsedCarAccident } from "./types";
 
 const stageFromLegacy: Record<string, PipelineStage> = {
@@ -92,5 +93,6 @@ export function migrateCRMState(state: CRMState): CRMState {
   return {
     ...state,
     customers: state.customers.map(migrateCustomer),
+    templates: consolidateMessageTemplates(state.templates ?? []),
   };
 }

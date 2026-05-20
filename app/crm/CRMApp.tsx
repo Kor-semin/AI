@@ -1083,8 +1083,11 @@ export function CRMApp({
       const hay = `${t.title} ${t.body}`.toLowerCase();
       if (stage.includes("시승") && (hay.includes("시승") || hay.includes("방문"))) s += 2;
       if (stage.includes("견적") && hay.includes("견적")) s += 2;
+      if (hay.includes("견적 안내")) s += 4;
       if (stage.includes("계약") && hay.includes("계약")) s += 2;
       if (pay && hay.includes(pay)) s += 2;
+      const fdMode = selectedCustomer.financeConditionDraft?.productMode;
+      if (fdMode && hay.includes(fdMode)) s += 2;
       if (hay.includes("중고")) s += 1;
       return s;
     };

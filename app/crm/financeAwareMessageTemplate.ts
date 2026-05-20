@@ -1,11 +1,36 @@
-import type { Customer, FinanceConditionDraft } from "./types";
+import type { Customer, FinanceConditionDraft, FinanceProductMode, MessageTemplate } from "./types";
 import { vehicleDisplayLine } from "./newCarEstimateDraft";
 import { formatKrwShort, parseMoneyToKrw } from "./recommendations";
 
-const FINANCE_AWARE_TITLES = new Set(["리스·장기렌트 안내", "할부 조건 확인"]);
+/** 상황별 문자 초안 — 금융 방식별 견적 안내(통합 카드) */
+export const ESTIMATE_GUIDE_TEMPLATE_TITLE = "견적 안내 문자";
+
+const LEGACY_ESTIMATE_TITLES = new Set([
+  "리스·장기렌트 안내",
+  "할부 조건 확인",
+  "현금·즉시 출고",
+]);
+
+const DEFAULT_ESTIMATE_GUIDE_BODY = `{고객명}님, 안녕하세요.
+
+문의 주신 차량 기준으로 견적 조건을 정리해보고 있습니다.
+
+차량명, 금융 방식, 초기 비용, 희망 월 납입금 또는 출고 희망일을 알려주시면 더 정확한 조건으로 안내드리겠습니다.
+
+확인 후 가능한 조건과 참고 견적을 함께 정리해드리겠습니다.`;
 
 function fmt(v?: string): string {
   return v && String(v).trim() ? String(v).trim() : "";
+}
+
+export function isEstimateGuideTemplateTitle(title: string): boolean {
+  const key = title.trim();
+  return key === ESTIMATE_GUIDE_TEMPLATE_TITLE || LEGACY_ESTIMATE_TITLES.has(key);
+}
+
+/** @deprecated — use isEstimateGuideTemplateTitle */
+export function isFinanceAwareTemplateTitle(title: string): boolean {
+  return isEstimateGuideTemplateTitle(title);
 }
 
 /** 금융 조건 초안에 문자 반영에 쓸 만한 값이 있는지 */
@@ -26,8 +51,22 @@ export function hasMeaningfulFinanceDraft(c: Customer): boolean {
   );
 }
 
-export function isFinanceAwareTemplateTitle(title: string): boolean {
-  return FINANCE_AWARE_TITLES.has(title.trim());
+/** 리스·할부·현금 분리 카드 → 견적 안내 문자 통합(기존 저장 데이터 호환) */
+export function consolidateMessageTemplates(templates: MessageTemplate[]): MessageTemplate[] {
+  const mergedTitles = Array.from(LEGACY_ESTIMATE_TITLES);
+  const filtered = templates.filter((t) => !mergedTitles.includes(t.title.trim()));
+  const hasGuide = filtered.some((t) => t.title.trim() === ESTIMATE_GUIDE_TEMPLATE_TITLE);
+  if (hasGuide) return filtered;
+  const t0 = new Date().toISOString();
+  return [
+    {
+      id: `tpl_estimate_guide_${t0.slice(0, 10).replace(/-/g, "")}`,
+      title: ESTIMATE_GUIDE_TEMPLATE_TITLE,
+      body: DEFAULT_ESTIMATE_GUIDE_BODY,
+      updatedAt: t0,
+    },
+    ...filtered,
+  ];
 }
 
 function vehicleLineWithTrim(c: Customer): string {
@@ -39,7 +78,6 @@ function vehicleLineWithTrim(c: Customer): string {
   return vehicleDisplayLine(c);
 }
 
-/** 만·원 단위 자연 표현(빈 값·0만 제외) */
 function formatFinanceAmountLabel(text?: string): string {
   const raw = fmt(text);
   if (!raw) return "";
@@ -98,7 +136,7 @@ function buildConditionSummaryParts(fd: FinanceConditionDraft): string[] {
   const months = formatContractMonths(fd.contractMonths);
   if (months) bits.push(`계약기간 ${months} 기준`);
   const monthly = formatMonthlyPaymentLabel(fd.monthlyPayment);
-  if (monthly) bits.push(`월 납입금은 ${monthly} 수준`);
+  if (monthly) bits.push(`월 납입금 ${monthly} 수준`);
   return bits;
 }
 
@@ -107,13 +145,13 @@ function buildPriorityFocusSentence(needs: string[]): string | null {
   const primary = needs[0]!;
   const map: Record<string, string> = {
     "월 납입금 부담 최소화":
-      "고객님께서 월 납입금 부담을 가장 중요하게 보시는 만큼, 보증금과 계약기간 조정에 따라 월 납입금이 더 낮아질 수 있는 조건도 함께 비교해드리겠습니다.",
+      "월 납입금 부담을 줄이는 방향을 우선으로 보고 계셔서, 보증금과 계약기간 조정에 따른 조건도 함께 비교해드리겠습니다.",
     "초기 비용 최소화":
       "초기 비용 부담을 줄이는 방향을 우선으로 보고 계셔서, 선납금·보증금과 기간을 조정한 조건도 함께 비교해드리겠습니다.",
     "총 비용 확인":
       "총 납입 부담을 함께 보시는 것이 중요하시므로, 월 납입·초기·만기 기준을 함께 정리해드리겠습니다.",
     "빠른 출고":
-      "출고 시점도 중요하게 보고 계셔서, 재고·배정 가능 여부는 상담 시점 기준으로 다시 확인해 안내드리겠습니다.",
+      "빠른 출고를 원하실 경우 색상과 옵션 조정 가능 여부에 따라 가능한 재고가 달라질 수 있어, 현재 확인 가능한 차량 기준으로 정리해드리겠습니다.",
     "법인 비용처리":
       "법인 사용 목적에 맞춰 월 비용 부담과 필요 서류를 함께 확인해드리겠습니다.",
     "가족 사용": "가족 사용 목적까지 고려해 실사용 편의성과 조건을 함께 정리드리겠습니다.",
@@ -132,9 +170,29 @@ function mentionsAnnualMileage(fd: FinanceConditionDraft): boolean {
   return /주행|km|킬로|약정거리/i.test(blob);
 }
 
-function buildLeaseFinanceAwareMessage(customer: Customer): string | null {
+function buildGenericEstimateGuideMessage(customer: Customer): string {
+  const name = customer.name?.trim() || "고객";
+  const veh = vehicleLineWithTrim(customer);
+  const lines: string[] = [];
+  lines.push(`${name}님, 안녕하세요.`);
+  lines.push("");
+  if (veh) {
+    lines.push(`문의 주신 ${veh} 기준으로 견적 조건을 정리해보고 있습니다.`);
+  } else {
+    lines.push("문의 주신 차량 기준으로 견적 조건을 정리해보고 있습니다.");
+  }
+  lines.push("");
+  lines.push(
+    "차량명, 금융 방식, 초기 비용, 희망 월 납입금 또는 출고 희망일을 알려주시면 더 정확한 조건으로 안내드리겠습니다.",
+  );
+  lines.push("");
+  lines.push("확인 후 가능한 조건과 참고 견적을 함께 정리해드리겠습니다.");
+  return lines.join("\n");
+}
+
+function buildLeaseEstimateMessage(customer: Customer): string | null {
   const fd = customer.financeConditionDraft;
-  if (!fd || !hasMeaningfulFinanceDraft(customer)) return null;
+  if (!fd) return null;
 
   const name = customer.name?.trim() || "고객";
   const veh = vehicleLineWithTrim(customer);
@@ -152,7 +210,7 @@ function buildLeaseFinanceAwareMessage(customer: Customer): string | null {
 
   const bits = buildConditionSummaryParts(fd);
   if (bits.length) {
-    lines.push(`현재 확인된 조건 기준으로는 ${bits.join(", ")}으로 확인됩니다.`);
+    lines.push(`현재 입력된 조건 기준으로는 ${bits.join(", ")}으로 확인됩니다.`);
     lines.push("");
   }
 
@@ -163,7 +221,7 @@ function buildLeaseFinanceAwareMessage(customer: Customer): string | null {
   }
 
   lines.push(
-    "리스와 장기렌트는 약정거리, 인수 여부, 보험 포함 여부에 따라 조건이 달라질 수 있어 해당 부분까지 확인 후 비교표로 안내드리겠습니다.",
+    "리스와 장기렌트는 약정거리, 인수 여부, 보험 포함 여부에 따라 조건이 달라질 수 있어 해당 부분까지 확인 후 안내드리겠습니다.",
   );
   lines.push("");
 
@@ -174,16 +232,14 @@ function buildLeaseFinanceAwareMessage(customer: Customer): string | null {
 
   if (!mentionsAnnualMileage(fd)) {
     lines.push("편하실 때 연간 주행거리와 만기 인수 여부만 알려주시면 더 정확하게 정리해드리겠습니다.");
-  } else {
-    lines.push("추가로 확인이 필요한 약정거리·인수 조건이 있으면 말씀 주시면 비교표에 반영하겠습니다.");
   }
 
   return lines.join("\n");
 }
 
-function buildInstallmentFinanceAwareMessage(customer: Customer): string | null {
+function buildInstallmentEstimateMessage(customer: Customer): string | null {
   const fd = customer.financeConditionDraft;
-  if (!fd || !hasMeaningfulFinanceDraft(customer)) return null;
+  if (!fd) return null;
 
   const name = customer.name?.trim() || "고객";
   const veh = vehicleLineWithTrim(customer);
@@ -199,9 +255,6 @@ function buildInstallmentFinanceAwareMessage(customer: Customer): string | null 
   const bits = buildConditionSummaryParts(fd);
   if (bits.length) {
     lines.push(`현재 입력된 조건 기준으로 ${bits.join(", ")}으로 확인됩니다.`);
-    lines.push("");
-  } else {
-    lines.push("현재 입력된 조건을 기준으로 할부 조건을 다시 정리해보고 있습니다.");
     lines.push("");
   }
 
@@ -223,24 +276,106 @@ function buildInstallmentFinanceAwareMessage(customer: Customer): string | null 
     lines.push("");
   }
 
-  lines.push("확인 후 부담이 적은 조건과 총 납입 기준을 함께 안내드리겠습니다.");
+  lines.push("확인 후 부담이 적은 조건과 참고 견적을 함께 안내드리겠습니다.");
 
   return lines.join("\n");
 }
 
-/** 상황별 문자 초안 본문 — 금융 조건이 있으면 검토용 맞춤 문구, 없으면 기존 템플릿 */
+function buildCashEstimateMessage(customer: Customer): string | null {
+  const fd = customer.financeConditionDraft;
+  if (!fd) return null;
+
+  const name = customer.name?.trim() || "고객";
+  const veh = vehicleLineWithTrim(customer);
+  const needs = customer.customerPriorityNeeds ?? [];
+  const lines: string[] = [];
+
+  lines.push(`${name}님, 안녕하세요.`);
+  lines.push("");
+  if (veh) {
+    lines.push(`문의 주신 ${veh} 기준으로 현금 구매 조건과 출고 가능 여부를 확인해보고 있습니다.`);
+  } else {
+    lines.push("문의 주신 차량 기준으로 현금 구매 조건과 출고 가능 여부를 확인해보고 있습니다.");
+  }
+  lines.push("");
+
+  const price = formatFinanceAmountLabel(fd.totalVehiclePrice);
+  const promo = formatFinanceAmountLabel(fd.promotionOrDiscount);
+  if (price && promo) {
+    lines.push(`현재 입력된 조건 기준으로 차량가 ${price}, 프로모션 ${promo} 조건을 기준으로 안내드릴 수 있습니다.`);
+  } else if (price) {
+    lines.push(`현재 입력된 조건 기준으로 차량가 ${price} 조건을 기준으로 안내드릴 수 있습니다.`);
+  } else if (promo) {
+    lines.push(`현재 입력된 조건 기준으로 프로모션 ${promo} 조건을 기준으로 안내드릴 수 있습니다.`);
+  }
+  lines.push("");
+
+  const focus = buildPriorityFocusSentence(needs);
+  if (focus) {
+    lines.push(focus);
+    lines.push("");
+  } else if (needs.includes("빠른 출고")) {
+    lines.push(
+      "빠른 출고를 원하실 경우 색상과 옵션 조정 가능 여부에 따라 가능한 재고가 달라질 수 있어, 현재 확인 가능한 차량 기준으로 정리해드리겠습니다.",
+    );
+    lines.push("");
+  } else {
+    lines.push(
+      "색상과 옵션 조정 가능 여부에 따라 가능한 재고가 달라질 수 있어, 현재 확인 가능한 차량 기준으로 정리해드리겠습니다.",
+    );
+    lines.push("");
+  }
+
+  lines.push("확인 후 출고 가능 일정과 필요 서류를 함께 안내드리겠습니다.");
+
+  return lines.join("\n");
+}
+
+function resolveModeBranch(mode: FinanceProductMode | undefined): "lease" | "installment" | "cash" | "unknown" {
+  if (mode === "리스" || mode === "장기렌트") return "lease";
+  if (mode === "할부") return "installment";
+  if (mode === "현금") return "cash";
+  return "unknown";
+}
+
+/** 견적 안내 문자 — 금융 방식·입력 조건에 따른 검토용 문구 */
+export function buildEstimateGuideMessage(customer: Customer): string {
+  const fd = customer.financeConditionDraft;
+  const branch = resolveModeBranch(fd?.productMode);
+
+  if (branch === "lease") {
+    return buildLeaseEstimateMessage(customer) ?? buildGenericEstimateGuideMessage(customer);
+  }
+  if (branch === "installment") {
+    return buildInstallmentEstimateMessage(customer) ?? buildGenericEstimateGuideMessage(customer);
+  }
+  if (branch === "cash") {
+    return buildCashEstimateMessage(customer) ?? buildGenericEstimateGuideMessage(customer);
+  }
+
+  if (!hasMeaningfulFinanceDraft(customer)) {
+    return buildGenericEstimateGuideMessage(customer);
+  }
+
+  if (fd && fmt(fd.deposit)) {
+    return buildLeaseEstimateMessage(customer) ?? buildGenericEstimateGuideMessage(customer);
+  }
+  if (fd && (fmt(fd.downPayment) || fmt(fd.monthlyPayment))) {
+    return buildInstallmentEstimateMessage(customer) ?? buildGenericEstimateGuideMessage(customer);
+  }
+
+  return buildCashEstimateMessage(customer) ??
+    buildInstallmentEstimateMessage(customer) ??
+    buildGenericEstimateGuideMessage(customer);
+}
+
+/** 상황별 문자 초안 본문 — 견적 안내는 금융 방식별 생성, 그 외는 저장 본문 */
 export function resolveMessageTemplateBody(
   templateTitle: string,
   customer: Customer | null | undefined,
   fallbackBody: string,
 ): string {
   if (!customer) return fallbackBody;
-  const title = templateTitle.trim();
-  if (title === "리스·장기렌트 안내") {
-    return buildLeaseFinanceAwareMessage(customer) ?? fallbackBody;
-  }
-  if (title === "할부 조건 확인") {
-    return buildInstallmentFinanceAwareMessage(customer) ?? fallbackBody;
-  }
-  return fallbackBody;
+  if (!isEstimateGuideTemplateTitle(templateTitle)) return fallbackBody;
+  return buildEstimateGuideMessage(customer);
 }

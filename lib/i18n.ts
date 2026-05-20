@@ -1301,7 +1301,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.templates.quickCopyHint": "고객 상황에 맞게 검토 후 복사",
     "crm.templates.sectionReviewHint": "검토 후 필요한 부분만 수정해 사용하세요.",
     "crm.templates.financeReflectHint":
-      "입력된 금융 조건이 있으면 문자 초안에 함께 반영됩니다.",
+      "차량·금융 조건을 입력하면 견적 안내 문자가 더 구체적으로 정리됩니다.",
     "crm.templates.copyFailHint": "자동 복사가 불가했습니다. 본문을 길게 눌러 복사해 주세요.",
     "crm.templates.emptyHint": "자주 쓰는 문구 초안을 먼저 만들어 두세요.",
     "crm.block.nextActionsTitle": "다음 행동 · 할 일",
@@ -2312,7 +2312,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.templates.quickCopyHint": "Review for the customer, then copy",
     "crm.templates.sectionReviewHint": "Review and edit only what you need before sending.",
     "crm.templates.financeReflectHint":
-      "When finance conditions are filled in, message drafts can include them for review.",
+      "Fill in vehicle and finance details for a more specific estimate guide draft.",
     "crm.templates.copyFailHint": "Could not copy automatically. Long-press the body to copy.",
     "crm.templates.emptyHint": "Create drafts for messages you send often.",
     "crm.block.nextActionsTitle": "Next steps · tasks",
