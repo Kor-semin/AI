@@ -851,6 +851,9 @@ export type TranslationKey =
   | "landing.showroom.concept.tipStep3Short"
   | "landing.showroom.concept.tipStep4Short"
   | "landing.showroom.concept.tapToExpand"
+  | "theme.toggleLabel"
+  | "theme.dark"
+  | "theme.light"
   | "settings.display.title"
   | "settings.textSize.title"
   | "settings.textSize.description"
@@ -1895,6 +1898,9 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.showroom.concept.tipStep3Short": "실제 사용 흐름",
     "landing.showroom.concept.tipStep4Short": "베타 사용 안내",
     "landing.showroom.concept.tapToExpand": "탭하여 자세히 보기",
+    "theme.toggleLabel": "화면 테마",
+    "theme.dark": "다크",
+    "theme.light": "라이트",
     "settings.display.title": "화면 설정",
     "settings.textSize.title": "글씨 크기",
     "settings.textSize.description": "앱에서 보이는 글자의 크기를 조정합니다.",
@@ -2962,6 +2968,9 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "landing.showroom.concept.tipStep3Short": "Day-to-day flow",
     "landing.showroom.concept.tipStep4Short": "Beta usage notes",
     "landing.showroom.concept.tapToExpand": "Tap to view details",
+    "theme.toggleLabel": "Color theme",
+    "theme.dark": "Dark",
+    "theme.light": "Light",
     "settings.display.title": "Display",
     "settings.textSize.title": "Text size",
     "settings.textSize.description": "Adjust the text size used across the app.",

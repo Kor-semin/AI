@@ -3809,3 +3809,247 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   }
 }
 
+/* ── Theme: dark (default) / light ── */
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --sensora-bg: #020817;
+  --sensora-bg-mid: #07111f;
+  --sensora-bg-elevated: rgba(15, 23, 42, 0.72);
+  --sensora-card: rgba(5, 15, 26, 0.68);
+  --sensora-text-primary: #f8fafc;
+  --sensora-text-secondary: #94a3b8;
+  --sensora-text-muted: #64748b;
+  --sensora-border: rgba(255, 255, 255, 0.1);
+  --sensora-header-bg: rgba(7, 17, 31, 0.88);
+  --sensora-accent: rgba(56, 189, 248, 0.35);
+}
+
+html[data-theme="light"] {
+  color-scheme: light;
+  --background: #f4f0e8;
+  --foreground: #172033;
+  --paper: #fffdf9;
+  --paper-2: #f8f5ef;
+  --ink-2: #4b5563;
+  --edge: #e4dfd4;
+  --sensora-bg: #f4f0e8;
+  --sensora-bg-mid: #ebe6dc;
+  --sensora-bg-elevated: #fffdf9;
+  --sensora-card: #ffffff;
+  --sensora-text-primary: #172033;
+  --sensora-text-secondary: #475569;
+  --sensora-text-muted: #64748b;
+  --sensora-border: rgba(23, 32, 51, 0.12);
+  --sensora-header-bg: rgba(255, 253, 248, 0.92);
+  --sensora-accent: rgba(52, 92, 124, 0.28);
+}
+
+html[data-theme="light"] body {
+  background: var(--sensora-bg);
+  color: var(--sensora-text-primary);
+}
+
+/* 앱 셸 · 헤더 텍스트 */
+html[data-theme="light"] .sensora-app-shell {
+  color: #1e293b;
+}
+
+html[data-theme="light"] .sensora-app-shell .text-slate-50,
+html[data-theme="light"] .sensora-app-shell .text-slate-100,
+html[data-theme="light"] .sensora-app-shell .text-white {
+  color: #0f172a;
+}
+
+html[data-theme="light"] .sensora-app-shell .text-slate-200,
+html[data-theme="light"] .sensora-app-shell .text-slate-300 {
+  color: #334155;
+}
+
+html[data-theme="light"] .sensora-app-shell .text-slate-400,
+html[data-theme="light"] .sensora-app-shell .text-slate-500 {
+  color: #475569;
+}
+
+html[data-theme="light"] header.landing-service-nav,
+html[data-theme="light"] .sensora-app-shell > header {
+  border-color: rgba(23, 32, 51, 0.1) !important;
+  background: var(--sensora-header-bg) !important;
+  box-shadow: inset 0 -1px 0 rgba(23, 32, 51, 0.06) !important;
+}
+
+html[data-theme="light"] .landing-service-nav .text-white,
+html[data-theme="light"] .landing-service-nav .text-slate-300 {
+  color: #1e293b !important;
+}
+
+html[data-theme="light"] .sensora-theme-toggle {
+  border-color: rgba(23, 32, 51, 0.12);
+  background: rgba(255, 253, 248, 0.85);
+}
+
+html[data-theme="light"] .sensora-theme-toggle-btn:not(.sensora-theme-toggle-btn--active) {
+  border-color: rgba(23, 32, 51, 0.1) !important;
+  background: rgba(255, 255, 255, 0.7) !important;
+  color: #64748b !important;
+}
+
+html[data-theme="light"] .sensora-theme-toggle-btn--active {
+  color: #0f172a !important;
+  background: rgba(56, 189, 248, 0.14) !important;
+}
+
+/* 배경 · 워크스페이스 */
+html[data-theme="light"] .crm-bg {
+  background-color: var(--sensora-bg);
+  background-image:
+    radial-gradient(900px 560px at 8% -4%, rgba(56, 189, 248, 0.07), transparent 58%),
+    radial-gradient(640px 440px at 100% 2%, rgba(139, 92, 246, 0.05), transparent 54%),
+    linear-gradient(180deg, #f8f5ef 0%, #f4f0e8 52%, #ebe6dc 100%);
+}
+
+html[data-theme="light"] .crm-app-stage::before {
+  opacity: 0.45;
+  background:
+    radial-gradient(ellipse 80% 60% at 70% -8%, rgba(56, 189, 248, 0.05), transparent 58%),
+    radial-gradient(ellipse 56% 48% at 12% 12%, rgba(139, 92, 246, 0.04), transparent 55%);
+}
+
+html[data-theme="light"] .sensora-inspirational-backdrop .absolute.inset-0:first-of-type {
+  background: linear-gradient(180deg, #f8f5ef 0%, #f0ebe3 48%, #f4f0e8 100%) !important;
+}
+
+html[data-theme="light"] .sensora-inspirational-backdrop .absolute.inset-0:nth-of-type(2) {
+  background:
+    radial-gradient(ellipse 72% 52% at 56% 20%, rgba(56, 189, 248, 0.08), transparent 60%),
+    radial-gradient(ellipse 48% 38% at 50% 90%, rgba(148, 163, 184, 0.12), transparent 62%) !important;
+}
+
+/* 랜딩 */
+html[data-theme="light"] .sensora-landing-warm {
+  background-color: var(--sensora-bg);
+  color: #1e293b;
+}
+
+html[data-theme="light"] .sensora-landing-warm-backdrop {
+  background:
+    radial-gradient(ellipse 82% 52% at 52% 8%, rgba(56, 189, 248, 0.08), transparent 55%),
+    radial-gradient(ellipse 58% 42% at 96% 18%, rgba(139, 92, 246, 0.05), transparent 52%),
+    linear-gradient(180deg, #faf7f1 0%, #f4f0e8 45%, #ebe6dc 100%);
+}
+
+html[data-theme="light"] .sensora-landing-warm .landing-warm-hero-title {
+  color: #0f172a;
+}
+
+html[data-theme="light"] .sensora-landing-warm .landing-warm-hero-accent {
+  color: #345c7c;
+}
+
+html[data-theme="light"] .sensora-landing-warm .landing-story-card,
+html[data-theme="light"] .sensora-landing-warm .landing-flow-step {
+  border-color: var(--sensora-border);
+  background: var(--sensora-card);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 12px 36px -24px rgba(23, 32, 51, 0.1);
+}
+
+html[data-theme="light"] .landing-mobile-nav-shell > div {
+  border-color: var(--sensora-border) !important;
+  background: linear-gradient(180deg, #fffdf9 0%, #f8f5ef 100%) !important;
+  box-shadow: 0 12px 32px -20px rgba(23, 32, 51, 0.12) !important;
+}
+
+html[data-theme="light"] .landing-mobile-nav-shell button[aria-current="page"] {
+  border-color: rgba(56, 189, 248, 0.35) !important;
+  background: rgba(56, 189, 248, 0.1) !important;
+  color: #0f172a !important;
+}
+
+html[data-theme="light"] .landing-mobile-nav-shell button:not([aria-current="page"]) {
+  border-color: var(--sensora-border) !important;
+  background: #fffdf9 !important;
+  color: #1e293b !important;
+}
+
+html[data-theme="light"] .crm-app-stage aside > div {
+  border-color: var(--sensora-border) !important;
+  background: linear-gradient(180deg, #fffdf9 0%, #f8f5ef 96%, #f4f0e8 100%) !important;
+  box-shadow: 0 16px 40px -24px rgba(23, 32, 51, 0.12) !important;
+}
+
+/* 프리미엄 패널 · 버튼 */
+html[data-theme="light"] .sensora-premium-panel {
+  border-color: var(--sensora-border);
+  background: linear-gradient(165deg, #fffdf9 0%, #f8f5ef 100%);
+  box-shadow:
+    0 8px 28px -12px rgba(23, 32, 51, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95);
+}
+
+html[data-theme="light"] .sensora-premium-panel-interactive:hover {
+  border-color: rgba(56, 189, 248, 0.28);
+  box-shadow:
+    0 12px 32px -12px rgba(23, 32, 51, 0.12),
+    0 0 32px -16px rgba(56, 189, 248, 0.1);
+}
+
+html[data-theme="light"] .sensora-premium-card {
+  border-color: var(--sensora-border);
+  background: linear-gradient(165deg, #ffffff 0%, #f8f5ef 100%);
+  box-shadow: 0 8px 24px -14px rgba(23, 32, 51, 0.1);
+}
+
+html[data-theme="light"] .sensora-premium-primary-workspace {
+  border-color: rgba(52, 92, 124, 0.32);
+  background: linear-gradient(180deg, #3d5a78 0%, #2a4258 48%, #243a50 100%);
+  color: #f8fafc;
+}
+
+html[data-theme="light"] .sensora-dark-ghost-btn {
+  border-color: rgba(23, 32, 51, 0.14);
+  color: #334155;
+  background: rgba(255, 255, 255, 0.75);
+}
+
+html[data-theme="light"] .sensora-dark-ghost-btn:hover {
+  border-color: rgba(56, 189, 248, 0.32);
+  background: #ffffff;
+}
+
+html[data-theme="light"] .sensora-premium-input {
+  border-color: rgba(23, 32, 51, 0.14);
+  background: #fffdf9;
+  color: #172033;
+}
+
+html[data-theme="light"] .sensora-premium-input::placeholder {
+  color: #94a3b8;
+}
+
+html[data-theme="light"] .landing-enterprise-btn-secondary {
+  border-color: rgba(23, 32, 51, 0.14);
+  background: rgba(255, 255, 255, 0.72);
+  color: #1e293b;
+}
+
+html[data-theme="light"] .landing-enterprise-btn-secondary:hover {
+  border-color: rgba(56, 189, 248, 0.28);
+  background: #ffffff;
+}
+
+html[data-theme="light"] .customer-support-quick-card {
+  border-color: rgba(52, 92, 124, 0.22) !important;
+  background: linear-gradient(180deg, #ffffff 0%, #f8f5ef 100%) !important;
+}
+
+html[data-theme="light"] .customer-support-error-card {
+  border-color: rgba(180, 140, 60, 0.22) !important;
+  background: linear-gradient(135deg, #fffdf9 0%, #faf6ee 100%) !important;
+}
+
+html[data-theme="light"] .quick-ai-entry-input-card,
+html[data-theme="light"] .quick-ai-entry-result-card {
+  border-color: var(--sensora-border);
+}
+

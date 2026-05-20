@@ -10,6 +10,7 @@ import { NotebookCover } from "@/app/components/NotebookCover";
 import { SensoraAnimatedMark } from "@/app/components/SensoraAnimatedMark";
 import { MobileLandingDock } from "@/app/components/MobileLandingDock";
 import { LanguageSelect } from "@/app/components/i18n/LanguageSelect";
+import { ThemeToggle } from "@/app/components/ThemeToggle";
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
 import { ConciergeSidebar } from "@/app/components/concierge/ConciergeSidebar";
 import {
@@ -238,7 +239,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
   const showNotebookCover = view === "app";
 
   return (
-    <div className="relative flex min-h-screen flex-col overflow-x-hidden text-slate-100">
+    <div className="sensora-app-shell relative flex min-h-screen flex-col overflow-x-hidden text-slate-100">
       <MobileAppSplash />
       <InspirationalBackdrop />
       {showNotebookCover ? <NotebookCover /> : null}
@@ -289,6 +290,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
 
               <div className="landing-nav-actions-cluster flex w-full min-w-0 flex-col gap-2 max-lg:gap-1 sm:gap-2.5 lg:w-auto lg:max-w-none lg:flex-none lg:flex-row lg:items-center lg:justify-end lg:gap-4 xl:gap-5">
                 <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1.5 max-lg:gap-x-1.5 max-lg:gap-y-1 sm:gap-x-3 sm:gap-y-2 lg:justify-end max-lg:[&_select]:h-7 max-lg:[&_select]:max-w-[5rem] max-lg:[&_select]:px-1.5 max-lg:[&_select]:py-1 max-lg:[&_select]:text-[10px]">
+                  <ThemeToggle dense />
                   <LanguageSelect dense />
                   {auth.status === "loading" ? (
                     <span className="text-xs text-slate-400">{t("auth.checkingLogin")}</span>
@@ -379,6 +381,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                 </div>
               </button>
               <div className="relative z-[1] flex w-full min-w-0 flex-wrap items-center justify-end gap-2 sm:w-auto sm:justify-end">
+                <ThemeToggle dense />
                 <span className="relative z-[1] shrink-0">
                   <LanguageSelect dense />
                 </span>

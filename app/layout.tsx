@@ -5,8 +5,12 @@ import { LanguageProvider } from "@/app/components/i18n/LanguageProvider";
 import { PwaInstallHint } from "@/app/components/PwaInstallHint";
 import { TextSizeProvider } from "@/app/components/TextSizeProvider";
 import { TEXT_SIZE_STORAGE_KEY } from "@/lib/textSizePreference";
+import { THEME_STORAGE_KEY } from "@/lib/themePreference";
+import { ThemeProvider } from "@/app/components/ThemeProvider";
 
 const TEXT_SIZE_BOOT_SCRIPT = `(function(){try{var k=${JSON.stringify(TEXT_SIZE_STORAGE_KEY)};var r=localStorage.getItem(k);var x=r==="small"||r==="large"?r:"medium";document.documentElement.setAttribute("data-text-size",x);}catch(e){}})();`;
+
+const THEME_BOOT_SCRIPT = `(function(){try{var k=${JSON.stringify(THEME_STORAGE_KEY)};var s=localStorage.getItem(k);var t=s==="light"||s==="dark"?s:null;if(!t){t=window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";}document.documentElement.setAttribute("data-theme",t);document.documentElement.style.colorScheme=t;}catch(e){document.documentElement.setAttribute("data-theme","dark");document.documentElement.style.colorScheme="dark";}})();`;
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -73,18 +77,22 @@ export default function RootLayout({
     <html
       lang="ko"
       data-text-size="medium"
+      data-theme="dark"
       suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} ${coverSerif.variable} ${coverSans.variable} h-full antialiased`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: TEXT_SIZE_BOOT_SCRIPT }} suppressHydrationWarning />
+        <script dangerouslySetInnerHTML={{ __html: THEME_BOOT_SCRIPT }} suppressHydrationWarning />
       </head>
       <body className="flex min-h-full flex-col">
         <LanguageProvider>
-          <TextSizeProvider>
-            {children}
-            <PwaInstallHint />
-          </TextSizeProvider>
+          <ThemeProvider>
+            <TextSizeProvider>
+              {children}
+              <PwaInstallHint />
+            </TextSizeProvider>
+          </ThemeProvider>
         </LanguageProvider>
       </body>
     </html>
