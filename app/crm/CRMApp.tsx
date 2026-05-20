@@ -87,6 +87,15 @@ import {
   getDemoAiSummaryLine,
 } from "./customerListDisplay";
 import {
+  computeCustomerListStats,
+  CUSTOMER_LIST_FILTER_OPTIONS,
+  CUSTOMER_LIST_SORT_OPTIONS,
+  filterCustomersByListFilter,
+  sortCustomersForList,
+  type CustomerListFilterId,
+  type CustomerListSortId,
+} from "./customerListFilters";
+import {
   buildQuickConsultationResult,
   buildQuickCustomerModalMemo,
   parseQuickCustomerIdentity,
@@ -423,6 +432,8 @@ export function CRMApp({
   const [state, setState] = useState<CRMState>(() => emptyState());
   const [selectedCustomerId, setSelectedCustomerId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [customerListFilter, setCustomerListFilter] = useState<CustomerListFilterId>("all");
+  const [customerListSort, setCustomerListSort] = useState<CustomerListSortId>("recentConsult");
   const [searchOpen, setSearchOpen] = useState(false);
   const [tab, setTab] = useState<"고객" | "다음할일" | "일정" | "템플릿">("고객");
   const didHydrateRef = useRef(false);
@@ -889,8 +900,8 @@ export function CRMApp({
     });
   }, [state.customers]);
 
-  const customersFiltered = useMemo(() => {
-    const list = [...state.customers].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+  const customersSearchMatched = useMemo(() => {
+    const list = [...state.customers];
     const nq = normalizeSearchFold(searchQuery);
     if (!nq) return list;
     return list.filter((c) => {
@@ -901,7 +912,21 @@ export function CRMApp({
     });
   }, [searchQuery, state.customers]);
 
-  const customerSearchResults = useMemo(() => customersFiltered.slice(0, 5), [customersFiltered]);
+  const customerListStats = useMemo(
+    () => computeCustomerListStats(customersSearchMatched, state.nextActions),
+    [customersSearchMatched, state.nextActions],
+  );
+
+  const customersFiltered = useMemo(() => {
+    const filtered = filterCustomersByListFilter(
+      customersSearchMatched,
+      customerListFilter,
+      state.nextActions,
+    );
+    return sortCustomersForList(filtered, customerListSort, state.nextActions);
+  }, [customersSearchMatched, customerListFilter, customerListSort, state.nextActions]);
+
+  const customerSearchResults = useMemo(() => customersSearchMatched.slice(0, 5), [customersSearchMatched]);
 
   const featureSearchResults = useMemo(() => {
     const nq = normalizeSearchFold(searchQuery);
@@ -2102,6 +2127,55 @@ export function CRMApp({
                   <p className="mt-2 text-[15px] leading-relaxed text-slate-400">
                     {t("crm.customerDetail.listIntro")}
                   </p>
+                  <p className="mt-3 text-[13px] font-medium leading-relaxed text-slate-400">
+                    {t("crm.customerList.stats.total").replace("{count}", String(customerListStats.total))}
+                    <span className="text-slate-600"> · </span>
+                    {t("crm.customerList.stats.contactToday").replace("{count}", String(customerListStats.contactToday))}
+                    <span className="text-slate-600"> · </span>
+                    {t("crm.customerList.stats.noResponse").replace("{count}", String(customerListStats.noResponse))}
+                  </p>
+                  <div className="crm-customer-list-filters mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <div
+                      className="-mx-1 flex min-w-0 gap-1.5 overflow-x-auto overscroll-x-contain px-1 pb-0.5 [scrollbar-width:thin]"
+                      role="tablist"
+                      aria-label="고객 목록 필터"
+                    >
+                      {CUSTOMER_LIST_FILTER_OPTIONS.map(({ id, labelKey }) => {
+                        const active = customerListFilter === id;
+                        return (
+                          <button
+                            key={id}
+                            type="button"
+                            role="tab"
+                            aria-selected={active}
+                            onClick={() => setCustomerListFilter(id)}
+                            className={[
+                              "shrink-0 touch-manipulation rounded-full px-3.5 py-2 text-[13px] font-semibold outline-none transition focus-visible:ring-2 focus-visible:ring-sky-400/35",
+                              active
+                                ? "bg-sky-500/18 text-sky-100 ring-1 ring-sky-400/35"
+                                : "bg-white/[0.05] text-slate-400 ring-1 ring-white/[0.08] hover:bg-white/[0.08] hover:text-slate-200",
+                            ].join(" ")}
+                          >
+                            {t(labelKey)}
+                          </button>
+                        );
+                      })}
+                    </div>
+                    <label className="flex shrink-0 items-center gap-2 text-[13px] text-slate-400 sm:ml-2">
+                      <span className="font-semibold text-slate-500">{t("crm.customerList.sortLabel")}</span>
+                      <select
+                        value={customerListSort}
+                        onChange={(e) => setCustomerListSort(e.target.value as CustomerListSortId)}
+                        className="min-h-[40px] w-full min-w-[9.5rem] rounded-xl border border-white/[0.11] bg-slate-950/55 px-3 py-2 text-[13px] font-semibold text-slate-100 outline-none focus:border-sky-400/45 focus:ring-2 focus:ring-sky-500/20 sm:w-auto"
+                      >
+                        {CUSTOMER_LIST_SORT_OPTIONS.map(({ id, labelKey }) => (
+                          <option key={id} value={id}>
+                            {t(labelKey)}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                  </div>
                 </div>
                 <div className="xl:max-h-[calc(100vh-16rem)] xl:overflow-y-auto">
                   <div className="divide-y divide-white/[0.07]">
@@ -2184,18 +2258,26 @@ export function CRMApp({
                   </div>
                 </div>
                 {customersFiltered.length === 0 ? (
-                  <div className="sensora-crm-empty-nexus relative border-t border-white/[0.11] px-8 py-14 text-center">
-                    <p className="text-[18px] font-semibold text-slate-50">등록된 고객이 없습니다</p>
-                    <p className="mx-auto mt-3 max-w-md text-[15px] leading-relaxed text-slate-400">
-                      첫 고객을 추가하거나 「주소록 가져오기」로 불러와 상담과 일정을 이어 가 보세요.
+                  <div className="border-t border-white/[0.09] px-6 py-10 text-center sm:px-8 sm:py-12">
+                    <p className="text-[16px] font-semibold text-slate-200">
+                      {customersSearchMatched.length === 0
+                        ? "등록된 고객이 없습니다"
+                        : t("crm.customerList.emptyFilter")}
                     </p>
-                    <button
-                      type="button"
-                      className="sensora-premium-primary-workspace mt-8 rounded-xl px-6 py-3 text-[15px] font-semibold touch-manipulation"
-                      onClick={openCreateCustomerModal}
-                    >
-                      고객 추가하기
-                    </button>
+                    <p className="mx-auto mt-2 max-w-md text-[14px] leading-relaxed text-slate-500">
+                      {customersSearchMatched.length === 0
+                        ? "첫 고객을 추가하거나 「주소록 가져오기」로 불러와 상담과 일정을 이어 가 보세요."
+                        : t("crm.customerList.emptyFilterHint")}
+                    </p>
+                    {customersSearchMatched.length === 0 ? (
+                      <button
+                        type="button"
+                        className="sensora-premium-primary-workspace mt-6 rounded-xl px-6 py-3 text-[15px] font-semibold touch-manipulation"
+                        onClick={openCreateCustomerModal}
+                      >
+                        고객 추가하기
+                      </button>
+                    ) : null}
                   </div>
                 ) : null}
               </div>

@@ -925,6 +925,20 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   background: rgba(148, 163, 184, 0.65);
 }
 
+/* 고객 리스트 필터 바 — 가로 스크롤(모바일) */
+.crm-customer-list-filters [role="tablist"] {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.38) rgba(15, 23, 42, 0.55);
+  -webkit-overflow-scrolling: touch;
+}
+.crm-customer-list-filters [role="tablist"]::-webkit-scrollbar {
+  height: 6px;
+}
+.crm-customer-list-filters [role="tablist"]::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.38);
+  border-radius: 999px;
+}
+
 /* 안내 모달 패널 — preview gate · Sensora TIP */
 .sensora-premium-modal-shell {
   border-radius: 1.25rem;

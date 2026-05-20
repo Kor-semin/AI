@@ -337,6 +337,21 @@ export type TranslationKey =
   | "crm.customerCard.aiSummaryLabel"
   | "crm.customerCard.nextActionLabel"
   | "crm.customerCard.nextActionUnset"
+  | "crm.customerList.filter.all"
+  | "crm.customerList.filter.contactToday"
+  | "crm.customerList.filter.consulting"
+  | "crm.customerList.filter.estimateReview"
+  | "crm.customerList.filter.deliveryPrep"
+  | "crm.customerList.filter.aftercare"
+  | "crm.customerList.sort.recentConsult"
+  | "crm.customerList.sort.nextContact"
+  | "crm.customerList.sort.interest"
+  | "crm.customerList.stats.total"
+  | "crm.customerList.stats.contactToday"
+  | "crm.customerList.stats.noResponse"
+  | "crm.customerList.sortLabel"
+  | "crm.customerList.emptyFilter"
+  | "crm.customerList.emptyFilterHint"
   | "crm.templates.quickCopyHint"
   | "crm.templates.sectionReviewHint"
   | "crm.templates.copyFailHint"
@@ -1258,6 +1273,21 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.customerCard.aiSummaryLabel": "AI 요약",
     "crm.customerCard.nextActionLabel": "다음 행동",
     "crm.customerCard.nextActionUnset": "다음 행동 미정",
+    "crm.customerList.filter.all": "전체",
+    "crm.customerList.filter.contactToday": "오늘 연락",
+    "crm.customerList.filter.consulting": "상담 진행",
+    "crm.customerList.filter.estimateReview": "견적 검토",
+    "crm.customerList.filter.deliveryPrep": "출고 준비",
+    "crm.customerList.filter.aftercare": "사후관리",
+    "crm.customerList.sort.recentConsult": "최근 상담순",
+    "crm.customerList.sort.nextContact": "다음 연락일순",
+    "crm.customerList.sort.interest": "관심도순",
+    "crm.customerList.stats.total": "전체 {count}명",
+    "crm.customerList.stats.contactToday": "오늘 연락 {count}명",
+    "crm.customerList.stats.noResponse": "미응답 {count}명",
+    "crm.customerList.sortLabel": "정렬",
+    "crm.customerList.emptyFilter": "선택한 조건에 맞는 고객이 없습니다.",
+    "crm.customerList.emptyFilterHint": "다른 필터를 선택하거나 고객을 추가해 주세요.",
     "crm.templates.quickCopyHint": "고객 상황에 맞게 검토 후 복사",
     "crm.templates.sectionReviewHint": "검토 후 필요한 부분만 수정해 사용하세요.",
     "crm.templates.copyFailHint": "자동 복사가 불가했습니다. 본문을 길게 눌러 복사해 주세요.",
@@ -2244,6 +2274,21 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.customerCard.aiSummaryLabel": "AI summary",
     "crm.customerCard.nextActionLabel": "Next step",
     "crm.customerCard.nextActionUnset": "Next step not set",
+    "crm.customerList.filter.all": "All",
+    "crm.customerList.filter.contactToday": "Contact today",
+    "crm.customerList.filter.consulting": "In consultation",
+    "crm.customerList.filter.estimateReview": "Quote review",
+    "crm.customerList.filter.deliveryPrep": "Delivery prep",
+    "crm.customerList.filter.aftercare": "Aftercare",
+    "crm.customerList.sort.recentConsult": "Recent consult",
+    "crm.customerList.sort.nextContact": "Next contact",
+    "crm.customerList.sort.interest": "Interest score",
+    "crm.customerList.stats.total": "All {count}",
+    "crm.customerList.stats.contactToday": "Contact today {count}",
+    "crm.customerList.stats.noResponse": "No response {count}",
+    "crm.customerList.sortLabel": "Sort",
+    "crm.customerList.emptyFilter": "No customers match this filter.",
+    "crm.customerList.emptyFilterHint": "Try another filter or add a customer.",
     "crm.templates.quickCopyHint": "Review for the customer, then copy",
     "crm.templates.sectionReviewHint": "Review and edit only what you need before sending.",
     "crm.templates.copyFailHint": "Could not copy automatically. Long-press the body to copy.",
