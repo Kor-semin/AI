@@ -109,7 +109,7 @@ function LandingSectionNav({
       className="landing-section-nav relative z-[2] hidden w-full lg:block"
       aria-label={t("landing.nav.brandTagline")}
     >
-      <div className="landing-section-nav-inner mx-auto flex w-full max-w-[1440px] items-center justify-between gap-4 px-4 sm:px-6">
+      <div className="landing-section-nav-inner landing-content-rail mx-auto flex w-full max-w-[1160px] items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         <div className="landing-section-nav-brand min-w-0 shrink-0">
           <p className="text-[0.9375rem] font-semibold leading-tight tracking-[-0.02em] text-white sm:text-[1rem]">
             {t("product.name")}
@@ -445,8 +445,8 @@ export function LandingShowroom({
 }: Props) {
   const { t } = useLanguage();
 
-  const sectionShell = "relative z-[1] w-full px-4 sm:px-6";
-  const innerMax = "mx-auto w-full max-w-[1440px]";
+  const sectionShell = "relative z-[1] w-full px-4 sm:px-6 lg:px-8";
+  const landingRail = "landing-content-rail mx-auto w-full max-w-[1160px]";
 
   const featureCards = MOBILE_WORK_CARDS;
 
@@ -604,7 +604,7 @@ export function LandingShowroom({
         id="sensora-landing-hero"
         className={`landing-hero-section ${sectionShell} hidden pb-6 pt-3 lg:block sm:pb-8 sm:pt-4`}
       >
-        <div className={innerMax}>
+        <div className={landingRail}>
           <LandingFirstScreenIntro t={t} onOpenAppWorkspace={onOpenAppWorkspace} layout="desktop" />
           <LandingAiAssistantDemo />
         </div>
@@ -615,7 +615,7 @@ export function LandingShowroom({
         id="sensora-landing-problem"
         className={`landing-story-anchor ${sectionShell} border-t border-white/[0.06] py-10 sm:py-14 max-lg:border-t-0`}
       >
-        <div className={`${innerMax} landing-story-section`}>
+        <div className={`${landingRail} landing-story-section`}>
           <h2 className="landing-story-title mx-auto max-w-[22ch] text-center [word-break:keep-all]">{t("landing.problems.title")}</h2>
           <ul className="landing-story-card-grid mt-8 sm:mt-10">
             {PROBLEM_KEYS.map((key, index) => (
@@ -636,7 +636,7 @@ export function LandingShowroom({
         id="sensora-landing-solution"
         className={`landing-story-anchor ${sectionShell} border-t border-white/[0.06] py-10 sm:py-14`}
       >
-        <div className={`${innerMax} landing-story-section max-w-[720px] lg:max-w-[800px]`}>
+        <div className={`${landingRail} landing-story-section max-w-[720px] lg:max-w-[800px]`}>
           <h2 className="landing-story-title mx-auto max-w-[20ch] text-center [word-break:keep-all]">{t("landing.solution.title")}</h2>
           <p className="mx-auto mt-5 max-w-[48ch] text-center text-[0.9rem] leading-relaxed text-slate-300/90 sm:text-[0.98rem] [word-break:keep-all]">
             {t("landing.solution.body")}
@@ -664,7 +664,7 @@ export function LandingShowroom({
         id="sensora-landing-features"
         className={`landing-story-anchor ${sectionShell} border-t border-white/[0.06] py-10 sm:py-14`}
       >
-        <div className={`${innerMax} landing-story-section`}>
+        <div className={`${landingRail} landing-story-section`}>
           <h2 className="landing-story-title mx-auto max-w-[18ch] text-center [word-break:keep-all]">{t("landing.features.title")}</h2>
           <ul className="landing-story-card-grid landing-story-card-grid--features mt-8 sm:mt-10">
             {LANDING_FEATURE_DEFS.map((feature) => {
@@ -692,7 +692,7 @@ export function LandingShowroom({
         id="sensora-landing-flow"
         className={`landing-story-anchor ${sectionShell} border-t border-white/[0.06] py-10 sm:py-14`}
       >
-        <div className={`${innerMax} landing-story-section max-w-[800px] lg:max-w-[900px]`}>
+        <div className={`${landingRail} landing-story-section max-w-[800px] lg:max-w-[900px]`}>
           <h2 className="landing-story-title mx-auto max-w-[20ch] text-center [word-break:keep-all]">{t("landing.flow.title")}</h2>
           <ol className="landing-flow-steps mt-8 sm:mt-10">
             {FLOW_STEP_KEYS.map((key, index) => (
@@ -714,7 +714,7 @@ export function LandingShowroom({
         id="sensora-landing-trust"
         className={`landing-story-anchor ${sectionShell} border-t border-white/[0.06] py-10 sm:py-14`}
       >
-        <div className={`${innerMax} landing-story-section max-w-[640px] lg:max-w-[720px]`}>
+        <div className={`${landingRail} landing-story-section max-w-[640px] lg:max-w-[720px]`}>
           <p className="text-center text-[10px] font-semibold uppercase tracking-[0.16em] text-violet-300/78 sm:text-[11px]">
             {t("landing.slides.philosophy.kicker")}
           </p>
@@ -744,7 +744,7 @@ export function LandingShowroom({
             : "max-lg:pb-12",
         ].join(" ")}
       >
-        <div className={`${innerMax} max-w-[520px] sm:max-w-[560px]`}>
+        <div className={`${landingRail} max-w-[520px] sm:max-w-[560px]`}>
           <div className="mx-auto flex w-full flex-col items-center text-center">
             <h2 className="max-w-[28ch] text-[clamp(1.05rem,calc(0.78rem+1.6vw),1.55rem)] font-semibold leading-[1.35] tracking-[-0.028em] text-slate-50 [word-break:keep-all] sm:max-w-[32ch]">
               {t("landing.cta.title")}
