@@ -1,3 +1,6 @@
+import { hasMeaningfulFinanceDraft, isFinanceAwareTemplateTitle } from "./financeAwareMessageTemplate";
+import type { Customer } from "./types";
+
 /** 상황별 문자 초안 카드 하단 설명(제목 기준, 기존 저장 데이터 호환) */
 const MESSAGE_TEMPLATE_CARD_HINTS: Record<string, string> = {
   "중고 매입·대차 문의": "차량 상태 확인 후 대략적인 감가를 안내합니다.",
@@ -11,7 +14,10 @@ const MESSAGE_TEMPLATE_CARD_HINTS: Record<string, string> = {
   "계약 전 체크리스트": "명의·등록·보험·출고 전 확인사항을 정리합니다.",
 };
 
-export function getMessageTemplateCardHint(title: string): string {
+export function getMessageTemplateCardHint(title: string, customer?: Customer | null): string {
   const key = title.trim();
+  if (customer && hasMeaningfulFinanceDraft(customer) && isFinanceAwareTemplateTitle(key)) {
+    return "입력된 금융 조건을 반영해 검토용 문구를 만듭니다.";
+  }
   return MESSAGE_TEMPLATE_CARD_HINTS[key] ?? "";
 }

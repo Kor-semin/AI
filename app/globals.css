@@ -981,6 +981,16 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   display: none;
 }
 
+/* 세금·시세 참고 — 금융 조건 정리와 시각적 분리(선택 입력) */
+.crm-finance-tax-market-form {
+  margin-top: 0.25rem;
+  border-color: rgba(148, 163, 184, 0.14);
+  background: rgba(2, 6, 23, 0.42);
+}
+.crm-finance-tax-market-form > summary {
+  opacity: 0.92;
+}
+
 /* 안내 모달 패널 — preview gate · Sensora TIP */
 .sensora-premium-modal-shell {
   border-radius: 1.25rem;

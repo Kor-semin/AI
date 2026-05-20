@@ -65,6 +65,7 @@ import {
   type DemoSalesStyle,
 } from "@/app/components/concierge/aiDemoResponse";
 import { getMessageTemplateCardHint } from "./messageTemplateCardHints";
+import { resolveMessageTemplateBody } from "./financeAwareMessageTemplate";
 import { makeId, seedState } from "./seed";
 import { ContactImportFileGuideModal } from "./ContactImportFileGuideModal";
 import { ImportContactsPanel, type ImportContactsCommitPayload } from "./ImportContactsPanel";
@@ -1712,7 +1713,10 @@ export function CRMApp({
 
   function renderTemplate(tpl: MessageTemplate, customer?: Customer | null) {
     const cName = customer?.name ?? "고객";
-    return tpl.body.replaceAll("{고객명}", cName).replaceAll("{내이름}", myName);
+    const body = customer
+      ? resolveMessageTemplateBody(tpl.title, customer, tpl.body)
+      : tpl.body;
+    return body.replaceAll("{고객명}", cName).replaceAll("{내이름}", myName);
   }
 
   const allNextActions = useMemo(() => {
@@ -3182,9 +3186,10 @@ export function CRMApp({
                     </button>
                   </div>
                   <p className="mt-2 text-[11px] leading-snug text-slate-500">{t("crm.templates.sectionReviewHint")}</p>
+                  <p className="mt-1 text-[11px] leading-snug text-slate-500">{t("crm.templates.financeReflectHint")}</p>
                   <div className="mt-4 space-y-2">
                     {quickTemplates.map((tpl) => {
-                      const cardHint = getMessageTemplateCardHint(tpl.title);
+                      const cardHint = getMessageTemplateCardHint(tpl.title, selectedCustomer);
                       return (
                       <button
                         key={tpl.id}
@@ -3550,6 +3555,7 @@ export function CRMApp({
                 </button>
               </div>
               <p className="mt-2 text-[13px] leading-relaxed text-slate-400">{t("crm.templates.sectionReviewHint")}</p>
+              <p className="mt-1 text-[12px] leading-relaxed text-slate-500">{t("crm.templates.financeReflectHint")}</p>
 
               <section
                 id="season-care"
@@ -3751,7 +3757,7 @@ export function CRMApp({
 
               <div className="mt-10 grid grid-cols-1 gap-5 lg:grid-cols-2">
                 {state.templates.map((tpl) => {
-                  const cardHint = getMessageTemplateCardHint(tpl.title);
+                  const cardHint = getMessageTemplateCardHint(tpl.title, selectedCustomer);
                   return (
                   <div
                     key={tpl.id}

@@ -356,6 +356,7 @@ export type TranslationKey =
   | "crm.customerList.emptyFilterHint"
   | "crm.templates.quickCopyHint"
   | "crm.templates.sectionReviewHint"
+  | "crm.templates.financeReflectHint"
   | "crm.templates.copyFailHint"
   | "crm.templates.emptyHint"
   | "crm.block.nextActionsTitle"
@@ -1273,7 +1274,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.financeMarketInfo": "금융·예산·시세 정보",
     "crm.financeTaxMarketTitle": "세금·시세 참고 정보",
     "crm.financeTaxMarketLead":
-      "필요한 경우에만 입력하세요. 견적 상담이나 비교 안내에 참고됩니다.",
+      "필요한 경우에만 입력하는 참고 정보입니다. 실제 견적·세금 안내는 최종 확인이 필요합니다.",
     "crm.tradeInSummary": "중고차 정리",
     "crm.tab.customers": "고객",
     "crm.tab.next": "다음 행동",
@@ -1299,6 +1300,8 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.customerList.emptyFilterHint": "다른 필터를 선택하거나 고객을 추가해 주세요.",
     "crm.templates.quickCopyHint": "고객 상황에 맞게 검토 후 복사",
     "crm.templates.sectionReviewHint": "검토 후 필요한 부분만 수정해 사용하세요.",
+    "crm.templates.financeReflectHint":
+      "입력된 금융 조건이 있으면 문자 초안에 함께 반영됩니다.",
     "crm.templates.copyFailHint": "자동 복사가 불가했습니다. 본문을 길게 눌러 복사해 주세요.",
     "crm.templates.emptyHint": "자주 쓰는 문구 초안을 먼저 만들어 두세요.",
     "crm.block.nextActionsTitle": "다음 행동 · 할 일",
@@ -2282,7 +2285,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.financeMarketInfo": "Finance, Budget & Market Info",
     "crm.financeTaxMarketTitle": "Tax & market reference",
     "crm.financeTaxMarketLead":
-      "Fill in only when needed—for quote discussions or comparison notes. Not tax advice.",
+      "Optional reference only—not confirmed tax or quote advice. Verify before sharing with customers.",
     "crm.tradeInSummary": "Trade-in Vehicle Summary",
     "crm.tab.customers": "Customers",
     "crm.tab.next": "Next steps",
@@ -2308,6 +2311,8 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.customerList.emptyFilterHint": "Try another filter or add a customer.",
     "crm.templates.quickCopyHint": "Review for the customer, then copy",
     "crm.templates.sectionReviewHint": "Review and edit only what you need before sending.",
+    "crm.templates.financeReflectHint":
+      "When finance conditions are filled in, message drafts can include them for review.",
     "crm.templates.copyFailHint": "Could not copy automatically. Long-press the body to copy.",
     "crm.templates.emptyHint": "Create drafts for messages you send often.",
     "crm.block.nextActionsTitle": "Next steps · tasks",
