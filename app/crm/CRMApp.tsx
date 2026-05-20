@@ -999,6 +999,13 @@ export function CRMApp({
     el?.scrollIntoView({ behavior: "smooth", block: "start" });
   }, []);
 
+  const openCustomerMessageDraftSection = useCallback(() => {
+    if (typeof document === "undefined") return;
+    const el = document.getElementById("customer-message-draft-section");
+    if (el instanceof HTMLDetailsElement) el.open = true;
+    el?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, []);
+
   const budgetWonSelected = useMemo(
     () => parseMoneyToKrw(selectedCustomer?.budget),
     [selectedCustomer?.budget],
@@ -2360,7 +2367,7 @@ export function CRMApp({
                           </button>
                           <button
                             type="button"
-                            onClick={() => onActiveSectionChange("ai")}
+                            onClick={openCustomerMessageDraftSection}
                             className="sensora-dark-ghost-btn min-h-[44px] rounded-xl px-4 py-2.5 text-[13px] font-semibold touch-manipulation"
                           >
                             {t("crm.customerDetail.quickActionSms")}
@@ -2504,6 +2511,7 @@ export function CRMApp({
               </details>
 
               <details
+                id="customer-message-draft-section"
                 open
                 className="scroll-mt-24 rounded-[22px] border border-white/[0.09] bg-slate-950/50 px-5 py-4 sm:p-5"
               >
