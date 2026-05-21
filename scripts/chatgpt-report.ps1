@@ -73,13 +73,32 @@ function Exit-WithError {
 
 function Set-ReportClipboard {
     param([string] $Text)
+    # Windows: Set-Clipboard → WinForms → clip.exe 순으로 시도
     try {
-        Set-Clipboard -Value $Text
+        Set-Clipboard -Value $Text -ErrorAction Stop
+        return $true
     }
     catch {
-        Add-Type -AssemblyName System.Windows.Forms
-        [System.Windows.Forms.Clipboard]::SetText($Text)
+        # Set-Clipboard 미지원/실패
     }
+    try {
+        Add-Type -AssemblyName System.Windows.Forms -ErrorAction Stop
+        [System.Windows.Forms.Clipboard]::SetText($Text)
+        return $true
+    }
+    catch {
+        # WinForms 클립보드 실패
+    }
+    try {
+        $Text | clip.exe
+        if ($LASTEXITCODE -eq 0) {
+            return $true
+        }
+    }
+    catch {
+        # clip.exe 실패
+    }
+    return $false
 }
 
 function Get-NormalizedFiles {
@@ -211,28 +230,29 @@ if (-not $DryRun) {
     $stagedChanges = git diff --cached --name-only
     if ([string]::IsNullOrWhiteSpace($stagedChanges)) {
         Write-Host ''
-        Write-Host '커밋할 변경이 없습니다.' -ForegroundColor Yellow
-        exit 0
+        Write-Host '커밋할 변경이 없습니다. 보고 요약만 생성합니다.' -ForegroundColor Yellow
+        $pushStatus = if ($Push) { '미실행 (커밋 없음)' } else { '미실행' }
     }
-
-    Write-Step 'git commit'
-    git commit -m $CommitMessage
-    if ($LASTEXITCODE -ne 0) {
-        Exit-WithError 'git commit 실패.'
-    }
-
-    $commitSha = (git rev-parse HEAD).Trim()
-    if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($commitSha)) {
-        Exit-WithError 'git rev-parse HEAD 실패.'
-    }
-
-    if ($Push) {
-        Write-Step 'git push'
-        git push
+    else {
+        Write-Step 'git commit'
+        git commit -m $CommitMessage
         if ($LASTEXITCODE -ne 0) {
-            Exit-WithError 'git push 실패.'
+            Exit-WithError 'git commit 실패.'
         }
-        $pushStatus = '완료'
+
+        $commitSha = (git rev-parse HEAD).Trim()
+        if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($commitSha)) {
+            Exit-WithError 'git rev-parse HEAD 실패.'
+        }
+
+        if ($Push) {
+            Write-Step 'git push'
+            git push
+            if ($LASTEXITCODE -ne 0) {
+                Exit-WithError 'git push 실패.'
+            }
+            $pushStatus = '완료'
+        }
     }
 }
 else {
@@ -270,8 +290,6 @@ Vercel 확인 SHA: $($footer.VercelSha)
 다음 작업 추천: $($footer.NextStep)
 "@
 
-Set-ReportClipboard -Text $report
-
 Write-Host ''
 Write-Host '--- [ChatGPT 보고용 요약] 미리보기 ---' -ForegroundColor DarkCyan
 $previewLines = $report -split "`r?`n"
@@ -285,4 +303,11 @@ if ($previewLines.Count -gt $previewCount) {
 Write-Host ''
 Write-Host $report
 Write-Host ''
-Write-Host 'ChatGPT 보고용 요약을 클립보드에 복사했습니다.' -ForegroundColor Green
+
+$clipboardOk = Set-ReportClipboard -Text $report
+if ($clipboardOk) {
+    Write-Host '(클립보드에도 복사되었습니다.)' -ForegroundColor Green
+}
+else {
+    Write-Host '(클립보드 복사는 실패했습니다. 위 보고 내용을 직접 복사해 주세요.)' -ForegroundColor Yellow
+}
