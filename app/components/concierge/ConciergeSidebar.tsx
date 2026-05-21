@@ -16,7 +16,7 @@ const CRM_NAV_MAIN_SECTIONS = CRM_SECTION_ORDER.filter((s) => !CRM_NAV_FOOTER_SE
 
 function navButtonClass(active: boolean): string {
   return [
-    "crm-desktop-nav-item group relative grid w-full shrink-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-x-2 rounded-xl py-2 pl-3 pr-2.5 min-h-[44px] touch-manipulation outline-none ring-offset-2 ring-offset-[#020817] focus-visible:ring-2 focus-visible:ring-sky-500/40",
+    "crm-desktop-nav-item group relative flex w-full shrink-0 flex-col items-start justify-center gap-0.5 rounded-xl py-2 pl-3 pr-2.5 min-h-[46px] text-left touch-manipulation outline-none ring-offset-2 ring-offset-[#020817] focus-visible:ring-2 focus-visible:ring-sky-500/40",
     "motion-safe:transition-[background,box-shadow,transform,color,border-color] motion-safe:duration-[220ms] motion-safe:ease-out",
     active
       ? "border border-sky-400/22 bg-gradient-to-r from-sky-500/[0.14] via-white/[0.04] to-transparent pl-[calc(10px+0.375rem)] text-[#F8FAFC] shadow-[inset_0_1px_0_rgba(255,255,255,0.07),0_0_40px_-12px_rgba(56,189,248,0.14),0_0_48px_-18px_rgba(139,92,246,0.06)] before:absolute before:left-[3px] before:top-1.5 before:bottom-1.5 before:w-[3px] before:rounded-full before:bg-gradient-to-b before:from-sky-300/95 before:to-indigo-400/75"
@@ -66,17 +66,8 @@ export function ConciergeSidebar({
         aria-current={active ? "page" : undefined}
         aria-label={`${title}, ${subtitle}`}
       >
-        <span className="crm-desktop-nav-item__title min-w-0 truncate text-[13px] font-semibold leading-tight tracking-tight">
-          {title}
-        </span>
-        <span
-          className={[
-            "crm-desktop-nav-item__subtitle shrink-0 text-right text-[11px] font-medium leading-tight tracking-normal",
-            active ? "text-[#EDF4FC]" : "text-[#ADB7C9] group-hover:text-[#E9F0FA]",
-          ].join(" ")}
-        >
-          {subtitle}
-        </span>
+        <span className="crm-desktop-nav-item__title w-full min-w-0 truncate">{title}</span>
+        <span className="crm-desktop-nav-item__subtitle w-full min-w-0 truncate">{subtitle}</span>
       </button>
     );
   };
