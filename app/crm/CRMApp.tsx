@@ -110,6 +110,8 @@ import {
   buildQuickConsultationResult,
   buildQuickCustomerModalMemo,
   parseQuickCustomerIdentity,
+  formatRichConsultationNeedsDisplay,
+  isRichStructuredConsultation,
   polishFlowInsightsForCustomer,
   polishNextActionForDisplay,
   resolveCustomerVehicleFields,
@@ -618,7 +620,9 @@ export function CRMApp({
         { salesStyle: workspaceSalesStyle },
       );
       setFlowDraftInsights(
-        customer ? polishFlowInsightsForCustomer(customer, raw) : raw,
+        customer
+          ? polishFlowInsightsForCustomer(customer, raw, { inputMemo: snap, salesStyle: workspaceSalesStyle })
+          : raw,
       );
       window.setTimeout(() => setWorkspaceAiBusy(false), 220);
     }, 0);
@@ -647,7 +651,9 @@ export function CRMApp({
         { salesStyle: workspaceSalesStyle },
       );
       setFlowDraftInsights(
-        customer ? polishFlowInsightsForCustomer(customer, raw) : raw,
+        customer
+          ? polishFlowInsightsForCustomer(customer, raw, { inputMemo: snap, salesStyle: workspaceSalesStyle })
+          : raw,
       );
       window.setTimeout(() => setWorkspaceAiBusy(false), 220);
     }, 0);
@@ -681,9 +687,10 @@ export function CRMApp({
         { salesStyle: workspaceSalesStyle },
       );
       setFlowDraftInsights((prev) => {
-        if (!prev) return customer ? polishFlowInsightsForCustomer(customer, raw) : raw;
+        const flowOpts = { inputMemo: snapshot, salesStyle: workspaceSalesStyle };
+        if (!prev) return customer ? polishFlowInsightsForCustomer(customer, raw, flowOpts) : raw;
         const merged = { summary: prev.summary, nextAction: prev.nextAction, message: raw.message };
-        return customer ? polishFlowInsightsForCustomer(customer, merged) : merged;
+        return customer ? polishFlowInsightsForCustomer(customer, merged, flowOpts) : merged;
       });
       window.setTimeout(() => setWorkspaceAiBusy(false), 220);
     }, 0);
@@ -1082,6 +1089,9 @@ export function CRMApp({
 
   const workspaceAiCoachTopics = useMemo(() => {
     if (!flowDraftInsights || !flowDraftMemo.trim()) return null;
+    if (isRichStructuredConsultation(flowDraftMemo)) {
+      return formatRichConsultationNeedsDisplay(flowDraftMemo);
+    }
     const langUi: "ko" | "en" = language === "ko" ? "ko" : "en";
     return formatCareNeedsGuideTopicsUi(flowDraftMemo, langUi);
   }, [flowDraftMemo, flowDraftInsights, language]);

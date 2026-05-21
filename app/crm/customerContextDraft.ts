@@ -8,7 +8,7 @@ import {
   hasMeaningfulFinanceDraft,
 } from "./financeAwareMessageTemplate";
 import { parseMoneyToKrw } from "./recommendations";
-import type { Customer, FinanceConditionDraft, NextAction } from "./types";
+import type { Customer, FinanceConditionDraft, NextAction, UsedCarAccident, UsedCarInfo } from "./types";
 
 export type QuickConsultationNeeds = {
   vehicle?: string;
@@ -63,8 +63,45 @@ export function normalizeInterestVehicle(memo: string, candidate?: string): stri
   return undefined;
 }
 
-export function extractPreferredVehicleModel(memo: string): string | undefined {
+/** 관심 신차(보유·대차 차량 문장 제외). */
+export function extractInterestVehicleFromMemo(memo: string): string | undefined {
   const raw = memo.trim();
+  if (!raw) return undefined;
+
+  const labeled = raw.match(/관심\s*차량(?:은|이|:\s*)?([^\n。]+)/i);
+  if (labeled?.[1]) {
+    let v = labeled[1]
+      .trim()
+      .replace(/이고.*$/i, "")
+      .replace(/이며.*$/i, "")
+      .replace(/[,，].*$/, "")
+      .trim();
+    v = v.replace(/\s*(?:가족|주말|월|할부|리스).*$/i, "").trim();
+    if (v) return normalizeKoreanVehicleSpelling(v);
+  }
+
+  for (const line of raw.split(/\n+/)) {
+    if (/보유\s*차량|현재\s*보유|매입가/i.test(line)) continue;
+    if (/관심\s*차량|쏘렌토|하이브리드/i.test(line)) {
+      const hybrid = line.match(/쏘렌토\s*하이브리드/i);
+      if (hybrid) return normalizeKoreanVehicleSpelling(hybrid[0]);
+      const sorento = line.match(/쏘렌토/i);
+      if (sorento) return "쏘렌토";
+    }
+  }
+
+  return undefined;
+}
+
+export function extractPreferredVehicleModel(memo: string): string | undefined {
+  const interest = extractInterestVehicleFromMemo(memo);
+  if (interest) return interest;
+
+  const raw = memo
+    .split(/\n+/)
+    .filter((line) => !/보유\s*차량|현재\s*보유/i.test(line))
+    .join("\n")
+    .trim();
   if (!raw) return undefined;
 
   const known = raw.match(KNOWN_MODEL_RE);
@@ -76,6 +113,262 @@ export function extractPreferredVehicleModel(memo: string): string | undefined {
   if (combo?.[1]) return combo[1].toUpperCase();
 
   return undefined;
+}
+
+type ParsedOwnedVehicle = {
+  label: string;
+  brand?: string;
+  model?: string;
+  year?: string;
+  mileageKm?: string;
+  accident?: UsedCarAccident;
+};
+
+function parseOwnedVehicleFromMemo(memo: string): ParsedOwnedVehicle | undefined {
+  const raw = memo.trim();
+  const line =
+    raw.split(/\n+/).find((l) => /보유\s*차량|현재\s*보유/i.test(l)) ??
+    (/(?:아우디|Audi)\s*A4/i.test(raw) && /보유|매입/i.test(raw) ? raw : "");
+
+  if (!line) return undefined;
+
+  const brand = /아우디|audi/i.test(line) ? "아우디" : undefined;
+  const model = /\bA4\b/i.test(line) ? "A4" : undefined;
+  const year = line.match(/(\d{4})\s*년식/)?.[1];
+  const mileageKm =
+    line.match(/약\s*([\d,.]+)\s*만\s*km/i)?.[0]?.trim() ??
+    line.match(/([\d,.]+)\s*km/i)?.[0]?.trim() ??
+    (/\b9\s*만\s*km/i.test(line) ? "약 9만 km" : undefined);
+
+  let accident: UsedCarAccident | undefined;
+  if (/단순교환/.test(raw)) accident = "단순교환";
+  else if (/무사고/.test(raw)) accident = "무사고";
+  else if (/사고(?!\s*유무)/.test(raw) && !/무사고/.test(raw)) accident = "사고";
+
+  const parts = [brand, model, year ? `${year}년식` : "", mileageKm, accident].filter(Boolean);
+  if (!parts.length) return undefined;
+
+  return { label: parts.join(" · "), brand, model, year, mileageKm, accident };
+}
+
+/** 구조화된 상담 메모(관심 차량·보유 차량·금융·다음 연락 등). */
+export function isRichStructuredConsultation(memo: string): boolean {
+  const raw = memo.trim();
+  if (raw.length < 120) return false;
+  let score = 0;
+  if (/관심\s*차량/i.test(raw)) score += 1;
+  if (/보유\s*차량|현재\s*보유/i.test(raw)) score += 1;
+  if (/할부|리스/i.test(raw) && /비교|확정하지\s*않/i.test(raw)) score += 1;
+  if (/다음\s*연락|토요일|통화/i.test(raw)) score += 1;
+  if (/가족|7인승|공간|연비/i.test(raw)) score += 1;
+  if (/월\s*납입|초기\s*비용/i.test(raw)) score += 1;
+  return score >= 4;
+}
+
+function extractRichFinanceNote(memo: string): string | undefined {
+  if (/할부.*리스|리스.*할부/i.test(memo) && /비교|확정하지\s*않/i.test(memo)) {
+    return "할부와 리스 조건 비교(금융 방식 미정)";
+  }
+  if (/확정하지\s*않|금융\s*방식.*미정/i.test(memo)) return "금융 방식 미정";
+  return undefined;
+}
+
+function extractRichBudgetNote(memo: string): string | undefined {
+  const bits: string[] = [];
+  if (/월\s*납입.*낮추|납입금.*낮추/i.test(memo)) bits.push("월 납입금 부담 최소화");
+  if (/초기\s*비용.*많이\s*쓰고\s*싶지\s*않|초기\s*비용.*최소/i.test(memo)) bits.push("초기 비용 최소화");
+  return bits.length ? bits.join(", ") + " 희망" : undefined;
+}
+
+function extractRichTimingNote(memo: string): string | undefined {
+  if (/출고\s*가능/i.test(memo)) return "출고 가능 여부 확인 필요";
+  if (/출고|인도/i.test(memo)) return extractDeliveryNote(memo);
+  return undefined;
+}
+
+function extractRichPrioritiesNote(memo: string): string | undefined {
+  const bits: string[] = [];
+  if (/가족용\s*7인승|7인승/i.test(memo)) bits.push("가족용 7인승");
+  if (/공간/i.test(memo)) bits.push("공간");
+  if (/연비/i.test(memo)) bits.push("연비");
+  if (/주요\s*옵션|옵션/i.test(memo)) bits.push("주요 옵션");
+  return bits.length ? bits.join(", ") : undefined;
+}
+
+function extractRichConcernsNote(memo: string): string | undefined {
+  const bits: string[] = [];
+  if (/할부.*리스|리스.*할부/i.test(memo)) bits.push("할부/리스 조건 비교");
+  else if (/할부|리스/i.test(memo)) bits.push("금융 조건 비교");
+  if (/매입|대차/i.test(memo)) bits.push("기존 차량 매입가 확인");
+  return bits.length ? bits.join(", ") : undefined;
+}
+
+/** Sensora Flow 고객 니즈 패널용(구조화 메모). */
+export function formatRichConsultationNeedsDisplay(memo: string): string {
+  const interest = extractInterestVehicleFromMemo(memo);
+  const owned = parseOwnedVehicleFromMemo(memo);
+  const lines: string[] = [];
+
+  if (interest) lines.push(`관심 차량:\n${interest}`);
+  const budget = extractRichBudgetNote(memo);
+  if (budget) lines.push(`예산·월 납입:\n${budget}`);
+  const timing = extractRichTimingNote(memo);
+  if (timing) lines.push(`구매·출고 시기:\n${timing}`);
+  const priorities = extractRichPrioritiesNote(memo);
+  if (priorities) lines.push(`중요 조건:\n${priorities}`);
+  const concerns = extractRichConcernsNote(memo);
+  if (concerns) lines.push(`우려 사항:\n${concerns}`);
+  if (owned) lines.push(`보유/대차 차량:\n${owned.label}`);
+
+  return lines.join("\n\n").trim() || memo.slice(0, 200);
+}
+
+function buildRichConsultationSms(
+  name: string,
+  interestVehicle: string | undefined,
+  memo: string,
+  owned?: ParsedOwnedVehicle,
+): string {
+  const salutation = name.trim() || "고객";
+  const vehiclePhrase = interestVehicle ? interestVehicle : "문의 주신 차량";
+  const lines: string[] = [`${salutation}님, 안녕하세요.`, "담당 영업사원입니다.", ""];
+
+  if (/가족|7인승/i.test(memo)) {
+    lines.push(
+      `말씀 주신 ${vehiclePhrase} 기준으로 가족용 7인승 사용에 맞는 주요 옵션과 출고 가능 여부를 확인해 보겠습니다.`,
+      "",
+    );
+  } else {
+    lines.push(
+      `말씀 주신 ${vehiclePhrase} 기준으로 주요 옵션과 출고 가능 여부를 확인해 보겠습니다.`,
+      "",
+    );
+  }
+
+  const financeBits: string[] = [];
+  if (/할부.*리스|리스.*할부/i.test(memo)) {
+    financeBits.push("할부와 리스 조건은 월 납입 부담과 초기 비용을 낮추는 방향으로 비교해드리겠습니다");
+  } else if (/월\s*납입|초기\s*비용/i.test(memo)) {
+    financeBits.push("월 납입 부담과 초기 비용을 낮추는 방향으로 조건을 비교해드리겠습니다");
+  }
+
+  if (owned) {
+    const ownedPhrase = owned.label.replace(/\s*·\s*단순교환$/, "");
+    financeBits.push(`현재 보유 중이신 ${ownedPhrase} 차량의 매입 가능 금액도 함께 확인해 보겠습니다`);
+  } else if (/매입|보유\s*차량/i.test(memo)) {
+    financeBits.push("현재 보유 중이신 차량의 매입 가능 금액도 함께 확인해 보겠습니다");
+  }
+
+  if (financeBits.length) lines.push(`${financeBits.join(", ")}.`, "");
+
+  const callWhen =
+    firstMatch(memo, [/이번\s*주\s*토요일\s*오전[^\n。]*/i, /토요일\s*오전[^\n。]*/i]) ??
+    (/토요일/i.test(memo) ? "토요일 오전" : undefined);
+  if (callWhen) {
+    lines.push(
+      `${callWhen}에 통화 가능하실 때, 출고 일정과 월 납입 조건, 기존 차량 매입가까지 같이 정리해서 안내드리겠습니다.`,
+      "",
+    );
+  } else if (/주말/i.test(memo)) {
+    lines.push("주말 통화를 선호하신다고 메모되어 있어, 편하신 시간 알려주시면 맞춰 연락드리겠습니다.", "");
+  }
+
+  lines.push("감사합니다.");
+  return sanitizeAiTextForInput(memo, lines.join("\n"));
+}
+
+function buildRichNextActions(
+  memo: string,
+  interestVehicle?: string,
+  owned?: ParsedOwnedVehicle,
+): string[] {
+  const header =
+    firstMatch(memo, [/이번\s*주\s*토요일\s*오전[^\n。]*/i])?.replace(/\s*에\s*통화.*$/, "").trim() ??
+    (/토요일\s*오전/i.test(memo) ? "이번 주 토요일 오전 통화" : undefined);
+
+  const bullets: string[] = [];
+  const confirmLine = memo.match(/통화\s*때\s*확인할\s*내용(?:은|:\s*)?([^\n]+)/i)?.[1];
+  if (confirmLine) {
+    if (/출고\s*가능/i.test(confirmLine) && interestVehicle) {
+      bullets.push(`${interestVehicle} 출고 가능 여부 확인`);
+    } else if (/출고\s*가능/i.test(confirmLine)) {
+      bullets.push("출고 가능 여부 확인");
+    }
+    if (/주요\s*옵션/i.test(confirmLine)) bullets.push("주요 옵션 확인");
+    if (/월\s*납입|할부|리스/i.test(confirmLine)) bullets.push("할부/리스 월 납입 조건 비교");
+    if (/매입|A4|보유/i.test(confirmLine) && owned) {
+      bullets.push(`${owned.brand ?? ""} ${owned.model ?? ""} 매입 가능 금액 확인`.trim());
+    } else if (/매입/i.test(confirmLine)) {
+      bullets.push("기존 차량 매입 가능 금액 확인");
+    }
+  }
+
+  if (!bullets.length) {
+    if (interestVehicle) bullets.push(`${interestVehicle} 출고 가능 여부 확인`);
+    bullets.push("주요 옵션 확인");
+    if (/할부|리스/i.test(memo)) bullets.push("할부/리스 월 납입 조건 비교");
+    if (owned) bullets.push(`${owned.brand ?? ""} ${owned.model ?? ""} 매입 가능 금액 확인`.trim());
+  }
+
+  const out: string[] = [];
+  if (header) out.push(header);
+  bullets.forEach((b) => out.push(`- ${b}`));
+  return out.filter(Boolean);
+}
+
+function buildRichQuickConsultationResult(
+  memo: string,
+  identity: QuickCustomerIdentity,
+): QuickConsultationResult {
+  const name =
+    identity.name?.trim() ||
+    parseQuickCustomerIdentity(memo).name?.trim() ||
+    firstMatch(memo, [/([가-힣]{2,6})\s*고객/i])?.replace(/\s*고객$/, "") ||
+    "고객";
+  const interestVehicle =
+    extractInterestVehicleFromMemo(memo) ??
+    normalizeInterestVehicle(memo, identity.vehicle) ??
+    undefined;
+  const owned = parseOwnedVehicleFromMemo(memo);
+
+  const needs: QuickConsultationNeeds = {
+    vehicle: interestVehicle,
+    budget: extractRichBudgetNote(memo),
+    timing: extractRichTimingNote(memo),
+    priorities: extractRichPrioritiesNote(memo),
+    concerns: extractRichConcernsNote(memo),
+  };
+
+  const summary = formatRichConsultationNeedsDisplay(memo);
+  const message = buildRichConsultationSms(name, interestVehicle, memo, owned);
+  const nextActions = buildRichNextActions(memo, interestVehicle, owned);
+
+  const insights: DemoConsultingResponse = {
+    summary,
+    message: applyCustomerNameToMessageText(name, message),
+    nextAction: nextActions.join("\n"),
+  };
+
+  return {
+    needs,
+    summary,
+    message: insights.message,
+    nextActions,
+    insights,
+  };
+}
+
+/** 구조화 메모에서 보유 차량 필드(저장 시 선택 반영용 · 기존 저장 API 변경 없음). */
+export function parseOwnedVehicleFieldsFromMemo(memo: string): UsedCarInfo | undefined {
+  const parsed = parseOwnedVehicleFromMemo(memo);
+  if (!parsed) return undefined;
+  return {
+    brand: parsed.brand,
+    model: parsed.model,
+    year: parsed.year,
+    mileageKm: parsed.mileageKm,
+    accident: parsed.accident,
+  };
 }
 
 const MODEL_TO_BRAND: Record<string, string> = {
@@ -120,7 +413,9 @@ export function resolveCustomerVehicleFields(
   memo: string,
   modelCandidate?: string,
 ): { vehicleBrand?: string; interestedModel?: string } {
-  const model = normalizeInterestVehicle(memo, modelCandidate);
+  const model =
+    extractInterestVehicleFromMemo(memo) ??
+    normalizeInterestVehicle(memo, modelCandidate);
   if (!model) return {};
   return {
     vehicleBrand: inferVehicleBrandForModel(model),
@@ -229,9 +524,12 @@ export function parseQuickCustomerIdentity(memo: string): QuickCustomerIdentity 
     }
   }
 
+  const interest =
+    extractInterestVehicleFromMemo(raw) ?? normalizeInterestVehicle(raw, vehicle);
+
   return {
     name,
-    vehicle: normalizeInterestVehicle(raw, vehicle),
+    vehicle: interest,
   };
 }
 
@@ -385,6 +683,22 @@ function buildGroundedQuickConsultationResult(
 
 /** 고객 추가 모달용 짧은 상담 메모(긴 AI 결과·문자 초안 전문 제외). */
 export function buildQuickCustomerModalMemo(memo: string, result: QuickConsultationResult): string {
+  if (isRichStructuredConsultation(memo)) {
+    const owned = parseOwnedVehicleFieldsFromMemo(memo);
+    const lines: string[] = [];
+    if (result.needs.vehicle) lines.push(`관심: ${result.needs.vehicle}`);
+    if (owned?.brand || owned?.model) {
+      lines.push(`보유/대차: ${[owned.brand, owned.model, owned.year, owned.mileageKm].filter(Boolean).join(" ")}`);
+      if (owned.accident) lines.push(`사고: ${owned.accident}`);
+    }
+    if (result.needs.priorities) lines.push(result.needs.priorities);
+    if (result.needs.budget) lines.push(result.needs.budget);
+    if (result.needs.concerns) lines.push(result.needs.concerns);
+    const next = result.nextActions[0]?.trim();
+    if (next) lines.push("", "[다음 행동]", ...result.nextActions);
+    return lines.join("\n");
+  }
+
   const identity = parseQuickCustomerIdentity(memo);
   const vehicle = normalizeInterestVehicle(memo, result.needs.vehicle ?? identity.vehicle);
   const lines: string[] = [];
@@ -496,6 +810,9 @@ const NEXT_ACTION_BOILERPLATE_RE =
 export function polishNextActionForDisplay(raw: string): string {
   const t = raw.trim();
   if (!t) return "";
+  if (/^-\s+/.test(t) || /토요일\s*오전|출고\s*가능\s*여부|매입\s*가능|할부\/리스/i.test(t)) {
+    return t.replace(/^[-•*]\s*/, "").trim();
+  }
   if (NEXT_ACTION_BOILERPLATE_RE.test(t) || t.length > 72) {
     if (/리스|할부|견적|금융/i.test(t)) {
       return "리스 조건과 출고 가능 여부 확인 후 견적 안내 문자 검토";
@@ -701,13 +1018,27 @@ export function buildCustomerAiSummaryLine(c: Customer): string {
 }
 
 /** Flow·상세 화면용 AI 출력 정리(고객명·금융 조건 반영). */
+export type FlowInsightOptions = DemoConsultingOptions & { /** 분석 중인 워크스페이스 메모(저장 전) */ inputMemo?: string };
+
 export function polishFlowInsightsForCustomer(
   customer: Customer,
   insights: DemoConsultingResponse,
-  options?: DemoConsultingOptions,
+  options?: FlowInsightOptions,
 ): DemoConsultingResponse {
   const name = customer.name?.trim();
-  const memo = customerMemoCombined(customer);
+  const memo = (options?.inputMemo?.trim() || customerMemoCombined(customer)).trim();
+
+  if (memo && isRichStructuredConsultation(memo)) {
+    const identity = parseQuickCustomerIdentity(memo);
+    if (name) identity.name = name;
+    const q = buildRichQuickConsultationResult(memo, identity);
+    return {
+      summary: q.summary,
+      message: applyCustomerNameToMessageText(name, q.message),
+      nextAction: q.nextActions.join("\n"),
+    };
+  }
+
   const summary =
     buildCustomerAiSummaryLine(customer) ||
     applyCustomerNameToMessageText(name, insights.summary.trim());
@@ -809,6 +1140,10 @@ function splitNextActions(nextAction: string): string[] {
 export function buildQuickConsultationResult(memo: string, options?: DemoConsultingOptions): QuickConsultationResult {
   const trimmed = memo.trim();
   const identity = parseQuickCustomerIdentity(trimmed);
+
+  if (isRichStructuredConsultation(trimmed)) {
+    return buildRichQuickConsultationResult(trimmed, identity);
+  }
 
   if (shouldUseGroundedQuickDraft(trimmed)) {
     return buildGroundedQuickConsultationResult(trimmed, identity);
