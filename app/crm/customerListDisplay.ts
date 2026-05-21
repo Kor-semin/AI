@@ -4,6 +4,7 @@ import {
   extractPreferredVehicleModel,
   inferVehicleBrandForModel,
   normalizeInterestVehicle,
+  normalizeKoreanVehicleSpelling,
   polishNextActionForDisplay,
 } from "./customerContextDraft";
 
@@ -49,7 +50,22 @@ export function formatCustomerInterestVehicle(c: Customer): string {
   }
 
   const parts = [c.vehicleBrand, c.interestedModel].filter(Boolean).map((p) => String(p).trim());
-  return parts.join(" ").trim();
+  return normalizeKoreanVehicleSpelling(parts.join(" ").trim());
+}
+
+/** 할 일 기한 표시 — 과거·완료 상태를 구분. */
+export function formatNextActionDueLabel(iso?: string, doneAt?: string): string {
+  if (doneAt) return "완료";
+  if (!iso) return "";
+  const when = new Date(iso);
+  if (Number.isNaN(when.getTime())) return iso;
+  const display = formatCrmDisplayDateTime(iso);
+  const endOfDue = new Date(when);
+  endOfDue.setHours(23, 59, 59, 999);
+  if (endOfDue.getTime() < Date.now()) {
+    return `기한 지남 · ${display}`;
+  }
+  return display;
 }
 
 /** 고객 카드 다음 행동 라벨(과도하게 긴 AI 문구 축약). 빈 값은 빈 문자열. */

@@ -37,6 +37,11 @@ const KNOWN_MODEL_RE =
 const BRAND_ONLY_RE =
   /^(?:Mercedes[\s-]*Benz|Mercedes-Benz|메르세데스|벤츠|BMW|Audi|아우디|폭스바겐|Volkswagen|렉서스|Lexus|제네시스|Genesis|현대|기아)$/i;
 
+/** 데모·표시용 기아 Sorento 표기 통일(사용자 직접 입력 원문은 저장 시 그대로). */
+export function normalizeKoreanVehicleSpelling(text: string): string {
+  return text.replace(/소렌토/g, "쏘렌토");
+}
+
 const HANGUL_NAME_RE = /^[가-힣]{2,6}$/;
 const MODEL_LINE_RE = /^[A-Za-z][A-Za-z0-9.\-\s]{0,24}$/;
 
@@ -53,7 +58,7 @@ export function normalizeInterestVehicle(memo: string, candidate?: string): stri
   if (fromCandidate) return fromCandidate[0];
 
   if (c.length <= 32 && !BRAND_ONLY_RE.test(c) && !/클래스\s*상담|라인업|기타/i.test(c)) {
-    return c;
+    return normalizeKoreanVehicleSpelling(c);
   }
   return undefined;
 }
@@ -264,7 +269,7 @@ function shouldUseGroundedQuickDraft(memo: string): boolean {
   return false;
 }
 
-function sanitizeAiTextForInput(memo: string, text: string): string {
+export function sanitizeAiTextForInput(memo: string, text: string): string {
   const input = memo.trim();
   const body = text.trim();
   if (!input || !body) return body;
@@ -305,7 +310,7 @@ function buildGroundedSmsDraft(
   const vehiclePhrase = vehicle ? `관심 가져주신 ${vehicle}` : "문의 주신 차량";
 
   return [
-    `안녕하세요, ${name}님.`,
+    `${name}님, 안녕하세요.`,
     "담당 영업사원입니다.",
     "",
     `지난 상담 때 말씀 주신 ${paymentPhrase} 기준으로 다시 연락드렸습니다.`,
@@ -510,9 +515,84 @@ export function polishNextActionForDisplay(raw: string): string {
 function customerVehicleLine(c: Pick<Customer, "memo" | "interestedModel" | "vehicleBrand">): string {
   const memo = c.memo ?? "";
   const model = normalizeInterestVehicle(memo, c.interestedModel) ?? extractPreferredVehicleModel(memo);
-  if (model) return model;
+  if (model) return normalizeKoreanVehicleSpelling(model);
   const im = c.interestedModel?.trim();
-  return im && !BRAND_ONLY_RE.test(im) ? im : "";
+  if (im && !BRAND_ONLY_RE.test(im)) {
+    return normalizeKoreanVehicleSpelling(im);
+  }
+  return "";
+}
+
+function formatInterestModelsForSms(c: Pick<Customer, "memo" | "interestedModel" | "vehicleBrand">): string {
+  const im = c.interestedModel?.trim();
+  if (im && /[·|/]/.test(im)) {
+    const parts = im
+      .split(/[·|/]+/)
+      .map((s) => normalizeKoreanVehicleSpelling(s.trim()))
+      .filter(Boolean);
+    if (parts.length >= 2) return parts.join("와 ");
+    if (parts.length === 1) return parts[0]!;
+  }
+  const line = customerVehicleLine(c);
+  return line ? normalizeKoreanVehicleSpelling(line) : "";
+}
+
+function customerMemoCombined(c: Pick<Customer, "memo" | "personalityMemo">): string {
+  return `${c.memo ?? ""}\n${c.personalityMemo ?? ""}`.trim();
+}
+
+/** 상담 메모·관심 차량만으로 문자 초안을 쓸지(과추측·데모 엔진 회피). */
+export function shouldUseMemoContextSmsDraft(c: Pick<Customer, "memo" | "personalityMemo" | "interestedModel" | "vehicleBrand" | "financeConditionDraft">): boolean {
+  const memo = customerMemoCombined(c);
+  if (!memo && !c.interestedModel?.trim()) return false;
+  if (hasMeaningfulFinanceDraft(c as Customer)) return false;
+  if (hasComfortTopicsInInput(memo)) return false;
+  if (isSparseQuickConsultation(memo)) return true;
+  if (/가족|7인승|주말|시승|옵션/i.test(memo) && Boolean(formatInterestModelsForSms(c) || c.interestedModel?.trim())) {
+    return true;
+  }
+  return shouldUseGroundedQuickDraft(memo);
+}
+
+export type MemoContextSmsOpts = { pendingNextActionTitle?: string | null };
+
+/** 입력·관심 차량·메모만 반영한 검토용 문자 초안. */
+export function buildMemoContextSmsDraft(
+  c: Pick<Customer, "name" | "memo" | "personalityMemo" | "interestedModel" | "vehicleBrand" | "stage">,
+  opts?: MemoContextSmsOpts,
+): string {
+  const name = c.name?.trim() || "고객";
+  const memo = customerMemoCombined(c);
+  const vehicle = formatInterestModelsForSms(c);
+  const lines: string[] = [`${name}님, 안녕하세요.`, "담당 영업사원입니다.", ""];
+
+  if (/가족|7인승/i.test(memo)) {
+    lines.push("지난 상담 때 말씀 주신 가족용 7인승 차량 기준으로 다시 연락드렸습니다.", "");
+  } else if (/시승/i.test(memo) || /시승/i.test(opts?.pendingNextActionTitle ?? "")) {
+    lines.push("지난 상담 때 말씀 주신 시승·옵션 니즈를 기준으로 다시 연락드렸습니다.", "");
+  }
+
+  if (vehicle) {
+    lines.push(
+      `관심 가져주신 ${vehicle} 기준으로 출고 가능 여부, 주요 옵션, 월 납입 조건을 함께 확인해 보겠습니다.`,
+      "",
+    );
+  }
+
+  if (/주말/i.test(memo)) {
+    lines.push(
+      "주말 통화를 선호하신다고 메모되어 있어, 편하신 시간 알려주시면 맞춰 연락드리겠습니다.",
+      "",
+    );
+  }
+
+  const pending = opts?.pendingNextActionTitle?.trim();
+  if (pending && !/시승/i.test(memo) && /시승|옵션/i.test(pending)) {
+    lines.push(`다음으로는 ${pending}을(를) 함께 맞추면 좋겠습니다.`, "");
+  }
+
+  lines.push("감사합니다.");
+  return lines.join("\n");
 }
 
 function collectMissingFields(c: Customer): string[] {
@@ -624,17 +704,24 @@ export function buildCustomerAiSummaryLine(c: Customer): string {
 export function polishFlowInsightsForCustomer(
   customer: Customer,
   insights: DemoConsultingResponse,
+  options?: DemoConsultingOptions,
 ): DemoConsultingResponse {
   const name = customer.name?.trim();
+  const memo = customerMemoCombined(customer);
   const summary =
     buildCustomerAiSummaryLine(customer) ||
     applyCustomerNameToMessageText(name, insights.summary.trim());
 
-  let message = insights.message.trim();
+  let message: string;
   if (hasMeaningfulFinanceDraft(customer)) {
     message = buildEstimateGuideMessage(customer);
+  } else if (shouldUseMemoContextSmsDraft(customer)) {
+    message = buildMemoContextSmsDraft(customer);
+  } else if (memo && (shouldUseGroundedQuickDraft(memo) || isSparseQuickConsultation(memo))) {
+    const q = buildQuickConsultationResult(memo, options);
+    message = applyCustomerNameToMessageText(name, sanitizeAiTextForInput(memo, q.message));
   } else {
-    message = applyCustomerNameToMessageText(name, message);
+    message = applyCustomerNameToMessageText(name, sanitizeAiTextForInput(memo, insights.message.trim()));
   }
 
   const nextLines = splitNextActions(insights.nextAction).map(polishNextActionForDisplay).filter(Boolean);

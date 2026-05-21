@@ -136,19 +136,16 @@ function normalizeTrim(raw: string): string {
     .trim();
 }
 
-export function buildUsedCarSearchQuery(
-  c: Pick<Customer, "vehicleBrand" | "interestedModel" | "usedCar">,
-): string {
-  const brand =
-    (c.usedCar?.brand ?? "").trim() ||
-    (c.vehicleBrand && c.vehicleBrand !== "기타" ? c.vehicleBrand : "");
-  const model = normalizeUsedCarModel((c.usedCar?.model ?? "").trim() || (c.interestedModel ?? ""));
+export function buildUsedCarSearchQuery(c: Pick<Customer, "usedCar">): string {
+  const brand = (c.usedCar?.brand ?? "").trim();
+  const model = normalizeUsedCarModel((c.usedCar?.model ?? "").trim());
   const y = (c.usedCar?.year ?? "").trim();
   const km = normalizeMileageKm(c.usedCar?.mileageKm ?? "");
   const acc = c.usedCar?.accident && c.usedCar.accident !== "미상" ? c.usedCar.accident : "";
   const grade = normalizeTrim(c.usedCar?.trim ?? ""); // UI에서는 "등급"으로 사용
   const parts = [y, brand, model, grade, km ? `${km}km` : "", acc].filter(Boolean);
   const q = parts.join(" ").trim();
-  return q || model || brand || "중고차";
+  if (!q) return "차종·연식 입력 후 검색어 생성";
+  return q;
 }
 

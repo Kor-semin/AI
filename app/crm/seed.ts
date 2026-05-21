@@ -29,7 +29,7 @@ export function seedState(): CRMState {
     leadSource: "SNS(유튜브·인스타)",
     stage: "상담 진행",
     vehicleBrand: "기아",
-    interestedModel: "쏘렌토 · 소렌토 하이브리드",
+    interestedModel: "쏘렌토 · 쏘렌토 하이브리드",
     budget: "3,800만원까지 협상",
     memo: "가족용 7인승. 주말 통화 선호.",
   };

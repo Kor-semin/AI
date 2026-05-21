@@ -88,6 +88,7 @@ import {
   formatCustomerInterestVehicle,
   defaultNextActionDueIso,
   formatCrmDisplayDateTime,
+  formatNextActionDueLabel,
   formatCustomerNextActionLabel,
   getDemoAiSummaryLine,
   partitionNextActions,
@@ -2919,7 +2920,16 @@ export function CRMApp({
                                   {resolveNextActionListTitle(a, selectedCustomer)}
                                 </span>
                                 {a.dueAt ? (
-                                  <span className="shrink-0 text-[12px] text-slate-500">{formatDateTime(a.dueAt)}</span>
+                                  <span
+                                    className={[
+                                      "shrink-0 text-[12px]",
+                                      formatNextActionDueLabel(a.dueAt, a.doneAt).startsWith("기한 지남")
+                                        ? "font-medium text-amber-400/90"
+                                        : "text-slate-500",
+                                    ].join(" ")}
+                                  >
+                                    {formatNextActionDueLabel(a.dueAt, a.doneAt)}
+                                  </span>
                                 ) : null}
                               </li>
                             ))}
@@ -2963,6 +2973,16 @@ export function CRMApp({
                   </summary>
                   <div className="mt-4 rounded-xl border border-white/[0.11] bg-slate-950/55 p-4">
                     <div className="text-xs font-semibold text-slate-50">중고차 정리(검색어 생성)</div>
+                    <p className="mt-1.5 text-[12px] leading-relaxed text-slate-500">
+                      관심 신차와 별도로, 고객이 보유 중인 차량이나 대차·매입 검토 차량을 입력해 시세 검색어를
+                      만듭니다.
+                    </p>
+                    {formatCustomerInterestVehicle(selectedCustomer) ? (
+                      <p className="mt-2 text-[12px] text-slate-400">
+                        <span className="font-medium text-slate-500">관심 신차(참고): </span>
+                        {formatCustomerInterestVehicle(selectedCustomer)}
+                      </p>
+                    ) : null}
                     <datalist id="usedcar-brand-options">
                       {[
                         "현대",
@@ -2993,6 +3013,13 @@ export function CRMApp({
                         label="중고차 브랜드"
                         value={selectedCustomer.usedCar?.brand ?? ""}
                         placeholder="예: 현대 / 벤츠 / Audi"
+                        clearable
+                        onClear={() =>
+                          upsertCustomer({
+                            id: selectedCustomer.id,
+                            usedCar: { ...(selectedCustomer.usedCar ?? {}), brand: "", model: "" },
+                          })
+                        }
                         onChange={(v) =>
                           upsertCustomer({
                             id: selectedCustomer.id,
@@ -3042,6 +3069,13 @@ export function CRMApp({
                         label="중고차 차종"
                         value={selectedCustomer.usedCar?.model ?? ""}
                         placeholder="예: 그랜저 / 팰리세이드 / A6"
+                        clearable
+                        onClear={() =>
+                          upsertCustomer({
+                            id: selectedCustomer.id,
+                            usedCar: { ...(selectedCustomer.usedCar ?? {}), model: "" },
+                          })
+                        }
                         onChange={(v) =>
                           upsertCustomer({
                             id: selectedCustomer.id,
@@ -3130,7 +3164,7 @@ export function CRMApp({
                           });
                         }}
                       >
-                        {t("common.copy")}
+                        검색어 복사
                       </button>
                       <button
                         type="button"
@@ -3139,12 +3173,12 @@ export function CRMApp({
                           const q = buildUsedCarSearchQuery(selectedCustomer);
                           const line = `${q}\n- 연식/주행거리/사고/등급을 추가로 입력하면 더 정확합니다.`;
                           void copyToClipboard(line).then((ok) => {
-                            if (ok) showToast("메모 복사 완료");
+                            if (ok) showToast("검색 메모 복사 완료");
                             else alert(line);
                           });
                         }}
                       >
-                        {t("common.copy")}
+                        검색 메모 복사
                       </button>
                     </div>
                     <p className="mt-2 text-[12px] text-slate-400">
@@ -3574,8 +3608,15 @@ export function CRMApp({
                           >
                             <div className="flex items-center justify-between gap-3">
                               <div className="truncate font-semibold text-slate-50">{label}</div>
-                              <div className="shrink-0 text-[13px] font-medium text-slate-400">
-                                {formatDateTime(a.dueAt)}
+                              <div
+                                className={[
+                                  "shrink-0 text-[13px] font-medium",
+                                  formatNextActionDueLabel(a.dueAt, a.doneAt).startsWith("기한 지남")
+                                    ? "text-amber-400/90"
+                                    : "text-slate-400",
+                                ].join(" ")}
+                              >
+                                {formatNextActionDueLabel(a.dueAt, a.doneAt)}
                               </div>
                             </div>
                             {c?.name && !label.includes(c.name) ? (
@@ -4418,7 +4459,7 @@ function FieldList({
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
           className={[
-            "w-full rounded-xl border border-white/[0.11] bg-slate-950/55 py-2 text-sm text-slate-100 outline-none placeholder:text-slate-500 focus:border-sky-400/45",
+            "crm-datalist-input w-full rounded-xl border border-white/[0.11] bg-slate-950/55 py-2 text-sm text-slate-100 outline-none placeholder:text-slate-500 focus:border-sky-400/45",
             showClear ? "pl-3 pr-10" : "px-3",
           ].join(" ")}
         />

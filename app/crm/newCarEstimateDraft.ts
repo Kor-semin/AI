@@ -1,6 +1,12 @@
 import type { Customer, FinanceConditionDraft } from "./types";
 import type { TranslationKey } from "@/lib/i18n";
-import { buildFinanceDraftDetailBullets } from "./customerContextDraft";
+import {
+  buildFinanceDraftDetailBullets,
+  buildMemoContextSmsDraft,
+  normalizeKoreanVehicleSpelling,
+  sanitizeAiTextForInput,
+  shouldUseMemoContextSmsDraft,
+} from "./customerContextDraft";
 import { buildUsedCarSearchQuery } from "./recommendations";
 import { buildTradeInPriceSmsParagraphs } from "./tradeInPriceNotes";
 import { formatCrmDisplayDateTime } from "./customerListDisplay";
@@ -98,10 +104,9 @@ export function vehicleDisplayLine(c: Customer): string {
   if (fromFd) return fromFd;
   const b = c.vehicleBrand;
   const m = c.interestedModel?.trim();
-  if (b && m) return `${b} ${m}`;
-  if (m) return m;
-  const q = buildUsedCarSearchQuery(c);
-  return q || "";
+  if (b && m) return normalizeKoreanVehicleSpelling(`${b} ${m}`);
+  if (m) return normalizeKoreanVehicleSpelling(m);
+  return "";
 }
 
 /** 상담 메모에서 원문 인용 없이 반영할 짧은 문장만 생성 */
@@ -260,14 +265,20 @@ export function buildNewCarFinanceSmsPreview(
   t: (key: TranslationKey) => string,
   opts?: BuildSmsPreviewOpts,
 ): string {
+  const memoCombined = `${c.memo ?? ""}\n${c.personalityMemo ?? ""}`.trim();
+  const fd = c.financeConditionDraft;
+  const hasSavedFinance = Boolean(fd?.productMode && fd.productMode !== "알 수 없음");
+
+  if (!fd && shouldUseMemoContextSmsDraft(c)) {
+    const draft = buildMemoContextSmsDraft(c, { pendingNextActionTitle: opts?.pendingNextActionTitle });
+    return sanitizeSmsRedFlags(sanitizeAiTextForInput(memoCombined, draft));
+  }
+
   const name = c.name?.trim() || "고객";
   const veh = vehicleDisplayLine(c);
   const needs = c.customerPriorityNeeds ?? [];
-  const fd = c.financeConditionDraft;
-  const hasFinance = Boolean(fd?.productMode);
-  const memoCombined = `${c.memo ?? ""}\n${c.personalityMemo ?? ""}`;
   const memoPhrases = reflectMemoToSafePhrases(memoCombined);
-  const hasContext = Boolean(veh || needs.length || memoPhrases.length || c.stage || hasFinance);
+  const hasContext = Boolean(veh || needs.length || memoPhrases.length || c.stage || hasSavedFinance);
 
   if (!hasContext) return "";
 
@@ -302,7 +313,7 @@ export function buildNewCarFinanceSmsPreview(
     }
   }
 
-  if (hasFinance && fd) {
+  if (hasSavedFinance && fd) {
     const detailLines: string[] = [];
     if (fmt(fd.totalVehiclePrice)) detailLines.push(`총 차량가(참고): ${fmt(fd.totalVehiclePrice)}`);
     if (fmt(fd.promotionOrDiscount)) detailLines.push(`프로모션/할인: ${fmt(fd.promotionOrDiscount)}`);
@@ -367,7 +378,7 @@ export function buildNewCarFinanceSmsPreview(
 
   chunks.push(t("crm.newCar.smsPreviewClosingDisclaimer"));
 
-  return sanitizeSmsRedFlags(chunks.join("\n\n"));
+  return sanitizeSmsRedFlags(sanitizeAiTextForInput(memoCombined, chunks.join("\n\n")));
 }
 
 /** 상담 요약·고객 메시지(빠른 초안) — 신차 상담 톤, 니즈·메모 태그 연동 */
@@ -406,5 +417,5 @@ export function buildConsultationQuickDraft(c: Customer, myName: string): string
 }
 
 export function defaultFinanceDraft(): FinanceConditionDraft {
-  return { productMode: "리스" };
+  return { productMode: "알 수 없음" };
 }

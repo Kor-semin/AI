@@ -4058,6 +4058,15 @@ html[data-theme="light"] body {
   color: var(--sensora-text-primary);
 }
 
+/* 중고차 브랜드/트림 datalist — 라이트 모드에서 검은 팝업 방지 */
+html[data-theme="light"] input[list].crm-datalist-input {
+  color-scheme: light;
+}
+
+html[data-theme="dark"] input[list].crm-datalist-input {
+  color-scheme: dark;
+}
+
 /* 앱 셸 · 헤더 텍스트 */
 html[data-theme="light"] .sensora-app-shell {
   color: #1e293b;
