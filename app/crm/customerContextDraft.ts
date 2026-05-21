@@ -89,6 +89,9 @@ export function extractInterestVehicleFromMemo(memo: string): string | undefined
     if (v) return v;
   }
 
+  const hybridFull = raw.match(/쏘렌토\s*하이브리드/i);
+  if (hybridFull) return normalizeKoreanVehicleSpelling(hybridFull[0]);
+
   for (const line of raw.split(/\n+/)) {
     if (/보유\s*차량|현재\s*보유|매입가/i.test(line)) continue;
     if (/관심\s*차량|쏘렌토|하이브리드/i.test(line)) {
@@ -163,15 +166,56 @@ function parseOwnedVehicleFromMemo(memo: string): ParsedOwnedVehicle | undefined
 /** 구조화된 상담 메모(관심 차량·보유 차량·금융·다음 연락 등). */
 export function isRichStructuredConsultation(memo: string): boolean {
   const raw = memo.trim();
-  if (raw.length < 120) return false;
+  if (raw.length < 80) return false;
+  if (extractInterestVehicleFromMemo(raw) && /가족|7인승|보유|할부|리스|토요일|월\s*납입|초기\s*비용/i.test(raw)) {
+    return true;
+  }
   let score = 0;
   if (/관심\s*차량/i.test(raw)) score += 1;
   if (/보유\s*차량|현재\s*보유/i.test(raw)) score += 1;
   if (/할부|리스/i.test(raw) && /비교|확정하지\s*않/i.test(raw)) score += 1;
   if (/다음\s*연락|토요일|통화/i.test(raw)) score += 1;
   if (/가족|7인승|공간|연비/i.test(raw)) score += 1;
-  if (/월\s*납입|초기\s*비용/i.test(raw)) score += 1;
-  return score >= 4;
+  if (/월\s*납입|초기\s*비용|납입금/i.test(raw)) score += 1;
+  return score >= 3;
+}
+
+/** AI 비서 고객 니즈 카드 5항목 — 입력 메모에서 직접 채움. */
+export function buildStructuredConsultationNeeds(memo: string): QuickConsultationNeeds {
+  const raw = memo.trim();
+  const vehicle = sanitizeInterestVehicleLabel(extractInterestVehicleFromMemo(raw) ?? "");
+
+  const budgetBits: string[] = [];
+  if (/월\s*납입|납입금|납입\s*조건/i.test(raw)) budgetBits.push("월 납입금 부담 최소화");
+  if (/초기\s*비용/i.test(raw)) budgetBits.push("초기 비용 최소화");
+
+  const priorityBits: string[] = [];
+  if (/가족용\s*7인승|7인승/i.test(raw)) priorityBits.push("가족용 7인승");
+  if (/공간/i.test(raw)) priorityBits.push("공간");
+  if (/연비/i.test(raw)) priorityBits.push("연비");
+  if (/주요\s*옵션|옵션/i.test(raw)) priorityBits.push("주요 옵션");
+
+  const concernBits: string[] = [];
+  if (/할부|리스/i.test(raw)) concernBits.push("할부·리스 조건 비교");
+  if (/매입|보유\s*차량|대차/i.test(raw)) concernBits.push("기존 차량 매입가 확인");
+
+  return {
+    vehicle: vehicle || undefined,
+    budget: budgetBits.length ? budgetBits.join(", ") : undefined,
+    timing: /출고\s*가능|출고/i.test(raw) ? "출고 가능 여부 확인 필요" : undefined,
+    priorities: priorityBits.length ? priorityBits.join(", ") : undefined,
+    concerns: concernBits.length ? concernBits.join(", ") : undefined,
+  };
+}
+
+function mergeConsultationNeeds(base: QuickConsultationNeeds, rich: QuickConsultationNeeds): QuickConsultationNeeds {
+  return {
+    vehicle: rich.vehicle || base.vehicle,
+    budget: rich.budget || base.budget,
+    timing: rich.timing || base.timing,
+    priorities: rich.priorities || base.priorities,
+    concerns: rich.concerns || base.concerns,
+  };
 }
 
 function extractRichFinanceNote(memo: string): string | undefined {
@@ -205,28 +249,20 @@ function extractRichPrioritiesNote(memo: string): string | undefined {
 }
 
 function extractRichConcernsNote(memo: string): string | undefined {
-  const bits: string[] = [];
-  if (/할부.*리스|리스.*할부/i.test(memo)) bits.push("할부/리스 조건 비교");
-  else if (/할부|리스/i.test(memo)) bits.push("금융 조건 비교");
-  if (/매입|대차/i.test(memo)) bits.push("기존 차량 매입가 확인");
-  return bits.length ? bits.join(", ") : undefined;
+  return buildStructuredConsultationNeeds(memo).concerns;
 }
 
 /** Sensora Flow 고객 니즈 패널용(구조화 메모). */
 export function formatRichConsultationNeedsDisplay(memo: string): string {
-  const interest = extractInterestVehicleFromMemo(memo);
+  const needs = buildStructuredConsultationNeeds(memo);
   const owned = parseOwnedVehicleFromMemo(memo);
   const lines: string[] = [];
 
-  if (interest) lines.push(`관심 차량:\n${interest}`);
-  const budget = extractRichBudgetNote(memo);
-  if (budget) lines.push(`예산·월 납입:\n${budget}`);
-  const timing = extractRichTimingNote(memo);
-  if (timing) lines.push(`구매·출고 시기:\n${timing}`);
-  const priorities = extractRichPrioritiesNote(memo);
-  if (priorities) lines.push(`중요 조건:\n${priorities}`);
-  const concerns = extractRichConcernsNote(memo);
-  if (concerns) lines.push(`우려 사항:\n${concerns}`);
+  if (needs.vehicle) lines.push(`관심 차량:\n${needs.vehicle}`);
+  if (needs.budget) lines.push(`예산·월 납입:\n${needs.budget}`);
+  if (needs.timing) lines.push(`구매·출고 시기:\n${needs.timing}`);
+  if (needs.priorities) lines.push(`중요 조건:\n${needs.priorities}`);
+  if (needs.concerns) lines.push(`우려 사항:\n${needs.concerns}`);
   if (owned) lines.push(`보유/대차 차량:\n${owned.label}`);
 
   return lines.join("\n\n").trim() || memo.slice(0, 200);
@@ -286,43 +322,39 @@ function buildRichConsultationSms(
   return sanitizeAiTextForInput(memo, lines.join("\n"));
 }
 
-function buildRichNextActions(
+/** AI 비서·추천 다음 행동 — 검토용 불릿 목록. */
+export function buildRichNextActions(
   memo: string,
   interestVehicle?: string,
   owned?: ParsedOwnedVehicle,
 ): string[] {
-  const header =
-    firstMatch(memo, [/이번\s*주\s*토요일\s*오전[^\n。]*/i])?.replace(/\s*에\s*통화.*$/, "").trim() ??
-    (/토요일\s*오전/i.test(memo) ? "이번 주 토요일 오전 통화" : undefined);
+  const raw = memo.trim();
+  const vehicle =
+    sanitizeInterestVehicleLabel(interestVehicle ?? extractInterestVehicleFromMemo(raw) ?? "") || undefined;
+  const ownedV = owned ?? parseOwnedVehicleFromMemo(raw);
+  const lines: string[] = [];
 
-  const bullets: string[] = [];
-  const confirmLine = memo.match(/통화\s*때\s*확인할\s*내용(?:은|:\s*)?([^\n]+)/i)?.[1];
-  if (confirmLine) {
-    if (/출고\s*가능/i.test(confirmLine) && interestVehicle) {
-      bullets.push(`${interestVehicle} 출고 가능 여부 확인`);
-    } else if (/출고\s*가능/i.test(confirmLine)) {
-      bullets.push("출고 가능 여부 확인");
-    }
-    if (/주요\s*옵션/i.test(confirmLine)) bullets.push("주요 옵션 확인");
-    if (/월\s*납입|할부|리스/i.test(confirmLine)) bullets.push("할부/리스 월 납입 조건 비교");
-    if (/매입|A4|보유/i.test(confirmLine) && owned) {
-      bullets.push(`${owned.brand ?? ""} ${owned.model ?? ""} 매입 가능 금액 확인`.trim());
-    } else if (/매입/i.test(confirmLine)) {
-      bullets.push("기존 차량 매입 가능 금액 확인");
-    }
+  if (/토요일|다음\s*연락/i.test(raw)) {
+    lines.push("토요일 오전 통화 일정 확인");
+  }
+  if (vehicle) {
+    lines.push(`${vehicle} 출고 가능 여부 확인`);
+  } else if (/출고\s*가능/i.test(raw)) {
+    lines.push("출고 가능 여부 확인");
+  }
+  if (/주요\s*옵션|옵션/i.test(raw)) {
+    lines.push("주요 옵션 확인");
+  }
+  if (/할부|리스|월\s*납입/i.test(raw)) {
+    lines.push("할부·리스 월 납입 조건 비교");
+  }
+  if (ownedV?.brand && ownedV?.model) {
+    lines.push(`${ownedV.brand} ${ownedV.model} 매입 가능 금액 확인`);
+  } else if (/매입|보유\s*차량/i.test(raw)) {
+    lines.push("기존 차량 매입 가능 금액 확인");
   }
 
-  if (!bullets.length) {
-    if (interestVehicle) bullets.push(`${interestVehicle} 출고 가능 여부 확인`);
-    bullets.push("주요 옵션 확인");
-    if (/할부|리스/i.test(memo)) bullets.push("할부/리스 월 납입 조건 비교");
-    if (owned) bullets.push(`${owned.brand ?? ""} ${owned.model ?? ""} 매입 가능 금액 확인`.trim());
-  }
-
-  const out: string[] = [];
-  if (header) out.push(header);
-  bullets.forEach((b) => out.push(`- ${b}`));
-  return out.filter(Boolean);
+  return lines;
 }
 
 function buildRichQuickConsultationResult(
@@ -334,18 +366,9 @@ function buildRichQuickConsultationResult(
     parseQuickCustomerIdentity(memo).name?.trim() ||
     firstMatch(memo, [/([가-힣]{2,6})\s*고객/i])?.replace(/\s*고객$/, "") ||
     "고객";
-  const interestVehicle = sanitizeInterestVehicleLabel(
-    extractInterestVehicleFromMemo(memo) ?? normalizeInterestVehicle(memo, identity.vehicle) ?? "",
-  );
+  const needs = buildStructuredConsultationNeeds(memo);
+  const interestVehicle = needs.vehicle;
   const owned = parseOwnedVehicleFromMemo(memo);
-
-  const needs: QuickConsultationNeeds = {
-    vehicle: interestVehicle || undefined,
-    budget: extractRichBudgetNote(memo),
-    timing: extractRichTimingNote(memo),
-    priorities: extractRichPrioritiesNote(memo),
-    concerns: extractRichConcernsNote(memo),
-  };
 
   const summary = formatRichConsultationNeedsDisplay(memo);
   const message = buildRichConsultationSms(name, interestVehicle, memo, owned);
@@ -1220,11 +1243,12 @@ export function buildQuickConsultationResult(memo: string, options?: DemoConsult
       .filter(Boolean)
       .join("\n") || polishNextActionForDisplay(insightsRaw.nextAction),
   };
-  const needs = parseQuickConsultationNeeds(trimmed, insights.summary);
+  let needs = parseQuickConsultationNeeds(trimmed, insights.summary);
   if (identity.vehicle && !needs.vehicle) {
     needs.vehicle = identity.vehicle;
   }
   needs.vehicle = normalizeInterestVehicle(trimmed, needs.vehicle);
+  needs = mergeConsultationNeeds(needs, buildStructuredConsultationNeeds(trimmed));
 
   let message = sanitizeAiTextForInput(trimmed, insights.message);
   let summary = sanitizeAiTextForInput(trimmed, insights.summary);
@@ -1240,12 +1264,24 @@ export function buildQuickConsultationResult(memo: string, options?: DemoConsult
     );
   }
 
-  const nextActions = splitNextActions(insights.nextAction);
+  const structuredActions = buildRichNextActions(trimmed, needs.vehicle, parseOwnedVehicleFromMemo(trimmed));
+  const demoActions = splitNextActions(insights.nextAction);
+  const nextActions =
+    structuredActions.length >= 2
+      ? structuredActions
+      : demoActions.length > 0
+        ? demoActions
+        : [insights.nextAction.trim()].filter(Boolean);
+
+  if (isRichStructuredConsultation(trimmed) || structuredActions.length >= 2) {
+    summary = formatRichConsultationNeedsDisplay(trimmed);
+  }
+
   return {
     needs,
     summary,
     message,
-    nextActions: nextActions.length > 0 ? nextActions : [insights.nextAction.trim()].filter(Boolean),
-    insights: { ...insights, summary, message },
+    nextActions,
+    insights: { ...insights, summary, message, nextAction: nextActions.join("\n") },
   };
 }

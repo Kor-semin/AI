@@ -147,7 +147,7 @@ export function QuickAiAssistantEntry({
                   <span className="mt-0.5 text-sky-300/90" aria-hidden>
                     ·
                   </span>
-                  <span className="[word-break:keep-all]">{line}</span>
+                  <span className="[word-break:keep-all]">{line.replace(/^[-•*]\s*/, "")}</span>
                 </li>
               ))}
             </ul>

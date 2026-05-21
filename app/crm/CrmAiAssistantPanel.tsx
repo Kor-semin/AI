@@ -7,6 +7,11 @@ import type { TranslationKey } from "@/lib/i18n";
 import type { Customer, CustomerEstimateAttachment } from "@/app/crm/types";
 import { refreshCustomerEstimateDownloadUrl } from "@/app/crm/storage";
 import {
+  buildRichNextActions,
+  buildStructuredConsultationNeeds,
+  isRichStructuredConsultation,
+} from "@/app/crm/customerContextDraft";
+import {
   buildCustomerContextBulletLines,
   buildRecommendedNextActionsFromCustomer,
   resolveSmsDraftEstimateAttachment,
@@ -93,10 +98,15 @@ export function CrmAiAssistantPanel({
     () => (selectedCustomer ? buildCustomerContextBulletLines(selectedCustomer, t) : []),
     [selectedCustomer, t],
   );
-  const recommendedActions = useMemo(
-    () => (selectedCustomer ? buildRecommendedNextActionsFromCustomer(selectedCustomer) : []),
-    [selectedCustomer],
-  );
+  const recommendedActions = useMemo(() => {
+    if (!selectedCustomer) return [];
+    const memo = flowDraftMemo.trim();
+    if (flowDraftInsights && memo && isRichStructuredConsultation(memo)) {
+      const needs = buildStructuredConsultationNeeds(memo);
+      return buildRichNextActions(memo, needs.vehicle);
+    }
+    return buildRecommendedNextActionsFromCustomer(selectedCustomer);
+  }, [selectedCustomer, flowDraftMemo, flowDraftInsights]);
 
   const resolveEstimateUrl = async (att: CustomerEstimateAttachment) => {
     if (att.downloadUrl) return att.downloadUrl;
