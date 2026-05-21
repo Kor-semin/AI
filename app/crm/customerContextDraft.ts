@@ -313,7 +313,10 @@ function buildRichConsultationSms(
     financeBits.push("현재 보유 중이신 차량의 매입 가능 금액도 함께 확인해 보겠습니다");
   }
 
-  if (financeBits.length) lines.push(`${financeBits.join(", ")}.`, "");
+  if (financeBits.length) {
+    financeBits.forEach((bit) => lines.push(`${bit}.`));
+    lines.push("");
+  }
 
   const callWhen =
     firstMatch(memo, [/이번\s*주\s*토요일\s*오전[^\n。]*/i, /토요일\s*오전[^\n。]*/i]) ??
@@ -447,7 +450,13 @@ export function inferVehicleBrandForModel(model: string): string | undefined {
   const key = model.trim();
   if (!key) return undefined;
   const upper = key.toUpperCase();
-  return MODEL_TO_BRAND[upper] ?? MODEL_TO_BRAND[key];
+  if (MODEL_TO_BRAND[upper]) return MODEL_TO_BRAND[upper];
+  if (MODEL_TO_BRAND[key]) return MODEL_TO_BRAND[key];
+  const tokens = Object.keys(MODEL_TO_BRAND).sort((a, b) => b.length - a.length);
+  for (const token of tokens) {
+    if (key.includes(token)) return MODEL_TO_BRAND[token];
+  }
+  return undefined;
 }
 
 /** 고객 저장 시 관심 차량 필드(모델 우선 · 브랜드는 보조). */
@@ -509,6 +518,9 @@ function extractNameFromLine(line: string): string | undefined {
   const t = stripNameSuffix(line.trim());
   if (!t) return undefined;
 
+  const consultLead = t.match(/^([가-힣]{2,6})\s*고객\s*상담/i);
+  if (consultLead?.[1] && HANGUL_NAME_RE.test(consultLead[1])) return consultLead[1];
+
   const glued = t.match(/^([가-힣]{2,6})([A-Za-z][A-Za-z0-9.\-]+)$/);
   if (glued) return glued[1];
 
@@ -517,6 +529,16 @@ function extractNameFromLine(line: string): string | undefined {
   const labeled = t.match(/(?:고객\s*명|성함|이름)\s*[:\-]?\s*([가-힣]{2,6})/i);
   if (labeled?.[1]) return labeled[1].trim();
 
+  return undefined;
+}
+
+function extractCustomerNameFromMemo(memo: string): string | undefined {
+  const raw = memo.trim();
+  if (!raw) return undefined;
+  const consult = raw.match(/([가-힣]{2,6})\s*고객\s*상담/i);
+  if (consult?.[1] && HANGUL_NAME_RE.test(consult[1])) return consult[1];
+  const honorific = raw.match(/([가-힣]{2,6})님/);
+  if (honorific?.[1] && HANGUL_NAME_RE.test(honorific[1])) return honorific[1];
   return undefined;
 }
 
@@ -570,6 +592,10 @@ export function parseQuickCustomerIdentity(memo: string): QuickCustomerIdentity 
 
   const interest =
     extractInterestVehicleFromMemo(raw) ?? normalizeInterestVehicle(raw, vehicle);
+
+  if (!name) {
+    name = extractCustomerNameFromMemo(raw);
+  }
 
   return {
     name,
