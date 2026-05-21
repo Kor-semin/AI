@@ -56,7 +56,7 @@ export function LandingAiAssistantDemo() {
 
   return (
     <section
-      className="landing-hero-demo"
+      className="landing-hero-demo landing-hero-demo--preview"
       aria-labelledby="landing-hero-demo-title"
     >
       <header className="landing-hero-demo-header text-center">

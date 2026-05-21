@@ -602,7 +602,7 @@ export function LandingShowroom({
       {/* 데스크톱 Hero — 핵심 가치·CTA 후 AI 비서 사용 예시 데모 */}
       <section
         id="sensora-landing-hero"
-        className={`landing-hero-section ${sectionShell} hidden pb-6 pt-3 lg:block sm:pb-8 sm:pt-4`}
+        className={`landing-hero-section landing-hero-section--showcase ${sectionShell} hidden pb-8 pt-6 lg:block lg:pb-14 lg:pt-12`}
       >
         <div className={landingSectionContainer}>
           <LandingFirstScreenIntro t={t} onOpenAppWorkspace={onOpenAppWorkspace} layout="desktop" />
