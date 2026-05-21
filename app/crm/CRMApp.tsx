@@ -50,6 +50,7 @@ import {
   recommendModelsByBudget,
 } from "./recommendations";
 import { summarizeTradeInPriceNotes } from "./tradeInPriceNotes";
+import { buildUsedCarTrimDatalistOptions } from "./usedCarTrimOptions";
 import { getMemoFeedback } from "./memoFeedback";
 import { NewCarEstimateFinanceCard } from "./NewCarEstimateFinanceCard";
 import {
@@ -3083,32 +3084,24 @@ export function CRMApp({
                       <datalist
                         id={listIdForBrand("usedcar-trim-options", selectedCustomer.usedCar?.brand)}
                       >
-                        {(() => {
-                          const b = (selectedCustomer.usedCar?.brand ?? "").trim().toLowerCase();
-                          const common = [
-                            "프리미엄",
-                            "프레스티지",
-                            "익스클루시브",
-                            "캘리그래피",
-                            "노블레스",
-                            "시그니처",
-                          ];
-                          const importCommon = ["AMG Line", "M Sport", "S line", "quattro", "4MATIC"];
-                          const opts =
-                            b === "벤츠" || b === "mercedes" || b === "mercedes-benz"
-                              ? [...importCommon, "Avantgarde", "Exclusive", "AMG"]
-                              : b === "bmw"
-                                ? [...importCommon, "Luxury", "xDrive", "MSport"]
-                                : b === "아우디" || b === "audi"
-                                  ? [...importCommon, "Premium", "Prestige"]
-                                  : common;
-                          return opts.map((t) => <option key={t} value={t} />);
-                        })()}
+                        {buildUsedCarTrimDatalistOptions(
+                          selectedCustomer.usedCar?.brand,
+                          selectedCustomer.usedCar?.trim,
+                        ).map((t) => (
+                          <option key={t} value={t} />
+                        ))}
                       </datalist>
                       <FieldList
                         label="등급/트림"
                         value={selectedCustomer.usedCar?.trim ?? ""}
                         placeholder="예: 익스클루시브 / 프레스티지"
+                        clearable
+                        onClear={() =>
+                          upsertCustomer({
+                            id: selectedCustomer.id,
+                            usedCar: { ...(selectedCustomer.usedCar ?? {}), trim: "" },
+                          })
+                        }
                         onChange={(v) =>
                           upsertCustomer({
                             id: selectedCustomer.id,
@@ -4396,23 +4389,45 @@ function FieldList({
   onChange,
   placeholder,
   listId,
+  clearable,
+  onClear,
 }: {
   label: string;
   value: string;
   onChange: (v: string) => void;
   placeholder?: string;
   listId: string;
+  /** 값이 있을 때 오른쪽 초기화(×) 버튼 표시 */
+  clearable?: boolean;
+  onClear?: () => void;
 }) {
+  const showClear = Boolean(clearable && value.trim());
   return (
     <label className="grid gap-1">
       <div className="text-xs font-semibold text-slate-300">{label}</div>
-      <input
-        value={value}
-        list={listId}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder={placeholder}
-        className="w-full rounded-xl border border-white/[0.11] bg-slate-950/55 px-3 py-2 text-sm text-slate-100 outline-none placeholder:text-slate-500 focus:border-sky-400/45"
-      />
+      <div className="relative">
+        <input
+          value={value}
+          list={listId}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder={placeholder}
+          className={[
+            "w-full rounded-xl border border-white/[0.11] bg-slate-950/55 py-2 text-sm text-slate-100 outline-none placeholder:text-slate-500 focus:border-sky-400/45",
+            showClear ? "pl-3 pr-10" : "px-3",
+          ].join(" ")}
+        />
+        {showClear ? (
+          <button
+            type="button"
+            aria-label={`${label} 초기화`}
+            title="초기화"
+            className="crm-field-clear-btn absolute right-1.5 top-1/2 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-lg text-[17px] leading-none text-slate-400 transition hover:bg-white/[0.08] hover:text-slate-100"
+            onClick={() => (onClear ? onClear() : onChange(""))}
+          >
+            ×
+          </button>
+        ) : null}
+      </div>
     </label>
   );
 }

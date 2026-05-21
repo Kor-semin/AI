@@ -1001,6 +1001,19 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   display: none;
 }
 
+/* 중고차 등급/트림 — 입력 초기화 버튼 */
+.crm-field-clear-btn {
+  touch-action: manipulation;
+}
+
+html.light .crm-field-clear-btn {
+  color: rgb(100 116 139);
+}
+html.light .crm-field-clear-btn:hover {
+  background: rgba(15, 23, 42, 0.06);
+  color: rgb(51 65 85);
+}
+
 /* 중고차 가격 정리 — 금융 조건 정리와 시각적 분리(선택 입력) */
 .crm-trade-in-price-form {
   margin-top: 0.25rem;
