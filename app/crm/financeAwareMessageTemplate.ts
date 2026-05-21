@@ -99,6 +99,25 @@ function formatManwonLabel(text?: string): string {
   return raw;
 }
 
+/** 월 납입금 — 고객 문자용 만 원 단위(큰 금액) */
+function formatMonthlyManwonLabel(text?: string): string {
+  const raw = fmt(text);
+  if (!raw) return "";
+  const won = parseMoneyToKrw(raw);
+  if (won != null && won >= 100_000) {
+    const man = Math.round(won / 10_000);
+    if (man > 0) return `약 ${man.toLocaleString("ko-KR")}만 원`;
+  }
+  if (/^\d[\d,.\s]*$/.test(raw)) {
+    const n = parseInt(raw.replace(/[^\d]/g, ""), 10);
+    if (n >= 100_000) {
+      const man = Math.round(n / 10_000);
+      if (man > 0) return `약 ${man.toLocaleString("ko-KR")}만 원`;
+    }
+  }
+  return formatMonthlyWonLabel(text);
+}
+
 /** 월 납입금 — 원 단위 콤마(만 원 변환 없음) */
 function formatMonthlyWonLabel(text?: string): string {
   const raw = fmt(text);
@@ -223,32 +242,45 @@ function buildLeaseEstimateMessage(customer: Customer): string | null {
   const lines: string[] = [];
 
   lines.push(`${name}님, 안녕하세요.`);
+  lines.push("담당 영업사원입니다.");
   lines.push("");
   if (veh) {
-    lines.push(`문의 주신 ${veh} 기준으로 리스 조건을 정리해보고 있습니다.`);
+    lines.push(`문의 주신 ${veh} 기준으로 리스 조건을 정리하고 있습니다.`);
   } else {
-    lines.push("문의 주신 차량 기준으로 리스 조건을 정리해보고 있습니다.");
+    lines.push("문의 주신 차량 기준으로 리스 조건을 정리하고 있습니다.");
   }
   lines.push("");
 
-  const bits = buildConditionSummaryParts(fd);
-  if (bits.length) {
-    lines.push(`현재 확인된 조건으로는 ${bits.join(", ")} 수준으로 확인됩니다.`);
+  const condParts: string[] = [];
+  const months = formatContractMonths(fd.contractMonths);
+  const deposit = formatManwonLabel(fd.deposit);
+  const down = formatManwonLabel(fd.downPayment);
+  const monthly = formatMonthlyManwonLabel(fd.monthlyPayment);
+  if (months) condParts.push(`계약기간 ${months}`);
+  if (deposit) condParts.push(`보증금 ${deposit}`);
+  else if (down) condParts.push(`선납금 ${down}`);
+  if (condParts.length) {
+    lines.push(`현재 확인된 조건으로는 ${condParts.join(", ")} 기준이며`);
+    if (monthly) lines.push(`${monthly} 수준으로 검토되고 있습니다.`);
+    lines.push("");
+  } else if (monthly) {
+    lines.push(`월 납입금은 ${monthly} 수준으로 검토 중입니다.`);
     lines.push("");
   }
 
-  const focus = buildPriorityFocusSentence(needs);
-  if (focus) {
-    lines.push(focus);
-    lines.push("");
+  if (needs.includes("월 납입금 부담 최소화")) {
+    lines.push(
+      "월 납입 부담을 낮추는 방향을 우선으로 보고 계셔서, 선납금·보증금·캐피탈 조건에 따른 차이도 함께 확인해 보겠습니다.",
+    );
+  } else {
+    const focus = buildPriorityFocusSentence(needs);
+    if (focus) lines.push(focus);
   }
-
-  lines.push(
-    "리스는 약정거리와 선납금·보증금, 캐피탈 조건에 따라 월 납입금이 조금씩 달라질 수 있어 조건별로 비교해보겠습니다.",
-  );
   lines.push("");
-
-  appendMaturityLines(lines, fd, "리스");
+  lines.push("출고 가능 여부까지 확인한 뒤 안내드리겠습니다.");
+  lines.push("");
+  lines.push("확인해보시고 궁금하신 부분은 편하게 말씀 주세요.");
+  lines.push("감사합니다.");
 
   return lines.join("\n");
 }
@@ -273,7 +305,7 @@ function buildLongRentEstimateMessage(customer: Customer): string | null {
 
   const bits = buildConditionSummaryParts(fd);
   if (bits.length) {
-    lines.push(`현재 입력된 조건 기준으로는 ${bits.join(", ")} 수준으로 확인됩니다.`);
+    lines.push(`${bits.join(", ")} 수준으로 검토 중입니다.`);
     lines.push("");
   }
 
@@ -310,7 +342,7 @@ function buildInstallmentEstimateMessage(customer: Customer): string | null {
 
   const bits = buildConditionSummaryParts(fd, { omitDownPayment: true });
   if (bits.length) {
-    lines.push(`현재 입력된 조건 기준으로는 ${bits.join(", ")} 수준으로 확인됩니다.`);
+    lines.push(`${bits.join(", ")} 수준으로 검토 중입니다.`);
     lines.push("");
   }
 
@@ -362,11 +394,11 @@ function buildCashEstimateMessage(customer: Customer): string | null {
   const price = formatManwonLabel(fd.totalVehiclePrice);
   const promo = formatManwonLabel(fd.promotionOrDiscount);
   if (price && promo) {
-    lines.push(`현재 입력된 조건 기준으로 차량가 ${price}, 프로모션 ${promo} 조건을 기준으로 안내드릴 수 있습니다.`);
+    lines.push(`차량가 ${price}, 프로모션 ${promo} 조건을 기준으로 안내드릴 수 있습니다.`);
   } else if (price) {
-    lines.push(`현재 입력된 조건 기준으로 차량가 ${price} 조건을 기준으로 안내드릴 수 있습니다.`);
+    lines.push(`차량가 ${price} 조건을 기준으로 안내드릴 수 있습니다.`);
   } else if (promo) {
-    lines.push(`현재 입력된 조건 기준으로 프로모션 ${promo} 조건을 기준으로 안내드릴 수 있습니다.`);
+    lines.push(`프로모션 ${promo} 조건을 기준으로 안내드릴 수 있습니다.`);
   }
   lines.push("");
 
@@ -428,6 +460,13 @@ export function resolveMessageTemplateBody(
   fallbackBody: string,
 ): string {
   if (!customer) return fallbackBody;
-  if (!isEstimateGuideTemplateTitle(templateTitle)) return fallbackBody;
+  const name = customer.name?.trim() || "고객";
+  const salutation = name ? `${name}님` : "고객님";
+  const withName = fallbackBody
+    .replaceAll("{고객명}님", salutation)
+    .replaceAll("{고객명}", name)
+    .replaceAll("OO님", salutation)
+    .replaceAll("OO 님", salutation);
+  if (!isEstimateGuideTemplateTitle(templateTitle)) return withName;
   return buildEstimateGuideMessage(customer);
 }

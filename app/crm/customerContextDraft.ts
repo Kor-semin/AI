@@ -3,6 +3,11 @@ import {
   type DemoConsultingOptions,
   type DemoConsultingResponse,
 } from "@/app/components/concierge/aiDemoResponse";
+import {
+  buildEstimateGuideMessage,
+  hasMeaningfulFinanceDraft,
+} from "./financeAwareMessageTemplate";
+import type { Customer, NextAction } from "./types";
 
 export type QuickConsultationNeeds = {
   vehicle?: string;
@@ -329,12 +334,12 @@ function buildSparseQuickConsultationResult(
   }
 
   const summary = vehicle
-    ? `${vehicle}에 관심이 있는 고객입니다.\n예산, 구매 시기, 출고 희망일, 결제 방식은 추가 확인이 필요합니다.`
-    : "관심 차량 확인이 필요한 고객입니다.\n예산, 구매 시기, 출고 희망일, 결제 방식은 추가 확인이 필요합니다.";
+    ? `관심 차량: ${vehicle}\n추가 확인: 예산, 구매 시기, 결제 방식`
+    : "추가 확인: 관심 차량, 예산, 구매 시기, 결제 방식";
   const message = vehicle
     ? `안녕하세요, ${name}님.\n문의 주신 ${vehicle} 관련해서 안내드리겠습니다.\n예산, 출고 희망일, 원하시는 조건을 알려주시면 그 기준으로 견적과 가능 조건을 정리해드리겠습니다.`
     : `안녕하세요, ${name}님.\n문의 주셔서 감사합니다.\n예산, 출고 희망일, 원하시는 조건을 알려주시면 견적과 가능 조건을 정리해드리겠습니다.`;
-  const nextActions = ["예산, 구매 시기, 출고 희망일, 결제 방식을 추가로 확인합니다."];
+  const nextActions = ["예산·구매 시기·결제 방식 추가 확인"];
   const insights: DemoConsultingResponse = { summary, message, nextAction: nextActions.join("\n") };
   const needs: QuickConsultationNeeds = {
     vehicle: vehicle || undefined,
@@ -354,11 +359,11 @@ function buildGroundedQuickConsultationResult(
   const deliveryNote = extractDeliveryNote(memo);
 
   const summary = vehicle
-    ? `${vehicle}에 관심이 있는 고객입니다.\n월 납입 조건과 출고 일정 확인이 필요합니다.`
-    : "관심 차량 확인이 필요한 고객입니다.\n월 납입 조건과 출고 일정 확인이 필요합니다.";
+    ? `관심 차량: ${vehicle}\n상담 포인트: 월 납입·출고 일정 확인`
+    : "상담 포인트: 관심 차량, 월 납입·출고 일정 확인";
 
   const message = buildGroundedSmsDraft(name, vehicle, paymentNote, deliveryNote);
-  const nextActions = ["월 납입 조건과 출고 가능 일정 확인 후 안내"];
+  const nextActions = ["리스·출고 조건 확인 후 견적 안내 문자 검토"];
   const insights: DemoConsultingResponse = {
     summary,
     message,
@@ -462,10 +467,194 @@ export function parseQuickConsultationNeeds(memo: string, summary = ""): QuickCo
   };
 }
 
+/** 고객 문자·요약에 쓸 호칭(이름 없으면 고객님). */
+export function formatCustomerSalutation(name?: string | null): string {
+  const n = name?.trim();
+  return n ? `${n}님` : "고객님";
+}
+
+/** OO placeholder → 실제 고객명(없으면 고객님). */
+export function applyCustomerNameToMessageText(name: string | undefined | null, text: string): string {
+  const salutation = formatCustomerSalutation(name);
+  return text
+    .replaceAll("OO 님", salutation)
+    .replaceAll("OO님", salutation)
+    .replaceAll("{고객명}님", salutation)
+    .replaceAll("{고객명}", name?.trim() || "고객");
+}
+
+const NEXT_ACTION_BOILERPLATE_RE =
+  /라인별\s*조건|문자\s*톤|마지막으로\s*한\s*번\s*더|메모에\s*적힌|그대로\s*반영|현재\s*확인\s*가능한\s*조건\s*기준|입력된\s*조건\s*기준/i;
+
+/** 다음 행동·검수 문구를 영업 카드용 1~2줄로 축약. */
+export function polishNextActionForDisplay(raw: string): string {
+  const t = raw.trim();
+  if (!t) return "";
+  if (NEXT_ACTION_BOILERPLATE_RE.test(t) || t.length > 72) {
+    if (/리스|할부|견적|금융/i.test(t)) {
+      return "리스 조건과 출고 가능 여부 확인 후 견적 안내 문자 검토";
+    }
+    if (/월\s*납입|출고/i.test(t)) {
+      return "월 납입·출고 일정 확인 후 안내";
+    }
+    return "견적·조건 확인 후 안내 문자 검토";
+  }
+  const first = t
+    .split(/\n+/)
+    .map((line) => line.replace(/^[-•*]\s*/, "").trim())
+    .find((line) => line.length > 0);
+  return first ?? t;
+}
+
+function customerVehicleLine(c: Pick<Customer, "memo" | "interestedModel" | "vehicleBrand">): string {
+  const memo = c.memo ?? "";
+  const model = normalizeInterestVehicle(memo, c.interestedModel) ?? extractPreferredVehicleModel(memo);
+  if (model) return model;
+  const im = c.interestedModel?.trim();
+  return im && !BRAND_ONLY_RE.test(im) ? im : "";
+}
+
+function collectMissingFields(c: Customer): string[] {
+  const missing: string[] = [];
+  if (!c.budget?.trim() && !c.financeConditionDraft?.monthlyPayment?.trim()) missing.push("예산");
+  if (!c.purchaseTiming?.trim()) missing.push("구매 시기");
+  if (!c.paymentType?.trim() && !c.financeConditionDraft?.productMode) missing.push("결제 방식");
+  if (!customerVehicleLine(c)) missing.push("관심 차량");
+  return missing;
+}
+
+/** 고객 카드·AI 요약 영역용 짧은 요약(불릿). */
+export function buildCustomerAiSummaryLine(c: Customer): string {
+  const memoRaw = c.memo ?? "";
+  const vehicle = customerVehicleLine(c) || extractPreferredVehicleModel(memoRaw);
+  const fd = c.financeConditionDraft;
+  const needs = c.customerPriorityNeeds ?? [];
+  const lines: string[] = [];
+
+  if (vehicle) lines.push(`관심 차량: ${vehicle}`);
+  if (c.stage?.trim()) lines.push(`상담 상태: ${c.stage.trim()}`);
+  if (fd?.productMode) lines.push(`금융 방식: ${fd.productMode}`);
+
+  const points: string[] = [];
+  if (needs.includes("월 납입금 부담 최소화")) points.push("월 납입 부담 최소화");
+  if (needs.includes("빠른 출고")) points.push("출고 일정 확인");
+  if (needs.length && !points.length) points.push(needs.slice(0, 2).join(", "));
+  const memo = memoRaw.toLowerCase();
+  if (!points.length && /월\s*납입|납입\s*부담/i.test(memo)) points.push("월 납입 부담 최소화");
+  if (!points.length && /출고/i.test(memo)) points.push("출고 일정 확인");
+  if (points.length) lines.push(`상담 포인트: ${points.join(", ")}`);
+
+  const missing = collectMissingFields(c);
+  if (missing.length) lines.push(`추가 확인: ${missing.join(", ")}`);
+
+  if (lines.length) return lines.join("\n");
+
+  const firstLine =
+    memoRaw
+      .split(/\n+/)
+      .map((l) => l.trim())
+      .find((l) => l && !l.startsWith("[") && !/^(?:다음 행동|ai 요약)/i.test(l)) ?? "";
+  if (firstLine && firstLine.length <= 48) return firstLine;
+  if (memoRaw.trim()) return firstLine.slice(0, 48) + (firstLine.length > 48 ? "…" : "");
+  return "상담 메모를 바탕으로 정리한 고객입니다.";
+}
+
+/** Flow·상세 화면용 AI 출력 정리(고객명·금융 조건 반영). */
+export function polishFlowInsightsForCustomer(
+  customer: Customer,
+  insights: DemoConsultingResponse,
+): DemoConsultingResponse {
+  const name = customer.name?.trim();
+  const summary =
+    buildCustomerAiSummaryLine(customer) ||
+    applyCustomerNameToMessageText(name, insights.summary.trim());
+
+  let message = insights.message.trim();
+  if (hasMeaningfulFinanceDraft(customer)) {
+    message = buildEstimateGuideMessage(customer);
+  } else {
+    message = applyCustomerNameToMessageText(name, message);
+  }
+
+  const nextLines = splitNextActions(insights.nextAction).map(polishNextActionForDisplay).filter(Boolean);
+  const nextAction = nextLines.length > 0 ? nextLines.join("\n") : polishNextActionForDisplay(insights.nextAction);
+
+  return { summary, message, nextAction };
+}
+
+function formatExportDateTime(iso?: string): string {
+  if (!iso) return "—";
+  try {
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return iso;
+    return d.toLocaleString("ko-KR");
+  } catch {
+    return iso;
+  }
+}
+
+type CalendarEventLike = { title: string; startAt: string };
+
+/**보내기·복사용 고객 요약(핵심만, 빈 필드 최소). */
+export function buildCompactCustomerExportText(
+  customer: Customer,
+  nextActions: NextAction[],
+  events: CalendarEventLike[],
+): string {
+  const vehicle = customerVehicleLine(customer);
+  const fd = customer.financeConditionDraft;
+  const lines: string[] = ["고객 요약"];
+
+  if (customer.name?.trim()) lines.push(`- 이름: ${customer.name.trim()}`);
+  if (customer.phone?.trim()) lines.push(`- 연락처: ${customer.phone.trim()}`);
+  if (vehicle) lines.push(`- 관심 차량: ${vehicle}`);
+  if (customer.stage?.trim()) lines.push(`- 상담 상태: ${customer.stage.trim()}`);
+  if (fd?.productMode) lines.push(`- 금융 방식: ${fd.productMode}`);
+
+  const needs = customer.customerPriorityNeeds ?? [];
+  if (needs.length) lines.push(`- 상담 포인트: ${needs.join(", ")}`);
+
+  const missing = collectMissingFields(customer);
+  if (missing.length) {
+    lines.push("", "추가 확인 필요", ...missing.map((m) => `- ${m}`));
+  }
+
+  const memoBrief =
+    customer.memo
+      ?.split(/\n+/)
+      .map((l) => l.trim())
+      .find((l) => l && !l.startsWith("[") && !/^다음 행동/i.test(l)) ?? "";
+  if (memoBrief && memoBrief.length <= 80) {
+    lines.push(`- 상담 메모: ${memoBrief}`);
+  }
+
+  const actions = nextActions.filter((a) => a.customerId === customer.id);
+  const pending = actions.filter((a) => !a.doneAt);
+  const uniqueTitles = [...new Set(pending.map((a) => polishNextActionForDisplay(a.title)).filter(Boolean))];
+
+  lines.push("", "다음 할 일");
+  if (uniqueTitles.length) {
+    uniqueTitles.slice(0, 6).forEach((title) => lines.push(`- ${title}`));
+  } else {
+    lines.push("- (등록된 할 일 없음)");
+  }
+
+  const custEvents = events.filter((e) => e);
+  if (custEvents.length) {
+    lines.push("", "일정");
+    custEvents.slice(0, 8).forEach((e) => {
+      lines.push(`- ${e.title} (${formatExportDateTime(e.startAt)})`);
+    });
+  }
+
+  lines.push("", `업데이트: ${formatExportDateTime(customer.updatedAt)}`);
+  return lines.join("\n");
+}
+
 function splitNextActions(nextAction: string): string[] {
   return nextAction
     .split(/\n+/)
-    .map((line) => line.replace(/^[-•*]\s*/, "").trim())
+    .map((line) => polishNextActionForDisplay(line.replace(/^[-•*]\s*/, "").trim()))
     .filter((line) => line.length > 0);
 }
 
@@ -477,15 +666,25 @@ export function buildQuickConsultationResult(memo: string, options?: DemoConsult
     return buildGroundedQuickConsultationResult(trimmed, identity);
   }
 
-  const insights = generateDemoConsultingResponse(trimmed, options);
+  const insightsRaw = generateDemoConsultingResponse(trimmed, options);
+  const insights = {
+    ...insightsRaw,
+    summary: insightsRaw.summary.trim(),
+    message: applyCustomerNameToMessageText(identity.name, insightsRaw.message.trim()),
+    nextAction: insightsRaw.nextAction
+      .split(/\n+/)
+      .map((ln) => polishNextActionForDisplay(ln))
+      .filter(Boolean)
+      .join("\n") || polishNextActionForDisplay(insightsRaw.nextAction),
+  };
   const needs = parseQuickConsultationNeeds(trimmed, insights.summary);
   if (identity.vehicle && !needs.vehicle) {
     needs.vehicle = identity.vehicle;
   }
   needs.vehicle = normalizeInterestVehicle(trimmed, needs.vehicle);
 
-  let message = sanitizeAiTextForInput(trimmed, insights.message.trim());
-  let summary = sanitizeAiTextForInput(trimmed, insights.summary.trim());
+  let message = sanitizeAiTextForInput(trimmed, insights.message);
+  let summary = sanitizeAiTextForInput(trimmed, insights.summary);
 
   if (!message || message.length < 40) {
     const paymentNote = extractPaymentNote(trimmed);

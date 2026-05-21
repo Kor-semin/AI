@@ -65,7 +65,7 @@ import {
   type DemoSalesStyle,
 } from "@/app/components/concierge/aiDemoResponse";
 import { getMessageTemplateCardHint } from "./messageTemplateCardHints";
-import { resolveMessageTemplateBody } from "./financeAwareMessageTemplate";
+import { buildEstimateGuideMessage, hasMeaningfulFinanceDraft, resolveMessageTemplateBody } from "./financeAwareMessageTemplate";
 import { makeId, seedState } from "./seed";
 import { ContactImportFileGuideModal } from "./ContactImportFileGuideModal";
 import { ImportContactsPanel, type ImportContactsCommitPayload } from "./ImportContactsPanel";
@@ -98,9 +98,13 @@ import {
   type CustomerListSortId,
 } from "./customerListFilters";
 import {
+  applyCustomerNameToMessageText,
+  buildCompactCustomerExportText,
   buildQuickConsultationResult,
   buildQuickCustomerModalMemo,
   parseQuickCustomerIdentity,
+  polishFlowInsightsForCustomer,
+  polishNextActionForDisplay,
   resolveCustomerVehicleFields,
   type QuickConsultationResult,
 } from "./customerContextDraft";
@@ -612,10 +616,13 @@ export function CRMApp({
     smsRewriteNonceRef.current = 0;
     window.setTimeout(() => {
       setFlowDraftMemo(snap);
+      const customer = state.customers.find((c) => c.id === selectedCustomerId);
+      const raw = generateDemoConsultingResponse(
+        customer?.name?.trim() ? `${customer.name.trim()}님 상담.\n${snap}` : snap,
+        { salesStyle: workspaceSalesStyle },
+      );
       setFlowDraftInsights(
-        generateDemoConsultingResponse(snap, {
-          salesStyle: workspaceSalesStyle,
-        }),
+        customer ? polishFlowInsightsForCustomer(customer, raw) : raw,
       );
       window.setTimeout(() => setWorkspaceAiBusy(false), 220);
     }, 0);
@@ -638,10 +645,13 @@ export function CRMApp({
     const salt = "\u2060".repeat(smsRewriteNonceRef.current);
     window.setTimeout(() => {
       setFlowDraftMemo(snap);
+      const customer = state.customers.find((c) => c.id === selectedCustomerId);
+      const raw = generateDemoConsultingResponse(
+        customer?.name?.trim() ? `${customer.name.trim()}님 상담.\n${snap}${salt}` : `${snap}${salt}`,
+        { salesStyle: workspaceSalesStyle },
+      );
       setFlowDraftInsights(
-        generateDemoConsultingResponse(`${snap}${salt}`, {
-          salesStyle: workspaceSalesStyle,
-        }),
+        customer ? polishFlowInsightsForCustomer(customer, raw) : raw,
       );
       window.setTimeout(() => setWorkspaceAiBusy(false), 220);
     }, 0);
@@ -667,12 +677,17 @@ export function CRMApp({
     smsRewriteNonceRef.current += 1;
     const salt = "\u2060".repeat(smsRewriteNonceRef.current);
     window.setTimeout(() => {
-      const fresh = generateDemoConsultingResponse(`${snapshot}${salt}`, {
-        salesStyle: workspaceSalesStyle,
-      });
+      const customer = state.customers.find((c) => c.id === selectedCustomerId);
+      const raw = generateDemoConsultingResponse(
+        customer?.name?.trim()
+          ? `${customer.name.trim()}님 상담.\n${snapshot}${salt}`
+          : `${snapshot}${salt}`,
+        { salesStyle: workspaceSalesStyle },
+      );
       setFlowDraftInsights((prev) => {
-        if (!prev) return fresh;
-        return { summary: prev.summary, nextAction: prev.nextAction, message: fresh.message };
+        if (!prev) return customer ? polishFlowInsightsForCustomer(customer, raw) : raw;
+        const merged = { summary: prev.summary, nextAction: prev.nextAction, message: raw.message };
+        return customer ? polishFlowInsightsForCustomer(customer, merged) : merged;
       });
       window.setTimeout(() => setWorkspaceAiBusy(false), 220);
     }, 0);
@@ -1050,10 +1065,14 @@ export function CRMApp({
     setWorkspaceAiMemoDraft(m);
     setFlowDraftMemo(trimmed);
     setFlowDraftInsights(
-      trimmed
-        ? generateDemoConsultingResponse(m, {
-            salesStyle: workspaceSalesStyleRef.current,
-          })
+      trimmed && c
+        ? polishFlowInsightsForCustomer(
+            c,
+            generateDemoConsultingResponse(
+              c.name?.trim() ? `${c.name.trim()}님 상담.\n${m}` : m,
+              { salesStyle: workspaceSalesStyleRef.current },
+            ),
+          )
         : null,
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps -- 고객 전환 시점만 동기화(타이핑 중 재분석·덮어쓰기 방지)
@@ -1681,35 +1700,7 @@ export function CRMApp({
     }
     const actions = state.nextActions.filter((a) => a.customerId === customer.id);
     const events = state.events.filter((e) => e.customerId === customer.id);
-    const text = [
-      `고객 요약`,
-      `- 이름: ${customer.name}`,
-      `- 연락처: ${customer.phone ?? "-"}`,
-      `- 이메일: ${customer.email ?? "-"}`,
-      `- 유입: ${customer.leadSource}`,
-      `- 단계: ${customer.stage}`,
-      `- 구매 예정 시기: ${customer.purchaseTiming ?? "-"}`,
-      `- 다음 연락 예정일: ${customer.nextContactAt ? formatDateTime(customer.nextContactAt) : "-"}`,
-      `- 브랜드: ${customer.vehicleBrand ?? "-"}`,
-      `- 차종: ${customer.interestedModel ?? "-"}`,
-      `- 비교 차량: ${customer.compareVehicles ?? "-"}`,
-      `- 예산: ${customer.budget ?? "-"}`,
-      `- 금융유형: ${customer.paymentType ?? "-"}`,
-      `- 금융메모: ${customer.paymentNotes ?? "-"}`,
-      `- 중고차: ${customer.usedCar ? JSON.stringify(customer.usedCar) : "-"}`,
-      `- 시세메모: ${customer.marketPrice ? JSON.stringify(customer.marketPrice) : "-"}`,
-      `- 비교·시세 정리: ${customer.comparisonNotes ?? "-"}`,
-      `- 마지막 상담 메모: ${customer.memo ?? "-"}`,
-      `- 고객 성향 메모: ${customer.personalityMemo ?? "-"}`,
-      ``,
-      `다음 할 일`,
-      ...actions.map((a) => `- [${a.doneAt ? "완료" : "미완"}] ${a.title} (${formatDateTime(a.dueAt)})`),
-      ``,
-      `일정`,
-      ...events.map((e) => `- ${e.title} (${formatDateTime(e.startAt)})`),
-      ``,
-      `업데이트: ${formatDateTime(customer.updatedAt)}`,
-    ].join("\n");
+    const text = buildCompactCustomerExportText(customer, actions, events);
     downloadText(`customer_${customer.name}_${customer.id}.txt`, text);
   }
 
@@ -1720,7 +1711,7 @@ export function CRMApp({
     const body = customer
       ? resolveMessageTemplateBody(tpl.title, customer, tpl.body)
       : tpl.body;
-    return body.replaceAll("{고객명}", cName).replaceAll("{내이름}", myName);
+    return applyCustomerNameToMessageText(cName, body).replaceAll("{내이름}", myName);
   }
 
   const allNextActions = useMemo(() => {
@@ -2111,7 +2102,9 @@ export function CRMApp({
                     .map((ln) => ln.trim())
                     .find((ln) => ln.length > 0);
                   const line =
-                    raw?.replace(/^[-•*]\s*/, "") ?? t("crm.workspaceAi.followUpDefaultTitle");
+                    polishNextActionForDisplay(
+                      raw?.replace(/^[-•*]\s*/, "") ?? t("crm.workspaceAi.followUpDefaultTitle"),
+                    ) || t("crm.workspaceAi.followUpDefaultTitle");
                   addNextAction(selectedCustomerId, line);
                   showToast(t("crm.workspaceAi.followUpToast"));
                 }}
@@ -2537,7 +2530,15 @@ export function CRMApp({
                   <p className="text-[13px] leading-relaxed text-slate-400">{t("crm.customerDetail.smsDisclaimer")}</p>
                   {(() => {
                     const primary = flowDraftInsights?.message?.trim() ?? "";
-                    const text = primary || buildConsultationQuickDraft(selectedCustomer, myName);
+                    const financeSms =
+                      selectedCustomer && hasMeaningfulFinanceDraft(selectedCustomer)
+                        ? buildEstimateGuideMessage(selectedCustomer).trim()
+                        : "";
+                    const text =
+                      financeSms ||
+                      (primary
+                        ? applyCustomerNameToMessageText(selectedCustomer.name, primary)
+                        : buildConsultationQuickDraft(selectedCustomer, myName));
                     return (
                       <>
                         {!primary ? (
