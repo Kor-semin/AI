@@ -85,8 +85,13 @@ import { CrmAiAssistantPanel } from "./CrmAiAssistantPanel";
 import { QuickAiAssistantEntry } from "./QuickAiAssistantEntry";
 import {
   formatCustomerInterestVehicle,
+  defaultNextActionDueIso,
+  formatCrmDisplayDateTime,
   formatCustomerNextActionLabel,
   getDemoAiSummaryLine,
+  partitionNextActions,
+  resolveNextActionListTitle,
+  sortNextActionsForWorkspace,
 } from "./customerListDisplay";
 import {
   computeCustomerListStats,
@@ -243,19 +248,7 @@ function computeCustomersAfterContactImport(
 }
 
 function formatDateTime(iso?: string) {
-  if (!iso) return "";
-  try {
-    const d = new Date(iso);
-    return new Intl.DateTimeFormat("ko-KR", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-    }).format(d);
-  } catch {
-    return iso;
-  }
+  return formatCrmDisplayDateTime(iso);
 }
 
 function clampText(s: string, n = 80) {
@@ -442,6 +435,7 @@ export function CRMApp({
   const [customerListSort, setCustomerListSort] = useState<CustomerListSortId>("recentConsult");
   const [searchOpen, setSearchOpen] = useState(false);
   const [tab, setTab] = useState<"고객" | "다음할일" | "일정" | "템플릿">("고객");
+  const [showCompletedNextActions, setShowCompletedNextActions] = useState(false);
   const didHydrateRef = useRef(false);
   const [sync, setSync] = useState<SyncStatus>({ mode: uid ? "cloud" : "local", status: "idle" });
   const cloudPartsRef = useRef<Partial<CRMState>>({});
@@ -997,10 +991,15 @@ export function CRMApp({
 
   const selectedNextActions = useMemo(() => {
     if (!selectedCustomerId) return [];
-    return state.nextActions
-      .filter((a) => a.customerId === selectedCustomerId)
-      .sort((a, b) => (a.dueAt ?? "").localeCompare(b.dueAt ?? ""));
+    return sortNextActionsForWorkspace(
+      state.nextActions.filter((a) => a.customerId === selectedCustomerId),
+    );
   }, [selectedCustomerId, state.nextActions]);
+
+  const selectedNextActionsSplit = useMemo(
+    () => partitionNextActions(selectedNextActions),
+    [selectedNextActions],
+  );
 
   const selectedEvents = useMemo(() => {
     if (!selectedCustomerId) return [];
@@ -1544,18 +1543,19 @@ export function CRMApp({
       return;
     }
     const raw = titleOverride?.trim();
+    const customer = state.customers.find((c) => c.id === customerId);
     const title =
       raw && raw.length > 0
         ? raw.length > 140
           ? `${raw.slice(0, 137)}…`
           : raw
-        : "다음 할 일";
+        : resolveNextActionListTitle({ title: "다음 할 일" }, customer);
     const t = nowIso();
     const action: NextAction = {
       id: makeId("act"),
       customerId,
       createdAt: t,
-      dueAt: new Date(Date.now() + 1000 * 60 * 60).toISOString(),
+      dueAt: defaultNextActionDueIso(),
       title,
     };
     setState((prev) => ({ ...prev, nextActions: [action, ...prev.nextActions] }));
@@ -1714,13 +1714,15 @@ export function CRMApp({
     return applyCustomerNameToMessageText(cName, body).replaceAll("{내이름}", myName);
   }
 
-  const allNextActions = useMemo(() => {
-    return [...state.nextActions].sort((a, b) => {
-      const aKey = `${a.doneAt ? "1" : "0"}_${a.dueAt ?? ""}`;
-      const bKey = `${b.doneAt ? "1" : "0"}_${b.dueAt ?? ""}`;
-      return aKey.localeCompare(bKey);
-    });
-  }, [state.nextActions]);
+  const allNextActions = useMemo(
+    () => sortNextActionsForWorkspace(state.nextActions),
+    [state.nextActions],
+  );
+
+  const allNextActionsSplit = useMemo(
+    () => partitionNextActions(allNextActions),
+    [allNextActions],
+  );
 
   const allEvents = useMemo(() => {
     return [...state.events].sort((a, b) => a.startAt.localeCompare(b.startAt));
@@ -2195,12 +2197,11 @@ export function CRMApp({
                   <div className="divide-y divide-white/[0.07]">
                     {customersFiltered.map((c) => {
                       const na = state.nextActions.find((a) => a.customerId === c.id && !a.doneAt);
-                      const nextRaw = na?.title?.trim()
-                        ? na.title
+                      const nextLbl = na
+                        ? formatCustomerNextActionLabel(resolveNextActionListTitle(na, c))
                         : c.nextContactAt
-                          ? formatDateTime(c.nextContactAt)
+                          ? formatCustomerNextActionLabel(`다음 연락 ${formatDateTime(c.nextContactAt)}`)
                           : "";
-                      const nextLbl = nextRaw ? formatCustomerNextActionLabel(nextRaw) : "—";
                       const sx = scorePurchaseIntent(c);
                       const showScore = shouldShowPurchaseIntentScore(c);
                       const vehicleLine = formatCustomerInterestVehicle(c) || "—";
@@ -2248,12 +2249,14 @@ export function CRMApp({
                                 </span>
                                 {getDemoAiSummaryLine(c)}
                               </p>
-                              <p className="mt-1.5 text-[14px] leading-snug text-slate-300/90">
-                                <span className="text-[11px] font-semibold text-slate-500">
-                                  {t("crm.customerCard.nextActionLabel")}:{" "}
-                                </span>
-                                {clampText(nextLbl, 120)}
-                              </p>
+                              {nextLbl ? (
+                                <p className="mt-1.5 text-[14px] leading-snug text-slate-300/90">
+                                  <span className="text-[11px] font-semibold text-slate-500">
+                                    {t("crm.customerCard.nextActionLabel")}:{" "}
+                                  </span>
+                                  {clampText(nextLbl, 120)}
+                                </p>
+                              ) : null}
                               <p className="mt-1.5 text-[13px] text-slate-500">
                                 최근 상담일 {formatDateTime(c.updatedAt)}
                               </p>
@@ -2323,15 +2326,19 @@ export function CRMApp({
                             <span className="text-slate-500">·</span>
                             <span>
                               {(() => {
-                                const na = state.nextActions.find((a) => a.customerId === selectedCustomer.id && !a.doneAt);
-                                const nextRaw = na?.title?.trim()
-                                  ? na.title
+                                const na = state.nextActions.find(
+                                  (a) => a.customerId === selectedCustomer.id && !a.doneAt,
+                                );
+                                const nextLbl = na
+                                  ? formatCustomerNextActionLabel(
+                                      resolveNextActionListTitle(na, selectedCustomer),
+                                    )
                                   : selectedCustomer.nextContactAt
-                                    ? formatDateTime(selectedCustomer.nextContactAt)
+                                    ? formatCustomerNextActionLabel(
+                                        `다음 연락 ${formatDateTime(selectedCustomer.nextContactAt)}`,
+                                      )
                                     : "";
-                                const nextLbl = nextRaw
-                                  ? formatCustomerNextActionLabel(nextRaw)
-                                  : t("crm.customerCard.nextActionUnset");
+                                if (!nextLbl) return null;
                                 return (
                                   <>
                                     <span className="font-medium text-slate-500">다음 행동: </span>
@@ -2811,16 +2818,16 @@ export function CRMApp({
                           <span className="font-semibold text-slate-400">다음 연락 예정: </span>
                           {selectedCustomer.nextContactAt ? formatDateTime(selectedCustomer.nextContactAt) : "미정"}
                         </div>
-                        {selectedNextActions.filter((a) => !a.doneAt).length ? (
+                        {selectedNextActionsSplit.pending.length ? (
                           <ul className="space-y-2">
-                            {selectedNextActions
-                              .filter((a) => !a.doneAt)
-                              .map((a) => (
+                            {selectedNextActionsSplit.pending.map((a) => (
                               <li
                                 key={a.id}
                                 className="flex items-start justify-between gap-2 rounded-xl border border-white/[0.08] bg-slate-950/40 px-3 py-2.5 text-[14px] text-slate-200"
                               >
-                                <span className="min-w-0">{a.title}</span>
+                                <span className="min-w-0">
+                                  {resolveNextActionListTitle(a, selectedCustomer)}
+                                </span>
                                 {a.dueAt ? (
                                   <span className="shrink-0 text-[12px] text-slate-500">{formatDateTime(a.dueAt)}</span>
                                 ) : null}
@@ -3247,7 +3254,7 @@ export function CRMApp({
                     </button>
                   </div>
                   <div className="mt-4 space-y-2">
-                    {selectedNextActions.map((a) => (
+                    {selectedNextActionsSplit.pending.map((a) => (
                       <div
                         key={a.id}
                         className="rounded-xl border border-white/[0.11] bg-slate-950/55 p-3"
@@ -3261,14 +3268,11 @@ export function CRMApp({
                               className="mt-1"
                             />
                             <input
-                              value={a.title}
+                              value={resolveNextActionListTitle(a, selectedCustomer)}
                               onChange={(e) => updateNextAction(a.id, { title: e.target.value })}
                               className="w-full min-w-0 border-0 bg-transparent text-sm font-semibold outline-none"
                             />
                           </label>
-                          <div className="text-[12px] font-medium text-slate-400">
-                            {a.doneAt ? "완료" : "미완료"}
-                          </div>
                         </div>
                         <div className="mt-2 flex items-center gap-2">
                           <div className="text-xs text-slate-400">기한</div>
@@ -3283,6 +3287,37 @@ export function CRMApp({
                         </div>
                       </div>
                     ))}
+                    {selectedNextActionsSplit.done.length > 0 ? (
+                      <details
+                        className="rounded-xl border border-white/[0.08] bg-slate-950/35 px-3 py-2"
+                        open={showCompletedNextActions}
+                        onToggle={(e) => setShowCompletedNextActions(e.currentTarget.open)}
+                      >
+                        <summary className="cursor-pointer text-[13px] font-semibold text-slate-500">
+                          완료된 할 일 ({selectedNextActionsSplit.done.length})
+                        </summary>
+                        <div className="mt-2 space-y-2">
+                          {selectedNextActionsSplit.done.map((a) => (
+                            <div
+                              key={a.id}
+                              className="rounded-lg border border-white/[0.06] bg-slate-950/40 p-2.5 opacity-80"
+                            >
+                              <label className="flex min-w-0 items-start gap-2">
+                                <input
+                                  type="checkbox"
+                                  checked
+                                  onChange={() => toggleNextActionDone(a.id)}
+                                  className="mt-0.5"
+                                />
+                                <span className="text-[13px] text-slate-400 line-through decoration-slate-600">
+                                  {resolveNextActionListTitle(a, selectedCustomer)}
+                                </span>
+                              </label>
+                            </div>
+                          ))}
+                        </div>
+                      </details>
+                    ) : null}
                     {selectedNextActions.length === 0 ? (
                       <div className="rounded-xl border border-dashed border-slate-500/35 p-4 text-xs text-slate-400">
                         아직 없습니다. “+ 추가”로 만들어보세요.
@@ -3441,8 +3476,9 @@ export function CRMApp({
                   <div className="rounded-2xl border border-white/[0.11] bg-slate-950/45 p-5">
                     <div className="text-[13px] font-semibold text-slate-50">{t("crm.section.allNextActions")}</div>
                     <div className="mt-4 max-h-[min(420px,50vh)] space-y-2 overflow-y-auto pr-1">
-                      {allNextActions.map((a) => {
+                      {allNextActionsSplit.pending.map((a) => {
                         const c = state.customers.find((x) => x.id === a.customerId);
+                        const label = resolveNextActionListTitle(a, c);
                         return (
                           <button
                             key={a.id}
@@ -3455,18 +3491,51 @@ export function CRMApp({
                             className="w-full rounded-xl border border-white/[0.11] bg-slate-950/55 p-4 text-left text-[14px] transition hover:bg-slate-950/45"
                           >
                             <div className="flex items-center justify-between gap-3">
-                              <div className="truncate font-semibold text-slate-50">
-                                {a.doneAt ? "완료 · " : ""}
-                                {a.title}
-                              </div>
+                              <div className="truncate font-semibold text-slate-50">{label}</div>
                               <div className="shrink-0 text-[13px] font-medium text-slate-400">
                                 {formatDateTime(a.dueAt)}
                               </div>
                             </div>
-                            <div className="mt-1 text-[13px] text-slate-400">{c?.name ?? "알 수 없음"}</div>
+                            {c?.name && !label.includes(c.name) ? (
+                              <div className="mt-1 text-[13px] text-slate-400">{c.name}</div>
+                            ) : null}
                           </button>
                         );
                       })}
+                      {allNextActionsSplit.done.length > 0 ? (
+                        <details
+                          className="rounded-xl border border-dashed border-white/[0.1] bg-slate-950/30 px-3 py-2"
+                          open={showCompletedNextActions}
+                          onToggle={(e) => setShowCompletedNextActions(e.currentTarget.open)}
+                        >
+                          <summary className="cursor-pointer text-[13px] font-semibold text-slate-500">
+                            완료된 할 일 보기 ({allNextActionsSplit.done.length})
+                          </summary>
+                          <div className="mt-2 space-y-2">
+                            {allNextActionsSplit.done.map((a) => {
+                              const c = state.customers.find((x) => x.id === a.customerId);
+                              const label = resolveNextActionListTitle(a, c);
+                              return (
+                                <button
+                                  key={a.id}
+                                  type="button"
+                                  onClick={() => {
+                                    setSelectedCustomerId(a.customerId);
+                                    onActiveSectionChange("customers");
+                                    setTab("고객");
+                                  }}
+                                  className="w-full rounded-lg border border-white/[0.08] bg-slate-950/40 p-3 text-left text-[13px] text-slate-400 transition hover:bg-slate-950/55"
+                                >
+                                  <div className="flex items-center justify-between gap-2">
+                                    <span className="truncate line-through decoration-slate-600">{label}</span>
+                                    <span className="shrink-0 text-[12px]">완료</span>
+                                  </div>
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </details>
+                      ) : null}
                       {allNextActions.length === 0 ? (
                         <div className="text-[14px] text-slate-400">등록된 다음 연락이 없습니다.</div>
                       ) : null}

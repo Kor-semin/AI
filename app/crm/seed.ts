@@ -5,6 +5,14 @@ function nowIso() {
   return new Date().toISOString();
 }
 
+/** 샘플 일정·할 일용 영업 시간대 ISO(저장 구조는 동일, 표시만 자연스럽게). */
+function seedScheduleIso(dayOffset: number, hour: number, minute: number): string {
+  const d = new Date();
+  d.setDate(d.getDate() + dayOffset);
+  d.setHours(hour, minute, 0, 0);
+  return d.toISOString();
+}
+
 export function makeId(prefix: string) {
   return `${prefix}_${Math.random().toString(16).slice(2)}_${Date.now().toString(16)}`;
 }
@@ -94,14 +102,14 @@ export function seedState(): CRMState {
         id: makeId("act"),
         customerId: kim.id,
         createdAt: t0,
-        dueAt: new Date(Date.now() + 1000 * 60 * 60 * 2).toISOString(),
+        dueAt: seedScheduleIso(0, 10, 30),
         title: "시승·옵션 니즈 정리",
       },
       {
         id: makeId("act"),
         customerId: lee.id,
         createdAt: t0,
-        dueAt: new Date(Date.now() + 1000 * 60 * 60 * 20).toISOString(),
+        dueAt: seedScheduleIso(1, 14, 0),
         title: "시승 일정 조율 및 견적 조건 안내",
       },
     ],
@@ -109,7 +117,7 @@ export function seedState(): CRMState {
       {
         id: makeId("evt"),
         customerId: lee.id,
-        startAt: new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString(),
+        startAt: seedScheduleIso(2, 16, 30),
         title: "매장 방문 · 시승 안내",
         notes: "면허·운전 패턴 확인, 금융 조건 간단히",
       },

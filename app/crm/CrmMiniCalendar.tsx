@@ -2,6 +2,7 @@
 
 import type { CalendarEvent, Customer, DeliveryGuide, NextAction } from "@/app/crm/types";
 import { getCalendarItemPrefix, type CalendarMiniItemKind } from "@/app/crm/calendarItemLabels";
+import { formatCrmDisplayTimeOnly, resolveNextActionListTitle } from "@/app/crm/customerListDisplay";
 import { useMemo, useState } from "react";
 
 type MiniItem = {
@@ -81,7 +82,8 @@ export function CrmMiniCalendar({
       if (!due) continue;
       const key = isoDayKeyLocal(due);
       const c = customerById.get(a.customerId);
-      const label = c ? `${c.name} · ${a.title}` : a.title;
+      const task = resolveNextActionListTitle(a, c);
+      const label = c ? `${c.name} · ${task}` : task;
       push(key, {
         id: `na-${a.id}`,
         kind: "next",
@@ -98,7 +100,7 @@ export function CrmMiniCalendar({
       const key = isoDayKeyLocal(st);
       const c = e.customerId ? customerById.get(e.customerId) : undefined;
       const title = e.title?.trim() || "일정";
-      const time = st.toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit" });
+      const time = formatCrmDisplayTimeOnly(e.startAt) || st.toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit" });
       const evLabel = c ? `${c.name} · ${time} · ${title}` : `${time} · ${title}`;
       push(key, {
         id: `ev-${e.id}`,
@@ -115,7 +117,9 @@ export function CrmMiniCalendar({
         const d = parseIsoToLocalDate(c.nextContactAt);
         if (d) {
           const key = isoDayKeyLocal(d);
-          const time = d.toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit" });
+          const time =
+            formatCrmDisplayTimeOnly(c.nextContactAt) ||
+            d.toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit" });
           const ncLabel = `${c.name} · ${time} · 다음 연락`;
           push(key, {
             id: `nc-${c.id}-${key}`,
