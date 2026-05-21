@@ -425,7 +425,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
       <main
         className={
           view === "landing"
-            ? "relative z-10 flex min-h-0 flex-1 flex-col overflow-hidden sensora-landing-main-depth sensora-landing-view bg-transparent"
+            ? "relative z-10 flex min-h-0 w-full min-w-0 max-w-full flex-1 flex-col overflow-hidden sensora-landing-main-depth sensora-landing-view bg-transparent"
             : "relative z-10 flex flex-1 flex-col"
         }
       >

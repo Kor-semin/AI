@@ -63,7 +63,7 @@ export function InspirationalBackdrop() {
       <div
         role="status"
         aria-live="polite"
-        className="pointer-events-none fixed bottom-14 left-4 z-[5] max-w-[min(92vw,22rem)] text-left text-[11px] font-medium tracking-tight text-slate-500 lg:bottom-11 lg:z-[5] xl:opacity-[0.88]"
+        className="sensora-inspirational-quote pointer-events-none fixed bottom-14 left-4 z-[5] max-w-[min(92vw,22rem)] text-left text-[11px] font-medium tracking-tight text-slate-500 lg:bottom-11 lg:z-[5] xl:opacity-[0.88]"
       >
         「{QUOTES[quoteIdx]}」
       </div>

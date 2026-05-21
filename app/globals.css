@@ -2686,6 +2686,65 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   margin-top: 0.25rem;
 }
 
+/* 랜딩 페이지 레이아웃 축 — 전체 너비 shell + 중앙 container */
+.landing-page-shell {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  align-self: stretch;
+  box-sizing: border-box;
+}
+
+.landing-section-shell {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 1023px) {
+  .landing-section-shell {
+    padding-inline: clamp(1rem, 4vw, 1.5rem);
+  }
+}
+
+.landing-section-container,
+.landing-content-rail {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 70rem;
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 2.5vw, 2rem);
+}
+
+.landing-section-container--mid {
+  max-width: 50rem;
+}
+
+.landing-section-container--wide {
+  max-width: 56.25rem;
+}
+
+.landing-section-container--narrow {
+  max-width: 45rem;
+}
+
+.landing-section-container--cta {
+  max-width: 35rem;
+}
+
+@media (min-width: 1024px) {
+  main.sensora-landing-view {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    align-self: stretch;
+  }
+
+  .landing-page-shell.sensora-landing-scroll {
+    align-items: stretch;
+  }
+}
+
 /* 데스크톱 랜딩 — 섹션 네비(Hero와 분리) + 앵커 스크롤 여백 */
 .sensora-landing-scroll {
   --landing-nav-height: 4.25rem;
@@ -3925,13 +3984,28 @@ html[data-theme="light"] .sensora-inspirational-backdrop .absolute.inset-0:nth-o
 }
 
 /* 랜딩 — 라이트모드 전용 (앱 CRM 화면과 분리) */
-html[data-theme="light"] .sensora-app-shell:has(.sensora-landing-view) .sensora-inspirational-backdrop {
+html[data-theme="light"] .sensora-app-shell:has(.sensora-landing-view) .sensora-inspirational-backdrop,
+html[data-theme="light"] .sensora-app-shell:has(.sensora-landing-view) .sensora-inspirational-quote {
   opacity: 0;
   visibility: hidden;
 }
 
 html[data-theme="light"] .sensora-landing-main-depth::before {
   opacity: 0;
+}
+
+html[data-theme="light"] main.sensora-landing-view {
+  background-color: #f6f1e8;
+}
+
+html[data-theme="light"] #sensora-landing-scroll.landing-page-shell.sensora-landing-warm {
+  width: 100%;
+  max-width: 100%;
+  margin-inline: 0;
+  flex: 0 1 auto;
+  align-items: stretch;
+  background-color: #f6f1e8;
+  color: #0f172a;
 }
 
 html[data-theme="light"] .sensora-landing-scroll.sensora-landing-warm {
@@ -3946,10 +4020,17 @@ html[data-theme="light"] .sensora-landing-warm-backdrop {
     linear-gradient(180deg, #faf7f2 0%, #f6f1e8 42%, #f0ebe3 100%);
 }
 
+html[data-theme="light"] .sensora-landing-warm .landing-section-container,
 html[data-theme="light"] .sensora-landing-warm .landing-content-rail {
-  width: 100%;
-  max-width: 72.5rem;
+  width: min(100%, 70rem);
+  max-width: 70rem;
   margin-inline: auto;
+}
+
+html[data-theme="light"] .sensora-landing-warm .landing-section-shell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 html[data-theme="light"] .sensora-landing-warm .landing-section-nav {
@@ -3958,7 +4039,8 @@ html[data-theme="light"] .sensora-landing-warm .landing-section-nav {
 }
 
 html[data-theme="light"] .sensora-landing-warm .landing-section-nav-inner {
-  max-width: 72.5rem;
+  width: min(100%, 70rem);
+  max-width: 70rem;
 }
 
 html[data-theme="light"] .sensora-landing-warm .landing-section-nav-link {
@@ -4101,6 +4183,12 @@ html[data-theme="light"] .sensora-landing-warm #sensora-landing-cta a {
 
 html[data-theme="light"] .sensora-landing-warm #sensora-landing-cta a:hover {
   color: #334155;
+}
+
+@media (min-width: 1024px) {
+  html[data-theme="light"] #sensora-landing-cta.landing-story-anchor {
+    padding-bottom: 2.75rem !important;
+  }
 }
 
 html[data-theme="light"] .landing-mobile-nav-shell > div {
