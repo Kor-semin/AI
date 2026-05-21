@@ -1,5 +1,6 @@
 import type { Customer, FinanceConditionDraft, FinanceProductMode, MessageTemplate } from "./types";
 import { vehicleDisplayLine } from "./newCarEstimateDraft";
+import { normalizeKoreanVehicleSpellingInCatalog } from "./vehicleCatalog";
 import { parseMoneyToKrw } from "./recommendations";
 import { buildTradeInPriceSmsParagraphs } from "./tradeInPriceNotes";
 
@@ -79,9 +80,9 @@ function vehicleLineWithTrim(c: Customer): string {
   const fd = c.financeConditionDraft;
   const name = fmt(fd?.vehicleName);
   const trim = fmt(fd?.vehicleTrim);
-  if (name && trim) return `${name} ${trim}`;
-  if (name) return name;
-  return vehicleDisplayLine(c);
+  if (name && trim) return normalizeKoreanVehicleSpellingInCatalog(`${name} ${trim}`);
+  if (name) return normalizeKoreanVehicleSpellingInCatalog(name);
+  return normalizeKoreanVehicleSpellingInCatalog(vehicleDisplayLine(c));
 }
 
 /** 차량가·프로모션·보증금·선납금 등 — 고객 문자용 만 원 단위 */

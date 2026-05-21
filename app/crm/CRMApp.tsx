@@ -36,7 +36,12 @@ import {
 import { migrateCRMState } from "./migrate";
 import { DEALER_LEAD_SOURCES, DEALER_PIPELINE_STAGES } from "./constants";
 import type { VehicleBrandId } from "./vehicleCatalog";
-import { vehicleModelsFor, VEHICLE_BRANDS } from "./vehicleCatalog";
+import {
+  getUsedCarBrandDatalistOptions,
+  getUsedCarModelDatalistOptions,
+  vehicleModelsFor,
+  VEHICLE_BRANDS,
+} from "./vehicleCatalog";
 import {
   explainPurchaseIntent,
   LEAD_SCORE_HOTWORDS,
@@ -2761,27 +2766,7 @@ export function CRMApp({
                     <section className="space-y-3">
                       <h3 className="text-[13px] font-semibold text-slate-200">차량 정보</h3>
                       <datalist id="usedcar-brand-options">
-                        {[
-                          "현대",
-                          "기아",
-                          "제네시스",
-                          "쉐보레",
-                          "르노코리아",
-                          "KG모빌리티",
-                          "벤츠",
-                          "BMW",
-                          "아우디",
-                          "폭스바겐",
-                          "미니",
-                          "볼보",
-                          "렉서스",
-                          "도요타",
-                          "혼다",
-                          "포르쉐",
-                          "랜드로버",
-                          "지프",
-                          "테슬라",
-                        ].map((b) => (
+                        {getUsedCarBrandDatalistOptions().map((b) => (
                           <option key={b} value={b} />
                         ))}
                       </datalist>
@@ -2808,39 +2793,9 @@ export function CRMApp({
                         <datalist
                           id={listIdForBrand("usedcar-model-options", selectedCustomer.usedCar?.brand)}
                         >
-                          {(() => {
-                            const b = (selectedCustomer.usedCar?.brand ?? "").trim().toLowerCase();
-                            const opts =
-                              b === "현대"
-                                ? [
-                                    "그랜저",
-                                    "쏘나타",
-                                    "아반떼",
-                                    "싼타페",
-                                    "투싼",
-                                    "팰리세이드",
-                                    "아이오닉5",
-                                    "아이오닉6",
-                                  ]
-                                : b === "기아"
-                                  ? ["K5", "K8", "K3", "쏘렌토", "스포티지", "카니발", "셀토스", "EV6"]
-                                  : b === "제네시스"
-                                    ? ["G70", "G80", "G90", "GV70", "GV80"]
-                                    : b === "벤츠" || b === "mercedes" || b === "mercedes-benz"
-                                      ? ["E클래스", "C클래스", "S클래스", "GLC", "GLE", "GLB", "CLA"]
-                                      : b === "bmw"
-                                        ? ["3시리즈", "5시리즈", "7시리즈", "X3", "X5", "X6", "1시리즈"]
-                                        : b === "아우디" || b === "audi"
-                                          ? ["A4", "A6", "A7", "A8", "Q3", "Q5", "Q7", "Q8"]
-                                          : b === "폭스바겐" || b === "폭스바겠" || b === "volkswagen"
-                                            ? ["골프", "파사트", "티구안", "투아렉"]
-                                            : b === "볼보" || b === "volvo"
-                                              ? ["S60", "S90", "XC40", "XC60", "XC90"]
-                                              : b === "렉서스" || b === "lexus"
-                                                ? ["ES", "RX", "NX", "LS"]
-                                                : [];
-                            return opts.map((m) => <option key={m} value={m} />);
-                          })()}
+                          {getUsedCarModelDatalistOptions(selectedCustomer.usedCar?.brand).map((m) => (
+                            <option key={m} value={m} />
+                          ))}
                         </datalist>
                         <FieldList
                           label="중고차 차종"
@@ -2867,6 +2822,7 @@ export function CRMApp({
                           {buildUsedCarTrimDatalistOptions(
                             selectedCustomer.usedCar?.brand,
                             selectedCustomer.usedCar?.trim,
+                            selectedCustomer.usedCar?.model,
                           ).map((trimOpt) => (
                             <option key={trimOpt} value={trimOpt} />
                           ))}

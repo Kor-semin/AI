@@ -17,6 +17,8 @@ import {
   financeFieldLabel,
   financeFieldPlaceholder,
   financeFieldsForMode,
+  getFinanceVehicleNameSuggestions,
+  getFinanceVehicleTrimSuggestions,
   sortedEstimateAttachments,
   type FinanceFieldId,
 } from "@/app/crm/newCarEstimateDraft";
@@ -41,11 +43,13 @@ function FinanceDraftField({
   mode,
   draft,
   onChange,
+  listOptions,
 }: {
   field: FinanceFieldId;
   mode: FinanceProductMode;
   draft: FinanceConditionDraft;
   onChange: (patch: Partial<FinanceConditionDraft>) => void;
+  listOptions?: string[];
 }) {
   const value = (draft[field] as string | undefined) ?? "";
   const label = financeFieldLabel(field, mode);
@@ -67,6 +71,13 @@ function FinanceDraftField({
     );
   }
 
+  const listId =
+    field === "vehicleName"
+      ? "crm-finance-vehicle-name-options"
+      : field === "vehicleTrim"
+        ? "crm-finance-vehicle-trim-options"
+        : undefined;
+
   return (
     <label className="grid gap-1">
       <span className={FINANCE_LABEL_CLASS}>{label}</span>
@@ -81,7 +92,15 @@ function FinanceDraftField({
         }}
         className={FINANCE_INPUT_CLASS}
         placeholder={placeholder}
+        list={listId}
       />
+      {listId && listOptions?.length ? (
+        <datalist id={listId}>
+          {listOptions.map((opt) => (
+            <option key={opt} value={opt} />
+          ))}
+        </datalist>
+      ) : null}
     </label>
   );
 }
@@ -118,6 +137,14 @@ export function NewCarEstimateFinanceCard({ uid, customer, onPatch, onRequireLog
   const [busy, setBusy] = useState(false);
 
   const draft = customer.financeConditionDraft ?? defaultFinanceDraft();
+  const financeVehicleNameOptions = getFinanceVehicleNameSuggestions(
+    customer.vehicleBrand,
+    customer.interestedModel,
+  );
+  const financeVehicleTrimOptions = getFinanceVehicleTrimSuggestions(
+    customer.vehicleBrand,
+    draft.vehicleName || customer.interestedModel,
+  );
   const list = sortedEstimateAttachments(customer);
 
   const setDraft = (patch: Partial<FinanceConditionDraft>) => {
@@ -411,7 +438,20 @@ export function NewCarEstimateFinanceCard({ uid, customer, onPatch, onRequireLog
 
           <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
             {financeFieldsForMode(draft.productMode).map((field) => (
-              <FinanceDraftField key={field} field={field} mode={draft.productMode} draft={draft} onChange={setDraft} />
+              <FinanceDraftField
+                key={field}
+                field={field}
+                mode={draft.productMode}
+                draft={draft}
+                onChange={setDraft}
+                listOptions={
+                  field === "vehicleName"
+                    ? financeVehicleNameOptions
+                    : field === "vehicleTrim"
+                      ? financeVehicleTrimOptions
+                      : undefined
+                }
+              />
             ))}
           </div>
 

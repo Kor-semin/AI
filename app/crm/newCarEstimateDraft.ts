@@ -10,6 +10,12 @@ import {
 import { buildUsedCarSearchQuery } from "./recommendations";
 import { buildTradeInPriceSmsParagraphs } from "./tradeInPriceNotes";
 import { formatCrmDisplayDateTime } from "./customerListDisplay";
+import {
+  getFinanceVehicleNameSuggestions,
+  getFinanceVehicleTrimSuggestions,
+} from "./vehicleCatalog";
+
+export { getFinanceVehicleNameSuggestions, getFinanceVehicleTrimSuggestions };
 
 /** 고객 니즈 선택지(한글 라벨 — Firestore·상태에 그대로 저장) */
 export const CUSTOMER_PRIORITY_OPTIONS = [

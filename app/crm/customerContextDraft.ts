@@ -9,7 +9,13 @@ import {
 } from "./financeAwareMessageTemplate";
 import { parseMoneyToKrw } from "./recommendations";
 import type { Customer, FinanceConditionDraft, NextAction, UsedCarAccident, UsedCarInfo } from "./types";
-import { vehicleModelsFor, type VehicleBrandId } from "./vehicleCatalog";
+import {
+  inferCatalogBrandForModelText,
+  isInterestedModelInBrandCatalog,
+  mapInterestedModelForBrand,
+  normalizeKoreanVehicleSpellingInCatalog,
+  parseVehicleInterest,
+} from "./vehicleCatalog";
 
 export type QuickConsultationNeeds = {
   vehicle?: string;
@@ -40,11 +46,7 @@ const BRAND_ONLY_RE =
 
 /** 데모·표시용 기아 Sorento 표기 통일(쏘렌트/소렌토 → 쏘렌토). */
 export function normalizeKoreanVehicleSpelling(text: string): string {
-  return text
-    .replace(/쏘렌트\s*하이브리드/gi, "쏘렌토 하이브리드")
-    .replace(/소렌토\s*하이브리드/gi, "쏘렌토 하이브리드")
-    .replace(/쏘렌트/gi, "쏘렌토")
-    .replace(/소렌토/gi, "쏘렌토");
+  return normalizeKoreanVehicleSpellingInCatalog(text);
 }
 
 /** 관심 차량 필드용 — 조사·어미·문장 조각 제거 후 차량명만. */
@@ -431,85 +433,12 @@ export function parseOwnedVehicleFieldsFromMemo(memo: string): UsedCarInfo | und
   };
 }
 
-const MODEL_TO_BRAND: Record<string, string> = {
-  GLC: "Mercedes-Benz",
-  GLE: "Mercedes-Benz",
-  GLS: "Mercedes-Benz",
-  GLA: "Mercedes-Benz",
-  GLB: "Mercedes-Benz",
-  CLA: "Mercedes-Benz",
-  "C-CLASS": "Mercedes-Benz",
-  "E-CLASS": "Mercedes-Benz",
-  "S-CLASS": "Mercedes-Benz",
-  EQE: "Mercedes-Benz",
-  EQS: "Mercedes-Benz",
-  X3: "BMW",
-  X5: "BMW",
-  "3시리즈": "BMW",
-  "5시리즈": "BMW",
-  그랜저: "현대",
-  아반떼: "현대",
-  투싼: "현대",
-  쏘렌토: "기아",
-  카니발: "기아",
-  K3: "기아",
-  K5: "기아",
-  K8: "기아",
-  G80: "제네시스",
-  GV70: "제네시스",
-  GV80: "제네시스",
-};
-
 /** 모델 코드에서 브랜드 추론(표시·저장 매핑용). */
 export function inferVehicleBrandForModel(model: string): string | undefined {
-  const key = model.trim();
-  if (!key) return undefined;
-  const upper = key.toUpperCase();
-  if (MODEL_TO_BRAND[upper]) return MODEL_TO_BRAND[upper];
-  if (MODEL_TO_BRAND[key]) return MODEL_TO_BRAND[key];
-  const tokens = Object.keys(MODEL_TO_BRAND).sort((a, b) => b.length - a.length);
-  for (const token of tokens) {
-    if (key.includes(token)) return MODEL_TO_BRAND[token];
-  }
-  return undefined;
+  return inferCatalogBrandForModelText(model);
 }
 
-function normalizeCatalogModelKey(text: string): string {
-  return text.replace(/\s*·\s*/g, " ").replace(/\s+/g, " ").trim();
-}
-
-/** 브랜드 카탈로그 옵션에 맞게 관심 차종 표기 정리(쏘렌토 하이브리드 → 쏘렌토 · 하이브리드 등). */
-export function mapInterestedModelForBrand(
-  brand: string | undefined,
-  model: string | undefined,
-): string | undefined {
-  if (!model?.trim()) return undefined;
-  const m = model.trim();
-  const b = brand?.trim();
-  if (!b) return m;
-  const opts = [...vehicleModelsFor(b as VehicleBrandId)];
-  if (opts.includes(m)) return m;
-  const target = normalizeCatalogModelKey(m);
-  for (const opt of opts) {
-    if (normalizeCatalogModelKey(opt) === target) return opt;
-  }
-  if (/쏘렌토/i.test(m) && /하이브리드/i.test(m)) {
-    const hit = opts.find((o) => /쏘렌토/i.test(o) && /하이브리드/i.test(o));
-    if (hit) return hit;
-  }
-  if (/쏘렌토/i.test(m)) {
-    const hit = opts.find((o) => /쏘렌토/i.test(o));
-    if (hit) return hit;
-  }
-  return m;
-}
-
-export function isInterestedModelInBrandCatalog(brand: string, model: string): boolean {
-  const b = brand.trim();
-  const m = model.trim();
-  if (!b || b === "기타" || !m) return false;
-  return [...vehicleModelsFor(b as VehicleBrandId)].includes(m);
-}
+export { isInterestedModelInBrandCatalog, mapInterestedModelForBrand };
 
 /** Quick AI 저장 모달 — 고객명(문자 초안·메모와 동일 기준). */
 export function resolveQuickCustomerNameForSave(memo: string, smsMessage?: string): string {
@@ -542,22 +471,40 @@ export function buildQuickSaveCustomerDraftFields(
   const identity = parseQuickCustomerIdentity(snap);
   const vehicleCandidate = result.needs.vehicle ?? identity.vehicle;
   const vehicleFields = resolveCustomerVehicleFields(snap, vehicleCandidate);
-  const brand = vehicleFields.vehicleBrand ?? "";
-  const rawModel =
-    sanitizeInterestVehicleLabel(vehicleFields.interestedModel ?? vehicleCandidate ?? "") ||
-    vehicleFields.interestedModel ||
-    vehicleCandidate ||
+  const parseInput = [vehicleCandidate, vehicleFields.interestedModel, result.needs.vehicle]
+    .filter(Boolean)
+    .join(" ")
+    .trim();
+  const parsed = parseVehicleInterest(parseInput || snap);
+  const brand =
+    parsed.brandDisplayName ??
+    vehicleFields.vehicleBrand ??
+    (parseInput ? inferVehicleBrandForModel(parseInput) : undefined) ??
     "";
-  const catalogModel = mapInterestedModelForBrand(brand, rawModel);
+  const rawModel =
+    sanitizeInterestVehicleLabel(parsed.interestedModelLabel ?? "") ||
+    sanitizeInterestVehicleLabel(vehicleFields.interestedModel ?? vehicleCandidate ?? "") ||
+    "";
+  const catalogModel = mapInterestedModelForBrand(brand, rawModel || parseInput);
   let interestedModel = normalizeKoreanVehicleSpelling(
-    catalogModel && isInterestedModelInBrandCatalog(brand, catalogModel) ? catalogModel : rawModel,
+    catalogModel && brand && isInterestedModelInBrandCatalog(brand, catalogModel)
+      ? catalogModel
+      : parsed.interestedModelLabel || rawModel || parseInput,
   );
   if (!interestedModel.trim()) {
     const needsVehicle = result.needs.vehicle?.trim();
     if (needsVehicle) {
-      const mapped = mapInterestedModelForBrand(brand, needsVehicle);
+      const needsParsed = parseVehicleInterest(`${brand} ${needsVehicle}`.trim() || needsVehicle);
+      const mapped = mapInterestedModelForBrand(
+        needsParsed.brandDisplayName ?? brand,
+        needsParsed.interestedModelLabel ?? needsVehicle,
+      );
       interestedModel = normalizeKoreanVehicleSpelling(
-        mapped && isInterestedModelInBrandCatalog(brand, mapped) ? mapped : needsVehicle,
+        mapped &&
+          (needsParsed.brandDisplayName ?? brand) &&
+          isInterestedModelInBrandCatalog(needsParsed.brandDisplayName ?? brand, mapped)
+          ? mapped
+          : needsParsed.interestedModelLabel ?? needsVehicle,
       );
     }
   }
@@ -579,9 +526,16 @@ export function resolveCustomerVehicleFields(
       modelCandidate,
   );
   if (!model) return {};
+  const parsed = parseVehicleInterest(model);
+  if (parsed.brandDisplayName) {
+    return {
+      vehicleBrand: parsed.brandDisplayName,
+      interestedModel: parsed.interestedModelLabel ?? model,
+    };
+  }
   return {
     vehicleBrand: inferVehicleBrandForModel(model),
-    interestedModel: model,
+    interestedModel: parsed.interestedModelLabel ?? model,
   };
 }
 
