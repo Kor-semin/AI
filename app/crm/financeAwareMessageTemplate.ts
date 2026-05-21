@@ -48,6 +48,11 @@ export function hasMeaningfulFinanceDraft(c: Customer): boolean {
       fmt(fd.contractMonths) ||
       fmt(fd.monthlyPayment) ||
       fmt(fd.maturityOptions) ||
+      fmt(fd.interestRate) ||
+      fmt(fd.agreedDistance) ||
+      fmt(fd.insuranceIncluded) ||
+      fmt(fd.deliveryAvailability) ||
+      fmt(fd.registrationFeesNote) ||
       fmt(fd.customerConditionNote),
   );
 }
@@ -157,6 +162,7 @@ function buildConditionSummaryParts(fd: FinanceConditionDraft, opts?: { omitDown
   }
   const months = formatContractMonths(fd.contractMonths);
   if (months) bits.push(`계약기간 ${months}`);
+  if (fmt(fd.interestRate)) bits.push(`금리 ${fmt(fd.interestRate)}`);
   const monthly = formatMonthlyWonLabel(fd.monthlyPayment);
   if (monthly) bits.push(`월 납입금은 ${monthly}`);
   return bits;
@@ -209,7 +215,7 @@ function buildPriorityFocusSentence(needs: string[]): string | null {
 }
 
 function mentionsAnnualMileage(fd: FinanceConditionDraft): boolean {
-  const blob = `${fd.customerConditionNote ?? ""} ${fd.maturityOptions ?? ""}`;
+  const blob = `${fd.customerConditionNote ?? ""} ${fd.maturityOptions ?? ""} ${fd.agreedDistance ?? ""} ${fd.insuranceIncluded ?? ""}`;
   return /주행|km|킬로|약정거리/i.test(blob);
 }
 

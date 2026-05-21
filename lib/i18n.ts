@@ -491,6 +491,8 @@ export type TranslationKey =
   | "crm.newCar.financeModeLabel"
   | "crm.newCar.leaseHintBullets"
   | "crm.newCar.loanHintBullets"
+  | "crm.newCar.longRentHintBullets"
+  | "crm.newCar.cashHintBullets"
   | "crm.newCar.otherModeHint"
   | "crm.newCar.unknownModeHint"
   | "crm.newCar.prioritySectionTitle"
@@ -1508,11 +1510,16 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.newCar.financeDetailCollapse": "상세 조건 접기",
     "crm.newCar.financeModeLabel": "금융 방식",
     "crm.newCar.leaseHintBullets":
-      "리스 안내 포인트\n· 월 납입금과 잔존가치·보증금·선납금의 균형\n· 만기 인수·반납·연장 가능성\n· 법인·개인 사용 목적에 따른 검토 차이",
+      "리스 조건은 보증금, 선납금, 잔존가치, 캐피탈 조건에 따라 월 납입금이 달라질 수 있습니다.",
     "crm.newCar.loanHintBullets":
-      "할부 안내 포인트\n· 월 납입금과 할부 기간·선수금\n· 총 납입 부담\n· 소유권과 장기 보유 계획",
-    "crm.newCar.otherModeHint": "현금·장기렌트는 총 비용·세금·비용 처리 방식을 함께 확인하는 것이 좋습니다.",
-    "crm.newCar.unknownModeHint": "금융 방식이 견적서만으로 불명확할 수 있습니다. 리스·할부 각각의 월 납입·잔존·기간을 원본과 대조해 확인해 주세요.",
+      "할부 조건은 선납금, 기간, 금리에 따라 월 납입금이 달라질 수 있습니다.",
+    "crm.newCar.longRentHintBullets":
+      "장기렌트 조건은 약정거리, 보험 포함 여부, 보증금 조건에 따라 월 납입금이 달라질 수 있습니다.",
+    "crm.newCar.cashHintBullets":
+      "현금 구매는 차량가, 프로모션, 등록 시점에 필요한 비용을 함께 확인하면 좋습니다.",
+    "crm.newCar.otherModeHint": "금융 방식이 정해지면 필요한 조건이 달라집니다. 현재 확인된 내용만 먼저 정리해 주세요.",
+    "crm.newCar.unknownModeHint":
+      "금융 방식이 아직 정해지지 않았다면, 차량명·예산·희망 월 납입금만 먼저 입력해도 됩니다.",
     "crm.newCar.prioritySectionTitle": "고객이 중요하게 보는 조건",
     "crm.newCar.detailsToggle": "펼치기",
     "crm.sensoraFlow.banner":
@@ -2574,11 +2581,16 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.newCar.financeDetailCollapse": "Hide detail",
     "crm.newCar.financeModeLabel": "Product",
     "crm.newCar.leaseHintBullets":
-      "Lease checklist\n· Balance monthly payment with residual, deposit, and down payment\n· End-of-term buy, return, or extension\n· Corporate vs personal use differences",
+      "Lease monthly payment can change with deposit, down payment, residual value, and capital terms.",
     "crm.newCar.loanHintBullets":
-      "Installment checklist\n· Monthly payment vs term and down payment\n· Total cost of financing\n· Ownership and long-term holding plans",
-    "crm.newCar.otherModeHint": "For cash or long-term rent, also confirm taxes and how costs are booked.",
-    "crm.newCar.unknownModeHint": "The product type may be unclear from the quote alone. Compare lease vs installment monthly payment, residual, and term with the original document.",
+      "Installment monthly payment can change with down payment, term, and interest rate.",
+    "crm.newCar.longRentHintBullets":
+      "Long-term rent monthly cost can change with mileage cap, insurance inclusion, and deposit.",
+    "crm.newCar.cashHintBullets":
+      "For cash purchase, confirm vehicle price, promotions, and registration-related costs.",
+    "crm.newCar.otherModeHint": "Required fields depend on the finance type. Enter what you have confirmed so far.",
+    "crm.newCar.unknownModeHint":
+      "If the finance type is not decided yet, start with vehicle name, budget, and target monthly payment.",
     "crm.newCar.prioritySectionTitle": "What the customer cares about most",
     "crm.newCar.detailsToggle": "Expand",
     "crm.sensoraFlow.banner":

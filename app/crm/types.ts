@@ -41,6 +41,16 @@ export type FinanceConditionDraft = {
   residualValue?: string;
   monthlyPayment?: string;
   maturityOptions?: string;
+  /** 할부 금리(예: 4.9%) */
+  interestRate?: string;
+  /** 장기렌트 약정거리 */
+  agreedDistance?: string;
+  /** 장기렌트 보험 포함 여부 */
+  insuranceIncluded?: string;
+  /** 현금 구매 출고 가능 여부 */
+  deliveryAvailability?: string;
+  /** 현금 등록·부대비용 메모 */
+  registrationFeesNote?: string;
   /** 고객이 중요하게 본 조건 등 자유 메모 */
   customerConditionNote?: string;
 };

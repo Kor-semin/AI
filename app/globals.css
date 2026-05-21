@@ -1097,6 +1097,32 @@ html[data-theme="light"] .crm-create-customer-modal__textarea::-webkit-scrollbar
   display: none;
 }
 
+.crm-finance-priority-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.375rem;
+}
+
+@media (min-width: 640px) {
+  .crm-finance-priority-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+}
+
+.crm-finance-priority-chip {
+  font-size: 0.75rem;
+  line-height: 1.35;
+  padding: 0.375rem 0.625rem;
+}
+
+@media (min-width: 640px) {
+  .crm-finance-priority-chip {
+    font-size: 0.8125rem;
+    padding: 0.5rem 0.75rem;
+  }
+}
+
 /* 중고차 등급/트림 — 입력 초기화 버튼 */
 .crm-field-clear-btn {
   touch-action: manipulation;

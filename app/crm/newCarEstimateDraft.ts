@@ -1,4 +1,4 @@
-import type { Customer, FinanceConditionDraft } from "./types";
+import type { Customer, FinanceConditionDraft, FinanceProductMode } from "./types";
 import type { TranslationKey } from "@/lib/i18n";
 import {
   buildFinanceDraftDetailBullets,
@@ -323,6 +323,9 @@ export function buildNewCarFinanceSmsPreview(
     if (fmt(fd.residualValue)) detailLines.push(`잔존가치(리스): ${fmt(fd.residualValue)}`);
     if (fmt(fd.monthlyPayment)) detailLines.push(`월 납입금(참고): ${fmt(fd.monthlyPayment)}`);
     if (fmt(fd.maturityOptions)) detailLines.push(`만기 선택지 검토: ${fmt(fd.maturityOptions)}`);
+    if (fmt(fd.interestRate)) detailLines.push(`금리(참고): ${fmt(fd.interestRate)}`);
+    if (fmt(fd.agreedDistance)) detailLines.push(`약정거리(참고): ${fmt(fd.agreedDistance)}`);
+    if (fmt(fd.insuranceIncluded)) detailLines.push(`보험 포함: ${fmt(fd.insuranceIncluded)}`);
     if (fmt(fd.customerConditionNote)) detailLines.push(`기타 확인 사항: ${fmt(fd.customerConditionNote)}`);
 
     if (fd.productMode === "리스") {
@@ -414,6 +417,132 @@ export function buildConsultationQuickDraft(c: Customer, myName: string): string
   );
 
   return lines.filter(Boolean).join("\n");
+}
+
+/** 금융 조건 폼 — 입력 필드 식별자 */
+export type FinanceFieldId =
+  | "vehicleName"
+  | "vehicleTrim"
+  | "totalVehiclePrice"
+  | "promotionOrDiscount"
+  | "downPayment"
+  | "deposit"
+  | "contractMonths"
+  | "interestRate"
+  | "residualValue"
+  | "maturityOptions"
+  | "monthlyPayment"
+  | "agreedDistance"
+  | "insuranceIncluded"
+  | "deliveryAvailability"
+  | "registrationFeesNote"
+  | "customerConditionNote";
+
+const FINANCE_FIELD_PLACEHOLDERS: Partial<Record<FinanceFieldId, string>> = {
+  vehicleName: "예: 쏘렌토 하이브리드",
+  vehicleTrim: "예: 캘리그래피",
+  totalVehiclePrice: "예: 4,200만원",
+  promotionOrDiscount: "예: 출고 지원금",
+  downPayment: "예: 300만원",
+  deposit: "예: 500만원",
+  contractMonths: "예: 48개월",
+  interestRate: "예: 4.9%",
+  residualValue: "예: 55%",
+  maturityOptions: "예: 인수/반납 검토",
+  monthlyPayment: "예: 견적서 기준 참고",
+  agreedDistance: "예: 연 2만 km",
+  insuranceIncluded: "예: 포함 / 별도",
+  deliveryAvailability: "예: 2주 내 가능",
+  registrationFeesNote: "예: 취등록세·번호판 등",
+  customerConditionNote: "예: 월 납입 부담, 초기비용, 출고 시점",
+};
+
+export function financeFieldLabel(field: FinanceFieldId, mode: FinanceProductMode): string {
+  const labels: Record<FinanceFieldId, string> = {
+    vehicleName: "차량명",
+    vehicleTrim: "트림",
+    totalVehiclePrice: mode === "알 수 없음" ? "예산" : "총 차량가",
+    promotionOrDiscount: "프로모션/할인",
+    downPayment: "선납금",
+    deposit: "보증금",
+    contractMonths: "계약 기간",
+    interestRate: "금리",
+    residualValue: "잔존가치",
+    maturityOptions: "만기 선택",
+    monthlyPayment: mode === "장기렌트" ? "월 렌트료" : mode === "알 수 없음" ? "희망 월 납입금" : "월 납입금",
+    agreedDistance: "약정거리",
+    insuranceIncluded: "보험 포함 여부",
+    deliveryAvailability: "출고 가능 여부",
+    registrationFeesNote: "등록비/부대비용 메모",
+    customerConditionNote: "고객 요청사항 메모",
+  };
+  return labels[field];
+}
+
+export function financeFieldPlaceholder(field: FinanceFieldId, mode: FinanceProductMode): string {
+  if (field === "totalVehiclePrice" && mode === "알 수 없음") return "예: 4,000만원 내외";
+  if (field === "monthlyPayment" && mode === "알 수 없음") return "예: 70만원 이하";
+  if (field === "downPayment" && mode === "할부") return "예: 300만원";
+  return FINANCE_FIELD_PLACEHOLDERS[field] ?? "";
+}
+
+/** 금융 방식별 기본 입력 필드(상세 접기 영역 제외) */
+export function financeFieldsForMode(mode: FinanceProductMode): FinanceFieldId[] {
+  switch (mode) {
+    case "알 수 없음":
+      return ["vehicleName", "vehicleTrim", "totalVehiclePrice", "monthlyPayment", "customerConditionNote"];
+    case "할부":
+      return [
+        "vehicleName",
+        "vehicleTrim",
+        "totalVehiclePrice",
+        "promotionOrDiscount",
+        "downPayment",
+        "contractMonths",
+        "interestRate",
+        "monthlyPayment",
+        "customerConditionNote",
+      ];
+    case "리스":
+      return [
+        "vehicleName",
+        "vehicleTrim",
+        "totalVehiclePrice",
+        "promotionOrDiscount",
+        "downPayment",
+        "deposit",
+        "contractMonths",
+        "residualValue",
+        "maturityOptions",
+        "monthlyPayment",
+        "customerConditionNote",
+      ];
+    case "장기렌트":
+      return [
+        "vehicleName",
+        "vehicleTrim",
+        "totalVehiclePrice",
+        "deposit",
+        "downPayment",
+        "contractMonths",
+        "agreedDistance",
+        "insuranceIncluded",
+        "monthlyPayment",
+        "customerConditionNote",
+      ];
+    case "현금":
+      return [
+        "vehicleName",
+        "vehicleTrim",
+        "totalVehiclePrice",
+        "promotionOrDiscount",
+        "deliveryAvailability",
+        "registrationFeesNote",
+        "customerConditionNote",
+      ];
+    default:
+      return ["vehicleName", "vehicleTrim", "customerConditionNote"];
+  }
 }
 
 export function defaultFinanceDraft(): FinanceConditionDraft {

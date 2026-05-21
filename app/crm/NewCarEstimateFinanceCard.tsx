@@ -10,13 +10,81 @@ import {
   uploadCustomerEstimateFile,
 } from "@/app/crm/storage";
 import { makeId } from "@/app/crm/seed";
-import { CUSTOMER_PRIORITY_OPTIONS, defaultFinanceDraft, sortedEstimateAttachments } from "@/app/crm/newCarEstimateDraft";
+import { normalizeKoreanVehicleSpelling } from "@/app/crm/customerContextDraft";
+import {
+  CUSTOMER_PRIORITY_OPTIONS,
+  defaultFinanceDraft,
+  financeFieldLabel,
+  financeFieldPlaceholder,
+  financeFieldsForMode,
+  sortedEstimateAttachments,
+  type FinanceFieldId,
+} from "@/app/crm/newCarEstimateDraft";
 
 const FINANCE_MODES: FinanceProductMode[] = ["리스", "할부", "현금", "장기렌트", "알 수 없음"];
 
 const FINANCE_INPUT_CLASS =
   "sensora-premium-input rounded-xl border border-white/[0.12] bg-slate-950/55 px-3 py-2 text-[14px] text-slate-100";
 const FINANCE_LABEL_CLASS = "text-[12px] font-semibold text-slate-400";
+
+function financeHintKey(mode: FinanceProductMode): TranslationKey {
+  if (mode === "리스") return "crm.newCar.leaseHintBullets";
+  if (mode === "할부") return "crm.newCar.loanHintBullets";
+  if (mode === "장기렌트") return "crm.newCar.longRentHintBullets";
+  if (mode === "현금") return "crm.newCar.cashHintBullets";
+  if (mode === "알 수 없음") return "crm.newCar.unknownModeHint";
+  return "crm.newCar.otherModeHint";
+}
+
+function FinanceDraftField({
+  field,
+  mode,
+  draft,
+  onChange,
+}: {
+  field: FinanceFieldId;
+  mode: FinanceProductMode;
+  draft: FinanceConditionDraft;
+  onChange: (patch: Partial<FinanceConditionDraft>) => void;
+}) {
+  const value = (draft[field] as string | undefined) ?? "";
+  const label = financeFieldLabel(field, mode);
+  const placeholder = financeFieldPlaceholder(field, mode);
+  const isNote = field === "customerConditionNote";
+
+  if (isNote) {
+    return (
+      <label className="grid gap-1 sm:col-span-2">
+        <span className={FINANCE_LABEL_CLASS}>{label}</span>
+        <textarea
+          value={value}
+          onChange={(e) => onChange({ customerConditionNote: e.target.value })}
+          rows={3}
+          className={`${FINANCE_INPUT_CLASS} min-h-[80px] resize-y`}
+          placeholder={placeholder}
+        />
+      </label>
+    );
+  }
+
+  return (
+    <label className="grid gap-1">
+      <span className={FINANCE_LABEL_CLASS}>{label}</span>
+      <input
+        value={value}
+        onChange={(e) => {
+          const next =
+            field === "vehicleName" || field === "vehicleTrim"
+              ? normalizeKoreanVehicleSpelling(e.target.value)
+              : e.target.value;
+          onChange({ [field]: next } as Partial<FinanceConditionDraft>);
+        }}
+        className={FINANCE_INPUT_CLASS}
+        placeholder={placeholder}
+      />
+    </label>
+  );
+}
 
 const ACCEPT_MIME = new Set(["application/pdf", "image/png", "image/jpeg"]);
 const ACCEPT_EXT = /\.(pdf|png|jpg|jpeg)$/i;
@@ -338,150 +406,33 @@ export function NewCarEstimateFinanceCard({ uid, customer, onPatch, onRequireLog
           </div>
 
           <div className="rounded-xl border border-white/[0.08] bg-slate-950/40 px-3 py-2.5 text-[12px] leading-relaxed text-slate-400">
-            {draft.productMode === "리스" ? (
-              <p className="whitespace-pre-line">{t("crm.newCar.leaseHintBullets")}</p>
-            ) : draft.productMode === "할부" ? (
-              <p className="whitespace-pre-line">{t("crm.newCar.loanHintBullets")}</p>
-            ) : draft.productMode === "알 수 없음" ? (
-              <p className="whitespace-pre-line">{t("crm.newCar.unknownModeHint")}</p>
-            ) : (
-              <p>{t("crm.newCar.otherModeHint")}</p>
-            )}
+            <p>{t(financeHintKey(draft.productMode))}</p>
           </div>
 
           <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
-            <label className="grid gap-1">
-              <span className={FINANCE_LABEL_CLASS}>차량명</span>
-              <input
-                value={draft.vehicleName ?? ""}
-                onChange={(e) => setDraft({ vehicleName: e.target.value })}
-                className={FINANCE_INPUT_CLASS}
-                placeholder="예: 그랜저 하이브리드"
-              />
-            </label>
-            <label className="grid gap-1">
-              <span className={FINANCE_LABEL_CLASS}>트림</span>
-              <input
-                value={draft.vehicleTrim ?? ""}
-                onChange={(e) => setDraft({ vehicleTrim: e.target.value })}
-                className={FINANCE_INPUT_CLASS}
-                placeholder="예: 캘리그래피"
-              />
-            </label>
-            <label className="grid gap-1">
-              <span className={FINANCE_LABEL_CLASS}>총 차량가</span>
-              <input
-                value={draft.totalVehiclePrice ?? ""}
-                onChange={(e) => setDraft({ totalVehiclePrice: e.target.value })}
-                className={FINANCE_INPUT_CLASS}
-                placeholder="예: 4,200만원"
-              />
-            </label>
-            <label className="grid gap-1">
-              <span className={FINANCE_LABEL_CLASS}>프로모션/할인</span>
-              <input
-                value={draft.promotionOrDiscount ?? ""}
-                onChange={(e) => setDraft({ promotionOrDiscount: e.target.value })}
-                className={FINANCE_INPUT_CLASS}
-                placeholder="예: 출고 지원금"
-              />
-            </label>
-            <label className="grid gap-1">
-              <span className={FINANCE_LABEL_CLASS}>선납금</span>
-              <input
-                value={draft.downPayment ?? ""}
-                onChange={(e) => setDraft({ downPayment: e.target.value })}
-                className={FINANCE_INPUT_CLASS}
-                placeholder="예: 300만원 (할부)"
-              />
-            </label>
-            <label className="grid gap-1">
-              <span className={FINANCE_LABEL_CLASS}>보증금</span>
-              <input
-                value={draft.deposit ?? ""}
-                onChange={(e) => setDraft({ deposit: e.target.value })}
-                className={FINANCE_INPUT_CLASS}
-                placeholder="예: 500만원 (리스)"
-              />
-            </label>
-            <label className="grid gap-1">
-              <span className={FINANCE_LABEL_CLASS}>계약 기간</span>
-              <input
-                value={draft.contractMonths ?? ""}
-                onChange={(e) => setDraft({ contractMonths: e.target.value })}
-                className={FINANCE_INPUT_CLASS}
-                placeholder="예: 48개월"
-              />
-            </label>
-            <label className="grid gap-1">
-              <span className={FINANCE_LABEL_CLASS}>월 납입금</span>
-              <input
-                value={draft.monthlyPayment ?? ""}
-                onChange={(e) => setDraft({ monthlyPayment: e.target.value })}
-                className={FINANCE_INPUT_CLASS}
-                placeholder="예: 견적서 기준 참고"
-              />
-            </label>
+            {financeFieldsForMode(draft.productMode).map((field) => (
+              <FinanceDraftField key={field} field={field} mode={draft.productMode} draft={draft} onChange={setDraft} />
+            ))}
           </div>
 
           <section className="space-y-2.5 rounded-xl border border-white/[0.08] bg-slate-950/35 px-3 py-3 sm:px-4">
             <h3 className="text-[14px] font-semibold text-slate-100">{t("crm.newCar.prioritySectionTitle")}</h3>
             <p className="text-[12px] leading-relaxed text-slate-500">{t("crm.newCar.priorityReflectHint")}</p>
-            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+            <div className="crm-finance-priority-grid">
               {CUSTOMER_PRIORITY_OPTIONS.map((opt) => {
                 const on = (customer.customerPriorityNeeds ?? []).includes(opt);
                 return (
                   <label
                     key={opt}
-                    className="flex cursor-pointer items-start gap-2 rounded-lg border border-white/[0.08] bg-slate-950/40 px-3 py-2 text-[13px] text-slate-200 hover:bg-white/[0.04]"
+                    className="crm-finance-priority-chip flex cursor-pointer items-start gap-2 rounded-lg border border-white/[0.08] bg-slate-950/40 text-slate-200 hover:bg-white/[0.04]"
                   >
-                    <input type="checkbox" checked={on} onChange={() => toggleNeed(opt)} className="mt-0.5" />
+                    <input type="checkbox" checked={on} onChange={() => toggleNeed(opt)} className="mt-0.5 shrink-0" />
                     <span>{opt}</span>
                   </label>
                 );
               })}
             </div>
           </section>
-
-          <details className="crm-finance-detail-details rounded-xl border border-white/[0.08] bg-slate-950/30 px-3 py-2 sm:px-4">
-            <summary className="flex cursor-pointer list-none items-center justify-between gap-3 rounded-lg px-1 py-2 outline-none transition hover:bg-slate-950/40 focus-visible:ring-2 focus-visible:ring-sky-400/35 [&::-webkit-details-marker]:hidden">
-              <span className="text-[13px] font-semibold text-slate-200">{t("crm.newCar.financeDetailSectionTitle")}</span>
-              <span className="crm-finance-detail-toggle shrink-0 text-[12px] font-semibold text-slate-500">
-                <span className="crm-finance-detail-toggle__expand">{t("crm.newCar.financeDetailExpand")}</span>
-                <span className="crm-finance-detail-toggle__collapse">{t("crm.newCar.financeDetailCollapse")}</span>
-              </span>
-            </summary>
-            <div className="grid grid-cols-1 gap-2.5 border-t border-white/[0.06] pb-1 pt-3 sm:grid-cols-2">
-              <label className="grid gap-1">
-                <span className={FINANCE_LABEL_CLASS}>잔존가치</span>
-                <input
-                  value={draft.residualValue ?? ""}
-                  onChange={(e) => setDraft({ residualValue: e.target.value })}
-                  className={FINANCE_INPUT_CLASS}
-                  placeholder="예: 55%"
-                />
-              </label>
-              <label className="grid gap-1 sm:col-span-2">
-                <span className={FINANCE_LABEL_CLASS}>만기 선택</span>
-                <input
-                  value={draft.maturityOptions ?? ""}
-                  onChange={(e) => setDraft({ maturityOptions: e.target.value })}
-                  className={FINANCE_INPUT_CLASS}
-                  placeholder="예: 인수/반납 검토"
-                />
-              </label>
-              <label className="grid gap-1 sm:col-span-2">
-                <span className={FINANCE_LABEL_CLASS}>고객 요청사항 · 기타 세부 조건</span>
-                <textarea
-                  value={draft.customerConditionNote ?? ""}
-                  onChange={(e) => setDraft({ customerConditionNote: e.target.value })}
-                  rows={3}
-                  className={`${FINANCE_INPUT_CLASS} min-h-[80px] resize-y`}
-                  placeholder="예: 월 납입 부담, 초기비용, 출고 시점"
-                />
-              </label>
-            </div>
-          </details>
 
           <p className="text-[11px] leading-relaxed text-slate-500">{t("crm.newCar.disclaimerAiReview")}</p>
         </div>
