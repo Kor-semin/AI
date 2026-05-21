@@ -5282,7 +5282,31 @@ html[data-theme="light"] .crm-app-stage .quick-ai-entry-result-card li {
   color: var(--crm-light-text) !important;
 }
 
-html[data-theme="light"] .crm-app-stage .quick-ai-entry-result-card li span:first-child {
+html[data-theme="light"] .crm-app-stage .quick-ai-entry-result-card h2 {
+  color: #0f172a !important;
+}
+
+html[data-theme="light"] .crm-app-stage .quick-ai-needs-label {
+  color: #475569 !important;
+}
+
+html[data-theme="light"] .crm-app-stage .quick-ai-needs-value {
+  color: #0f172a !important;
+  font-weight: 500;
+  opacity: 1 !important;
+}
+
+html[data-theme="light"] .crm-app-stage .quick-ai-needs-value--empty {
+  color: #94a3b8 !important;
+  font-weight: 400;
+}
+
+html[data-theme="light"] .crm-app-stage .quick-ai-entry-result-card .quick-ai-needs-item {
+  border-color: var(--crm-light-border) !important;
+  background: #fafafa !important;
+}
+
+html[data-theme="light"] .crm-app-stage .quick-ai-entry-result-card li span:first-child:not(.quick-ai-needs-label) {
   color: #475569 !important;
 }
 
@@ -5592,7 +5616,38 @@ html[data-theme="light"] .crm-app-stage .quick-ai-entry-result-card [class*="050
 html[data-theme="light"] .crm-app-stage .quick-ai-entry-result-card [class*="030b14"] {
   background-color: #fafafa !important;
   border-color: rgba(15, 23, 42, 0.1) !important;
-  color: var(--crm-light-text) !important;
+}
+
+html[data-theme="light"] .crm-app-stage .quick-ai-entry-result-card .quick-ai-needs-value:not(.quick-ai-needs-value--empty) {
+  color: #0f172a !important;
+}
+
+html[data-theme="light"] .crm-app-stage .quick-ai-entry-result-card p.text-slate-100\/92,
+html[data-theme="light"] .crm-app-stage .quick-ai-entry-result-card li.text-slate-200\/92 {
+  color: #1e293b !important;
+}
+
+html[data-theme="light"] .crm-app-stage .quick-ai-entry-result-card .text-slate-500 {
+  color: #64748b !important;
+}
+
+/* 다크모드: 니즈 값 가독성 유지 */
+html[data-theme="dark"] .crm-app-stage .quick-ai-needs-label,
+html:not([data-theme="light"]) .crm-app-stage .quick-ai-needs-label {
+  color: rgb(203 213 225) !important;
+}
+
+html[data-theme="dark"] .crm-app-stage .quick-ai-needs-value:not(.quick-ai-needs-value--empty),
+html:not([data-theme="light"]) .crm-app-stage .quick-ai-needs-value:not(.quick-ai-needs-value--empty) {
+  color: rgba(248, 250, 252, 0.92) !important;
+  font-weight: 500;
+  opacity: 1 !important;
+}
+
+html[data-theme="dark"] .crm-app-stage .quick-ai-needs-value--empty,
+html:not([data-theme="light"]) .crm-app-stage .quick-ai-needs-value--empty {
+  color: rgb(148 163 184) !important;
+  font-weight: 400;
 }
 
 html[data-theme="light"] .crm-app-stage #crm-main .hover\:bg-white\/\[0\.06\]:hover,

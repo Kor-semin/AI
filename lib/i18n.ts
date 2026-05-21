@@ -1547,7 +1547,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.quickAi.needs.timing": "구매·출고 시기",
     "crm.quickAi.needs.priorities": "중요 조건",
     "crm.quickAi.needs.concerns": "우려 사항",
-    "crm.quickAi.needsUnset": "상담 요약에서 확인",
+    "crm.quickAi.needsUnset": "아직 확인되지 않았습니다",
     "crm.quickAi.smsTitle": "고객에게 보낼 문자 초안",
     "crm.quickAi.smsDisclaimer": "검토용 초안입니다. 최종 발송 전에 꼭 확인해 주세요.",
     "crm.quickAi.copySms": "문자 초안 복사하기",

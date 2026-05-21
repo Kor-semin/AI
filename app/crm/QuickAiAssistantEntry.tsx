@@ -100,16 +100,26 @@ export function QuickAiAssistantEntry({
               <SensoraAnimatedMark size={28} animated={false} className="shrink-0 opacity-90" aria-hidden />
               <h2 className="text-[15px] font-semibold text-slate-50">{t("crm.quickAi.needsTitle")}</h2>
             </div>
-            <ul className="mt-3 space-y-2">
+            <ul className="quick-ai-needs-list mt-3 space-y-2">
               {NEED_LABEL_KEYS.map(({ key, labelKey }) => {
-                const value = result.needs[key] ?? t("crm.quickAi.needsUnset");
+                const rawValue = result.needs[key]?.trim();
+                const hasValue = Boolean(rawValue);
+                const value = hasValue ? rawValue! : t("crm.quickAi.needsUnset");
                 return (
                   <li
                     key={key}
-                    className="rounded-xl border border-white/[0.08] bg-[#050f1a]/55 px-3 py-2.5 text-[0.8125rem] leading-snug sm:text-[0.875rem]"
+                    className="quick-ai-needs-item rounded-xl border border-white/[0.08] bg-[#050f1a]/55 px-3 py-2.5 text-[0.8125rem] leading-snug sm:text-[0.875rem]"
                   >
-                    <span className="font-semibold text-slate-300">{t(labelKey)}</span>
-                    <span className="mt-1 block text-slate-100/92 [word-break:keep-all]">{value}</span>
+                    <span className="quick-ai-needs-label font-semibold text-slate-300">{t(labelKey)}</span>
+                    <span
+                      className={
+                        hasValue
+                          ? "quick-ai-needs-value mt-1 block [word-break:keep-all]"
+                          : "quick-ai-needs-value quick-ai-needs-value--empty mt-1 block [word-break:keep-all]"
+                      }
+                    >
+                      {value}
+                    </span>
                   </li>
                 );
               })}

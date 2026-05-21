@@ -163,6 +163,15 @@ function parseOwnedVehicleFromMemo(memo: string): ParsedOwnedVehicle | undefined
   return { label: parts.join(" · "), brand, model, year, mileageKm, accident };
 }
 
+/** 문자 초안용 보유 차량 표기(브랜드·모델·연식·주행). */
+function formatOwnedVehicleSmsPhrase(owned: ParsedOwnedVehicle): string {
+  const head = [owned.brand, owned.model].filter(Boolean).join(" ");
+  const extras = [owned.year ? `${owned.year}년식` : "", owned.mileageKm ?? ""].filter(Boolean);
+  if (head && extras.length) return `${head} ${extras.join(", ")}`;
+  if (head) return head;
+  return owned.label.replace(/\s*·\s*/g, " ").replace(/\s+/g, " ").trim();
+}
+
 /** 구조화된 상담 메모(관심 차량·보유 차량·금융·다음 연락 등). */
 export function isRichStructuredConsultation(memo: string): boolean {
   const raw = memo.trim();
@@ -298,7 +307,7 @@ function buildRichConsultationSms(
   }
 
   if (owned) {
-    const ownedPhrase = owned.label.replace(/\s*·\s*단순교환$/, "");
+    const ownedPhrase = formatOwnedVehicleSmsPhrase(owned);
     financeBits.push(`현재 보유 중이신 ${ownedPhrase} 차량의 매입 가능 금액도 함께 확인해 보겠습니다`);
   } else if (/매입|보유\s*차량/i.test(memo)) {
     financeBits.push("현재 보유 중이신 차량의 매입 가능 금액도 함께 확인해 보겠습니다");
@@ -334,7 +343,9 @@ export function buildRichNextActions(
   const ownedV = owned ?? parseOwnedVehicleFromMemo(raw);
   const lines: string[] = [];
 
-  if (/토요일|다음\s*연락/i.test(raw)) {
+  if (/이번\s*주\s*토요일/i.test(raw)) {
+    lines.push("이번 주 토요일 오전 통화 일정 확인");
+  } else if (/토요일|다음\s*연락/i.test(raw)) {
     lines.push("토요일 오전 통화 일정 확인");
   }
   if (vehicle) {
@@ -893,7 +904,9 @@ const NEXT_ACTION_BOILERPLATE_RE =
 export function polishNextActionForDisplay(raw: string): string {
   const t = raw.trim();
   if (!t) return "";
-  if (/^-\s+/.test(t) || /토요일\s*오전|출고\s*가능\s*여부|매입\s*가능|할부\/리스/i.test(t)) {
+  if (/^이번\s*주\s*토요일\s*오전$/i.test(t)) return "이번 주 토요일 오전 통화 일정 확인";
+  if (/^토요일\s*오전$/i.test(t)) return "토요일 오전 통화 일정 확인";
+  if (/^-\s+/.test(t) || /통화\s*일정\s*확인|토요일\s*오전|출고\s*가능\s*여부|매입\s*가능|할부\/리스/i.test(t)) {
     return t.replace(/^[-•*]\s*/, "").trim();
   }
   if (NEXT_ACTION_BOILERPLATE_RE.test(t) || t.length > 72) {
