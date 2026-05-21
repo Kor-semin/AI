@@ -4802,6 +4802,50 @@ html[data-theme="light"] .crm-app-stage aside nav .border-white\/\[0\.08\] {
   border-color: var(--crm-light-border) !important;
 }
 
+/* 라이트모드 — 데스크톱 사이드바 메뉴 밀도·가독성 */
+@media (min-width: 1024px) {
+  html[data-theme="light"] .crm-app-stage .crm-desktop-sidebar {
+    width: 18rem;
+  }
+
+  html[data-theme="light"] .crm-app-stage .crm-desktop-nav {
+    gap: 0.25rem;
+  }
+
+  html[data-theme="light"] .crm-app-stage .crm-desktop-nav-item {
+    min-height: 2.375rem !important;
+    padding-top: 0.4375rem !important;
+    padding-bottom: 0.4375rem !important;
+    column-gap: 0.5rem !important;
+  }
+
+  html[data-theme="light"] .crm-app-stage .crm-desktop-nav-item__title {
+    font-size: 0.8125rem !important;
+    font-weight: 600 !important;
+    line-height: 1.25 !important;
+    letter-spacing: -0.01em;
+    white-space: nowrap !important;
+  }
+
+  html[data-theme="light"] .crm-app-stage .crm-desktop-nav-item__subtitle {
+    font-size: 0.6875rem !important;
+    font-weight: 500 !important;
+    line-height: 1.2 !important;
+    white-space: nowrap !important;
+    max-width: 6.5rem;
+    color: var(--crm-light-text-helper) !important;
+  }
+
+  html[data-theme="light"] .crm-app-stage aside nav button[aria-current="page"] .crm-desktop-nav-item__subtitle {
+    color: #345c7c !important;
+  }
+
+  html[data-theme="light"] .crm-app-stage aside nav button[aria-current="page"]::before {
+    top: 0.375rem !important;
+    bottom: 0.375rem !important;
+  }
+}
+
 html[data-theme="light"] .crm-app-stage .landing-mobile-nav-shell > div {
   border: 1px solid var(--crm-light-border) !important;
   background: #ffffff !important;
