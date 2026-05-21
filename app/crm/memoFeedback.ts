@@ -1,4 +1,4 @@
-import type { Customer, PaymentType } from "./types";
+import type { Customer, FinanceProductMode, PaymentType } from "./types";
 
 export type MemoFeedback = {
   bullets: string[];
@@ -10,6 +10,26 @@ function norm(s: string) {
   return s.toLowerCase();
 }
 
+function resolveFinanceMode(c: Customer): FinanceProductMode | PaymentType | undefined {
+  return c.financeConditionDraft?.productMode ?? c.paymentType;
+}
+
+function financeModeBullet(mode: FinanceProductMode | PaymentType | undefined): string | null {
+  if (mode === "리스") {
+    return "리스 조건은 잔존가치, 보증금, 약정거리, 선납금에 따라 월 납입금이 달라질 수 있습니다.";
+  }
+  if (mode === "장기렌트") {
+    return "장기렌트 조건은 약정거리, 보험 포함 여부, 보증금 조건에 따라 월 납입금이 달라질 수 있습니다.";
+  }
+  if (mode === "할부") {
+    return "할부 조건은 선납금, 기간, 금리에 따라 월 납입금이 달라질 수 있습니다.";
+  }
+  if (mode === "현금") {
+    return "현금 구매는 차량가, 프로모션, 등록 시점에 필요한 비용을 함께 확인하면 좋습니다.";
+  }
+  return null;
+}
+
 /** 규칙 기반 가벼운 피드백(LLM 없음) */
 export function getMemoFeedback(c: Customer): MemoFeedback {
   const blob = norm(`${c.memo ?? ""} ${c.budget ?? ""} ${c.paymentNotes ?? ""} ${c.comparisonNotes ?? ""}`);
@@ -17,27 +37,25 @@ export function getMemoFeedback(c: Customer): MemoFeedback {
   const nextQuestions: string[] = [];
   const risks: string[] = [];
 
-  const payment = c.paymentType as PaymentType | undefined;
-  if (payment === "리스" || payment === "장기렌트") {
-    bullets.push("리스/장기렌트면 잔가·약정거리·초과거리 요금을 짧게 확인하는 게 좋아요.");
-    nextQuestions.push("약정 기간(36/48/60개월)과 연간 주행거리는 어느 정도인가요?");
-  }
-  if (payment === "할부") {
-    bullets.push("할부면 선납·기간·금리(캐시백 포함) 3가지만 정리하면 상담이 빨라져요.");
-    nextQuestions.push("월 납입 가능 한도(대략)는 어느 정도인가요?");
-  }
-  if (payment === "현금") {
-    bullets.push("현금이면 즉시 출고/명의 이전 일정만 맞추면 됩니다.");
-  }
+  const mode = resolveFinanceMode(c);
+  const modeBullet = financeModeBullet(mode);
+  if (modeBullet) bullets.push(modeBullet);
 
   if (!c.interestedModel?.trim()) {
     nextQuestions.push("희망 차종(브랜드 포함)을 한 줄로만 정해 주실 수 있을까요?");
   }
-  if (!c.budget?.trim()) {
+  if (!c.budget?.trim() && !c.financeConditionDraft?.monthlyPayment?.trim()) {
     nextQuestions.push("총예산(또는 월 납입) 범위를 숫자로 알려 주실 수 있을까요?");
   }
   if (!c.phone?.trim()) {
     nextQuestions.push("연락 가능한 번호(또는 카톡)를 남겨 주실 수 있을까요?");
+  }
+
+  if (mode === "리스" || mode === "장기렌트") {
+    nextQuestions.push("약정 기간(36/48/60개월)과 연간 주행거리는 어느 정도인가요?");
+  }
+  if (mode === "할부") {
+    nextQuestions.push("월 납입 가능 한도(대략)는 어느 정도인가요?");
   }
 
   if (blob.includes("급") || blob.includes("빨리") || blob.includes("당일")) {

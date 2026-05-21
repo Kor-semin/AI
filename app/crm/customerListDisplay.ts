@@ -1,5 +1,6 @@
 import type { Customer, NextAction } from "./types";
 import {
+  buildCustomerAiSummaryLine,
   extractPreferredVehicleModel,
   inferVehicleBrandForModel,
   normalizeInterestVehicle,
@@ -15,17 +16,6 @@ function clampText(s: string, max = 80) {
   const t = s.trim();
   if (t.length <= max) return t;
   return `${t.slice(0, max - 1)}…`;
-}
-
-function shortVehicleLabel(c: Customer): string {
-  const full = formatCustomerInterestVehicle(c);
-  if (!full) return "";
-  const stripped = full
-    .replace(/Mercedes[\s-]*Benz\s*/gi, "")
-    .replace(/메르세데스[\s-]*벤츠\s*/g, "")
-    .trim();
-  const token = (stripped || full).split(/\s+/)[0] ?? "";
-  return token.length > 24 ? `${token.slice(0, 23)}…` : token;
 }
 
 /** 고객 카드·상세의 관심 차량 한 줄(모델명 우선 · 메모에서 GLC 등 복구). */
@@ -60,35 +50,6 @@ export function formatCustomerInterestVehicle(c: Customer): string {
 
   const parts = [c.vehicleBrand, c.interestedModel].filter(Boolean).map((p) => String(p).trim());
   return parts.join(" ").trim();
-}
-
-/** 고객 리스트 카드용 한 줄 AI 요약. */
-export function buildCustomerListCardSummary(c: Customer): string {
-  const veh = shortVehicleLabel(c);
-  const fd = c.financeConditionDraft?.productMode;
-  const needs = c.customerPriorityNeeds ?? [];
-  const parts: string[] = [];
-
-  if (veh) parts.push(`${veh} 관심`);
-  if (fd === "리스") parts.push("리스 조건 검토");
-  else if (fd === "할부") parts.push("할부 조건 검토");
-  else if (fd === "장기렌트") parts.push("장기렌트 조건 검토");
-  else if (fd === "현금") parts.push("출고·현금 조건 확인");
-  else if (c.stage?.trim() && c.stage !== "미상담") parts.push(c.stage.trim());
-
-  if (needs.includes("월 납입금 부담 최소화")) parts.push("월 납입 부담 최소화");
-  if (needs.includes("빠른 출고")) parts.push("출고 일정 확인");
-
-  if (parts.length >= 2) return clampText(parts.slice(0, 3).join(" · "), 72);
-
-  const memoLine =
-    (c.memo ?? "")
-      .split(/\n+/)
-      .map((l) => l.trim())
-      .find((l) => l && !l.startsWith("[")) ?? "";
-  if (parts.length === 1) return clampText(parts[0], 72);
-  if (memoLine) return clampText(memoLine, 72);
-  return "상담·견적 정리 중";
 }
 
 /** 고객 카드 다음 행동 라벨(과도하게 긴 AI 문구 축약). 빈 값은 빈 문자열. */
@@ -218,5 +179,5 @@ export function formatCrmDisplayTimeOnly(iso?: string): string {
 
 /** 데모·예시 데이터 기반 AI 요약 (실제 AI 연동 없음) */
 export function getDemoAiSummaryLine(c: Customer): string {
-  return buildCustomerListCardSummary(c);
+  return clampText(buildCustomerAiSummaryLine(c), 72);
 }

@@ -7,7 +7,8 @@ import {
   buildEstimateGuideMessage,
   hasMeaningfulFinanceDraft,
 } from "./financeAwareMessageTemplate";
-import type { Customer, NextAction } from "./types";
+import { parseMoneyToKrw } from "./recommendations";
+import type { Customer, FinanceConditionDraft, NextAction } from "./types";
 
 export type QuickConsultationNeeds = {
   vehicle?: string;
@@ -334,8 +335,8 @@ function buildSparseQuickConsultationResult(
   }
 
   const summary = vehicle
-    ? `관심 차량: ${vehicle}\n추가 확인: 예산, 구매 시기, 결제 방식`
-    : "추가 확인: 관심 차량, 예산, 구매 시기, 결제 방식";
+    ? `${vehicle} 관심. 예산·구매 시기·출고 일정은 추가 확인이 필요합니다.`
+    : "관심 차량·예산·구매 시기는 추가 확인이 필요합니다.";
   const message = vehicle
     ? `안녕하세요, ${name}님.\n문의 주신 ${vehicle} 관련해서 안내드리겠습니다.\n예산, 출고 희망일, 원하시는 조건을 알려주시면 그 기준으로 견적과 가능 조건을 정리해드리겠습니다.`
     : `안녕하세요, ${name}님.\n문의 주셔서 감사합니다.\n예산, 출고 희망일, 원하시는 조건을 알려주시면 견적과 가능 조건을 정리해드리겠습니다.`;
@@ -359,8 +360,8 @@ function buildGroundedQuickConsultationResult(
   const deliveryNote = extractDeliveryNote(memo);
 
   const summary = vehicle
-    ? `관심 차량: ${vehicle}\n상담 포인트: 월 납입·출고 일정 확인`
-    : "상담 포인트: 관심 차량, 월 납입·출고 일정 확인";
+    ? `${vehicle} 관심. 월 납입·출고 일정을 중심으로 추가 상담이 필요합니다.`
+    : "월 납입·출고 일정을 중심으로 추가 상담이 필요합니다.";
 
   const message = buildGroundedSmsDraft(name, vehicle, paymentNote, deliveryNote);
   const nextActions = ["리스·출고 조건 확인 후 견적 안내 문자 검토"];
@@ -390,7 +391,7 @@ export function buildQuickCustomerModalMemo(memo: string, result: QuickConsultat
   if (paymentNote) lines.push(paymentNote);
   if (deliveryNote) lines.push(deliveryNote);
   if (!paymentNote && !deliveryNote) {
-    lines.push("예산, 구매 시기, 출고 희망일, 결제 방식 추가 확인 필요");
+    lines.push("예산·구매 시기·출고 일정은 추가 확인이 필요합니다.");
   } else {
     const missing: string[] = [];
     if (!paymentNote) missing.push("월 납입 조건");
@@ -484,7 +485,7 @@ export function applyCustomerNameToMessageText(name: string | undefined | null, 
 }
 
 const NEXT_ACTION_BOILERPLATE_RE =
-  /라인별\s*조건|문자\s*톤|마지막으로\s*한\s*번\s*더|메모에\s*적힌|그대로\s*반영|현재\s*확인\s*가능한\s*조건\s*기준|입력된\s*조건\s*기준/i;
+  /라인별\s*조건|문자\s*톤|마지막으로\s*한\s*번\s*더|메모에\s*적힌|그대로\s*반영|현재\s*확인\s*가능한\s*조건\s*기준|입력된\s*조건\s*기준|월\s*출금|확인합니다|톤을\s*맞|리스\s*\/\s*장기렌트/i;
 
 /** 다음 행동·검수 문구를 영업 카드용 1~2줄로 축약. */
 export function polishNextActionForDisplay(raw: string): string {
@@ -523,40 +524,100 @@ function collectMissingFields(c: Customer): string[] {
   return missing;
 }
 
-/** 고객 카드·AI 요약 영역용 짧은 요약(불릿). */
+function formatManwonDisplay(text?: string): string {
+  const raw = text?.trim();
+  if (!raw) return "";
+  const won = parseMoneyToKrw(raw);
+  if (won != null && won > 0) {
+    const man = Math.round(won / 10_000);
+    if (man > 0) return `${man.toLocaleString("ko-KR")}만 원`;
+  }
+  if (/^\d[\d,.\s]*$/.test(raw)) {
+    const n = parseInt(raw.replace(/[^\d]/g, ""), 10);
+    if (n >= 100) return `${n.toLocaleString("ko-KR")}만 원`;
+  }
+  return raw;
+}
+
+/** 금융 초안 필드 — 화면 표시용(단위 포함). */
+export function formatFinanceDraftDisplay(
+  field: keyof FinanceConditionDraft,
+  raw?: string,
+): string {
+  const t = raw?.trim();
+  if (!t) return "";
+  if (field === "monthlyPayment") {
+    const won = parseMoneyToKrw(t);
+    if (won != null && won >= 100_000) {
+      return `약 ${Math.round(won / 10_000).toLocaleString("ko-KR")}만 원`;
+    }
+    return t;
+  }
+  if (field === "contractMonths") {
+    return /개월/i.test(t) ? t : `${t.replace(/[^\d]/g, "")}개월`;
+  }
+  if (field === "deposit" || field === "residualValue" || field === "downPayment" || field === "totalVehiclePrice") {
+    return formatManwonDisplay(t);
+  }
+  return t;
+}
+
+/** 고객 맥락 요약 — 입력된 금융 조건 불릿 */
+export function buildFinanceDraftDetailBullets(fd?: FinanceConditionDraft): string[] {
+  if (!fd) return [];
+  const lines: string[] = [];
+  const months = formatFinanceDraftDisplay("contractMonths", fd.contractMonths);
+  const deposit = formatFinanceDraftDisplay("deposit", fd.deposit);
+  const residual = formatFinanceDraftDisplay("residualValue", fd.residualValue);
+  const down = formatFinanceDraftDisplay("downPayment", fd.downPayment);
+  const monthly = formatFinanceDraftDisplay("monthlyPayment", fd.monthlyPayment);
+  if (months) lines.push(`계약기간: ${months}`);
+  if (deposit) lines.push(`보증금: ${deposit}`);
+  if (down) lines.push(`선납금: ${down}`);
+  if (residual) lines.push(`잔존가치: ${residual}`);
+  if (monthly) lines.push(`월 납입금: ${monthly}`);
+  return lines;
+}
+
+function summarizePriorityNeedsPhrase(needs: string[]): string {
+  if (!needs.length) return "";
+  const bits: string[] = [];
+  if (needs.includes("월 납입금 부담 최소화")) bits.push("월 납입 부담");
+  if (needs.includes("초기 비용 최소화")) bits.push("초기 비용");
+  if (needs.includes("빠른 출고")) bits.push("출고 일정");
+  if (needs.length && !bits.length) return `${needs.slice(0, 2).join(", ")}을 중요하게 보고 있습니다.`;
+  if (bits.length === 1) return `${bits[0]}을 중요하게 보고 있습니다.`;
+  if (bits.length >= 2) return `${bits.slice(0, 2).join("과 ")}을 낮추는 조건을 중요하게 보고 있습니다.`;
+  return "";
+}
+
+/** 고객 카드·AI 요약 — 짧은 카드형 한 줄 */
 export function buildCustomerAiSummaryLine(c: Customer): string {
   const memoRaw = c.memo ?? "";
   const vehicle = customerVehicleLine(c) || extractPreferredVehicleModel(memoRaw);
-  const fd = c.financeConditionDraft;
+  const mode = c.financeConditionDraft?.productMode ?? c.paymentType;
   const needs = c.customerPriorityNeeds ?? [];
-  const lines: string[] = [];
+  const needPhrase = summarizePriorityNeedsPhrase(needs);
 
-  if (vehicle) lines.push(`관심 차량: ${vehicle}`);
-  if (c.stage?.trim()) lines.push(`상담 상태: ${c.stage.trim()}`);
-  if (fd?.productMode) lines.push(`금융 방식: ${fd.productMode}`);
-
-  const points: string[] = [];
-  if (needs.includes("월 납입금 부담 최소화")) points.push("월 납입 부담 최소화");
-  if (needs.includes("빠른 출고")) points.push("출고 일정 확인");
-  if (needs.length && !points.length) points.push(needs.slice(0, 2).join(", "));
-  const memo = memoRaw.toLowerCase();
-  if (!points.length && /월\s*납입|납입\s*부담/i.test(memo)) points.push("월 납입 부담 최소화");
-  if (!points.length && /출고/i.test(memo)) points.push("출고 일정 확인");
-  if (points.length) lines.push(`상담 포인트: ${points.join(", ")}`);
-
-  const missing = collectMissingFields(c);
-  if (missing.length) lines.push(`추가 확인: ${missing.join(", ")}`);
-
-  if (lines.length) return lines.join("\n");
+  if (vehicle && mode) {
+    const base = `${vehicle} ${mode} 상담입니다.`;
+    return needPhrase ? `${base} ${needPhrase}` : base;
+  }
+  if (vehicle) {
+    return needPhrase ? `${vehicle} 관심 고객입니다. ${needPhrase}` : `${vehicle} 관심 고객입니다.`;
+  }
+  if (needPhrase) return needPhrase;
 
   const firstLine =
     memoRaw
       .split(/\n+/)
       .map((l) => l.trim())
       .find((l) => l && !l.startsWith("[") && !/^(?:다음 행동|ai 요약)/i.test(l)) ?? "";
-  if (firstLine && firstLine.length <= 48) return firstLine;
-  if (memoRaw.trim()) return firstLine.slice(0, 48) + (firstLine.length > 48 ? "…" : "");
-  return "상담 메모를 바탕으로 정리한 고객입니다.";
+  if (firstLine) {
+    const short = firstLine.replace(/추가 확인 필요/g, "추가 상담 필요");
+    return short.length <= 72 ? short : `${short.slice(0, 71)}…`;
+  }
+  return "상담·견적 정리 중입니다.";
 }
 
 /** Flow·상세 화면용 AI 출력 정리(고객명·금융 조건 반영). */

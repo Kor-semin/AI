@@ -1090,7 +1090,13 @@ export function CRMApp({
   }, [state.customers]);
 
   const quickTemplates = useMemo(() => {
-    const tpls = [...state.templates];
+    const tpls = state.templates.filter((tpl) => {
+      const title = tpl.title.trim();
+      if (/^새\s*템플릿$/i.test(title)) return false;
+      const body = tpl.body.trim();
+      if (!body || body === "안녕하세요 {고객명}님, ...") return false;
+      return true;
+    });
     if (!selectedCustomer) return tpls.slice(0, 10);
     const stage = selectedCustomer.stage;
     const pay = (selectedCustomer.paymentType ?? "").toLowerCase();
@@ -1655,8 +1661,8 @@ export function CRMApp({
     const t = nowIso();
     const tpl: MessageTemplate = {
       id: makeId("tpl"),
-      title: "새 템플릿",
-      body: "안녕하세요 {고객명}님, ...",
+      title: "프로모션 안내",
+      body: "{고객명}님, 안녕하세요.\n진행 중인 프로모션과 혜택은 상담 시점·재고에 따라 달라질 수 있어, 확인 후 안내드리겠습니다.\n궁금하신 옵션·조건이 있으시면 편하게 말씀 주세요.",
       updatedAt: t,
     };
     setState((prev) => ({ ...prev, templates: [tpl, ...prev.templates] }));

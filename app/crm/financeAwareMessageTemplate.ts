@@ -262,7 +262,7 @@ function buildLeaseEstimateMessage(customer: Customer): string | null {
   else if (down) condParts.push(`선납금 ${down}`);
   if (condParts.length) {
     lines.push(`현재 확인된 조건으로는 ${condParts.join(", ")} 기준이며`);
-    if (monthly) lines.push(`${monthly} 수준으로 검토되고 있습니다.`);
+    if (monthly) lines.push(`월 납입금은 ${monthly} 수준으로 검토되고 있습니다.`);
     lines.push("");
   } else if (monthly) {
     lines.push(`월 납입금은 ${monthly} 수준으로 검토 중입니다.`);

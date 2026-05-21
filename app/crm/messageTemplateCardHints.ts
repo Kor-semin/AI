@@ -14,6 +14,9 @@ const MESSAGE_TEMPLATE_CARD_HINTS: Record<string, string> = {
   "견적 발송 후 팔로업": "견적 확인 이후 옵션·프로모션·출고 일정을 다시 안내합니다.",
   "시승·매장 방문 안내": "방문 시간과 시승 준비사항을 부드럽게 안내합니다.",
   "계약 전 체크리스트": "명의·등록·보험·출고 전 확인사항을 정리합니다.",
+  "프로모션 안내": "진행 중인 프로모션·혜택을 확인 후 안내합니다.",
+  "출고 가능 재고 안내": "출고 가능 재고와 옵션 조정 가능 여부를 안내합니다.",
+  "재상담 요청": "이전 상담 이후 추가 확인 사항을 다시 정리합니다.",
 };
 
 export function getMessageTemplateCardHint(title: string, customer?: Customer | null): string {

@@ -1,7 +1,9 @@
 import type { Customer, FinanceConditionDraft } from "./types";
 import type { TranslationKey } from "@/lib/i18n";
+import { buildFinanceDraftDetailBullets } from "./customerContextDraft";
 import { buildUsedCarSearchQuery } from "./recommendations";
 import { buildTradeInPriceSmsParagraphs } from "./tradeInPriceNotes";
+import { formatCrmDisplayDateTime } from "./customerListDisplay";
 
 /** 고객 니즈 선택지(한글 라벨 — Firestore·상태에 그대로 저장) */
 export const CUSTOMER_PRIORITY_OPTIONS = [
@@ -38,7 +40,7 @@ const NEEDS_SMS_LINE: Record<string, string> = {
 
 /** 니즈별 추천 다음 행동(검토 제안 — 자동 실행 아님) */
 const NEEDS_REC_ACTION: Record<string, string> = {
-  "월 납입금 부담 최소화": "리스·할부 조건을 비교해 검토용 문자 발송",
+  "월 납입금 부담 최소화": "월 납입·보증금 조건 검토용 문자 발송",
   "초기 비용 최소화": "선납금·보증금 조정안 검토",
   "총 비용 확인": "월 납입·초기·만기 포함 총비용 시나리오 정리",
   "빠른 출고": "재고·배정 가능 여부 확인",
@@ -122,8 +124,10 @@ export function reflectMemoToSafePhrases(memoRaw: string): string[] {
   if (/프로모션|혜택|지원금/i.test(raw)) {
     phrases.push("프로모션·혜택은 상담 시점에 따라 달라질 수 있어 진행 전 다시 확인드리겠습니다.");
   }
-  if (/리스|장기렌트/i.test(raw)) {
-    phrases.push("검토 중이신 금융 방식(리스 등)에 맞춰 조건을 다시 정리드리겠습니다.");
+  if (/리스/i.test(raw) && !/장기렌트/i.test(raw)) {
+    phrases.push("검토 중이신 리스 조건에 맞춰 다시 정리드리겠습니다.");
+  } else if (/장기렌트/i.test(raw)) {
+    phrases.push("검토 중이신 장기렌트 조건에 맞춰 다시 정리드리겠습니다.");
   }
   if (/할부|할인금융/i.test(raw)) {
     phrases.push("할부 조건과 기간에 따라 달라질 수 있는 부분을 함께 확인드리겠습니다.");
@@ -168,9 +172,13 @@ export function buildRecommendedNextActionsFromCustomer(c: Customer): string[] {
     const a = NEEDS_REC_ACTION[n];
     if (a) push(a);
   }
+  const mode = c.financeConditionDraft?.productMode;
   const memoTags = memoReflectTags(`${c.memo ?? ""}\n${c.personalityMemo ?? ""}`);
   if (memoTags.includes("월 납입 부담") && !needs.some((n) => n.includes("월 납입"))) {
-    push("리스·할부 조건 비교 문자 발송");
+    if (mode === "리스") push("리스 조건·견적 안내 문자 검토");
+    else if (mode === "할부") push("할부 조건·견적 안내 문자 검토");
+    else if (mode === "장기렌트") push("장기렌트 조건·견적 안내 문자 검토");
+    else push("월 납입 조건·견적 안내 문자 검토");
   }
   if (memoTags.includes("출고 일정") && !needs.includes("빠른 출고")) {
     push("재고·배정 가능 여부 확인");
@@ -202,25 +210,28 @@ export function buildCustomerContextBulletLines(
 ): string[] {
   const lines: string[] = [];
   const veh = vehicleDisplayLine(c);
-  if (veh) lines.push(`${t("crm.contextSummary.vehicle")}: ${veh}`);
-  if (c.stage) lines.push(`${t("crm.contextSummary.stage")}: ${c.stage}`);
-  const needs = c.customerPriorityNeeds ?? [];
-  if (needs.length) lines.push(`${t("crm.contextSummary.needs")}: ${needs.join(", ")}`);
-  const memoTags = memoReflectTags(`${c.memo ?? ""}\n${c.personalityMemo ?? ""}`);
-  if (memoTags.length) {
-    lines.push(`${t("crm.contextSummary.memoDigest")}: ${memoTags.join(" · ")}`);
-  }
   const fd = c.financeConditionDraft;
-  if (fd?.productMode) {
-    lines.push(`${t("crm.contextSummary.financeMode")}: ${fd.productMode}`);
-    const finBits: string[] = [];
-    if (fmt(fd.monthlyPayment)) finBits.push(`${t("crm.contextSummary.monthly")}: ${fmt(fd.monthlyPayment)}`);
-    if (fmt(fd.contractMonths)) finBits.push(`${t("crm.contextSummary.contract")}: ${fmt(fd.contractMonths)}`);
-    if (fmt(fd.residualValue)) finBits.push(`${t("crm.contextSummary.residual")}: ${fmt(fd.residualValue)}`);
-    if (fmt(fd.downPayment)) finBits.push(`${t("crm.contextSummary.down")}: ${fmt(fd.downPayment)}`);
-    if (fmt(fd.deposit)) finBits.push(`${t("crm.contextSummary.deposit")}: ${fmt(fd.deposit)}`);
-    if (finBits.length) lines.push(`${t("crm.contextSummary.financeDetails")}: ${finBits.join(" · ")}`);
+  const needs = c.customerPriorityNeeds ?? [];
+  const mode = fd?.productMode ?? c.paymentType;
+
+  if (veh) lines.push(`${t("crm.contextSummary.vehicle")}: ${veh}`);
+  if (mode) lines.push(`${t("crm.contextSummary.financeMode")}: ${mode}`);
+  if (needs.length) lines.push(`중요 조건: ${needs.join(", ")}`);
+
+  const missing: string[] = [];
+  if (!c.purchaseTiming?.trim()) missing.push("구매 시기");
+  if (!c.budget?.trim() && !fd?.monthlyPayment?.trim()) missing.push("예산");
+  if (needs.includes("빠른 출고") || /출고/i.test(c.memo ?? "")) {
+    if (!/출고/i.test(`${c.memo ?? ""}${c.personalityMemo ?? ""}`)) missing.push("출고 가능 여부");
   }
+  if (missing.length) lines.push(`확인 필요: ${missing.join(", ")}`);
+
+  const finBullets = buildFinanceDraftDetailBullets(fd);
+  if (finBullets.length) {
+    lines.push(t("crm.contextSummary.financeDetails"));
+    finBullets.forEach((b) => lines.push(b));
+  }
+
   const est = sortedEstimateAttachments(c);
   if (est.length) {
     const attachState = c.smsDraftIncludeEstimateWording
@@ -233,14 +244,8 @@ export function buildCustomerContextBulletLines(
     );
   }
   if (c.nextContactAt) {
-    try {
-      const d = new Date(c.nextContactAt);
-      if (!Number.isNaN(d.getTime())) {
-        lines.push(`${t("crm.contextSummary.nextContact")}: ${d.toLocaleString("ko-KR")}`);
-      }
-    } catch {
-      /* ignore */
-    }
+    const when = formatCrmDisplayDateTime(c.nextContactAt);
+    if (when) lines.push(`${t("crm.contextSummary.nextContact")}: ${when}`);
   }
   return lines;
 }
@@ -317,7 +322,7 @@ export function buildNewCarFinanceSmsPreview(
     } else if (fd.productMode === "할부") {
       chunks.push(
         `할부 조건에 따라 월 납입금이 달라질 수 있으며, 장기 보유를 고려하신다면 총 납입 부담과 월 부담을 함께 비교해보시는 것이 좋습니다.\n` +
-          `말씀주신 월 납입 기준에 맞춰 리스 조건과도 함께 비교해드리겠습니다.`,
+          `말씀주신 월 납입 기준에 맞춰 할부 조건을 다시 정리해드리겠습니다.`,
       );
     } else if (fd.productMode === "알 수 없음") {
       chunks.push(
