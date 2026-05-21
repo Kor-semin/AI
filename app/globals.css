@@ -983,9 +983,11 @@ html[data-theme="light"] .crm-create-customer-modal__footer button:first-child:h
   background: #f8f5ef !important;
 }
 
+html[data-theme="light"] .crm-create-customer-modal__footer .crm-create-customer-modal__save-btn:not(:disabled),
 html[data-theme="light"] .crm-create-customer-modal__footer .sensora-premium-primary-workspace:not(:disabled),
 html[data-theme="light"] .crm-create-customer-modal__footer button[type="submit"]:not(:disabled) {
-  color: #f8fafc !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
   border-color: rgba(15, 23, 42, 0.2) !important;
   background: linear-gradient(180deg, #1a2740 0%, #0f172a 55%, #0a1220 100%) !important;
   box-shadow:
@@ -993,6 +995,7 @@ html[data-theme="light"] .crm-create-customer-modal__footer button[type="submit"
     0 8px 24px -10px rgba(15, 23, 42, 0.2) !important;
 }
 
+html[data-theme="light"] .crm-create-customer-modal__footer .crm-create-customer-modal__save-btn:disabled,
 html[data-theme="light"] .crm-create-customer-modal__footer .sensora-premium-primary-workspace:disabled,
 html[data-theme="light"] .crm-create-customer-modal__footer button[type="submit"]:disabled {
   color: #64748b !important;

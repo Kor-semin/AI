@@ -9,6 +9,7 @@ import {
 } from "./financeAwareMessageTemplate";
 import { parseMoneyToKrw } from "./recommendations";
 import type { Customer, FinanceConditionDraft, NextAction, UsedCarAccident, UsedCarInfo } from "./types";
+import { vehicleModelsFor, type VehicleBrandId } from "./vehicleCatalog";
 
 export type QuickConsultationNeeds = {
   vehicle?: string;
@@ -457,6 +458,92 @@ export function inferVehicleBrandForModel(model: string): string | undefined {
     if (key.includes(token)) return MODEL_TO_BRAND[token];
   }
   return undefined;
+}
+
+function normalizeCatalogModelKey(text: string): string {
+  return text.replace(/\s*·\s*/g, " ").replace(/\s+/g, " ").trim();
+}
+
+/** 브랜드 카탈로그 옵션에 맞게 관심 차종 표기 정리(쏘렌토 하이브리드 → 쏘렌토 · 하이브리드 등). */
+export function mapInterestedModelForBrand(
+  brand: string | undefined,
+  model: string | undefined,
+): string | undefined {
+  if (!model?.trim()) return undefined;
+  const m = model.trim();
+  const b = brand?.trim();
+  if (!b) return m;
+  const opts = [...vehicleModelsFor(b as VehicleBrandId)];
+  if (opts.includes(m)) return m;
+  const target = normalizeCatalogModelKey(m);
+  for (const opt of opts) {
+    if (normalizeCatalogModelKey(opt) === target) return opt;
+  }
+  if (/쏘렌토/i.test(m) && /하이브리드/i.test(m)) {
+    const hit = opts.find((o) => /쏘렌토/i.test(o) && /하이브리드/i.test(o));
+    if (hit) return hit;
+  }
+  if (/쏘렌토/i.test(m)) {
+    const hit = opts.find((o) => /쏘렌토/i.test(o));
+    if (hit) return hit;
+  }
+  return m;
+}
+
+export function isInterestedModelInBrandCatalog(brand: string, model: string): boolean {
+  const b = brand.trim();
+  const m = model.trim();
+  if (!b || b === "기타" || !m) return false;
+  return [...vehicleModelsFor(b as VehicleBrandId)].includes(m);
+}
+
+/** Quick AI 저장 모달 — 고객명(문자 초안·메모와 동일 기준). */
+export function resolveQuickCustomerNameForSave(memo: string, smsMessage?: string): string {
+  const identity = parseQuickCustomerIdentity(memo);
+  if (identity.name?.trim()) return identity.name.trim();
+  const fromMemo = extractCustomerNameFromMemo(memo);
+  if (fromMemo) return fromMemo;
+  const fromLead = firstMatch(memo, [/([가-힣]{2,6})\s*고객/i])?.replace(/\s*고객$/, "").trim();
+  if (fromLead && HANGUL_NAME_RE.test(fromLead)) return fromLead;
+  const sms = smsMessage?.trim();
+  if (sms) {
+    const honorific = sms.match(/^([가-힣]{2,6})님/m)?.[1];
+    if (honorific && HANGUL_NAME_RE.test(honorific)) return honorific;
+  }
+  return "";
+}
+
+export type QuickSaveCustomerDraftFields = {
+  name: string;
+  vehicleBrand: string;
+  interestedModel: string;
+};
+
+/** Quick AI → 새 고객 추가 모달 초기값(이름·브랜드·관심 차종). */
+export function buildQuickSaveCustomerDraftFields(
+  memo: string,
+  result: QuickConsultationResult,
+): QuickSaveCustomerDraftFields {
+  const snap = memo.trim();
+  const identity = parseQuickCustomerIdentity(snap);
+  const vehicleCandidate = result.needs.vehicle ?? identity.vehicle;
+  const vehicleFields = resolveCustomerVehicleFields(snap, vehicleCandidate);
+  const brand = vehicleFields.vehicleBrand ?? "";
+  const rawModel =
+    sanitizeInterestVehicleLabel(vehicleFields.interestedModel ?? vehicleCandidate ?? "") ||
+    vehicleFields.interestedModel ||
+    vehicleCandidate ||
+    "";
+  const catalogModel = mapInterestedModelForBrand(brand, rawModel);
+  const interestedModel =
+    catalogModel && isInterestedModelInBrandCatalog(brand, catalogModel)
+      ? catalogModel
+      : rawModel;
+  return {
+    name: resolveQuickCustomerNameForSave(snap, result.message),
+    vehicleBrand: brand,
+    interestedModel,
+  };
 }
 
 /** 고객 저장 시 관심 차량 필드(모델 우선 · 브랜드는 보조). */

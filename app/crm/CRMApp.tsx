@@ -109,6 +109,8 @@ import {
   buildCompactCustomerExportText,
   buildQuickConsultationResult,
   buildQuickCustomerModalMemo,
+  buildQuickSaveCustomerDraftFields,
+  isInterestedModelInBrandCatalog,
   parseQuickCustomerIdentity,
   formatRichConsultationNeedsDisplay,
   isRichStructuredConsultation,
@@ -579,14 +581,13 @@ export function CRMApp({
     if (!quickConsultationResult) return;
     const snap = quickConsultationDraft.trim();
     const r = quickConsultationResult;
-    const identity = parseQuickCustomerIdentity(snap);
     const nextLine = r.nextActions.filter((l) => l.trim()).join("\n");
-    const vehicleFields = resolveCustomerVehicleFields(snap, r.needs.vehicle ?? identity.vehicle);
+    const draftFields = buildQuickSaveCustomerDraftFields(snap, r);
     setCreateCustomerDraft({
       ...CREATE_CUSTOMER_INITIAL,
-      name: identity.name?.trim() ?? "",
-      vehicleBrand: vehicleFields.vehicleBrand ?? "",
-      interestedModel: vehicleFields.interestedModel ?? "",
+      name: draftFields.name,
+      vehicleBrand: draftFields.vehicleBrand,
+      interestedModel: draftFields.interestedModel,
       memo: buildQuickCustomerModalMemo(snap, r),
       nextActionText: nextLine,
     });
@@ -4112,25 +4113,32 @@ export function CRMApp({
                   }))
                 }
               />
-              {(createCustomerDraft.vehicleBrand ?? "").trim() &&
-              createCustomerDraft.vehicleBrand !== "기타" ? (
-                <SelectField
-                  label="관심 차종"
-                  placeholderOption="선택 안 함 · 목록 외 차종은 브랜드를 ‘기타’로 선택"
-                  value={createCustomerDraft.interestedModel}
-                  options={[...vehicleModelsFor(createCustomerDraft.vehicleBrand as VehicleBrandId)]}
-                  onChange={(v) => setCreateCustomerDraft((prev) => ({ ...prev, interestedModel: v }))}
-                />
-              ) : (
-                <Field
-                  label="관심 차량"
-                  value={createCustomerDraft.interestedModel}
-                  placeholder="예: GV80 5인승 디젤 또는 자유 입력"
-                  onChange={(v) =>
-                    setCreateCustomerDraft((prev) => ({ ...prev, interestedModel: v }))
-                  }
-                />
-              )}
+              {(() => {
+                const brand = (createCustomerDraft.vehicleBrand ?? "").trim();
+                const model = (createCustomerDraft.interestedModel ?? "").trim();
+                const useModelSelect =
+                  brand !== "" &&
+                  brand !== "기타" &&
+                  (!model || isInterestedModelInBrandCatalog(brand, model));
+                return useModelSelect ? (
+                  <SelectField
+                    label="관심 차종"
+                    placeholderOption="선택 안 함 · 목록 외 차종은 브랜드를 ‘기타’로 선택"
+                    value={createCustomerDraft.interestedModel}
+                    options={[...vehicleModelsFor(createCustomerDraft.vehicleBrand as VehicleBrandId)]}
+                    onChange={(v) => setCreateCustomerDraft((prev) => ({ ...prev, interestedModel: v }))}
+                  />
+                ) : (
+                  <Field
+                    label="관심 차량"
+                    value={createCustomerDraft.interestedModel}
+                    placeholder="예: 쏘렌토 하이브리드 또는 자유 입력"
+                    onChange={(v) =>
+                      setCreateCustomerDraft((prev) => ({ ...prev, interestedModel: v }))
+                    }
+                  />
+                );
+              })()}
               <TextArea
                 label="상담 메모"
                 value={createCustomerDraft.memo}
@@ -4166,7 +4174,7 @@ export function CRMApp({
                 type="submit"
                 form="crm-create-customer-form"
                 disabled={createCustomerBusy}
-                className="sensora-premium-primary-workspace min-h-[44px] shrink-0 rounded-xl px-6 py-2.5 text-[14px] font-semibold touch-manipulation disabled:cursor-not-allowed disabled:opacity-50"
+                className="crm-create-customer-modal__save-btn sensora-premium-primary-workspace min-h-[44px] shrink-0 rounded-xl px-6 py-2.5 text-[14px] font-semibold touch-manipulation disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {createCustomerBusy ? "저장 중…" : "저장"}
               </button>
