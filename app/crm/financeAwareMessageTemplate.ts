@@ -1,6 +1,7 @@
 import type { Customer, FinanceConditionDraft, FinanceProductMode, MessageTemplate } from "./types";
 import { vehicleDisplayLine } from "./newCarEstimateDraft";
 import { parseMoneyToKrw } from "./recommendations";
+import { buildTradeInPriceSmsParagraphs } from "./tradeInPriceNotes";
 
 /** 상황별 문자 초안 — 금융 방식별 견적 안내(통합 카드) */
 export const ESTIMATE_GUIDE_TEMPLATE_TITLE = "견적 안내 문자";
@@ -437,20 +438,25 @@ function resolveFinanceMode(mode: FinanceProductMode | undefined): FinanceModeBr
 export function buildEstimateGuideMessage(customer: Customer): string {
   const mode = resolveFinanceMode(customer.financeConditionDraft?.productMode);
 
+  let base: string;
   if (mode === "리스") {
-    return buildLeaseEstimateMessage(customer) ?? buildGenericEstimateGuideMessage(customer);
+    base = buildLeaseEstimateMessage(customer) ?? buildGenericEstimateGuideMessage(customer);
+  } else if (mode === "장기렌트") {
+    base = buildLongRentEstimateMessage(customer) ?? buildGenericEstimateGuideMessage(customer);
+  } else if (mode === "할부") {
+    base = buildInstallmentEstimateMessage(customer) ?? buildGenericEstimateGuideMessage(customer);
+  } else if (mode === "현금") {
+    base = buildCashEstimateMessage(customer) ?? buildGenericEstimateGuideMessage(customer);
+  } else {
+    base = buildGenericEstimateGuideMessage(customer);
   }
-  if (mode === "장기렌트") {
-    return buildLongRentEstimateMessage(customer) ?? buildGenericEstimateGuideMessage(customer);
-  }
-  if (mode === "할부") {
-    return buildInstallmentEstimateMessage(customer) ?? buildGenericEstimateGuideMessage(customer);
-  }
-  if (mode === "현금") {
-    return buildCashEstimateMessage(customer) ?? buildGenericEstimateGuideMessage(customer);
-  }
+  return appendTradeInPriceToMessage(base, customer);
+}
 
-  return buildGenericEstimateGuideMessage(customer);
+function appendTradeInPriceToMessage(base: string, customer: Customer): string {
+  const tradeIn = buildTradeInPriceSmsParagraphs(customer);
+  if (!tradeIn.length) return base;
+  return `${base.trim()}\n\n${tradeIn.join("\n")}`;
 }
 
 /** 상황별 문자 초안 본문 — 견적 안내는 금융 방식별 생성, 그 외는 저장 본문 */

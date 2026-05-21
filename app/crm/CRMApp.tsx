@@ -48,8 +48,8 @@ import {
   formatKrwShort,
   parseMoneyToKrw,
   recommendModelsByBudget,
-  summarizeMarketVsBudget,
 } from "./recommendations";
+import { summarizeTradeInPriceNotes } from "./tradeInPriceNotes";
 import { getMemoFeedback } from "./memoFeedback";
 import { NewCarEstimateFinanceCard } from "./NewCarEstimateFinanceCard";
 import {
@@ -1032,12 +1032,8 @@ export function CRMApp({
   );
   const marketSummaryLines = useMemo(() => {
     if (!selectedCustomer) return [];
-    return summarizeMarketVsBudget({
-      budgetWon: budgetWonSelected,
-      encarMin: selectedCustomer.marketPrice?.encarMin,
-      encarMax: selectedCustomer.marketPrice?.encarMax,
-    });
-  }, [selectedCustomer, budgetWonSelected]);
+    return summarizeTradeInPriceNotes(selectedCustomer);
+  }, [selectedCustomer]);
   const memoFeedback = useMemo(
     () => (selectedCustomer ? getMemoFeedback(selectedCustomer) : null),
     [selectedCustomer],
@@ -2599,13 +2595,13 @@ export function CRMApp({
 
               <div className="flex flex-col gap-4">
                 <details
-                  id="crm-block-budget"
-                  className="crm-finance-tax-market-form scroll-mt-24 rounded-2xl border border-white/[0.11] bg-slate-950/55 p-5"
+                  id="crm-block-budget-compare"
+                  className="crm-budget-compare-form scroll-mt-24 rounded-2xl border border-white/[0.11] bg-slate-950/55 p-5"
                 >
                   <summary className="flex cursor-pointer list-none items-center justify-between gap-3 rounded-xl px-1 py-1.5 outline-none transition hover:bg-slate-950/45 focus-visible:ring-2 focus-visible:ring-sky-400/35 [&::-webkit-details-marker]:hidden">
                     <div className="min-w-0">
-                      <div className="text-[16px] font-semibold text-slate-50">{t("crm.financeTaxMarketTitle")}</div>
-                      <div className="mt-1 text-[13px] leading-relaxed text-slate-400">{t("crm.financeTaxMarketLead")}</div>
+                      <div className="text-[16px] font-semibold text-slate-50">{t("crm.budgetCompareTitle")}</div>
+                      <div className="mt-1 text-[13px] leading-relaxed text-slate-400">{t("crm.budgetCompareLead")}</div>
                     </div>
                     <span className="shrink-0 rounded-full border border-white/[0.11] bg-white/[0.07] px-3 py-1 text-[12px] font-semibold text-slate-300">
                       {t("crm.newCar.detailsToggle")}
@@ -2719,87 +2715,174 @@ export function CRMApp({
                         </div>
                       )}
                     </div>
-
-                    <div className="rounded-xl border border-white/[0.11] bg-slate-950/45 p-4">
-                      <div className="text-xs font-semibold text-slate-50">
-                        시세 메모(직접 확인 값)
-                      </div>
-                      <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                        <Field
-                          label="시세 최저(만원/원)"
-                          value={selectedCustomer.marketPrice?.encarMin ?? ""}
-                          placeholder="예: 2100만"
-                          onChange={(v) =>
-                            upsertCustomer({
-                              id: selectedCustomer.id,
-                              marketPrice: {
-                                ...(selectedCustomer.marketPrice ?? {}),
-                                encarMin: v,
-                              },
-                            })
-                          }
-                        />
-                        <Field
-                          label="시세 최고(만원/원)"
-                          value={selectedCustomer.marketPrice?.encarMax ?? ""}
-                          placeholder="예: 2350만"
-                          onChange={(v) =>
-                            upsertCustomer({
-                              id: selectedCustomer.id,
-                              marketPrice: {
-                                ...(selectedCustomer.marketPrice ?? {}),
-                                encarMax: v,
-                              },
-                            })
-                          }
-                        />
-                        <Field
-                          label="시세 기준일"
-                          value={selectedCustomer.marketPrice?.asOf ?? ""}
-                          placeholder="예: 2026-04-29"
-                          onChange={(v) =>
-                            upsertCustomer({
-                              id: selectedCustomer.id,
-                              marketPrice: { ...(selectedCustomer.marketPrice ?? {}), asOf: v },
-                            })
-                          }
-                        />
-                      </div>
-                      {marketSummaryLines.length ? (
-                        <ul className="mt-3 list-disc space-y-1 pl-4 text-[12px] text-slate-300">
-                          {marketSummaryLines.map((line, i) => (
-                            <li key={`${i}-${line.slice(0, 24)}`}>{line}</li>
-                          ))}
-                        </ul>
-                      ) : null}
-                    </div>
-
-                    <TextArea
-                      label="마지막 상담 메모"
-                      value={selectedCustomer.memo ?? ""}
-                      placeholder="상담 내용/특이사항, 협상 포인트, 고객이 말한 핵심 문장 등을 빠르게 정리"
-                      onChange={(v) => upsertCustomer({ id: selectedCustomer.id, memo: v })}
-                    />
-
-                    <div id="crm-block-memo" tabIndex={-1} className="scroll-mt-24" />
-
-                    <TextArea
-                      label="고객 성향 메모"
-                      value={selectedCustomer.personalityMemo ?? ""}
-                      placeholder="예: 결정 빠름/신중함, 가격 민감, 가족 동승, 연락 선호 시간 등"
-                      onChange={(v) =>
-                        upsertCustomer({ id: selectedCustomer.id, personalityMemo: v })
-                      }
-                    />
-
-                    <button
-                      onClick={() => deleteCustomer(selectedCustomer.id)}
-                      className="mt-2 rounded-lg border border-white/[0.11] bg-slate-950/45 px-3 py-2 text-xs font-semibold text-slate-400 hover:bg-white/[0.08]"
-                    >
-                      고객 삭제
-                    </button>
                   </div>
                 </details>
+
+                <details
+                  id="crm-block-trade-in-price"
+                  className="crm-trade-in-price-form scroll-mt-24 rounded-2xl border border-white/[0.11] bg-slate-950/55 p-5"
+                >
+                  <summary className="flex cursor-pointer list-none items-center justify-between gap-3 rounded-xl px-1 py-1.5 outline-none transition hover:bg-slate-950/45 focus-visible:ring-2 focus-visible:ring-sky-400/35 [&::-webkit-details-marker]:hidden">
+                    <div className="min-w-0">
+                      <div className="text-[16px] font-semibold text-slate-50">{t("crm.financeTaxMarketTitle")}</div>
+                      <div className="mt-1 text-[13px] leading-relaxed text-slate-400">{t("crm.financeTaxMarketLead")}</div>
+                    </div>
+                    <span className="shrink-0 rounded-full border border-white/[0.11] bg-white/[0.07] px-3 py-1 text-[12px] font-semibold text-slate-300">
+                      {t("crm.newCar.detailsToggle")}
+                    </span>
+                  </summary>
+                  <div className="mt-4 grid grid-cols-1 gap-4 border-t border-white/[0.07] pt-4">
+                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                      <Field
+                        label="기존 차량명"
+                        value={selectedCustomer.usedCar?.model ?? ""}
+                        placeholder="예: BMW X5 50e"
+                        onChange={(v) =>
+                          upsertCustomer({
+                            id: selectedCustomer.id,
+                            usedCar: { ...(selectedCustomer.usedCar ?? {}), model: v },
+                          })
+                        }
+                      />
+                      <Field
+                        label="연식"
+                        value={selectedCustomer.usedCar?.year ?? ""}
+                        placeholder="예: 2023년식"
+                        onChange={(v) =>
+                          upsertCustomer({
+                            id: selectedCustomer.id,
+                            usedCar: { ...(selectedCustomer.usedCar ?? {}), year: v },
+                          })
+                        }
+                      />
+                      <Field
+                        label="주행거리"
+                        value={selectedCustomer.usedCar?.mileageKm ?? ""}
+                        placeholder="예: 23,800km"
+                        onChange={(v) =>
+                          upsertCustomer({
+                            id: selectedCustomer.id,
+                            usedCar: { ...(selectedCustomer.usedCar ?? {}), mileageKm: v },
+                          })
+                        }
+                      />
+                      <SelectField
+                        label="사고 유무"
+                        placeholderOption="선택 안 함"
+                        value={selectedCustomer.usedCar?.accident ?? ""}
+                        options={[...ACCIDENT_OPTIONS]}
+                        onChange={(v) =>
+                          upsertCustomer({
+                            id: selectedCustomer.id,
+                            usedCar: {
+                              ...(selectedCustomer.usedCar ?? {}),
+                              accident: v ? (v as UsedCarAccident) : undefined,
+                            },
+                          })
+                        }
+                      />
+                      <Field
+                        label="최저 매입가"
+                        value={selectedCustomer.marketPrice?.encarMin ?? ""}
+                        placeholder="예: 4,000만 원"
+                        onChange={(v) =>
+                          upsertCustomer({
+                            id: selectedCustomer.id,
+                            marketPrice: {
+                              ...(selectedCustomer.marketPrice ?? {}),
+                              encarMin: v,
+                            },
+                          })
+                        }
+                      />
+                      <Field
+                        label="최고 매입가"
+                        value={selectedCustomer.marketPrice?.encarMax ?? ""}
+                        placeholder="예: 4,250만 원"
+                        onChange={(v) =>
+                          upsertCustomer({
+                            id: selectedCustomer.id,
+                            marketPrice: {
+                              ...(selectedCustomer.marketPrice ?? {}),
+                              encarMax: v,
+                            },
+                          })
+                        }
+                      />
+                      <Field
+                        label="견적 기준일"
+                        value={selectedCustomer.marketPrice?.asOf ?? ""}
+                        placeholder="예: 2026-05-21"
+                        onChange={(v) =>
+                          upsertCustomer({
+                            id: selectedCustomer.id,
+                            marketPrice: { ...(selectedCustomer.marketPrice ?? {}), asOf: v },
+                          })
+                        }
+                      />
+                      <Field
+                        label="최종 안내가"
+                        value={selectedCustomer.marketPrice?.guidePrice ?? ""}
+                        placeholder="예: 4,200만 원 전후 안내"
+                        onChange={(v) =>
+                          upsertCustomer({
+                            id: selectedCustomer.id,
+                            marketPrice: {
+                              ...(selectedCustomer.marketPrice ?? {}),
+                              guidePrice: v,
+                            },
+                          })
+                        }
+                      />
+                    </div>
+                    <TextArea
+                      label="견적처 메모"
+                      value={selectedCustomer.marketPrice?.quoteSources ?? ""}
+                      placeholder="예: A상사 4,000 / B상사 4,180 / C상사 4,250"
+                      onChange={(v) =>
+                        upsertCustomer({
+                          id: selectedCustomer.id,
+                          marketPrice: {
+                            ...(selectedCustomer.marketPrice ?? {}),
+                            quoteSources: v,
+                          },
+                        })
+                      }
+                    />
+                    {marketSummaryLines.length ? (
+                      <ul className="list-disc space-y-1 pl-4 text-[12px] leading-relaxed text-slate-300">
+                        {marketSummaryLines.map((line, i) => (
+                          <li key={`${i}-${line.slice(0, 24)}`}>{line}</li>
+                        ))}
+                      </ul>
+                    ) : null}
+                  </div>
+                </details>
+
+                <TextArea
+                  label="마지막 상담 메모"
+                  value={selectedCustomer.memo ?? ""}
+                  placeholder="상담 내용/특이사항, 협상 포인트, 고객이 말한 핵심 문장 등을 빠르게 정리"
+                  onChange={(v) => upsertCustomer({ id: selectedCustomer.id, memo: v })}
+                />
+
+                <div id="crm-block-memo" tabIndex={-1} className="scroll-mt-24" />
+
+                <TextArea
+                  label="고객 성향 메모"
+                  value={selectedCustomer.personalityMemo ?? ""}
+                  placeholder="예: 결정 빠름/신중함, 가격 민감, 가족 동승, 연락 선호 시간 등"
+                  onChange={(v) =>
+                    upsertCustomer({ id: selectedCustomer.id, personalityMemo: v })
+                  }
+                />
+
+                <button
+                  onClick={() => deleteCustomer(selectedCustomer.id)}
+                  className="rounded-lg border border-white/[0.11] bg-slate-950/45 px-3 py-2 text-xs font-semibold text-slate-400 hover:bg-white/[0.08]"
+                >
+                  고객 삭제
+                </button>
 
                 <details className="scroll-mt-24 rounded-2xl border border-white/[0.09] bg-slate-950/50 p-5">
                   <summary className="flex cursor-pointer list-none items-center justify-between gap-3 rounded-xl px-1 py-1.5 outline-none transition hover:bg-slate-950/40 [&::-webkit-details-marker]:hidden">

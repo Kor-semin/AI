@@ -331,6 +331,8 @@ export type TranslationKey =
   | "crm.financeMarketInfo"
   | "crm.financeTaxMarketTitle"
   | "crm.financeTaxMarketLead"
+  | "crm.budgetCompareTitle"
+  | "crm.budgetCompareLead"
   | "crm.tradeInSummary"
   | "crm.tab.customers"
   | "crm.tab.next"
@@ -1317,10 +1319,12 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.nextAction": "다음 행동",
     "crm.aiRecommendation": "AI 추천 메시지",
     "crm.consultationSummary": "상담 요약",
-    "crm.financeMarketInfo": "금융·예산·시세 정보",
-    "crm.financeTaxMarketTitle": "세금·시세 참고 정보",
+    "crm.financeMarketInfo": "금융·예산·대차 참고",
+    "crm.budgetCompareTitle": "예산·비교 참고",
+    "crm.budgetCompareLead": "신차 예산과 비교 차종을 간단히 정리합니다.",
+    "crm.financeTaxMarketTitle": "중고차 가격 정리",
     "crm.financeTaxMarketLead":
-      "필요한 경우에만 입력하는 참고 정보입니다. 실제 견적·세금 안내는 최종 확인이 필요합니다.",
+      "여러 매입 견적을 비교해 고객에게 안내할 기준 가격을 정리합니다. 입력하지 않아도 견적 안내 문자는 작성할 수 있습니다.",
     "crm.tradeInSummary": "중고차 정리",
     "crm.tab.customers": "고객",
     "crm.tab.next": "다음 행동",
@@ -2381,10 +2385,12 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.nextAction": "Next Action",
     "crm.aiRecommendation": "AI Recommendation",
     "crm.consultationSummary": "Consultation Summary",
-    "crm.financeMarketInfo": "Finance, Budget & Market Info",
-    "crm.financeTaxMarketTitle": "Tax & market reference",
+    "crm.financeMarketInfo": "Finance, budget & trade-in notes",
+    "crm.budgetCompareTitle": "Budget & comparison",
+    "crm.budgetCompareLead": "New-car budget and comparison models for reference.",
+    "crm.financeTaxMarketTitle": "Trade-in price notes",
     "crm.financeTaxMarketLead":
-      "Optional reference only—not confirmed tax or quote advice. Verify before sharing with customers.",
+      "Compare purchase quotes from multiple sources. Optional—estimate messages work without this section.",
     "crm.tradeInSummary": "Trade-in Vehicle Summary",
     "crm.tab.customers": "Customers",
     "crm.tab.next": "Next steps",

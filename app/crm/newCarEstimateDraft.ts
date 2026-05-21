@@ -1,6 +1,7 @@
 import type { Customer, FinanceConditionDraft } from "./types";
 import type { TranslationKey } from "@/lib/i18n";
 import { buildUsedCarSearchQuery } from "./recommendations";
+import { buildTradeInPriceSmsParagraphs } from "./tradeInPriceNotes";
 
 /** 고객 니즈 선택지(한글 라벨 — Firestore·상태에 그대로 저장) */
 export const CUSTOMER_PRIORITY_OPTIONS = [
@@ -338,6 +339,11 @@ export function buildNewCarFinanceSmsPreview(
     if (detailLines.length) chunks.push(detailLines.join("\n"));
   }
 
+  const tradeInParas = buildTradeInPriceSmsParagraphs(c);
+  if (tradeInParas.length) {
+    chunks.push(tradeInParas.join("\n"));
+  }
+
   if (opts?.pendingNextActionTitle?.trim()) {
     chunks.push(`다음 연락·진행으로는 "${opts.pendingNextActionTitle.trim()}"을(를) 함께 맞추면 좋겠습니다.`);
   }
@@ -376,24 +382,9 @@ export function buildConsultationQuickDraft(c: Customer, myName: string): string
     lines.push(`상담 메모에서 함께 반영할 포인트: ${tags.join(" · ")}`);
   }
 
-  const mp = c.marketPrice;
-  if (mp?.encarMin?.trim() || mp?.encarMax?.trim()) {
-    const mn = mp.encarMin?.trim();
-    const mx = mp.encarMax?.trim();
-    const asOf = mp.asOf?.trim() || "상담 시점";
-    if (mn && mx) {
-      lines.push(
-        `비교를 위해 확인해 둔 금액 범위는 약 ${mn} ~ ${mx}입니다(기준: ${asOf}). 신차·금융 조건에 따라 달라질 수 있어 견적서 기준으로 다시 안내드리겠습니다.`,
-      );
-    } else if (mn) {
-      lines.push(
-        `비교를 위해 확인해 둔 하한 참고값은 약 ${mn}입니다(기준: ${asOf}). 최종 조건은 견적서와 금융 승인 기준에 따라 다시 확인드리겠습니다.`,
-      );
-    } else if (mx) {
-      lines.push(
-        `비교를 위해 확인해 둔 상한 참고값은 약 ${mx}입니다(기준: ${asOf}). 최종 조건은 견적서와 금융 승인 기준에 따라 다시 확인드리겠습니다.`,
-      );
-    }
+  const tradeInLines = buildTradeInPriceSmsParagraphs(c);
+  if (tradeInLines.length) {
+    lines.push(...tradeInLines);
   }
 
   if (c.budget?.trim()) {

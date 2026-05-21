@@ -60,14 +60,20 @@ export type UsedCarInfo = {
   notes?: string;
 };
 
-/** 직접 확인한 시세 범위(원 단위 문자열 허용) */
+/** 대차·매입 견적 비교(원/만원 문자열 허용 — encar* 필드명은 기존 데이터 호환) */
 export type MarketPriceSnapshot = {
+  /** 최저 매입가 */
   encarMin?: string;
+  /** 최고 매입가 */
   encarMax?: string;
   bobaeMin?: string;
   bobaeMax?: string;
-  /** 기준일(예: 2026-04-29) — 자유 입력 */
+  /** 견적 기준일(예: 2026-05-21) */
   asOf?: string;
+  /** 견적처 메모(예: A상사 4,000 / B상사 4,180) */
+  quoteSources?: string;
+  /** 최종 안내가(예: 4,200만 원 전후) */
+  guidePrice?: string;
 };
 
 export type DeliveryGuideServiceItems = {
@@ -152,9 +158,9 @@ export type Customer = {
   paymentType?: PaymentType;
   /** 중고차 매입·비교용 정리 */
   usedCar?: UsedCarInfo;
-  /** 시세 메모(직접 확인 값) */
+  /** 대차·매입 견적 비교 메모 */
   marketPrice?: MarketPriceSnapshot;
-  /** 예산·비교차종·시세 정리 메모 */
+  /** 예산·비교차종 정리 메모 */
   comparisonNotes?: string;
   /** 대차·번호 이전 등 메모 */
   tradeInNotes?: string;
