@@ -2739,131 +2739,308 @@ export function CRMApp({
                       {t("crm.newCar.detailsToggle")}
                     </span>
                   </summary>
-                  <div className="mt-4 grid grid-cols-1 gap-4 border-t border-white/[0.07] pt-4">
-                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                      <Field
-                        label="기존 차량명"
-                        value={selectedCustomer.usedCar?.model ?? ""}
-                        placeholder="예: BMW X5 50e"
-                        onChange={(v) =>
-                          upsertCustomer({
-                            id: selectedCustomer.id,
-                            usedCar: { ...(selectedCustomer.usedCar ?? {}), model: v },
-                          })
-                        }
-                      />
-                      <Field
-                        label="연식"
-                        value={selectedCustomer.usedCar?.year ?? ""}
-                        placeholder="예: 2023년식"
-                        onChange={(v) =>
-                          upsertCustomer({
-                            id: selectedCustomer.id,
-                            usedCar: { ...(selectedCustomer.usedCar ?? {}), year: v },
-                          })
-                        }
-                      />
-                      <Field
-                        label="주행거리"
-                        value={selectedCustomer.usedCar?.mileageKm ?? ""}
-                        placeholder="예: 23,800km"
-                        onChange={(v) =>
-                          upsertCustomer({
-                            id: selectedCustomer.id,
-                            usedCar: { ...(selectedCustomer.usedCar ?? {}), mileageKm: v },
-                          })
-                        }
-                      />
-                      <SelectField
-                        label="사고 유무"
-                        placeholderOption="선택 안 함"
-                        value={selectedCustomer.usedCar?.accident ?? ""}
-                        options={[...ACCIDENT_OPTIONS]}
-                        onChange={(v) =>
-                          upsertCustomer({
-                            id: selectedCustomer.id,
-                            usedCar: {
-                              ...(selectedCustomer.usedCar ?? {}),
-                              accident: v ? (v as UsedCarAccident) : undefined,
-                            },
-                          })
-                        }
-                      />
-                      <Field
-                        label="최저 매입가"
-                        value={selectedCustomer.marketPrice?.encarMin ?? ""}
-                        placeholder="예: 4,000만 원"
-                        onChange={(v) =>
-                          upsertCustomer({
-                            id: selectedCustomer.id,
-                            marketPrice: {
-                              ...(selectedCustomer.marketPrice ?? {}),
-                              encarMin: v,
-                            },
-                          })
-                        }
-                      />
-                      <Field
-                        label="최고 매입가"
-                        value={selectedCustomer.marketPrice?.encarMax ?? ""}
-                        placeholder="예: 4,250만 원"
-                        onChange={(v) =>
-                          upsertCustomer({
-                            id: selectedCustomer.id,
-                            marketPrice: {
-                              ...(selectedCustomer.marketPrice ?? {}),
-                              encarMax: v,
-                            },
-                          })
-                        }
-                      />
-                      <Field
-                        label="견적 기준일"
-                        value={selectedCustomer.marketPrice?.asOf ?? ""}
-                        placeholder="예: 2026-05-21"
-                        onChange={(v) =>
-                          upsertCustomer({
-                            id: selectedCustomer.id,
-                            marketPrice: { ...(selectedCustomer.marketPrice ?? {}), asOf: v },
-                          })
-                        }
-                      />
-                      <Field
-                        label="최종 안내가"
-                        value={selectedCustomer.marketPrice?.guidePrice ?? ""}
-                        placeholder="예: 4,200만 원 전후 안내"
-                        onChange={(v) =>
-                          upsertCustomer({
-                            id: selectedCustomer.id,
-                            marketPrice: {
-                              ...(selectedCustomer.marketPrice ?? {}),
-                              guidePrice: v,
-                            },
-                          })
-                        }
-                      />
-                    </div>
-                    <TextArea
-                      label="견적처 메모"
-                      value={selectedCustomer.marketPrice?.quoteSources ?? ""}
-                      placeholder="예: A상사 4,000 / B상사 4,180 / C상사 4,250"
-                      onChange={(v) =>
-                        upsertCustomer({
-                          id: selectedCustomer.id,
-                          marketPrice: {
-                            ...(selectedCustomer.marketPrice ?? {}),
-                            quoteSources: v,
-                          },
-                        })
-                      }
-                    />
-                    {marketSummaryLines.length ? (
-                      <ul className="list-disc space-y-1 pl-4 text-[12px] leading-relaxed text-slate-300">
-                        {marketSummaryLines.map((line, i) => (
-                          <li key={`${i}-${line.slice(0, 24)}`}>{line}</li>
-                        ))}
-                      </ul>
+                  <div className="mt-4 space-y-6 border-t border-white/[0.07] pt-4">
+                    {formatCustomerInterestVehicle(selectedCustomer) ? (
+                      <p className="text-[12px] text-slate-400">
+                        <span className="font-medium text-slate-500">관심 신차(참고): </span>
+                        {formatCustomerInterestVehicle(selectedCustomer)}
+                      </p>
                     ) : null}
+
+                    <section className="space-y-3">
+                      <h3 className="text-[13px] font-semibold text-slate-200">차량 정보</h3>
+                      <datalist id="usedcar-brand-options">
+                        {[
+                          "현대",
+                          "기아",
+                          "제네시스",
+                          "쉐보레",
+                          "르노코리아",
+                          "KG모빌리티",
+                          "벤츠",
+                          "BMW",
+                          "아우디",
+                          "폭스바겐",
+                          "미니",
+                          "볼보",
+                          "렉서스",
+                          "도요타",
+                          "혼다",
+                          "포르쉐",
+                          "랜드로버",
+                          "지프",
+                          "테슬라",
+                        ].map((b) => (
+                          <option key={b} value={b} />
+                        ))}
+                      </datalist>
+                      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                        <FieldList
+                          label="중고차 브랜드"
+                          value={selectedCustomer.usedCar?.brand ?? ""}
+                          placeholder="예: 현대 / 벤츠 / Audi"
+                          clearable
+                          onClear={() =>
+                            upsertCustomer({
+                              id: selectedCustomer.id,
+                              usedCar: { ...(selectedCustomer.usedCar ?? {}), brand: "", model: "" },
+                            })
+                          }
+                          onChange={(v) =>
+                            upsertCustomer({
+                              id: selectedCustomer.id,
+                              usedCar: { ...(selectedCustomer.usedCar ?? {}), brand: v },
+                            })
+                          }
+                          listId="usedcar-brand-options"
+                        />
+                        <datalist
+                          id={listIdForBrand("usedcar-model-options", selectedCustomer.usedCar?.brand)}
+                        >
+                          {(() => {
+                            const b = (selectedCustomer.usedCar?.brand ?? "").trim().toLowerCase();
+                            const opts =
+                              b === "현대"
+                                ? [
+                                    "그랜저",
+                                    "쏘나타",
+                                    "아반떼",
+                                    "싼타페",
+                                    "투싼",
+                                    "팰리세이드",
+                                    "아이오닉5",
+                                    "아이오닉6",
+                                  ]
+                                : b === "기아"
+                                  ? ["K5", "K8", "K3", "쏘렌토", "스포티지", "카니발", "셀토스", "EV6"]
+                                  : b === "제네시스"
+                                    ? ["G70", "G80", "G90", "GV70", "GV80"]
+                                    : b === "벤츠" || b === "mercedes" || b === "mercedes-benz"
+                                      ? ["E클래스", "C클래스", "S클래스", "GLC", "GLE", "GLB", "CLA"]
+                                      : b === "bmw"
+                                        ? ["3시리즈", "5시리즈", "7시리즈", "X3", "X5", "X6", "1시리즈"]
+                                        : b === "아우디" || b === "audi"
+                                          ? ["A4", "A6", "A7", "A8", "Q3", "Q5", "Q7", "Q8"]
+                                          : b === "폭스바겐" || b === "폭스바겠" || b === "volkswagen"
+                                            ? ["골프", "파사트", "티구안", "투아렉"]
+                                            : b === "볼보" || b === "volvo"
+                                              ? ["S60", "S90", "XC40", "XC60", "XC90"]
+                                              : b === "렉서스" || b === "lexus"
+                                                ? ["ES", "RX", "NX", "LS"]
+                                                : [];
+                            return opts.map((m) => <option key={m} value={m} />);
+                          })()}
+                        </datalist>
+                        <FieldList
+                          label="중고차 차종"
+                          value={selectedCustomer.usedCar?.model ?? ""}
+                          placeholder="예: 그랜저 / 팰리세이드 / A6"
+                          clearable
+                          onClear={() =>
+                            upsertCustomer({
+                              id: selectedCustomer.id,
+                              usedCar: { ...(selectedCustomer.usedCar ?? {}), model: "" },
+                            })
+                          }
+                          onChange={(v) =>
+                            upsertCustomer({
+                              id: selectedCustomer.id,
+                              usedCar: { ...(selectedCustomer.usedCar ?? {}), model: v },
+                            })
+                          }
+                          listId={listIdForBrand("usedcar-model-options", selectedCustomer.usedCar?.brand)}
+                        />
+                        <datalist
+                          id={listIdForBrand("usedcar-trim-options", selectedCustomer.usedCar?.brand)}
+                        >
+                          {buildUsedCarTrimDatalistOptions(
+                            selectedCustomer.usedCar?.brand,
+                            selectedCustomer.usedCar?.trim,
+                          ).map((trimOpt) => (
+                            <option key={trimOpt} value={trimOpt} />
+                          ))}
+                        </datalist>
+                        <FieldList
+                          label="등급/트림"
+                          value={selectedCustomer.usedCar?.trim ?? ""}
+                          placeholder="예: 익스클루시브 / 프레스티지"
+                          clearable
+                          onClear={() =>
+                            upsertCustomer({
+                              id: selectedCustomer.id,
+                              usedCar: { ...(selectedCustomer.usedCar ?? {}), trim: "" },
+                            })
+                          }
+                          onChange={(v) =>
+                            upsertCustomer({
+                              id: selectedCustomer.id,
+                              usedCar: { ...(selectedCustomer.usedCar ?? {}), trim: v },
+                            })
+                          }
+                          listId={listIdForBrand("usedcar-trim-options", selectedCustomer.usedCar?.brand)}
+                        />
+                        <Field
+                          label="연식"
+                          value={selectedCustomer.usedCar?.year ?? ""}
+                          placeholder="예: 2019 · 2023년식"
+                          onChange={(v) =>
+                            upsertCustomer({
+                              id: selectedCustomer.id,
+                              usedCar: { ...(selectedCustomer.usedCar ?? {}), year: v },
+                            })
+                          }
+                        />
+                        <Field
+                          label="주행거리"
+                          value={selectedCustomer.usedCar?.mileageKm ?? ""}
+                          placeholder="예: 120000 또는 12만 km"
+                          onChange={(v) =>
+                            upsertCustomer({
+                              id: selectedCustomer.id,
+                              usedCar: { ...(selectedCustomer.usedCar ?? {}), mileageKm: v },
+                            })
+                          }
+                        />
+                        <SelectField
+                          label="사고 유무"
+                          placeholderOption="선택 안 함"
+                          value={selectedCustomer.usedCar?.accident ?? ""}
+                          options={[...ACCIDENT_OPTIONS]}
+                          onChange={(v) =>
+                            upsertCustomer({
+                              id: selectedCustomer.id,
+                              usedCar: {
+                                ...(selectedCustomer.usedCar ?? {}),
+                                accident: v ? (v as UsedCarAccident) : undefined,
+                              },
+                            })
+                          }
+                        />
+                      </div>
+                    </section>
+
+                    <section className="space-y-3 border-t border-white/[0.07] pt-4">
+                      <h3 className="text-[13px] font-semibold text-slate-200">검색어 생성</h3>
+                      <div className="flex flex-wrap gap-2">
+                        <button
+                          type="button"
+                          className="sensora-premium-primary-workspace rounded-lg px-3 py-2 text-xs font-semibold touch-manipulation"
+                          onClick={() => {
+                            const q = buildUsedCarSearchQuery(selectedCustomer);
+                            void copyToClipboard(q).then((ok) => {
+                              if (ok) showToast("검색어 복사 완료");
+                              else alert(q);
+                            });
+                          }}
+                        >
+                          검색어 복사
+                        </button>
+                        <button
+                          type="button"
+                          className="rounded-lg border border-white/[0.11] bg-slate-950/55 px-3 py-2 text-xs font-semibold hover:bg-white/[0.08]"
+                          onClick={() => {
+                            const q = buildUsedCarSearchQuery(selectedCustomer);
+                            const line = `${q}\n- 연식/주행거리/사고/등급을 추가로 입력하면 더 정확합니다.`;
+                            void copyToClipboard(line).then((ok) => {
+                              if (ok) showToast("검색 메모 복사 완료");
+                              else alert(line);
+                            });
+                          }}
+                        >
+                          검색 메모 복사
+                        </button>
+                      </div>
+                      <p className="text-[12px] text-slate-400">
+                        검색어:{" "}
+                        <span className="font-medium text-slate-300">
+                          {buildUsedCarSearchQuery(selectedCustomer)}
+                        </span>
+                      </p>
+                    </section>
+
+                    <section className="space-y-3 border-t border-white/[0.07] pt-4">
+                      <h3 className="text-[13px] font-semibold text-slate-200">매입가 비교</h3>
+                      <p className="text-[12px] leading-relaxed text-slate-500">
+                        매입가 범위를 입력하면 고객에게 안내할 대차 기준 금액을 정리해 드립니다. 실제 매입가는
+                        차량 상태와 현장 확인에 따라 달라질 수 있습니다.
+                      </p>
+                      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                        <Field
+                          label="최저 매입가"
+                          value={selectedCustomer.marketPrice?.encarMin ?? ""}
+                          placeholder="예: 4,000만 원"
+                          onChange={(v) =>
+                            upsertCustomer({
+                              id: selectedCustomer.id,
+                              marketPrice: {
+                                ...(selectedCustomer.marketPrice ?? {}),
+                                encarMin: v,
+                              },
+                            })
+                          }
+                        />
+                        <Field
+                          label="최고 매입가"
+                          value={selectedCustomer.marketPrice?.encarMax ?? ""}
+                          placeholder="예: 4,250만 원"
+                          onChange={(v) =>
+                            upsertCustomer({
+                              id: selectedCustomer.id,
+                              marketPrice: {
+                                ...(selectedCustomer.marketPrice ?? {}),
+                                encarMax: v,
+                              },
+                            })
+                          }
+                        />
+                        <Field
+                          label="견적 기준일"
+                          value={selectedCustomer.marketPrice?.asOf ?? ""}
+                          placeholder="예: 2026-05-21"
+                          onChange={(v) =>
+                            upsertCustomer({
+                              id: selectedCustomer.id,
+                              marketPrice: { ...(selectedCustomer.marketPrice ?? {}), asOf: v },
+                            })
+                          }
+                        />
+                        <Field
+                          label="최종 안내가"
+                          value={selectedCustomer.marketPrice?.guidePrice ?? ""}
+                          placeholder="예: 4,200만 원 전후 안내"
+                          onChange={(v) =>
+                            upsertCustomer({
+                              id: selectedCustomer.id,
+                              marketPrice: {
+                                ...(selectedCustomer.marketPrice ?? {}),
+                                guidePrice: v,
+                              },
+                            })
+                          }
+                        />
+                      </div>
+                      <TextArea
+                        label="견적처 메모"
+                        value={selectedCustomer.marketPrice?.quoteSources ?? ""}
+                        placeholder="예: A상사 4,000 / B상사 4,180 / C상사 4,250"
+                        onChange={(v) =>
+                          upsertCustomer({
+                            id: selectedCustomer.id,
+                            marketPrice: {
+                              ...(selectedCustomer.marketPrice ?? {}),
+                              quoteSources: v,
+                            },
+                          })
+                        }
+                      />
+                      {marketSummaryLines.length ? (
+                        <ul className="list-disc space-y-1 pl-4 text-[12px] leading-relaxed text-slate-300">
+                          {marketSummaryLines.map((line, i) => (
+                            <li key={`${i}-${line.slice(0, 24)}`}>{line}</li>
+                          ))}
+                        </ul>
+                      ) : null}
+                    </section>
                   </div>
                 </details>
 
@@ -2955,238 +3132,6 @@ export function CRMApp({
                         </div>
                       </>
                     ) : null}
-                  </div>
-                </details>
-
-                <details
-                  id="crm-block-used-car"
-                  className="scroll-mt-24 rounded-2xl border border-white/[0.11] bg-slate-950/55 p-5"
-                >
-                  <summary className="flex cursor-pointer list-none items-center justify-between gap-3 rounded-xl px-1 py-1.5 outline-none transition hover:bg-slate-950/45">
-                    <div>
-                      <div className="text-[16px] font-semibold text-slate-50">{t("crm.tradeInSummary")}</div>
-                      <div className="mt-1 text-[13px] text-slate-400">검색어 생성 · 연식/주행/사고 기록</div>
-                    </div>
-                    <span className="rounded-full border border-white/[0.11] bg-white/[0.07] px-3 py-1 text-[12px] font-semibold text-slate-300">
-                      펼치기
-                    </span>
-                  </summary>
-                  <div className="mt-4 rounded-xl border border-white/[0.11] bg-slate-950/55 p-4">
-                    <div className="text-xs font-semibold text-slate-50">중고차 정리(검색어 생성)</div>
-                    <p className="mt-1.5 text-[12px] leading-relaxed text-slate-500">
-                      관심 신차와 별도로, 고객이 보유 중인 차량이나 대차·매입 검토 차량을 입력해 시세 검색어를
-                      만듭니다.
-                    </p>
-                    {formatCustomerInterestVehicle(selectedCustomer) ? (
-                      <p className="mt-2 text-[12px] text-slate-400">
-                        <span className="font-medium text-slate-500">관심 신차(참고): </span>
-                        {formatCustomerInterestVehicle(selectedCustomer)}
-                      </p>
-                    ) : null}
-                    <datalist id="usedcar-brand-options">
-                      {[
-                        "현대",
-                        "기아",
-                        "제네시스",
-                        "쉐보레",
-                        "르노코리아",
-                        "KG모빌리티",
-                        "벤츠",
-                        "BMW",
-                        "아우디",
-                        "폭스바겐",
-                        "미니",
-                        "볼보",
-                        "렉서스",
-                        "도요타",
-                        "혼다",
-                        "포르쉐",
-                        "랜드로버",
-                        "지프",
-                        "테슬라",
-                      ].map((b) => (
-                        <option key={b} value={b} />
-                      ))}
-                    </datalist>
-                    <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                      <FieldList
-                        label="중고차 브랜드"
-                        value={selectedCustomer.usedCar?.brand ?? ""}
-                        placeholder="예: 현대 / 벤츠 / Audi"
-                        clearable
-                        onClear={() =>
-                          upsertCustomer({
-                            id: selectedCustomer.id,
-                            usedCar: { ...(selectedCustomer.usedCar ?? {}), brand: "", model: "" },
-                          })
-                        }
-                        onChange={(v) =>
-                          upsertCustomer({
-                            id: selectedCustomer.id,
-                            usedCar: { ...(selectedCustomer.usedCar ?? {}), brand: v },
-                          })
-                        }
-                        listId="usedcar-brand-options"
-                      />
-                      <datalist
-                        id={listIdForBrand("usedcar-model-options", selectedCustomer.usedCar?.brand)}
-                      >
-                        {(() => {
-                          const b = (selectedCustomer.usedCar?.brand ?? "").trim().toLowerCase();
-                          const opts =
-                            b === "현대"
-                              ? [
-                                  "그랜저",
-                                  "쏘나타",
-                                  "아반떼",
-                                  "싼타페",
-                                  "투싼",
-                                  "팰리세이드",
-                                  "아이오닉5",
-                                  "아이오닉6",
-                                ]
-                              : b === "기아"
-                                ? ["K5", "K8", "K3", "쏘렌토", "스포티지", "카니발", "셀토스", "EV6"]
-                                : b === "제네시스"
-                                  ? ["G70", "G80", "G90", "GV70", "GV80"]
-                                  : b === "벤츠" || b === "mercedes" || b === "mercedes-benz"
-                                    ? ["E클래스", "C클래스", "S클래스", "GLC", "GLE", "GLB", "CLA"]
-                                    : b === "bmw"
-                                      ? ["3시리즈", "5시리즈", "7시리즈", "X3", "X5", "X6", "1시리즈"]
-                                      : b === "아우디" || b === "audi"
-                                        ? ["A4", "A6", "A7", "A8", "Q3", "Q5", "Q7", "Q8"]
-                                        : b === "폭스바겐" || b === "폭스바겠" || b === "volkswagen"
-                                          ? ["골프", "파사트", "티구안", "투아렉"]
-                                          : b === "볼보" || b === "volvo"
-                                            ? ["S60", "S90", "XC40", "XC60", "XC90"]
-                                            : b === "렉서스" || b === "lexus"
-                                              ? ["ES", "RX", "NX", "LS"]
-                                              : [];
-                          return opts.map((m) => <option key={m} value={m} />);
-                        })()}
-                      </datalist>
-                      <FieldList
-                        label="중고차 차종"
-                        value={selectedCustomer.usedCar?.model ?? ""}
-                        placeholder="예: 그랜저 / 팰리세이드 / A6"
-                        clearable
-                        onClear={() =>
-                          upsertCustomer({
-                            id: selectedCustomer.id,
-                            usedCar: { ...(selectedCustomer.usedCar ?? {}), model: "" },
-                          })
-                        }
-                        onChange={(v) =>
-                          upsertCustomer({
-                            id: selectedCustomer.id,
-                            usedCar: { ...(selectedCustomer.usedCar ?? {}), model: v },
-                          })
-                        }
-                        listId={listIdForBrand("usedcar-model-options", selectedCustomer.usedCar?.brand)}
-                      />
-                      <Field
-                        label="연식(예: 2019)"
-                        value={selectedCustomer.usedCar?.year ?? ""}
-                        placeholder="2019"
-                        onChange={(v) =>
-                          upsertCustomer({
-                            id: selectedCustomer.id,
-                            usedCar: { ...(selectedCustomer.usedCar ?? {}), year: v },
-                          })
-                        }
-                      />
-                      <Field
-                        label="주행거리(km)"
-                        value={selectedCustomer.usedCar?.mileageKm ?? ""}
-                        placeholder="예: 120000 또는 12만"
-                        onChange={(v) =>
-                          upsertCustomer({
-                            id: selectedCustomer.id,
-                            usedCar: { ...(selectedCustomer.usedCar ?? {}), mileageKm: v },
-                          })
-                        }
-                      />
-                      <SelectField
-                        label="사고 여부(대략)"
-                        placeholderOption="선택 안 함"
-                        value={selectedCustomer.usedCar?.accident ?? ""}
-                        options={[...ACCIDENT_OPTIONS]}
-                        onChange={(v) =>
-                          upsertCustomer({
-                            id: selectedCustomer.id,
-                            usedCar: {
-                              ...(selectedCustomer.usedCar ?? {}),
-                              accident: v ? (v as UsedCarAccident) : undefined,
-                            },
-                          })
-                        }
-                      />
-                      <datalist
-                        id={listIdForBrand("usedcar-trim-options", selectedCustomer.usedCar?.brand)}
-                      >
-                        {buildUsedCarTrimDatalistOptions(
-                          selectedCustomer.usedCar?.brand,
-                          selectedCustomer.usedCar?.trim,
-                        ).map((t) => (
-                          <option key={t} value={t} />
-                        ))}
-                      </datalist>
-                      <FieldList
-                        label="등급/트림"
-                        value={selectedCustomer.usedCar?.trim ?? ""}
-                        placeholder="예: 익스클루시브 / 프레스티지"
-                        clearable
-                        onClear={() =>
-                          upsertCustomer({
-                            id: selectedCustomer.id,
-                            usedCar: { ...(selectedCustomer.usedCar ?? {}), trim: "" },
-                          })
-                        }
-                        onChange={(v) =>
-                          upsertCustomer({
-                            id: selectedCustomer.id,
-                            usedCar: { ...(selectedCustomer.usedCar ?? {}), trim: v },
-                          })
-                        }
-                        listId={listIdForBrand("usedcar-trim-options", selectedCustomer.usedCar?.brand)}
-                      />
-                    </div>
-
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      <button
-                        type="button"
-                        className="sensora-premium-primary-workspace rounded-lg px-3 py-2 text-xs font-semibold touch-manipulation"
-                        onClick={() => {
-                          const q = buildUsedCarSearchQuery(selectedCustomer);
-                          void copyToClipboard(q).then((ok) => {
-                            if (ok) showToast("검색어 복사 완료");
-                            else alert(q);
-                          });
-                        }}
-                      >
-                        검색어 복사
-                      </button>
-                      <button
-                        type="button"
-                        className="rounded-lg border border-white/[0.11] bg-slate-950/55 px-3 py-2 text-xs font-semibold hover:bg-white/[0.08]"
-                        onClick={() => {
-                          const q = buildUsedCarSearchQuery(selectedCustomer);
-                          const line = `${q}\n- 연식/주행거리/사고/등급을 추가로 입력하면 더 정확합니다.`;
-                          void copyToClipboard(line).then((ok) => {
-                            if (ok) showToast("검색 메모 복사 완료");
-                            else alert(line);
-                          });
-                        }}
-                      >
-                        검색 메모 복사
-                      </button>
-                    </div>
-                    <p className="mt-2 text-[12px] text-slate-400">
-                      검색어:{" "}
-                      <span className="font-medium text-slate-300">
-                        {buildUsedCarSearchQuery(selectedCustomer)}
-                      </span>
-                    </p>
                   </div>
                 </details>
 

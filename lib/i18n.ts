@@ -1324,7 +1324,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.budgetCompareLead": "신차 예산과 비교 차종을 간단히 정리합니다.",
     "crm.financeTaxMarketTitle": "중고차 가격 정리",
     "crm.financeTaxMarketLead":
-      "여러 매입 견적을 비교해 고객에게 안내할 기준 가격을 정리합니다. 입력하지 않아도 견적 안내 문자는 작성할 수 있습니다.",
+      "관심 신차와 별도로, 고객이 보유 중인 차량이나 대차·매입 검토 차량을 정리하고, 검색어와 매입가 비교 기준을 함께 관리합니다.",
     "crm.tradeInSummary": "중고차 정리",
     "crm.tab.customers": "고객",
     "crm.tab.next": "다음 행동",
@@ -2390,7 +2390,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.budgetCompareLead": "New-car budget and comparison models for reference.",
     "crm.financeTaxMarketTitle": "Trade-in price notes",
     "crm.financeTaxMarketLead":
-      "Compare purchase quotes from multiple sources. Optional—estimate messages work without this section.",
+      "Separate from new-car interest: record the customer's current or trade-in vehicle, search keywords, and purchase-price comparison in one place.",
     "crm.tradeInSummary": "Trade-in Vehicle Summary",
     "crm.tab.customers": "Customers",
     "crm.tab.next": "Next steps",
