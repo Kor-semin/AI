@@ -42,6 +42,21 @@ export function normalizeKoreanVehicleSpelling(text: string): string {
   return text.replace(/소렌토/g, "쏘렌토");
 }
 
+/** 관심 차량 필드용 — 조사·어미·문장 조각 제거 후 차량명만. */
+export function sanitizeInterestVehicleLabel(raw?: string): string {
+  if (!raw?.trim()) return "";
+  let v = raw.trim();
+  v = v.replace(/^(?:은|는|이|가)\s+/u, "");
+  v = v.replace(/^(?:관심\s*)?(?:차량|차종)\s*(?:은|는|이|가|:)?\s*/iu, "");
+  v = v
+    .replace(/\s*(?:이고|이며|이라고|이라\s*).*$/iu, "")
+    .replace(/\s*(?:보고\s*있음|관심|차량|기준으로|이하|내외).*$/iu, "")
+    .trim();
+  v = v.replace(/^[,.，·|/\s]+|[,.，·|/\s]+$/g, "");
+  if (!v) return "";
+  return normalizeKoreanVehicleSpelling(v);
+}
+
 const HANGUL_NAME_RE = /^[가-힣]{2,6}$/;
 const MODEL_LINE_RE = /^[A-Za-z][A-Za-z0-9.\-\s]{0,24}$/;
 
@@ -58,7 +73,7 @@ export function normalizeInterestVehicle(memo: string, candidate?: string): stri
   if (fromCandidate) return fromCandidate[0];
 
   if (c.length <= 32 && !BRAND_ONLY_RE.test(c) && !/클래스\s*상담|라인업|기타/i.test(c)) {
-    return normalizeKoreanVehicleSpelling(c);
+    return sanitizeInterestVehicleLabel(c);
   }
   return undefined;
 }
@@ -68,16 +83,10 @@ export function extractInterestVehicleFromMemo(memo: string): string | undefined
   const raw = memo.trim();
   if (!raw) return undefined;
 
-  const labeled = raw.match(/관심\s*차량(?:은|이|:\s*)?([^\n。]+)/i);
+  const labeled = raw.match(/관심\s*차량\s*(?:은|는|이|가|:)?\s*([^\n。]+)/i);
   if (labeled?.[1]) {
-    let v = labeled[1]
-      .trim()
-      .replace(/이고.*$/i, "")
-      .replace(/이며.*$/i, "")
-      .replace(/[,，].*$/, "")
-      .trim();
-    v = v.replace(/\s*(?:가족|주말|월|할부|리스).*$/i, "").trim();
-    if (v) return normalizeKoreanVehicleSpelling(v);
+    const v = sanitizeInterestVehicleLabel(labeled[1]);
+    if (v) return v;
   }
 
   for (const line of raw.split(/\n+/)) {
@@ -325,14 +334,13 @@ function buildRichQuickConsultationResult(
     parseQuickCustomerIdentity(memo).name?.trim() ||
     firstMatch(memo, [/([가-힣]{2,6})\s*고객/i])?.replace(/\s*고객$/, "") ||
     "고객";
-  const interestVehicle =
-    extractInterestVehicleFromMemo(memo) ??
-    normalizeInterestVehicle(memo, identity.vehicle) ??
-    undefined;
+  const interestVehicle = sanitizeInterestVehicleLabel(
+    extractInterestVehicleFromMemo(memo) ?? normalizeInterestVehicle(memo, identity.vehicle) ?? "",
+  );
   const owned = parseOwnedVehicleFromMemo(memo);
 
   const needs: QuickConsultationNeeds = {
-    vehicle: interestVehicle,
+    vehicle: interestVehicle || undefined,
     budget: extractRichBudgetNote(memo),
     timing: extractRichTimingNote(memo),
     priorities: extractRichPrioritiesNote(memo),
@@ -413,9 +421,11 @@ export function resolveCustomerVehicleFields(
   memo: string,
   modelCandidate?: string,
 ): { vehicleBrand?: string; interestedModel?: string } {
-  const model =
+  const model = sanitizeInterestVehicleLabel(
     extractInterestVehicleFromMemo(memo) ??
-    normalizeInterestVehicle(memo, modelCandidate);
+      normalizeInterestVehicle(memo, modelCandidate) ??
+      modelCandidate,
+  );
   if (!model) return {};
   return {
     vehicleBrand: inferVehicleBrandForModel(model),
@@ -681,29 +691,77 @@ function buildGroundedQuickConsultationResult(
   return { needs, summary, message, nextActions, insights };
 }
 
+function buildRichCustomerModalMemo(memo: string, result: QuickConsultationResult): string {
+  const vehicle = sanitizeInterestVehicleLabel(
+    result.needs.vehicle ?? extractInterestVehicleFromMemo(memo) ?? "",
+  );
+  const owned = parseOwnedVehicleFieldsFromMemo(memo);
+  const lines: string[] = [];
+
+  if (vehicle) lines.push(`${vehicle} 관심.`);
+
+  if (/가족|7인승/i.test(memo)) {
+    const sub: string[] = [];
+    if (/공간/i.test(memo)) sub.push("공간");
+    if (/연비/i.test(memo)) sub.push("연비");
+    if (/출고\s*가능/i.test(memo)) sub.push("출고 가능 여부");
+    if (sub.length) {
+      lines.push(`가족용 7인승 차량을 보고 있으며, ${sub.join(", ")}을 중요하게 봄.`);
+    } else {
+      lines.push("가족용 7인승 차량을 보고 있음.");
+    }
+  }
+
+  if (/월\s*납입|초기\s*비용/i.test(memo)) {
+    lines.push("월 납입금과 초기 비용을 낮추는 조건을 희망함.");
+  } else if (result.needs.budget) {
+    lines.push(`${result.needs.budget}.`);
+  }
+
+  if (/할부.*리스|리스.*할부/i.test(memo)) {
+    lines.push("할부와 리스 조건 비교 필요.");
+  }
+
+  if (owned?.brand || owned?.model) {
+    const ownedLine = [
+      owned.brand,
+      owned.model,
+      owned.year ? `${owned.year}년식` : "",
+      owned.mileageKm,
+      owned.accident,
+    ]
+      .filter(Boolean)
+      .join(", ");
+    lines.push(`보유 차량: ${ownedLine}.`);
+  }
+
+  const callWhen =
+    firstMatch(memo, [/이번\s*주\s*토요일\s*오전/i, /토요일\s*오전/i]) ??
+    (/토요일/i.test(memo) ? "토요일 오전" : undefined);
+  if (callWhen) {
+    const when = callWhen.replace(/에\s*통화.*$/i, "").trim();
+    lines.push(`${when} 통화 예정.`);
+  }
+
+  return lines
+    .map((l) => l.replace(/^(?:은|는|이고)\s+/u, "").trim())
+    .filter(Boolean)
+    .join("\n");
+}
+
 /** 고객 추가 모달용 짧은 상담 메모(긴 AI 결과·문자 초안 전문 제외). */
 export function buildQuickCustomerModalMemo(memo: string, result: QuickConsultationResult): string {
   if (isRichStructuredConsultation(memo)) {
-    const owned = parseOwnedVehicleFieldsFromMemo(memo);
-    const lines: string[] = [];
-    if (result.needs.vehicle) lines.push(`관심: ${result.needs.vehicle}`);
-    if (owned?.brand || owned?.model) {
-      lines.push(`보유/대차: ${[owned.brand, owned.model, owned.year, owned.mileageKm].filter(Boolean).join(" ")}`);
-      if (owned.accident) lines.push(`사고: ${owned.accident}`);
-    }
-    if (result.needs.priorities) lines.push(result.needs.priorities);
-    if (result.needs.budget) lines.push(result.needs.budget);
-    if (result.needs.concerns) lines.push(result.needs.concerns);
-    const next = result.nextActions[0]?.trim();
-    if (next) lines.push("", "[다음 행동]", ...result.nextActions);
-    return lines.join("\n");
+    return buildRichCustomerModalMemo(memo, result);
   }
 
   const identity = parseQuickCustomerIdentity(memo);
-  const vehicle = normalizeInterestVehicle(memo, result.needs.vehicle ?? identity.vehicle);
+  const vehicle = sanitizeInterestVehicleLabel(
+    normalizeInterestVehicle(memo, result.needs.vehicle ?? identity.vehicle) ?? "",
+  );
   const lines: string[] = [];
   if (vehicle) {
-    lines.push(`${vehicle} 관심`);
+    lines.push(`${vehicle} 관심.`);
   }
   const paymentNote = extractPaymentNote(memo) ?? result.needs.budget;
   const deliveryNote = extractDeliveryNote(memo) ?? result.needs.timing;
@@ -740,9 +798,11 @@ export function parseQuickConsultationNeeds(memo: string, summary = ""): QuickCo
       }
     }
   }
-  vehicle = normalizeInterestVehicle(raw, vehicle);
+  vehicle = sanitizeInterestVehicleLabel(normalizeInterestVehicle(raw, vehicle) ?? "");
   if (!vehicle) {
-    vehicle = normalizeInterestVehicle(raw, firstMatch(summary, [/관심\s*차량[:\s]*([^\n]+)/i]));
+    vehicle = sanitizeInterestVehicleLabel(
+      normalizeInterestVehicle(raw, firstMatch(summary, [/관심\s*차량[:\s]*([^\n]+)/i])) ?? "",
+    );
   }
 
   const budget =

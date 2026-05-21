@@ -925,6 +925,84 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   background: rgba(148, 163, 184, 0.65);
 }
 
+/* 새 고객 추가 모달 — 라이트모드(오버레이는 #crm-main 밖 fixed) */
+html[data-theme="light"] .crm-create-customer-modal {
+  background: #fffdf9 !important;
+  border-color: rgba(15, 23, 42, 0.12) !important;
+  color: #0f172a;
+  box-shadow:
+    0 24px 48px rgba(15, 23, 42, 0.14),
+    0 2px 8px rgba(15, 23, 42, 0.06);
+}
+
+html[data-theme="light"] .crm-create-customer-modal__header,
+html[data-theme="light"] .crm-create-customer-modal__footer {
+  background: #fffdf9 !important;
+  border-color: rgba(15, 23, 42, 0.1) !important;
+}
+
+html[data-theme="light"] .crm-create-customer-modal #crm-create-customer-title {
+  color: #0f172a !important;
+}
+
+html[data-theme="light"] .crm-create-customer-modal__body label > div {
+  color: #475569 !important;
+}
+
+html[data-theme="light"] .crm-create-customer-modal__body .sensora-premium-input,
+html[data-theme="light"] .crm-create-customer-modal__body input,
+html[data-theme="light"] .crm-create-customer-modal__body select,
+html[data-theme="light"] .crm-create-customer-modal__body textarea {
+  background: #ffffff !important;
+  border: 1px solid rgba(15, 23, 42, 0.12) !important;
+  color: #0f172a !important;
+  box-shadow: none;
+}
+
+html[data-theme="light"] .crm-create-customer-modal__body .sensora-premium-input::placeholder,
+html[data-theme="light"] .crm-create-customer-modal__body input::placeholder,
+html[data-theme="light"] .crm-create-customer-modal__body textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+html[data-theme="light"] .crm-create-customer-modal__body .sensora-premium-input:focus,
+html[data-theme="light"] .crm-create-customer-modal__body input:focus,
+html[data-theme="light"] .crm-create-customer-modal__body select:focus,
+html[data-theme="light"] .crm-create-customer-modal__body textarea:focus {
+  border-color: rgba(52, 92, 124, 0.45) !important;
+  box-shadow: 0 0 0 3px rgba(52, 92, 124, 0.12) !important;
+}
+
+html[data-theme="light"] .crm-create-customer-modal__footer button:first-child {
+  background: #ffffff !important;
+  border-color: rgba(15, 23, 42, 0.14) !important;
+  color: #334155 !important;
+}
+
+html[data-theme="light"] .crm-create-customer-modal__footer button:first-child:hover {
+  background: #f8f5ef !important;
+}
+
+html[data-theme="light"] .crm-create-customer-modal__footer .sensora-premium-primary-workspace,
+html[data-theme="light"] .crm-create-customer-modal__footer button[type="submit"] {
+  color: #0f172a !important;
+}
+
+html[data-theme="light"] .crm-create-customer-modal__body,
+html[data-theme="light"] .crm-create-customer-modal__textarea {
+  scrollbar-color: rgba(100, 116, 139, 0.45) rgba(248, 245, 239, 0.9);
+}
+
+html[data-theme="light"] .crm-create-customer-modal__body::-webkit-scrollbar-track,
+html[data-theme="light"] .crm-create-customer-modal__textarea::-webkit-scrollbar-track {
+  background: rgba(248, 245, 239, 0.9);
+}
+
+html[data-theme="light"] .crm-create-customer-modal__body::-webkit-scrollbar-thumb,
+html[data-theme="light"] .crm-create-customer-modal__textarea::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, 0.4);
+}
+
 /* 고객 리스트 필터 바 — 가로 스크롤(모바일) */
 .crm-customer-list-filters [role="tablist"] {
   scrollbar-width: thin;

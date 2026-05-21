@@ -580,7 +580,7 @@ export function CRMApp({
     const snap = quickConsultationDraft.trim();
     const r = quickConsultationResult;
     const identity = parseQuickCustomerIdentity(snap);
-    const nextLine = r.nextActions[0]?.trim() ?? "";
+    const nextLine = r.nextActions.filter((l) => l.trim()).join("\n");
     const vehicleFields = resolveCustomerVehicleFields(snap, r.needs.vehicle ?? identity.vehicle);
     setCreateCustomerDraft({
       ...CREATE_CUSTOMER_INITIAL,
@@ -4047,11 +4047,11 @@ export function CRMApp({
             role="dialog"
             aria-modal="true"
             aria-labelledby="crm-create-customer-title"
-            className="crm-create-customer-modal flex max-h-[92dvh] w-full max-w-[520px] flex-col rounded-t-[22px] border border-white/[0.11] bg-slate-950/55 shadow-2xl sm:rounded-[22px]"
+            className="crm-create-customer-modal flex max-h-[92dvh] w-full max-w-[520px] flex-col rounded-t-[22px] border border-white/[0.11] bg-slate-950/55 shadow-2xl sm:rounded-[22px] sm:max-h-[min(92dvh,720px)]"
             onMouseDown={(e) => e.stopPropagation()}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="shrink-0 border-b border-white/[0.11] bg-slate-950/45 px-4 py-3 sm:px-5">
+            <div className="crm-create-customer-modal__header shrink-0 border-b border-white/[0.11] bg-slate-950/45 px-4 py-3 sm:px-5">
               <h2 id="crm-create-customer-title" className="text-[16px] font-extrabold text-slate-50">
                 새 고객 추가
               </h2>
@@ -4154,7 +4154,7 @@ export function CRMApp({
                 }
               />
             </form>
-            <div className="flex shrink-0 flex-col-reverse gap-2 border-t border-white/[0.11] bg-slate-950/55 px-4 py-4 sm:flex-row sm:justify-end sm:gap-3 sm:px-6">
+            <div className="crm-create-customer-modal__footer flex shrink-0 flex-col-reverse gap-2 border-t border-white/[0.11] bg-slate-950/55 px-4 py-4 sm:flex-row sm:justify-end sm:gap-3 sm:px-6">
               <button
                 type="button"
                 className="min-h-[44px] shrink-0 rounded-xl border border-white/[0.11] bg-slate-950/55 px-5 py-2.5 text-[14px] font-semibold text-slate-300 hover:bg-slate-950/45 touch-manipulation"
