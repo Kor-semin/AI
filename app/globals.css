@@ -3964,8 +3964,10 @@ html[data-theme="light"] .crm-app-stage.crm-bg {
   --crm-light-card: #ffffff;
   --crm-light-text: #0f172a;
   --crm-light-text-secondary: #475569;
-  --crm-light-text-muted: #64748b;
-  --crm-light-border: rgba(15, 23, 42, 0.1);
+  --crm-light-text-helper: #64748b;
+  --crm-light-text-muted: #94a3b8;
+  --crm-light-border: rgba(15, 23, 42, 0.11);
+  --crm-light-card-shadow: 0 1px 2px rgba(15, 23, 42, 0.05), 0 10px 26px -16px rgba(15, 23, 42, 0.09);
   background-color: var(--crm-light-bg);
   background-image:
     radial-gradient(900px 520px at 6% -6%, rgba(56, 189, 248, 0.05), transparent 58%),
@@ -3994,7 +3996,7 @@ html[data-theme="light"] .crm-app-stage .text-slate-300 {
 
 html[data-theme="light"] .crm-app-stage .text-slate-400,
 html[data-theme="light"] .crm-app-stage .text-slate-500 {
-  color: var(--crm-light-text-secondary) !important;
+  color: var(--crm-light-text-helper) !important;
 }
 
 html[data-theme="light"] .crm-app-stage .text-violet-300,
@@ -4644,7 +4646,7 @@ html[data-theme="light"] .crm-app-stage aside nav button:not([aria-current="page
 }
 
 html[data-theme="light"] .crm-app-stage aside nav button:not([aria-current="page"]) > span:last-child {
-  color: var(--crm-light-text-secondary) !important;
+  color: var(--crm-light-text-helper) !important;
 }
 
 html[data-theme="light"] .crm-app-stage aside nav button:not([aria-current="page"]):hover {
@@ -4711,18 +4713,37 @@ html[data-theme="light"] .crm-app-stage .crm-mobile-section-rail button[aria-cur
   color: #345c7c !important;
 }
 
+html[data-theme="light"] .crm-app-stage #crm-main > div > header {
+  gap: 0.85rem;
+}
+
+html[data-theme="light"] .crm-app-stage #crm-main > div > header > div:first-child p {
+  color: var(--crm-light-text-helper) !important;
+}
+
 html[data-theme="light"] .crm-app-stage .crm-workspace-toolbar {
-  padding: 0;
-  gap: 0.75rem;
-  border: none;
-  background: transparent;
-  box-shadow: none;
+  display: flex;
+  align-items: stretch;
+  padding: 0.5rem;
+  gap: 0.65rem;
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  border-radius: 1.125rem;
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
   backdrop-filter: none;
+}
+
+html[data-theme="light"] .crm-app-stage .crm-workspace-toolbar > .relative {
+  flex: 1 1 12rem;
+  min-width: 0;
 }
 
 @media (min-width: 640px) {
   html[data-theme="light"] .crm-app-stage .crm-workspace-toolbar {
-    gap: 0.85rem;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 0.7rem;
+    padding: 0.55rem 0.65rem;
   }
 }
 
@@ -4768,9 +4789,7 @@ html[data-theme="light"] .crm-app-stage #crm-unified-search-results .border-whit
 html[data-theme="light"] .crm-app-stage .sensora-premium-panel {
   border: 1px solid var(--crm-light-border);
   background: #ffffff;
-  box-shadow:
-    0 1px 2px rgba(15, 23, 42, 0.04),
-    0 8px 24px -14px rgba(15, 23, 42, 0.08);
+  box-shadow: var(--crm-light-card-shadow);
   backdrop-filter: none;
 }
 
@@ -4784,14 +4803,22 @@ html[data-theme="light"] .crm-app-stage .sensora-premium-panel-interactive:hover
 html[data-theme="light"] .crm-app-stage .sensora-premium-card {
   border: 1px solid var(--crm-light-border);
   background: #ffffff;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 8px 24px -14px rgba(15, 23, 42, 0.08);
+  box-shadow: var(--crm-light-card-shadow);
   backdrop-filter: none;
+}
+
+html[data-theme="light"] .crm-app-stage .crm-workspace-toolbar .sensora-premium-ghost,
+html[data-theme="light"] .crm-app-stage .crm-workspace-toolbar .sensora-premium-primary-workspace {
+  min-height: 3rem;
+  border-radius: 0.875rem;
+  font-size: 0.875rem;
+  font-weight: 600;
 }
 
 html[data-theme="light"] .crm-app-stage .crm-workspace-toolbar .sensora-premium-ghost {
   border: 1px solid var(--crm-light-border) !important;
   background: #ffffff !important;
-  color: #334155 !important;
+  color: #475569 !important;
   box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04) !important;
 }
 
@@ -4819,15 +4846,34 @@ html[data-theme="light"] .crm-app-stage .sensora-premium-primary-workspace:hover
 }
 
 html[data-theme="light"] .crm-app-stage .sensora-dark-ghost-btn {
-  border: 1px solid var(--crm-light-border);
-  color: #334155;
-  background: #ffffff;
+  min-height: 2.75rem;
+  border-radius: 1.125rem;
+  border: 1px solid rgba(15, 23, 42, 0.09);
+  color: #475569;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+  font-size: 0.875rem;
+  font-weight: 600;
 }
 
 html[data-theme="light"] .crm-app-stage .sensora-dark-ghost-btn:hover {
-  border-color: rgba(15, 23, 42, 0.14);
-  background: #fafafa;
+  border-color: rgba(15, 23, 42, 0.12);
+  background: #ffffff;
   color: var(--crm-light-text);
+}
+
+html[data-theme="light"] .crm-app-stage #crm-main > div > .flex.flex-wrap.items-center.gap-2 {
+  gap: 0.5rem !important;
+  row-gap: 0.65rem !important;
+  align-items: center;
+}
+
+html[data-theme="light"] .crm-app-stage #crm-main > div > .flex.flex-wrap.items-center.gap-2 .flex.flex-wrap.gap-2 {
+  gap: 0.5rem !important;
+}
+
+html[data-theme="light"] .crm-app-stage #crm-main > div > .flex.flex-wrap.items-center.gap-2 label > span {
+  color: var(--crm-light-text-secondary) !important;
 }
 
 html[data-theme="light"] .crm-app-stage .sensora-premium-input {
@@ -4872,8 +4918,17 @@ html[data-theme="light"] .crm-app-stage .quick-ai-entry-input-card,
 html[data-theme="light"] .crm-app-stage .quick-ai-entry-result-card {
   border: 1px solid var(--crm-light-border) !important;
   background: #ffffff !important;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 10px 28px -16px rgba(15, 23, 42, 0.08) !important;
+  box-shadow: var(--crm-light-card-shadow) !important;
   backdrop-filter: none !important;
+}
+
+html[data-theme="light"] .crm-app-stage .quick-ai-entry-hero p {
+  color: var(--crm-light-text-helper) !important;
+}
+
+html[data-theme="light"] .crm-app-stage .quick-ai-entry-hero .text-slate-300\/92,
+html[data-theme="light"] .crm-app-stage .quick-ai-entry-hero p.mt-3 {
+  color: var(--crm-light-text-secondary) !important;
 }
 
 html[data-theme="light"] .crm-app-stage .quick-ai-entry-input-card label {
@@ -4881,7 +4936,7 @@ html[data-theme="light"] .crm-app-stage .quick-ai-entry-input-card label {
 }
 
 html[data-theme="light"] .crm-app-stage .quick-ai-entry-input-card p {
-  color: var(--crm-light-text-secondary) !important;
+  color: var(--crm-light-text-helper) !important;
 }
 
 html[data-theme="light"] .crm-app-stage .quick-ai-entry-result-card li {
@@ -4904,15 +4959,21 @@ html[data-theme="light"] .crm-app-stage .quick-ai-entry-analyze-btn.landing-ente
 }
 
 html[data-theme="light"] .crm-app-stage .quick-ai-entry-analyze-btn.landing-enterprise-btn-primary:disabled {
-  opacity: 0.62 !important;
+  opacity: 1 !important;
   cursor: not-allowed;
-  border-color: var(--crm-light-border) !important;
-  background: #f1f5f9 !important;
-  color: #64748b !important;
-  box-shadow: none !important;
+  border: 1px solid rgba(148, 163, 184, 0.38) !important;
+  background: linear-gradient(180deg, #e9eff5 0%, #dde6ef 100%) !important;
+  color: #475569 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.82),
+    0 1px 2px rgba(15, 23, 42, 0.06) !important;
 }
 
 html[data-theme="light"] .crm-app-stage .quick-ai-entry-secondary-nav {
   border-top-color: var(--crm-light-border) !important;
+}
+
+html[data-theme="light"] .crm-app-stage .crm-mobile-section-rail button:not([aria-current="page"]) span:last-child {
+  color: var(--crm-light-text-helper) !important;
 }
 
