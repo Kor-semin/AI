@@ -38,9 +38,13 @@ const KNOWN_MODEL_RE =
 const BRAND_ONLY_RE =
   /^(?:Mercedes[\s-]*Benz|Mercedes-Benz|메르세데스|벤츠|BMW|Audi|아우디|폭스바겐|Volkswagen|렉서스|Lexus|제네시스|Genesis|현대|기아)$/i;
 
-/** 데모·표시용 기아 Sorento 표기 통일(사용자 직접 입력 원문은 저장 시 그대로). */
+/** 데모·표시용 기아 Sorento 표기 통일(쏘렌트/소렌토 → 쏘렌토). */
 export function normalizeKoreanVehicleSpelling(text: string): string {
-  return text.replace(/소렌토/g, "쏘렌토");
+  return text
+    .replace(/쏘렌트\s*하이브리드/gi, "쏘렌토 하이브리드")
+    .replace(/소렌토\s*하이브리드/gi, "쏘렌토 하이브리드")
+    .replace(/쏘렌트/gi, "쏘렌토")
+    .replace(/소렌토/gi, "쏘렌토");
 }
 
 /** 관심 차량 필드용 — 조사·어미·문장 조각 제거 후 차량명만. */
@@ -278,6 +282,19 @@ export function formatRichConsultationNeedsDisplay(memo: string): string {
   return lines.join("\n\n").trim() || memo.slice(0, 200);
 }
 
+function buildRichCallScheduleSmsLine(memo: string): string | undefined {
+  if (/이번\s*주\s*토요일\s*오전/i.test(memo)) {
+    return "이번 주 토요일 오전 통화 때, 출고 일정과 월 납입 조건, 기존 차량 매입가까지 같이 정리해서 안내드리겠습니다.";
+  }
+  if (/토요일\s*오전/i.test(memo)) {
+    return "토요일 오전에 통화 가능하실 때, 출고 일정과 월 납입 조건, 기존 차량 매입가까지 같이 정리해서 안내드리겠습니다.";
+  }
+  if (/다음\s*연락|토요일/i.test(memo)) {
+    return "통화 일정에 맞춰 출고 일정과 월 납입 조건, 기존 차량 매입가까지 같이 정리해서 안내드리겠습니다.";
+  }
+  return undefined;
+}
+
 function buildRichConsultationSms(
   name: string,
   interestVehicle: string | undefined,
@@ -285,7 +302,9 @@ function buildRichConsultationSms(
   owned?: ParsedOwnedVehicle,
 ): string {
   const salutation = name.trim() || "고객";
-  const vehiclePhrase = interestVehicle ? interestVehicle : "문의 주신 차량";
+  const vehiclePhrase = interestVehicle
+    ? normalizeKoreanVehicleSpelling(interestVehicle)
+    : "문의 주신 차량";
   const lines: string[] = [`${salutation}님, 안녕하세요.`, "담당 영업사원입니다.", ""];
 
   if (/가족|7인승/i.test(memo)) {
@@ -319,14 +338,9 @@ function buildRichConsultationSms(
     lines.push("");
   }
 
-  const callWhen =
-    firstMatch(memo, [/이번\s*주\s*토요일\s*오전[^\n。]*/i, /토요일\s*오전[^\n。]*/i]) ??
-    (/토요일/i.test(memo) ? "토요일 오전" : undefined);
-  if (callWhen) {
-    lines.push(
-      `${callWhen}에 통화 가능하실 때, 출고 일정과 월 납입 조건, 기존 차량 매입가까지 같이 정리해서 안내드리겠습니다.`,
-      "",
-    );
+  const callLine = buildRichCallScheduleSmsLine(memo);
+  if (callLine) {
+    lines.push(callLine, "");
   } else if (/주말/i.test(memo)) {
     lines.push("주말 통화를 선호하신다고 메모되어 있어, 편하신 시간 알려주시면 맞춰 연락드리겠습니다.", "");
   }
@@ -535,10 +549,18 @@ export function buildQuickSaveCustomerDraftFields(
     vehicleCandidate ||
     "";
   const catalogModel = mapInterestedModelForBrand(brand, rawModel);
-  const interestedModel =
-    catalogModel && isInterestedModelInBrandCatalog(brand, catalogModel)
-      ? catalogModel
-      : rawModel;
+  let interestedModel = normalizeKoreanVehicleSpelling(
+    catalogModel && isInterestedModelInBrandCatalog(brand, catalogModel) ? catalogModel : rawModel,
+  );
+  if (!interestedModel.trim()) {
+    const needsVehicle = result.needs.vehicle?.trim();
+    if (needsVehicle) {
+      const mapped = mapInterestedModelForBrand(brand, needsVehicle);
+      interestedModel = normalizeKoreanVehicleSpelling(
+        mapped && isInterestedModelInBrandCatalog(brand, mapped) ? mapped : needsVehicle,
+      );
+    }
+  }
   return {
     name: resolveQuickCustomerNameForSave(snap, result.message),
     vehicleBrand: brand,
@@ -744,7 +766,7 @@ export function sanitizeAiTextForInput(memo: string, text: string): string {
   if (/착좌감/.test(out) && !/착좌감/.test(input)) {
     out = out.replace(/.*착좌감.*\n?/g, "").trim();
   }
-  return out;
+  return normalizeKoreanVehicleSpelling(out);
 }
 
 function buildGroundedSmsDraft(
