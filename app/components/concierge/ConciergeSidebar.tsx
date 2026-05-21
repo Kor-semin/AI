@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useRef } from "react";
+
 import { SensoraAnimatedMark } from "@/app/components/SensoraAnimatedMark";
 import {
   CRM_SECTION_LABELS,
@@ -35,6 +37,22 @@ export function ConciergeSidebar({
   onOpenLanding: () => void;
 }) {
   const { t } = useLanguage();
+  const mobileRailRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const rail = mobileRailRef.current;
+    if (!rail) return;
+    const activeBtn = rail.querySelector<HTMLButtonElement>('button[aria-current="page"]');
+    if (!activeBtn) return;
+    const prefersReduced =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    activeBtn.scrollIntoView({
+      inline: "center",
+      block: "nearest",
+      behavior: prefersReduced ? "auto" : "smooth",
+    });
+  }, [activeSection]);
 
   const renderNavButton = (section: CrmSection) => {
     const active = activeSection === section;
@@ -79,7 +97,8 @@ export function ConciergeSidebar({
         <div className="rounded-[22px] border border-white/[0.13] bg-gradient-to-b from-slate-950/65 to-[#07111f]/78 px-1.5 py-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_16px_44px_-22px_rgba(0,0,0,0.48),0_0_48px_-22px_rgba(56,189,248,0.06)] backdrop-blur-xl ring-1 ring-inset ring-white/[0.035]">
           <p className="sr-only">가로로 스크롤하여 메뉴를 선택합니다.</p>
           <div
-            className="crm-mobile-section-rail flex snap-x snap-mandatory gap-2 overflow-x-auto overflow-y-hidden overscroll-x-contain px-1 py-1 pr-10 [scrollbar-width:thin] max-[390px]:gap-2.5"
+            ref={mobileRailRef}
+            className="crm-mobile-section-rail flex snap-x snap-mandatory gap-2 overflow-x-auto overflow-y-hidden overscroll-x-contain scroll-px-3 px-1 py-1 pr-14 [scrollbar-width:thin] max-[390px]:gap-2"
             role="presentation"
             style={{
               scrollbarColor: "#94A3B8 transparent",
@@ -95,9 +114,9 @@ export function ConciergeSidebar({
                   type="button"
                   onClick={() => onNavigate(section)}
                   className={[
-                    "flex min-h-[72px] w-[clamp(9.75rem,calc((100vw-4.25rem)/2.12),11.25rem)] max-[390px]:min-h-[70px] shrink-0 snap-start touch-manipulation flex-col justify-center gap-1 rounded-xl border px-3 py-2.5 text-left shadow-sm outline-none ring-offset-2 ring-offset-[#020817] transition focus-visible:ring-2 focus-visible:ring-sky-500/40",
+                    "flex min-h-[68px] w-[clamp(8.25rem,calc((100vw-3.75rem)/2.35),10.25rem)] max-[390px]:min-h-[66px] shrink-0 snap-center touch-manipulation flex-col justify-center gap-0.5 rounded-xl border px-2.5 py-2 text-left shadow-sm outline-none ring-offset-2 ring-offset-[#020817] transition focus-visible:ring-2 focus-visible:ring-sky-500/40",
                     active
-                      ? "border-sky-400/40 bg-sky-500/15 text-[#F8FAFC] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)] ring-2 ring-sky-400/25"
+                      ? "border-sky-400/45 bg-sky-500/15 text-[#F8FAFC] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08),0_10px_28px_-14px_rgba(56,189,248,0.22)] ring-2 ring-sky-400/35"
                       : [
                           "border-white/[0.11] bg-slate-950/38 text-slate-100 backdrop-blur-sm",
                           "transition-[border-color,background-color,box-shadow,transform] duration-200",

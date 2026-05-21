@@ -26,6 +26,7 @@ const FAQ_KEYS: ReadonlyArray<{ q: TranslationKey; a: TranslationKey }> = [
   { q: "crm.support.faq2.q", a: "crm.support.faq2.a" },
   { q: "crm.support.faq3.q", a: "crm.support.faq3.a" },
   { q: "crm.support.faq4.q", a: "crm.support.faq4.a" },
+  { q: "crm.support.faq5.q", a: "crm.support.faq5.a" },
 ];
 
 const ERROR_CHECKLIST_KEYS: readonly TranslationKey[] = [

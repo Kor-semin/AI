@@ -408,6 +408,8 @@ export type TranslationKey =
   | "crm.support.faq3.a"
   | "crm.support.faq4.q"
   | "crm.support.faq4.a"
+  | "crm.support.faq5.q"
+  | "crm.support.faq5.a"
   | "crm.support.privacy.title"
   | "crm.support.privacy.body"
   | "crm.support.privacy.policyLink"
@@ -1402,6 +1404,9 @@ export const translations: Record<LanguageCode, TranslationDict> = {
       "상담 메모 정리, 문자 초안, 다음 행동 정리, 고객관리, 금융 조건 기반 견적 안내 등을 순차적으로 사용할 수 있습니다.",
     "crm.support.faq4.q": "오류나 개선 의견은 어떻게 전달하나요?",
     "crm.support.faq4.a": "고객센터의 이메일 문의 또는 오류 신고를 통해 전달할 수 있습니다.",
+    "crm.support.faq5.q": "iPhone·Android에서 앱처럼 쓰려면?",
+    "crm.support.faq5.a":
+      "iPhone Safari: 공유 버튼 → “홈 화면에 추가”. Android Chrome: 메뉴 → “홈 화면에 추가” 또는 “앱 설치”. 베타 기간에는 홈 화면 추가를 권장합니다.",
     "crm.support.privacy.title": "고객 정보는 신뢰가 먼저입니다",
     "crm.support.privacy.body":
       "Sensora는 영업사원의 고객 정보를 자동으로 수집하거나 임의로 저장하지 않습니다.\n고객 정보는 사용자가 직접 입력하고 확인한 뒤 저장하는 구조를 기준으로 합니다.\nAI가 제안하는 문자 초안과 다음 행동은 검토용이며, 최종 판단과 발송은 영업사원이 직접 진행합니다.",
@@ -2013,11 +2018,11 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.seasonCare.tone.promo": "장문 홍보 톤",
     "pwa.install.title": "앱처럼 사용하기",
     "pwa.install.description":
-      "앱처럼 사용하려면 브라우저 메뉴에서 ‘홈 화면에 추가’를 선택하세요.",
+      "베타 사용 시 홈 화면에 추가하면 주소창 없이 앱처럼 열 수 있습니다.",
     "pwa.install.ios":
-      "iPhone에서는 Safari 공유 버튼을 누른 뒤 ‘홈 화면에 추가’를 선택하세요.",
+      "iPhone에서는 Safari 공유 버튼을 누른 뒤 “홈 화면에 추가”를 선택하면 앱처럼 사용할 수 있습니다.",
     "pwa.install.android":
-      "Android에서는 Chrome 메뉴에서 ‘앱 설치’ 또는 ‘홈 화면에 추가’를 선택하세요.",
+      "Android에서는 Chrome 메뉴에서 “홈 화면에 추가” 또는 “앱 설치”를 선택해 사용할 수 있습니다.",
     "pwa.install.dismiss": "닫기",
     "pwa.install.more": "자세히",
     "pwa.install.less": "접기",
@@ -2463,6 +2468,9 @@ export const translations: Record<LanguageCode, TranslationDict> = {
       "Consultation notes, message drafts, next-step suggestions, customer records, and quote guidance from finance conditions you enter—rolled out step by step.",
     "crm.support.faq4.q": "How do I send feedback or report bugs?",
     "crm.support.faq4.a": "Use email support or the issue report template in Customer support.",
+    "crm.support.faq5.q": "How do I use Sensora like an app on my phone?",
+    "crm.support.faq5.a":
+      "iPhone (Safari): Share → Add to Home Screen. Android (Chrome): Menu → Add to Home screen or Install app. During beta, adding to the home screen is recommended.",
     "crm.support.privacy.title": "Customer data starts with trust",
     "crm.support.privacy.body":
       "Sensora does not automatically collect or arbitrarily store your customers’ information.\nYou enter and confirm what is saved.\nAI drafts and next-step suggestions are for review—you decide what to send.",
@@ -3091,11 +3099,11 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "crm.seasonCare.tone.promo": "Long promotional",
     "pwa.install.title": "Install Sensora like an app",
     "pwa.install.description":
-      "To use Sensora like an app, open your browser menu and choose ‘Add to Home screen’.",
+      "During beta, add Sensora to your home screen to open it without the browser address bar.",
     "pwa.install.ios":
-      "On iPhone Safari, tap the Share button, then choose ‘Add to Home Screen’.",
+      "On iPhone, tap Safari’s Share button, then choose “Add to Home Screen” to use it like an app.",
     "pwa.install.android":
-      "On Android Chrome, choose ‘Install app’ or ‘Add to Home screen’ from the ⋮ menu.",
+      "On Android, open Chrome’s menu and choose “Add to Home screen” or “Install app”.",
     "pwa.install.dismiss": "Dismiss",
     "pwa.install.more": "Details",
     "pwa.install.less": "Less",

@@ -1901,10 +1901,14 @@ export function CRMApp({
             <p className="mt-1.5 text-[14px] font-semibold leading-snug text-slate-400">
               {t(CRM_SECTION_MOBILE_SUBTITLE_KEYS[activeSection])}
             </p>
+            <p className="crm-pwa-beta-hint mt-3 border-t border-white/[0.08] pt-3 text-[12px] leading-[1.55] text-slate-500">
+              <span className="block">{t("pwa.install.ios")}</span>
+              <span className="mt-1 block">{t("pwa.install.android")}</span>
+            </p>
           </div>
 
           {showSellerToolsRow ? (
-            <div className="flex flex-wrap items-center gap-2 sm:justify-between">
+            <div className="crm-seller-tools-row flex flex-wrap items-center gap-2 sm:justify-between">
               <label className="flex flex-1 flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
                 <span className="whitespace-nowrap text-[14px] font-semibold text-slate-200">
                   내 이름 · 템플릿 치환
