@@ -3957,20 +3957,49 @@ html[data-theme="light"] .sensora-theme-toggle-btn--active {
   background: rgba(56, 189, 248, 0.14) !important;
 }
 
-/* 배경 · 워크스페이스 */
-html[data-theme="light"] .crm-bg {
-  background-color: var(--sensora-bg);
+/* 배경 · 워크스페이스 (앱 CRM — 랜딩 제외) */
+html[data-theme="light"] .crm-bg.crm-app-stage,
+html[data-theme="light"] .crm-app-stage.crm-bg {
+  --crm-light-bg: #f7f3ea;
+  --crm-light-card: #ffffff;
+  --crm-light-text: #0f172a;
+  --crm-light-text-secondary: #475569;
+  --crm-light-text-muted: #64748b;
+  --crm-light-border: rgba(15, 23, 42, 0.1);
+  background-color: var(--crm-light-bg);
   background-image:
-    radial-gradient(900px 560px at 8% -4%, rgba(56, 189, 248, 0.07), transparent 58%),
-    radial-gradient(640px 440px at 100% 2%, rgba(139, 92, 246, 0.05), transparent 54%),
-    linear-gradient(180deg, #f8f5ef 0%, #f4f0e8 52%, #ebe6dc 100%);
+    radial-gradient(900px 520px at 6% -6%, rgba(56, 189, 248, 0.05), transparent 58%),
+    radial-gradient(620px 400px at 100% 0%, rgba(99, 102, 241, 0.04), transparent 54%),
+    linear-gradient(180deg, #fafafa 0%, #f7f3ea 52%, #f5f5f7 100%);
+  color: var(--crm-light-text);
 }
 
 html[data-theme="light"] .crm-app-stage::before {
-  opacity: 0.45;
+  opacity: 0.28;
   background:
-    radial-gradient(ellipse 80% 60% at 70% -8%, rgba(56, 189, 248, 0.05), transparent 58%),
-    radial-gradient(ellipse 56% 48% at 12% 12%, rgba(139, 92, 246, 0.04), transparent 55%);
+    radial-gradient(ellipse 80% 60% at 70% -8%, rgba(56, 189, 248, 0.04), transparent 58%),
+    radial-gradient(ellipse 56% 48% at 12% 12%, rgba(139, 92, 246, 0.03), transparent 55%);
+}
+
+html[data-theme="light"] .crm-app-stage .text-slate-50,
+html[data-theme="light"] .crm-app-stage .text-slate-100,
+html[data-theme="light"] .crm-app-stage .text-white {
+  color: var(--crm-light-text) !important;
+}
+
+html[data-theme="light"] .crm-app-stage .text-slate-200,
+html[data-theme="light"] .crm-app-stage .text-slate-300 {
+  color: #334155 !important;
+}
+
+html[data-theme="light"] .crm-app-stage .text-slate-400,
+html[data-theme="light"] .crm-app-stage .text-slate-500 {
+  color: var(--crm-light-text-secondary) !important;
+}
+
+html[data-theme="light"] .crm-app-stage .text-violet-300,
+html[data-theme="light"] .crm-app-stage .text-violet-300\/78 {
+  color: #5b4fc7 !important;
 }
 
 html[data-theme="light"] .sensora-inspirational-backdrop .absolute.inset-0:first-of-type {
@@ -4575,58 +4604,247 @@ html[data-theme="light"] .landing-mobile-nav-shell button:not([aria-current="pag
 }
 
 html[data-theme="light"] .crm-app-stage aside > div {
-  border-color: var(--sensora-border) !important;
-  background: linear-gradient(180deg, #fffdf9 0%, #f8f5ef 96%, #f4f0e8 100%) !important;
-  box-shadow: 0 16px 40px -24px rgba(23, 32, 51, 0.12) !important;
-}
-
-/* 프리미엄 패널 · 버튼 */
-html[data-theme="light"] .sensora-premium-panel {
-  border-color: var(--sensora-border);
-  background: linear-gradient(165deg, #fffdf9 0%, #f8f5ef 100%);
+  border: 1px solid var(--crm-light-border) !important;
+  background: #ffffff !important;
   box-shadow:
-    0 8px 28px -12px rgba(23, 32, 51, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.95);
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 16px 40px -24px rgba(15, 23, 42, 0.1) !important;
+  backdrop-filter: none !important;
 }
 
-html[data-theme="light"] .sensora-premium-panel-interactive:hover {
-  border-color: rgba(56, 189, 248, 0.28);
+html[data-theme="light"] .crm-app-stage aside > div > button {
+  border-bottom-color: var(--crm-light-border) !important;
+}
+
+html[data-theme="light"] .crm-app-stage aside > div > button:hover {
+  background: rgba(15, 23, 42, 0.03) !important;
+}
+
+html[data-theme="light"] .crm-app-stage aside > div > button .text-xs {
+  color: #345c7c !important;
+}
+
+html[data-theme="light"] .crm-app-stage aside > div > button .text-base {
+  color: var(--crm-light-text) !important;
+}
+
+html[data-theme="light"] .crm-app-stage aside > div > button .text-sm {
+  color: var(--crm-light-text-secondary) !important;
+}
+
+html[data-theme="light"] .crm-app-stage aside nav button:not([aria-current="page"]) {
+  border-color: transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: #334155 !important;
+}
+
+html[data-theme="light"] .crm-app-stage aside nav button:not([aria-current="page"]) > span:first-child {
+  color: var(--crm-light-text) !important;
+}
+
+html[data-theme="light"] .crm-app-stage aside nav button:not([aria-current="page"]) > span:last-child {
+  color: var(--crm-light-text-secondary) !important;
+}
+
+html[data-theme="light"] .crm-app-stage aside nav button:not([aria-current="page"]):hover {
+  border-color: var(--crm-light-border) !important;
+  background: rgba(15, 23, 42, 0.04) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04) !important;
+}
+
+html[data-theme="light"] .crm-app-stage aside nav button:not([aria-current="page"]):hover > span:last-child {
+  color: #334155 !important;
+}
+
+html[data-theme="light"] .crm-app-stage aside nav button[aria-current="page"] {
+  border: 1px solid rgba(56, 189, 248, 0.28) !important;
+  background: linear-gradient(90deg, rgba(56, 189, 248, 0.14) 0%, rgba(255, 255, 255, 0.72) 100%) !important;
   box-shadow:
-    0 12px 32px -12px rgba(23, 32, 51, 0.12),
-    0 0 32px -16px rgba(56, 189, 248, 0.1);
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 0 28px -14px rgba(56, 189, 248, 0.18) !important;
+  color: var(--crm-light-text) !important;
 }
 
-html[data-theme="light"] .sensora-premium-card {
-  border-color: var(--sensora-border);
-  background: linear-gradient(165deg, #ffffff 0%, #f8f5ef 100%);
-  box-shadow: 0 8px 24px -14px rgba(23, 32, 51, 0.1);
+html[data-theme="light"] .crm-app-stage aside nav button[aria-current="page"]::before {
+  background: linear-gradient(180deg, #38bdf8 0%, #6366f1 100%) !important;
 }
 
-html[data-theme="light"] .sensora-premium-primary-workspace {
-  border-color: rgba(52, 92, 124, 0.32);
-  background: linear-gradient(180deg, #3d5a78 0%, #2a4258 48%, #243a50 100%);
-  color: #f8fafc;
+html[data-theme="light"] .crm-app-stage aside nav button[aria-current="page"] > span:first-child {
+  color: var(--crm-light-text) !important;
 }
 
-html[data-theme="light"] .sensora-dark-ghost-btn {
-  border-color: rgba(23, 32, 51, 0.14);
+html[data-theme="light"] .crm-app-stage aside nav button[aria-current="page"] > span:last-child {
+  color: #345c7c !important;
+}
+
+html[data-theme="light"] .crm-app-stage aside nav .border-white\/\[0\.08\] {
+  border-color: var(--crm-light-border) !important;
+}
+
+html[data-theme="light"] .crm-app-stage .landing-mobile-nav-shell > div {
+  border: 1px solid var(--crm-light-border) !important;
+  background: #ffffff !important;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 12px 32px -20px rgba(15, 23, 42, 0.08) !important;
+  backdrop-filter: none !important;
+}
+
+html[data-theme="light"] .crm-app-stage .crm-mobile-section-rail button:not([aria-current="page"]) {
+  border-color: var(--crm-light-border) !important;
+  background: #ffffff !important;
+  color: var(--crm-light-text) !important;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03) !important;
+}
+
+html[data-theme="light"] .crm-app-stage .crm-mobile-section-rail button:not([aria-current="page"]) span:last-child {
+  color: var(--crm-light-text-secondary) !important;
+}
+
+html[data-theme="light"] .crm-app-stage .crm-mobile-section-rail button[aria-current="page"] {
+  border-color: rgba(56, 189, 248, 0.32) !important;
+  background: rgba(56, 189, 248, 0.1) !important;
+  color: var(--crm-light-text) !important;
+}
+
+html[data-theme="light"] .crm-app-stage .crm-mobile-section-rail button[aria-current="page"] span:last-child {
+  color: #345c7c !important;
+}
+
+html[data-theme="light"] .crm-app-stage .crm-workspace-toolbar {
+  padding: 0;
+  gap: 0.75rem;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+@media (min-width: 640px) {
+  html[data-theme="light"] .crm-app-stage .crm-workspace-toolbar {
+    gap: 0.85rem;
+  }
+}
+
+html[data-theme="light"] .crm-app-stage .crm-workspace-toolbar .sensora-premium-input {
+  border: 1px solid var(--crm-light-border) !important;
+  background: #ffffff !important;
+  color: var(--crm-light-text) !important;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04) !important;
+  backdrop-filter: none !important;
+}
+
+html[data-theme="light"] .crm-app-stage .crm-workspace-toolbar .sensora-premium-input::placeholder {
+  color: var(--crm-light-text-muted) !important;
+}
+
+html[data-theme="light"] .crm-app-stage .crm-workspace-toolbar .sensora-premium-input:focus {
+  border-color: rgba(56, 189, 248, 0.35) !important;
+  box-shadow:
+    0 0 0 3px rgba(56, 189, 248, 0.12),
+    0 1px 2px rgba(15, 23, 42, 0.04) !important;
+}
+
+html[data-theme="light"] .crm-app-stage #crm-unified-search-results {
+  border: 1px solid var(--crm-light-border) !important;
+  background: #ffffff !important;
+  box-shadow: 0 8px 32px -12px rgba(15, 23, 42, 0.14) !important;
+  backdrop-filter: none !important;
+}
+
+html[data-theme="light"] .crm-app-stage #crm-unified-search-results button {
+  color: var(--crm-light-text) !important;
+}
+
+html[data-theme="light"] .crm-app-stage #crm-unified-search-results button:hover {
+  background: rgba(15, 23, 42, 0.04) !important;
+}
+
+html[data-theme="light"] .crm-app-stage #crm-unified-search-results .border-white\/\[0\.08\] {
+  border-color: var(--crm-light-border) !important;
+}
+
+/* 프리미엄 패널 · 버튼 (앱 CRM) */
+html[data-theme="light"] .crm-app-stage .sensora-premium-panel {
+  border: 1px solid var(--crm-light-border);
+  background: #ffffff;
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 8px 24px -14px rgba(15, 23, 42, 0.08);
+  backdrop-filter: none;
+}
+
+html[data-theme="light"] .crm-app-stage .sensora-premium-panel-interactive:hover {
+  border-color: rgba(56, 189, 248, 0.22);
+  box-shadow:
+    0 2px 6px rgba(15, 23, 42, 0.05),
+    0 12px 32px -14px rgba(15, 23, 42, 0.1);
+}
+
+html[data-theme="light"] .crm-app-stage .sensora-premium-card {
+  border: 1px solid var(--crm-light-border);
+  background: #ffffff;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 8px 24px -14px rgba(15, 23, 42, 0.08);
+  backdrop-filter: none;
+}
+
+html[data-theme="light"] .crm-app-stage .crm-workspace-toolbar .sensora-premium-ghost {
+  border: 1px solid var(--crm-light-border) !important;
+  background: #ffffff !important;
+  color: #334155 !important;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04) !important;
+}
+
+html[data-theme="light"] .crm-app-stage .crm-workspace-toolbar .sensora-premium-ghost:hover {
+  border-color: rgba(15, 23, 42, 0.14) !important;
+  background: #fafafa !important;
+  color: var(--crm-light-text) !important;
+  box-shadow: 0 2px 8px -4px rgba(15, 23, 42, 0.08) !important;
+}
+
+html[data-theme="light"] .crm-app-stage .sensora-premium-primary-workspace,
+html[data-theme="light"] .crm-app-stage .crm-workspace-toolbar .sensora-premium-primary-workspace {
+  border: 1px solid rgba(15, 23, 42, 0.2) !important;
+  background: linear-gradient(180deg, #1a2740 0%, #0f172a 55%, #0a1220 100%) !important;
+  color: #f8fafc !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 1px 2px rgba(15, 23, 42, 0.08),
+    0 10px 28px -12px rgba(15, 23, 42, 0.22) !important;
+}
+
+html[data-theme="light"] .crm-app-stage .sensora-premium-primary-workspace:hover {
+  filter: brightness(1.04);
+  border-color: rgba(15, 23, 42, 0.28) !important;
+}
+
+html[data-theme="light"] .crm-app-stage .sensora-dark-ghost-btn {
+  border: 1px solid var(--crm-light-border);
   color: #334155;
-  background: rgba(255, 255, 255, 0.75);
-}
-
-html[data-theme="light"] .sensora-dark-ghost-btn:hover {
-  border-color: rgba(56, 189, 248, 0.32);
   background: #ffffff;
 }
 
-html[data-theme="light"] .sensora-premium-input {
-  border-color: rgba(23, 32, 51, 0.14);
-  background: #fffdf9;
-  color: #172033;
+html[data-theme="light"] .crm-app-stage .sensora-dark-ghost-btn:hover {
+  border-color: rgba(15, 23, 42, 0.14);
+  background: #fafafa;
+  color: var(--crm-light-text);
 }
 
-html[data-theme="light"] .sensora-premium-input::placeholder {
-  color: #94a3b8;
+html[data-theme="light"] .crm-app-stage .sensora-premium-input {
+  border: 1px solid var(--crm-light-border);
+  background: #ffffff;
+  color: var(--crm-light-text);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+  backdrop-filter: none;
+}
+
+html[data-theme="light"] .crm-app-stage .sensora-premium-input::placeholder {
+  color: var(--crm-light-text-muted);
+}
+
+html[data-theme="light"] .crm-app-stage .sensora-premium-input:focus {
+  border-color: rgba(56, 189, 248, 0.32);
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.12);
 }
 
 html[data-theme="light"] .landing-enterprise-btn-secondary {
@@ -4650,8 +4868,51 @@ html[data-theme="light"] .customer-support-error-card {
   background: linear-gradient(135deg, #fffdf9 0%, #faf6ee 100%) !important;
 }
 
-html[data-theme="light"] .quick-ai-entry-input-card,
-html[data-theme="light"] .quick-ai-entry-result-card {
-  border-color: var(--sensora-border);
+html[data-theme="light"] .crm-app-stage .quick-ai-entry-input-card,
+html[data-theme="light"] .crm-app-stage .quick-ai-entry-result-card {
+  border: 1px solid var(--crm-light-border) !important;
+  background: #ffffff !important;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 10px 28px -16px rgba(15, 23, 42, 0.08) !important;
+  backdrop-filter: none !important;
+}
+
+html[data-theme="light"] .crm-app-stage .quick-ai-entry-input-card label {
+  color: #334155 !important;
+}
+
+html[data-theme="light"] .crm-app-stage .quick-ai-entry-input-card p {
+  color: var(--crm-light-text-secondary) !important;
+}
+
+html[data-theme="light"] .crm-app-stage .quick-ai-entry-result-card li {
+  border-color: var(--crm-light-border) !important;
+  background: #fafafa !important;
+  color: var(--crm-light-text) !important;
+}
+
+html[data-theme="light"] .crm-app-stage .quick-ai-entry-result-card li span:first-child {
+  color: #475569 !important;
+}
+
+html[data-theme="light"] .crm-app-stage .quick-ai-entry-analyze-btn.landing-enterprise-btn-primary:not(:disabled) {
+  border-color: rgba(15, 23, 42, 0.2) !important;
+  background: linear-gradient(180deg, #1a2740 0%, #0f172a 55%, #0a1220 100%) !important;
+  color: #f8fafc !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 8px 24px -10px rgba(15, 23, 42, 0.2) !important;
+}
+
+html[data-theme="light"] .crm-app-stage .quick-ai-entry-analyze-btn.landing-enterprise-btn-primary:disabled {
+  opacity: 0.62 !important;
+  cursor: not-allowed;
+  border-color: var(--crm-light-border) !important;
+  background: #f1f5f9 !important;
+  color: #64748b !important;
+  box-shadow: none !important;
+}
+
+html[data-theme="light"] .crm-app-stage .quick-ai-entry-secondary-nav {
+  border-top-color: var(--crm-light-border) !important;
 }
 
