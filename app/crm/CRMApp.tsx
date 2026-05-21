@@ -3701,10 +3701,12 @@ export function CRMApp({
             <div
               id="crm-block-templates"
               tabIndex={-1}
-              className="rounded-2xl border border-white/[0.11] bg-slate-950/55 p-6 shadow-[0_1px_4px_rgba(15,23,42,0.04)] outline-none"
+              className="crm-templates-workspace scroll-mt-24 rounded-2xl border border-white/[0.11] bg-slate-950/55 p-5 shadow-[0_1px_4px_rgba(15,23,42,0.04)] outline-none sm:p-6 lg:p-8"
             >
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <div className="text-[18px] font-semibold text-slate-50">{t("crm.section.templates")}</div>
+              <div className="crm-templates-workspace__header flex flex-wrap items-center justify-between gap-3">
+                <div className="crm-templates-workspace__title text-[18px] font-semibold text-slate-50 lg:text-[20px]">
+                  {t("crm.section.templates")}
+                </div>
                 <button
                   type="button"
                   onClick={addTemplate}
@@ -3713,8 +3715,12 @@ export function CRMApp({
                   + 템플릿
                 </button>
               </div>
-              <p className="mt-2 text-[13px] leading-relaxed text-slate-400">{t("crm.templates.sectionReviewHint")}</p>
-              <p className="mt-1 text-[12px] leading-relaxed text-slate-500">{t("crm.templates.financeReflectHint")}</p>
+              <p className="crm-templates-workspace__lead mt-2 text-[14px] leading-relaxed text-slate-400 lg:text-[15px]">
+                {t("crm.templates.sectionReviewHint")}
+              </p>
+              <p className="crm-templates-workspace__sublead mt-1 text-[13px] leading-relaxed text-slate-500 lg:text-[14px]">
+                {t("crm.templates.financeReflectHint")}
+              </p>
 
               <section
                 id="season-care"
@@ -3914,24 +3920,26 @@ export function CRMApp({
                 </details>
               </section>
 
-              <div className="mt-10 grid grid-cols-1 gap-5 lg:grid-cols-2">
+              <div className="crm-templates-grid mt-8 lg:mt-10">
                 {state.templates.map((tpl) => {
                   const cardHint = getMessageTemplateCardHint(tpl.title, selectedCustomer);
                   return (
                   <div
                     key={tpl.id}
-                    className="rounded-2xl border border-white/[0.11] bg-slate-950/45 p-5"
+                    className="crm-template-card rounded-2xl border border-white/[0.11] bg-slate-950/45 p-5 sm:p-6"
                   >
                     <input
-                      className="w-full border-0 bg-transparent text-[17px] font-semibold text-slate-50 outline-none"
+                      className="crm-template-card__title w-full border-0 bg-transparent text-[17px] font-semibold text-slate-50 outline-none lg:text-[18px]"
                       value={tpl.title}
                       onChange={(e) => updateTemplate(tpl.id, { title: e.target.value })}
                     />
                     {cardHint ? (
-                      <p className="mt-1 line-clamp-2 text-[13px] leading-snug text-slate-400">{cardHint}</p>
+                      <p className="crm-template-card__hint mt-1.5 line-clamp-2 text-[13px] leading-snug text-slate-400 lg:text-[14px]">
+                        {cardHint}
+                      </p>
                     ) : null}
                     <textarea
-                      className="mt-3 min-h-[130px] w-full resize-y rounded-xl border border-white/[0.11] bg-slate-950/55 px-4 py-3 text-[14px] text-slate-300 outline-none focus:border-sky-400/45"
+                      className="crm-template-card__body mt-3 min-h-[140px] w-full resize-y rounded-xl border border-white/[0.11] bg-slate-950/55 px-4 py-3.5 text-[14px] leading-relaxed text-slate-200 outline-none focus:border-sky-400/45 lg:min-h-[156px] lg:text-[15px]"
                       value={tpl.body}
                       onChange={(e) => updateTemplate(tpl.id, { body: e.target.value })}
                       autoComplete="off"
@@ -3939,7 +3947,7 @@ export function CRMApp({
                       autoCapitalize="off"
                       spellCheck={false}
                     />
-                    <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
+                    <div className="crm-template-card__footer mt-4 flex flex-wrap items-center justify-between gap-3">
                       <button
                         type="button"
                         onClick={async () => {
@@ -3951,17 +3959,19 @@ export function CRMApp({
                               : "자동 복사가 불가했습니다. 본문을 길게 눌러 복사해 주세요.",
                           );
                         }}
-                        className="rounded-xl bg-white/[0.07] px-4 py-2.5 text-[13px] font-semibold text-slate-50 ring-1 ring-inset ring-white/[0.12] hover:bg-white/[0.1]"
+                        className="crm-template-card__copy min-h-[44px] rounded-xl bg-white/[0.07] px-4 py-2.5 text-[14px] font-semibold text-slate-50 ring-1 ring-inset ring-white/[0.12] hover:bg-white/[0.1] touch-manipulation"
                       >
                         {selectedCustomer ? `${t("common.select")} · ${t("common.copy")}` : t("common.copy")}
                       </button>
-                      <div className="text-[12px] font-medium text-slate-400">업데이트: {formatDateTime(tpl.updatedAt)}</div>
+                      <div className="crm-template-card__meta text-[12px] font-medium text-slate-400 lg:text-[13px]">
+                        업데이트: {formatDateTime(tpl.updatedAt)}
+                      </div>
                     </div>
                   </div>
                 );
                 })}
                 {state.templates.length === 0 ? (
-                  <div className="rounded-2xl border border-dashed border-slate-500/35 px-8 py-12 text-center text-[15px] text-slate-400">
+                  <div className="crm-templates-empty rounded-2xl border border-dashed border-slate-500/35 px-8 py-12 text-center text-[15px] text-slate-400 lg:text-[16px]">
                     템플릿이 없습니다.
                   </div>
                 ) : null}

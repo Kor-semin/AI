@@ -1123,6 +1123,110 @@ html[data-theme="light"] .crm-create-customer-modal__textarea::-webkit-scrollbar
   }
 }
 
+/* 상황별 문자 초안 — 데스크톱 본문 폭·카드 가독성 */
+.crm-templates-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.25rem;
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .crm-templates-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.75rem;
+  }
+
+  .crm-app-stage .crm-template-card {
+    padding: 1.5rem 1.625rem;
+  }
+
+  .crm-app-stage .crm-template-card__title {
+    font-size: 1.125rem;
+    letter-spacing: -0.01em;
+  }
+
+  .crm-app-stage .crm-template-card__body {
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    min-height: 10rem;
+    padding: 0.875rem 1rem;
+  }
+
+  .crm-app-stage .crm-template-card__copy {
+    font-size: 0.9375rem;
+    padding: 0.625rem 1.125rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .crm-app-stage #crm-main:has(.crm-templates-workspace) > div {
+    max-width: min(1520px, 100%);
+  }
+
+  .crm-app-stage .crm-templates-workspace {
+    width: 100%;
+    max-width: min(1280px, 100%);
+    margin-inline: auto;
+  }
+}
+
+html:not([data-theme="light"]) .crm-app-stage .crm-templates-workspace {
+  border-color: rgba(255, 255, 255, 0.14);
+  background: rgba(2, 6, 23, 0.58);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.04),
+    0 22px 48px -28px rgba(0, 0, 0, 0.55);
+}
+
+html:not([data-theme="light"]) .crm-app-stage .crm-template-card {
+  border-color: rgba(255, 255, 255, 0.16);
+  background: rgba(2, 6, 23, 0.62);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 14px 36px -22px rgba(0, 0, 0, 0.5);
+}
+
+html:not([data-theme="light"]) .crm-app-stage .crm-template-card__title {
+  color: rgb(248 250 252);
+}
+
+html:not([data-theme="light"]) .crm-app-stage .crm-template-card__hint {
+  color: rgb(148 163 184);
+}
+
+html:not([data-theme="light"]) .crm-app-stage .crm-template-card__body {
+  border-color: rgba(255, 255, 255, 0.14);
+  background: rgba(2, 6, 23, 0.72);
+  color: rgb(226 232 240);
+}
+
+html:not([data-theme="light"]) .crm-app-stage .crm-template-card__copy {
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+html:not([data-theme="light"]) .crm-app-stage .crm-template-card__copy:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+html[data-theme="light"] .crm-app-stage .crm-template-card {
+  border-color: rgba(148, 163, 184, 0.35);
+  background: rgba(255, 255, 255, 0.92);
+}
+
+html[data-theme="light"] .crm-app-stage .crm-template-card__body {
+  border-color: rgba(148, 163, 184, 0.32);
+  background: rgb(248 250 252);
+  color: rgb(30 41 59);
+}
+
+html[data-theme="light"] .crm-app-stage .crm-template-card__copy {
+  background: rgb(241 245 249);
+  color: rgb(15 23 42);
+  box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.35);
+}
+
 /* 중고차 등급/트림 — 입력 초기화 버튼 */
 .crm-field-clear-btn {
   touch-action: manipulation;
