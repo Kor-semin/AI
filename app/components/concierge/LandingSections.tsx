@@ -449,14 +449,6 @@ export function LandingShowroom({
                       {t("cta.tryAppExperience")}
                     </button>
                   </div>
-                  <div className="landing-guide03-mobile-card-list" aria-label="모바일 가이드 카드">
-                    {LANDING_GUIDE_CARDS.map((card) => (
-                      <button key={`mobile-${card.id}`} type="button" onClick={() => setActiveGuideCard(card)}>
-                        <span>{card.title}</span>
-                        <small>{card.desc}</small>
-                      </button>
-                    ))}
-                  </div>
                 </div>
 
                 <Link href="/?view=landing" prefetch={false} className="landing-guide03-hotspot landing-guide03-hotspot--brand" aria-label="Sensora Auto CRM 랜딩으로 이동">
@@ -488,6 +480,17 @@ export function LandingShowroom({
                     <span className="sr-only">{card.title}</span>
                   </button>
                 ))}
+              </div>
+              <div className="landing-guide03-mobile-guides-panel" aria-label="모바일 가이드 모달 카드">
+                <p>가이드 모달</p>
+                <div>
+                  {LANDING_GUIDE_CARDS.map((card) => (
+                    <button key={`mobile-${card.id}`} type="button" onClick={() => setActiveGuideCard(card)}>
+                      <span>{card.title}</span>
+                      <small>{card.desc}</small>
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
           </div>

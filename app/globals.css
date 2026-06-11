@@ -2580,6 +2580,10 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   display: none;
 }
 
+.landing-guide03-mobile-guides-panel {
+  display: none;
+}
+
 .landing-guide03-hotspot {
   position: absolute;
   z-index: 2;
@@ -2858,19 +2862,31 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
     color: #e2e8f0;
   }
 
-  .landing-guide03-mobile-card-list {
-    margin-top: 1rem;
+  .landing-guide03-mobile-guides-panel {
     display: grid;
-    max-height: min(30svh, 14rem);
-    gap: 0.45rem;
-    overflow-y: auto;
-    padding-right: 0.15rem;
-    overscroll-behavior: contain;
+    width: 100%;
+    gap: 0.55rem;
+    padding: 0.8rem 0.25rem 0.25rem;
   }
 
-  .landing-guide03-mobile-card-list button {
+  .landing-guide03-mobile-guides-panel > p {
+    padding-left: 0.25rem;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(125, 211, 252, 0.82);
+  }
+
+  .landing-guide03-mobile-guides-panel > div {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+
+  .landing-guide03-mobile-guides-panel button {
     display: flex;
-    min-height: 3.15rem;
+    min-height: 3.35rem;
     cursor: pointer;
     flex-direction: column;
     justify-content: center;
@@ -2882,13 +2898,13 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
     touch-action: manipulation;
   }
 
-  .landing-guide03-mobile-card-list span {
+  .landing-guide03-mobile-guides-panel span {
     font-size: 0.82rem;
     font-weight: 800;
     color: #f8fafc;
   }
 
-  .landing-guide03-mobile-card-list small {
+  .landing-guide03-mobile-guides-panel small {
     margin-top: 0.15rem;
     display: -webkit-box;
     overflow: hidden;
