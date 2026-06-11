@@ -443,7 +443,7 @@ function AppPreviewScreenBrowser({
                   className="app-preview-guide-card group grid min-h-[8.5rem] w-full cursor-pointer touch-manipulation gap-3 rounded-[20px] border border-white/[0.1] bg-white/[0.045] p-3 text-left shadow-[0_18px_54px_-38px_rgba(0,0,0,0.74),inset_0_1px_0_rgba(255,255,255,0.07)] transition-[transform,border-color,background-color,box-shadow] duration-200 hover:-translate-y-0.5 hover:border-sky-300/28 hover:bg-white/[0.065] hover:shadow-[0_24px_64px_-40px_rgba(14,165,233,0.22)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 motion-reduce:transition-none motion-reduce:hover:translate-y-0 sm:min-h-[14.5rem] sm:gap-4 sm:rounded-[26px] sm:p-4"
                   aria-label={`${card.title} · ${card.action}`}
                 >
-                  <span className="flex items-center justify-between border-b border-white/[0.08] pb-2.5 sm:pb-3">
+                  <span className="hidden items-center justify-between border-b border-white/[0.08] pb-2.5 sm:flex sm:pb-3">
                     <span className="text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-slate-500">Sensora</span>
                     <span
                       className={[
@@ -458,14 +458,14 @@ function AppPreviewScreenBrowser({
                   <span className="min-w-0">
                     <span className="block text-[1rem] font-semibold leading-tight tracking-[-0.035em] text-slate-50 sm:text-[1.24rem]">{card.title}</span>
                     <span className="mt-1.5 block text-[0.78rem] leading-relaxed text-slate-400 sm:mt-2 sm:text-[0.88rem]">{card.desc}</span>
-                    <span className="mt-3 flex flex-wrap gap-1.5 sm:mt-4">
+                    <span className="mt-3 hidden flex-wrap gap-1.5 sm:mt-4 sm:flex">
                       {card.points.map((point) => (
                         <span key={`${card.id}-${point}`} className="rounded-full border border-white/[0.1] bg-white/[0.04] px-2.5 py-1 text-[0.72rem] font-semibold text-slate-300">
                           {point}
                         </span>
                       ))}
                     </span>
-                    <span className="mt-3 inline-flex min-h-9 items-center gap-1.5 rounded-2xl border border-white/[0.1] bg-white/[0.04] px-3.5 py-2 text-[0.8rem] font-semibold text-sky-100 transition group-hover:border-sky-300/22 group-hover:bg-sky-300/[0.07] sm:mt-5 sm:min-h-10 sm:px-4 sm:text-[0.84rem]">
+                    <span className="mt-2 inline-flex min-h-8 items-center gap-1.5 rounded-2xl border border-white/[0.1] bg-white/[0.04] px-3 py-1.5 text-[0.76rem] font-semibold text-sky-100 transition group-hover:border-sky-300/22 group-hover:bg-sky-300/[0.07] sm:mt-5 sm:min-h-10 sm:px-4 sm:py-2 sm:text-[0.84rem]">
                       {card.action}
                       <IconArrowRightSoft className="size-[0.95rem] shrink-0 opacity-80" />
                     </span>
