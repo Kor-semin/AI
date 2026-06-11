@@ -215,11 +215,11 @@ function InternalBetaApprovalContent() {
             <div>
               <p className="text-xs font-bold uppercase tracking-[0.18em] text-sky-300/85">Internal · {mode}</p>
               <h1 className="mt-2 text-2xl font-semibold tracking-tight text-slate-50 sm:text-3xl">베타 신청 승인 관리</h1>
-              <p className="mt-3 max-w-3xl text-sm leading-relaxed text-slate-400">
+              <p className="mt-3 max-w-3xl break-keep text-sm leading-relaxed text-slate-400">
                 목록에서는 이메일과 연락처를 마스킹합니다. 전체 개인정보는 상세보기에서만 확인하고, 승인/반려는 서버 API가 관리자 이메일을 다시 검증한 뒤 Firestore에 반영합니다.
               </p>
-              <p className="mt-2 max-w-3xl text-xs leading-relaxed text-slate-500">
-                관리자 이메일 목록은 코드에 하드코딩하지 않고 <span className="font-semibold text-slate-300">BETA_APPROVAL_ADMIN_EMAILS</span> 환경변수로만 관리합니다.
+              <p className="mt-2 max-w-3xl break-keep text-xs leading-relaxed text-slate-500">
+                관리자 권한 기준은 코드에 하드코딩하지 않고 <span className="font-semibold text-slate-300">BETA_APPROVAL_ADMIN_EMAILS</span> 환경변수로만 관리합니다.
               </p>
             </div>
             <div className="flex flex-wrap gap-2">
@@ -236,11 +236,11 @@ function InternalBetaApprovalContent() {
         </header>
 
         {!isFirebaseConfigured() ? (
-          <section className="rounded-2xl border border-amber-300/20 bg-amber-300/[0.08] px-5 py-4 text-sm leading-relaxed text-amber-100">
+          <section className="break-keep rounded-2xl border border-amber-300/20 bg-amber-300/[0.08] px-5 py-4 text-sm leading-relaxed text-amber-100">
             Firebase 설정이 없어 관리자 로그인을 진행할 수 없습니다. NEXT_PUBLIC_FIREBASE_* 환경변수를 설정한 뒤 사용하세요.
           </section>
         ) : !isGoogleAuthEnabled() ? (
-          <section className="rounded-2xl border border-amber-300/20 bg-amber-300/[0.08] px-5 py-4 text-sm leading-relaxed text-amber-100">
+          <section className="break-keep rounded-2xl border border-amber-300/20 bg-amber-300/[0.08] px-5 py-4 text-sm leading-relaxed text-amber-100">
             현재 Google 로그인 기능이 꺼져 있어 내부 승인 페이지 접근이 차단됩니다.
           </section>
         ) : auth.status === "loading" ? (
@@ -288,7 +288,7 @@ function InternalBetaApprovalContent() {
               </div>
             </section>
 
-            <section className="rounded-2xl border border-sky-300/14 bg-sky-300/[0.07] px-5 py-4 text-sm leading-relaxed text-sky-100">
+            <section className="break-keep rounded-2xl border border-sky-300/14 bg-sky-300/[0.07] px-5 py-4 text-sm leading-relaxed text-sky-100">
               승인/반려 버튼을 누르면 서버에서 Firebase 로그인 토큰과 관리자 이메일을 다시 확인한 뒤 처리합니다. Firestore rules는 직접 클라이언트 접근도 관리자 커스텀 클레임 기준으로 제한합니다.
             </section>
 
