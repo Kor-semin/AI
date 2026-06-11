@@ -2576,6 +2576,10 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   pointer-events: none;
 }
 
+.landing-guide03-mobile-copy {
+  display: none;
+}
+
 .landing-guide03-hotspot {
   position: absolute;
   z-index: 2;
@@ -2750,6 +2754,118 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
 .app-preview-tour-card,
 .app-preview-guide-card {
   background-image: linear-gradient(180deg, rgba(30, 41, 59, 0.52) 0%, rgba(15, 23, 42, 0.72) 100%);
+}
+
+@media (max-width: 640px) {
+  .landing-guide03-hero-shell {
+    align-items: stretch;
+    padding: clamp(0.35rem, 2.4vw, 0.75rem);
+  }
+
+  .landing-guide03-hero-frame {
+    aspect-ratio: auto;
+    min-height: min(72svh, 34rem);
+    width: 100%;
+    border-radius: 24px;
+    background:
+      radial-gradient(ellipse 90% 52% at 50% 0%, rgba(79, 70, 229, 0.18), transparent 62%),
+      linear-gradient(180deg, #030b18 0%, #020817 72%, #020817 100%);
+  }
+
+  .landing-guide03-hero-image {
+    position: absolute;
+    inset: auto -68% 0 auto;
+    width: min(190vw, 46rem);
+    max-width: none;
+    opacity: 0.34;
+    filter: saturate(0.88) brightness(0.82);
+  }
+
+  .landing-guide03-mobile-copy {
+    position: relative;
+    z-index: 5;
+    display: flex;
+    min-height: min(72svh, 34rem);
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(1.1rem, 5vw, 1.55rem);
+    color: #f8fafc;
+  }
+
+  .landing-guide03-mobile-kicker {
+    width: fit-content;
+    border-radius: 999px;
+    border: 1px solid rgba(129, 140, 248, 0.34);
+    background: rgba(30, 41, 59, 0.72);
+    padding: 0.36rem 0.72rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: rgba(191, 219, 254, 0.92);
+  }
+
+  .landing-guide03-mobile-copy h1 {
+    margin-top: 0.9rem;
+    max-width: 10.5em;
+    font-size: clamp(2rem, 10vw, 2.75rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.07em;
+  }
+
+  .landing-guide03-mobile-copy p {
+    margin-top: 0.9rem;
+    max-width: 28ch;
+    font-size: 0.94rem;
+    font-weight: 600;
+    line-height: 1.55;
+    color: rgba(203, 213, 225, 0.94);
+  }
+
+  .landing-guide03-mobile-copy .landing-guide03-mobile-trust {
+    margin-top: 0.65rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: rgba(148, 163, 184, 0.95);
+  }
+
+  .landing-guide03-mobile-actions {
+    margin-top: 1.25rem;
+    display: grid;
+    gap: 0.65rem;
+  }
+
+  .landing-guide03-mobile-actions a,
+  .landing-guide03-mobile-actions button {
+    min-height: 3rem;
+    cursor: pointer;
+    border-radius: 0.95rem;
+    padding: 0.78rem 1rem;
+    text-align: center;
+    font-size: 0.93rem;
+    font-weight: 800;
+    touch-action: manipulation;
+  }
+
+  .landing-guide03-mobile-actions a {
+    background: linear-gradient(135deg, #8b5cf6 0%, #2563eb 100%);
+    color: #f8fafc;
+    box-shadow: 0 18px 34px -20px rgba(37, 99, 235, 0.8);
+  }
+
+  .landing-guide03-mobile-actions button {
+    border: 1px solid rgba(148, 163, 184, 0.48);
+    background: rgba(2, 8, 23, 0.54);
+    color: #e2e8f0;
+  }
+
+  .landing-guide03-hotspot {
+    display: none;
+  }
+
+  .landing-guide03-hotspot--guide-card {
+    display: block;
+    opacity: 0;
+  }
 }
 
 .app-preview-virtual-screen {

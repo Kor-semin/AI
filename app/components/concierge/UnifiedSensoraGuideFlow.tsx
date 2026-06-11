@@ -417,33 +417,33 @@ function AppPreviewScreenBrowser({
   return (
     <div className={`flex min-h-0 flex-1 flex-col ${className}`.trim()}>
       <div className="sensora-guide-preview-hide-scroll min-h-0 flex-1 overflow-y-auto overscroll-y-contain [-webkit-overflow-scrolling:touch] pb-[max(2rem,calc(env(safe-area-inset-bottom,0px)+1.5rem))]">
-        <div className="mx-auto flex w-full max-w-[min(1180px,100%)] flex-col gap-5 px-0 pb-4 pt-2 sm:px-2 sm:pt-4 lg:gap-6">
-          <section className="app-preview-tour-screen overflow-hidden rounded-[30px] border border-white/[0.12] bg-slate-900/72 text-slate-100 shadow-[0_36px_104px_-58px_rgba(0,0,0,0.78),inset_0_1px_0_rgba(255,255,255,0.075)]">
-            <div className="grid gap-5 border-b border-white/[0.09] bg-[linear-gradient(135deg,rgba(11,35,64,0.94)_0%,rgba(7,19,35,0.98)_58%,rgba(3,10,20,0.99)_100%)] px-5 py-6 sm:px-7 sm:py-8 lg:grid-cols-[minmax(0,0.72fr)_auto] lg:items-end">
+        <div className="mx-auto flex w-full max-w-[min(1180px,100%)] flex-col gap-4 px-0 pb-4 pt-1 sm:px-2 sm:pt-4 lg:gap-6">
+          <section className="app-preview-tour-screen overflow-hidden rounded-[22px] border border-white/[0.12] bg-slate-900/72 text-slate-100 shadow-[0_36px_104px_-58px_rgba(0,0,0,0.78),inset_0_1px_0_rgba(255,255,255,0.075)] sm:rounded-[30px]">
+            <div className="grid gap-4 border-b border-white/[0.09] bg-[linear-gradient(135deg,rgba(11,35,64,0.94)_0%,rgba(7,19,35,0.98)_58%,rgba(3,10,20,0.99)_100%)] px-4 py-4 sm:gap-5 sm:px-7 sm:py-8 lg:grid-cols-[minmax(0,0.72fr)_auto] lg:items-end">
               <div>
                 <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-sky-100/72">{copy.eyebrow}</p>
-                <h2 className="mt-3 max-w-[18ch] text-balance text-[clamp(2rem,5vw,4.1rem)] font-semibold leading-[1.02] tracking-[-0.055em]">{copy.title}</h2>
-                <p className="mt-4 max-w-[40rem] text-[0.95rem] font-medium leading-relaxed text-slate-300 sm:text-[1.05rem]">{copy.sub}</p>
+                <h2 className="mt-2 max-w-[18ch] text-balance text-[clamp(1.55rem,7vw,4.1rem)] font-semibold leading-[1.04] tracking-[-0.055em] sm:mt-3">{copy.title}</h2>
+                <p className="mt-3 max-w-[40rem] text-[0.84rem] font-medium leading-relaxed text-slate-300 sm:mt-4 sm:text-[1.05rem]">{copy.sub}</p>
               </div>
               <Link
                 href={JOIN_PATH}
                 prefetch={false}
-                className="inline-flex min-h-11 cursor-pointer items-center justify-center rounded-2xl border border-white/[0.14] bg-white/[0.055] px-5 py-2.5 text-sm font-semibold text-slate-100 transition hover:bg-white/[0.085] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35"
+                className="inline-flex min-h-10 cursor-pointer items-center justify-center rounded-2xl border border-white/[0.14] bg-white/[0.055] px-5 py-2.5 text-sm font-semibold text-slate-100 transition hover:bg-white/[0.085] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 sm:min-h-11"
               >
                 {t("cta.joinBeta")}
               </Link>
             </div>
 
-            <div className="grid gap-4 px-5 py-5 sm:px-7 sm:py-7 lg:grid-cols-2">
+            <div className="grid gap-2.5 px-4 py-4 sm:gap-4 sm:px-7 sm:py-7 lg:grid-cols-2">
               {copy.cards.map((card) => (
                 <button
                   key={card.id}
                   type="button"
                   onClick={() => handleCardClick(card)}
-                  className="app-preview-guide-card group grid min-h-[14.5rem] w-full cursor-pointer touch-manipulation gap-4 rounded-[26px] border border-white/[0.1] bg-white/[0.045] p-4 text-left shadow-[0_18px_54px_-38px_rgba(0,0,0,0.74),inset_0_1px_0_rgba(255,255,255,0.07)] transition-[transform,border-color,background-color,box-shadow] duration-200 hover:-translate-y-0.5 hover:border-sky-300/28 hover:bg-white/[0.065] hover:shadow-[0_24px_64px_-40px_rgba(14,165,233,0.22)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+                  className="app-preview-guide-card group grid min-h-[8.5rem] w-full cursor-pointer touch-manipulation gap-3 rounded-[20px] border border-white/[0.1] bg-white/[0.045] p-3 text-left shadow-[0_18px_54px_-38px_rgba(0,0,0,0.74),inset_0_1px_0_rgba(255,255,255,0.07)] transition-[transform,border-color,background-color,box-shadow] duration-200 hover:-translate-y-0.5 hover:border-sky-300/28 hover:bg-white/[0.065] hover:shadow-[0_24px_64px_-40px_rgba(14,165,233,0.22)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/35 motion-reduce:transition-none motion-reduce:hover:translate-y-0 sm:min-h-[14.5rem] sm:gap-4 sm:rounded-[26px] sm:p-4"
                   aria-label={`${card.title} · ${card.action}`}
                 >
-                  <span className="flex items-center justify-between border-b border-white/[0.08] pb-3">
+                  <span className="flex items-center justify-between border-b border-white/[0.08] pb-2.5 sm:pb-3">
                     <span className="text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-slate-500">Sensora</span>
                     <span
                       className={[
@@ -456,22 +456,31 @@ function AppPreviewScreenBrowser({
                   </span>
 
                   <span className="min-w-0">
-                    <span className="block text-[1.12rem] font-semibold leading-tight tracking-[-0.035em] text-slate-50 sm:text-[1.24rem]">{card.title}</span>
-                    <span className="mt-2 block text-[0.88rem] leading-relaxed text-slate-400">{card.desc}</span>
-                    <span className="mt-4 flex flex-wrap gap-1.5">
+                    <span className="block text-[1rem] font-semibold leading-tight tracking-[-0.035em] text-slate-50 sm:text-[1.24rem]">{card.title}</span>
+                    <span className="mt-1.5 block text-[0.78rem] leading-relaxed text-slate-400 sm:mt-2 sm:text-[0.88rem]">{card.desc}</span>
+                    <span className="mt-3 flex flex-wrap gap-1.5 sm:mt-4">
                       {card.points.map((point) => (
                         <span key={`${card.id}-${point}`} className="rounded-full border border-white/[0.1] bg-white/[0.04] px-2.5 py-1 text-[0.72rem] font-semibold text-slate-300">
                           {point}
                         </span>
                       ))}
                     </span>
-                    <span className="mt-5 inline-flex min-h-10 items-center gap-1.5 rounded-2xl border border-white/[0.1] bg-white/[0.04] px-4 py-2 text-[0.84rem] font-semibold text-sky-100 transition group-hover:border-sky-300/22 group-hover:bg-sky-300/[0.07]">
+                    <span className="mt-3 inline-flex min-h-9 items-center gap-1.5 rounded-2xl border border-white/[0.1] bg-white/[0.04] px-3.5 py-2 text-[0.8rem] font-semibold text-sky-100 transition group-hover:border-sky-300/22 group-hover:bg-sky-300/[0.07] sm:mt-5 sm:min-h-10 sm:px-4 sm:text-[0.84rem]">
                       {card.action}
                       <IconArrowRightSoft className="size-[0.95rem] shrink-0 opacity-80" />
                     </span>
                   </span>
                 </button>
               ))}
+            </div>
+            <div className="border-t border-white/[0.08] px-4 pb-4 sm:hidden">
+              <Link
+                href={JOIN_PATH}
+                prefetch={false}
+                className="mt-4 inline-flex min-h-11 w-full items-center justify-center rounded-2xl bg-white/[0.08] px-5 py-3 text-sm font-semibold text-slate-50 ring-1 ring-white/[0.13]"
+              >
+                {t("cta.joinBeta")}
+              </Link>
             </div>
           </section>
         </div>

@@ -1542,6 +1542,53 @@ export function CRMApp({
     <>
       <div id="crm-main" className="w-full min-w-0 pb-8 text-slate-100 lg:pb-10">
         <div className="mx-auto flex w-full max-w-[min(1580px,100%)] flex-col gap-6 px-1 sm:gap-8 sm:px-4 xl:px-0">
+          {activeSection === "dashboard" ? (
+            <section className="sensora-premium-card rounded-[24px] px-4 py-5 shadow-[0_26px_64px_-34px_rgba(0,0,0,0.7)] md:hidden">
+              <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-sky-300/80">MVP quick start</p>
+              <h2 className="mt-2 text-[1.65rem] font-semibold leading-[1.08] tracking-[-0.055em] text-slate-50">
+                상담 메모를 넣으면 AI가 정리합니다.
+              </h2>
+              <p className="mt-2 text-[0.84rem] font-medium leading-relaxed text-slate-400">
+                자동 저장·자동 발송 없이, 사용자가 확인한 뒤 필요한 기록만 저장합니다.
+              </p>
+              <div className="mt-4 rounded-2xl border border-white/[0.1] bg-slate-950/48 px-3.5 py-3">
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <p className="text-sm font-semibold text-slate-100">오늘 할 일</p>
+                    <p className="mt-1 text-xs leading-snug text-slate-500">
+                      {overviewStats.dueToday > 0
+                        ? `${overviewStats.dueToday}건 확인 필요`
+                        : "오늘 급한 연락은 없습니다."}
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => onActiveSectionChange("followup")}
+                    className="min-h-10 rounded-xl border border-white/[0.12] bg-white/[0.05] px-3 text-xs font-semibold text-slate-200"
+                  >
+                    확인
+                  </button>
+                </div>
+              </div>
+              <label className="mt-3 block">
+                <span className="text-sm font-semibold text-slate-100">빠른 상담 메모</span>
+                <textarea
+                  value={workspaceAiMemoDraft}
+                  onChange={(e) => setWorkspaceAiMemoDraft(e.target.value)}
+                  rows={4}
+                  placeholder="예: GLC 조건 상담, 월 납입 기준 비교 요청, 다음 주 초 출고 가능 여부 확인"
+                  className="mt-2 min-h-[8rem] w-full resize-y rounded-2xl border border-white/[0.11] bg-slate-950/60 px-3.5 py-3 text-[0.93rem] leading-relaxed text-slate-100 outline-none placeholder:text-slate-600 focus:border-sky-400/45"
+                />
+              </label>
+              <button
+                type="button"
+                onClick={() => onActiveSectionChange("ai")}
+                className="sensora-premium-primary-workspace mt-3 min-h-12 w-full rounded-2xl px-5 py-3 text-sm font-semibold touch-manipulation"
+              >
+                AI 비서에서 정리하기
+              </button>
+            </section>
+          ) : null}
           {!uid ? (
             <div
               className="sensora-premium-card rounded-[18px] px-5 py-4 text-left text-[14px] leading-[1.65] text-slate-400 max-[390px]:px-[1.125rem]"
@@ -1786,7 +1833,7 @@ export function CRMApp({
           ) : null}
 
           {activeSection === "dashboard" ? (
-            <div id="crm-section-dashboard" className="scroll-mt-24">
+            <div id="crm-section-dashboard" className="hidden scroll-mt-24 md:block">
               <DashboardSection
                 todayFollowUps={overviewStats.dueToday}
                 highPotential={overviewStats.highPotential}

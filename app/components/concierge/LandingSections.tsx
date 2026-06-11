@@ -432,6 +432,25 @@ export function LandingShowroom({
                   sizes="(max-width: 1440px) 100vw, 1440px"
                 />
 
+                <div className="landing-guide03-mobile-copy" aria-label="Sensora 모바일 랜딩 핵심 안내">
+                  <p className="landing-guide03-mobile-kicker">자동차 영업 업무용</p>
+                  <h1>상담은 했는데, 다음 연락이 밀리고 있다면.</h1>
+                  <p>
+                    상담 메모를 넣으면 고객 니즈, 문자 초안, 다음 연락 포인트까지 정리합니다.
+                  </p>
+                  <p className="landing-guide03-mobile-trust">
+                    자동 저장·자동 발송 없이, 확인 후 직접 저장하고 복사합니다.
+                  </p>
+                  <div className="landing-guide03-mobile-actions">
+                    <Link href={JOIN_PATH} prefetch={false}>
+                      {t("cta.joinBeta")}
+                    </Link>
+                    <button type="button" onClick={onOpenAppWorkspace}>
+                      {t("cta.tryAppExperience")}
+                    </button>
+                  </div>
+                </div>
+
                 <Link href="/?view=landing" prefetch={false} className="landing-guide03-hotspot landing-guide03-hotspot--brand" aria-label="Sensora Auto CRM 랜딩으로 이동">
                   <span className="sr-only">Sensora Auto CRM</span>
                 </Link>

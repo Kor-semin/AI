@@ -35,6 +35,7 @@ export function SensoraGuideGallery({
   const active = guides.find((g) => g.id === activeId) ?? guides[0];
 
   const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [brokenImages, setBrokenImages] = useState<Record<string, boolean>>({});
 
   const slides = useMemo(
     () => guides.map((g) => ({ src: g.image, caption: getTitle(g) })),
@@ -47,6 +48,17 @@ export function SensoraGuideGallery({
   }, [guides, activeId]);
 
   const closeGuideLightboxLabel = t("preview.toc.close");
+
+  if (!active) {
+    return (
+      <div className="rounded-[20px] border border-white/[0.12] bg-slate-950/70 px-5 py-8 text-center">
+        <p className="text-base font-semibold text-slate-50">{t("preview.guide.pageTitle")}</p>
+        <p className="mx-auto mt-2 max-w-[32ch] text-sm leading-relaxed text-slate-400">
+          {t("landing.showroom.tip.imageMissing")}
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="flex w-full min-w-0 flex-col gap-3 sm:gap-5 lg:gap-7">
@@ -74,15 +86,25 @@ export function SensoraGuideGallery({
                 className="absolute inset-0 z-[3] rounded-[inherit] cursor-zoom-in touch-manipulation outline-none ring-inset focus-visible:ring-2 focus-visible:ring-sky-400/48"
                 onClick={() => setLightboxOpen(true)}
               />
-              <Image
-                key={`${activeId}-${active.image}`}
-                src={active.image}
-                alt=""
-                fill
-                className="pointer-events-none sensora-guide-hero-img object-contain object-top opacity-[0.98] transition-[opacity,filter] duration-300 ease-out group-hover:brightness-[1.02]"
-                sizes="(max-width:640px) 100vw, (max-width:1024px) 100vw, min(1120px, 72vw)"
-                quality={100}
-              />
+              {brokenImages[active.id] || !active.image ? (
+                <div className="absolute inset-0 flex flex-col items-center justify-center px-5 text-center">
+                  <p className="text-sm font-semibold text-slate-100">{getTitle(active)}</p>
+                  <p className="mt-2 max-w-[34ch] text-xs leading-relaxed text-slate-400">
+                    {getDescription(active) || t("landing.showroom.tip.imageMissing")}
+                  </p>
+                </div>
+              ) : (
+                <Image
+                  key={`${activeId}-${active.image}`}
+                  src={active.image}
+                  alt=""
+                  fill
+                  className="pointer-events-none sensora-guide-hero-img object-contain object-top opacity-[0.98] transition-[opacity,filter] duration-300 ease-out group-hover:brightness-[1.02]"
+                  sizes="(max-width:640px) 100vw, (max-width:1024px) 100vw, min(1120px, 72vw)"
+                  quality={100}
+                  onError={() => setBrokenImages((prev) => ({ ...prev, [active.id]: true }))}
+                />
+              )}
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#040a14]/95 via-[#020617]/35 to-transparent" aria-hidden />
               <div className="pointer-events-none absolute inset-0 rounded-[inherit] shadow-[inset_0_0_40px_-20px_rgba(56,189,248,0.06)] mix-blend-screen" aria-hidden />
             </div>
