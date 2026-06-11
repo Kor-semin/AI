@@ -427,7 +427,8 @@ export function LandingShowroom({
                   height={941}
                   priority
                   quality={100}
-                  className="landing-guide03-hero-image block h-auto w-full select-none"
+                  className="landing-guide03-hero-image block w-full select-none"
+                  style={{ height: "auto" }}
                   sizes="(max-width: 1440px) 100vw, 1440px"
                 />
 

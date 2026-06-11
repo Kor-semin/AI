@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useMemo, useState } from "react";
 
-import { DEFAULT_GUIDE_ID, type SensoraGuideEntry } from "@/lib/sensoraGuide";
+import type { SensoraGuideEntry } from "@/lib/sensoraGuide";
 
 import { SensoraGuideCard } from "@/app/components/concierge/SensoraGuideCard";
 import { SensoraFullscreenImageOverlay } from "@/app/components/concierge/SensoraFullscreenImageOverlay";
@@ -82,7 +82,6 @@ export function SensoraGuideGallery({
                 className="pointer-events-none sensora-guide-hero-img object-contain object-top opacity-[0.98] transition-[opacity,filter] duration-300 ease-out group-hover:brightness-[1.02]"
                 sizes="(max-width:640px) 100vw, (max-width:1024px) 100vw, min(1120px, 72vw)"
                 quality={100}
-                priority={active.id === DEFAULT_GUIDE_ID}
               />
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#040a14]/95 via-[#020617]/35 to-transparent" aria-hidden />
               <div className="pointer-events-none absolute inset-0 rounded-[inherit] shadow-[inset_0_0_40px_-20px_rgba(56,189,248,0.06)] mix-blend-screen" aria-hidden />

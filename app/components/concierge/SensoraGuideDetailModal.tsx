@@ -192,7 +192,6 @@ export function SensoraGuideDetailModal({
                       className="pointer-events-none object-contain object-center"
                       sizes="(max-width:640px) 92vw,(max-width:1024px) 88vw, min(840px, 92vw)"
                       quality={100}
-                      priority={false}
                       onError={() => setBroken((m) => ({ ...m, [safeIdx]: true }))}
                     />
                   </div>
@@ -271,9 +270,8 @@ export function SensoraGuideDetailModal({
                       <Image
                         src={g.image}
                         alt=""
-                        width={176}
-                        height={112}
-                        className="h-full w-full object-cover"
+                      fill
+                      className="object-cover"
                         sizes="132px"
                         quality={96}
                         onError={() => setBroken((m) => ({ ...m, [i]: true }))}

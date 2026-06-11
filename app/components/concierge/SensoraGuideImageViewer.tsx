@@ -196,9 +196,8 @@ export function SensoraGuideImageViewer({
                   <Image
                     src={item.src}
                     alt=""
-                    width={200}
-                    height={120}
-                    className="h-full w-full object-cover"
+                    fill
+                    className="object-cover"
                     sizes="132px"
                     quality={100}
                     onError={() => setBroken((m) => ({ ...m, [i]: true }))}

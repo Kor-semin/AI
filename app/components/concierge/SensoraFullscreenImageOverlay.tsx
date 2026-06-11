@@ -135,7 +135,6 @@ export function SensoraFullscreenImageOverlay({
             fill
             sizes="(max-width:640px) 96vw,min(1272px,min(92vw,1280px))"
             className="object-contain object-center drop-shadow-[0_24px_60px_-20px_rgba(0,0,0,0.65)]"
-            priority
             quality={100}
           />
 
