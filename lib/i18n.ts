@@ -66,13 +66,31 @@ export type TranslationKey =
   | "form.contact"
   | "form.email"
   | "form.dealership"
+  | "form.jobRole"
+  | "form.usePurpose"
   | "form.currentCrm"
   | "form.motivation"
+  | "join.assurance.free"
+  | "join.assurance.noPayment"
+  | "join.assurance.approval"
   | "join.submit"
   | "join.submitting"
   | "join.trustNoticeLine1"
   | "join.trustNoticeLine2"
   | "join.trustNoticeLine3"
+  | "join.storageNoticeRemote"
+  | "join.storageNoticeLocal"
+  | "join.success.title"
+  | "join.success.bodyRemote"
+  | "join.success.bodyLocal"
+  | "join.success.storageLabel"
+  | "join.success.storageRemote"
+  | "join.success.storageLocal"
+  | "join.success.storageNone"
+  | "join.success.nextLabel"
+  | "join.success.nextValue"
+  | "join.success.backPreview"
+  | "join.success.submitAnother"
   | "join.alert.betaReceivedRemote"
   | "join.alert.betaNotPersisted"
   | "join.alert.betaSaveFailed"
@@ -679,13 +697,33 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "form.contact": "연락처",
     "form.email": "이메일",
     "form.dealership": "소속 브랜드 / 전시장",
+    "form.jobRole": "직무",
+    "form.usePurpose": "사용 목적",
     "form.currentCrm": "현재 고객관리 방식",
     "form.motivation": "사용해 보고 싶은 이유",
+    "join.assurance.free": "초기 베타는 무료",
+    "join.assurance.noPayment": "자동 결제 없음",
+    "join.assurance.approval": "승인 후 사용 가능",
     "join.submit": "베타 신청 제출하기",
     "join.submitting": "제출 중…",
     "join.trustNoticeLine1": "입력하신 정보는 베타 안내와 사용자 확인을 위해서만 사용됩니다.",
     "join.trustNoticeLine2": "Sensora는 고객 연락처나 고객 정보를 자동으로 수집하지 않습니다.",
     "join.trustNoticeLine3": "고객 정보는 사용자가 직접 확인하고 저장하는 구조를 기준으로 합니다.",
+    "join.storageNoticeRemote": "현재 신청 내용은 설정된 베타 접수 엔드포인트로 전송됩니다.",
+    "join.storageNoticeLocal": "현재 환경은 실제 DB·이메일 연동 전 단계라, 신청 내용은 이 브라우저의 로컬 데모 저장소에만 보관됩니다.",
+    "join.success.title": "베타 신청이 완료되었습니다",
+    "join.success.bodyRemote":
+      "신청 내용을 접수했습니다.\n운영팀 검토 후 승인 대상자에게 순차적으로 안내드리겠습니다.",
+    "join.success.bodyLocal":
+      "테스트 신청이 완료되었습니다.\n현재 환경은 실제 DB·이메일 연동 전 단계이므로 이 브라우저의 로컬 데모 저장소에만 보관됩니다.",
+    "join.success.storageLabel": "저장 방식",
+    "join.success.storageRemote": "베타 접수 엔드포인트 전송",
+    "join.success.storageLocal": "브라우저 로컬 데모 저장",
+    "join.success.storageNone": "저장 확인 불가",
+    "join.success.nextLabel": "다음 단계",
+    "join.success.nextValue": "검토 후 승인된 사용자에게 사용 가능 경로를 안내합니다.",
+    "join.success.backPreview": "미리보기로 돌아가기",
+    "join.success.submitAnother": "다른 신청 작성",
     "join.alert.betaReceivedRemote": "베타 신청이 접수되었습니다.",
     "join.alert.betaNotPersisted":
       "테스트 제출이 완료되었습니다.\n현재는 저장 기능이 연결되지 않은 상태입니다.",
@@ -1356,14 +1394,35 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "form.contact": "Contact Number",
     "form.email": "Email",
     "form.dealership": "Brand / Showroom",
+    "form.jobRole": "Role",
+    "form.usePurpose": "Use purpose",
     "form.currentCrm": "Current Customer Management Method",
     "form.motivation": "Why You Want to Try Sensora",
+    "join.assurance.free": "Early beta is free",
+    "join.assurance.noPayment": "No automatic payment",
+    "join.assurance.approval": "Available after approval",
     "join.submit": "Submit beta signup",
     "join.submitting": "Submitting…",
     "join.trustNoticeLine1":
       "The information you enter is used only for beta communications and to confirm your details.",
     "join.trustNoticeLine2": "Sensora does not automatically collect your customers’ contacts or CRM data.",
     "join.trustNoticeLine3": "Customer records stay under your review: you confirm and save anything that’s stored.",
+    "join.storageNoticeRemote": "This environment sends beta requests to the configured signup endpoint.",
+    "join.storageNoticeLocal":
+      "This environment does not have real DB/email integration yet, so requests are stored only in this browser’s local demo storage.",
+    "join.success.title": "Beta signup complete",
+    "join.success.bodyRemote":
+      "Your request has been received.\nThe operations team will review it and follow up with approved users in order.",
+    "join.success.bodyLocal":
+      "Your test request is complete.\nThis environment does not have real DB/email integration yet, so it is stored only in this browser’s local demo storage.",
+    "join.success.storageLabel": "Storage mode",
+    "join.success.storageRemote": "Sent to beta signup endpoint",
+    "join.success.storageLocal": "Browser local demo storage",
+    "join.success.storageNone": "Storage not confirmed",
+    "join.success.nextLabel": "Next step",
+    "join.success.nextValue": "Approved users will receive the path to use the product after review.",
+    "join.success.backPreview": "Back to preview",
+    "join.success.submitAnother": "Submit another request",
     "join.alert.betaReceivedRemote": "Thanks — your beta signup was received.",
     "join.alert.betaNotPersisted":
       "Your test submission is complete.\nSaving to our systems isn’t connected yet.",

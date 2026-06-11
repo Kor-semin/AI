@@ -5,15 +5,22 @@ import { Suspense, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
 import type { BetaSignupPayload } from "@/lib/betaSignupSubmit";
-import { submitBetaSignup } from "@/lib/betaSignupSubmit";
+import { betaSignupStorageMode, submitBetaSignup } from "@/lib/betaSignupSubmit";
 import { useLanguage } from "@/app/components/i18n/LanguageProvider";
 
 function BetaJoinForm() {
   const [pending, setPending] = useState(false);
+  const [completed, setCompleted] = useState<null | {
+    savedToBackend: boolean;
+    savedLocally: boolean;
+    submittedAt: string;
+    email: string;
+  }>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const { t } = useLanguage();
   const searchParams = useSearchParams();
   const returnToPreview = searchParams.get("returnTo") === "preview";
+  const storageMode = betaSignupStorageMode();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -27,8 +34,9 @@ function BetaJoinForm() {
       contact: String(fd.get("contact") ?? "").trim(),
       email: String(fd.get("email") ?? "").trim(),
       dealership: String(fd.get("dealership") ?? "").trim(),
+      jobRole: String(fd.get("jobRole") ?? "").trim(),
+      usePurpose: String(fd.get("usePurpose") ?? "").trim(),
       currentCrmApproach: String(fd.get("currentCrmApproach") ?? "").trim(),
-      motivation: String(fd.get("motivation") ?? "").trim(),
     };
 
     if (
@@ -36,8 +44,9 @@ function BetaJoinForm() {
       !payload.contact ||
       !payload.email ||
       !payload.dealership ||
-      !payload.currentCrmApproach ||
-      !payload.motivation
+      !payload.jobRole ||
+      !payload.usePurpose ||
+      !payload.currentCrmApproach
     ) {
       window.alert(t("join.fillAllFields"));
       return;
@@ -55,12 +64,12 @@ function BetaJoinForm() {
         window.alert(t("join.alert.betaSaveFailed"));
         return;
       }
-      if (returnToPreview && res.savedToBackend) {
-        window.alert(t("join.alert.betaReceivedRemote"));
-        window.location.assign("/?view=app");
-        return;
-      }
-      window.alert(res.savedToBackend ? t("join.alert.betaReceivedRemote") : t("join.alert.betaNotPersisted"));
+      setCompleted({
+        savedToBackend: res.savedToBackend,
+        savedLocally: res.savedLocally,
+        submittedAt: res.submittedAt,
+        email: payload.email,
+      });
       const mounted = formRef.current;
       if (mounted?.isConnected) {
         mounted.reset();
@@ -96,9 +105,75 @@ function BetaJoinForm() {
           <p className="mt-3 max-w-[min(100%,38rem)] text-pretty whitespace-pre-line text-base leading-relaxed text-slate-400 max-sm:text-[0.9375rem]">
             {t("join.intro")}
           </p>
+          <div className="mt-4 grid gap-2 sm:grid-cols-3">
+            {[
+              t("join.assurance.free"),
+              t("join.assurance.noPayment"),
+              t("join.assurance.approval"),
+            ].map((line) => (
+              <div
+                key={line}
+                className="rounded-2xl border border-white/[0.1] bg-white/[0.045] px-3.5 py-2.5 text-sm font-semibold leading-snug text-slate-200"
+              >
+                {line}
+              </div>
+            ))}
+          </div>
         </div>
 
         <div className="sensora-premium-card relative rounded-[24px] px-6 py-7 max-[389px]:p-6 sm:p-10">
+          {completed ? (
+            <section className="relative text-center" role="status" aria-live="polite">
+              <div className="mx-auto flex size-12 items-center justify-center rounded-full border border-emerald-300/30 bg-emerald-400/[0.12] text-xl text-emerald-100">
+                ✓
+              </div>
+              <h2 className="mt-4 text-2xl font-semibold tracking-tight text-slate-50">
+                {t("join.success.title")}
+              </h2>
+              <p className="mx-auto mt-3 max-w-md whitespace-pre-line text-sm leading-relaxed text-slate-400">
+                {completed.savedToBackend
+                  ? t("join.success.bodyRemote")
+                  : t("join.success.bodyLocal")}
+              </p>
+              <dl className="mt-6 grid gap-3 rounded-2xl border border-white/[0.1] bg-slate-950/55 px-4 py-4 text-left text-sm">
+                <div>
+                  <dt className="font-semibold text-slate-500">{t("form.email")}</dt>
+                  <dd className="mt-1 break-all font-medium text-slate-200">{completed.email}</dd>
+                </div>
+                <div>
+                  <dt className="font-semibold text-slate-500">{t("join.success.storageLabel")}</dt>
+                  <dd className="mt-1 font-medium text-slate-200">
+                    {completed.savedToBackend
+                      ? t("join.success.storageRemote")
+                      : completed.savedLocally
+                        ? t("join.success.storageLocal")
+                        : t("join.success.storageNone")}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="font-semibold text-slate-500">{t("join.success.nextLabel")}</dt>
+                  <dd className="mt-1 font-medium text-slate-200">{t("join.success.nextValue")}</dd>
+                </div>
+              </dl>
+              <div className="mt-6 flex flex-col gap-2 sm:flex-row sm:justify-center">
+                {returnToPreview ? (
+                  <Link
+                    href="/?view=landing"
+                    className="sensora-premium-primary-workspace inline-flex min-h-12 items-center justify-center rounded-2xl px-5 py-3 text-sm font-semibold"
+                  >
+                    {t("join.success.backPreview")}
+                  </Link>
+                ) : null}
+                <button
+                  type="button"
+                  onClick={() => setCompleted(null)}
+                  className="sensora-dark-ghost-btn inline-flex min-h-12 items-center justify-center rounded-2xl px-5 py-3 text-sm font-semibold"
+                >
+                  {t("join.success.submitAnother")}
+                </button>
+              </div>
+            </section>
+          ) : (
           <form ref={formRef} className="relative" onSubmit={(ev) => void handleSubmit(ev)} noValidate>
             <fieldset className="space-y-6 border-0 p-0 [&_legend]:sr-only">
               <legend>{t("join.formLegend")}</legend>
@@ -155,6 +230,34 @@ function BetaJoinForm() {
               </div>
 
               <div>
+                <label htmlFor="jobRole" className="text-sm font-semibold text-slate-100">
+                  {t("form.jobRole")}
+                </label>
+                <input
+                  id="jobRole"
+                  name="jobRole"
+                  type="text"
+                  required
+                  className={fieldClass}
+                  placeholder="예: 신차 영업 / 인증중고 / 전시장 매니저"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="usePurpose" className="text-sm font-semibold text-slate-100">
+                  {t("form.usePurpose")}
+                </label>
+                <textarea
+                  id="usePurpose"
+                  name="usePurpose"
+                  rows={3}
+                  required
+                  className={textareaFieldClass}
+                  placeholder="예: 상담 메모 정리, 문자 초안, 다음 연락 관리에 써보고 싶습니다."
+                />
+              </div>
+
+              <div>
                 <label htmlFor="currentCrmApproach" className="text-sm font-semibold text-slate-100">
                   {t("form.currentCrm")}
                 </label>
@@ -167,20 +270,6 @@ function BetaJoinForm() {
                   placeholder="엑셀, 메모, 타사 CRM, 단체 프로그램 등 현재 어떻게 관리하고 있는지 적어 주세요."
                 />
               </div>
-
-              <div>
-                <label htmlFor="motivation" className="text-sm font-semibold text-slate-100">
-                  {t("form.motivation")}
-                </label>
-                <textarea
-                  id="motivation"
-                  name="motivation"
-                  rows={3}
-                  required
-                  className={textareaFieldClass}
-                  placeholder="기대 기능, 업무 상 불편, 도입 타이밍 등을 적어 주세요."
-                />
-              </div>
             </fieldset>
 
             <div className="mt-8 flex flex-col gap-5 border-t border-white/[0.1] pt-8">
@@ -191,6 +280,7 @@ function BetaJoinForm() {
                 <p className="font-semibold text-slate-100">{t("join.trustNoticeLine1")}</p>
                 <p>{t("join.trustNoticeLine2")}</p>
                 <p>{t("join.trustNoticeLine3")}</p>
+                <p>{storageMode === "remote" ? t("join.storageNoticeRemote") : t("join.storageNoticeLocal")}</p>
               </div>
               <button
                 type="submit"
@@ -208,6 +298,7 @@ function BetaJoinForm() {
               </p>
             </div>
           </form>
+          )}
         </div>
 
         {process.env.NODE_ENV !== "production" ? (
