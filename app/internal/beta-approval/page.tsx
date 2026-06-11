@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
@@ -138,7 +138,7 @@ function ApplicantCard({
   );
 }
 
-export default function InternalBetaApprovalPage() {
+function InternalBetaApprovalContent() {
   const { auth, authError, signIn, signOut } = useAuth();
   const searchParams = useSearchParams();
   const mode = searchParams.get("v") === "firestore" ? "firestore" : "firestore";
@@ -425,5 +425,19 @@ export default function InternalBetaApprovalPage() {
         </>
       ) : null}
     </main>
+  );
+}
+
+export default function InternalBetaApprovalPage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="flex min-h-[100dvh] items-center justify-center bg-[#020817] px-4 text-sm text-slate-400">
+          내부 승인 화면을 불러오는 중입니다…
+        </main>
+      }
+    >
+      <InternalBetaApprovalContent />
+    </Suspense>
   );
 }
