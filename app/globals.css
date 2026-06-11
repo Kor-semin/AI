@@ -2787,7 +2787,7 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
     display: flex;
     min-height: min(72svh, 34rem);
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     padding: clamp(1.1rem, 5vw, 1.55rem);
     color: #f8fafc;
   }
@@ -2858,13 +2858,54 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
     color: #e2e8f0;
   }
 
+  .landing-guide03-mobile-card-list {
+    margin-top: 1rem;
+    display: grid;
+    max-height: min(30svh, 14rem);
+    gap: 0.45rem;
+    overflow-y: auto;
+    padding-right: 0.15rem;
+    overscroll-behavior: contain;
+  }
+
+  .landing-guide03-mobile-card-list button {
+    display: flex;
+    min-height: 3.15rem;
+    cursor: pointer;
+    flex-direction: column;
+    justify-content: center;
+    border-radius: 0.95rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(15, 23, 42, 0.58);
+    padding: 0.58rem 0.75rem;
+    text-align: left;
+    touch-action: manipulation;
+  }
+
+  .landing-guide03-mobile-card-list span {
+    font-size: 0.82rem;
+    font-weight: 800;
+    color: #f8fafc;
+  }
+
+  .landing-guide03-mobile-card-list small {
+    margin-top: 0.15rem;
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    font-size: 0.68rem;
+    font-weight: 600;
+    line-height: 1.25;
+    color: rgba(148, 163, 184, 0.98);
+  }
+
   .landing-guide03-hotspot {
     display: none;
   }
 
   .landing-guide03-hotspot--guide-card {
-    display: block;
-    opacity: 0;
+    display: none;
   }
 }
 
