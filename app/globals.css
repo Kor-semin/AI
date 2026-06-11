@@ -2615,19 +2615,19 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
 }
 
 .landing-guide03-hotspot--nav-join {
-  left: 65.9%;
-  top: 5.45%;
+  left: 93.9%;
+  top: 1.05%;
   z-index: 4;
-  width: 9.6%;
-  height: 6.2%;
+  width: 5.5%;
+  height: 4.1%;
 }
 
 .landing-guide03-hotspot--nav-preview {
-  left: 75.4%;
-  top: 5.45%;
+  left: 83%;
+  top: 1.05%;
   z-index: 4;
-  width: 11.2%;
-  height: 6.2%;
+  width: 10.1%;
+  height: 4.1%;
 }
 
 .landing-guide03-hotspot--nav-register {
@@ -2639,18 +2639,18 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
 
 .landing-guide03-hotspot--hero-join {
   left: 7%;
-  top: 39.75%;
+  top: 45.7%;
   z-index: 4;
-  width: 14%;
-  height: 7.35%;
+  width: 15.4%;
+  height: 6.2%;
 }
 
 .landing-guide03-hotspot--hero-preview {
-  left: 22%;
-  top: 39.75%;
+  left: 23.8%;
+  top: 45.7%;
   z-index: 4;
-  width: 15.4%;
-  height: 7.35%;
+  width: 18.9%;
+  height: 6.2%;
 }
 
 .landing-guide03-hotspot--hero-register {

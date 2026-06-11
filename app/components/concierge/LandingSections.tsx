@@ -108,82 +108,82 @@ type LandingGuideCard = {
 const LANDING_GUIDE_CARDS: LandingGuideCard[] = [
   {
     id: "tip-start",
-    title: "이용 시작 방법",
-    desc: "베타 신청부터 승인, 계정 등록 후 사용까지의 흐름을 확인합니다.",
+    title: "상담 내용 분산",
+    desc: "상담 내용이 카톡, 문자, 메모장에 흩어집니다.",
     detail:
-      "Sensora는 베타 신청, 내부 확인, 영업 계정 등록을 거쳐 사용할 수 있도록 안내합니다. 실제 저장 기능은 승인된 사용 경로에서만 열리며, 고객 정보는 사용자가 확인한 뒤 다룹니다.",
+      "상담이 끝난 뒤 기록 위치가 갈라지면 예산, 비교 차량, 고객 고민을 다시 찾는 데 시간이 걸립니다. Sensora는 상담 메모를 한 흐름으로 정리해 다음 확인 지점을 놓치지 않도록 돕습니다.",
     image: "/images/guides/sensora-guide-03.png",
-    points: ["베타 신청", "승인 확인", "계정 등록"],
+    points: ["카톡", "문자", "메모장"],
     style: { left: "27.1%", top: "65.9%", width: "15.5%", height: "15.1%", borderRadius: "16px" },
   },
   {
     id: "tip-feature",
-    title: "기능 설명",
-    desc: "핵심 업무 영역이 어떤 역할을 하는지 한 번에 봅니다.",
+    title: "고객 조건 흐려짐",
+    desc: "고객이 말한 예산·비교차량·고민이 며칠 뒤 흐려집니다.",
     detail:
-      "기능 설명은 메뉴를 반복해서 보여주기보다 각 업무가 무엇을 돕는지 정리합니다. AI는 검토용 초안을 돕고, 최종 판단과 저장은 영업사원이 직접 합니다.",
+      "상담 직후에는 분명했던 조건도 시간이 지나면 흐려집니다. 고객 니즈 요약은 다시 연락하기 전 핵심 조건을 짧게 확인하기 위한 검토 보조입니다.",
     image: "/images/guides/sensora-app-menu-target.png",
-    points: ["업무 역할", "검토용 초안", "사용자 확인"],
+    points: ["예산", "비교 차량", "고민"],
     style: { left: "43.9%", top: "65.9%", width: "15.5%", height: "15.1%", borderRadius: "16px" },
   },
   {
     id: "tip-flow",
-    title: "실제 사용 흐름",
-    desc: "상담 기록부터 고객 요약, 메시지, 일정까지 이어지는 흐름입니다.",
+    title: "문자 follow-up 부담",
+    desc: "문자 follow-up을 보내야 하는데 말투와 내용을 매번 새로 고민합니다.",
     detail:
-      "상담 내용을 기록하면 니즈와 다음 행동을 다시 확인하기 쉬운 구조로 이어집니다. 이 미리보기는 흐름 안내이며, 고객 정보가 자동 저장되거나 자동 수집되는 동작은 포함하지 않습니다.",
+      "고객마다 조건과 온도가 달라 문자를 매번 새로 쓰기 어렵습니다. Sensora는 상담 맥락을 바탕으로 복사해 다듬기 쉬운 검토용 문자 초안을 제안합니다.",
     image: "/images/guides/sensora-preview-target.png",
-    points: ["상담 기록", "요약 확인", "다음 행동"],
+    points: ["말투", "내용", "복사 전 검토"],
     style: { left: "60.8%", top: "65.9%", width: "15.5%", height: "15.1%", borderRadius: "16px" },
   },
   {
     id: "tip-beta",
-    title: "베타 사용 안내",
-    desc: "실제 저장과 계정 기능은 베타 승인 후 사용할 수 있습니다.",
+    title: "연락 타이밍 이탈",
+    desc: "다음 연락 타이밍을 놓치면 고객은 다른 영업사원에게 넘어갑니다.",
     detail:
-      "베타 기간에는 화면과 문구가 조정될 수 있습니다. 민감한 고객 정보는 승인된 경로와 사용자의 확인 흐름을 기준으로 다룹니다.",
+      "놓친 고객은 대부분 상담 직후가 아니라 후속 연락에서 사라집니다. 다음 연락 목적과 확인할 내용을 정리해, 사용자가 직접 판단하고 실행할 수 있게 둡니다.",
     image: "/images/guides/sensora-current-app-screen.png",
-    points: ["예시 화면", "승인 후 사용", "사용자 확인"],
+    points: ["타이밍", "연락 목적", "직접 실행"],
     style: { left: "77.6%", top: "65.9%", width: "15.5%", height: "15.1%", borderRadius: "16px" },
   },
   {
     id: "flow-memo",
-    title: "상담 정리 · 기록",
-    desc: "고객과 나눈 대화와 관심 차량을 업무 화면에서 다시 확인합니다.",
+    title: "고객 니즈 요약",
+    desc: "상담 메모만 넣으면 고객이 중요하게 본 조건을 정리합니다.",
     detail:
-      "상담 메모는 고객 상황, 관심 차량, 예산, 구매 시점처럼 나중에 다시 볼 근거를 남기는 영역입니다. 기록은 사용자의 선택과 확인을 전제로 합니다.",
+      "고객 상황, 관심 차량, 예산, 구매 시점처럼 다시 연락할 때 필요한 근거를 짧게 묶습니다. 자동 판단으로 확정하지 않고 영업사원이 확인하고 수정할 수 있습니다.",
     image: "/images/guides/sensora-current-app-screen.png",
-    points: ["상담 메모", "관심 차량", "기록 확인"],
+    points: ["관심 차량", "예산", "구매 시점"],
     style: { left: "10.3%", top: "88.3%", width: "17.4%", height: "9.7%", borderRadius: "15px" },
   },
   {
     id: "flow-needs",
-    title: "고객 니즈 요약",
-    desc: "상담 메모를 바탕으로 고객이 중요하게 본 조건을 정리합니다.",
+    title: "문자 초안 생성",
+    desc: "상담 맥락을 바탕으로 짧고 실제적인 문자 초안을 만듭니다.",
     detail:
-      "고객 니즈 요약은 상담 내용을 더 쉽게 다시 읽기 위한 검토 보조입니다. 자동 판단으로 확정하지 않고, 영업사원이 내용을 확인하고 수정할 수 있는 흐름을 우선합니다.",
+      "초안은 바로 발송되지 않습니다. 고객에게 보내기 전 표현, 조건, 사실관계는 영업사원이 직접 확인하고 필요한 부분만 복사해 사용합니다.",
     image: "/images/guides/sensora-preview-target.png",
-    points: ["조건 정리", "검토 보조", "수정 가능"],
+    points: ["검토용 초안", "직접 복사", "자동 발송 없음"],
     style: { left: "31%", top: "88.3%", width: "17.4%", height: "9.7%", borderRadius: "15px" },
   },
   {
     id: "flow-sms",
-    title: "발송 문자",
-    desc: "상담 맥락을 바탕으로 사용할 수 있는 문자 초안을 확인합니다.",
+    title: "다음 연락 목적 추천",
+    desc: "다음 연락에서 확인할 목적과 실행 내용을 정리합니다.",
     detail:
-      "발송 문자는 바로 전송되는 자동화가 아니라 검토용 초안입니다. 고객에게 보내기 전 표현과 사실관계는 영업사원이 직접 확인합니다.",
+      "견적 조건 재확인, 출고 가능 여부 안내, 비교 차량 질문처럼 다음 연락에서 놓치면 안 되는 목적을 보여줍니다. AI가 대신 연락하지 않고 사용자가 직접 실행합니다.",
     image: "/images/guides/sensora-preview-target.png",
-    points: ["문자 초안", "직접 확인", "복사 전 검토"],
+    points: ["연락 목적", "확인 항목", "직접 실행"],
     style: { left: "51.6%", top: "88.3%", width: "17.4%", height: "9.7%", borderRadius: "15px" },
   },
   {
     id: "flow-next",
-    title: "다음 연락",
-    desc: "상담 이후 확인할 연락 시점과 실행 내용을 정리합니다.",
+    title: "확인 후 고객 기록 저장",
+    desc: "요약과 주의할 응대 포인트를 확인한 뒤 고객 기록에 남깁니다.",
     detail:
-      "다음 연락은 상담 이후 사용자가 확인해야 할 행동을 정리하는 영역입니다. AI가 알아서 연락한다는 의미가 아니라, 영업사원이 직접 판단하고 실행할 내용을 보기 쉽게 둡니다.",
+      "고객 정보는 자동으로 수집하거나 임의 저장하지 않습니다. AI 결과는 사용자가 확인한 뒤 저장하고, 수정이 필요한 표현은 영업사원이 직접 고칩니다.",
     image: "/images/guides/sensora-current-app-screen.png",
-    points: ["다음 연락", "일정 확인", "직접 실행"],
+    points: ["응대 포인트", "사용자 확인", "자동 저장 없음"],
     style: { left: "72.3%", top: "88.3%", width: "19%", height: "9.7%", borderRadius: "15px" },
   },
 ];
@@ -440,9 +440,6 @@ export function LandingShowroom({
                 <button type="button" onClick={onOpenAppWorkspace} className="landing-guide03-hotspot landing-guide03-hotspot--nav-preview" aria-label={t("cta.tryAppExperience")}>
                   <span className="sr-only">{t("cta.tryAppExperience")}</span>
                 </button>
-                <Link href="/register" prefetch={false} className="landing-guide03-hotspot landing-guide03-hotspot--nav-register" aria-label={t("auth.salesRegistration")}>
-                  <span className="sr-only">{t("auth.salesRegistration")}</span>
-                </Link>
 
                 <Link href={JOIN_PATH} prefetch={false} className="landing-guide03-hotspot landing-guide03-hotspot--hero-join" aria-label={t("cta.joinBeta")}>
                   <span className="sr-only">{t("cta.joinBeta")}</span>
@@ -450,9 +447,6 @@ export function LandingShowroom({
                 <button type="button" onClick={onOpenAppWorkspace} className="landing-guide03-hotspot landing-guide03-hotspot--hero-preview" aria-label={t("cta.tryAppExperience")}>
                   <span className="sr-only">{t("cta.tryAppExperience")}</span>
                 </button>
-                <Link href="/register" prefetch={false} className="landing-guide03-hotspot landing-guide03-hotspot--hero-register" aria-label={t("auth.salesRegistration")}>
-                  <span className="sr-only">{t("auth.salesRegistration")}</span>
-                </Link>
 
                 {LANDING_GUIDE_CARDS.map((card) => (
                   <button
@@ -600,6 +594,9 @@ export function LandingShowroom({
               <h2 className="max-w-[24ch] text-[clamp(1.2rem,calc(0.82rem+1.85vw),1.65rem)] font-semibold leading-[1.2] tracking-[-0.03em] text-slate-50 [word-break:keep-all] sm:max-w-[26ch]">
                 {t("landing.slides.actions.closingHeadline")}
               </h2>
+              <p className="mt-4 max-w-[38ch] text-[0.88rem] leading-relaxed text-slate-400 sm:text-[0.94rem]">
+                {t("landing.showroom.announcement.body")}
+              </p>
               <div className="landing-slide-actions-cta-cluster mx-auto mt-9 flex w-full max-w-[22rem] flex-col items-stretch gap-2.5 sm:mt-10 sm:max-w-[24rem]">
                 <Link href={JOIN_PATH} prefetch={false} className={`${entPrimaryBtn} w-full justify-center`}>
                   {t("cta.joinBeta")}
