@@ -1543,7 +1543,7 @@ export function CRMApp({
       <div id="crm-main" className="w-full min-w-0 pb-8 text-slate-100 lg:pb-10">
         <div className="mx-auto flex w-full max-w-[min(1580px,100%)] flex-col gap-6 px-1 sm:gap-8 sm:px-4 xl:px-0">
           {activeSection === "dashboard" ? (
-            <section className="sensora-premium-card rounded-[24px] px-4 py-5 shadow-[0_26px_64px_-34px_rgba(0,0,0,0.7)] md:hidden">
+            <section className="sensora-premium-card rounded-[24px] px-4 py-5 shadow-[0_26px_64px_-34px_rgba(0,0,0,0.7)] lg:hidden">
               <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-sky-300/80">MVP quick start</p>
               <h2 className="mt-2 text-[1.65rem] font-semibold leading-[1.08] tracking-[-0.055em] text-slate-50">
                 상담 메모를 넣으면 AI가 정리합니다.
@@ -1833,7 +1833,7 @@ export function CRMApp({
           ) : null}
 
           {activeSection === "dashboard" ? (
-            <div id="crm-section-dashboard" className="hidden scroll-mt-24 md:block">
+            <div id="crm-section-dashboard" className="hidden scroll-mt-24 lg:block">
               <DashboardSection
                 todayFollowUps={overviewStats.dueToday}
                 highPotential={overviewStats.highPotential}

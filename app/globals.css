@@ -2763,6 +2763,10 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
 @media (max-width: 640px) {
   .landing-guide03-hero-shell {
     align-items: stretch;
+    flex-direction: column;
+    justify-content: flex-start;
+    height: auto;
+    min-height: 100%;
     padding: clamp(0.35rem, 2.4vw, 0.75rem);
   }
 
