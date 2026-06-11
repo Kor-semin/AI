@@ -17,7 +17,7 @@ Sensora 웹 앱의 `/join` 폼 제출은 `NEXT_PUBLIC_BETA_SIGNUP_ENDPOINT`가 �
 
 | A | B | C | D | E | F | G | H | I | J | K | L |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| `submittedAt` | `source` | `fullName` | `contact` | `email` | `dealership` | `currentCrmApproach` | `motivation` | `status` | `approvedAt` | `approvedBy` | `reviewNote` |
+| `submittedAt` | `source` | `fullName` | `contact` | `email` | `dealership` | `jobRole` | `usePurpose` | `currentCrmApproach` | `status` | `approvedAt` | `approvedBy` | `reviewNote` |
 
 - 신규 접수 시 **`status` 기본값은 `승인 대기`** 입니다(스크립트 `doPost`에서 설정).
 - **`승인 완료`**: 앱·클라우드 경로 허용 · **`승인 대기`**: 대표 검토 대기 · **`승인 거절`**: 해당 이메일 사용 불가 안내 · **`status` 빈 칸**: 조회 시 “신청 없음”과 동일하게 처리(아래 스크립트 예시 참고).
@@ -59,8 +59,9 @@ function doPost(e) {
       data.contact || "",
       data.email || "",
       data.dealership || "",
+      data.jobRole || "",
+      data.usePurpose || data.motivation || "",
       data.currentCrmApproach || "",
-      data.motivation || "",
       "승인 대기",
       "",
       "",
@@ -237,6 +238,11 @@ function doGet(e) {
 NEXT_PUBLIC_BETA_SIGNUP_ENDPOINT=https://script.google.com/macros/s/.../exec
 BETA_ACCESS_ENDPOINT=https://script.google.com/macros/s/.../exec
 BETA_ACCESS_SECRET=
+
+## 내부 승인 페이지(Firestore 운영 시)
+BETA_APPROVAL_ADMIN_EMAILS=admin@example.com
+BETA_APPROVAL_FIRESTORE_COLLECTION=betaSignups
+FIREBASE_SERVICE_ACCOUNT_JSON='{"type":"service_account","project_id":"..."}'
 ```
 
 앱 쪽 API: **`POST /api/beta-access/check`** — Body `{ "email": "user@example.com" }` — 응답은 `ok`, `approved`, `status`만 클라이언트로 전달합니다.  
@@ -252,14 +258,43 @@ BETA_ACCESS_SECRET=
 | `contact` | 연락처 |
 | `email` | 이메일 |
 | `dealership` | 소속 전시장 등 |
+| `jobRole` | 직무 |
+| `usePurpose` | 사용 목적 |
 | `currentCrmApproach` | 현재 고객관리 방식 |
-| `motivation` | 사용 사유 등 |
 | `submittedAt` | 제출 시각(ISO 8601 문자열, 클라이언트 생성) |
 | `source` | 고정 문자열 `sensora-alpha-join`(구분용) |
 
 ---
 
-## 7. 테스트 및 확인
+## 7. 내부 승인 페이지(Firestore 운영)
+
+`/internal/beta-approval?v=firestore`는 서버 API를 통해서만 신청 목록을 읽고 승인/반려를 처리합니다.
+
+필요 환경변수:
+
+- `BETA_APPROVAL_ADMIN_EMAILS`: 쉼표로 구분한 관리자 이메일 목록. 실제 주소는 Git에 넣지 말고 Vercel/로컬 환경변수에만 둡니다.
+- `BETA_APPROVAL_FIRESTORE_COLLECTION`: 기본값 `betaSignups`.
+- `FIREBASE_SERVICE_ACCOUNT_JSON`: 서버 API가 Firestore REST를 호출할 서비스 계정 JSON. 저장소에 커밋하지 않습니다.
+- `NEXT_PUBLIC_FIREBASE_*`: 관리자 Google 로그인과 Firebase ID 토큰 발급용 public 설정.
+
+권한 구조:
+
+1. 클라이언트는 신청 목록을 Firestore에서 직접 읽지 않고 `/api/internal/beta-approval` 서버 API를 호출합니다.
+2. 서버 API는 Firebase ID 토큰으로 로그인 이메일을 확인하고, `BETA_APPROVAL_ADMIN_EMAILS`에 포함된 경우에만 목록/승인/반려를 처리합니다.
+3. Firestore rules는 직접 클라이언트 접근에 대비해 `betaSignups` 읽기/수정을 `request.auth.token.betaAdmin == true`로 제한합니다.
+4. `betaAdmin` custom claim은 Firebase Admin SDK 또는 운영 스크립트에서 대상 관리자 UID에 설정해야 합니다.
+
+custom claim 설정 예시(운영 로컬 스크립트 또는 Firebase Admin 콘솔 환경에서만 실행):
+
+```js
+await admin.auth().setCustomUserClaims(uid, { betaAdmin: true });
+```
+
+> 서비스 계정 JSON, 실제 UID, 실제 관리자 이메일은 저장소에 커밋하지 마세요.
+
+---
+
+## 8. 테스트 및 확인
 
 1. **엔드포인트 미설정:** `/join`에서 제출 시 **테스트 제출** 안내(저장 미연결)가 나오는지 확인합니다.
 2. **엔드포인트 설정 후:** 클라이언트는 **`no-cors`** 로 요청하므로 **응답 상태·본문은 페이지 스크립트에서 확인 불가**합니다. Network 에 전송 행만 보일 수 있습니다. 최종 검증은 **시트 새 행 추가** 여부입니다. **Console 에 입력값을 찍지 않습니다.**
@@ -268,9 +303,11 @@ BETA_ACCESS_SECRET=
 
 ---
 
-## 8. 보안 주의
+## 9. 보안 주의
 
 - 웹 앱 URL이 유출되면 누구나 POST를 보낼 수 있습니다. 필요하면 Apps Script 또는 별도 백엔드에서 간단한 토큰 검증을 추가하는 것을 검토하세요.
 - **승인 조회 URL**은 `NEXT_PUBLIC_`로 노출하지 말고, **`BETA_ACCESS_ENDPOINT` + 선택적 시크릿**으로 서버에서만 호출하세요.
 - 시트에는 개인정보가 쌓이므로 접근 권한·공유 범위를 최소화하세요.
 - 서버·클라이언트 **Console에 이메일·이름·연락처 등을 로그로 남기지 않습니다.**
+- `/internal/beta-approval`은 `BETA_APPROVAL_ADMIN_EMAILS`와 Firebase ID 토큰 검증이 모두 통과해야 목록/승인/반려가 가능합니다.
+- Firestore rules 변경(`betaSignups` 보호)은 Firebase Console 또는 CLI로 별도 배포해야 운영 DB에 반영됩니다.

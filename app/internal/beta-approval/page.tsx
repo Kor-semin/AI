@@ -206,7 +206,7 @@ function InternalBetaApprovalContent() {
   );
 
   return (
-    <main className="min-h-[100dvh] bg-[#020817] px-4 py-5 text-slate-100 sm:px-6 lg:px-8">
+    <main className="internal-beta-approval-page min-h-[100dvh] bg-[#020817] px-4 py-5 text-slate-100 sm:px-6 lg:px-8">
       <div aria-hidden className="pointer-events-none fixed inset-0 bg-[radial-gradient(820px_420px_at_12%_-10%,rgba(56,189,248,0.14),transparent_58%),radial-gradient(780px_420px_at_100%_0%,rgba(139,92,246,0.1),transparent_56%)]" />
 
       <div className="relative z-[1] mx-auto flex w-full max-w-7xl flex-col gap-5">

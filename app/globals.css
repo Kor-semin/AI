@@ -34,18 +34,33 @@ html[data-text-size="large"] {
   --sensora-font-sans-stack: "YoonGothic310", "윤고딕 310", "Yoon Gothic 310", "Apple SD Gothic Neo", "Pretendard",
     "Noto Sans KR", "Malgun Gothic", system-ui, ui-sans-serif, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
 
-  /* Light SaaS shell — 실버 · 그레이 · 블랙 */
-  --background: #f4f6f8;
-  --foreground: #111827;
-  --paper: #ffffff;
-  --paper-2: #f9fafb;
+  /* Sensora premium CRM palette — Burgundy · Cream · Beige · Brown */
+  --sensora-burgundy: #810b38;
+  --sensora-cream: #f1e2d1;
+  --sensora-beige: #dcc3aa;
+  --sensora-brown: #541a1a;
+  --sensora-burgundy-rgb: 129 11 56;
+  --sensora-cream-rgb: 241 226 209;
+  --sensora-beige-rgb: 220 195 170;
+  --sensora-brown-rgb: 84 26 26;
+  --sensora-deep-brown: #1f0b0d;
+  --sensora-warm-ink: #541a1a;
+  --sensora-warm-muted: #74524a;
+  --sensora-warm-border: rgba(84, 26, 26, 0.18);
+  --sensora-focus-ring: rgba(129, 11, 56, 0.36);
+
+  /* Light SaaS shell — warm premium */
+  --background: #f1e2d1;
+  --foreground: #541a1a;
+  --paper: #fff8f0;
+  --paper-2: #f6eadc;
   /* muted text — 대비를 한 단계 올려 가독성 개선 */
   --ink-2: #4b5563;
   --edge: #e5e7eb;
   --edge-strong: rgba(148, 163, 184, 0.55);
 
   /* Dark hero / marketing strip */
-  --landing-hero-bg: #111318;
+  --landing-hero-bg: #1f0b0d;
   /* Mono gray hierarchy (dark navy background) */
   --landing-hero-title: #f8fafc;
   --landing-hero-text: #e5e7eb;
@@ -55,15 +70,15 @@ html[data-text-size="large"] {
   --landing-hero-subtle: #64748b;
   --landing-hero-border: rgba(148, 163, 184, 0.18);
 
-  --accent: #94a3b8;
-  /* Legacy aliases — 브라운·골드 제거 후 슬레이트 계열 유지용 */
-  --gold: #cbd5e1;
-  --gold-2: rgba(203, 213, 225, 0.9);
-  --gold-ink: #475569;
+  --accent: #810b38;
+  /* Legacy aliases — 기존 컴포넌트 호환용 */
+  --gold: #dcc3aa;
+  --gold-2: rgba(220, 195, 170, 0.9);
+  --gold-ink: #541a1a;
 
-  --btn-primary-bg: #111827;
-  --btn-primary-hover: #1f2937;
-  --btn-primary-text: #f9fafb;
+  --btn-primary-bg: #810b38;
+  --btn-primary-hover: #6d092f;
+  --btn-primary-text: #fff8f0;
 
   --card-shadow: 0 12px 40px rgba(17, 19, 24, 0.07), 0 2px 8px rgba(17, 19, 24, 0.04);
 }
@@ -78,23 +93,23 @@ html[data-text-size="large"] {
 @media (prefers-color-scheme: dark) {
   :root {
     /* 앱 단일 라이트 테마와 동일(랜딩·워크스페이스 일관성) */
-    --background: #f4f6f8;
-    --foreground: #111827;
-    --paper: #ffffff;
-    --paper-2: #f9fafb;
-    --ink-2: #6b7280;
-    --edge: #e5e7eb;
-    --edge-strong: rgba(148, 163, 184, 0.55);
-    --landing-hero-bg: #111318;
-    --landing-hero-text: #f4f6f8;
-    --landing-hero-muted: #9ca3af;
-    --accent: #94a3b8;
-    --gold: #cbd5e1;
-    --gold-2: rgba(203, 213, 225, 0.9);
-    --gold-ink: #475569;
-    --btn-primary-bg: #111827;
-    --btn-primary-hover: #1f2937;
-    --btn-primary-text: #f9fafb;
+    --background: #f1e2d1;
+    --foreground: #541a1a;
+    --paper: #fff8f0;
+    --paper-2: #f6eadc;
+    --ink-2: #74524a;
+    --edge: rgba(84, 26, 26, 0.18);
+    --edge-strong: rgba(84, 26, 26, 0.34);
+    --landing-hero-bg: #1f0b0d;
+    --landing-hero-text: #fff8f0;
+    --landing-hero-muted: rgba(241, 226, 209, 0.68);
+    --accent: #810b38;
+    --gold: #dcc3aa;
+    --gold-2: rgba(220, 195, 170, 0.9);
+    --gold-ink: #541a1a;
+    --btn-primary-bg: #810b38;
+    --btn-primary-hover: #6d092f;
+    --btn-primary-text: #fff8f0;
     --card-shadow: 0 12px 40px rgba(17, 19, 24, 0.07), 0 2px 8px rgba(17, 19, 24, 0.04);
   }
 }
@@ -3208,5 +3223,237 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
 .sensora-crm-empty-nexus > * {
   position: relative;
   z-index: 1;
+}
+
+/* ── Sensora brand refresh: burgundy / cream / beige / brown ── */
+.crm-bg,
+.join-premium-surface {
+  background-color: var(--sensora-deep-brown);
+  background-image:
+    radial-gradient(980px 620px at 10% -6%, rgba(var(--sensora-burgundy-rgb), 0.22), transparent 60%),
+    radial-gradient(900px 560px at 98% 2%, rgba(var(--sensora-beige-rgb), 0.1), transparent 58%),
+    linear-gradient(180deg, #1f0b0d 0%, #120708 100%);
+}
+
+.crm-app-stage::before {
+  background:
+    radial-gradient(760px 420px at 18% 0%, rgba(var(--sensora-burgundy-rgb), 0.14), transparent 62%),
+    radial-gradient(700px 440px at 100% 16%, rgba(var(--sensora-beige-rgb), 0.08), transparent 60%);
+}
+
+.sensora-premium-card {
+  border-color: rgba(var(--sensora-beige-rgb), 0.2);
+  background: linear-gradient(
+    180deg,
+    rgba(53, 18, 18, 0.86) 0%,
+    rgba(31, 11, 13, 0.88) 100%
+  );
+  box-shadow:
+    0 24px 70px -40px rgba(0, 0, 0, 0.72),
+    inset 0 1px 0 rgba(var(--sensora-cream-rgb), 0.07);
+}
+
+.sensora-premium-input {
+  border-color: rgba(var(--sensora-beige-rgb), 0.24);
+  background: rgba(31, 11, 13, 0.68);
+  color: var(--sensora-cream);
+}
+
+.sensora-premium-input::placeholder {
+  color: rgba(var(--sensora-cream-rgb), 0.48);
+}
+
+.sensora-premium-input:focus {
+  border-color: rgba(var(--sensora-beige-rgb), 0.74);
+  box-shadow:
+    0 0 0 2px rgba(31, 11, 13, 0.96),
+    0 0 0 4px var(--sensora-focus-ring);
+}
+
+.sensora-premium-primary-workspace,
+.landing-enterprise-btn-primary,
+.landing-first-screen-primary-cta.landing-enterprise-btn-primary {
+  border-color: rgba(var(--sensora-beige-rgb), 0.36);
+  background: linear-gradient(180deg, #9b1648 0%, var(--sensora-burgundy) 52%, #5d0828 100%);
+  color: #fff8f0;
+  box-shadow:
+    inset 0 1px 0 rgba(var(--sensora-cream-rgb), 0.18),
+    0 16px 34px -22px rgba(var(--sensora-burgundy-rgb), 0.9);
+}
+
+.sensora-premium-primary-workspace:hover,
+.landing-enterprise-btn-primary:hover,
+.landing-first-screen-primary-cta.landing-enterprise-btn-primary:hover {
+  border-color: rgba(var(--sensora-beige-rgb), 0.62);
+  background: linear-gradient(180deg, #a91950 0%, #8d0f3f 52%, #660a2d 100%);
+  filter: none;
+}
+
+.sensora-premium-primary-workspace:focus-visible,
+.landing-enterprise-btn-primary:focus-visible,
+.sensora-dark-ghost-btn:focus-visible,
+.landing-enterprise-btn-secondary:focus-visible,
+.landing-guide03-hotspot:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px rgba(31, 11, 13, 0.96),
+    0 0 0 4px var(--sensora-focus-ring);
+}
+
+.sensora-dark-ghost-btn,
+.landing-enterprise-btn-secondary {
+  border-color: rgba(var(--sensora-beige-rgb), 0.28);
+  background: rgba(var(--sensora-cream-rgb), 0.055);
+  color: rgba(var(--sensora-cream-rgb), 0.94);
+}
+
+.sensora-dark-ghost-btn:hover,
+.landing-enterprise-btn-secondary:hover {
+  border-color: rgba(var(--sensora-beige-rgb), 0.52);
+  background: rgba(var(--sensora-beige-rgb), 0.12);
+  box-shadow: inset 0 1px 0 rgba(var(--sensora-cream-rgb), 0.08);
+}
+
+.landing-guide03-hero-frame {
+  background: var(--sensora-deep-brown);
+  box-shadow:
+    0 34px 110px -58px rgba(0, 0, 0, 0.9),
+    0 0 0 1px rgba(var(--sensora-beige-rgb), 0.16);
+}
+
+.landing-guide03-hotspot:hover {
+  background: rgba(var(--sensora-burgundy-rgb), 0.15);
+  box-shadow:
+    0 0 0 1px rgba(var(--sensora-beige-rgb), 0.36),
+    0 14px 34px -22px rgba(var(--sensora-burgundy-rgb), 0.72);
+}
+
+.app-preview-tour-screen {
+  background-image:
+    radial-gradient(860px 360px at 22% 0%, rgba(var(--sensora-burgundy-rgb), 0.22), transparent 62%),
+    linear-gradient(180deg, rgba(50, 17, 18, 0.94) 0%, rgba(20, 8, 9, 0.98) 100%);
+}
+
+.app-preview-tour-card,
+.app-preview-guide-card {
+  border-color: rgba(var(--sensora-beige-rgb), 0.14);
+  background-image: linear-gradient(180deg, rgba(84, 26, 26, 0.42) 0%, rgba(31, 11, 13, 0.78) 100%);
+}
+
+.sensora-guide-pick-card.sensora-guide-pick-card--active::after,
+.sensora-crm-empty-nexus::before {
+  background:
+    radial-gradient(ellipse 92% 70% at 50% -20%, rgba(var(--sensora-burgundy-rgb), 0.14), transparent 58%),
+    radial-gradient(ellipse 55% 48% at 96% 88%, rgba(var(--sensora-beige-rgb), 0.1), transparent 52%);
+  box-shadow: inset 0 0 36px -12px rgba(var(--sensora-burgundy-rgb), 0.16);
+}
+
+@media (max-width: 640px) {
+  .landing-guide03-hero-frame {
+    background:
+      radial-gradient(ellipse 90% 52% at 50% 0%, rgba(var(--sensora-burgundy-rgb), 0.24), transparent 62%),
+      linear-gradient(180deg, #2a1012 0%, var(--sensora-deep-brown) 72%, #120708 100%);
+  }
+
+  .landing-guide03-mobile-copy {
+    color: var(--sensora-cream);
+  }
+
+  .landing-guide03-mobile-kicker {
+    border-color: rgba(var(--sensora-beige-rgb), 0.46);
+    background: rgba(84, 26, 26, 0.64);
+    color: var(--sensora-cream);
+  }
+
+  .landing-guide03-mobile-copy p {
+    color: rgba(var(--sensora-cream-rgb), 0.9);
+  }
+
+  .landing-guide03-mobile-copy .landing-guide03-mobile-trust {
+    color: rgba(var(--sensora-beige-rgb), 0.9);
+  }
+
+  .landing-guide03-mobile-actions a {
+    background: linear-gradient(135deg, #a91950 0%, var(--sensora-burgundy) 100%);
+    color: #fff8f0;
+    box-shadow: 0 18px 34px -20px rgba(var(--sensora-burgundy-rgb), 0.95);
+  }
+
+  .landing-guide03-mobile-actions button,
+  .landing-guide03-mobile-guides-panel button {
+    border-color: rgba(var(--sensora-beige-rgb), 0.24);
+    background: rgba(31, 11, 13, 0.66);
+    color: var(--sensora-cream);
+  }
+
+  .landing-guide03-mobile-guides-panel > p {
+    color: rgba(var(--sensora-beige-rgb), 0.9);
+  }
+
+  .landing-guide03-mobile-guides-panel small {
+    color: rgba(var(--sensora-cream-rgb), 0.66);
+  }
+}
+
+.join-premium-surface .text-sky-400\/95,
+.join-premium-surface .text-sky-300,
+.join-premium-surface .text-sky-400 {
+  color: var(--sensora-beige) !important;
+}
+
+.join-premium-surface .bg-emerald-400\/\[0\.12\] {
+  background-color: rgba(var(--sensora-burgundy-rgb), 0.18) !important;
+}
+
+.join-premium-surface .border-emerald-300\/30 {
+  border-color: rgba(var(--sensora-beige-rgb), 0.34) !important;
+}
+
+.join-premium-surface .text-emerald-100 {
+  color: var(--sensora-cream) !important;
+}
+
+.internal-beta-approval-page {
+  background:
+    radial-gradient(820px 420px at 12% -10%, rgba(var(--sensora-burgundy-rgb), 0.18), transparent 58%),
+    linear-gradient(180deg, #1f0b0d 0%, #120708 100%) !important;
+}
+
+.internal-beta-approval-page .text-sky-300\/85,
+.internal-beta-approval-page .text-sky-300\/80,
+.internal-beta-approval-page .text-sky-100,
+.internal-beta-approval-page .text-sky-400 {
+  color: var(--sensora-beige) !important;
+}
+
+.internal-beta-approval-page .bg-sky-300,
+.internal-beta-approval-page .bg-sky-400 {
+  background-color: var(--sensora-burgundy) !important;
+  color: #fff8f0 !important;
+}
+
+.internal-beta-approval-page .border-sky-300\/14,
+.internal-beta-approval-page .border-sky-300\/20 {
+  border-color: rgba(var(--sensora-beige-rgb), 0.22) !important;
+}
+
+.internal-beta-approval-page .bg-sky-300\/\[0\.07\],
+.internal-beta-approval-page .bg-sky-300\/\[0\.1\] {
+  background-color: rgba(var(--sensora-beige-rgb), 0.08) !important;
+}
+
+.internal-beta-approval-page .bg-amber-300\/\[0\.08\],
+.internal-beta-approval-page .bg-orange-300\/\[0\.12\] {
+  background-color: rgba(var(--sensora-beige-rgb), 0.12) !important;
+}
+
+.internal-beta-approval-page .border-amber-300\/20,
+.internal-beta-approval-page .border-orange-300\/25 {
+  border-color: rgba(var(--sensora-beige-rgb), 0.28) !important;
+}
+
+.internal-beta-approval-page .text-amber-100,
+.internal-beta-approval-page .text-orange-100 {
+  color: var(--sensora-cream) !important;
 }
 
