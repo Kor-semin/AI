@@ -152,3 +152,16 @@ npx tsx scripts/set-beta-admin-claim.ts --uid=FIREBASE_AUTH_UID
 - 상세보기 동작을 확인합니다.
 - 승인하기 동작과 `approved` 상태 변경을 확인합니다.
 - 반려 테스트 시 `rejected` 상태 변경을 확인합니다.
+
+## 운영/품질 체크리스트 연결 (필수)
+
+Sensora 작업 기준이 흔들리지 않도록 아래 두 문서를 함께 사용합니다.
+
+- 운영/배포/권한/보안 체크: `docs/sensora-production-setup.md` (본 문서)
+- 제품/디자인/UX 품질 체크: `docs/sensora-design-qa-checklist.md`
+
+랜딩/앱/관리자 화면 작업 시 반드시 아래 순서로 검증합니다.
+
+1. 본 문서로 운영 구조(Firestore, env, 권한, 상태코드, 보안)를 확인
+2. `docs/sensora-design-qa-checklist.md`로 스타일·카피·모바일 가독성·마스킹 품질을 확인
+3. 최종 보고에 두 체크리스트 기준 충족 여부를 함께 기록
