@@ -79,12 +79,14 @@ export type TranslationKey =
   | "join.trustNoticeLine2"
   | "join.trustNoticeLine3"
   | "join.storageNoticeRemote"
+  | "join.storageNoticeFirestore"
   | "join.storageNoticeLocal"
   | "join.success.title"
   | "join.success.bodyRemote"
   | "join.success.bodyLocal"
   | "join.success.storageLabel"
   | "join.success.storageRemote"
+  | "join.success.storageFirestore"
   | "join.success.storageLocal"
   | "join.success.storageNone"
   | "join.success.nextLabel"
@@ -710,6 +712,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "join.trustNoticeLine2": "Sensora는 고객 연락처나 고객 정보를 자동으로 수집하지 않습니다.",
     "join.trustNoticeLine3": "고객 정보는 사용자가 직접 확인하고 저장하는 구조를 기준으로 합니다.",
     "join.storageNoticeRemote": "현재 신청 내용은 설정된 베타 접수 엔드포인트로 전송됩니다.",
+    "join.storageNoticeFirestore": "현재 신청 내용은 Firebase Firestore의 betaSignups 컬렉션에 저장됩니다.",
     "join.storageNoticeLocal": "현재 환경은 실제 DB·이메일 연동 전 단계라, 신청 내용은 이 브라우저의 로컬 데모 저장소에만 보관됩니다.",
     "join.success.title": "베타 신청이 완료되었습니다",
     "join.success.bodyRemote":
@@ -718,6 +721,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
       "테스트 신청이 완료되었습니다.\n현재 환경은 실제 DB·이메일 연동 전 단계이므로 이 브라우저의 로컬 데모 저장소에만 보관됩니다.",
     "join.success.storageLabel": "저장 방식",
     "join.success.storageRemote": "베타 접수 엔드포인트 전송",
+    "join.success.storageFirestore": "Firestore betaSignups 저장",
     "join.success.storageLocal": "브라우저 로컬 데모 저장",
     "join.success.storageNone": "저장 확인 불가",
     "join.success.nextLabel": "다음 단계",
@@ -1408,6 +1412,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "join.trustNoticeLine2": "Sensora does not automatically collect your customers’ contacts or CRM data.",
     "join.trustNoticeLine3": "Customer records stay under your review: you confirm and save anything that’s stored.",
     "join.storageNoticeRemote": "This environment sends beta requests to the configured signup endpoint.",
+    "join.storageNoticeFirestore": "This environment stores beta requests in the Firebase Firestore betaSignups collection.",
     "join.storageNoticeLocal":
       "This environment does not have real DB/email integration yet, so requests are stored only in this browser’s local demo storage.",
     "join.success.title": "Beta signup complete",
@@ -1417,6 +1422,7 @@ export const translations: Record<LanguageCode, TranslationDict> = {
       "Your test request is complete.\nThis environment does not have real DB/email integration yet, so it is stored only in this browser’s local demo storage.",
     "join.success.storageLabel": "Storage mode",
     "join.success.storageRemote": "Sent to beta signup endpoint",
+    "join.success.storageFirestore": "Saved to Firestore betaSignups",
     "join.success.storageLocal": "Browser local demo storage",
     "join.success.storageNone": "Storage not confirmed",
     "join.success.nextLabel": "Next step",

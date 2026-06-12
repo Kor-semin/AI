@@ -12,6 +12,7 @@ function BetaJoinForm() {
   const [pending, setPending] = useState(false);
   const [completed, setCompleted] = useState<null | {
     savedToBackend: boolean;
+    savedToFirestore: boolean;
     savedLocally: boolean;
     submittedAt: string;
     email: string;
@@ -66,6 +67,7 @@ function BetaJoinForm() {
       }
       setCompleted({
         savedToBackend: res.savedToBackend,
+        savedToFirestore: res.savedToFirestore,
         savedLocally: res.savedLocally,
         submittedAt: res.submittedAt,
         email: payload.email,
@@ -143,7 +145,9 @@ function BetaJoinForm() {
                 <div>
                   <dt className="font-semibold text-slate-500">{t("join.success.storageLabel")}</dt>
                   <dd className="mt-1 font-medium text-slate-200">
-                    {completed.savedToBackend
+                    {completed.savedToFirestore
+                      ? t("join.success.storageFirestore")
+                      : completed.savedToBackend
                       ? t("join.success.storageRemote")
                       : completed.savedLocally
                         ? t("join.success.storageLocal")
@@ -280,7 +284,13 @@ function BetaJoinForm() {
                 <p className="font-semibold text-slate-100">{t("join.trustNoticeLine1")}</p>
                 <p>{t("join.trustNoticeLine2")}</p>
                 <p>{t("join.trustNoticeLine3")}</p>
-                <p>{storageMode === "remote" ? t("join.storageNoticeRemote") : t("join.storageNoticeLocal")}</p>
+                <p>
+                  {storageMode === "firestore"
+                    ? t("join.storageNoticeFirestore")
+                    : storageMode === "remote"
+                      ? t("join.storageNoticeRemote")
+                      : t("join.storageNoticeLocal")}
+                </p>
               </div>
               <button
                 type="submit"

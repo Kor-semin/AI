@@ -5,13 +5,73 @@ service cloud.firestore {
       return request.auth != null && request.auth.token.betaAdmin == true;
     }
 
+    function isValidBetaSignupCreate() {
+      let data = request.resource.data;
+      return data.keys().hasOnly([
+          'fullName',
+          'contact',
+          'email',
+          'dealership',
+          'jobRole',
+          'usePurpose',
+          'currentCrmApproach',
+          'submittedAt',
+          'source',
+          'status',
+          'createdAt',
+          'updatedAt'
+        ]) &&
+        data.keys().hasAll([
+          'fullName',
+          'contact',
+          'email',
+          'dealership',
+          'jobRole',
+          'usePurpose',
+          'currentCrmApproach',
+          'submittedAt',
+          'source',
+          'status',
+          'createdAt',
+          'updatedAt'
+        ]) &&
+        data.fullName is string &&
+        data.fullName.size() > 0 &&
+        data.fullName.size() <= 80 &&
+        data.contact is string &&
+        data.contact.size() > 0 &&
+        data.contact.size() <= 40 &&
+        data.email is string &&
+        data.email.size() > 3 &&
+        data.email.size() <= 120 &&
+        data.dealership is string &&
+        data.dealership.size() > 0 &&
+        data.dealership.size() <= 160 &&
+        data.jobRole is string &&
+        data.jobRole.size() > 0 &&
+        data.jobRole.size() <= 80 &&
+        data.usePurpose is string &&
+        data.usePurpose.size() > 0 &&
+        data.usePurpose.size() <= 1200 &&
+        data.currentCrmApproach is string &&
+        data.currentCrmApproach.size() > 0 &&
+        data.currentCrmApproach.size() <= 1200 &&
+        data.submittedAt is string &&
+        data.submittedAt.size() <= 40 &&
+        data.source == 'sensora-alpha-join' &&
+        data.status == 'pending' &&
+        data.createdAt is timestamp &&
+        data.updatedAt is timestamp;
+    }
+
     match /users/{uid}/{document=**} {
       allow read, write: if request.auth != null && request.auth.uid == uid;
     }
 
     match /betaSignups/{signupId} {
       allow read, update: if isBetaAdmin();
-      allow create, delete: if false;
+      allow create: if isValidBetaSignupCreate();
+      allow delete: if false;
     }
   }
 }

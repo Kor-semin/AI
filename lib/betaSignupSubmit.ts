@@ -1,6 +1,6 @@
 /**
  * Sensora Auto CRM — 베타 신청 페이로드.
- * Google Apps Script 웹 앱 등으로 POST할 때 필드명을 그대로 맞추면 됩니다.
+ * Firestore betaSignups 컬렉션 또는 Google Apps Script 웹 앱 등으로 POST할 때 필드명을 그대로 맞추면 됩니다.
  */
 export type BetaSignupPayload = {
   fullName: string;
@@ -18,9 +18,16 @@ export type BetaSignupWireBody = BetaSignupPayload & {
   source: string;
 };
 
-/** 제출 성공 시 `savedToBackend`: 엔드포인트로 POST 됐는지 여부. 알림 문구는 호출 측(i18n)에서 처리합니다. */
+/** 제출 성공 시 저장 위치 플래그. 알림 문구는 호출 측(i18n)에서 처리합니다. */
 export type BetaSignupResult =
-  | { ok: true; savedToBackend: boolean; savedLocally: boolean; submittedAt: string }
+  | {
+      ok: true;
+      savedToBackend: boolean;
+      savedToFirestore: boolean;
+      savedToWebhook: boolean;
+      savedLocally: boolean;
+      submittedAt: string;
+    }
   | { ok: false; error: string };
 
 const BETA_SIGNUP_SOURCE = "sensora-alpha-join";
@@ -31,6 +38,11 @@ function betaSignupEndpoint(): string {
   return typeof raw === "string" ? raw.trim() : "";
 }
 
+function betaSignupFirestoreCollection(): string {
+  const raw = process.env.NEXT_PUBLIC_BETA_SIGNUP_FIRESTORE_COLLECTION;
+  return (typeof raw === "string" ? raw.trim() : "") || "betaSignups";
+}
+
 function buildWireBody(payload: BetaSignupPayload): BetaSignupWireBody {
   return {
     ...payload,
@@ -39,7 +51,15 @@ function buildWireBody(payload: BetaSignupPayload): BetaSignupWireBody {
   };
 }
 
-export function betaSignupStorageMode(): "remote" | "local-demo" {
+export function betaSignupStorageMode(): "firestore" | "remote" | "local-demo" {
+  if (
+    process.env.NEXT_PUBLIC_FIREBASE_API_KEY &&
+    process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN &&
+    process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID &&
+    process.env.NEXT_PUBLIC_FIREBASE_APP_ID
+  ) {
+    return "firestore";
+  }
   return betaSignupEndpoint() ? "remote" : "local-demo";
 }
 
@@ -56,10 +76,27 @@ function saveLocalBetaSignup(body: BetaSignupWireBody): boolean {
   }
 }
 
+async function saveFirestoreBetaSignup(body: BetaSignupWireBody): Promise<boolean> {
+  const { isFirebaseConfigured, getFirebaseDb } = await import("@/app/firebase/client");
+  if (!isFirebaseConfigured()) return false;
+
+  const { addDoc, collection, serverTimestamp } = await import("firebase/firestore");
+  const db = getFirebaseDb();
+  await addDoc(collection(db, betaSignupFirestoreCollection()), {
+    ...body,
+    status: "pending",
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp(),
+  });
+  return true;
+}
+
 /**
  * 베타 신청 제출 (클라이언트 전용).
  *
- * - 엔드포인트 비어 있음: 브라우저 localStorage 데모 저장 — `{ ok: true, savedToBackend: false }`
+ * - Firebase public env 있음: Firestore `betaSignups`(기본) 컬렉션에 create.
+ * - Firebase 미설정 + 엔드포인트 있음: Google Apps Script 웹훅 호환 POST.
+ * - 둘 다 비어 있음: 브라우저 localStorage 데모 저장.
  * - 엔드포인트 있음: `no-cors` + `text/plain` 로 JSON 문자열 POST (Google Apps Script 웹 앱 호환).
  *   `no-cors`에서는 응답 상태를 읽을 수 없으므로 **fetch 가 reject 되지 않으면** 접수 성공으로 봅니다.
  *
@@ -75,9 +112,28 @@ export async function submitBetaSignup(payload: BetaSignupPayload): Promise<Beta
 
     const payloadWithMeta = buildWireBody(payload);
 
+    const savedToFirestore = await saveFirestoreBetaSignup(payloadWithMeta);
+    if (savedToFirestore) {
+      return {
+        ok: true,
+        savedToBackend: true,
+        savedToFirestore: true,
+        savedToWebhook: false,
+        savedLocally: false,
+        submittedAt: payloadWithMeta.submittedAt,
+      };
+    }
+
     if (!endpoint) {
       const savedLocally = saveLocalBetaSignup(payloadWithMeta);
-      return { ok: true, savedToBackend: false, savedLocally, submittedAt: payloadWithMeta.submittedAt };
+      return {
+        ok: true,
+        savedToBackend: false,
+        savedToFirestore: false,
+        savedToWebhook: false,
+        savedLocally,
+        submittedAt: payloadWithMeta.submittedAt,
+      };
     }
 
     await fetch(endpoint, {
@@ -87,9 +143,16 @@ export async function submitBetaSignup(payload: BetaSignupPayload): Promise<Beta
       body: JSON.stringify(payloadWithMeta),
     });
 
-    return { ok: true, savedToBackend: true, savedLocally: false, submittedAt: payloadWithMeta.submittedAt };
+    return {
+      ok: true,
+      savedToBackend: true,
+      savedToFirestore: false,
+      savedToWebhook: true,
+      savedLocally: false,
+      submittedAt: payloadWithMeta.submittedAt,
+    };
   } catch {
-    console.warn("[beta signup] webhook request failed");
+    console.warn("[beta signup] request failed");
     return { ok: false, error: "network" };
   }
 }
