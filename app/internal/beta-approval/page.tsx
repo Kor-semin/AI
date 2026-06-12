@@ -18,6 +18,21 @@ import {
 
 type StatusFilter = "all" | BetaApprovalStatus;
 
+type OperationalStatus = {
+  publicFirebaseConfigured: boolean;
+  projectIdConfigured: boolean;
+  signupCollectionConfigured: boolean;
+  adminEmailsConfigured: boolean;
+  serviceAccountConfigured: boolean;
+  approvalCollectionConfigured: boolean;
+  signupCollectionName: string;
+  approvalCollectionName: string;
+  collectionsMatch: boolean;
+  targetCollectionName: string;
+  adminVerificationAvailable: boolean;
+  firestoreServerReadAvailable: boolean;
+};
+
 const FILTERS: Array<{ key: StatusFilter; label: string }> = [
   { key: "all", label: "전체" },
   { key: "pending", label: "승인 대기" },
@@ -29,6 +44,95 @@ function statusBadgeClass(status: BetaApprovalStatus): string {
   if (status === "approved") return "border-emerald-300/25 bg-emerald-300/[0.1] text-emerald-100";
   if (status === "rejected") return "border-rose-300/25 bg-rose-300/[0.1] text-rose-100";
   return "border-amber-300/25 bg-amber-300/[0.1] text-amber-100";
+}
+
+function EnvStateBadge({ ok }: { ok: boolean }) {
+  return (
+    <span
+      className={[
+        "inline-flex min-w-[4.25rem] justify-center rounded-full border px-2.5 py-1 text-[11px] font-bold",
+        ok
+          ? "border-[#DCC3AA]/50 bg-[#810B38]/20 text-[#F1E2D1]"
+          : "border-amber-300/30 bg-amber-300/[0.1] text-amber-100",
+      ].join(" ")}
+    >
+      {ok ? "설정됨" : "미설정"}
+    </span>
+  );
+}
+
+function OperationalStatusSection({ status }: { status: OperationalStatus | null }) {
+  const rows: Array<[string, boolean]> = status
+    ? [
+        ["Firebase public env 설정 여부", status.publicFirebaseConfigured],
+        ["NEXT_PUBLIC_FIREBASE_PROJECT_ID 존재 여부", status.projectIdConfigured],
+        ["NEXT_PUBLIC_BETA_SIGNUP_FIRESTORE_COLLECTION 설정 여부", status.signupCollectionConfigured],
+        ["BETA_APPROVAL_ADMIN_EMAILS 설정 여부", status.adminEmailsConfigured],
+        ["FIREBASE_SERVICE_ACCOUNT_JSON 설정 여부", status.serviceAccountConfigured],
+        ["BETA_APPROVAL_FIRESTORE_COLLECTION 설정 여부", status.approvalCollectionConfigured],
+        ["관리자 권한 검증 가능 여부", status.adminVerificationAvailable],
+        ["Firestore 서버 조회 가능 여부", status.firestoreServerReadAvailable],
+      ]
+    : [];
+
+  return (
+    <section className="rounded-[24px] border border-[#DCC3AA]/25 bg-[#541A1A]/55 p-4 shadow-[0_24px_64px_-42px_rgba(0,0,0,0.78)] sm:p-5">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#DCC3AA]">Production readiness</p>
+          <h2 className="mt-1 text-lg font-semibold text-[#F1E2D1]">운영 상태 확인</h2>
+          <p className="mt-2 max-w-3xl break-keep text-sm leading-relaxed text-[#F1E2D1]/72">
+            실제 환경변수 값은 표시하지 않습니다. 설정 여부와 저장/조회 대상 컬렉션명만 확인합니다.
+          </p>
+        </div>
+        {status ? (
+          <span
+            className={[
+              "w-fit rounded-full border px-3 py-1 text-xs font-bold",
+              status.collectionsMatch
+                ? "border-[#DCC3AA]/45 bg-[#F1E2D1]/10 text-[#F1E2D1]"
+                : "border-amber-300/35 bg-amber-300/[0.1] text-amber-100",
+            ].join(" ")}
+          >
+            {status.collectionsMatch ? "컬렉션 일치" : "컬렉션 확인 필요"}
+          </span>
+        ) : null}
+      </div>
+
+      {status ? (
+        <>
+          <dl className="mt-4 grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
+            {rows.map(([label, ok]) => (
+              <div key={label} className="flex items-center justify-between gap-3 rounded-2xl border border-[#F1E2D1]/10 bg-[#F1E2D1]/[0.055] px-3 py-3">
+                <dt className="break-keep text-xs font-semibold leading-relaxed text-[#F1E2D1]/70">{label}</dt>
+                <dd className="shrink-0">
+                  <EnvStateBadge ok={Boolean(ok)} />
+                </dd>
+              </div>
+            ))}
+          </dl>
+          <div className="mt-3 grid gap-2 text-xs sm:grid-cols-3">
+            <div className="rounded-2xl border border-[#F1E2D1]/10 bg-[#F1E2D1]/[0.055] px-3 py-3">
+              <p className="font-bold text-[#DCC3AA]">/join 저장 컬렉션</p>
+              <p className="mt-1 font-semibold text-[#F1E2D1]">{status.signupCollectionName}</p>
+            </div>
+            <div className="rounded-2xl border border-[#F1E2D1]/10 bg-[#F1E2D1]/[0.055] px-3 py-3">
+              <p className="font-bold text-[#DCC3AA]">관리자 조회 컬렉션</p>
+              <p className="mt-1 font-semibold text-[#F1E2D1]">{status.approvalCollectionName}</p>
+            </div>
+            <div className="rounded-2xl border border-[#F1E2D1]/10 bg-[#F1E2D1]/[0.055] px-3 py-3">
+              <p className="font-bold text-[#DCC3AA]">현재 조회 대상</p>
+              <p className="mt-1 font-semibold text-[#F1E2D1]">{status.targetCollectionName}</p>
+            </div>
+          </div>
+        </>
+      ) : (
+        <div className="mt-4 rounded-2xl border border-[#F1E2D1]/10 bg-[#F1E2D1]/[0.055] px-4 py-6 text-sm text-[#F1E2D1]/70">
+          운영 상태를 불러오는 중입니다.
+        </div>
+      )}
+    </section>
+  );
 }
 
 async function authHeaders(): Promise<HeadersInit> {
@@ -148,6 +252,7 @@ function InternalBetaApprovalContent() {
   const [loading, setLoading] = useState(false);
   const [savingId, setSavingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [operationalStatus, setOperationalStatus] = useState<OperationalStatus | null>(null);
 
   const filtered = useMemo(
     () => (filter === "all" ? applicants : applicants.filter((applicant) => applicant.status === filter)),
@@ -176,6 +281,25 @@ function InternalBetaApprovalContent() {
   useEffect(() => {
     void loadApplicants();
   }, [loadApplicants]);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function loadOperationalStatus() {
+      try {
+        const res = await fetch("/api/internal/beta-approval/status", { cache: "no-store" });
+        const data = (await res.json().catch(() => null)) as { ok?: boolean; status?: OperationalStatus } | null;
+        if (!cancelled && res.ok && data?.ok && data.status) {
+          setOperationalStatus(data.status);
+        }
+      } catch {
+        if (!cancelled) setOperationalStatus(null);
+      }
+    }
+    void loadOperationalStatus();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const handleAction = useCallback(
     async (applicant: BetaApprovalApplicant, action: "approve" | "reject") => {
@@ -234,6 +358,8 @@ function InternalBetaApprovalContent() {
             </div>
           </div>
         </header>
+
+        <OperationalStatusSection status={operationalStatus} />
 
         {!isFirebaseConfigured() ? (
           <section className="break-keep rounded-2xl border border-amber-300/20 bg-amber-300/[0.08] px-5 py-4 text-sm leading-relaxed text-amber-100">
