@@ -3457,3 +3457,167 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   color: var(--sensora-cream) !important;
 }
 
+/* ── Final brand direction: Figma burgundy / cream landing system ── */
+.sensora-nebula-shell::before {
+  background:
+    radial-gradient(ellipse 90% 70% at 78% -8%, rgba(var(--sensora-burgundy-rgb), 0.18), transparent 58%),
+    radial-gradient(ellipse 70% 55% at 6% 18%, rgba(var(--sensora-beige-rgb), 0.11), transparent 56%),
+    radial-gradient(ellipse 55% 45% at 102% 88%, rgba(84, 26, 26, 0.16), transparent 55%);
+}
+
+.sensora-notebook-nebula-accent::after,
+.notebook-cover-consultant-hero.sensora-notebook-nebula-accent::after {
+  background:
+    radial-gradient(ellipse 100% 80% at 50% -20%, rgba(var(--sensora-burgundy-rgb), 0.16), transparent 50%),
+    radial-gradient(ellipse 80% 60% at 95% 40%, rgba(var(--sensora-beige-rgb), 0.12), transparent 52%);
+}
+
+.sensora-app-preview-galaxy__milky {
+  background: linear-gradient(
+    105deg,
+    transparent 6%,
+    rgba(var(--sensora-beige-rgb), 0.08) 38%,
+    rgba(var(--sensora-burgundy-rgb), 0.09) 52%,
+    rgba(var(--sensora-beige-rgb), 0.05) 62%,
+    transparent 88%
+  );
+}
+
+.sensora-app-preview-galaxy__vignette {
+  background: linear-gradient(180deg, rgba(31, 11, 13, 0.2) 0%, rgba(84, 26, 26, 0.46) 52%, rgba(31, 11, 13, 0.94) 100%);
+}
+
+.sensora-glass-surface {
+  border-color: rgba(var(--sensora-beige-rgb), 0.18);
+  background: linear-gradient(155deg, rgba(84, 26, 26, 0.74) 0%, rgba(31, 11, 13, 0.72) 54%, rgba(18, 7, 8, 0.62) 100%);
+}
+
+.landing-showroom-hero-scene::after {
+  background: linear-gradient(to bottom, transparent, rgba(31, 11, 13, 0.9));
+}
+
+.landing-showroom-premium-rule {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(var(--sensora-beige-rgb), 0.12),
+    rgba(var(--sensora-burgundy-rgb), 0.18),
+    rgba(var(--sensora-beige-rgb), 0.22),
+    rgba(var(--sensora-burgundy-rgb), 0.18),
+    rgba(var(--sensora-beige-rgb), 0.12),
+    transparent
+  );
+  box-shadow:
+    0 0 32px rgba(var(--sensora-burgundy-rgb), 0.05),
+    0 0 48px rgba(var(--sensora-beige-rgb), 0.035);
+}
+
+@media (max-width: 1023px) {
+  .landing-mobile-nav-shell::after {
+    background: linear-gradient(90deg, transparent 0%, rgb(31 11 13) 88%, rgb(31 11 13) 100%);
+  }
+}
+
+.landing-guide03-hero-frame {
+  background:
+    radial-gradient(900px 480px at 18% 0%, rgba(var(--sensora-burgundy-rgb), 0.24), transparent 62%),
+    linear-gradient(180deg, #2a1012 0%, var(--sensora-deep-brown) 74%, #120708 100%);
+  box-shadow:
+    0 34px 110px -58px rgba(0, 0, 0, 0.9),
+    0 0 0 1px rgba(var(--sensora-beige-rgb), 0.2),
+    inset 0 1px 0 rgba(var(--sensora-cream-rgb), 0.08);
+}
+
+.landing-guide03-hotspot:hover {
+  background: rgba(var(--sensora-burgundy-rgb), 0.18);
+  box-shadow:
+    0 0 0 1px rgba(var(--sensora-beige-rgb), 0.44),
+    0 14px 34px -22px rgba(var(--sensora-burgundy-rgb), 0.74);
+}
+
+.landing-guide03-hotspot:focus-visible {
+  outline-color: rgba(var(--sensora-beige-rgb), 0.92);
+  background: rgba(var(--sensora-burgundy-rgb), 0.16);
+}
+
+.landing-guide03-mobile-card-list button,
+.landing-guide03-mobile-guides-panel button,
+.landing-showcase-tip-card,
+.landing-showcase-flow-step,
+.landing-tip-feature-card,
+.landing-flow-strip-card {
+  border-color: rgba(var(--sensora-beige-rgb), 0.22);
+}
+
+.join-premium-surface > div[aria-hidden] {
+  background:
+    radial-gradient(780px 440px at 10% -4%, rgba(var(--sensora-burgundy-rgb), 0.2), transparent 56%),
+    radial-gradient(680px 420px at 100% 4%, rgba(var(--sensora-beige-rgb), 0.12), transparent 54%),
+    radial-gradient(520px 360px at 50% 96%, rgba(84, 26, 26, 0.12), transparent 58%) !important;
+}
+
+.join-premium-surface .hover\:border-sky-400\/28:hover {
+  border-color: rgba(var(--sensora-beige-rgb), 0.42) !important;
+}
+
+.join-premium-surface .focus-visible\:ring-sky-400\/35:focus-visible,
+.crm-bg .focus-visible\:ring-sky-400\/35:focus-visible {
+  --tw-ring-color: rgba(var(--sensora-burgundy-rgb), 0.35) !important;
+}
+
+.join-premium-surface .shadow-\[inset_0_1px_0_rgba\(255\,255\,255\,0\.06\)\,0_0_40px_-16px_rgba\(56\,189\,248\,0\.09\)\] {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 0 40px -16px rgba(var(--sensora-burgundy-rgb), 0.16) !important;
+}
+
+.crm-bg .text-sky-300\/80,
+.crm-bg .text-sky-300,
+.crm-bg .text-sky-400,
+.crm-bg .text-sky-400\/95,
+.app-preview-tour-screen .text-sky-300,
+.app-preview-tour-screen .text-sky-400 {
+  color: var(--sensora-beige) !important;
+}
+
+.crm-bg .focus\:border-sky-400\/45:focus,
+.crm-bg .border-sky-400\/45 {
+  border-color: rgba(var(--sensora-beige-rgb), 0.48) !important;
+}
+
+.crm-bg .ring-sky-400\/28 {
+  --tw-ring-color: rgba(var(--sensora-beige-rgb), 0.32) !important;
+}
+
+.crm-bg .bg-sky-950\/20,
+.crm-bg .bg-sky-500\/12 {
+  background-color: rgba(var(--sensora-burgundy-rgb), 0.16) !important;
+}
+
+.sensora-crm-empty-nexus {
+  border-color: rgba(var(--sensora-beige-rgb), 0.28) !important;
+  background-color: rgba(84, 26, 26, 0.42) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(var(--sensora-cream-rgb), 0.055),
+    0 0 48px -28px rgba(var(--sensora-burgundy-rgb), 0.14) !important;
+}
+
+.internal-beta-approval-page {
+  background:
+    radial-gradient(840px 430px at 12% -10%, rgba(var(--sensora-burgundy-rgb), 0.28), transparent 58%),
+    radial-gradient(760px 420px at 96% 0%, rgba(var(--sensora-beige-rgb), 0.12), transparent 56%),
+    linear-gradient(180deg, #1f0b0d 0%, #120708 100%) !important;
+}
+
+.internal-beta-approval-page .divide-white\/\[0\.08\] > :not([hidden]) ~ :not([hidden]) {
+  border-color: rgba(var(--sensora-beige-rgb), 0.14) !important;
+}
+
+.internal-beta-approval-page .bg-rose-300\/\[0\.08\] {
+  background-color: rgba(var(--sensora-burgundy-rgb), 0.18) !important;
+}
+
+.internal-beta-approval-page .border-rose-300\/20 {
+  border-color: rgba(var(--sensora-burgundy-rgb), 0.38) !important;
+}
+

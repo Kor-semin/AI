@@ -41,9 +41,9 @@ const FILTERS: Array<{ key: StatusFilter; label: string }> = [
 ];
 
 function statusBadgeClass(status: BetaApprovalStatus): string {
-  if (status === "approved") return "border-emerald-300/25 bg-emerald-300/[0.1] text-emerald-100";
-  if (status === "rejected") return "border-rose-300/25 bg-rose-300/[0.1] text-rose-100";
-  return "border-amber-300/25 bg-amber-300/[0.1] text-amber-100";
+  if (status === "approved") return "border-[#DCC3AA]/45 bg-[#F1E2D1]/15 text-[#F1E2D1]";
+  if (status === "rejected") return "border-[#810B38]/35 bg-[#810B38]/18 text-[#F1E2D1]";
+  return "border-[#DCC3AA]/42 bg-[#DCC3AA]/14 text-[#F1E2D1]";
 }
 
 function EnvStateBadge({ ok }: { ok: boolean }) {
@@ -52,8 +52,8 @@ function EnvStateBadge({ ok }: { ok: boolean }) {
       className={[
         "inline-flex min-w-[4.25rem] justify-center rounded-full border px-2.5 py-1 text-[11px] font-bold",
         ok
-          ? "border-[#DCC3AA]/50 bg-[#810B38]/20 text-[#F1E2D1]"
-          : "border-amber-300/30 bg-amber-300/[0.1] text-amber-100",
+          ? "border-[#F1E2D1]/55 bg-[#810B38] text-[#FFF8F0]"
+          : "border-[#DCC3AA]/60 bg-[#F1E2D1]/14 text-[#F1E2D1]",
       ].join(" ")}
     >
       {ok ? "설정됨" : "미설정"}
@@ -76,7 +76,7 @@ function OperationalStatusSection({ status }: { status: OperationalStatus | null
     : [];
 
   return (
-    <section className="rounded-[24px] border border-[#DCC3AA]/25 bg-[#541A1A]/55 p-4 shadow-[0_24px_64px_-42px_rgba(0,0,0,0.78)] sm:p-5">
+    <section className="rounded-[24px] border border-[#DCC3AA]/34 bg-[#541A1A]/72 p-4 shadow-[0_24px_64px_-42px_rgba(0,0,0,0.78)] sm:p-5">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#DCC3AA]">Production readiness</p>
@@ -90,8 +90,8 @@ function OperationalStatusSection({ status }: { status: OperationalStatus | null
             className={[
               "w-fit rounded-full border px-3 py-1 text-xs font-bold",
               status.collectionsMatch
-                ? "border-[#DCC3AA]/45 bg-[#F1E2D1]/10 text-[#F1E2D1]"
-                : "border-amber-300/35 bg-amber-300/[0.1] text-amber-100",
+                ? "border-[#DCC3AA]/60 bg-[#F1E2D1]/14 text-[#F1E2D1]"
+                : "border-[#DCC3AA]/50 bg-[#810B38]/22 text-[#F1E2D1]",
             ].join(" ")}
           >
             {status.collectionsMatch ? "컬렉션 일치" : "컬렉션 확인 필요"}
@@ -103,8 +103,8 @@ function OperationalStatusSection({ status }: { status: OperationalStatus | null
         <>
           <dl className="mt-4 grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
             {rows.map(([label, ok]) => (
-              <div key={label} className="flex items-center justify-between gap-3 rounded-2xl border border-[#F1E2D1]/10 bg-[#F1E2D1]/[0.055] px-3 py-3">
-                <dt className="break-keep text-xs font-semibold leading-relaxed text-[#F1E2D1]/70">{label}</dt>
+              <div key={label} className="flex items-center justify-between gap-3 rounded-2xl border border-[#F1E2D1]/16 bg-[#F1E2D1]/[0.075] px-3 py-3">
+                <dt className="break-keep text-xs font-semibold leading-relaxed text-[#F1E2D1]/78">{label}</dt>
                 <dd className="shrink-0">
                   <EnvStateBadge ok={Boolean(ok)} />
                 </dd>
@@ -112,15 +112,15 @@ function OperationalStatusSection({ status }: { status: OperationalStatus | null
             ))}
           </dl>
           <div className="mt-3 grid gap-2 text-xs sm:grid-cols-3">
-            <div className="rounded-2xl border border-[#F1E2D1]/10 bg-[#F1E2D1]/[0.055] px-3 py-3">
+            <div className="rounded-2xl border border-[#F1E2D1]/16 bg-[#F1E2D1]/[0.075] px-3 py-3">
               <p className="font-bold text-[#DCC3AA]">/join 저장 컬렉션</p>
               <p className="mt-1 font-semibold text-[#F1E2D1]">{status.signupCollectionName}</p>
             </div>
-            <div className="rounded-2xl border border-[#F1E2D1]/10 bg-[#F1E2D1]/[0.055] px-3 py-3">
+            <div className="rounded-2xl border border-[#F1E2D1]/16 bg-[#F1E2D1]/[0.075] px-3 py-3">
               <p className="font-bold text-[#DCC3AA]">관리자 조회 컬렉션</p>
               <p className="mt-1 font-semibold text-[#F1E2D1]">{status.approvalCollectionName}</p>
             </div>
-            <div className="rounded-2xl border border-[#F1E2D1]/10 bg-[#F1E2D1]/[0.055] px-3 py-3">
+            <div className="rounded-2xl border border-[#F1E2D1]/16 bg-[#F1E2D1]/[0.075] px-3 py-3">
               <p className="font-bold text-[#DCC3AA]">현재 조회 대상</p>
               <p className="mt-1 font-semibold text-[#F1E2D1]">{status.targetCollectionName}</p>
             </div>
@@ -156,7 +156,7 @@ function ApplicantActions({
       <button
         type="button"
         onClick={() => onDetail(applicant)}
-        className="min-h-10 rounded-xl border border-white/[0.14] bg-white/[0.055] px-3 py-2 text-xs font-semibold text-slate-100 transition hover:bg-white/[0.09]"
+        className="min-h-10 rounded-xl border border-[#DCC3AA]/28 bg-[#F1E2D1]/10 px-3 py-2 text-xs font-semibold text-[#F1E2D1] transition hover:bg-[#F1E2D1]/16"
       >
         상세보기
       </button>
@@ -164,7 +164,7 @@ function ApplicantActions({
         type="button"
         disabled={disabled || applicant.status === "approved"}
         onClick={() => onAction(applicant, "approve")}
-        className="min-h-10 rounded-xl border border-emerald-300/25 bg-emerald-300/[0.12] px-3 py-2 text-xs font-semibold text-emerald-100 transition hover:bg-emerald-300/[0.18] disabled:cursor-not-allowed disabled:opacity-45"
+        className="min-h-10 rounded-xl border border-[#DCC3AA]/40 bg-[#F1E2D1]/12 px-3 py-2 text-xs font-semibold text-[#F1E2D1] transition hover:bg-[#F1E2D1]/18 disabled:cursor-not-allowed disabled:opacity-45"
       >
         승인하기
       </button>
@@ -172,7 +172,7 @@ function ApplicantActions({
         type="button"
         disabled={disabled || applicant.status === "rejected"}
         onClick={() => onAction(applicant, "reject")}
-        className="min-h-10 rounded-xl border border-rose-300/25 bg-rose-300/[0.12] px-3 py-2 text-xs font-semibold text-rose-100 transition hover:bg-rose-300/[0.18] disabled:cursor-not-allowed disabled:opacity-45"
+        className="min-h-10 rounded-xl border border-[#810B38]/45 bg-[#810B38]/28 px-3 py-2 text-xs font-semibold text-[#F1E2D1] transition hover:bg-[#810B38]/38 disabled:cursor-not-allowed disabled:opacity-45"
       >
         반려하기
       </button>
@@ -193,19 +193,19 @@ function ApplicantCard({
 }) {
   const suspicious = isSuspiciousBetaApplicant(applicant);
   return (
-    <article className="rounded-[22px] border border-white/[0.11] bg-slate-950/70 p-4 shadow-[0_20px_52px_-34px_rgba(0,0,0,0.75)]">
+    <article className="rounded-[22px] border border-[#DCC3AA]/24 bg-[#541A1A]/62 p-4 shadow-[0_20px_52px_-34px_rgba(0,0,0,0.75)]">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2">
-            <h2 className="truncate text-lg font-semibold tracking-tight text-slate-50">{applicant.fullName || "이름 없음"}</h2>
+            <h2 className="truncate text-lg font-semibold tracking-tight text-[#F1E2D1]">{applicant.fullName || "이름 없음"}</h2>
             {suspicious ? (
-              <span className="rounded-full border border-orange-300/25 bg-orange-300/[0.12] px-2 py-0.5 text-[11px] font-bold text-orange-100">
+              <span className="rounded-full border border-[#DCC3AA]/38 bg-[#DCC3AA]/14 px-2 py-0.5 text-[11px] font-bold text-[#F1E2D1]">
                 검토 필요
               </span>
             ) : null}
           </div>
-          <p className="mt-1 text-sm font-medium text-slate-400">{applicant.dealership || "소속 미입력"}</p>
-          <p className="mt-1 text-xs font-semibold text-slate-500">{applicant.jobRole || "직무 미입력"}</p>
+          <p className="mt-1 text-sm font-medium text-[#F1E2D1]/70">{applicant.dealership || "소속 미입력"}</p>
+          <p className="mt-1 text-xs font-semibold text-[#DCC3AA]/74">{applicant.jobRole || "직무 미입력"}</p>
         </div>
         <span className={`shrink-0 rounded-full border px-2.5 py-1 text-[11px] font-bold ${statusBadgeClass(applicant.status)}`}>
           {betaApprovalStatusLabel(applicant.status)}
@@ -214,28 +214,28 @@ function ApplicantCard({
 
       <dl className="mt-4 grid gap-3 text-sm">
         <div>
-          <dt className="text-xs font-semibold text-slate-500">이메일</dt>
-          <dd className="mt-1 break-all font-medium text-slate-200">{maskBetaApprovalEmail(applicant.email)}</dd>
+          <dt className="text-xs font-semibold text-[#DCC3AA]/70">이메일</dt>
+          <dd className="mt-1 break-all font-medium text-[#F1E2D1]">{maskBetaApprovalEmail(applicant.email)}</dd>
         </div>
         <div>
-          <dt className="text-xs font-semibold text-slate-500">연락처</dt>
-          <dd className="mt-1 font-medium text-slate-200">{maskBetaApprovalPhone(applicant.contact)}</dd>
+          <dt className="text-xs font-semibold text-[#DCC3AA]/70">연락처</dt>
+          <dd className="mt-1 font-medium text-[#F1E2D1]">{maskBetaApprovalPhone(applicant.contact)}</dd>
         </div>
         <div>
-          <dt className="text-xs font-semibold text-slate-500">현재 고객관리 방식</dt>
-          <dd className="mt-1 line-clamp-3 leading-relaxed text-slate-300">{applicant.currentCrmApproach || "—"}</dd>
+          <dt className="text-xs font-semibold text-[#DCC3AA]/70">현재 고객관리 방식</dt>
+          <dd className="mt-1 line-clamp-3 leading-relaxed text-[#F1E2D1]/82">{applicant.currentCrmApproach || "—"}</dd>
         </div>
         <div>
-          <dt className="text-xs font-semibold text-slate-500">사용 목적</dt>
-          <dd className="mt-1 line-clamp-3 leading-relaxed text-slate-300">{applicant.usePurpose || "—"}</dd>
+          <dt className="text-xs font-semibold text-[#DCC3AA]/70">사용 목적</dt>
+          <dd className="mt-1 line-clamp-3 leading-relaxed text-[#F1E2D1]/82">{applicant.usePurpose || "—"}</dd>
         </div>
         <div>
-          <dt className="text-xs font-semibold text-slate-500">신청일</dt>
-          <dd className="mt-1 font-medium text-slate-300">{formatBetaApprovalSubmittedAt(applicant.submittedAt)}</dd>
+          <dt className="text-xs font-semibold text-[#DCC3AA]/70">신청일</dt>
+          <dd className="mt-1 font-medium text-[#F1E2D1]/82">{formatBetaApprovalSubmittedAt(applicant.submittedAt)}</dd>
         </div>
       </dl>
 
-      <div className="mt-4 border-t border-white/[0.09] pt-4">
+      <div className="mt-4 border-t border-[#DCC3AA]/16 pt-4">
         <ApplicantActions applicant={applicant} disabled={disabled} onDetail={onDetail} onAction={onAction} />
       </div>
     </article>
@@ -330,28 +330,28 @@ function InternalBetaApprovalContent() {
   );
 
   return (
-    <main className="internal-beta-approval-page min-h-[100dvh] bg-[#020817] px-4 py-5 text-slate-100 sm:px-6 lg:px-8">
-      <div aria-hidden className="pointer-events-none fixed inset-0 bg-[radial-gradient(820px_420px_at_12%_-10%,rgba(56,189,248,0.14),transparent_58%),radial-gradient(780px_420px_at_100%_0%,rgba(139,92,246,0.1),transparent_56%)]" />
+    <main className="internal-beta-approval-page min-h-[100dvh] bg-[#1F0B0D] px-4 py-5 text-[#F1E2D1] sm:px-6 lg:px-8">
+      <div aria-hidden className="pointer-events-none fixed inset-0 bg-[radial-gradient(820px_420px_at_12%_-10%,rgba(129,11,56,0.28),transparent_58%),radial-gradient(780px_420px_at_100%_0%,rgba(220,195,170,0.12),transparent_56%)]" />
 
       <div className="relative z-[1] mx-auto flex w-full max-w-7xl flex-col gap-5">
-        <header className="rounded-[26px] border border-white/[0.11] bg-slate-950/72 px-5 py-5 shadow-[0_28px_78px_-44px_rgba(0,0,0,0.82)] sm:px-6">
+        <header className="rounded-[26px] border border-[#DCC3AA]/22 bg-[#541A1A]/64 px-5 py-5 shadow-[0_28px_78px_-44px_rgba(0,0,0,0.82)] sm:px-6">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.18em] text-sky-300/85">Internal · {mode}</p>
-              <h1 className="mt-2 text-2xl font-semibold tracking-tight text-slate-50 sm:text-3xl">베타 신청 승인 관리</h1>
-              <p className="mt-3 max-w-3xl break-keep text-sm leading-relaxed text-slate-400">
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#DCC3AA]">Internal · {mode}</p>
+              <h1 className="mt-2 text-2xl font-semibold tracking-tight text-[#F1E2D1] sm:text-3xl">베타 신청 승인 관리</h1>
+              <p className="mt-3 max-w-3xl break-keep text-sm leading-relaxed text-[#F1E2D1]/72">
                 목록에서는 이메일과 연락처를 마스킹합니다. 전체 개인정보는 상세보기에서만 확인하고, 승인/반려는 서버 API가 관리자 이메일을 다시 검증한 뒤 Firestore에 반영합니다.
               </p>
-              <p className="mt-2 max-w-3xl break-keep text-xs leading-relaxed text-slate-500">
-                관리자 권한 기준은 코드에 하드코딩하지 않고 <span className="font-semibold text-slate-300">BETA_APPROVAL_ADMIN_EMAILS</span> 환경변수로만 관리합니다.
+              <p className="mt-2 max-w-3xl break-keep text-xs leading-relaxed text-[#DCC3AA]/72">
+                관리자 권한 기준은 코드에 하드코딩하지 않고 <span className="font-semibold text-[#F1E2D1]">BETA_APPROVAL_ADMIN_EMAILS</span> 환경변수로만 관리합니다.
               </p>
             </div>
             <div className="flex flex-wrap gap-2">
-              <Link href="/?view=landing" className="min-h-10 rounded-xl border border-white/[0.12] bg-white/[0.04] px-3 py-2 text-sm font-semibold text-slate-200">
+              <Link href="/?view=landing" className="min-h-10 rounded-xl border border-[#DCC3AA]/24 bg-[#F1E2D1]/10 px-3 py-2 text-sm font-semibold text-[#F1E2D1]">
                 랜딩으로
               </Link>
               {auth.status === "signed-in" ? (
-                <button type="button" onClick={() => void signOut()} className="min-h-10 rounded-xl border border-white/[0.12] bg-white/[0.04] px-3 py-2 text-sm font-semibold text-slate-200">
+                <button type="button" onClick={() => void signOut()} className="min-h-10 rounded-xl border border-[#DCC3AA]/24 bg-[#F1E2D1]/10 px-3 py-2 text-sm font-semibold text-[#F1E2D1]">
                   로그아웃
                 </button>
               ) : null}
@@ -362,33 +362,33 @@ function InternalBetaApprovalContent() {
         <OperationalStatusSection status={operationalStatus} />
 
         {!isFirebaseConfigured() ? (
-          <section className="break-keep rounded-2xl border border-amber-300/20 bg-amber-300/[0.08] px-5 py-4 text-sm leading-relaxed text-amber-100">
+          <section className="break-keep rounded-2xl border border-[#DCC3AA]/30 bg-[#DCC3AA]/12 px-5 py-4 text-sm leading-relaxed text-[#F1E2D1]">
             Firebase 설정이 없어 관리자 로그인을 진행할 수 없습니다. NEXT_PUBLIC_FIREBASE_* 환경변수를 설정한 뒤 사용하세요.
           </section>
         ) : !isGoogleAuthEnabled() ? (
-          <section className="break-keep rounded-2xl border border-amber-300/20 bg-amber-300/[0.08] px-5 py-4 text-sm leading-relaxed text-amber-100">
+          <section className="break-keep rounded-2xl border border-[#DCC3AA]/30 bg-[#DCC3AA]/12 px-5 py-4 text-sm leading-relaxed text-[#F1E2D1]">
             현재 Google 로그인 기능이 꺼져 있어 내부 승인 페이지 접근이 차단됩니다.
           </section>
         ) : auth.status === "loading" ? (
-          <section className="rounded-2xl border border-white/[0.1] bg-slate-950/60 px-5 py-10 text-center text-sm text-slate-400">관리자 로그인 상태를 확인하는 중입니다…</section>
+          <section className="rounded-2xl border border-[#DCC3AA]/22 bg-[#541A1A]/52 px-5 py-10 text-center text-sm text-[#F1E2D1]/70">관리자 로그인 상태를 확인하는 중입니다…</section>
         ) : auth.status !== "signed-in" ? (
-          <section className="rounded-2xl border border-white/[0.1] bg-slate-950/60 px-5 py-8 text-center">
-            <h2 className="text-lg font-semibold text-slate-50">관리자 로그인이 필요합니다</h2>
-            <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-slate-400">
+          <section className="rounded-2xl border border-[#DCC3AA]/22 bg-[#541A1A]/52 px-5 py-8 text-center">
+            <h2 className="text-lg font-semibold text-[#F1E2D1]">관리자 로그인이 필요합니다</h2>
+            <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-[#F1E2D1]/70">
               클라이언트 화면에서만 막지 않고, 목록 조회와 승인/반려 API에서도 관리자 이메일을 다시 검증합니다.
             </p>
             {authError ? <p className="mt-3 text-sm font-medium text-rose-200">{authError}</p> : null}
             <button
               type="button"
               onClick={() => void signIn()}
-              className="mt-5 min-h-11 rounded-2xl bg-sky-400 px-5 py-3 text-sm font-bold text-slate-950"
+              className="mt-5 min-h-11 rounded-2xl bg-[#810B38] px-5 py-3 text-sm font-bold text-[#FFF8F0] shadow-[0_18px_34px_-22px_rgba(129,11,56,0.9)]"
             >
               Google 관리자 로그인
             </button>
           </section>
         ) : (
           <>
-            <section className="rounded-2xl border border-white/[0.11] bg-slate-950/66 p-3 shadow-[0_22px_60px_-40px_rgba(0,0,0,0.8)]">
+            <section className="rounded-2xl border border-[#DCC3AA]/22 bg-[#541A1A]/52 p-3 shadow-[0_22px_60px_-40px_rgba(0,0,0,0.8)]">
               <div className="flex flex-wrap gap-2" role="tablist" aria-label="베타 신청 상태 필터">
                 {FILTERS.map((item) => (
                   <button
@@ -397,7 +397,7 @@ function InternalBetaApprovalContent() {
                     onClick={() => setFilter(item.key)}
                     className={[
                       "min-h-10 rounded-xl px-4 py-2 text-sm font-bold transition",
-                      filter === item.key ? "bg-sky-300 text-slate-950" : "border border-white/[0.1] bg-white/[0.045] text-slate-300",
+                      filter === item.key ? "bg-[#F1E2D1] text-[#541A1A]" : "border border-[#DCC3AA]/20 bg-[#F1E2D1]/8 text-[#F1E2D1]/76",
                     ].join(" ")}
                   >
                     {item.label}
@@ -407,14 +407,14 @@ function InternalBetaApprovalContent() {
                   type="button"
                   onClick={() => void loadApplicants()}
                   disabled={loading}
-                  className="ml-auto min-h-10 rounded-xl border border-white/[0.12] bg-white/[0.04] px-4 py-2 text-sm font-bold text-slate-200 disabled:opacity-50"
+                  className="ml-auto min-h-10 rounded-xl border border-[#DCC3AA]/24 bg-[#F1E2D1]/10 px-4 py-2 text-sm font-bold text-[#F1E2D1] disabled:opacity-50"
                 >
                   {loading ? "불러오는 중…" : "새로고침"}
                 </button>
               </div>
             </section>
 
-            <section className="break-keep rounded-2xl border border-sky-300/14 bg-sky-300/[0.07] px-5 py-4 text-sm leading-relaxed text-sky-100">
+            <section className="break-keep rounded-2xl border border-[#DCC3AA]/24 bg-[#F1E2D1]/8 px-5 py-4 text-sm leading-relaxed text-[#F1E2D1]/82">
               승인/반려 버튼을 누르면 서버에서 Firebase 로그인 토큰과 관리자 이메일을 다시 확인한 뒤 처리합니다. Firestore rules는 직접 클라이언트 접근도 관리자 커스텀 클레임 기준으로 제한합니다.
             </section>
 
@@ -435,14 +435,14 @@ function InternalBetaApprovalContent() {
                 />
               ))}
               {!loading && filtered.length === 0 ? (
-                <div className="rounded-2xl border border-white/[0.1] bg-slate-950/55 px-5 py-10 text-center text-sm text-slate-400">표시할 신청자가 없습니다.</div>
+                <div className="rounded-2xl border border-[#DCC3AA]/22 bg-[#541A1A]/48 px-5 py-10 text-center text-sm text-[#F1E2D1]/70">표시할 신청자가 없습니다.</div>
               ) : null}
             </section>
 
-            <section className="hidden overflow-hidden rounded-[24px] border border-white/[0.11] bg-slate-950/66 shadow-[0_28px_78px_-46px_rgba(0,0,0,0.82)] sm:block">
+            <section className="hidden overflow-hidden rounded-[24px] border border-[#DCC3AA]/22 bg-[#541A1A]/52 shadow-[0_28px_78px_-46px_rgba(0,0,0,0.82)] sm:block">
               <div className="overflow-x-auto">
                 <table className="w-full min-w-[1060px] border-collapse text-left text-sm">
-                  <thead className="bg-white/[0.045] text-xs uppercase tracking-[0.08em] text-slate-500">
+                  <thead className="bg-[#F1E2D1]/8 text-xs uppercase tracking-[0.08em] text-[#DCC3AA]/78">
                     <tr>
                       <th className="px-4 py-3">신청자</th>
                       <th className="px-4 py-3">연락처</th>
@@ -459,31 +459,31 @@ function InternalBetaApprovalContent() {
                       return (
                         <tr key={applicant.id} className="align-top">
                           <td className="px-4 py-4">
-                            <div className="font-semibold text-slate-50">{applicant.fullName || "이름 없음"}</div>
+                            <div className="font-semibold text-[#F1E2D1]">{applicant.fullName || "이름 없음"}</div>
                             {suspicious ? (
-                              <div className="mt-1 inline-flex rounded-full border border-orange-300/25 bg-orange-300/[0.12] px-2 py-0.5 text-[11px] font-bold text-orange-100">
+                              <div className="mt-1 inline-flex rounded-full border border-[#DCC3AA]/38 bg-[#DCC3AA]/14 px-2 py-0.5 text-[11px] font-bold text-[#F1E2D1]">
                                 검토 필요
                               </div>
                             ) : null}
                           </td>
                           <td className="px-4 py-4">
-                            <div className="break-all text-slate-300">{maskBetaApprovalEmail(applicant.email)}</div>
-                            <div className="mt-1 text-slate-500">{maskBetaApprovalPhone(applicant.contact)}</div>
+                            <div className="break-all text-[#F1E2D1]/84">{maskBetaApprovalEmail(applicant.email)}</div>
+                            <div className="mt-1 text-[#DCC3AA]/70">{maskBetaApprovalPhone(applicant.contact)}</div>
                           </td>
                           <td className="px-4 py-4">
-                            <div className="max-w-[14rem] text-slate-300">{applicant.dealership || "—"}</div>
-                            <div className="mt-1 text-slate-500">{applicant.jobRole || "—"}</div>
+                            <div className="max-w-[14rem] text-[#F1E2D1]/84">{applicant.dealership || "—"}</div>
+                            <div className="mt-1 text-[#DCC3AA]/70">{applicant.jobRole || "—"}</div>
                           </td>
                           <td className="px-4 py-4">
-                            <div className="max-w-[18rem] line-clamp-2 text-slate-300">{applicant.usePurpose || "—"}</div>
-                            <div className="mt-1 max-w-[18rem] line-clamp-2 text-slate-500">{applicant.currentCrmApproach || "—"}</div>
+                            <div className="max-w-[18rem] line-clamp-2 text-[#F1E2D1]/84">{applicant.usePurpose || "—"}</div>
+                            <div className="mt-1 max-w-[18rem] line-clamp-2 text-[#DCC3AA]/70">{applicant.currentCrmApproach || "—"}</div>
                           </td>
                           <td className="px-4 py-4">
                             <span className={`rounded-full border px-2.5 py-1 text-[11px] font-bold ${statusBadgeClass(applicant.status)}`}>
                               {betaApprovalStatusLabel(applicant.status)}
                             </span>
                           </td>
-                          <td className="px-4 py-4 text-slate-400">{formatBetaApprovalSubmittedAt(applicant.submittedAt)}</td>
+                          <td className="px-4 py-4 text-[#F1E2D1]/72">{formatBetaApprovalSubmittedAt(applicant.submittedAt)}</td>
                           <td className="px-4 py-4">
                             <ApplicantActions applicant={applicant} disabled={savingId === applicant.id} onDetail={setSelected} onAction={handleAction} />
                           </td>
@@ -510,14 +510,14 @@ function InternalBetaApprovalContent() {
             role="dialog"
             aria-modal="true"
             aria-labelledby="beta-approval-detail-title"
-            className="fixed left-1/2 top-1/2 z-50 flex max-h-[min(92dvh,calc(100svh-1rem))] w-[min(calc(100vw-28px),42rem)] -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-[26px] border border-white/[0.13] bg-[#07111f] shadow-[0_38px_90px_-30px_rgba(0,0,0,0.82)]"
+            className="fixed left-1/2 top-1/2 z-50 flex max-h-[min(92dvh,calc(100svh-1rem))] w-[min(calc(100vw-28px),42rem)] -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-[26px] border border-[#DCC3AA]/24 bg-[#1F0B0D] shadow-[0_38px_90px_-30px_rgba(0,0,0,0.82)]"
           >
-            <div className="flex items-start justify-between gap-3 border-b border-white/[0.09] px-5 py-4">
+            <div className="flex items-start justify-between gap-3 border-b border-[#DCC3AA]/16 px-5 py-4">
               <div>
-                <p className="text-xs font-bold uppercase tracking-[0.16em] text-sky-300/80">상세보기</p>
-                <h2 id="beta-approval-detail-title" className="mt-1 text-xl font-semibold text-slate-50">{selected.fullName || "이름 없음"}</h2>
+                <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#DCC3AA]">상세보기</p>
+                <h2 id="beta-approval-detail-title" className="mt-1 text-xl font-semibold text-[#F1E2D1]">{selected.fullName || "이름 없음"}</h2>
               </div>
-              <button type="button" onClick={() => setSelected(null)} className="min-h-10 rounded-xl border border-white/[0.12] px-3 py-2 text-xs font-bold text-slate-200">
+              <button type="button" onClick={() => setSelected(null)} className="min-h-10 rounded-xl border border-[#DCC3AA]/24 px-3 py-2 text-xs font-bold text-[#F1E2D1]">
                 닫기
               </button>
             </div>
@@ -534,17 +534,17 @@ function InternalBetaApprovalContent() {
                   ["신청일", formatBetaApprovalSubmittedAt(selected.submittedAt)],
                   ["소스", selected.source || "—"],
                 ].map(([label, value]) => (
-                  <div key={label} className="rounded-2xl border border-white/[0.09] bg-white/[0.04] px-4 py-3">
-                    <dt className="text-xs font-bold text-slate-500">{label}</dt>
-                    <dd className="mt-1 whitespace-pre-wrap break-words font-medium leading-relaxed text-slate-100">{value}</dd>
+                  <div key={label} className="rounded-2xl border border-[#DCC3AA]/18 bg-[#F1E2D1]/8 px-4 py-3">
+                    <dt className="text-xs font-bold text-[#DCC3AA]/75">{label}</dt>
+                    <dd className="mt-1 whitespace-pre-wrap break-words font-medium leading-relaxed text-[#F1E2D1]">{value}</dd>
                   </div>
                 ))}
               </dl>
-              <div className="mt-5 rounded-2xl border border-amber-300/20 bg-amber-300/[0.08] px-4 py-3 text-xs leading-relaxed text-amber-100">
+              <div className="mt-5 rounded-2xl border border-[#DCC3AA]/30 bg-[#DCC3AA]/12 px-4 py-3 text-xs leading-relaxed text-[#F1E2D1]">
                 개인정보 전체 값은 상세보기에서만 노출됩니다. 외부 공유나 콘솔 로그에 전체 값을 남기지 마세요.
               </div>
             </div>
-            <div className="border-t border-white/[0.09] px-5 py-4">
+            <div className="border-t border-[#DCC3AA]/16 px-5 py-4">
               <ApplicantActions applicant={selected} disabled={savingId === selected.id} onDetail={setSelected} onAction={handleAction} />
             </div>
           </section>
@@ -558,7 +558,7 @@ export default function InternalBetaApprovalPage() {
   return (
     <Suspense
       fallback={
-        <main className="flex min-h-[100dvh] items-center justify-center bg-[#020817] px-4 text-sm text-slate-400">
+        <main className="flex min-h-[100dvh] items-center justify-center bg-[#1F0B0D] px-4 text-sm text-[#F1E2D1]/70">
           내부 승인 화면을 불러오는 중입니다…
         </main>
       }
