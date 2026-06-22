@@ -38,6 +38,43 @@ const statusLabels: Record<InventoryUnit["stockStatus"], { label: string; tone: 
 };
 
 export function SensoraInventoryView({ compact = false }: { compact?: boolean }) {
+  if (compact) {
+    return (
+      <section className="min-h-[583px] rounded-2xl border border-[#2B3037] bg-[#14171B] p-5 sm:p-6" aria-labelledby="inventory-preview-title">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#A93754]">Inventory</p>
+            <h2 id="inventory-preview-title" className="mt-1 text-lg font-semibold tracking-[-0.02em] text-[#F4F6F8]">재고 관리 미리보기</h2>
+          </div>
+          <span className="rounded-lg bg-[#2A151B] px-4 py-2 text-[10px] font-medium text-[#A93754]">DMS / ERP 연동 예정</span>
+        </div>
+
+        <div className="mt-6 overflow-x-auto">
+          <div className="min-w-[560px]">
+            <div className="grid grid-cols-[.65fr_1.35fr_1.2fr_.9fr] gap-4 rounded-lg border border-[#2B3037] bg-[#1A1E23] px-4 py-3 text-[10px] text-[#7F8792]">
+              <span>브랜드</span><span>모델 / 트림</span><span>외장색 / 내장색</span><span>재고 상태</span>
+            </div>
+            <div className="mt-4 space-y-4">
+              {previewInventory.map((unit) => {
+                const status = statusLabels[unit.stockStatus];
+                return (
+                  <div key={unit.id} className="grid min-h-[104px] grid-cols-[.65fr_1.35fr_1.2fr_.9fr] items-center gap-4 rounded-lg border border-[#2B3037] bg-[#1A1E23] px-4 text-[11px]">
+                    <span className="font-medium text-[#B7BDC6]">{unit.brand}</span>
+                    <span className="text-[#B7BDC6]">{unit.model} · {unit.trim || "-"}</span>
+                    <span className="text-[#7F8792]">{unit.exteriorColor || "-"} / {unit.interiorColor || "-"}</span>
+                    <span className={`font-medium ${status.tone.split(" ").find((token) => token.startsWith("text-")) ?? "text-[#B7BDC6]"}`}>{status.label}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        <p className="mt-6 text-[10px] leading-4 text-[#7F8792]">※ DMS/ERP 연동 전까지 재고 상태는 CRM에서 수동 확인됩니다.</p>
+      </section>
+    );
+  }
+
   return (
     <section className="rounded-2xl border border-[#2B3037] bg-[#14171B] p-5 sm:p-6" aria-labelledby={compact ? "inventory-preview-title" : "inventory-view-title"}>
       <div className="flex flex-wrap items-start justify-between gap-4">

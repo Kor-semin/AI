@@ -30,6 +30,54 @@ const teamMembers = sensoraB2BSeedData.users.filter((user) => user.teamId === "t
 const seedActivities = sensoraB2BSeedData.activityLogs;
 
 export function SensoraTeamView({ compact = false }: { compact?: boolean }) {
+  if (compact) {
+    const compactTeamRows = [
+      ["이서준 매니저", "정상 · 오늘 5건"],
+      ["박하나 매니저", "지연 · 2건"],
+      ["최민석 매니저", "정상 · 오늘 3건"],
+      ["정유진 매니저", "확인 필요 · 1건"],
+    ];
+    const compactActivities = [
+      "10:42 박하나 · 고객 통화 메모 추가",
+      "10:18 이서준 · GV70 시승 일정 제안",
+      "09:56 정유진 · 온라인 Lead 담당 배정",
+      "09:31 최민석 · 계약 가능성 상태 변경",
+    ];
+
+    return (
+      <section className="min-h-[583px] rounded-2xl border border-[#2B3037] bg-[#14171B] p-5 sm:p-6" aria-labelledby="team-preview-title">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#A93754]">Team Overview</p>
+            <h2 id="team-preview-title" className="mt-1 text-lg font-semibold tracking-[-0.02em] text-[#F4F6F8]">팀 현황 미리보기</h2>
+          </div>
+          <span className="rounded-lg bg-[#2A151B] px-4 py-2 text-[10px] font-medium text-[#A93754]">READ ONLY</span>
+        </div>
+
+        <div className="mt-6 min-h-[190px] rounded-lg border border-[#2B3037] bg-[#1A1E23] p-4">
+          <div className="grid grid-cols-[1fr_1.3fr] gap-4 text-[10px] text-[#7F8792]"><span>팀원</span><span>Follow-up</span></div>
+          <div className="mt-3 space-y-3">
+            {compactTeamRows.map(([name, status], index) => (
+              <div key={name} className="grid grid-cols-[1fr_1.3fr] gap-4 text-[11px]">
+                <span className="text-[#B7BDC6]">{name}</span>
+                <span className={index === 1 || index === 3 ? "text-[#B48A48]" : "text-[#B7BDC6]"}>{status}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-4 min-h-[190px] rounded-lg border border-[#2B3037] bg-[#1A1E23] p-4">
+          <h3 className="text-xs font-semibold text-[#F4F6F8]">최근 Activity Log</h3>
+          <div className="mt-4 space-y-3">
+            {compactActivities.map((activity) => <p key={activity} className="text-[10px] leading-4 text-[#B7BDC6]">{activity}</p>)}
+          </div>
+        </div>
+
+        <p className="mt-4 flex min-h-[60px] items-center rounded-lg bg-[#2A151B] px-4 py-3 text-[10px] leading-4 text-[#7F8792]">팀장 화면은 읽기 전용입니다. 담당자 변경과 발송은 각 업무 화면에서 실행합니다.</p>
+      </section>
+    );
+  }
+
   return (
     <section className="rounded-2xl border border-[#2B3037] bg-[#14171B] p-5 sm:p-6" aria-labelledby={compact ? "team-preview-title" : "team-view-title"}>
       <div className="flex flex-wrap items-start justify-between gap-4">

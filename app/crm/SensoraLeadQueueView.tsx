@@ -54,6 +54,32 @@ const readiness: Record<SensoraLead["status"], { label: string; tone: string }> 
 };
 
 export function SensoraLeadQueueView({ compact = false }: { compact?: boolean }) {
+  if (compact) {
+    return (
+      <section className="min-h-[380px] rounded-2xl border border-[#2B3037] bg-[#14171B] p-5 sm:p-6" aria-labelledby="lead-preview-title">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#A93754]">Lead Intake</p>
+            <h2 id="lead-preview-title" className="mt-1 text-lg font-semibold tracking-[-0.02em] text-[#F4F6F8]">신규 Lead 접수</h2>
+          </div>
+          <span className="rounded-lg bg-[#2A151B] px-4 py-2 text-[10px] font-medium text-[#A93754]">NEW · 12분 전</span>
+        </div>
+
+        <dl className="mt-9 grid min-h-[150px] grid-cols-[68px_1fr] content-center gap-x-4 gap-y-4 rounded-lg border border-[#2B3037] bg-[#1A1E23] p-4 text-[11px]">
+          <dt className="text-[#7F8792]">접수 채널</dt><dd className="text-[#B7BDC6]">전시장 전화 · 직접 방문</dd>
+          <dt className="text-[#7F8792]">온라인 문의</dt><dd className="text-[#B7BDC6]">웹 폼 유입</dd>
+          <dt className="text-[#7F8792]">담당 영업사원</dt><dd className="text-[#B7BDC6]">이서준 매니저</dd>
+          <dt className="text-[#7F8792]">전환 상태</dt><dd className="text-[#B7BDC6]">Customer 전환 준비</dd>
+        </dl>
+
+        <div className="mt-6 rounded-lg bg-[#2A151B] p-4">
+          <p className="text-xs font-semibold text-[#4E8A66]">Customer 전환 준비 · 80%</p>
+          <p className="mt-2 text-[10px] leading-4 text-[#7F8792]">연락처 확인 완료 · 관심 모델 확인 · 시승 일정 확인 필요</p>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="rounded-2xl border border-[#2B3037] bg-[#14171B] p-5 sm:p-6" aria-labelledby={compact ? "lead-preview-title" : "lead-view-title"}>
       <div className="flex items-start justify-between gap-4">
