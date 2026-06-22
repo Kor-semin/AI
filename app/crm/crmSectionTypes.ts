@@ -32,12 +32,12 @@ export const CRM_SECTION_ORDER: CrmSection[] = [
   "customers",
   "consulting",
   "ai",
-  "pipeline",
   "leadQueue",
-  "vehicle",
   "inventory",
-  "followup",
   "team",
+  "pipeline",
+  "vehicle",
+  "followup",
   "settings",
 ];
 

@@ -1,9 +1,12 @@
 "use client";
 
 import {
+  ROLE_ACCESS_PRINCIPLES,
+  canPreviewB2BSectionForRole,
   sensoraB2BSeedData,
   type LeadSource,
   type LeadStatus,
+  type UserRole,
 } from "@/lib/sensora";
 
 const LEAD_FLOW_STEPS = [
@@ -37,16 +40,26 @@ const LEAD_STATUS_LABELS: Record<LeadStatus, string> = {
   invalid: "무효",
 };
 
+const ROLE_LABELS: Record<UserRole, string> = {
+  sales_consultant: "영업사원",
+  team_leader: "영업팀장",
+  branch_manager: "지점장",
+  executive: "임원",
+  sensora_admin: "Sensora 운영자",
+};
+
+const PREVIEW_ROLES: UserRole[] = ["sales_consultant", "team_leader", "branch_manager", "executive", "sensora_admin"];
+
 function formatDateTime(iso?: string) {
   if (!iso) return "—";
   try {
-    return new Intl.DateTimeFormat("ko-KR", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-    }).format(new Date(iso));
+    const date = new Date(new Date(iso).getTime() + 9 * 60 * 60 * 1000);
+    const year = date.getUTCFullYear();
+    const month = String(date.getUTCMonth() + 1).padStart(2, "0");
+    const day = String(date.getUTCDate()).padStart(2, "0");
+    const hour = String(date.getUTCHours()).padStart(2, "0");
+    const minute = String(date.getUTCMinutes()).padStart(2, "0");
+    return `${year}. ${month}. ${day}. ${hour}:${minute}`;
   } catch {
     return iso;
   }
@@ -79,8 +92,33 @@ export function SensoraLeadQueueSection() {
           </p>
         </div>
         <span className="inline-flex w-fit rounded-full border border-rose-200/20 bg-[#3b0d16]/55 px-3 py-1.5 text-xs font-bold text-rose-50">
-          미리보기 · 저장/배정 기능 없음
+          읽기 전용 · 저장/배정 기능 없음
         </span>
+      </div>
+
+      <div className="mt-5 grid gap-3 lg:grid-cols-[1.1fr_0.9fr]">
+        <div className="rounded-2xl border border-rose-200/15 bg-[#3b0d16]/45 p-4 text-sm leading-relaxed text-rose-50/90">
+          현재 Lead 접수 화면은 베타 미리보기입니다. 실제 배정과 저장은 아직 연결되어 있지 않으며, 향후 승인된 영업 계정 기준으로 처리됩니다. AI 추천과 요약은 자동 저장되지 않으며, 최종 저장과 발송은 사용자가 직접 확인 후 진행합니다.
+        </div>
+        <div className="rounded-2xl border border-white/[0.1] bg-white/[0.045] p-4">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">권한별 노출 원칙</p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {PREVIEW_ROLES.map((role) => (
+              <span
+                key={role}
+                className={[
+                  "rounded-full border px-2.5 py-1 text-xs font-semibold",
+                  canPreviewB2BSectionForRole(role, "lead_queue")
+                    ? "border-emerald-300/30 bg-emerald-400/10 text-emerald-100"
+                    : "border-white/[0.1] bg-white/[0.04] text-slate-500",
+                ].join(" ")}
+                title={ROLE_ACCESS_PRINCIPLES[role]}
+              >
+                {ROLE_LABELS[role]} {canPreviewB2BSectionForRole(role, "lead_queue") ? "조회" : "본인 범위"}
+              </span>
+            ))}
+          </div>
+        </div>
       </div>
 
       <ol className="mt-6 grid gap-2 lg:grid-cols-5">

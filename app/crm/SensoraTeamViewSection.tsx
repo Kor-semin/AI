@@ -1,11 +1,14 @@
 "use client";
 
 import {
+  ROLE_ACCESS_PRINCIPLES,
+  canPreviewB2BSectionForRole,
   getFollowUpDelayDays,
   isFollowUpOverdue,
   sensoraB2BSeedData,
   type ActivityAction,
   type ActivityTargetType,
+  type UserRole,
 } from "@/lib/sensora";
 
 const ACTIVITY_ACTION_LABELS: Record<ActivityAction, string> = {
@@ -32,16 +35,26 @@ const ACTIVITY_TARGET_LABELS: Record<ActivityTargetType, string> = {
   dealer_group: "Dealer Group",
 };
 
+const ROLE_LABELS: Record<UserRole, string> = {
+  sales_consultant: "영업사원",
+  team_leader: "영업팀장",
+  branch_manager: "지점장",
+  executive: "임원",
+  sensora_admin: "Sensora 운영자",
+};
+
+const PREVIEW_ROLES: UserRole[] = ["sales_consultant", "team_leader", "branch_manager", "executive", "sensora_admin"];
+
 function formatDateTime(iso?: string) {
   if (!iso) return "—";
   try {
-    return new Intl.DateTimeFormat("ko-KR", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-    }).format(new Date(iso));
+    const date = new Date(new Date(iso).getTime() + 9 * 60 * 60 * 1000);
+    const year = date.getUTCFullYear();
+    const month = String(date.getUTCMonth() + 1).padStart(2, "0");
+    const day = String(date.getUTCDate()).padStart(2, "0");
+    const hour = String(date.getUTCHours()).padStart(2, "0");
+    const minute = String(date.getUTCMinutes()).padStart(2, "0");
+    return `${year}. ${month}. ${day}. ${hour}:${minute}`;
   } catch {
     return iso;
   }
@@ -79,7 +92,27 @@ export function SensoraTeamViewSection() {
           </p>
         </div>
         <div className="rounded-2xl border border-rose-200/15 bg-[#3b0d16]/45 p-4 text-sm leading-relaxed text-rose-50/90">
-          초기 베타에서는 팀원이 입력한 고객 데이터를 직접 수정하지 않고, 조회, 확인 요청, 리포트 확인 중심으로 운영합니다.
+          팀 현황은 팀장 권한에서 조회 중심으로 제공되는 미리보기입니다. 초기 베타에서는 팀원 데이터를 직접 수정하지 않고 확인 요청과 리포트 중심으로 운영됩니다. AI 추천과 요약은 자동 저장되지 않으며, 최종 저장과 발송은 사용자가 직접 확인 후 진행합니다.
+        </div>
+      </div>
+
+      <div className="mt-5 rounded-2xl border border-white/[0.1] bg-white/[0.045] p-4">
+        <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">권한별 노출 원칙</p>
+        <div className="mt-3 grid gap-2 sm:grid-cols-2 xl:grid-cols-5">
+          {PREVIEW_ROLES.map((role) => (
+            <div
+              key={role}
+              className={[
+                "rounded-2xl border p-3",
+                canPreviewB2BSectionForRole(role, "team_view")
+                  ? "border-emerald-300/25 bg-emerald-400/10"
+                  : "border-white/[0.08] bg-white/[0.035]",
+              ].join(" ")}
+            >
+              <p className="text-sm font-semibold text-slate-100">{ROLE_LABELS[role]}</p>
+              <p className="mt-1 text-xs leading-relaxed text-slate-500">{ROLE_ACCESS_PRINCIPLES[role]}</p>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -115,7 +148,7 @@ export function SensoraTeamViewSection() {
                     <p className="mt-0.5 text-xs text-slate-500">{member.role}</p>
                   </div>
                   <span className="rounded-full border border-white/[0.1] bg-white/[0.06] px-2.5 py-1 text-xs font-semibold text-slate-300">
-                    조회 중심
+                    읽기 전용
                   </span>
                 </li>
               ))}
@@ -125,7 +158,12 @@ export function SensoraTeamViewSection() {
 
         <section className="rounded-[24px] border border-white/[0.1] bg-[#0b1220]/86 p-5">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-rose-200/70">Team Follow-up</p>
-          <h3 className="mt-2 text-xl font-semibold text-slate-50">팀 연락 흐름</h3>
+          <div className="mt-2 flex flex-wrap items-center justify-between gap-2">
+            <h3 className="text-xl font-semibold text-slate-50">팀 연락 흐름</h3>
+            <span className="rounded-full border border-white/[0.1] bg-white/[0.06] px-3 py-1 text-xs font-semibold text-slate-300">
+              확인 요청 준비 중
+            </span>
+          </div>
           <div className="mt-4 space-y-3">
             {teamFollowUps.map((followUp) => {
               const delayDays = getFollowUpDelayDays(followUp);

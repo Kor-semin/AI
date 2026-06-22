@@ -106,13 +106,13 @@ const STATUS_TONE_CLASS: Record<ReturnType<typeof getInventoryStatusTone>, strin
 function formatDateTime(iso?: string) {
   if (!iso) return "—";
   try {
-    return new Intl.DateTimeFormat("ko-KR", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-    }).format(new Date(iso));
+    const date = new Date(new Date(iso).getTime() + 9 * 60 * 60 * 1000);
+    const year = date.getUTCFullYear();
+    const month = String(date.getUTCMonth() + 1).padStart(2, "0");
+    const day = String(date.getUTCDate()).padStart(2, "0");
+    const hour = String(date.getUTCHours()).padStart(2, "0");
+    const minute = String(date.getUTCMinutes()).padStart(2, "0");
+    return `${year}. ${month}. ${day}. ${hour}:${minute}`;
   } catch {
     return iso;
   }

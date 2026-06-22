@@ -1,12 +1,15 @@
 "use client";
 
 import {
+  ROLE_ACCESS_PRINCIPLES,
   canMarkInventoryAsSold,
+  canPreviewB2BSectionForRole,
   canReserveInventoryUnit,
   getInventoryStatusLabel,
   getInventoryStatusTone,
   sensoraB2BSeedData,
   type InventoryIntegrationStatus,
+  type UserRole,
 } from "@/lib/sensora";
 
 const INTEGRATION_STATUS_LABELS: Record<InventoryIntegrationStatus, string> = {
@@ -23,16 +26,26 @@ const STATUS_TONE_CLASS: Record<ReturnType<typeof getInventoryStatusTone>, strin
   muted: "border-slate-400/20 bg-white/[0.05] text-slate-400",
 };
 
+const ROLE_LABELS: Record<UserRole, string> = {
+  sales_consultant: "영업사원",
+  team_leader: "영업팀장",
+  branch_manager: "지점장",
+  executive: "임원",
+  sensora_admin: "Sensora 운영자",
+};
+
+const PREVIEW_ROLES: UserRole[] = ["sales_consultant", "team_leader", "branch_manager", "executive", "sensora_admin"];
+
 function formatDateTime(iso?: string) {
   if (!iso) return "—";
   try {
-    return new Intl.DateTimeFormat("ko-KR", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-    }).format(new Date(iso));
+    const date = new Date(new Date(iso).getTime() + 9 * 60 * 60 * 1000);
+    const year = date.getUTCFullYear();
+    const month = String(date.getUTCMonth() + 1).padStart(2, "0");
+    const day = String(date.getUTCDate()).padStart(2, "0");
+    const hour = String(date.getUTCHours()).padStart(2, "0");
+    const minute = String(date.getUTCMinutes()).padStart(2, "0");
+    return `${year}. ${month}. ${day}. ${hour}:${minute}`;
   } catch {
     return iso;
   }
@@ -55,8 +68,33 @@ export function SensoraInventorySection() {
           </p>
         </div>
         <span className="inline-flex w-fit rounded-full border border-rose-200/20 bg-[#3b0d16]/55 px-3 py-1.5 text-xs font-bold text-rose-50">
-          Integration Planned
+          읽기 전용 · Integration Planned
         </span>
+      </div>
+
+      <div className="mt-5 grid gap-3 lg:grid-cols-[1.1fr_0.9fr]">
+        <div className="rounded-2xl border border-rose-200/15 bg-[#3b0d16]/45 p-4 text-sm leading-relaxed text-rose-50/90">
+          현재 재고 관리는 CSV/수동 관리 기반 베타 구조입니다. 실제 DMS/ERP 연동은 아직 연결되지 않았으며, 연동 예정 상태만 표시합니다. AI 추천과 요약은 자동 저장되지 않으며, 최종 저장과 발송은 사용자가 직접 확인 후 진행합니다.
+        </div>
+        <div className="rounded-2xl border border-white/[0.1] bg-white/[0.045] p-4">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">권한별 노출 원칙</p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {PREVIEW_ROLES.map((role) => (
+              <span
+                key={role}
+                className={[
+                  "rounded-full border px-2.5 py-1 text-xs font-semibold",
+                  canPreviewB2BSectionForRole(role, "inventory")
+                    ? "border-emerald-300/30 bg-emerald-400/10 text-emerald-100"
+                    : "border-white/[0.1] bg-white/[0.04] text-slate-500",
+                ].join(" ")}
+                title={ROLE_ACCESS_PRINCIPLES[role]}
+              >
+                {ROLE_LABELS[role]} 조회
+              </span>
+            ))}
+          </div>
+        </div>
       </div>
 
       <div className="mt-6 grid gap-4">
