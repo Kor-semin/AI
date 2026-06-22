@@ -94,6 +94,10 @@ import { SensoraB2BWorkspacePreview } from "./SensoraB2BWorkspacePreview";
 import { SensoraLeadQueueSection } from "./SensoraLeadQueueSection";
 import { SensoraInventorySection } from "./SensoraInventorySection";
 import { SensoraTeamViewSection } from "./SensoraTeamViewSection";
+import { SensoraSalesDashboard } from "./SensoraSalesDashboard";
+import { SensoraLeadQueueView } from "./SensoraLeadQueueView";
+import { SensoraInventoryView } from "./SensoraInventoryView";
+import { SensoraTeamView } from "./SensoraTeamView";
 
 const CRM_GUIDE_VIEWER_IMAGES = SENSORA_GUIDE_IMAGES.map((s) => ({ src: s.src }));
 const CRM_GUIDE_SLIDE_TITLE_KEYS = SENSORA_GUIDE_IMAGES.map((s) => s.titleKey);
@@ -955,6 +959,10 @@ export function CRMApp({
     }
 
     const followUp = state.nextActions.filter((a) => !a.doneAt).length;
+    const overdueFollowUp = state.nextActions.filter((action) => {
+      if (action.doneAt || !action.dueAt) return false;
+      return new Date(action.dueAt) < dayStart;
+    }).length;
 
     const weekCut = new Date(Date.now() - 7 * 86400000).toISOString();
     let recentConsult = 0;
@@ -962,7 +970,7 @@ export function CRMApp({
       if (c.updatedAt >= weekCut) recentConsult++;
     }
 
-    return { dueToday, highPotential, followUp, recentConsult };
+    return { dueToday, highPotential, followUp, overdueFollowUp, recentConsult };
   }, [state.customers, state.nextActions]);
 
   const dashboardTodayDueLines = useMemo(() => {
@@ -1541,6 +1549,45 @@ export function CRMApp({
   const allEvents = useMemo(() => {
     return [...state.events].sort((a, b) => a.startAt.localeCompare(b.startAt));
   }, [state.events]);
+
+  const isFigmaFirstSection = (section: CrmSection) => activeSection === section;
+
+  if (isFigmaFirstSection("dashboard")) {
+    return (
+      <SensoraSalesDashboard
+        todayContacts={overviewStats.dueToday}
+        highPotential={overviewStats.highPotential}
+        overdueFollowUps={overviewStats.overdueFollowUp}
+        recentConsultations={overviewStats.recentConsult}
+        sellerName={myName}
+        onNavigate={onActiveSectionChange}
+      />
+    );
+  }
+
+  if (isFigmaFirstSection("leadQueue")) {
+    return (
+      <div id="crm-section-lead-queue" className="min-h-screen bg-[#0A0B0D] p-5 sm:p-6 xl:p-8">
+        <SensoraLeadQueueView />
+      </div>
+    );
+  }
+
+  if (isFigmaFirstSection("inventory")) {
+    return (
+      <div id="crm-section-inventory" className="min-h-screen bg-[#0A0B0D] p-5 sm:p-6 xl:p-8">
+        <SensoraInventoryView />
+      </div>
+    );
+  }
+
+  if (isFigmaFirstSection("team")) {
+    return (
+      <div id="crm-section-team" className="min-h-screen bg-[#0A0B0D] p-5 sm:p-6 xl:p-8">
+        <SensoraTeamView />
+      </div>
+    );
+  }
 
   return (
     <>
