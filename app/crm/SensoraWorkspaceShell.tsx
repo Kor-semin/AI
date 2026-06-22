@@ -1,8 +1,14 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useState } from "react";
+
+import { sensoraB2BSeedData } from "@/lib/sensora";
 
 import type { CrmSection } from "./crmSectionTypes";
+import { SensoraInventoryView } from "./SensoraInventoryView";
+import { SensoraLeadQueueView } from "./SensoraLeadQueueView";
+import { SensoraSalesDashboard } from "./SensoraSalesDashboard";
+import { SensoraTeamView } from "./SensoraTeamView";
 
 type WorkspaceMenuItem = {
   section: CrmSection;
@@ -22,27 +28,104 @@ const WORKSPACE_MENU: WorkspaceMenuItem[] = [
   { section: "settings", label: "설정", shortLabel: "ST" },
 ];
 
+const PLACEHOLDER_COPY: Partial<Record<CrmSection, { eyebrow: string; title: string; description: string }>> = {
+  customers: {
+    eyebrow: "Customer Workspace",
+    title: "고객관리",
+    description: "고객 목록과 상담 진행 상태를 확인하는 Figma-first 전용 화면을 준비하고 있습니다.",
+  },
+  consulting: {
+    eyebrow: "Consultation Notes",
+    title: "상담 메모",
+    description: "상담 기록과 고객 요구사항을 정돈된 읽기 전용 구조로 확인할 수 있습니다.",
+  },
+  ai: {
+    eyebrow: "AI Assistant",
+    title: "AI 비서",
+    description: "상담 요약, 다음 행동 제안과 문자 초안을 검토합니다. 자동 저장이나 자동 발송은 하지 않습니다.",
+  },
+  followup: {
+    eyebrow: "After Sales",
+    title: "사후관리",
+    description: "출고 이후 고객 연락과 후속 관리 구조를 확인하는 전용 화면을 준비하고 있습니다.",
+  },
+  settings: {
+    eyebrow: "Workspace Settings",
+    title: "설정",
+    description: "Sales Workspace의 사용자 환경과 조직 범위를 확인하는 읽기 전용 화면입니다.",
+  },
+};
+
 type SensoraWorkspaceShellProps = {
-  activeSection: CrmSection;
-  onNavigate: (section: CrmSection) => void;
+  initialSection?: CrmSection;
   onOpenLanding?: () => void;
   onSignOut?: () => void;
   userName?: string;
-  children: ReactNode;
 };
 
+function WorkspacePlaceholder({ section }: { section: CrmSection }) {
+  const copy = PLACEHOLDER_COPY[section] ?? PLACEHOLDER_COPY.customers!;
+
+  return (
+    <div className="min-h-screen bg-[#0A0B0D] p-5 sm:p-6 xl:p-8">
+      <section className="rounded-2xl border border-[#2B3037] bg-[#14171B] p-6 sm:p-8">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#7A263A]">{copy.eyebrow}</p>
+        <h1 className="mt-3 text-2xl font-semibold tracking-[-0.035em] text-[#F4F6F8]">{copy.title}</h1>
+        <p className="mt-3 max-w-2xl text-sm leading-6 text-[#B7BDC6]">{copy.description}</p>
+        <div className="mt-8 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+          {["업무 구조 확인", "베타 미리보기", "실제 처리 기능 미연결"].map((label) => (
+            <div key={label} className="rounded-lg border border-[#2B3037] bg-[#1A1E23] px-4 py-4 text-xs text-[#7F8792]">{label}</div>
+          ))}
+        </div>
+      </section>
+    </div>
+  );
+}
+
 export function SensoraWorkspaceShell({
-  activeSection,
-  onNavigate,
+  initialSection = "dashboard",
   onOpenLanding,
   onSignOut,
   userName,
-  children,
 }: SensoraWorkspaceShellProps) {
+  const [activeSection, setActiveSection] = useState<CrmSection>(initialSection);
   const displayName = userName?.trim() || "Sales Consultant";
+  const todayContacts = sensoraB2BSeedData.leads.length + sensoraB2BSeedData.followUps.length;
+  const highPotential = sensoraB2BSeedData.customers.filter((customer) => (customer.probability ?? 0) >= 40).length;
+  const overdueFollowUps = sensoraB2BSeedData.followUps.filter((followUp) => followUp.status === "overdue").length;
+  const recentConsultations = sensoraB2BSeedData.consultations.length;
+
+  const workspaceView = (() => {
+    if (activeSection === "dashboard") {
+      return (
+        <SensoraSalesDashboard
+          todayContacts={todayContacts}
+          highPotential={highPotential}
+          overdueFollowUps={overdueFollowUps}
+          recentConsultations={recentConsultations}
+          sellerName={displayName}
+          onNavigate={setActiveSection}
+        />
+      );
+    }
+
+    if (activeSection === "leadQueue") {
+      return <div className="min-h-screen bg-[#0A0B0D] p-5 sm:p-6 xl:p-8"><SensoraLeadQueueView /></div>;
+    }
+
+    if (activeSection === "inventory") {
+      return <div className="min-h-screen bg-[#0A0B0D] p-5 sm:p-6 xl:p-8"><SensoraInventoryView /></div>;
+    }
+
+    if (activeSection === "team") {
+      return <div className="min-h-screen bg-[#0A0B0D] p-5 sm:p-6 xl:p-8"><SensoraTeamView /></div>;
+    }
+
+    return <WorkspacePlaceholder section={activeSection} />;
+  })();
 
   return (
-    <div className="mx-auto grid min-h-screen w-full max-w-[1440px] bg-[#0A0B0D] text-[#F4F6F8] lg:grid-cols-[248px_minmax(0,1fr)]">
+    <div className="grid min-h-screen w-full bg-[#0A0B0D] text-[#F4F6F8] lg:grid-cols-[248px_minmax(0,1fr)]">
       <aside className="border-b border-[#2B3037] bg-[#0D0F12] lg:min-h-screen lg:border-b-0 lg:border-r">
         <div className="flex h-full flex-col px-4 py-5 lg:sticky lg:top-0 lg:min-h-screen lg:px-5 lg:py-6">
           <button
@@ -69,7 +152,7 @@ export function SensoraWorkspaceShell({
                 <button
                   key={item.section}
                   type="button"
-                  onClick={() => onNavigate(item.section)}
+                  onClick={() => setActiveSection(item.section)}
                   className={[
                     "flex min-h-10 shrink-0 items-center gap-3 rounded-lg border px-3 text-left text-[13px] font-medium transition-colors lg:w-full",
                     active
@@ -101,7 +184,7 @@ export function SensoraWorkspaceShell({
         </div>
       </aside>
 
-      <main className="min-w-0 bg-[#0A0B0D]">{children}</main>
+      <main className="min-w-0 w-full bg-[#0A0B0D]">{workspaceView}</main>
     </div>
   );
 }

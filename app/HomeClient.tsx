@@ -18,7 +18,6 @@ import {
 import { AppPreviewToc } from "@/app/components/concierge/AppPreviewToc";
 import { LandingShowroom } from "@/app/components/concierge/LandingSections";
 import { CRMApp } from "@/app/crm/CRMApp";
-import { SensoraWorkspaceShell } from "@/app/crm/SensoraWorkspaceShell";
 import { useAuth } from "@/app/crm/useAuth";
 import { sellerCanUseApp, useSellerProfile } from "@/app/crm/useSellerProfile";
 import { isFirebaseConfigured, isGoogleAuthEnabled } from "@/app/firebase/client";
@@ -194,7 +193,7 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
 
       <header
         className={[
-          view === "app" && showCrmApp ? "hidden" : "sticky top-0 z-30 isolate backdrop-blur-xl",
+          "sticky top-0 z-30 isolate backdrop-blur-xl",
           /** iPhone 상태바/notch 안전영역을 반영해 헤더 콘텐츠가 겹치지 않도록 */
             view === "landing"
             ? "hidden landing-service-nav landing-service-nav--compact pt-[max(6px,calc(env(safe-area-inset-top,0px)+2px))] pb-1 sm:pb-2"
@@ -376,12 +375,10 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
         {view === "app" ? (
           <div
             id="app"
-            className={showCrmApp
-              ? "relative min-h-screen scroll-mt-24 bg-[#0A0B0D] text-slate-100"
-              : "crm-bg crm-app-stage relative min-h-[calc(100dvh-3.25rem)] scroll-mt-24 px-4 pb-12 pt-6 text-slate-100 max-sm:pb-[max(7rem,calc(4.5rem+env(safe-area-inset-bottom,0px)))] sm:px-6 lg:min-h-[calc(100dvh-3.5rem)]"}
+            className="crm-bg crm-app-stage relative min-h-[calc(100dvh-3.25rem)] scroll-mt-24 px-4 pb-12 pt-6 text-slate-100 max-sm:pb-[max(7rem,calc(4.5rem+env(safe-area-inset-bottom,0px)))] sm:px-6 lg:min-h-[calc(100dvh-3.5rem)]"
           >
-            <div className={showCrmApp ? "mx-auto w-full max-w-[1440px]" : "mx-auto flex w-full max-w-[1520px] flex-col gap-2 xl:flex-row xl:gap-6 2xl:gap-8"}>
-              {!showCrmApp ? <ConciergeSidebar activeSection={crmSection} onNavigate={navigateCrmSection} onOpenLanding={returnToLanding} /> : null}
+            <div className="mx-auto flex w-full max-w-[1520px] flex-col gap-2 xl:flex-row xl:gap-6 2xl:gap-8">
+              <ConciergeSidebar activeSection={crmSection} onNavigate={navigateCrmSection} onOpenLanding={returnToLanding} />
               <div className="relative min-h-[60vh] min-w-0 flex-1 rounded-2xl">
                 {sellerLoading ? (
                   <div className="flex min-h-[40vh] items-center justify-center rounded-2xl border border-white/[0.1] bg-slate-900/45 px-6 py-16 text-base text-slate-400 backdrop-blur-md">
@@ -493,23 +490,15 @@ export function HomeClient({ initialView }: { initialView: "landing" | "app" }) 
                 ) : null}
 
                 {showCrmApp ? (
-                  <SensoraWorkspaceShell
+                  <CRMApp
+                    uid={crmUid}
+                    sellerDisplayName={
+                      auth.status === "signed-in" ? auth.name?.trim() || auth.email?.split("@")[0] || "" : ""
+                    }
                     activeSection={crmSection}
-                    onNavigate={navigateCrmSection}
-                    onOpenLanding={returnToLanding}
-                    onSignOut={auth.status === "signed-in" ? signOut : undefined}
-                    userName={auth.status === "signed-in" ? auth.name?.trim() || auth.email?.split("@")[0] || "" : ""}
-                  >
-                    <CRMApp
-                      uid={crmUid}
-                      sellerDisplayName={
-                        auth.status === "signed-in" ? auth.name?.trim() || auth.email?.split("@")[0] || "" : ""
-                      }
-                      activeSection={crmSection}
-                      onActiveSectionChange={navigateCrmSection}
-                      onOpenLandingView={returnToLanding}
-                    />
-                  </SensoraWorkspaceShell>
+                    onActiveSectionChange={navigateCrmSection}
+                    onOpenLandingView={returnToLanding}
+                  />
                 ) : null}
 
                 {!firebaseReady || !googleAuthEnabled ? (
