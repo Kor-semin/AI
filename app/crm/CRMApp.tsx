@@ -91,6 +91,9 @@ import {
 import { SensoraGuideImageViewer } from "@/app/components/concierge/SensoraGuideImageViewer";
 import { SENSORA_GUIDE_IMAGES } from "@/app/components/concierge/sensoraGuideImages";
 import { SensoraB2BWorkspacePreview } from "./SensoraB2BWorkspacePreview";
+import { SensoraLeadQueueSection } from "./SensoraLeadQueueSection";
+import { SensoraInventorySection } from "./SensoraInventorySection";
+import { SensoraTeamViewSection } from "./SensoraTeamViewSection";
 
 const CRM_GUIDE_VIEWER_IMAGES = SENSORA_GUIDE_IMAGES.map((s) => ({ src: s.src }));
 const CRM_GUIDE_SLIDE_TITLE_KEYS = SENSORA_GUIDE_IMAGES.map((s) => s.titleKey);
@@ -1755,7 +1758,9 @@ export function CRMApp({
           >
             <p className="text-[19px] font-bold tracking-tight text-slate-50">{CRM_SECTION_LABELS[activeSection].title}</p>
             <p className="mt-1.5 text-[14px] font-semibold leading-snug text-slate-400">
-              {t(CRM_SECTION_MOBILE_SUBTITLE_KEYS[activeSection])}
+              {CRM_SECTION_MOBILE_SUBTITLE_KEYS[activeSection] != null
+                ? t(CRM_SECTION_MOBILE_SUBTITLE_KEYS[activeSection]!)
+                : CRM_SECTION_LABELS[activeSection].subtitle}
             </p>
           </div>
 
@@ -1883,6 +1888,8 @@ export function CRMApp({
             />
           ) : null}
 
+          {activeSection === "leadQueue" ? <SensoraLeadQueueSection /> : null}
+
           {activeSection === "vehicle" ? (
             <VehicleMatchSection
               customer={selectedCustomer}
@@ -1890,6 +1897,10 @@ export function CRMApp({
               onOpenCustomers={() => onActiveSectionChange("customers")}
             />
           ) : null}
+
+          {activeSection === "inventory" ? <SensoraInventorySection /> : null}
+
+          {activeSection === "team" ? <SensoraTeamViewSection /> : null}
 
           {activeSection === "settings" ? (
             <SettingsSection

@@ -81,7 +81,8 @@ export function ConciergeSidebar({
             {CRM_SECTION_ORDER.map((section) => {
               const active = activeSection === section;
               const { title, subtitle } = CRM_SECTION_LABELS[section];
-              const caption = t(CRM_SECTION_MOBILE_SUBTITLE_KEYS[section]);
+              const captionKey = CRM_SECTION_MOBILE_SUBTITLE_KEYS[section];
+              const caption = captionKey ? t(captionKey) : subtitle;
               return (
                 <button
                   key={`m-${section}`}

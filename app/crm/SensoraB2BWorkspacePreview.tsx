@@ -435,13 +435,22 @@ export function SensoraB2BWorkspacePreview() {
         ))}
       </div>
 
-      <div className="mt-5 grid gap-5 xl:grid-cols-[1.1fr_0.9fr]">
-        <LeadQueuePreview />
-        <InventoryPreview />
+      <div className="mt-5 grid gap-4 lg:grid-cols-3">
+        {[
+          ["Lead 접수", "전시장 전화, 방문, 온라인 문의를 접수하고 담당자 배정 흐름을 확인합니다."],
+          ["재고 관리", "브랜드, 모델, 트림, 색상, 옵션, 재고 상태를 베타 구조로 확인합니다."],
+          ["팀 현황", "팀장은 같은 Sales Workspace 안에서 팀 흐름과 Activity Log를 조회합니다."],
+        ].map(([title, description]) => (
+          <article key={title} className="rounded-[22px] border border-white/[0.1] bg-[#0b1220]/88 p-5 shadow-[0_22px_56px_-34px_rgba(0,0,0,0.7)]">
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-rose-200/70">New CRM Section</p>
+            <h3 className="mt-2 text-xl font-semibold text-slate-50">{title}</h3>
+            <p className="mt-2 text-sm leading-relaxed text-slate-400">{description}</p>
+            <p className="mt-4 text-xs font-semibold text-slate-500">좌측 메뉴에서 상세 미리보기를 확인할 수 있습니다.</p>
+          </article>
+        ))}
       </div>
 
-      <div className="mt-5 grid gap-5 xl:grid-cols-[1fr_0.85fr]">
-        <ActivityLogPreview />
+      <div className="mt-5 grid gap-5">
         <aside className="rounded-[26px] border border-white/[0.1] bg-[#0b1220]/88 p-5 shadow-[0_24px_64px_-38px_rgba(0,0,0,0.72)] sm:p-6">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-rose-200/70">Data Reliability Note</p>
           <h3 className="mt-1 text-2xl font-semibold tracking-tight text-slate-50">베타 데이터 신뢰성 원칙</h3>

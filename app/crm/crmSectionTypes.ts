@@ -6,8 +6,11 @@ export type CrmSection =
   | "consulting"
   | "ai"
   | "pipeline"
+  | "leadQueue"
   | "vehicle"
+  | "inventory"
   | "followup"
+  | "team"
   | "settings";
 
 export const CRM_SECTION_LABELS: Record<CrmSection, { title: string; subtitle: string }> = {
@@ -16,8 +19,11 @@ export const CRM_SECTION_LABELS: Record<CrmSection, { title: string; subtitle: s
   consulting: { title: "상담 메모", subtitle: "직접 수정·원문 보존" },
   ai: { title: "AI 비서", subtitle: "니즈·영업 포인트·문자" },
   pipeline: { title: "영업 단계", subtitle: "단계별 고객" },
+  leadQueue: { title: "Lead 접수", subtitle: "문의·배정 흐름" },
   vehicle: { title: "차량 매칭", subtitle: "조건·예산·모델 적합" },
+  inventory: { title: "재고 관리", subtitle: "차량·상태 확인" },
   followup: { title: "사후관리", subtitle: "해야 할 일과 일정" },
+  team: { title: "팀 현황", subtitle: "팀 흐름·리포트" },
   settings: { title: "설정", subtitle: "내 정보·안내" },
 };
 
@@ -27,13 +33,16 @@ export const CRM_SECTION_ORDER: CrmSection[] = [
   "consulting",
   "ai",
   "pipeline",
+  "leadQueue",
   "vehicle",
+  "inventory",
   "followup",
+  "team",
   "settings",
 ];
 
 /** 좁은 화면(모바일) 섹션 탭 부제 · 요약 카드 한 줄 표시용 */
-export const CRM_SECTION_MOBILE_SUBTITLE_KEYS: Record<CrmSection, TranslationKey> = {
+export const CRM_SECTION_MOBILE_SUBTITLE_KEYS: Partial<Record<CrmSection, TranslationKey>> = {
   dashboard: "crm.nav.mobileSubtitle.dashboard",
   customers: "crm.nav.mobileSubtitle.customers",
   consulting: "crm.nav.mobileSubtitle.consulting",
@@ -61,13 +70,23 @@ export function hashToCrmSection(hashRaw: string): CrmSection | null {
       return "ai";
     case "pipeline":
       return "pipeline";
+    case "lead-queue":
+    case "leadqueue":
+    case "leads":
+      return "leadQueue";
     case "vehicle-match":
     case "vehicle":
       return "vehicle";
+    case "inventory":
+    case "inventory-beta":
+      return "inventory";
     case "follow-up":
     case "followup":
     case "crm-workspace-next":
       return "followup";
+    case "team":
+    case "team-view":
+      return "team";
     case "settings":
       return "settings";
     default:
@@ -87,10 +106,16 @@ export function crmSectionToHash(s: CrmSection): string {
       return "crm-ai-assistant";
     case "pipeline":
       return "pipeline";
+    case "leadQueue":
+      return "lead-queue";
     case "vehicle":
       return "vehicle-match";
+    case "inventory":
+      return "inventory";
     case "followup":
       return "follow-up";
+    case "team":
+      return "team-view";
     case "settings":
       return "settings";
     default:
