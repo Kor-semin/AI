@@ -90,6 +90,7 @@ import {
 } from "./seasonCareMessage";
 import { SensoraGuideImageViewer } from "@/app/components/concierge/SensoraGuideImageViewer";
 import { SENSORA_GUIDE_IMAGES } from "@/app/components/concierge/sensoraGuideImages";
+import { SensoraB2BWorkspacePreview } from "./SensoraB2BWorkspacePreview";
 
 const CRM_GUIDE_VIEWER_IMAGES = SENSORA_GUIDE_IMAGES.map((s) => ({ src: s.src }));
 const CRM_GUIDE_SLIDE_TITLE_KEYS = SENSORA_GUIDE_IMAGES.map((s) => s.titleKey);
@@ -1849,6 +1850,8 @@ export function CRMApp({
               />
             </div>
           ) : null}
+
+          {activeSection === "dashboard" ? <SensoraB2BWorkspacePreview /> : null}
 
           {activeSection === "consulting" ? (
             <ConsultingNotesSection
