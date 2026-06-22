@@ -56,13 +56,13 @@ const readiness: Record<SensoraLead["status"], { label: string; tone: string }> 
 export function SensoraLeadQueueView({ compact = false }: { compact?: boolean }) {
   if (compact) {
     return (
-      <section className="min-h-[380px] rounded-2xl border border-[#2B3037] bg-[#14171B] p-5 sm:p-6" aria-labelledby="lead-preview-title">
+      <section className="min-h-[380px] min-w-0 max-w-full rounded-2xl border border-[#2B3037] bg-[#14171B] p-5 sm:p-6" aria-labelledby="lead-preview-title">
         <div className="flex items-start justify-between gap-4">
           <div>
             <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#A93754]">Lead Intake</p>
             <h2 id="lead-preview-title" className="mt-1 text-lg font-semibold tracking-[-0.02em] text-[#F4F6F8]">신규 Lead 접수</h2>
           </div>
-          <span className="rounded-lg bg-[#2A151B] px-4 py-2 text-[10px] font-medium text-[#A93754]">NEW · 12분 전</span>
+          <span className="rounded-lg bg-[#2A151B] px-4 py-2 text-[10px] font-medium text-[#A93754]">Demo · 접수 예시</span>
         </div>
 
         <dl className="mt-9 grid min-h-[150px] grid-cols-[68px_1fr] content-center gap-x-4 gap-y-4 rounded-lg border border-[#2B3037] bg-[#1A1E23] p-4 text-[11px]">
@@ -81,17 +81,17 @@ export function SensoraLeadQueueView({ compact = false }: { compact?: boolean })
   }
 
   return (
-    <section className="rounded-2xl border border-[#2B3037] bg-[#14171B] p-5 sm:p-6" aria-labelledby={compact ? "lead-preview-title" : "lead-view-title"}>
+    <section className="min-w-0 max-w-full rounded-2xl border border-[#2B3037] bg-[#14171B] p-5 sm:p-6" aria-labelledby={compact ? "lead-preview-title" : "lead-view-title"}>
       <div className="flex items-start justify-between gap-4">
         <div>
           <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#7A263A]">Lead Intake</p>
           <h2 id={compact ? "lead-preview-title" : "lead-view-title"} className="mt-2 text-lg font-semibold tracking-[-0.02em] text-[#F4F6F8]">Lead 접수</h2>
           <p className="mt-1 text-xs leading-5 text-[#7F8792]">유입 경로와 담당자, Customer 전환 준비 상태를 한곳에서 확인합니다.</p>
         </div>
-        <span className="shrink-0 rounded-full border border-[#2B3037] bg-[#1A1E23] px-2.5 py-1 text-[10px] text-[#B7BDC6]">읽기 전용</span>
+        <span className="shrink-0 rounded-full border border-[#2B3037] bg-[#1A1E23] px-2.5 py-1 text-[10px] text-[#B7BDC6]">Beta Preview · Read-only</span>
       </div>
 
-      <div className="mt-5 overflow-x-auto">
+      <div className="mt-5 max-w-full overflow-x-auto">
         <div className={compact ? "min-w-[360px]" : "min-w-[600px]"}>
           <div className={`grid gap-3 border-b border-[#2B3037] px-3 pb-2 text-[10px] uppercase tracking-[0.1em] text-[#7F8792] ${compact ? "grid-cols-[1.25fr_1fr_.8fr]" : "grid-cols-[1fr_1.2fr_1.25fr_1fr]"}`}>
             {compact ? <><span>접수 고객</span><span>담당 영업사원</span><span>전환 상태</span></> : <><span>접수 경로</span><span>고객 / 관심 차량</span><span>담당 영업사원</span><span>전환 준비 상태</span></>}
@@ -114,7 +114,7 @@ export function SensoraLeadQueueView({ compact = false }: { compact?: boolean })
       </div>
 
       {!compact ? (
-        <p className="mt-5 rounded-lg border border-[#2B3037] bg-[#1A1E23] px-4 py-3 text-xs leading-5 text-[#B7BDC6]">베타 미리보기입니다. 배정·전환·저장 기능은 연결하지 않았습니다.</p>
+        <p className="mt-5 rounded-lg border border-[#2B3037] bg-[#1A1E23] px-4 py-3 text-xs leading-5 text-[#B7BDC6]">Beta Preview 예시 데이터입니다. 실제 배정·전환·저장 기능은 연결하지 않았습니다.</p>
       ) : null}
     </section>
   );

@@ -40,16 +40,19 @@ const statusLabels: Record<InventoryUnit["stockStatus"], { label: string; tone: 
 export function SensoraInventoryView({ compact = false }: { compact?: boolean }) {
   if (compact) {
     return (
-      <section className="min-h-[583px] rounded-2xl border border-[#2B3037] bg-[#14171B] p-5 sm:p-6" aria-labelledby="inventory-preview-title">
-        <div className="flex items-start justify-between gap-4">
+      <section className="min-h-[583px] min-w-0 max-w-full rounded-2xl border border-[#2B3037] bg-[#14171B] p-5 sm:p-6" aria-labelledby="inventory-preview-title">
+        <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#A93754]">Inventory</p>
             <h2 id="inventory-preview-title" className="mt-1 text-lg font-semibold tracking-[-0.02em] text-[#F4F6F8]">재고 관리 미리보기</h2>
           </div>
-          <span className="rounded-lg bg-[#2A151B] px-4 py-2 text-[10px] font-medium text-[#A93754]">DMS / ERP 연동 예정</span>
+          <div className="flex flex-wrap justify-end gap-2">
+            <span className="rounded-lg border border-[#2B3037] bg-[#1A1E23] px-3 py-2 text-[10px] text-[#B7BDC6]">Demo data · Read-only</span>
+            <span className="rounded-lg bg-[#2A151B] px-3 py-2 text-[10px] font-medium text-[#A93754]">DMS / ERP 연동 예정</span>
+          </div>
         </div>
 
-        <div className="mt-6 overflow-x-auto">
+        <div className="mt-6 max-w-full overflow-x-auto">
           <div className="min-w-[560px]">
             <div className="grid grid-cols-[.65fr_1.35fr_1.2fr_.9fr] gap-4 rounded-lg border border-[#2B3037] bg-[#1A1E23] px-4 py-3 text-[10px] text-[#7F8792]">
               <span>브랜드</span><span>모델 / 트림</span><span>외장색 / 내장색</span><span>재고 상태</span>
@@ -70,23 +73,26 @@ export function SensoraInventoryView({ compact = false }: { compact?: boolean })
           </div>
         </div>
 
-        <p className="mt-6 text-[10px] leading-4 text-[#7F8792]">※ DMS/ERP 연동 전까지 재고 상태는 CRM에서 수동 확인됩니다.</p>
+        <p className="mt-6 text-[10px] leading-4 text-[#7F8792]">Demo data · 실제 운영 데이터가 아닙니다. DMS/ERP 연동과 예약·판매 완료 처리 기능은 연결하지 않았습니다.</p>
       </section>
     );
   }
 
   return (
-    <section className="rounded-2xl border border-[#2B3037] bg-[#14171B] p-5 sm:p-6" aria-labelledby={compact ? "inventory-preview-title" : "inventory-view-title"}>
+    <section className="min-w-0 max-w-full rounded-2xl border border-[#2B3037] bg-[#14171B] p-5 sm:p-6" aria-labelledby={compact ? "inventory-preview-title" : "inventory-view-title"}>
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#7A263A]">Inventory</p>
           <h2 id={compact ? "inventory-preview-title" : "inventory-view-title"} className="mt-2 text-lg font-semibold tracking-[-0.02em] text-[#F4F6F8]">재고 관리</h2>
           <p className="mt-1 text-xs leading-5 text-[#7F8792]">차량 사양과 현재 재고 상태를 빠르게 비교합니다.</p>
         </div>
-        <span className="rounded-full border border-[#7A263A]/50 bg-[#2A151B] px-2.5 py-1 text-[10px] text-[#C98293]">DMS/ERP 연동 예정</span>
+        <div className="flex flex-wrap justify-end gap-2">
+          <span className="rounded-full border border-[#2B3037] bg-[#1A1E23] px-2.5 py-1 text-[10px] text-[#B7BDC6]">재고 관리 Read-only Preview</span>
+          <span className="rounded-full border border-[#7A263A]/50 bg-[#2A151B] px-2.5 py-1 text-[10px] text-[#C98293]">DMS/ERP 연동 예정</span>
+        </div>
       </div>
 
-      <div className="mt-5 overflow-x-auto">
+      <div className="mt-5 max-w-full overflow-x-auto">
         <div className="min-w-[640px]">
           <div className="grid grid-cols-[.8fr_1.25fr_.9fr_1fr_1fr_.8fr] gap-3 border-b border-[#2B3037] px-3 pb-2 text-[10px] uppercase tracking-[0.1em] text-[#7F8792]">
             <span>브랜드</span><span>모델</span><span>트림</span><span>외장색</span><span>내장색</span><span>재고 상태</span>
@@ -107,7 +113,7 @@ export function SensoraInventoryView({ compact = false }: { compact?: boolean })
         </div>
       </div>
 
-      <p className="mt-4 text-[11px] leading-5 text-[#7F8792]">현재 화면은 구조 확인용입니다. 외부 DMS/ERP 데이터 동기화 및 상태 변경 기능은 연결하지 않았습니다.</p>
+      <p className="mt-4 text-[11px] leading-5 text-[#7F8792]">현재 화면은 예시 데이터 구조를 확인하는 읽기 전용 미리보기입니다. 외부 DMS/ERP 동기화와 예약·판매 완료·상태 변경 기능은 연결하지 않았습니다.</p>
     </section>
   );
 }

@@ -16,8 +16,8 @@ export function SensoraSettingsView() {
 
         <section className="rounded-2xl border border-[#2B3037] bg-[#14171B] p-5 sm:p-6" aria-labelledby="service-status-title">
           <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#A93754]">Service Status</p><h2 id="service-status-title" className="mt-2 text-lg font-semibold text-[#F4F6F8]">서비스 연결 상태</h2>
-          <div className="mt-5 grid gap-3 sm:grid-cols-2">{[["Firebase", "구성 확인됨"], ["승인 계정", "Beta 승인"], ["DMS / ERP", "연동 예정"], ["AI 기능", "초안 미리보기"]].map(([label, value], index) => <div key={label} className="rounded-lg border border-[#2B3037] bg-[#1A1E23] p-4"><p className="text-[10px] text-[#7F8792]">{label}</p><p className={`mt-3 text-xs font-semibold ${index < 2 ? "text-[#4E8A66]" : "text-[#B7BDC6]"}`}>{value}</p></div>)}</div>
-          <div className="mt-4 rounded-lg border border-[#2B3037] bg-[#1A1E23] p-4"><p className="text-xs font-semibold text-[#F4F6F8]">Beta 기능 상태</p><ul className="mt-3 space-y-2 text-[11px] text-[#B7BDC6]"><li>Lead / 재고 / 팀 현황 · 구조 확인 가능</li><li>저장 / 전송 / 권한 변경 · 미연결</li><li>외부 시스템 동기화 · 연동 예정</li></ul></div>
+          <div className="mt-5 grid gap-3 sm:grid-cols-2">{[["Firebase", "연결 상태 예시"], ["승인 계정", "Beta 승인 흐름 예시"], ["DMS / ERP", "연동 예정"], ["AI 기능", "초안 미리보기"]].map(([label, value]) => <div key={label} className="rounded-lg border border-[#2B3037] bg-[#1A1E23] p-4"><p className="text-[10px] text-[#7F8792]">{label}</p><p className="mt-3 text-xs font-semibold text-[#B7BDC6]">{value}</p></div>)}</div>
+          <div className="mt-4 rounded-lg border border-[#2B3037] bg-[#1A1E23] p-4"><p className="text-xs font-semibold text-[#F4F6F8]">Beta Preview 상태 예시</p><ul className="mt-3 space-y-2 text-[11px] text-[#B7BDC6]"><li>Lead / 재고 / 팀 현황 · 구조 확인 가능</li><li>저장 / 전송 / 권한 변경 · 미연결</li><li>외부 시스템 동기화 · 연동 예정</li></ul></div>
         </section>
 
         <section className="rounded-2xl border border-[#2B3037] bg-[#14171B] p-5 sm:p-6" aria-labelledby="data-principles-title">

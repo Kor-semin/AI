@@ -36,13 +36,13 @@ export function SensoraSalesDashboard({
           <p className="mt-1.5 text-xs text-[#7F8792]">오늘의 고객 접점과 팀 영업 흐름을 한눈에 확인하세요.</p>
         </div>
         <div className="flex flex-wrap items-center gap-4">
-          <span className="inline-flex h-10 items-center rounded-lg border border-[#2B3037] bg-[#1A1E23] px-4 text-[11px] font-medium tracking-[0.04em] text-[#B7BDC6]">2026. 06. 22&nbsp; MON</span>
+          <span className="inline-flex min-h-10 items-center rounded-lg border border-[#2B3037] bg-[#1A1E23] px-4 py-2 text-[11px] font-medium tracking-[0.04em] text-[#B7BDC6]">Demo data · 2026. 06. 22 기준 예시</span>
           <button
             type="button"
             onClick={() => onNavigate("leadQueue")}
             className="inline-flex h-10 items-center justify-center rounded-lg border border-[#D5D8DC] bg-[#F4F6F8] px-4 text-xs font-semibold text-[#0A0B0D] transition-colors hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7A263A]"
           >
-            새 Lead 접수
+            Lead 접수 미리보기
           </button>
         </div>
       </header>
@@ -64,7 +64,7 @@ export function SensoraSalesDashboard({
               <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#A93754]">AI Assistant</p>
               <h2 id="ai-assistant-preview-title" className="mt-1 text-lg font-semibold tracking-[-0.02em] text-[#F4F6F8]">오늘의 상담 인사이트</h2>
             </div>
-            <span className="rounded-lg bg-[#2A151B] px-4 py-2 text-[10px] font-medium text-[#A93754]">검토 후 실행</span>
+            <span className="rounded-lg bg-[#2A151B] px-4 py-2 text-[10px] font-medium text-[#A93754]">검토 흐름 미리보기</span>
           </div>
 
           <div className="mt-8 grid gap-4 md:grid-cols-2">
@@ -85,7 +85,7 @@ export function SensoraSalesDashboard({
             </div>
           </div>
 
-          <p className="mt-6 rounded-lg bg-[#1A1E23] px-4 py-2 text-[10px] leading-4 text-[#7F8792]">AI는 자동 저장하거나 자동 발송하지 않습니다. 담당자가 검토한 뒤 직접 실행합니다.</p>
+          <p className="mt-6 rounded-lg bg-[#1A1E23] px-4 py-2 text-[10px] leading-4 text-[#7F8792]">AI는 자동 저장하거나 자동 발송하지 않습니다. 실제 실행 기능은 아직 연결되어 있지 않습니다.</p>
         </section>
 
         <SensoraLeadQueueView compact />

@@ -14,13 +14,15 @@ export function SensoraConsultationView() {
 
       <div className="mt-6 grid gap-4 xl:grid-cols-[1.1fr_.9fr]">
         <section className="rounded-2xl border border-[#2B3037] bg-[#14171B] p-5 sm:p-6" aria-labelledby="consultation-memo-title">
-          <div className="flex items-center justify-between gap-4"><h2 id="consultation-memo-title" className="text-lg font-semibold text-[#F4F6F8]">상담 메모 입력 영역</h2><span className="text-[10px] text-[#7F8792]">읽기 전용 예시</span></div>
-          <textarea readOnly value={"고객은 GV70 다크 그레이 외장과 블랙 내장을 선호함. 배우자와 함께 토요일 오후 시승 희망. 선수금 30%, 월 납입금 범위를 우선 비교하고 싶어 함. 즉시 출고 가능 재고와 프로모션 조건 확인 필요."} className="mt-5 min-h-[240px] w-full resize-none rounded-lg border border-[#2B3037] bg-[#1A1E23] p-4 text-sm leading-7 text-[#B7BDC6] outline-none" aria-label="상담 메모 미리보기" />
+          <div className="flex items-center justify-between gap-4"><h2 id="consultation-memo-title" className="text-lg font-semibold text-[#F4F6F8]">상담 메모 미리보기</h2><span className="text-[10px] text-[#7F8792]">읽기 전용 예시</span></div>
+          <div role="note" aria-label="상담 메모 미리보기" className="mt-5 min-h-[240px] w-full cursor-default select-text rounded-lg border border-[#2B3037] bg-[#1A1E23] p-4 text-sm leading-7 text-[#B7BDC6]">
+            고객은 GV70 다크 그레이 외장과 블랙 내장을 선호함. 배우자와 함께 토요일 오후 시승 희망. 선수금 30%, 월 납입금 범위를 우선 비교하고 싶어 함. 즉시 출고 가능 재고와 프로모션 조건 확인 필요.
+          </div>
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             <div className="rounded-lg border border-[#2B3037] bg-[#1A1E23] p-4"><p className="text-[10px] text-[#7F8792]">예산 / 월 납입금</p><p className="mt-2 text-xs font-medium text-[#F4F6F8]">선수금 30% · 월 110만원대</p></div>
             <div className="rounded-lg border border-[#2B3037] bg-[#1A1E23] p-4"><p className="text-[10px] text-[#7F8792]">관심 차량</p><p className="mt-2 text-xs font-medium text-[#F4F6F8]">GV70 2.5T AWD · Sport</p></div>
           </div>
-          <p className="mt-4 rounded-lg bg-[#2A151B] px-4 py-3 text-[10px] leading-4 text-[#7F8792]">AI는 자동 저장하지 않습니다. 사용자가 내용을 확인한 뒤 저장하는 구조만 미리 보여줍니다.</p>
+          <p className="mt-4 rounded-lg border border-[#2B3037] bg-[#1A1E23] px-4 py-3 text-[10px] leading-4 text-[#7F8792]">AI는 자동 저장하지 않습니다. 실제 저장 기능은 연결되어 있지 않습니다.</p>
         </section>
 
         <section className="rounded-2xl border border-[#2B3037] bg-[#14171B] p-5 sm:p-6" aria-labelledby="consultation-ai-title">

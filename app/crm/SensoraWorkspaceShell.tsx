@@ -97,9 +97,9 @@ export function SensoraWorkspaceShell({
   })();
 
   return (
-    <div className="grid min-h-screen w-full bg-[#0A0B0D] text-[#F4F6F8] lg:grid-cols-[248px_minmax(0,1fr)]">
-      <aside className="border-b border-[#2B3037] bg-[#0D0F12] lg:min-h-screen lg:border-b-0 lg:border-r">
-        <div className="flex h-full flex-col px-4 py-5 lg:sticky lg:top-0 lg:min-h-screen lg:px-6 lg:py-6">
+    <div className="grid min-h-screen min-w-0 w-full max-w-full grid-cols-[minmax(0,1fr)] bg-[#0A0B0D] text-[#F4F6F8] lg:grid-cols-[248px_minmax(0,1fr)]">
+      <aside className="min-w-0 max-w-full overflow-hidden border-b border-[#2B3037] bg-[#0D0F12] lg:min-h-screen lg:border-b-0 lg:border-r">
+        <div className="flex h-full min-w-0 max-w-full flex-col px-4 py-5 lg:sticky lg:top-0 lg:min-h-screen lg:px-6 lg:py-6">
           <button
             type="button"
             onClick={onOpenLanding}
@@ -115,7 +115,7 @@ export function SensoraWorkspaceShell({
           <div className="mt-6 w-fit rounded-full bg-[#1A1E23] px-3 py-2 text-[9px] font-medium uppercase tracking-[0.04em] text-[#B7BDC6]">Seoul · Sales</div>
           <p className="mt-6 text-[9px] font-semibold uppercase tracking-[0.14em] text-[#7F8792]">Workspace</p>
 
-          <nav className="mt-5 flex gap-2 overflow-x-auto pb-1 lg:flex-1 lg:flex-col lg:overflow-visible lg:pb-0" aria-label="Sales Workspace 메뉴">
+          <nav className="mt-5 flex w-full min-w-0 max-w-full gap-2 overflow-x-auto pb-1 lg:flex-1 lg:flex-col lg:overflow-visible lg:pb-0" aria-label="Sales Workspace 메뉴">
             {WORKSPACE_MENU.map((item) => {
               const active = activeSection === item.section;
               return (
@@ -154,7 +154,7 @@ export function SensoraWorkspaceShell({
         </div>
       </aside>
 
-      <main className="min-w-0 w-full bg-[#0A0B0D]">{workspaceView}</main>
+      <main className="min-w-0 w-full max-w-full bg-[#0A0B0D]">{workspaceView}</main>
     </div>
   );
 }

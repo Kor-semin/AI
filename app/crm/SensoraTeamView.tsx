@@ -45,7 +45,7 @@ export function SensoraTeamView({ compact = false }: { compact?: boolean }) {
     ];
 
     return (
-      <section className="min-h-[583px] rounded-2xl border border-[#2B3037] bg-[#14171B] p-5 sm:p-6" aria-labelledby="team-preview-title">
+      <section className="min-h-[583px] min-w-0 max-w-full rounded-2xl border border-[#2B3037] bg-[#14171B] p-5 sm:p-6" aria-labelledby="team-preview-title">
         <div className="flex items-start justify-between gap-4">
           <div>
             <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#A93754]">Team Overview</p>
@@ -73,13 +73,13 @@ export function SensoraTeamView({ compact = false }: { compact?: boolean }) {
           </div>
         </div>
 
-        <p className="mt-4 flex min-h-[60px] items-center rounded-lg bg-[#2A151B] px-4 py-3 text-[10px] leading-4 text-[#7F8792]">팀장 화면은 읽기 전용입니다. 담당자 변경과 발송은 각 업무 화면에서 실행합니다.</p>
+        <p className="mt-4 flex min-h-[60px] items-center rounded-lg border border-[#2B3037] bg-[#1A1E23] px-4 py-3 text-[10px] leading-4 text-[#7F8792]">팀장 화면은 읽기 전용 미리보기입니다. 담당자 변경·발송·상태 변경 기능은 연결하지 않았습니다.</p>
       </section>
     );
   }
 
   return (
-    <section className="rounded-2xl border border-[#2B3037] bg-[#14171B] p-5 sm:p-6" aria-labelledby={compact ? "team-preview-title" : "team-view-title"}>
+    <section className="min-w-0 max-w-full rounded-2xl border border-[#2B3037] bg-[#14171B] p-5 sm:p-6" aria-labelledby={compact ? "team-preview-title" : "team-view-title"}>
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#7A263A]">Team Overview</p>
