@@ -3,9 +3,14 @@
 import { useState } from "react";
 
 import type { CrmSection } from "./crmSectionTypes";
+import { SensoraAIAssistantView } from "./SensoraAIAssistantView";
+import { SensoraConsultationView } from "./SensoraConsultationView";
+import { SensoraCustomerView } from "./SensoraCustomerView";
+import { SensoraFollowUpView } from "./SensoraFollowUpView";
 import { SensoraInventoryView } from "./SensoraInventoryView";
 import { SensoraLeadQueueView } from "./SensoraLeadQueueView";
 import { SensoraSalesDashboard } from "./SensoraSalesDashboard";
+import { SensoraSettingsView } from "./SensoraSettingsView";
 import { SensoraTeamView } from "./SensoraTeamView";
 
 type WorkspaceMenuItem = {
@@ -26,59 +31,12 @@ const WORKSPACE_MENU: WorkspaceMenuItem[] = [
   { section: "settings", label: "설정", shortLabel: "⚙" },
 ];
 
-const PLACEHOLDER_COPY: Partial<Record<CrmSection, { eyebrow: string; title: string; description: string }>> = {
-  customers: {
-    eyebrow: "Customer Workspace",
-    title: "고객관리",
-    description: "고객 목록과 상담 진행 상태를 확인하는 Figma-first 전용 화면을 준비하고 있습니다.",
-  },
-  consulting: {
-    eyebrow: "Consultation Notes",
-    title: "상담 메모",
-    description: "상담 기록과 고객 요구사항을 정돈된 읽기 전용 구조로 확인할 수 있습니다.",
-  },
-  ai: {
-    eyebrow: "AI Assistant",
-    title: "AI 비서",
-    description: "상담 요약, 다음 행동 제안과 문자 초안을 검토합니다. 자동 저장이나 자동 발송은 하지 않습니다.",
-  },
-  followup: {
-    eyebrow: "After Sales",
-    title: "사후관리",
-    description: "출고 이후 고객 연락과 후속 관리 구조를 확인하는 전용 화면을 준비하고 있습니다.",
-  },
-  settings: {
-    eyebrow: "Workspace Settings",
-    title: "설정",
-    description: "Sales Workspace의 사용자 환경과 조직 범위를 확인하는 읽기 전용 화면입니다.",
-  },
-};
-
 type SensoraWorkspaceShellProps = {
   initialSection?: CrmSection;
   onOpenLanding?: () => void;
   onSignOut?: () => void;
   userName?: string;
 };
-
-function WorkspacePlaceholder({ section }: { section: CrmSection }) {
-  const copy = PLACEHOLDER_COPY[section] ?? PLACEHOLDER_COPY.customers!;
-
-  return (
-    <div className="min-h-screen bg-[#0A0B0D] p-5 sm:p-6 xl:p-8">
-      <section className="rounded-2xl border border-[#2B3037] bg-[#14171B] p-6 sm:p-8">
-        <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#7A263A]">{copy.eyebrow}</p>
-        <h1 className="mt-3 text-2xl font-semibold tracking-[-0.035em] text-[#F4F6F8]">{copy.title}</h1>
-        <p className="mt-3 max-w-2xl text-sm leading-6 text-[#B7BDC6]">{copy.description}</p>
-        <div className="mt-8 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-          {["업무 구조 확인", "베타 미리보기", "실제 처리 기능 미연결"].map((label) => (
-            <div key={label} className="rounded-lg border border-[#2B3037] bg-[#1A1E23] px-4 py-4 text-xs text-[#7F8792]">{label}</div>
-          ))}
-        </div>
-      </section>
-    </div>
-  );
-}
 
 export function SensoraWorkspaceShell({
   initialSection = "dashboard",
@@ -107,6 +65,18 @@ export function SensoraWorkspaceShell({
       );
     }
 
+    if (activeSection === "customers") {
+      return <SensoraCustomerView />;
+    }
+
+    if (activeSection === "consulting") {
+      return <SensoraConsultationView />;
+    }
+
+    if (activeSection === "ai") {
+      return <SensoraAIAssistantView />;
+    }
+
     if (activeSection === "leadQueue") {
       return <div className="min-h-screen bg-[#0A0B0D] p-5 sm:p-6 xl:p-8"><SensoraLeadQueueView /></div>;
     }
@@ -119,7 +89,11 @@ export function SensoraWorkspaceShell({
       return <div className="min-h-screen bg-[#0A0B0D] p-5 sm:p-6 xl:p-8"><SensoraTeamView /></div>;
     }
 
-    return <WorkspacePlaceholder section={activeSection} />;
+    if (activeSection === "followup") {
+      return <SensoraFollowUpView />;
+    }
+
+    return <SensoraSettingsView />;
   })();
 
   return (
