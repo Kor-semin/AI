@@ -53,6 +53,27 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 pnpm dev
 ```
 
+### Sensora Lead persistence beta
+
+`/sensora/workspace`의 Lead 접수 기능은 브라우저 저장소로 대체하지 않고 다음 Firestore 경로를 사용합니다.
+
+```text
+sensoraWorkspaces/sensora-beta-workspace/leads/{leadId}
+```
+
+로컬에서는 `.env.example`을 `.env.local`로 복사한 뒤 아래 Firebase Web App 공개 설정을 채우고 개발 서버를 다시 시작합니다. 실제 값과 `.env.local`은 커밋하지 않습니다.
+
+```text
+NEXT_PUBLIC_FIREBASE_API_KEY=
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
+NEXT_PUBLIC_FIREBASE_APP_ID=
+```
+
+Lead 저장과 조회에는 Firebase 로그인이 필요하며, `sellerProfiles/{uid}.approvalStatus`가 `approved`인 사용자만 자기 `createdByUid`와 일치하는 Lead를 읽거나 생성할 수 있습니다. `firestore.rules`를 같은 Firebase 프로젝트에 배포해야 하며, 이 베타 단계에서는 Lead 수정과 삭제를 허용하지 않습니다. 환경변수가 없거나 인증·권한이 충족되지 않으면 화면에 원인을 표시하고 입력값은 유지합니다.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

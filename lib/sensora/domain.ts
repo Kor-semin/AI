@@ -66,6 +66,7 @@ export type LeadStatus = (typeof LEAD_STATUSES)[number];
 
 export type SensoraLead = {
   id: string;
+  workspaceId?: string;
   source: LeadSource;
   receivedAt: SensoraTimestamp;
   receivedBy?: string;
@@ -75,6 +76,8 @@ export type SensoraLead = {
   customerName: string;
   phone?: string;
   interestedVehicle?: string;
+  purchaseTiming?: string;
+  preferredContactTime?: string;
   status: LeadStatus;
   convertedCustomerId?: string;
   memo?: string;

@@ -5,6 +5,93 @@ service cloud.firestore {
       return request.auth != null && request.auth.token.betaAdmin == true;
     }
 
+    function isApprovedSeller() {
+      return request.auth != null &&
+        exists(/databases/$(database)/documents/sellerProfiles/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/sellerProfiles/$(request.auth.uid)).data.approvalStatus == 'approved';
+    }
+
+    function isValidSensoraLeadCreate(workspaceId, leadId) {
+      let data = request.resource.data;
+      return workspaceId == 'sensora-beta-workspace' &&
+        data.keys().hasOnly([
+          'id',
+          'workspaceId',
+          'createdByUid',
+          'source',
+          'receivedAt',
+          'customerName',
+          'phone',
+          'interestedVehicle',
+          'purchaseTiming',
+          'preferredContactTime',
+          'memo',
+          'status',
+          'branchId',
+          'createdAt',
+          'updatedAt',
+          'createdAtServer',
+          'updatedAtServer'
+        ]) &&
+        data.keys().hasAll([
+          'id',
+          'workspaceId',
+          'createdByUid',
+          'source',
+          'receivedAt',
+          'customerName',
+          'phone',
+          'interestedVehicle',
+          'status',
+          'branchId',
+          'createdAt',
+          'updatedAt',
+          'createdAtServer',
+          'updatedAtServer'
+        ]) &&
+        data.id == leadId &&
+        data.workspaceId == workspaceId &&
+        data.createdByUid == request.auth.uid &&
+        data.source in [
+          'showroom_call',
+          'walk_in',
+          'online_inquiry',
+          'referral',
+          'test_drive_request',
+          'event',
+          'unknown'
+        ] &&
+        data.customerName is string &&
+        data.customerName.size() > 0 &&
+        data.customerName.size() <= 80 &&
+        data.phone is string &&
+        data.phone.size() > 0 &&
+        data.phone.size() <= 40 &&
+        data.interestedVehicle is string &&
+        data.interestedVehicle.size() > 0 &&
+        data.interestedVehicle.size() <= 160 &&
+        (!data.keys().hasAny(['purchaseTiming']) ||
+          (data.purchaseTiming is string && data.purchaseTiming.size() <= 80)) &&
+        (!data.keys().hasAny(['preferredContactTime']) ||
+          (data.preferredContactTime is string && data.preferredContactTime.size() <= 120)) &&
+        (!data.keys().hasAny(['memo']) ||
+          (data.memo is string && data.memo.size() <= 1200)) &&
+        data.status == 'new' &&
+        data.branchId == 'sensora-beta-branch' &&
+        data.receivedAt is string &&
+        data.receivedAt.size() <= 40 &&
+        data.createdAt is string &&
+        data.createdAt.size() <= 40 &&
+        data.updatedAt is string &&
+        data.updatedAt.size() <= 40 &&
+        data.receivedAt == data.createdAt &&
+        data.updatedAt == data.createdAt &&
+        data.createdAtServer is timestamp &&
+        data.updatedAtServer is timestamp &&
+        data.createdAtServer == request.time &&
+        data.updatedAtServer == request.time;
+    }
+
     function isValidBetaSignupCreate() {
       let data = request.resource.data;
       return data.keys().hasOnly([
@@ -66,6 +153,15 @@ service cloud.firestore {
 
     match /users/{uid}/{document=**} {
       allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+
+    match /sensoraWorkspaces/{workspaceId}/leads/{leadId} {
+      allow read: if isBetaAdmin() ||
+        (isApprovedSeller() &&
+          resource.data.workspaceId == workspaceId &&
+          resource.data.createdByUid == request.auth.uid);
+      allow create: if isApprovedSeller() && isValidSensoraLeadCreate(workspaceId, leadId);
+      allow update, delete: if false;
     }
 
     match /betaSignups/{signupId} {
