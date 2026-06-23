@@ -92,6 +92,177 @@ service cloud.firestore {
         data.updatedAtServer == request.time;
     }
 
+    function isValidSensoraLeadConversionUpdate(workspaceId, leadId) {
+      let before = resource.data;
+      let after = request.resource.data;
+      return workspaceId == 'sensora-beta-workspace' &&
+        before.workspaceId == workspaceId &&
+        before.createdByUid == request.auth.uid &&
+        before.status != 'converted' &&
+        after.diff(before).affectedKeys().hasOnly([
+          'status',
+          'convertedCustomerId',
+          'updatedAt',
+          'updatedAtServer'
+        ]) &&
+        after.status == 'converted' &&
+        after.convertedCustomerId is string &&
+        after.convertedCustomerId.size() > 0 &&
+        after.convertedCustomerId.size() <= 80 &&
+        after.updatedAt is string &&
+        after.updatedAt.size() <= 40 &&
+        after.updatedAtServer is timestamp &&
+        after.updatedAtServer == request.time &&
+        existsAfter(/databases/$(database)/documents/sensoraWorkspaces/$(workspaceId)/customers/$(after.convertedCustomerId)) &&
+        getAfter(/databases/$(database)/documents/sensoraWorkspaces/$(workspaceId)/customers/$(after.convertedCustomerId)).data.leadId == leadId &&
+        getAfter(/databases/$(database)/documents/sensoraWorkspaces/$(workspaceId)/customers/$(after.convertedCustomerId)).data.ownerUid == request.auth.uid;
+    }
+
+    function isValidSensoraCustomerCreate(workspaceId, customerId) {
+      let data = request.resource.data;
+      return workspaceId == 'sensora-beta-workspace' &&
+        data.keys().hasOnly([
+          'id',
+          'workspaceId',
+          'leadId',
+          'name',
+          'phone',
+          'interestedVehicle',
+          'source',
+          'purchaseTiming',
+          'preferredContactTime',
+          'memo',
+          'status',
+          'createdByUid',
+          'ownerUid',
+          'assignedUserId',
+          'branchId',
+          'createdAt',
+          'updatedAt',
+          'createdAtServer',
+          'updatedAtServer'
+        ]) &&
+        data.keys().hasAll([
+          'id',
+          'workspaceId',
+          'leadId',
+          'name',
+          'phone',
+          'interestedVehicle',
+          'source',
+          'status',
+          'createdByUid',
+          'ownerUid',
+          'assignedUserId',
+          'branchId',
+          'createdAt',
+          'updatedAt',
+          'createdAtServer',
+          'updatedAtServer'
+        ]) &&
+        data.id == customerId &&
+        data.workspaceId == workspaceId &&
+        data.leadId is string &&
+        data.leadId.size() > 0 &&
+        data.leadId.size() <= 80 &&
+        data.name is string &&
+        data.name.size() > 0 &&
+        data.name.size() <= 80 &&
+        data.phone is string &&
+        data.phone.size() > 0 &&
+        data.phone.size() <= 40 &&
+        data.interestedVehicle is string &&
+        data.interestedVehicle.size() > 0 &&
+        data.interestedVehicle.size() <= 160 &&
+        data.source in [
+          'showroom_call',
+          'walk_in',
+          'online_inquiry',
+          'referral',
+          'test_drive_request',
+          'event',
+          'unknown'
+        ] &&
+        (!data.keys().hasAny(['purchaseTiming']) ||
+          (data.purchaseTiming is string && data.purchaseTiming.size() <= 80)) &&
+        (!data.keys().hasAny(['preferredContactTime']) ||
+          (data.preferredContactTime is string && data.preferredContactTime.size() <= 120)) &&
+        (!data.keys().hasAny(['memo']) ||
+          (data.memo is string && data.memo.size() <= 1200)) &&
+        data.status == 'new' &&
+        data.createdByUid == request.auth.uid &&
+        data.ownerUid == request.auth.uid &&
+        data.assignedUserId == request.auth.uid &&
+        data.branchId == 'sensora-beta-branch' &&
+        data.createdAt is string &&
+        data.createdAt.size() <= 40 &&
+        data.updatedAt == data.createdAt &&
+        data.createdAtServer is timestamp &&
+        data.updatedAtServer is timestamp &&
+        data.createdAtServer == request.time &&
+        data.updatedAtServer == request.time &&
+        existsAfter(/databases/$(database)/documents/sensoraWorkspaces/$(workspaceId)/leads/$(data.leadId)) &&
+        getAfter(/databases/$(database)/documents/sensoraWorkspaces/$(workspaceId)/leads/$(data.leadId)).data.createdByUid == request.auth.uid &&
+        getAfter(/databases/$(database)/documents/sensoraWorkspaces/$(workspaceId)/leads/$(data.leadId)).data.status == 'converted' &&
+        getAfter(/databases/$(database)/documents/sensoraWorkspaces/$(workspaceId)/leads/$(data.leadId)).data.convertedCustomerId == customerId;
+    }
+
+    function isValidSensoraConversionActivityCreate(workspaceId, activityLogId) {
+      let data = request.resource.data;
+      return workspaceId == 'sensora-beta-workspace' &&
+        data.keys().hasOnly([
+          'id',
+          'workspaceId',
+          'actorUserId',
+          'action',
+          'targetType',
+          'targetId',
+          'leadId',
+          'customerId',
+          'before',
+          'after',
+          'branchId',
+          'createdAt',
+          'createdAtServer'
+        ]) &&
+        data.keys().hasAll([
+          'id',
+          'workspaceId',
+          'actorUserId',
+          'action',
+          'targetType',
+          'targetId',
+          'leadId',
+          'customerId',
+          'before',
+          'after',
+          'branchId',
+          'createdAt',
+          'createdAtServer'
+        ]) &&
+        data.id == activityLogId &&
+        data.workspaceId == workspaceId &&
+        data.actorUserId == request.auth.uid &&
+        data.action == 'lead_converted_to_customer' &&
+        data.targetType == 'customer' &&
+        data.targetId == data.customerId &&
+        data.leadId is string &&
+        data.customerId is string &&
+        data.before is map &&
+        data.after is map &&
+        data.branchId == 'sensora-beta-branch' &&
+        data.createdAt is string &&
+        data.createdAt.size() <= 40 &&
+        data.createdAtServer is timestamp &&
+        data.createdAtServer == request.time &&
+        existsAfter(/databases/$(database)/documents/sensoraWorkspaces/$(workspaceId)/leads/$(data.leadId)) &&
+        existsAfter(/databases/$(database)/documents/sensoraWorkspaces/$(workspaceId)/customers/$(data.customerId)) &&
+        getAfter(/databases/$(database)/documents/sensoraWorkspaces/$(workspaceId)/leads/$(data.leadId)).data.createdByUid == request.auth.uid &&
+        getAfter(/databases/$(database)/documents/sensoraWorkspaces/$(workspaceId)/leads/$(data.leadId)).data.status == 'converted' &&
+        getAfter(/databases/$(database)/documents/sensoraWorkspaces/$(workspaceId)/customers/$(data.customerId)).data.ownerUid == request.auth.uid &&
+        getAfter(/databases/$(database)/documents/sensoraWorkspaces/$(workspaceId)/customers/$(data.customerId)).data.leadId == data.leadId;
+    }
+
     function isValidBetaSignupCreate() {
       let data = request.resource.data;
       return data.keys().hasOnly([
@@ -167,6 +338,25 @@ service cloud.firestore {
           resource.data.workspaceId == workspaceId &&
           resource.data.createdByUid == request.auth.uid);
       allow create: if isApprovedSeller() && isValidSensoraLeadCreate(workspaceId, leadId);
+      allow update: if isApprovedSeller() && isValidSensoraLeadConversionUpdate(workspaceId, leadId);
+      allow delete: if false;
+    }
+
+    match /sensoraWorkspaces/{workspaceId}/customers/{customerId} {
+      allow read: if isBetaAdmin() ||
+        (isApprovedSeller() &&
+          resource.data.workspaceId == workspaceId &&
+          resource.data.ownerUid == request.auth.uid);
+      allow create: if isApprovedSeller() && isValidSensoraCustomerCreate(workspaceId, customerId);
+      allow update, delete: if false;
+    }
+
+    match /sensoraWorkspaces/{workspaceId}/activityLogs/{activityLogId} {
+      allow read: if isBetaAdmin() ||
+        (isApprovedSeller() &&
+          resource.data.workspaceId == workspaceId &&
+          resource.data.actorUserId == request.auth.uid);
+      allow create: if isApprovedSeller() && isValidSensoraConversionActivityCreate(workspaceId, activityLogId);
       allow update, delete: if false;
     }
 

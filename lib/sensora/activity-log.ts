@@ -32,10 +32,13 @@ export type ActivityLogChangeSet = Record<string, unknown>;
 
 export type ActivityLog = {
   id: string;
+  workspaceId?: string;
   actorUserId: string;
   action: ActivityAction;
   targetType: ActivityTargetType;
   targetId: string;
+  leadId?: string;
+  customerId?: string;
   before?: ActivityLogChangeSet;
   after?: ActivityLogChangeSet;
   branchId?: string;

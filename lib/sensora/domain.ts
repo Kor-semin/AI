@@ -102,14 +102,24 @@ export const CUSTOMER_STATUSES = [
 
 export type CustomerStatus = (typeof CUSTOMER_STATUSES)[number];
 
+export type SensoraCustomerStatus = CustomerStatus;
+
 export type SensoraCustomer = {
   id: string;
+  workspaceId?: string;
+  leadId?: string;
   name: string;
   phone?: string;
   email?: string;
   interestedVehicle?: string;
+  source?: LeadSource;
+  purchaseTiming?: string;
+  preferredContactTime?: string;
+  memo?: string;
   status: CustomerStatus;
   assignedUserId: string;
+  createdByUid?: string;
+  ownerUid?: string;
   branchId: string;
   teamId?: string;
   sourceLeadId?: string;

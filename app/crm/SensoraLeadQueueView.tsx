@@ -5,8 +5,10 @@ import { useEffect, useState, type FormEvent } from "react";
 
 import { isFirebaseConfigured } from "@/app/firebase/client";
 import {
+  convertSensoraLeadToCustomer,
   createSensoraLead,
   DEFAULT_SENSORA_WORKSPACE_ID,
+  getSensoraCustomerPersistenceMessage,
   getSensoraLeadPersistenceMessage,
   listSensoraLeads,
   sensoraB2BSeedData,
@@ -150,17 +152,38 @@ function LeadPreview() {
 
       <div className="mt-6 rounded-lg border border-[#2B3037] bg-[#101216] p-4">
         <p className="text-xs font-semibold text-[#D3D7DD]">Firestore 저장 기능은 Lead 접수 메뉴에서 사용합니다.</p>
-        <p className="mt-2 text-[10px] leading-4 text-[#7F8792]">고객 전환·담당자 배정·문자 발송은 연결되어 있지 않습니다.</p>
+        <p className="mt-2 text-[10px] leading-4 text-[#7F8792]">저장된 Lead는 사용자가 확인한 뒤 Customer로 전환할 수 있습니다.</p>
       </div>
     </section>
   );
 }
 
-function SavedLeadList({ leads, loading, loadError, onRetry }: {
+function SavedLeadList({
+  leads,
+  loading,
+  loadError,
+  conversionNotice,
+  selectedLeadId,
+  conversionLeadId,
+  convertingLeadId,
+  onRetry,
+  onToggleDetail,
+  onRequestConversion,
+  onCancelConversion,
+  onConfirmConversion,
+}: {
   leads: SensoraStoredLead[];
   loading: boolean;
   loadError: string;
+  conversionNotice: Notice;
+  selectedLeadId: string | null;
+  conversionLeadId: string | null;
+  convertingLeadId: string | null;
   onRetry: () => void;
+  onToggleDetail: (leadId: string) => void;
+  onRequestConversion: (leadId: string) => void;
+  onCancelConversion: () => void;
+  onConfirmConversion: (lead: SensoraStoredLead) => void;
 }) {
   return (
     <section className="rounded-2xl border border-[#2B3037] bg-[#14171B] p-5 sm:p-6" aria-labelledby="saved-leads-title">
@@ -174,6 +197,15 @@ function SavedLeadList({ leads, loading, loadError, onRetry }: {
           {leads.length}건
         </span>
       </div>
+
+      {conversionNotice ? (
+        <p
+          className={`mt-5 rounded-lg border px-4 py-3 text-sm ${conversionNotice.tone === "success" ? "border-[#355542] bg-[#17221B] text-[#9CC7AB]" : "border-[#6E3442] bg-[#25151A] text-[#E2A8B6]"}`}
+          role={conversionNotice.tone === "error" ? "alert" : "status"}
+        >
+          {conversionNotice.message}
+        </p>
+      ) : null}
 
       {loading ? (
         <p className="mt-6 rounded-lg border border-[#2B3037] bg-[#101216] px-4 py-5 text-sm text-[#B7BDC6]" role="status">
@@ -205,23 +237,78 @@ function SavedLeadList({ leads, loading, loadError, onRetry }: {
 
       {!loading && leads.length > 0 ? (
         <div className="mt-6 grid gap-3">
-          {leads.map((lead) => (
-            <article key={lead.id} className="grid gap-4 rounded-xl border border-[#2B3037] bg-[#101216] p-4 md:grid-cols-[1.2fr_1fr_auto] md:items-center">
-              <div className="min-w-0">
-                <div className="flex flex-wrap items-center gap-2">
-                  <h3 className="font-semibold text-[#F4F6F8]">{lead.customerName}</h3>
-                  <span className="rounded-full bg-[#1C2520] px-2 py-1 text-[10px] font-medium text-[#79A78B]">{statusLabels[lead.status]}</span>
+          {leads.map((lead) => {
+            const detailOpen = selectedLeadId === lead.id;
+            const conversionOpen = conversionLeadId === lead.id;
+            const converted = lead.status === "converted" || Boolean(lead.convertedCustomerId);
+            const converting = convertingLeadId === lead.id;
+
+            return (
+              <article key={lead.id} className="rounded-xl border border-[#2B3037] bg-[#101216] p-4">
+                <div className="grid gap-4 md:grid-cols-[1.2fr_1fr_auto] md:items-center">
+                  <div className="min-w-0">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <h3 className="font-semibold text-[#F4F6F8]">{lead.customerName}</h3>
+                      <span className="rounded-full bg-[#1C2520] px-2 py-1 text-[10px] font-medium text-[#79A78B]">{statusLabels[lead.status]}</span>
+                    </div>
+                    <p className="mt-2 text-sm text-[#C5CAD1]">{maskSensoraLeadPhone(lead.phone)}</p>
+                    <p className="mt-1 truncate text-xs text-[#7F8792]">{summarizeMemo(lead.memo)}</p>
+                  </div>
+                  <div className="min-w-0 text-xs">
+                    <p className="truncate font-medium text-[#D3D7DD]">{lead.interestedVehicle}</p>
+                    <p className="mt-1 text-[#7F8792]">{sourceLabels[lead.source]}</p>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-2 md:max-w-[210px] md:justify-end">
+                    <time className="w-full text-[11px] text-[#7F8792] md:text-right" dateTime={lead.createdAt}>{formatCreatedAt(lead.createdAt)}</time>
+                    <button
+                      type="button"
+                      onClick={() => onToggleDetail(lead.id)}
+                      className="rounded-lg border border-[#343A43] px-3 py-2 text-[11px] font-medium text-[#B7BDC6] hover:bg-[#1A1E23]"
+                      aria-expanded={detailOpen}
+                    >
+                      {detailOpen ? "상세 닫기" : "상세 보기"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => onRequestConversion(lead.id)}
+                      disabled={converted || converting}
+                      className="rounded-lg bg-[#7A263A] px-3 py-2 text-[11px] font-semibold text-white hover:bg-[#8D3047] disabled:cursor-not-allowed disabled:bg-[#343A43] disabled:text-[#8D949E]"
+                    >
+                      {converted ? "전환 완료" : converting ? "전환 중…" : "고객으로 전환"}
+                    </button>
+                  </div>
                 </div>
-                <p className="mt-2 text-sm text-[#C5CAD1]">{maskSensoraLeadPhone(lead.phone)}</p>
-                <p className="mt-1 truncate text-xs text-[#7F8792]">{summarizeMemo(lead.memo)}</p>
-              </div>
-              <div className="min-w-0 text-xs">
-                <p className="truncate font-medium text-[#D3D7DD]">{lead.interestedVehicle}</p>
-                <p className="mt-1 text-[#7F8792]">{sourceLabels[lead.source]}</p>
-              </div>
-              <time className="text-[11px] text-[#7F8792]" dateTime={lead.createdAt}>{formatCreatedAt(lead.createdAt)}</time>
-            </article>
-          ))}
+
+                {detailOpen ? (
+                  <dl className="mt-4 grid gap-3 border-t border-[#2B3037] pt-4 text-xs sm:grid-cols-2">
+                    <div><dt className="text-[#656D78]">고객명</dt><dd className="mt-1 text-[#D3D7DD]">{lead.customerName}</dd></div>
+                    <div><dt className="text-[#656D78]">연락처</dt><dd className="mt-1 text-[#D3D7DD]">{maskSensoraLeadPhone(lead.phone)}</dd></div>
+                    <div><dt className="text-[#656D78]">구매 시기</dt><dd className="mt-1 text-[#D3D7DD]">{lead.purchaseTiming || "미입력"}</dd></div>
+                    <div><dt className="text-[#656D78]">선호 연락 시간</dt><dd className="mt-1 text-[#D3D7DD]">{lead.preferredContactTime || "미입력"}</dd></div>
+                    <div className="sm:col-span-2"><dt className="text-[#656D78]">상담 메모</dt><dd className="mt-1 whitespace-pre-wrap leading-5 text-[#D3D7DD]">{lead.memo || "메모 없음"}</dd></div>
+                    {lead.convertedCustomerId ? (
+                      <div className="sm:col-span-2"><dt className="text-[#656D78]">Customer ID</dt><dd className="mt-1 break-all font-mono text-[#79A78B]">{lead.convertedCustomerId}</dd></div>
+                    ) : null}
+                  </dl>
+                ) : null}
+
+                {conversionOpen && !converted ? (
+                  <div className="mt-4 rounded-lg border border-[#6E5A34] bg-[#251F15] p-4" role="region" aria-label="Customer 전환 확인">
+                    <p className="text-sm font-semibold text-[#E8D3A6]">이 Lead를 고객관리 대상으로 전환합니다.</p>
+                    <p className="mt-2 text-xs leading-5 text-[#B7A781]">문자 발송, 담당자 자동 배정, Follow-up 자동 생성은 아직 실행되지 않습니다.</p>
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      <button type="button" onClick={() => onConfirmConversion(lead)} disabled={converting} className="rounded-lg bg-[#7A263A] px-4 py-2 text-xs font-semibold text-white hover:bg-[#8D3047] disabled:cursor-not-allowed disabled:bg-[#343A43]">
+                        {converting ? "Transaction 실행 중…" : "전환 실행"}
+                      </button>
+                      <button type="button" onClick={onCancelConversion} disabled={converting} className="rounded-lg border border-[#5B4C30] px-4 py-2 text-xs text-[#D7C49B] hover:bg-[#302719] disabled:opacity-50">
+                        취소
+                      </button>
+                    </div>
+                  </div>
+                ) : null}
+              </article>
+            );
+          })}
         </div>
       ) : null}
     </section>
@@ -234,8 +321,12 @@ function LeadPersistenceView() {
   const [leads, setLeads] = useState<SensoraStoredLead[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [selectedLeadId, setSelectedLeadId] = useState<string | null>(null);
+  const [conversionLeadId, setConversionLeadId] = useState<string | null>(null);
+  const [convertingLeadId, setConvertingLeadId] = useState<string | null>(null);
   const [loadError, setLoadError] = useState("");
   const [notice, setNotice] = useState<Notice>(null);
+  const [conversionNotice, setConversionNotice] = useState<Notice>(null);
 
   const canSubmit = Boolean(
     form.customerName.trim() &&
@@ -310,6 +401,42 @@ function LeadPersistenceView() {
     }
   };
 
+  const handleConvertLead = async (lead: SensoraStoredLead) => {
+    if (convertingLeadId || lead.status === "converted" || lead.convertedCustomerId) return;
+
+    setConvertingLeadId(lead.id);
+    setConversionNotice(null);
+    try {
+      const result = await convertSensoraLeadToCustomer({
+        workspaceId: DEFAULT_SENSORA_WORKSPACE_ID,
+        leadId: lead.id,
+      });
+      setLeads((current) => current.map((item) => (
+        item.id === lead.id
+          ? {
+              ...item,
+              status: result.lead.status,
+              convertedCustomerId: result.lead.convertedCustomerId,
+              updatedAt: result.lead.updatedAt,
+            }
+          : item
+      )));
+      setSelectedLeadId(lead.id);
+      setConversionLeadId(null);
+      setConversionNotice({
+        tone: "success",
+        message: `${result.customer.name} Customer가 생성되고 Lead 전환 상태가 저장되었습니다.`,
+      });
+    } catch (error) {
+      setConversionNotice({
+        tone: "error",
+        message: getSensoraCustomerPersistenceMessage(error),
+      });
+    } finally {
+      setConvertingLeadId(null);
+    }
+  };
+
   return (
     <div className="mx-auto grid w-full max-w-[1440px] gap-5 xl:grid-cols-[minmax(0,0.95fr)_minmax(420px,1.05fr)]">
       <section className="rounded-2xl border border-[#2B3037] bg-[#14171B] p-5 sm:p-6" aria-labelledby="lead-form-title">
@@ -322,14 +449,14 @@ function LeadPersistenceView() {
               </span>
             </div>
             <h1 id="lead-form-title" className="mt-4 text-xl font-semibold tracking-[-0.02em] text-[#F4F6F8]">신규 Lead 직접 등록</h1>
-            <p className="mt-2 text-xs leading-5 text-[#8D949E]">고객 전환·담당자 배정·문자 발송은 아직 연결되어 있지 않습니다.</p>
+            <p className="mt-2 text-xs leading-5 text-[#8D949E]">저장된 Lead의 Customer 전환은 사용자가 직접 확인하고 실행합니다.</p>
           </div>
           <span className="rounded-lg border border-[#2B3037] bg-[#101216] px-3 py-2 text-[10px] text-[#7F8792]">Beta workspace</span>
         </div>
 
         <div className="mt-5 rounded-lg border border-[#3B414A] bg-[#101216] p-4 text-xs leading-5 text-[#B7BDC6]">
           <p>Lead 저장은 사용자가 직접 입력 후 저장할 때만 실행됩니다.</p>
-          <p className="mt-1">고객 전환, 담당자 배정, 문자 발송은 아직 연결되어 있지 않습니다.</p>
+          <p className="mt-1">Customer 전환은 수동 실행이며 담당자 자동 배정, 문자 발송, Follow-up 자동 생성은 실행되지 않습니다.</p>
         </div>
 
         <form className="mt-6 grid gap-4 sm:grid-cols-2" onSubmit={handleSubmit} noValidate>
@@ -380,7 +507,24 @@ function LeadPersistenceView() {
       </section>
 
       <div className="grid content-start gap-5">
-        <SavedLeadList leads={leads} loading={loading} loadError={loadError} onRetry={() => void loadLeads()} />
+        <SavedLeadList
+          leads={leads}
+          loading={loading}
+          loadError={loadError}
+          conversionNotice={conversionNotice}
+          selectedLeadId={selectedLeadId}
+          conversionLeadId={conversionLeadId}
+          convertingLeadId={convertingLeadId}
+          onRetry={() => void loadLeads()}
+          onToggleDetail={(leadId) => setSelectedLeadId((current) => current === leadId ? null : leadId)}
+          onRequestConversion={(leadId) => {
+            setSelectedLeadId(leadId);
+            setConversionLeadId(leadId);
+            setConversionNotice(null);
+          }}
+          onCancelConversion={() => setConversionLeadId(null)}
+          onConfirmConversion={(lead) => void handleConvertLead(lead)}
+        />
 
         <section className="rounded-2xl border border-dashed border-[#343A43] bg-[#101216] p-5" aria-labelledby="demo-leads-title">
           <div className="flex items-center justify-between gap-3">
