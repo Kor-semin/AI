@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState, type FormEvent } from "react";
 
 import { isFirebaseConfigured } from "@/app/firebase/client";
@@ -183,9 +184,16 @@ function SavedLeadList({ leads, loading, loadError, onRetry }: {
       {!loading && loadError ? (
         <div className="mt-6 rounded-lg border border-[#6E3442] bg-[#25151A] p-4" role="alert">
           <p className="text-sm text-[#E2A8B6]">{loadError}</p>
-          <button type="button" onClick={onRetry} className="mt-3 rounded-lg border border-[#6E3442] px-3 py-2 text-xs font-medium text-[#F1C6D0] hover:bg-[#321B22]">
-            다시 조회
-          </button>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {loadError.includes("로그인") ? (
+              <Link href="/login" className="rounded-lg bg-[#7A263A] px-3 py-2 text-xs font-semibold text-white hover:bg-[#8D3047]">
+                승인 계정으로 로그인
+              </Link>
+            ) : null}
+            <button type="button" onClick={onRetry} className="rounded-lg border border-[#6E3442] px-3 py-2 text-xs font-medium text-[#F1C6D0] hover:bg-[#321B22]">
+              다시 조회
+            </button>
+          </div>
         </div>
       ) : null}
 
