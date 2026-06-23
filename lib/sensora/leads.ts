@@ -188,6 +188,7 @@ export async function listSensoraLeads(
     const db = getFirebaseDb();
     const leadsQuery = query(
       collection(db, "sensoraWorkspaces", workspaceId, "leads"),
+      where("workspaceId", "==", workspaceId),
       where("createdByUid", "==", createdByUid),
     );
     const snapshot = await getDocs(leadsQuery);

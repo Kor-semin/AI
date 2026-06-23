@@ -9,19 +9,22 @@ import {
   signInWithEmailAndPassword,
   signOut as firebaseSignOut,
 } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
 
-import { getFirebaseAuth, isFirebaseConfigured } from "@/app/firebase/client";
 import {
-  DEFAULT_SENSORA_WORKSPACE_ID,
-  listSensoraLeads,
-  SensoraLeadPersistenceError,
-} from "@/lib/sensora";
+  getFirebaseAuth,
+  getFirebaseDb,
+  isFirebaseConfigured,
+} from "@/app/firebase/client";
+
+function firebaseErrorCode(error: unknown): string {
+  return typeof error === "object" && error !== null && "code" in error
+    ? String((error as { code?: unknown }).code)
+    : "";
+}
 
 function authErrorMessage(error: unknown): string {
-  const code =
-    typeof error === "object" && error !== null && "code" in error
-      ? String((error as { code?: unknown }).code)
-      : "";
+  const code = firebaseErrorCode(error);
 
   if (code.includes("invalid-credential") || code.includes("wrong-password") || code.includes("user-not-found")) {
     return "이메일 또는 비밀번호를 확인해 주세요.";
@@ -38,10 +41,19 @@ function authErrorMessage(error: unknown): string {
   if (code.includes("network-request-failed")) {
     return "Firebase Auth에 연결할 수 없습니다. 네트워크 상태를 확인해 주세요.";
   }
-  if (error instanceof SensoraLeadPersistenceError) {
-    return error.message;
-  }
   return "로그인하지 못했습니다. 잠시 후 다시 시도해 주세요.";
+}
+
+function sellerProfileErrorMessage(error: unknown): string {
+  const code = firebaseErrorCode(error);
+
+  if (code.includes("permission-denied")) {
+    return "판매자 승인 프로필을 읽을 권한이 없습니다. Firestore sellerProfiles self-read rules 배포 상태를 확인해 주세요.";
+  }
+  if (code.includes("unavailable") || code.includes("network")) {
+    return "판매자 승인 상태를 확인할 수 없습니다. 네트워크 상태를 확인한 뒤 다시 로그인해 주세요.";
+  }
+  return "판매자 승인 상태 확인에 실패했습니다. 잠시 후 다시 로그인해 주세요.";
 }
 
 export default function LoginPage() {
@@ -64,22 +76,32 @@ export default function LoginPage() {
     const auth = getFirebaseAuth();
     try {
       await setPersistence(auth, browserLocalPersistence);
-      await signInWithEmailAndPassword(auth, email.trim(), password);
+      const credential = await signInWithEmailAndPassword(auth, email.trim(), password);
 
       try {
-        await listSensoraLeads(DEFAULT_SENSORA_WORKSPACE_ID);
-      } catch (leadAccessError) {
-        if (
-          leadAccessError instanceof SensoraLeadPersistenceError &&
-          leadAccessError.code === "permission-denied"
-        ) {
+        const sellerProfile = await getDoc(
+          doc(getFirebaseDb(), "sellerProfiles", credential.user.uid),
+        );
+
+        if (!sellerProfile.exists()) {
           await firebaseSignOut(auth);
           setError(
-            "로그인은 성공했지만 승인된 판매자 계정이 아닙니다. sellerProfiles 승인 상태를 확인해 주세요.",
+            "판매자 승인 프로필이 없습니다. Sensora 운영 담당자에게 승인을 요청해 주세요.",
           );
           return;
         }
-        throw leadAccessError;
+
+        if (sellerProfile.data().approvalStatus !== "approved") {
+          await firebaseSignOut(auth);
+          setError(
+            "판매자 계정 승인이 아직 완료되지 않았습니다. 승인 후 다시 로그인해 주세요.",
+          );
+          return;
+        }
+      } catch (sellerProfileError) {
+        await firebaseSignOut(auth);
+        setError(sellerProfileErrorMessage(sellerProfileError));
+        return;
       }
 
       router.replace("/sensora/workspace");
