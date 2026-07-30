@@ -93,7 +93,7 @@ const EMPTY_FORM: LeadFormState = {
 };
 
 const inputClass =
-  "mt-2 w-full rounded-lg border border-[#343A43] bg-[#101216] px-3 py-2.5 text-sm text-[#F4F6F8] outline-none transition placeholder:text-[#656D78] focus:border-[#8B3A4D] focus:ring-2 focus:ring-[#7A263A]/20 disabled:cursor-not-allowed disabled:opacity-60";
+  "mt-2 w-full rounded-lg border border-[var(--s-border-2)] bg-[var(--s-deep)] px-3 py-2.5 text-sm text-[var(--s-text)] outline-none transition placeholder:text-[var(--s-text-5)] focus:border-[var(--s-brand-hover)] focus:ring-2 focus:ring-[var(--s-brand-ring)] disabled:cursor-not-allowed disabled:opacity-60";
 
 export function maskSensoraLeadPhone(phone: string): string {
   const digits = phone.replace(/\D/g, "");
@@ -124,35 +124,35 @@ function summarizeMemo(memo?: string): string {
 function LeadPreview() {
   return (
     <section
-      className="min-h-[380px] min-w-0 max-w-full rounded-2xl border border-[#2B3037] bg-[#14171B] p-5 sm:p-6"
+      className="min-h-[380px] min-w-0 max-w-full rounded-2xl border border-[var(--s-border)] bg-[var(--s-card)] p-5 sm:p-6"
       aria-labelledby="lead-preview-title"
     >
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#A93754]">Lead Intake</p>
-          <h2 id="lead-preview-title" className="mt-1 text-lg font-semibold tracking-[-0.02em] text-[#F4F6F8]">
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--s-brand-text)]">Lead Intake</p>
+          <h2 id="lead-preview-title" className="mt-1 text-lg font-semibold tracking-[-0.02em] text-[var(--s-text)]">
             신규 Lead 접수
           </h2>
         </div>
-        <span className="rounded-lg bg-[#2A151B] px-4 py-2 text-[10px] font-medium text-[#A93754]">
+        <span className="rounded-lg bg-[var(--s-brand-tint)] px-4 py-2 text-xs font-medium text-[var(--s-brand-text)]">
           Demo data
         </span>
       </div>
 
-      <dl className="mt-9 grid min-h-[150px] grid-cols-[68px_1fr] content-center gap-x-4 gap-y-4 rounded-lg border border-[#2B3037] bg-[#1A1E23] p-4 text-[11px]">
-        <dt className="text-[#7F8792]">접수 채널</dt>
-        <dd className="text-[#B7BDC6]">전시장 전화 · 직접 방문</dd>
-        <dt className="text-[#7F8792]">온라인 문의</dt>
-        <dd className="text-[#B7BDC6]">웹 폼 유입</dd>
-        <dt className="text-[#7F8792]">저장 방식</dt>
-        <dd className="text-[#B7BDC6]">사용자 직접 입력 후 저장</dd>
-        <dt className="text-[#7F8792]">현재 단계</dt>
-        <dd className="text-[#B7BDC6]">Lead 접수 Beta</dd>
+      <dl className="mt-9 grid min-h-[150px] grid-cols-[84px_1fr] content-center gap-x-4 gap-y-4 rounded-lg border border-[var(--s-border)] bg-[var(--s-inner)] p-4 text-[0.8125rem]">
+        <dt className="text-[var(--s-text-3)]">접수 채널</dt>
+        <dd className="text-[var(--s-text-2)]">전시장 전화 · 직접 방문</dd>
+        <dt className="text-[var(--s-text-3)]">온라인 문의</dt>
+        <dd className="text-[var(--s-text-2)]">웹 폼 유입</dd>
+        <dt className="text-[var(--s-text-3)]">저장 방식</dt>
+        <dd className="text-[var(--s-text-2)]">사용자 직접 입력 후 저장</dd>
+        <dt className="text-[var(--s-text-3)]">현재 단계</dt>
+        <dd className="text-[var(--s-text-2)]">Lead 접수 Beta</dd>
       </dl>
 
-      <div className="mt-6 rounded-lg border border-[#2B3037] bg-[#101216] p-4">
-        <p className="text-xs font-semibold text-[#D3D7DD]">Firestore 저장 기능은 Lead 접수 메뉴에서 사용합니다.</p>
-        <p className="mt-2 text-[10px] leading-4 text-[#7F8792]">저장된 Lead는 사용자가 확인한 뒤 Customer로 전환할 수 있습니다.</p>
+      <div className="mt-6 rounded-lg border border-[var(--s-border)] bg-[var(--s-deep)] p-4">
+        <p className="text-sm font-semibold text-[var(--s-text-emph)]">Firestore 저장 기능은 Lead 접수 메뉴에서 사용합니다.</p>
+        <p className="mt-2 text-xs leading-5 text-[var(--s-text-3)]">저장된 Lead는 사용자가 확인한 뒤 Customer로 전환할 수 있습니다.</p>
       </div>
     </section>
   );
@@ -186,21 +186,21 @@ function SavedLeadList({
   onConfirmConversion: (lead: SensoraStoredLead) => void;
 }) {
   return (
-    <section className="rounded-2xl border border-[#2B3037] bg-[#14171B] p-5 sm:p-6" aria-labelledby="saved-leads-title">
+    <section className="rounded-2xl border border-[var(--s-border)] bg-[var(--s-card)] p-5 sm:p-6" aria-labelledby="saved-leads-title">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#4E8A66]">Live data</p>
-          <h2 id="saved-leads-title" className="mt-2 text-lg font-semibold text-[#F4F6F8]">Firestore 저장 데이터</h2>
-          <p className="mt-1 text-xs text-[#7F8792]">Demo data와 분리된 실제 Lead 목록입니다.</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--s-ok-text)]">Live data</p>
+          <h2 id="saved-leads-title" className="mt-2 text-lg font-semibold text-[var(--s-text)]">Firestore 저장 데이터</h2>
+          <p className="mt-1 text-[0.8125rem] text-[var(--s-text-3)]">Demo data와 분리된 실제 Lead 목록입니다.</p>
         </div>
-        <span className="rounded-full border border-[#2B3037] bg-[#101216] px-3 py-1.5 text-[10px] text-[#B7BDC6]">
+        <span className="rounded-full border border-[var(--s-border)] bg-[var(--s-deep)] px-3 py-1.5 text-xs text-[var(--s-text-2)]">
           {leads.length}건
         </span>
       </div>
 
       {conversionNotice ? (
         <p
-          className={`mt-5 rounded-lg border px-4 py-3 text-sm ${conversionNotice.tone === "success" ? "border-[#355542] bg-[#17221B] text-[#9CC7AB]" : "border-[#6E3442] bg-[#25151A] text-[#E2A8B6]"}`}
+          className={`mt-5 rounded-lg border px-4 py-3 text-sm ${conversionNotice.tone === "success" ? "border-[var(--s-ok-border)] bg-[var(--s-ok-tint)] text-[var(--s-ok-text)]" : "border-[var(--s-err-border)] bg-[var(--s-err-tint)] text-[var(--s-err-text)]"}`}
           role={conversionNotice.tone === "error" ? "alert" : "status"}
         >
           {conversionNotice.message}
@@ -208,21 +208,21 @@ function SavedLeadList({
       ) : null}
 
       {loading ? (
-        <p className="mt-6 rounded-lg border border-[#2B3037] bg-[#101216] px-4 py-5 text-sm text-[#B7BDC6]" role="status">
+        <p className="mt-6 rounded-lg border border-[var(--s-border)] bg-[var(--s-deep)] px-4 py-5 text-sm text-[var(--s-text-2)]" role="status">
           저장된 Lead를 불러오는 중입니다…
         </p>
       ) : null}
 
       {!loading && loadError ? (
-        <div className="mt-6 rounded-lg border border-[#6E3442] bg-[#25151A] p-4" role="alert">
-          <p className="text-sm text-[#E2A8B6]">{loadError}</p>
+        <div className="mt-6 rounded-lg border border-[var(--s-err-border)] bg-[var(--s-err-tint)] p-4" role="alert">
+          <p className="text-sm text-[var(--s-err-text)]">{loadError}</p>
           <div className="mt-3 flex flex-wrap gap-2">
             {loadError.includes("로그인") ? (
-              <Link href="/login" className="rounded-lg bg-[#7A263A] px-3 py-2 text-xs font-semibold text-white hover:bg-[#8D3047]">
+              <Link href="/login" className="rounded-lg bg-[var(--s-brand)] px-3 py-2 text-xs font-semibold text-white hover:bg-[var(--s-brand-hover)]">
                 승인 계정으로 로그인
               </Link>
             ) : null}
-            <button type="button" onClick={onRetry} className="rounded-lg border border-[#6E3442] px-3 py-2 text-xs font-medium text-[#F1C6D0] hover:bg-[#321B22]">
+            <button type="button" onClick={onRetry} className="rounded-lg border border-[var(--s-err-border)] px-3 py-2 text-xs font-medium text-[var(--s-err-text)] hover:bg-[var(--s-err-tint)]">
               다시 조회
             </button>
           </div>
@@ -230,7 +230,7 @@ function SavedLeadList({
       ) : null}
 
       {!loading && !loadError && leads.length === 0 ? (
-        <p className="mt-6 rounded-lg border border-dashed border-[#343A43] bg-[#101216] px-4 py-8 text-center text-sm text-[#7F8792]">
+        <p className="mt-6 rounded-lg border border-dashed border-[var(--s-border-2)] bg-[var(--s-deep)] px-4 py-8 text-center text-sm text-[var(--s-text-3)]">
           아직 저장된 Lead가 없습니다
         </p>
       ) : null}
@@ -244,26 +244,26 @@ function SavedLeadList({
             const converting = convertingLeadId === lead.id;
 
             return (
-              <article key={lead.id} className="rounded-xl border border-[#2B3037] bg-[#101216] p-4">
+              <article key={lead.id} className="rounded-xl border border-[var(--s-border)] bg-[var(--s-deep)] p-4">
                 <div className="grid gap-4 md:grid-cols-[1.2fr_1fr_auto] md:items-center">
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-2">
-                      <h3 className="font-semibold text-[#F4F6F8]">{lead.customerName}</h3>
-                      <span className="rounded-full bg-[#1C2520] px-2 py-1 text-[10px] font-medium text-[#79A78B]">{statusLabels[lead.status]}</span>
+                      <h3 className="font-semibold text-[var(--s-text)]">{lead.customerName}</h3>
+                      <span className="rounded-full bg-[var(--s-ok-tint)] px-2 py-1 text-xs font-medium text-[var(--s-ok-text)]">{statusLabels[lead.status]}</span>
                     </div>
-                    <p className="mt-2 text-sm text-[#C5CAD1]">{maskSensoraLeadPhone(lead.phone)}</p>
-                    <p className="mt-1 truncate text-xs text-[#7F8792]">{summarizeMemo(lead.memo)}</p>
+                    <p className="mt-2 text-sm text-[var(--s-text-2)]">{maskSensoraLeadPhone(lead.phone)}</p>
+                    <p className="mt-1 truncate text-xs text-[var(--s-text-3)]">{summarizeMemo(lead.memo)}</p>
                   </div>
                   <div className="min-w-0 text-xs">
-                    <p className="truncate font-medium text-[#D3D7DD]">{lead.interestedVehicle}</p>
-                    <p className="mt-1 text-[#7F8792]">{sourceLabels[lead.source]}</p>
+                    <p className="truncate font-medium text-[var(--s-text-emph)]">{lead.interestedVehicle}</p>
+                    <p className="mt-1 text-[var(--s-text-3)]">{sourceLabels[lead.source]}</p>
                   </div>
                   <div className="flex flex-wrap items-center gap-2 md:max-w-[210px] md:justify-end">
-                    <time className="w-full text-[11px] text-[#7F8792] md:text-right" dateTime={lead.createdAt}>{formatCreatedAt(lead.createdAt)}</time>
+                    <time className="w-full text-xs text-[var(--s-text-3)] md:text-right" dateTime={lead.createdAt}>{formatCreatedAt(lead.createdAt)}</time>
                     <button
                       type="button"
                       onClick={() => onToggleDetail(lead.id)}
-                      className="rounded-lg border border-[#343A43] px-3 py-2 text-[11px] font-medium text-[#B7BDC6] hover:bg-[#1A1E23]"
+                      className="rounded-lg border border-[var(--s-border-2)] px-3 py-2 text-xs font-medium text-[var(--s-text-2)] hover:bg-[var(--s-inner)]"
                       aria-expanded={detailOpen}
                     >
                       {detailOpen ? "상세 닫기" : "상세 보기"}
@@ -272,7 +272,7 @@ function SavedLeadList({
                       type="button"
                       onClick={() => onRequestConversion(lead.id)}
                       disabled={converted || converting}
-                      className="rounded-lg bg-[#7A263A] px-3 py-2 text-[11px] font-semibold text-white hover:bg-[#8D3047] disabled:cursor-not-allowed disabled:bg-[#343A43] disabled:text-[#8D949E]"
+                      className="rounded-lg bg-[var(--s-brand)] px-3 py-2 text-xs font-semibold text-white hover:bg-[var(--s-brand-hover)] disabled:cursor-not-allowed disabled:bg-[var(--s-border-2)] disabled:text-[var(--s-text-4)]"
                     >
                       {converted ? "전환 완료" : converting ? "전환 중…" : "고객으로 전환"}
                     </button>
@@ -280,27 +280,27 @@ function SavedLeadList({
                 </div>
 
                 {detailOpen ? (
-                  <dl className="mt-4 grid gap-3 border-t border-[#2B3037] pt-4 text-xs sm:grid-cols-2">
-                    <div><dt className="text-[#656D78]">고객명</dt><dd className="mt-1 text-[#D3D7DD]">{lead.customerName}</dd></div>
-                    <div><dt className="text-[#656D78]">연락처</dt><dd className="mt-1 text-[#D3D7DD]">{maskSensoraLeadPhone(lead.phone)}</dd></div>
-                    <div><dt className="text-[#656D78]">구매 시기</dt><dd className="mt-1 text-[#D3D7DD]">{lead.purchaseTiming || "미입력"}</dd></div>
-                    <div><dt className="text-[#656D78]">선호 연락 시간</dt><dd className="mt-1 text-[#D3D7DD]">{lead.preferredContactTime || "미입력"}</dd></div>
-                    <div className="sm:col-span-2"><dt className="text-[#656D78]">상담 메모</dt><dd className="mt-1 whitespace-pre-wrap leading-5 text-[#D3D7DD]">{lead.memo || "메모 없음"}</dd></div>
+                  <dl className="mt-4 grid gap-3 border-t border-[var(--s-border)] pt-4 text-xs sm:grid-cols-2">
+                    <div><dt className="text-[var(--s-text-5)]">고객명</dt><dd className="mt-1 text-[var(--s-text-emph)]">{lead.customerName}</dd></div>
+                    <div><dt className="text-[var(--s-text-5)]">연락처</dt><dd className="mt-1 text-[var(--s-text-emph)]">{maskSensoraLeadPhone(lead.phone)}</dd></div>
+                    <div><dt className="text-[var(--s-text-5)]">구매 시기</dt><dd className="mt-1 text-[var(--s-text-emph)]">{lead.purchaseTiming || "미입력"}</dd></div>
+                    <div><dt className="text-[var(--s-text-5)]">선호 연락 시간</dt><dd className="mt-1 text-[var(--s-text-emph)]">{lead.preferredContactTime || "미입력"}</dd></div>
+                    <div className="sm:col-span-2"><dt className="text-[var(--s-text-5)]">상담 메모</dt><dd className="mt-1 whitespace-pre-wrap leading-5 text-[var(--s-text-emph)]">{lead.memo || "메모 없음"}</dd></div>
                     {lead.convertedCustomerId ? (
-                      <div className="sm:col-span-2"><dt className="text-[#656D78]">Customer ID</dt><dd className="mt-1 break-all font-mono text-[#79A78B]">{lead.convertedCustomerId}</dd></div>
+                      <div className="sm:col-span-2"><dt className="text-[var(--s-text-5)]">Customer ID</dt><dd className="mt-1 break-all font-mono text-[var(--s-ok-text)]">{lead.convertedCustomerId}</dd></div>
                     ) : null}
                   </dl>
                 ) : null}
 
                 {conversionOpen && !converted ? (
-                  <div className="mt-4 rounded-lg border border-[#6E5A34] bg-[#251F15] p-4" role="region" aria-label="Customer 전환 확인">
-                    <p className="text-sm font-semibold text-[#E8D3A6]">이 Lead를 고객관리 대상으로 전환합니다.</p>
-                    <p className="mt-2 text-xs leading-5 text-[#B7A781]">문자 발송, 담당자 자동 배정, Follow-up 자동 생성은 아직 실행되지 않습니다.</p>
+                  <div className="mt-4 rounded-lg border border-[var(--s-warn-border)] bg-[var(--s-warn-tint)] p-4" role="region" aria-label="Customer 전환 확인">
+                    <p className="text-sm font-semibold text-[var(--s-warn-text-strong)]">이 Lead를 고객관리 대상으로 전환합니다.</p>
+                    <p className="mt-2 text-xs leading-5 text-[var(--s-warn-text-soft)]">문자 발송, 담당자 자동 배정, Follow-up 자동 생성은 아직 실행되지 않습니다.</p>
                     <div className="mt-4 flex flex-wrap gap-2">
-                      <button type="button" onClick={() => onConfirmConversion(lead)} disabled={converting} className="rounded-lg bg-[#7A263A] px-4 py-2 text-xs font-semibold text-white hover:bg-[#8D3047] disabled:cursor-not-allowed disabled:bg-[#343A43]">
+                      <button type="button" onClick={() => onConfirmConversion(lead)} disabled={converting} className="rounded-lg bg-[var(--s-brand)] px-4 py-2 text-xs font-semibold text-white hover:bg-[var(--s-brand-hover)] disabled:cursor-not-allowed disabled:bg-[var(--s-border-2)]">
                         {converting ? "Transaction 실행 중…" : "전환 실행"}
                       </button>
-                      <button type="button" onClick={onCancelConversion} disabled={converting} className="rounded-lg border border-[#5B4C30] px-4 py-2 text-xs text-[#D7C49B] hover:bg-[#302719] disabled:opacity-50">
+                      <button type="button" onClick={onCancelConversion} disabled={converting} className="rounded-lg border border-[var(--s-warn-border)] px-4 py-2 text-xs text-[var(--s-warn-text-soft)] hover:bg-[var(--s-warn-tint)] disabled:opacity-50">
                         취소
                       </button>
                     </div>
@@ -439,69 +439,69 @@ function LeadPersistenceView() {
 
   return (
     <div className="mx-auto grid w-full max-w-[1440px] gap-5 xl:grid-cols-[minmax(0,0.95fr)_minmax(420px,1.05fr)]">
-      <section className="rounded-2xl border border-[#2B3037] bg-[#14171B] p-5 sm:p-6" aria-labelledby="lead-form-title">
+      <section className="rounded-2xl border border-[var(--s-border)] bg-[var(--s-card)] p-5 sm:p-6" aria-labelledby="lead-form-title">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
             <div className="flex flex-wrap items-center gap-2">
-              <span className="rounded-full bg-[#2A151B] px-2.5 py-1 text-[10px] font-semibold text-[#C2667D]">Lead 접수 Beta</span>
-              <span className={`rounded-full border px-2.5 py-1 text-[10px] font-medium ${firebaseConfigured ? "border-[#355542] bg-[#17221B] text-[#79A78B]" : "border-[#6E3442] bg-[#25151A] text-[#E2A8B6]"}`}>
+              <span className="rounded-full bg-[var(--s-brand-tint)] px-2.5 py-1 text-xs font-semibold text-[var(--s-brand-text)]">Lead 접수 Beta</span>
+              <span className={`rounded-full border px-2.5 py-1 text-xs font-medium ${firebaseConfigured ? "border-[var(--s-ok-border)] bg-[var(--s-ok-tint)] text-[var(--s-ok-text)]" : "border-[var(--s-err-border)] bg-[var(--s-err-tint)] text-[var(--s-err-text)]"}`}>
                 {firebaseConfigured ? "Firestore 저장 연결" : "Firebase 설정 필요"}
               </span>
             </div>
-            <h1 id="lead-form-title" className="mt-4 text-xl font-semibold tracking-[-0.02em] text-[#F4F6F8]">신규 Lead 직접 등록</h1>
-            <p className="mt-2 text-xs leading-5 text-[#8D949E]">저장된 Lead의 Customer 전환은 사용자가 직접 확인하고 실행합니다.</p>
+            <h1 id="lead-form-title" className="mt-4 text-xl font-semibold tracking-[-0.02em] text-[var(--s-text)]">신규 Lead 직접 등록</h1>
+            <p className="mt-2 text-[0.8125rem] leading-6 text-[var(--s-text-4)]">저장된 Lead의 Customer 전환은 사용자가 직접 확인하고 실행합니다.</p>
           </div>
-          <span className="rounded-lg border border-[#2B3037] bg-[#101216] px-3 py-2 text-[10px] text-[#7F8792]">Beta workspace</span>
+          <span className="rounded-lg border border-[var(--s-border)] bg-[var(--s-deep)] px-3 py-2 text-xs text-[var(--s-text-3)]">Beta workspace</span>
         </div>
 
-        <div className="mt-5 rounded-lg border border-[#3B414A] bg-[#101216] p-4 text-xs leading-5 text-[#B7BDC6]">
+        <div className="mt-5 rounded-lg border border-[var(--s-border-2)] bg-[var(--s-deep)] p-4 text-[0.8125rem] leading-6 text-[var(--s-text-2)]">
           <p>Lead 저장은 사용자가 직접 입력 후 저장할 때만 실행됩니다.</p>
           <p className="mt-1">Customer 전환은 수동 실행이며 담당자 자동 배정, 문자 발송, Follow-up 자동 생성은 실행되지 않습니다.</p>
         </div>
 
         <form className="mt-6 grid gap-4 sm:grid-cols-2" onSubmit={handleSubmit} noValidate>
-          <label className="text-xs font-medium text-[#B7BDC6]">
-            고객명 <span className="text-[#C2667D]">*</span>
+          <label className="text-[0.8125rem] font-medium text-[var(--s-text-2)]">
+            고객명 <span className="text-[var(--s-brand-text)]">*</span>
             <input value={form.customerName} onChange={(event) => updateField("customerName", event.target.value)} className={inputClass} placeholder="예: 김도윤" autoComplete="name" required />
           </label>
-          <label className="text-xs font-medium text-[#B7BDC6]">
-            연락처 <span className="text-[#C2667D]">*</span>
+          <label className="text-[0.8125rem] font-medium text-[var(--s-text-2)]">
+            연락처 <span className="text-[var(--s-brand-text)]">*</span>
             <input value={form.phone} onChange={(event) => updateField("phone", event.target.value)} className={inputClass} placeholder="예: 010-1234-5678" inputMode="tel" autoComplete="tel" required />
           </label>
-          <label className="text-xs font-medium text-[#B7BDC6]">
-            유입 경로 <span className="text-[#C2667D]">*</span>
+          <label className="text-[0.8125rem] font-medium text-[var(--s-text-2)]">
+            유입 경로 <span className="text-[var(--s-brand-text)]">*</span>
             <select value={form.source} onChange={(event) => updateField("source", event.target.value as LeadFormState["source"])} className={inputClass} required>
               <option value="">유입 경로 선택</option>
               {Object.entries(sourceLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
             </select>
           </label>
-          <label className="text-xs font-medium text-[#B7BDC6]">
-            관심 차량 <span className="text-[#C2667D]">*</span>
+          <label className="text-[0.8125rem] font-medium text-[var(--s-text-2)]">
+            관심 차량 <span className="text-[var(--s-brand-text)]">*</span>
             <input value={form.interestedVehicle} onChange={(event) => updateField("interestedVehicle", event.target.value)} className={inputClass} placeholder="예: GV80 3.5T AWD" required />
           </label>
-          <label className="text-xs font-medium text-[#B7BDC6]">
+          <label className="text-[0.8125rem] font-medium text-[var(--s-text-2)]">
             구매 시기
             <input value={form.purchaseTiming} onChange={(event) => updateField("purchaseTiming", event.target.value)} className={inputClass} placeholder="예: 3개월 이내" />
           </label>
-          <label className="text-xs font-medium text-[#B7BDC6]">
+          <label className="text-[0.8125rem] font-medium text-[var(--s-text-2)]">
             선호 연락 시간
             <input value={form.preferredContactTime} onChange={(event) => updateField("preferredContactTime", event.target.value)} className={inputClass} placeholder="예: 평일 오후 6시 이후" />
           </label>
-          <label className="text-xs font-medium text-[#B7BDC6] sm:col-span-2">
+          <label className="text-[0.8125rem] font-medium text-[var(--s-text-2)] sm:col-span-2">
             상담 메모
             <textarea value={form.memo} onChange={(event) => updateField("memo", event.target.value)} className={`${inputClass} min-h-28 resize-y`} placeholder="고객이 직접 전달한 요청과 확인할 사항을 입력하세요." />
           </label>
 
           <div className="sm:col-span-2" aria-live="polite">
             {notice ? (
-              <p className={`mb-3 rounded-lg border px-4 py-3 text-sm ${notice.tone === "success" ? "border-[#355542] bg-[#17221B] text-[#9CC7AB]" : "border-[#6E3442] bg-[#25151A] text-[#E2A8B6]"}`} role={notice.tone === "error" ? "alert" : "status"}>
+              <p className={`mb-3 rounded-lg border px-4 py-3 text-sm ${notice.tone === "success" ? "border-[var(--s-ok-border)] bg-[var(--s-ok-tint)] text-[var(--s-ok-text)]" : "border-[var(--s-err-border)] bg-[var(--s-err-tint)] text-[var(--s-err-text)]"}`} role={notice.tone === "error" ? "alert" : "status"}>
                 {notice.message}
               </p>
             ) : null}
-            <button type="submit" disabled={!canSubmit || saving} className="w-full rounded-lg bg-[#7A263A] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#8D3047] disabled:cursor-not-allowed disabled:bg-[#343A43] disabled:text-[#7F8792]">
+            <button type="submit" disabled={!canSubmit || saving} className="w-full rounded-lg bg-[var(--s-brand)] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[var(--s-brand-hover)] disabled:cursor-not-allowed disabled:bg-[var(--s-border-2)] disabled:text-[var(--s-text-3)]">
               {saving ? "Firestore에 저장 중…" : "Lead 저장"}
             </button>
-            <p className="mt-2 text-center text-[10px] text-[#656D78]">필수값을 입력하고 버튼을 눌러야만 저장됩니다.</p>
+            <p className="mt-2 text-center text-xs text-[var(--s-text-4)]">필수값을 입력하고 버튼을 눌러야만 저장됩니다.</p>
           </div>
         </form>
       </section>
@@ -526,20 +526,20 @@ function LeadPersistenceView() {
           onConfirmConversion={(lead) => void handleConvertLead(lead)}
         />
 
-        <section className="rounded-2xl border border-dashed border-[#343A43] bg-[#101216] p-5" aria-labelledby="demo-leads-title">
+        <section className="rounded-2xl border border-dashed border-[var(--s-border-2)] bg-[var(--s-deep)] p-5" aria-labelledby="demo-leads-title">
           <div className="flex items-center justify-between gap-3">
             <div>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#7F8792]">Demo data</p>
-              <h2 id="demo-leads-title" className="mt-1 text-sm font-semibold text-[#D3D7DD]">화면 흐름 참고 데이터</h2>
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--s-text-3)]">Demo data</p>
+              <h2 id="demo-leads-title" className="mt-1 text-sm font-semibold text-[var(--s-text-emph)]">화면 흐름 참고 데이터</h2>
             </div>
-            <span className="text-[10px] text-[#656D78]">Firestore에 저장되지 않음</span>
+            <span className="text-xs text-[var(--s-text-4)]">Firestore에 저장되지 않음</span>
           </div>
           <div className="mt-4 grid gap-2 sm:grid-cols-3 xl:grid-cols-1 2xl:grid-cols-3">
             {previewLeads.map((lead) => (
-              <div key={lead.id} className="min-w-0 rounded-lg border border-[#2B3037] bg-[#14171B] p-3">
-                <p className="truncate text-xs font-medium text-[#B7BDC6]">{lead.customerName}</p>
-                <p className="mt-1 truncate text-[10px] text-[#656D78]">{lead.interestedVehicle}</p>
-                <p className="mt-2 text-[10px] text-[#8D949E]">{sourceLabels[lead.source]} · {lead.assignedUserId ? userLabels[lead.assignedUserId] ?? "담당자 확인" : "미배정"}</p>
+              <div key={lead.id} className="min-w-0 rounded-lg border border-[var(--s-border)] bg-[var(--s-card)] p-3">
+                <p className="truncate text-[0.8125rem] font-medium text-[var(--s-text-2)]">{lead.customerName}</p>
+                <p className="mt-1 truncate text-xs text-[var(--s-text-4)]">{lead.interestedVehicle}</p>
+                <p className="mt-2 text-xs text-[var(--s-text-4)]">{sourceLabels[lead.source]} · {lead.assignedUserId ? userLabels[lead.assignedUserId] ?? "담당자 확인" : "미배정"}</p>
               </div>
             ))}
           </div>

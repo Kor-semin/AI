@@ -1,32 +1,119 @@
 @import "tailwindcss";
 
-/* 글씨 크기(설정 화면) — root rem 기준으로 전반 리듬 정렬 · data 속성 bootstrap 스크립트와 동기 */
+/* 글씨 크기(설정 화면) — 범용 배율 규격 100%/120%/150%.
+   root rem 기준으로 전반 리듬 정렬 · data 속성 bootstrap 스크립트와 동기 */
 html {
   font-size: 100%;
   --sensora-density: 1;
   --sensora-ui-line: 1.55;
-  --sensora-font-scale-for-px: 1;
 }
 
-html[data-text-size="small"] {
-  font-size: 92%;
-  --sensora-density: 0.94;
-  --sensora-ui-line: 1.52;
-  --sensora-font-scale-for-px: 0.92;
-}
-
-html[data-text-size="medium"] {
+html[data-text-size="100"] {
   font-size: 100%;
   --sensora-density: 1;
   --sensora-ui-line: 1.55;
-  --sensora-font-scale-for-px: 1;
 }
 
-html[data-text-size="large"] {
-  font-size: 112%;
-  --sensora-density: 1.065;
+html[data-text-size="120"] {
+  font-size: 120%;
+  --sensora-density: 1.08;
   --sensora-ui-line: 1.58;
-  --sensora-font-scale-for-px: 1.12;
+}
+
+html[data-text-size="150"] {
+  font-size: 150%;
+  --sensora-density: 1.12;
+  --sensora-ui-line: 1.6;
+}
+
+/* =========================================================
+   Sensora Workspace 시맨틱 색 토큰 — 다크(기본) / 라이트
+   워크스페이스·랜딩·로그인 화면은 hex 대신 이 토큰만 사용합니다.
+   브랜드 원색(#820229 계열)은 로고에서 추출한 값입니다.
+   ========================================================= */
+:root,
+html[data-theme="dark"] {
+  color-scheme: dark;
+
+  --s-bg: #0a0b0d;
+  --s-panel: #0d0f12;
+  --s-card: #14171b;
+  --s-inner: #1a1e23;
+  --s-deep: #101216;
+  --s-border: #2b3037;
+  --s-border-2: #343a43;
+
+  --s-text: #f4f6f8;
+  --s-text-emph: #d3d7dd;
+  --s-text-2: #b7bdc6;
+  --s-text-3: #7f8792;
+  --s-text-4: #8d949e;
+  --s-text-5: #656d78;
+
+  --s-brand: #820229;
+  --s-brand-hover: #a22b43;
+  --s-brand-text: #dd8d92;
+  --s-brand-dot: #c5626d;
+  --s-brand-tint: #2a151b;
+  --s-brand-border: rgba(130, 2, 41, 0.65);
+  --s-brand-border-soft: rgba(130, 2, 41, 0.4);
+  --s-brand-ring: rgba(162, 43, 67, 0.4);
+
+  --s-ok-text: #6fae87;
+  --s-ok-border: #355542;
+  --s-ok-tint: #17221b;
+
+  --s-warn-text: #d0a45d;
+  --s-warn-text-strong: #e8d3a6;
+  --s-warn-text-soft: #b7a781;
+  --s-warn-border: #6e5a34;
+  --s-warn-tint: #251f15;
+
+  --s-err-text: #e2a8b6;
+  --s-err-border: #6e3442;
+  --s-err-tint: #25151a;
+}
+
+html[data-theme="light"] {
+  color-scheme: light;
+
+  --s-bg: #f7f5f2;
+  --s-panel: #ffffff;
+  --s-card: #ffffff;
+  --s-inner: #f4f0ec;
+  --s-deep: #faf8f6;
+  --s-border: #e5dfd9;
+  --s-border-2: #d8d0c8;
+
+  --s-text: #221a1b;
+  --s-text-emph: #3a3134;
+  --s-text-2: #57484c;
+  --s-text-3: #695a5d;
+  --s-text-4: #665759;
+  --s-text-5: #93868a;
+
+  --s-brand: #820229;
+  --s-brand-hover: #a22b43;
+  --s-brand-text: #820229;
+  --s-brand-dot: #a22b43;
+  --s-brand-tint: #fbedee;
+  --s-brand-border: #e7bac6;
+  --s-brand-border-soft: #f0d3db;
+  --s-brand-ring: rgba(130, 2, 41, 0.22);
+
+  --s-ok-text: #256b43;
+  --s-ok-border: #b9dcc6;
+  --s-ok-tint: #ecf6ef;
+
+  --s-warn-text: #8a6116;
+  --s-warn-text-strong: #6b4e13;
+  --s-warn-text-soft: #806722;
+  --s-warn-border: #e3d3ab;
+  --s-warn-tint: #faf3e3;
+
+  --s-err-text: #a02440;
+  --s-err-border: #eac2cc;
+  --s-err-tint: #fbeef1;
 }
 
 :root {
@@ -1760,18 +1847,21 @@ body:has([data-sensora-guide-viewer]) .pwa-install-hint-root {
   font-family: var(--font-cover-sans), "Noto Sans KR", "Apple SD Gothic Neo", sans-serif;
 }
 
-/* 표지 온보딩: 설정(large 글씨) 시 루트 rem이 커져도 세로 리듬이 과하게 벌어지지 않도록 */
+/* 표지 온보딩: 확대 배율(120%·150%) 시 루트 rem이 커져도 세로 리듬이 과하게 벌어지지 않도록 */
 @media (max-width: 520px) {
-  html[data-text-size="large"] .notebook-cover-inner-stage {
+  html[data-text-size="120"] .notebook-cover-inner-stage,
+  html[data-text-size="150"] .notebook-cover-inner-stage {
     padding-top: clamp(0.45rem, 2.2vw, 1.4rem);
     padding-bottom: clamp(0.45rem, 2.2vw, 1.4rem);
   }
 
-  html[data-text-size="large"] .notebook-cover-body-block {
+  html[data-text-size="120"] .notebook-cover-body-block,
+  html[data-text-size="150"] .notebook-cover-body-block {
     margin-top: clamp(0.55rem, 2.8vw, 1.35rem);
   }
 
-  html[data-text-size="large"] .notebook-cover-cover-layer > footer {
+  html[data-text-size="120"] .notebook-cover-cover-layer > footer,
+  html[data-text-size="150"] .notebook-cover-cover-layer > footer {
     margin-top: clamp(0.625rem, 2.8vw, 1.125rem);
     gap: clamp(0.625rem, 3vw, 1rem);
   }

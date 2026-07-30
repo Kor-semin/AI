@@ -6,16 +6,16 @@ import type { TextSizeOption } from "@/lib/textSizePreference";
 
 const OPTIONS: readonly {
   id: TextSizeOption;
-  labelKey: "settings.textSize.small.label"
-    | "settings.textSize.medium.label"
-    | "settings.textSize.large.label";
-  descKey: "settings.textSize.small.description"
-    | "settings.textSize.medium.description"
-    | "settings.textSize.large.description";
+  labelKey: "settings.textSize.100.label"
+    | "settings.textSize.120.label"
+    | "settings.textSize.150.label";
+  descKey: "settings.textSize.100.description"
+    | "settings.textSize.120.description"
+    | "settings.textSize.150.description";
 }[] = [
-  { id: "small", labelKey: "settings.textSize.small.label", descKey: "settings.textSize.small.description" },
-  { id: "medium", labelKey: "settings.textSize.medium.label", descKey: "settings.textSize.medium.description" },
-  { id: "large", labelKey: "settings.textSize.large.label", descKey: "settings.textSize.large.description" },
+  { id: "100", labelKey: "settings.textSize.100.label", descKey: "settings.textSize.100.description" },
+  { id: "120", labelKey: "settings.textSize.120.label", descKey: "settings.textSize.120.description" },
+  { id: "150", labelKey: "settings.textSize.150.label", descKey: "settings.textSize.150.description" },
 ];
 
 export function TextSizeControl() {

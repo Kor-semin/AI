@@ -5,8 +5,11 @@ import { LanguageProvider } from "@/app/components/i18n/LanguageProvider";
 import { PwaInstallHint } from "@/app/components/PwaInstallHint";
 import { TextSizeProvider } from "@/app/components/TextSizeProvider";
 import { TEXT_SIZE_STORAGE_KEY } from "@/lib/textSizePreference";
+import { THEME_STORAGE_KEY } from "@/lib/themePreference";
 
-const TEXT_SIZE_BOOT_SCRIPT = `(function(){try{var k=${JSON.stringify(TEXT_SIZE_STORAGE_KEY)};var r=localStorage.getItem(k);var x=r==="small"||r==="large"?r:"medium";document.documentElement.setAttribute("data-text-size",x);}catch(e){}})();`;
+// 배율 규격: "100"|"120"|"150". 구버전 저장값(small/medium/large)은 가장 가까운 배율로 이관.
+// 화면 모드: "dark"(기본) | "light". 첫 페인트 전에 적용해 깜빡임을 막습니다.
+const TEXT_SIZE_BOOT_SCRIPT = `(function(){try{var k=${JSON.stringify(TEXT_SIZE_STORAGE_KEY)};var r=localStorage.getItem(k);var x=r==="100"||r==="120"||r==="150"?r:r==="large"?"120":"100";document.documentElement.setAttribute("data-text-size",x);var tk=${JSON.stringify(THEME_STORAGE_KEY)};var t=localStorage.getItem(tk);document.documentElement.setAttribute("data-theme",t==="light"?"light":"dark");}catch(e){}})();`;
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -47,10 +50,10 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: "/icons/icon-192-v3.png", sizes: "192x192", type: "image/png" },
-      { url: "/icons/icon-512-v3.png", sizes: "512x512", type: "image/png" },
+      { url: "/icons/icon-192-v4.png", sizes: "192x192", type: "image/png" },
+      { url: "/icons/icon-512-v4.png", sizes: "512x512", type: "image/png" },
     ],
-    apple: [{ url: "/icons/apple-touch-icon-v3.png", sizes: "180x180" }],
+    apple: [{ url: "/icons/apple-touch-icon-v4.png", sizes: "180x180" }],
   },
 };
 
@@ -59,8 +62,8 @@ export const viewport: Viewport = {
   initialScale: 1,
   viewportFit: "cover",
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#111827" },
-    { media: "(prefers-color-scheme: dark)", color: "#111827" },
+    { media: "(prefers-color-scheme: light)", color: "#2A0405" },
+    { media: "(prefers-color-scheme: dark)", color: "#2A0405" },
   ],
 };
 
@@ -72,7 +75,8 @@ export default function RootLayout({
   return (
     <html
       lang="ko"
-      data-text-size="medium"
+      data-text-size="100"
+      data-theme="dark"
       suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} ${coverSerif.variable} ${coverSans.variable} h-full antialiased`}
     >

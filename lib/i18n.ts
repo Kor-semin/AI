@@ -555,12 +555,12 @@ export type TranslationKey =
   | "settings.display.title"
   | "settings.textSize.title"
   | "settings.textSize.description"
-  | "settings.textSize.small.label"
-  | "settings.textSize.small.description"
-  | "settings.textSize.medium.label"
-  | "settings.textSize.medium.description"
-  | "settings.textSize.large.label"
-  | "settings.textSize.large.description"
+  | "settings.textSize.100.label"
+  | "settings.textSize.100.description"
+  | "settings.textSize.120.label"
+  | "settings.textSize.120.description"
+  | "settings.textSize.150.label"
+  | "settings.textSize.150.description"
   | "settings.textSize.storageNotice"
   | "cover.aiGuide.title"
   | "cover.aiGuide.subtitle"
@@ -1247,12 +1247,12 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "settings.display.title": "화면 설정",
     "settings.textSize.title": "글씨 크기",
     "settings.textSize.description": "앱에서 보이는 글자의 크기를 조정합니다.",
-    "settings.textSize.small.label": "작게",
-    "settings.textSize.small.description": "한 화면에 더 많이 보기",
-    "settings.textSize.medium.label": "기본",
-    "settings.textSize.medium.description": "균형 있게 보기",
-    "settings.textSize.large.label": "크게",
-    "settings.textSize.large.description": "편하게 크게 보기",
+    "settings.textSize.100.label": "100%",
+    "settings.textSize.100.description": "기본 크기",
+    "settings.textSize.120.label": "120%",
+    "settings.textSize.120.description": "글자를 1.2배로 키움",
+    "settings.textSize.150.label": "150%",
+    "settings.textSize.150.description": "글자를 1.5배로 키움",
     "settings.textSize.storageNotice": "글씨 크기는 이 브라우저에 저장됩니다.",
     "cover.aiGuide.title": "AI 사용법",
     "cover.aiGuide.subtitle":
@@ -1958,12 +1958,12 @@ export const translations: Record<LanguageCode, TranslationDict> = {
     "settings.display.title": "Display",
     "settings.textSize.title": "Text size",
     "settings.textSize.description": "Adjust the text size used across the app.",
-    "settings.textSize.small.label": "Small",
-    "settings.textSize.small.description": "See more at once",
-    "settings.textSize.medium.label": "Default",
-    "settings.textSize.medium.description": "Balanced view",
-    "settings.textSize.large.label": "Large",
-    "settings.textSize.large.description": "Easier to read",
+    "settings.textSize.100.label": "100%",
+    "settings.textSize.100.description": "Default size",
+    "settings.textSize.120.label": "120%",
+    "settings.textSize.120.description": "1.2× larger text",
+    "settings.textSize.150.label": "150%",
+    "settings.textSize.150.description": "1.5× larger text",
     "settings.textSize.storageNotice": "Text size is saved in this browser.",
     "cover.aiGuide.title": "How to Use AI",
     "cover.aiGuide.subtitle":

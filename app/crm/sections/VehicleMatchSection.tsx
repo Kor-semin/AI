@@ -1,7 +1,7 @@
 "use client";
 
 import type { Customer } from "@/app/crm/types";
-import { generateDemoConsultingResponse } from "@/app/components/concierge/aiDemoResponse";
+import { generateGroundedConsultingResponse as generateDemoConsultingResponse } from "@/app/crm/consultingDraft";
 import { useMemo } from "react";
 
 export type VehicleMatchSectionProps = {

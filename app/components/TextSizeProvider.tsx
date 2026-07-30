@@ -24,7 +24,7 @@ type TextSizeContextValue = {
 const TextSizeContext = createContext<TextSizeContextValue | null>(null);
 
 export function TextSizeProvider({ children }: { children: React.ReactNode }) {
-  const [textSize, setTextSizeState] = useState<TextSizeOption>("medium");
+  const [textSize, setTextSizeState] = useState<TextSizeOption>("100");
 
   useEffect(() => {
     const next = readStoredTextSize();

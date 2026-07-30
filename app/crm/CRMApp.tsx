@@ -1,5 +1,7 @@
 "use client";
 
+import { generateGroundedConsultingResponse as generateDemoConsultingResponse } from "@/app/crm/consultingDraft";
+
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type {
@@ -53,7 +55,6 @@ import {
 import { getMemoFeedback } from "./memoFeedback";
 import {
   formatCareNeedsGuideTopicsUi,
-  generateDemoConsultingResponse,
   type DemoConsultingResponse,
   type DemoSalesStyle,
 } from "@/app/components/concierge/aiDemoResponse";
@@ -1553,16 +1554,8 @@ export function CRMApp({
   const isFigmaFirstSection = (section: CrmSection) => activeSection === section;
 
   if (isFigmaFirstSection("dashboard")) {
-    return (
-      <SensoraSalesDashboard
-        todayContacts={overviewStats.dueToday}
-        highPotential={overviewStats.highPotential}
-        overdueFollowUps={overviewStats.overdueFollowUp}
-        recentConsultations={overviewStats.recentConsult}
-        sellerName={myName}
-        onNavigate={onActiveSectionChange}
-      />
-    );
+    // KPI는 저장된 고객 목록에서 직접 계산되므로 숫자를 넘기지 않습니다.
+    return <SensoraSalesDashboard sellerName={myName} onNavigate={onActiveSectionChange} />;
   }
 
   if (isFigmaFirstSection("leadQueue")) {
