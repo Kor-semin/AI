@@ -79,8 +79,23 @@ const SYSTEM_PROMPT = `당신은 자동차 영업 상담 메모에서 "사실"�
 허용되는 id 목록(이외 id 금지):
 ${Object.entries(FACT_VOCABULARY).map(([id, label]) => `- ${id}: ${label}`).join("\n")}
 
+놓치기 쉬운 항목 — 다음 표현이 보이면 반드시 추출하십시오:
+- decider: 아내·남편·배우자·가족·부모가 의견에 관여한다는 언급 (예: "아내가 승차감 중요하다고 함" → ride와 decider 둘 다)
+- testDrive: "시승" 언급 전부
+- contactPref: 통화·연락 가능/어려운 시간대 언급
+- concern: 대기·납기·가격 부담 등 망설임의 이유
+한 문장에서 여러 항목이 나올 수 있으며, 같은 quote를 여러 항목에 써도 됩니다.
+
 출력은 JSON 객체 하나:
-{"facts":[{"id":"...","value":"항목 요약(40자 이내)","quote":"메모 원문 조각(120자 이내)"}]}`;
+{"facts":[{"id":"...","value":"항목 요약(40자 이내)","quote":"메모 원문 조각(120자 이내)"}]}
+
+예시:
+메모: "아내가 승차감 중요하다고 함. 오전엔 통화 어려움. 대기 길면 곤란."
+출력: {"facts":[
+ {"id":"ride","value":"승차감 중시","quote":"아내가 승차감 중요하다고 함"},
+ {"id":"decider","value":"아내 의견 관여","quote":"아내가 승차감 중요하다고 함"},
+ {"id":"contactPref","value":"오전 통화 어려움","quote":"오전엔 통화 어려움"},
+ {"id":"concern","value":"대기 기간 우려","quote":"대기 길면 곤란"}]}`;
 
 async function callOpenAi(apiKey: string, memo: string): Promise<GroundedFact[] | null> {
   const response = await fetch(OPENAI_URL, {
